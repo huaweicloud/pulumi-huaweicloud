@@ -10,6 +10,10 @@ import (
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
+// !> **WARNING:** It has been deprecated, use `Dew.Keypair` instead.
+//
+// Manages a keypair resource within HuaweiCloud.
+//
 // ## Example Usage
 // ### Create a new keypair and export private key to current folder
 //
@@ -64,7 +68,7 @@ import (
 //
 // ## Import
 //
-// Keypairs can be imported using the `name`, e.g.
+// Keypairs can be imported using the `name`, e.g. bash
 //
 // ```sh
 //

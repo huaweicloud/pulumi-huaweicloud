@@ -13,23 +13,27 @@ import * as utilities from "../utilities";
  * import * as pulumi from "@pulumi/pulumi";
  * import * as pulumi from "@huaweicloudos/pulumi";
  *
+ * const config = new pulumi.Config();
+ * const poolId = config.requireObject("poolId");
  * const monitor1 = new huaweicloud.dedicatedelb.Monitor("monitor1", {
- *     protocol: "HTTP",
+ *     poolId: poolId,
+ *     protocol: "HTTPS",
  *     interval: 30,
- *     timeout: 15,
- *     maxRetries: 10,
- *     urlPath: "/api",
+ *     timeout: 20,
+ *     maxRetries: 8,
+ *     urlPath: "/bb",
+ *     domainName: "www.bb.com",
  *     port: 8888,
- *     poolId: huaweicloud_elb_pool.test.id,
+ *     statusCode: "200,301,404-500,504",
  * });
  * ```
  *
  * ## Import
  *
- * ELB monitor can be imported using the monitor ID, e.g.
+ * ELB monitor can be imported using the monitor `id`, e.g. bash
  *
  * ```sh
- *  $ pulumi import huaweicloud:DedicatedElb/monitor:Monitor monitor_1 5c20fdad-7288-11eb-b817-0255ac10158b
+ *  $ pulumi import huaweicloud:DedicatedElb/monitor:Monitor test <id>
  * ```
  */
 export class Monitor extends pulumi.CustomResource {
@@ -61,29 +65,67 @@ export class Monitor extends pulumi.CustomResource {
     }
 
     /**
-     * The Domain Name of the Monitor.
+     * The creation time of the monitor.
      */
-    public readonly domainName!: pulumi.Output<string | undefined>;
+    public /*out*/ readonly createdAt!: pulumi.Output<string>;
     /**
-     * The time, in seconds, between sending probes to members.
+     * Specifies the domain name that HTTP requests are sent to during the health check.
+     * The domain name consists of 1 to 100 characters, can contain only digits, letters, hyphens (-), and periods (.) and
+     * must start with a digit or letter. The value is left blank by default, indicating that the virtual IP address of the
+     * load balancer is used as the destination address of HTTP requests. This parameter is available only when `protocol`
+     * is set to **HTTP** or **HTTPS**.
+     */
+    public readonly domainName!: pulumi.Output<string>;
+    /**
+     * Specifies whether the health check is enabled.
+     * + **true(default)**: Health check is enabled.
+     * + **false**: Health check is disabled.
+     */
+    public readonly enabled!: pulumi.Output<boolean | undefined>;
+    /**
+     * Specifies the HTTP method. Value options: **GET**, **HEAD**, **POST**. Defaults to **GET**.
+     */
+    public readonly httpMethod!: pulumi.Output<string>;
+    /**
+     * Specifies the interval between health checks, in seconds.
+     * Value ranges from `1` to `50`.
      */
     public readonly interval!: pulumi.Output<number>;
     /**
-     * Number of permissible ping failures before changing the member's status to INACTIVE.
-     * Must be a number between 1 and 10.
+     * Specifies the number of consecutive health checks when the health check result of
+     * a backend server changes from OFFLINE to ONLINE. Value ranges from `1` to `10`.
      */
     public readonly maxRetries!: pulumi.Output<number>;
     /**
-     * The id of the pool that this monitor will be assigned to.
+     * Specifies the number of consecutive health checks when the health check result of
+     * a backend server changes from ONLINE to OFFLINE. The value ranges from `1` to `10`, and the default value is `3`.
+     */
+    public readonly maxRetriesDown!: pulumi.Output<number>;
+    /**
+     * Specifies the health check name.
+     */
+    public readonly name!: pulumi.Output<string>;
+    /**
+     * Specifies the ID of the backend server group for which the health check is
+     * configured. Changing this creates a new monitor.
      */
     public readonly poolId!: pulumi.Output<string>;
     /**
-     * Specifies the health check port. The value ranges from 1 to 65535.
+     * Specifies the port used for the health check. If this parameter is left blank, a port of
+     * the backend server will be used by default. It is mandatory when the `protocol` of the backend server group is **IP**.
+     * Value ranges from `1` to `65,535`.
      */
-    public readonly port!: pulumi.Output<number | undefined>;
+    public readonly port!: pulumi.Output<number>;
     /**
-     * The type of probe, which is TCP, HTTP, or HTTPS, that is sent by the load
-     * balancer to verify the member state. Changing this creates a new monitor.
+     * Specifies the health check protocol. Value options: **TCP**, **UDP_CONNECT**,
+     * **HTTP**, **HTTPS**, **GRPC** or **TLS**.
+     * + If the protocol of the backend server is **QUIC**, the value can only be **UDP_CONNECT**.
+     * + If the protocol of the backend server is **UDP**, the value can only be **UDP_CONNECT**.
+     * + If the protocol of the backend server is **TCP**, the value can only be **TCP**, **HTTP** or **HTTPS**.
+     * + If the protocol of the backend server is **HTTP**, the value can only be **TCP**, **HTTP**, **HTTPS**, **TLS** or **GRPC**.
+     * + If the protocol of the backend server is **HTTPS**, the value can only be **TCP**, **HTTP**, **HTTPS**, **TLS** or **GRPC**.
+     * + If the protocol of the backend server is **GRPC**, the value can only be **TCP**, **HTTP**, **HTTPS**, **TLS** or **GRPC**.
+     * + If the protocol of the backend server is **TLS**, the value can only be **TCP**, **HTTP**, **HTTPS**, **TLS** or **GRPC**.
      */
     public readonly protocol!: pulumi.Output<string>;
     /**
@@ -92,13 +134,28 @@ export class Monitor extends pulumi.CustomResource {
      */
     public readonly region!: pulumi.Output<string>;
     /**
-     * Maximum number of seconds for a monitor to wait for a ping reply before it times out. The
-     * value must be less than the delay value.
+     * Specifies the expected HTTP status code. This parameter will take effect only when
+     * `protocol` is set to **HTTP** or **HTTPS**. Value options are as follows:
+     * + A specific value, for example: **200**.
+     * + A list of values that are separated with commas (,), for example: **200,202**.
+     * + A value range, for example: **200-204**.
+     */
+    public readonly statusCode!: pulumi.Output<string>;
+    /**
+     * Specifies the maximum time required for waiting for a response from the health check,
+     * in seconds. Value ranges from `1` to `50`. It is recommended that you set the value less than that of
+     * parameter `interval`.
      */
     public readonly timeout!: pulumi.Output<number>;
     /**
-     * Required for HTTP(S) types. URI path that will be accessed if monitor type is HTTP or
-     * HTTPS.
+     * The update time of the monitor.
+     */
+    public /*out*/ readonly updatedAt!: pulumi.Output<string>;
+    /**
+     * Specifies the HTTP request path for the health check. The value must start with a
+     * slash (/), can contain letters, digits, hyphens (-), slash (/), periods (.), percent signs (%), hashes(#), and(&)
+     * and the special characters: `~!()*[]@$^:',+`, and the default value is **&#47;**. This parameter is available only when
+     * `protocol` is set to **HTTP** or **HTTPS**.
      */
     public readonly urlPath!: pulumi.Output<string>;
 
@@ -115,14 +172,21 @@ export class Monitor extends pulumi.CustomResource {
         opts = opts || {};
         if (opts.id) {
             const state = argsOrState as MonitorState | undefined;
+            resourceInputs["createdAt"] = state ? state.createdAt : undefined;
             resourceInputs["domainName"] = state ? state.domainName : undefined;
+            resourceInputs["enabled"] = state ? state.enabled : undefined;
+            resourceInputs["httpMethod"] = state ? state.httpMethod : undefined;
             resourceInputs["interval"] = state ? state.interval : undefined;
             resourceInputs["maxRetries"] = state ? state.maxRetries : undefined;
+            resourceInputs["maxRetriesDown"] = state ? state.maxRetriesDown : undefined;
+            resourceInputs["name"] = state ? state.name : undefined;
             resourceInputs["poolId"] = state ? state.poolId : undefined;
             resourceInputs["port"] = state ? state.port : undefined;
             resourceInputs["protocol"] = state ? state.protocol : undefined;
             resourceInputs["region"] = state ? state.region : undefined;
+            resourceInputs["statusCode"] = state ? state.statusCode : undefined;
             resourceInputs["timeout"] = state ? state.timeout : undefined;
+            resourceInputs["updatedAt"] = state ? state.updatedAt : undefined;
             resourceInputs["urlPath"] = state ? state.urlPath : undefined;
         } else {
             const args = argsOrState as MonitorArgs | undefined;
@@ -142,14 +206,21 @@ export class Monitor extends pulumi.CustomResource {
                 throw new Error("Missing required property 'timeout'");
             }
             resourceInputs["domainName"] = args ? args.domainName : undefined;
+            resourceInputs["enabled"] = args ? args.enabled : undefined;
+            resourceInputs["httpMethod"] = args ? args.httpMethod : undefined;
             resourceInputs["interval"] = args ? args.interval : undefined;
             resourceInputs["maxRetries"] = args ? args.maxRetries : undefined;
+            resourceInputs["maxRetriesDown"] = args ? args.maxRetriesDown : undefined;
+            resourceInputs["name"] = args ? args.name : undefined;
             resourceInputs["poolId"] = args ? args.poolId : undefined;
             resourceInputs["port"] = args ? args.port : undefined;
             resourceInputs["protocol"] = args ? args.protocol : undefined;
             resourceInputs["region"] = args ? args.region : undefined;
+            resourceInputs["statusCode"] = args ? args.statusCode : undefined;
             resourceInputs["timeout"] = args ? args.timeout : undefined;
             resourceInputs["urlPath"] = args ? args.urlPath : undefined;
+            resourceInputs["createdAt"] = undefined /*out*/;
+            resourceInputs["updatedAt"] = undefined /*out*/;
         }
         opts = pulumi.mergeOptions(utilities.resourceOptsDefaults(), opts);
         super(Monitor.__pulumiType, name, resourceInputs, opts);
@@ -161,29 +232,67 @@ export class Monitor extends pulumi.CustomResource {
  */
 export interface MonitorState {
     /**
-     * The Domain Name of the Monitor.
+     * The creation time of the monitor.
+     */
+    createdAt?: pulumi.Input<string>;
+    /**
+     * Specifies the domain name that HTTP requests are sent to during the health check.
+     * The domain name consists of 1 to 100 characters, can contain only digits, letters, hyphens (-), and periods (.) and
+     * must start with a digit or letter. The value is left blank by default, indicating that the virtual IP address of the
+     * load balancer is used as the destination address of HTTP requests. This parameter is available only when `protocol`
+     * is set to **HTTP** or **HTTPS**.
      */
     domainName?: pulumi.Input<string>;
     /**
-     * The time, in seconds, between sending probes to members.
+     * Specifies whether the health check is enabled.
+     * + **true(default)**: Health check is enabled.
+     * + **false**: Health check is disabled.
+     */
+    enabled?: pulumi.Input<boolean>;
+    /**
+     * Specifies the HTTP method. Value options: **GET**, **HEAD**, **POST**. Defaults to **GET**.
+     */
+    httpMethod?: pulumi.Input<string>;
+    /**
+     * Specifies the interval between health checks, in seconds.
+     * Value ranges from `1` to `50`.
      */
     interval?: pulumi.Input<number>;
     /**
-     * Number of permissible ping failures before changing the member's status to INACTIVE.
-     * Must be a number between 1 and 10.
+     * Specifies the number of consecutive health checks when the health check result of
+     * a backend server changes from OFFLINE to ONLINE. Value ranges from `1` to `10`.
      */
     maxRetries?: pulumi.Input<number>;
     /**
-     * The id of the pool that this monitor will be assigned to.
+     * Specifies the number of consecutive health checks when the health check result of
+     * a backend server changes from ONLINE to OFFLINE. The value ranges from `1` to `10`, and the default value is `3`.
+     */
+    maxRetriesDown?: pulumi.Input<number>;
+    /**
+     * Specifies the health check name.
+     */
+    name?: pulumi.Input<string>;
+    /**
+     * Specifies the ID of the backend server group for which the health check is
+     * configured. Changing this creates a new monitor.
      */
     poolId?: pulumi.Input<string>;
     /**
-     * Specifies the health check port. The value ranges from 1 to 65535.
+     * Specifies the port used for the health check. If this parameter is left blank, a port of
+     * the backend server will be used by default. It is mandatory when the `protocol` of the backend server group is **IP**.
+     * Value ranges from `1` to `65,535`.
      */
     port?: pulumi.Input<number>;
     /**
-     * The type of probe, which is TCP, HTTP, or HTTPS, that is sent by the load
-     * balancer to verify the member state. Changing this creates a new monitor.
+     * Specifies the health check protocol. Value options: **TCP**, **UDP_CONNECT**,
+     * **HTTP**, **HTTPS**, **GRPC** or **TLS**.
+     * + If the protocol of the backend server is **QUIC**, the value can only be **UDP_CONNECT**.
+     * + If the protocol of the backend server is **UDP**, the value can only be **UDP_CONNECT**.
+     * + If the protocol of the backend server is **TCP**, the value can only be **TCP**, **HTTP** or **HTTPS**.
+     * + If the protocol of the backend server is **HTTP**, the value can only be **TCP**, **HTTP**, **HTTPS**, **TLS** or **GRPC**.
+     * + If the protocol of the backend server is **HTTPS**, the value can only be **TCP**, **HTTP**, **HTTPS**, **TLS** or **GRPC**.
+     * + If the protocol of the backend server is **GRPC**, the value can only be **TCP**, **HTTP**, **HTTPS**, **TLS** or **GRPC**.
+     * + If the protocol of the backend server is **TLS**, the value can only be **TCP**, **HTTP**, **HTTPS**, **TLS** or **GRPC**.
      */
     protocol?: pulumi.Input<string>;
     /**
@@ -192,13 +301,28 @@ export interface MonitorState {
      */
     region?: pulumi.Input<string>;
     /**
-     * Maximum number of seconds for a monitor to wait for a ping reply before it times out. The
-     * value must be less than the delay value.
+     * Specifies the expected HTTP status code. This parameter will take effect only when
+     * `protocol` is set to **HTTP** or **HTTPS**. Value options are as follows:
+     * + A specific value, for example: **200**.
+     * + A list of values that are separated with commas (,), for example: **200,202**.
+     * + A value range, for example: **200-204**.
+     */
+    statusCode?: pulumi.Input<string>;
+    /**
+     * Specifies the maximum time required for waiting for a response from the health check,
+     * in seconds. Value ranges from `1` to `50`. It is recommended that you set the value less than that of
+     * parameter `interval`.
      */
     timeout?: pulumi.Input<number>;
     /**
-     * Required for HTTP(S) types. URI path that will be accessed if monitor type is HTTP or
-     * HTTPS.
+     * The update time of the monitor.
+     */
+    updatedAt?: pulumi.Input<string>;
+    /**
+     * Specifies the HTTP request path for the health check. The value must start with a
+     * slash (/), can contain letters, digits, hyphens (-), slash (/), periods (.), percent signs (%), hashes(#), and(&)
+     * and the special characters: `~!()*[]@$^:',+`, and the default value is **&#47;**. This parameter is available only when
+     * `protocol` is set to **HTTP** or **HTTPS**.
      */
     urlPath?: pulumi.Input<string>;
 }
@@ -208,29 +332,63 @@ export interface MonitorState {
  */
 export interface MonitorArgs {
     /**
-     * The Domain Name of the Monitor.
+     * Specifies the domain name that HTTP requests are sent to during the health check.
+     * The domain name consists of 1 to 100 characters, can contain only digits, letters, hyphens (-), and periods (.) and
+     * must start with a digit or letter. The value is left blank by default, indicating that the virtual IP address of the
+     * load balancer is used as the destination address of HTTP requests. This parameter is available only when `protocol`
+     * is set to **HTTP** or **HTTPS**.
      */
     domainName?: pulumi.Input<string>;
     /**
-     * The time, in seconds, between sending probes to members.
+     * Specifies whether the health check is enabled.
+     * + **true(default)**: Health check is enabled.
+     * + **false**: Health check is disabled.
+     */
+    enabled?: pulumi.Input<boolean>;
+    /**
+     * Specifies the HTTP method. Value options: **GET**, **HEAD**, **POST**. Defaults to **GET**.
+     */
+    httpMethod?: pulumi.Input<string>;
+    /**
+     * Specifies the interval between health checks, in seconds.
+     * Value ranges from `1` to `50`.
      */
     interval: pulumi.Input<number>;
     /**
-     * Number of permissible ping failures before changing the member's status to INACTIVE.
-     * Must be a number between 1 and 10.
+     * Specifies the number of consecutive health checks when the health check result of
+     * a backend server changes from OFFLINE to ONLINE. Value ranges from `1` to `10`.
      */
     maxRetries: pulumi.Input<number>;
     /**
-     * The id of the pool that this monitor will be assigned to.
+     * Specifies the number of consecutive health checks when the health check result of
+     * a backend server changes from ONLINE to OFFLINE. The value ranges from `1` to `10`, and the default value is `3`.
+     */
+    maxRetriesDown?: pulumi.Input<number>;
+    /**
+     * Specifies the health check name.
+     */
+    name?: pulumi.Input<string>;
+    /**
+     * Specifies the ID of the backend server group for which the health check is
+     * configured. Changing this creates a new monitor.
      */
     poolId: pulumi.Input<string>;
     /**
-     * Specifies the health check port. The value ranges from 1 to 65535.
+     * Specifies the port used for the health check. If this parameter is left blank, a port of
+     * the backend server will be used by default. It is mandatory when the `protocol` of the backend server group is **IP**.
+     * Value ranges from `1` to `65,535`.
      */
     port?: pulumi.Input<number>;
     /**
-     * The type of probe, which is TCP, HTTP, or HTTPS, that is sent by the load
-     * balancer to verify the member state. Changing this creates a new monitor.
+     * Specifies the health check protocol. Value options: **TCP**, **UDP_CONNECT**,
+     * **HTTP**, **HTTPS**, **GRPC** or **TLS**.
+     * + If the protocol of the backend server is **QUIC**, the value can only be **UDP_CONNECT**.
+     * + If the protocol of the backend server is **UDP**, the value can only be **UDP_CONNECT**.
+     * + If the protocol of the backend server is **TCP**, the value can only be **TCP**, **HTTP** or **HTTPS**.
+     * + If the protocol of the backend server is **HTTP**, the value can only be **TCP**, **HTTP**, **HTTPS**, **TLS** or **GRPC**.
+     * + If the protocol of the backend server is **HTTPS**, the value can only be **TCP**, **HTTP**, **HTTPS**, **TLS** or **GRPC**.
+     * + If the protocol of the backend server is **GRPC**, the value can only be **TCP**, **HTTP**, **HTTPS**, **TLS** or **GRPC**.
+     * + If the protocol of the backend server is **TLS**, the value can only be **TCP**, **HTTP**, **HTTPS**, **TLS** or **GRPC**.
      */
     protocol: pulumi.Input<string>;
     /**
@@ -239,13 +397,24 @@ export interface MonitorArgs {
      */
     region?: pulumi.Input<string>;
     /**
-     * Maximum number of seconds for a monitor to wait for a ping reply before it times out. The
-     * value must be less than the delay value.
+     * Specifies the expected HTTP status code. This parameter will take effect only when
+     * `protocol` is set to **HTTP** or **HTTPS**. Value options are as follows:
+     * + A specific value, for example: **200**.
+     * + A list of values that are separated with commas (,), for example: **200,202**.
+     * + A value range, for example: **200-204**.
+     */
+    statusCode?: pulumi.Input<string>;
+    /**
+     * Specifies the maximum time required for waiting for a response from the health check,
+     * in seconds. Value ranges from `1` to `50`. It is recommended that you set the value less than that of
+     * parameter `interval`.
      */
     timeout: pulumi.Input<number>;
     /**
-     * Required for HTTP(S) types. URI path that will be accessed if monitor type is HTTP or
-     * HTTPS.
+     * Specifies the HTTP request path for the health check. The value must start with a
+     * slash (/), can contain letters, digits, hyphens (-), slash (/), periods (.), percent signs (%), hashes(#), and(&)
+     * and the special characters: `~!()*[]@$^:',+`, and the default value is **&#47;**. This parameter is available only when
+     * `protocol` is set to **HTTP** or **HTTPS**.
      */
     urlPath?: pulumi.Input<string>;
 }

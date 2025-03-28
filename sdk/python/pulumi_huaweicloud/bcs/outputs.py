@@ -50,10 +50,10 @@ class InstanceBlockInfo(dict):
         """
         :param int block_size: Specifies the volume of the block, the unit is MB. The default value is 2.
                Changing this creates a new instance.
-        :param int generation_interval: Specifies the block generation time, the unit is second. The defalt
+        :param int generation_interval: Specifies the block generation time, the unit is second. The default
                value is 2. Changing this creates a new instance.
         :param int transaction_quantity: Specifies the number of transactions included in the block. The
-               defalt value is 500. Changing this creates a new instance.
+               default value is 500. Changing this creates a new instance.
         """
         if block_size is not None:
             pulumi.set(__self__, "block_size", block_size)
@@ -75,7 +75,7 @@ class InstanceBlockInfo(dict):
     @pulumi.getter(name="generationInterval")
     def generation_interval(self) -> Optional[int]:
         """
-        Specifies the block generation time, the unit is second. The defalt
+        Specifies the block generation time, the unit is second. The default
         value is 2. Changing this creates a new instance.
         """
         return pulumi.get(self, "generation_interval")
@@ -85,7 +85,7 @@ class InstanceBlockInfo(dict):
     def transaction_quantity(self) -> Optional[int]:
         """
         Specifies the number of transactions included in the block. The
-        defalt value is 500. Changing this creates a new instance.
+        default value is 500. Changing this creates a new instance.
         """
         return pulumi.get(self, "transaction_quantity")
 
@@ -162,10 +162,10 @@ class InstanceCouchdb(dict):
                  password: str,
                  user_name: str):
         """
-        :param str password: Specifies the password of the couch datebase. The password consists of 8 to
+        :param str password: Specifies the password of the couch database. The password consists of 8 to
                26 characters and must consist at least three of following: uppercase letters, lowercase letters, digits, special
                characters(!@$%^-_=+[{}]:,./?). Changing this creates a new instance.
-        :param str user_name: Specifies the user name of the couch datebase. Changing this creates a new
+        :param str user_name: Specifies the user name of the couch database. Changing this creates a new
                instance.
         """
         pulumi.set(__self__, "password", password)
@@ -175,7 +175,7 @@ class InstanceCouchdb(dict):
     @pulumi.getter
     def password(self) -> str:
         """
-        Specifies the password of the couch datebase. The password consists of 8 to
+        Specifies the password of the couch database. The password consists of 8 to
         26 characters and must consist at least three of following: uppercase letters, lowercase letters, digits, special
         characters(!@$%^-_=+[{}]:,./?). Changing this creates a new instance.
         """
@@ -185,7 +185,7 @@ class InstanceCouchdb(dict):
     @pulumi.getter(name="userName")
     def user_name(self) -> str:
         """
-        Specifies the user name of the couch datebase. Changing this creates a new
+        Specifies the user name of the couch database. Changing this creates a new
         instance.
         """
         return pulumi.get(self, "user_name")

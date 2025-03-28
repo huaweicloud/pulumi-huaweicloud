@@ -8,17 +8,19 @@ import * as utilities from "../utilities";
 /**
  * Manages a Workspace desktop resource within HuaweiCloud.
  *
+ * > **NOTE:** Before creating Workspace desktop, ensure that the Workspace service has been registered.
+ *
  * ## Example Usage
  *
  * ## Import
  *
- * Desktops can be imported using the `id`, e.g.
+ * Desktops can be imported using the `id`, e.g. bash
  *
  * ```sh
  *  $ pulumi import huaweicloud:Workspace/desktop:Desktop test 339d2539-e945-4090-a08d-c16badc0c6bb
  * ```
  *
- *  Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response. The missing attributes include`nic` and `user_email`. It is generally recommended running `terraform plan` after importing a desktop. You can then decide if changes should be applied to the desktop, or the resource definition should be updated to align with the desktop. Also you can ignore changes as below. resource "huaweicloud_workspace_desktop" "test" {
+ *  Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response. The missing attributes include`user_email`, `delete_user`, `image_type`, `vpc_id`, `power_action`, `power_action_type` and `email_notification`. It is generally recommended running `terraform plan` after importing a desktop. You can then decide if changes should be applied to the desktop, or the resource definition should be updated to align with the desktop. Also you can ignore changes as below. hcl resource "huaweicloud_workspace_desktop" "test" {
  *
  *  ...
  *
@@ -26,7 +28,7 @@ import * as utilities from "../utilities";
  *
  *  ignore_changes = [
  *
- *  user_email, nic,
+ *  user_email, delete_user, image_type, vpc_id, power_action, power_action_type, email_notification,
  *
  *  ]
  *
@@ -82,12 +84,15 @@ export class Desktop extends pulumi.CustomResource {
      */
     public readonly emailNotification!: pulumi.Output<boolean | undefined>;
     /**
+     * Specifies the enterprise project ID of the desktop.
+     */
+    public readonly enterpriseProjectId!: pulumi.Output<string>;
+    /**
      * Specifies the flavor ID of desktop.
      */
     public readonly flavorId!: pulumi.Output<string>;
     /**
      * Specifies the image ID to create the desktop.
-     * Changing this will create a new resource.
      */
     public readonly imageId!: pulumi.Output<string>;
     /**
@@ -106,9 +111,21 @@ export class Desktop extends pulumi.CustomResource {
     public readonly name!: pulumi.Output<string>;
     /**
      * Specifies the NIC information corresponding to the desktop.
-     * The object structure is documented below. Changing this will create a new resource.
+     * The object structure is documented below.
      */
-    public readonly nics!: pulumi.Output<outputs.Workspace.DesktopNic[] | undefined>;
+    public readonly nics!: pulumi.Output<outputs.Workspace.DesktopNic[]>;
+    /**
+     * Specifies the power action to be done for the desktop.
+     * The valid values are **os-start**, **os-stop**, **reboot**, **os-hibernate**.
+     */
+    public readonly powerAction!: pulumi.Output<string>;
+    /**
+     * Specifies the power action mechanisms for the desktop.
+     * The valid values are as follows:
+     * + **SOFT**: Normal operation.
+     * + **HARD**: Forced operation.
+     */
+    public readonly powerActionType!: pulumi.Output<string | undefined>;
     /**
      * The region in which to create the Workspace desktop resource.
      * If omitted, the provider-level region will be used. Changing this will create a new resource.
@@ -126,8 +143,11 @@ export class Desktop extends pulumi.CustomResource {
      */
     public readonly securityGroups!: pulumi.Output<string[]>;
     /**
+     * The current status of the desktop.
+     */
+    public /*out*/ readonly status!: pulumi.Output<string>;
+    /**
      * Specifies the key/value pairs of the desktop.
-     * Changing this will create a new resource.
      */
     public readonly tags!: pulumi.Output<{[key: string]: string} | undefined>;
     /**
@@ -174,14 +194,18 @@ export class Desktop extends pulumi.CustomResource {
             resourceInputs["dataVolumes"] = state ? state.dataVolumes : undefined;
             resourceInputs["deleteUser"] = state ? state.deleteUser : undefined;
             resourceInputs["emailNotification"] = state ? state.emailNotification : undefined;
+            resourceInputs["enterpriseProjectId"] = state ? state.enterpriseProjectId : undefined;
             resourceInputs["flavorId"] = state ? state.flavorId : undefined;
             resourceInputs["imageId"] = state ? state.imageId : undefined;
             resourceInputs["imageType"] = state ? state.imageType : undefined;
             resourceInputs["name"] = state ? state.name : undefined;
             resourceInputs["nics"] = state ? state.nics : undefined;
+            resourceInputs["powerAction"] = state ? state.powerAction : undefined;
+            resourceInputs["powerActionType"] = state ? state.powerActionType : undefined;
             resourceInputs["region"] = state ? state.region : undefined;
             resourceInputs["rootVolume"] = state ? state.rootVolume : undefined;
             resourceInputs["securityGroups"] = state ? state.securityGroups : undefined;
+            resourceInputs["status"] = state ? state.status : undefined;
             resourceInputs["tags"] = state ? state.tags : undefined;
             resourceInputs["userEmail"] = state ? state.userEmail : undefined;
             resourceInputs["userGroup"] = state ? state.userGroup : undefined;
@@ -217,11 +241,14 @@ export class Desktop extends pulumi.CustomResource {
             resourceInputs["dataVolumes"] = args ? args.dataVolumes : undefined;
             resourceInputs["deleteUser"] = args ? args.deleteUser : undefined;
             resourceInputs["emailNotification"] = args ? args.emailNotification : undefined;
+            resourceInputs["enterpriseProjectId"] = args ? args.enterpriseProjectId : undefined;
             resourceInputs["flavorId"] = args ? args.flavorId : undefined;
             resourceInputs["imageId"] = args ? args.imageId : undefined;
             resourceInputs["imageType"] = args ? args.imageType : undefined;
             resourceInputs["name"] = args ? args.name : undefined;
             resourceInputs["nics"] = args ? args.nics : undefined;
+            resourceInputs["powerAction"] = args ? args.powerAction : undefined;
+            resourceInputs["powerActionType"] = args ? args.powerActionType : undefined;
             resourceInputs["region"] = args ? args.region : undefined;
             resourceInputs["rootVolume"] = args ? args.rootVolume : undefined;
             resourceInputs["securityGroups"] = args ? args.securityGroups : undefined;
@@ -230,6 +257,7 @@ export class Desktop extends pulumi.CustomResource {
             resourceInputs["userGroup"] = args ? args.userGroup : undefined;
             resourceInputs["userName"] = args ? args.userName : undefined;
             resourceInputs["vpcId"] = args ? args.vpcId : undefined;
+            resourceInputs["status"] = undefined /*out*/;
         }
         opts = pulumi.mergeOptions(utilities.resourceOptsDefaults(), opts);
         super(Desktop.__pulumiType, name, resourceInputs, opts);
@@ -262,12 +290,15 @@ export interface DesktopState {
      */
     emailNotification?: pulumi.Input<boolean>;
     /**
+     * Specifies the enterprise project ID of the desktop.
+     */
+    enterpriseProjectId?: pulumi.Input<string>;
+    /**
      * Specifies the flavor ID of desktop.
      */
     flavorId?: pulumi.Input<string>;
     /**
      * Specifies the image ID to create the desktop.
-     * Changing this will create a new resource.
      */
     imageId?: pulumi.Input<string>;
     /**
@@ -286,9 +317,21 @@ export interface DesktopState {
     name?: pulumi.Input<string>;
     /**
      * Specifies the NIC information corresponding to the desktop.
-     * The object structure is documented below. Changing this will create a new resource.
+     * The object structure is documented below.
      */
     nics?: pulumi.Input<pulumi.Input<inputs.Workspace.DesktopNic>[]>;
+    /**
+     * Specifies the power action to be done for the desktop.
+     * The valid values are **os-start**, **os-stop**, **reboot**, **os-hibernate**.
+     */
+    powerAction?: pulumi.Input<string>;
+    /**
+     * Specifies the power action mechanisms for the desktop.
+     * The valid values are as follows:
+     * + **SOFT**: Normal operation.
+     * + **HARD**: Forced operation.
+     */
+    powerActionType?: pulumi.Input<string>;
     /**
      * The region in which to create the Workspace desktop resource.
      * If omitted, the provider-level region will be used. Changing this will create a new resource.
@@ -306,8 +349,11 @@ export interface DesktopState {
      */
     securityGroups?: pulumi.Input<pulumi.Input<string>[]>;
     /**
+     * The current status of the desktop.
+     */
+    status?: pulumi.Input<string>;
+    /**
      * Specifies the key/value pairs of the desktop.
-     * Changing this will create a new resource.
      */
     tags?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
     /**
@@ -364,12 +410,15 @@ export interface DesktopArgs {
      */
     emailNotification?: pulumi.Input<boolean>;
     /**
+     * Specifies the enterprise project ID of the desktop.
+     */
+    enterpriseProjectId?: pulumi.Input<string>;
+    /**
      * Specifies the flavor ID of desktop.
      */
     flavorId: pulumi.Input<string>;
     /**
      * Specifies the image ID to create the desktop.
-     * Changing this will create a new resource.
      */
     imageId: pulumi.Input<string>;
     /**
@@ -388,9 +437,21 @@ export interface DesktopArgs {
     name?: pulumi.Input<string>;
     /**
      * Specifies the NIC information corresponding to the desktop.
-     * The object structure is documented below. Changing this will create a new resource.
+     * The object structure is documented below.
      */
     nics?: pulumi.Input<pulumi.Input<inputs.Workspace.DesktopNic>[]>;
+    /**
+     * Specifies the power action to be done for the desktop.
+     * The valid values are **os-start**, **os-stop**, **reboot**, **os-hibernate**.
+     */
+    powerAction?: pulumi.Input<string>;
+    /**
+     * Specifies the power action mechanisms for the desktop.
+     * The valid values are as follows:
+     * + **SOFT**: Normal operation.
+     * + **HARD**: Forced operation.
+     */
+    powerActionType?: pulumi.Input<string>;
     /**
      * The region in which to create the Workspace desktop resource.
      * If omitted, the provider-level region will be used. Changing this will create a new resource.
@@ -409,7 +470,6 @@ export interface DesktopArgs {
     securityGroups?: pulumi.Input<pulumi.Input<string>[]>;
     /**
      * Specifies the key/value pairs of the desktop.
-     * Changing this will create a new resource.
      */
     tags?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
     /**

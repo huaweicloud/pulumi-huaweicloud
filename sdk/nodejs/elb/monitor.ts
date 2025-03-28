@@ -55,7 +55,7 @@ import * as utilities from "../utilities";
  *
  * ## Import
  *
- * ELB monitor can be imported using the monitor ID, e.g.
+ * ELB monitor can be imported using the monitor ID, e.g. bash
  *
  * ```sh
  *  $ pulumi import huaweicloud:Elb/monitor:Monitor monitor_1 5c20fdad-7288-11eb-b817-0255ac10158b
@@ -120,7 +120,7 @@ export class Monitor extends pulumi.CustomResource {
      */
     public readonly poolId!: pulumi.Output<string>;
     /**
-     * Specifies the health check port. The port number ranges from 1 to 65535. If not specified,
+     * Specifies the health check port. The port number ranges from `1` to `65,535`. If not specified,
      * the port of the backend server will be used as the health check port.
      */
     public readonly port!: pulumi.Output<number | undefined>;
@@ -247,7 +247,7 @@ export interface MonitorState {
      */
     poolId?: pulumi.Input<string>;
     /**
-     * Specifies the health check port. The port number ranges from 1 to 65535. If not specified,
+     * Specifies the health check port. The port number ranges from `1` to `65,535`. If not specified,
      * the port of the backend server will be used as the health check port.
      */
     port?: pulumi.Input<number>;
@@ -313,7 +313,7 @@ export interface MonitorArgs {
      */
     poolId: pulumi.Input<string>;
     /**
-     * Specifies the health check port. The port number ranges from 1 to 65535. If not specified,
+     * Specifies the health check port. The port number ranges from `1` to `65,535`. If not specified,
      * the port of the backend server will be used as the health check port.
      */
     port?: pulumi.Input<number>;

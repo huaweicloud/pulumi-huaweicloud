@@ -19,12 +19,10 @@ class TagsTag(dict):
                  key: str,
                  value: str):
         """
-        :param str key: Specifies the tag key. The value can contain up to 36 characters.
-               Only letters, digits, hyphens (-), underscores (_), and Unicode characters from \\u4e00 to \\u9fff are allowed.
-               Changing this will create a new resource.
-        :param str value: Specifies the tag value. The value can contain up to 43 characters.
-               Only letters, digits, periods (.), hyphens (-), and underscores (_), and Unicode characters from \\u4e00 to \\u9fff
-               are allowed. Changing this will create a new resource.
+        :param str key: Specifies the tag key. The value can contain up to `36` characters. Only English letters,
+               Chinese characters, digits, hyphens (-) and underscores (_) are allowed.
+        :param str value: Specifies the tag value. The value can contain up to `43` characters. Only English letters,
+               Chinese characters, digits, periods (.), hyphens (-) and underscores (_) are allowed.
         """
         pulumi.set(__self__, "key", key)
         pulumi.set(__self__, "value", value)
@@ -33,9 +31,8 @@ class TagsTag(dict):
     @pulumi.getter
     def key(self) -> str:
         """
-        Specifies the tag key. The value can contain up to 36 characters.
-        Only letters, digits, hyphens (-), underscores (_), and Unicode characters from \\u4e00 to \\u9fff are allowed.
-        Changing this will create a new resource.
+        Specifies the tag key. The value can contain up to `36` characters. Only English letters,
+        Chinese characters, digits, hyphens (-) and underscores (_) are allowed.
         """
         return pulumi.get(self, "key")
 
@@ -43,9 +40,8 @@ class TagsTag(dict):
     @pulumi.getter
     def value(self) -> str:
         """
-        Specifies the tag value. The value can contain up to 43 characters.
-        Only letters, digits, periods (.), hyphens (-), and underscores (_), and Unicode characters from \\u4e00 to \\u9fff
-        are allowed. Changing this will create a new resource.
+        Specifies the tag value. The value can contain up to `43` characters. Only English letters,
+        Chinese characters, digits, periods (.), hyphens (-) and underscores (_) are allowed.
         """
         return pulumi.get(self, "value")
 

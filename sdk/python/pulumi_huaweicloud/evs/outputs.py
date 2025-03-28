@@ -86,13 +86,16 @@ class GetVolumesVolumeResult(dict):
                  description: str,
                  enterprise_project_id: str,
                  id: str,
+                 iops: int,
                  name: str,
                  service_type: str,
                  shareable: bool,
                  size: int,
                  status: str,
                  tags: Mapping[str, str],
+                 throughput: int,
                  update_at: str,
+                 volume_type: str,
                  wwn: str):
         """
         :param Sequence['GetVolumesVolumeAttachmentArgs'] attachments: The disk attachment information. Structure is documented below.
@@ -102,7 +105,10 @@ class GetVolumesVolumeResult(dict):
         :param str description: The disk description.
         :param str enterprise_project_id: Specifies the enterprise project ID for filtering.
         :param str id: The ID of the attached resource in UUID format.
-        :param str name: The disk name.
+        :param int iops: the IOPS(Input/Output Operations Per Second) of the volume. Only valid when `volume_type` is **GPSSD2** or
+               **ESSD2**.
+        :param str name: Specifies the name for the disks. This field will undergo a fuzzy matching query, the
+               query result is for all disks whose names contain this value.
         :param str service_type: The service type, such as EVS, DSS or DESS.
         :param bool shareable: Specifies whether the disk is shareable.
         :param int size: The disk size, in GB.
@@ -121,7 +127,15 @@ class GetVolumesVolumeResult(dict):
                + **ERROR**
                + **VPN**
         :param Mapping[str, str] tags: Specifies the included key/value pairs which associated with the desired disk.
+        :param int throughput: The throughput of the system disk. Only valid when `volume_type` is **GPSSD2**.
         :param str update_at: The time when the disk was updated.
+        :param str volume_type: The disk type. Valid values are as follows:
+               + **SAS**: High I/O type.
+               + **SSD**: Ultra-high I/O type.
+               + **GPSSD**: General purpose SSD type.
+               + **ESSD**: Extreme SSD type.
+               + **GPSSD2**: General purpose SSD V2 type.
+               + **ESSD2**: Extreme SSD V2 type.
         :param str wwn: The unique identifier used when attaching the disk.
         """
         pulumi.set(__self__, "attachments", attachments)
@@ -131,13 +145,16 @@ class GetVolumesVolumeResult(dict):
         pulumi.set(__self__, "description", description)
         pulumi.set(__self__, "enterprise_project_id", enterprise_project_id)
         pulumi.set(__self__, "id", id)
+        pulumi.set(__self__, "iops", iops)
         pulumi.set(__self__, "name", name)
         pulumi.set(__self__, "service_type", service_type)
         pulumi.set(__self__, "shareable", shareable)
         pulumi.set(__self__, "size", size)
         pulumi.set(__self__, "status", status)
         pulumi.set(__self__, "tags", tags)
+        pulumi.set(__self__, "throughput", throughput)
         pulumi.set(__self__, "update_at", update_at)
+        pulumi.set(__self__, "volume_type", volume_type)
         pulumi.set(__self__, "wwn", wwn)
 
     @property
@@ -198,9 +215,19 @@ class GetVolumesVolumeResult(dict):
 
     @property
     @pulumi.getter
+    def iops(self) -> int:
+        """
+        the IOPS(Input/Output Operations Per Second) of the volume. Only valid when `volume_type` is **GPSSD2** or
+        **ESSD2**.
+        """
+        return pulumi.get(self, "iops")
+
+    @property
+    @pulumi.getter
     def name(self) -> str:
         """
-        The disk name.
+        Specifies the name for the disks. This field will undergo a fuzzy matching query, the
+        query result is for all disks whose names contain this value.
         """
         return pulumi.get(self, "name")
 
@@ -258,12 +285,34 @@ class GetVolumesVolumeResult(dict):
         return pulumi.get(self, "tags")
 
     @property
+    @pulumi.getter
+    def throughput(self) -> int:
+        """
+        The throughput of the system disk. Only valid when `volume_type` is **GPSSD2**.
+        """
+        return pulumi.get(self, "throughput")
+
+    @property
     @pulumi.getter(name="updateAt")
     def update_at(self) -> str:
         """
         The time when the disk was updated.
         """
         return pulumi.get(self, "update_at")
+
+    @property
+    @pulumi.getter(name="volumeType")
+    def volume_type(self) -> str:
+        """
+        The disk type. Valid values are as follows:
+        + **SAS**: High I/O type.
+        + **SSD**: Ultra-high I/O type.
+        + **GPSSD**: General purpose SSD type.
+        + **ESSD**: Extreme SSD type.
+        + **GPSSD2**: General purpose SSD V2 type.
+        + **ESSD2**: Extreme SSD V2 type.
+        """
+        return pulumi.get(self, "volume_type")
 
     @property
     @pulumi.getter

@@ -20,7 +20,7 @@ import * as utilities from "../utilities";
  *
  * ## Import
  *
- * Projects can be imported using the `id`, e.g.
+ * Projects can be imported using the `id`, e.g. bash
  *
  * ```sh
  *  $ pulumi import huaweicloud:Cpts/project:Project test 1090
@@ -60,11 +60,11 @@ export class Project extends pulumi.CustomResource {
     public /*out*/ readonly createdAt!: pulumi.Output<string>;
     /**
      * Specifies the description of the project, which can contain a maximum of
-     * 50 characters.
+     * `50` characters.
      */
     public readonly description!: pulumi.Output<string | undefined>;
     /**
-     * Specifies a name for the project, which can contain a maximum of 42 characters.
+     * Specifies a name for the project, which can contain a maximum of `42` characters.
      */
     public readonly name!: pulumi.Output<string>;
     /**
@@ -118,11 +118,11 @@ export interface ProjectState {
     createdAt?: pulumi.Input<string>;
     /**
      * Specifies the description of the project, which can contain a maximum of
-     * 50 characters.
+     * `50` characters.
      */
     description?: pulumi.Input<string>;
     /**
-     * Specifies a name for the project, which can contain a maximum of 42 characters.
+     * Specifies a name for the project, which can contain a maximum of `42` characters.
      */
     name?: pulumi.Input<string>;
     /**
@@ -142,11 +142,11 @@ export interface ProjectState {
 export interface ProjectArgs {
     /**
      * Specifies the description of the project, which can contain a maximum of
-     * 50 characters.
+     * `50` characters.
      */
     description?: pulumi.Input<string>;
     /**
-     * Specifies a name for the project, which can contain a maximum of 42 characters.
+     * Specifies a name for the project, which can contain a maximum of `42` characters.
      */
     name?: pulumi.Input<string>;
     /**

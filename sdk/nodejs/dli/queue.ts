@@ -2,52 +2,54 @@
 // *** Do not edit by hand unless you're certain you know what you are doing! ***
 
 import * as pulumi from "@pulumi/pulumi";
+import { input as inputs, output as outputs } from "../types";
 import * as utilities from "../utilities";
 
 /**
  * Manages DLI Queue resource within HuaweiCloud
  *
  * ## Example Usage
- * ### Create a queue
+ * ### Create an exclusive mode queue
  *
  * ```typescript
  * import * as pulumi from "@pulumi/pulumi";
- * import * as huaweicloud from "@pulumi/huaweicloud";
+ * import * as pulumi from "@huaweicloudos/pulumi";
  *
- * const queue = new huaweicloud.Dli.Queue("queue", {
- *     cuCount: 16,
- *     tags: {
- *         foo: "bar",
- *         key: "value",
- *     },
- * });
- * ```
- * ### Create a queue with CIDR Block
- *
- * ```typescript
- * import * as pulumi from "@pulumi/pulumi";
- * import * as huaweicloud from "@pulumi/huaweicloud";
- *
- * const queue = new huaweicloud.Dli.Queue("queue", {
- *     cuCount: 16,
+ * const config = new pulumi.Config();
+ * const elasticResourcePoolName = config.requireObject("elasticResourcePoolName");
+ * const queueName = config.requireObject("queueName");
+ * const test = new huaweicloud.dli.Queue("test", {
+ *     elasticResourcePoolName: elasticResourcePoolName,
  *     resourceMode: 1,
+ *     cuCount: 16,
  *     tags: {
  *         foo: "bar",
  *         key: "value",
  *     },
- *     vpcCidr: "172.16.0.0/14",
  * });
  * ```
  *
  * ## Import
  *
- * DLI queue can be imported by
- *
- * `id`. For example,
+ * ### Import a SQL type queue bash
  *
  * ```sh
- *  $ pulumi import huaweicloud:Dli/queue:Queue example abc123
+ *  $ pulumi import huaweicloud:Dli/queue:Queue test <name>
  * ```
+ *
+ *  Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response. The missing attributes include`tags`. It is generally recommended running `terraform plan` after importing a DLI queue. You can then decide if changes should be applied to the resource, or the resource definition should be updated to align with the resource. Also you can ignore changes as below. hcl resource "huaweicloud_dli_queue" "test" {
+ *
+ *  ...
+ *
+ *  lifecycle {
+ *
+ *  ignore_changes = [
+ *
+ *  tags
+ *
+ *  ]
+ *
+ *  } }
  */
 export class Queue extends pulumi.CustomResource {
     /**
@@ -83,7 +85,7 @@ export class Queue extends pulumi.CustomResource {
     public /*out*/ readonly createTime!: pulumi.Output<number>;
     /**
      * Minimum number of CUs that are bound to a queue. Initial value can be `16`,
-     * `64`, or `256`. When scaleOut or scale_in, the number must be a multiple of 16
+     * `64`, or `256`. When scaleOut or scale_in, the number must be a multiple of `16`.
      */
     public readonly cuCount!: pulumi.Output<number>;
     /**
@@ -91,6 +93,11 @@ export class Queue extends pulumi.CustomResource {
      * resource.
      */
     public readonly description!: pulumi.Output<string>;
+    /**
+     * Specifies the name of the elastic resource pool to which the queue
+     * belongs.
+     */
+    public readonly elasticResourcePoolName!: pulumi.Output<string>;
     /**
      * Enterprise project ID. The value 0 indicates the default
      * enterprise project. Changing this parameter will create a new resource.
@@ -109,8 +116,8 @@ export class Queue extends pulumi.CustomResource {
     public readonly managementSubnetCidr!: pulumi.Output<string | undefined>;
     /**
      * Name of a queue. Name of a newly created resource queue. The name can contain
-     * only digits, letters, and underscores (\_), but cannot contain only digits or start with an underscore (_). Length
-     * range: 1 to 128 characters. Changing this parameter will create a new resource.
+     * only digits, lowercase letters, and underscores (\_), but cannot contain only digits or start with an underscore (_).
+     * Length range: `1` to `128` characters. Changing this parameter will create a new resource.
      */
     public readonly name!: pulumi.Output<string>;
     /**
@@ -133,12 +140,25 @@ export class Queue extends pulumi.CustomResource {
      */
     public readonly region!: pulumi.Output<string>;
     /**
-     * Queue resource mode. Changing this parameter will create a new
-     * resource. The options are as follows:
-     * + 0: indicates the shared resource mode.
+     * Specifies the queue resource mode.  
+     * The valid value is as follows:
      * + 1: indicates the exclusive resource mode.
      */
-    public readonly resourceMode!: pulumi.Output<number | undefined>;
+    public readonly resourceMode!: pulumi.Output<number>;
+    /**
+     * Specifies the list of scaling policies of the queue associated with
+     * an elastic resource pool.
+     * This parameter is only available if `resourceMode` is set to `1`.
+     * If you want to use this parameter, you must ensure that there is a scaling policy with a time period from `00:00` to `24:00`.
+     * The scalingPolicies structure is documented below.
+     */
+    public readonly scalingPolicies!: pulumi.Output<outputs.Dli.QueueScalingPolicy[]>;
+    /**
+     * Specifies spark driver configuration of the queue.
+     * This parameter is only available if `queueType` is set to `sql`.
+     * The sparkDriver structure is documented below.
+     */
+    public readonly sparkDriver!: pulumi.Output<outputs.Dli.QueueSparkDriver | undefined>;
     /**
      * @deprecated subnet_cidr is Deprecated
      */
@@ -148,9 +168,7 @@ export class Queue extends pulumi.CustomResource {
      */
     public readonly tags!: pulumi.Output<{[key: string]: string} | undefined>;
     /**
-     * The CIDR block of a queue. If use DLI enhanced datasource connections, the CIDR block
-     * cannot be the same as that of the data source.
-     * The CIDR blocks supported by different CU specifications:
+     * The CIDR block of the queue.
      */
     public readonly vpcCidr!: pulumi.Output<string>;
 
@@ -170,6 +188,7 @@ export class Queue extends pulumi.CustomResource {
             resourceInputs["createTime"] = state ? state.createTime : undefined;
             resourceInputs["cuCount"] = state ? state.cuCount : undefined;
             resourceInputs["description"] = state ? state.description : undefined;
+            resourceInputs["elasticResourcePoolName"] = state ? state.elasticResourcePoolName : undefined;
             resourceInputs["enterpriseProjectId"] = state ? state.enterpriseProjectId : undefined;
             resourceInputs["feature"] = state ? state.feature : undefined;
             resourceInputs["managementSubnetCidr"] = state ? state.managementSubnetCidr : undefined;
@@ -178,6 +197,8 @@ export class Queue extends pulumi.CustomResource {
             resourceInputs["queueType"] = state ? state.queueType : undefined;
             resourceInputs["region"] = state ? state.region : undefined;
             resourceInputs["resourceMode"] = state ? state.resourceMode : undefined;
+            resourceInputs["scalingPolicies"] = state ? state.scalingPolicies : undefined;
+            resourceInputs["sparkDriver"] = state ? state.sparkDriver : undefined;
             resourceInputs["subnetCidr"] = state ? state.subnetCidr : undefined;
             resourceInputs["tags"] = state ? state.tags : undefined;
             resourceInputs["vpcCidr"] = state ? state.vpcCidr : undefined;
@@ -188,6 +209,7 @@ export class Queue extends pulumi.CustomResource {
             }
             resourceInputs["cuCount"] = args ? args.cuCount : undefined;
             resourceInputs["description"] = args ? args.description : undefined;
+            resourceInputs["elasticResourcePoolName"] = args ? args.elasticResourcePoolName : undefined;
             resourceInputs["enterpriseProjectId"] = args ? args.enterpriseProjectId : undefined;
             resourceInputs["feature"] = args ? args.feature : undefined;
             resourceInputs["managementSubnetCidr"] = args ? args.managementSubnetCidr : undefined;
@@ -196,6 +218,8 @@ export class Queue extends pulumi.CustomResource {
             resourceInputs["queueType"] = args ? args.queueType : undefined;
             resourceInputs["region"] = args ? args.region : undefined;
             resourceInputs["resourceMode"] = args ? args.resourceMode : undefined;
+            resourceInputs["scalingPolicies"] = args ? args.scalingPolicies : undefined;
+            resourceInputs["sparkDriver"] = args ? args.sparkDriver : undefined;
             resourceInputs["subnetCidr"] = args ? args.subnetCidr : undefined;
             resourceInputs["tags"] = args ? args.tags : undefined;
             resourceInputs["vpcCidr"] = args ? args.vpcCidr : undefined;
@@ -216,7 +240,7 @@ export interface QueueState {
     createTime?: pulumi.Input<number>;
     /**
      * Minimum number of CUs that are bound to a queue. Initial value can be `16`,
-     * `64`, or `256`. When scaleOut or scale_in, the number must be a multiple of 16
+     * `64`, or `256`. When scaleOut or scale_in, the number must be a multiple of `16`.
      */
     cuCount?: pulumi.Input<number>;
     /**
@@ -224,6 +248,11 @@ export interface QueueState {
      * resource.
      */
     description?: pulumi.Input<string>;
+    /**
+     * Specifies the name of the elastic resource pool to which the queue
+     * belongs.
+     */
+    elasticResourcePoolName?: pulumi.Input<string>;
     /**
      * Enterprise project ID. The value 0 indicates the default
      * enterprise project. Changing this parameter will create a new resource.
@@ -242,8 +271,8 @@ export interface QueueState {
     managementSubnetCidr?: pulumi.Input<string>;
     /**
      * Name of a queue. Name of a newly created resource queue. The name can contain
-     * only digits, letters, and underscores (\_), but cannot contain only digits or start with an underscore (_). Length
-     * range: 1 to 128 characters. Changing this parameter will create a new resource.
+     * only digits, lowercase letters, and underscores (\_), but cannot contain only digits or start with an underscore (_).
+     * Length range: `1` to `128` characters. Changing this parameter will create a new resource.
      */
     name?: pulumi.Input<string>;
     /**
@@ -266,12 +295,25 @@ export interface QueueState {
      */
     region?: pulumi.Input<string>;
     /**
-     * Queue resource mode. Changing this parameter will create a new
-     * resource. The options are as follows:
-     * + 0: indicates the shared resource mode.
+     * Specifies the queue resource mode.  
+     * The valid value is as follows:
      * + 1: indicates the exclusive resource mode.
      */
     resourceMode?: pulumi.Input<number>;
+    /**
+     * Specifies the list of scaling policies of the queue associated with
+     * an elastic resource pool.
+     * This parameter is only available if `resourceMode` is set to `1`.
+     * If you want to use this parameter, you must ensure that there is a scaling policy with a time period from `00:00` to `24:00`.
+     * The scalingPolicies structure is documented below.
+     */
+    scalingPolicies?: pulumi.Input<pulumi.Input<inputs.Dli.QueueScalingPolicy>[]>;
+    /**
+     * Specifies spark driver configuration of the queue.
+     * This parameter is only available if `queueType` is set to `sql`.
+     * The sparkDriver structure is documented below.
+     */
+    sparkDriver?: pulumi.Input<inputs.Dli.QueueSparkDriver>;
     /**
      * @deprecated subnet_cidr is Deprecated
      */
@@ -281,9 +323,7 @@ export interface QueueState {
      */
     tags?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
     /**
-     * The CIDR block of a queue. If use DLI enhanced datasource connections, the CIDR block
-     * cannot be the same as that of the data source.
-     * The CIDR blocks supported by different CU specifications:
+     * The CIDR block of the queue.
      */
     vpcCidr?: pulumi.Input<string>;
 }
@@ -294,7 +334,7 @@ export interface QueueState {
 export interface QueueArgs {
     /**
      * Minimum number of CUs that are bound to a queue. Initial value can be `16`,
-     * `64`, or `256`. When scaleOut or scale_in, the number must be a multiple of 16
+     * `64`, or `256`. When scaleOut or scale_in, the number must be a multiple of `16`.
      */
     cuCount: pulumi.Input<number>;
     /**
@@ -302,6 +342,11 @@ export interface QueueArgs {
      * resource.
      */
     description?: pulumi.Input<string>;
+    /**
+     * Specifies the name of the elastic resource pool to which the queue
+     * belongs.
+     */
+    elasticResourcePoolName?: pulumi.Input<string>;
     /**
      * Enterprise project ID. The value 0 indicates the default
      * enterprise project. Changing this parameter will create a new resource.
@@ -320,8 +365,8 @@ export interface QueueArgs {
     managementSubnetCidr?: pulumi.Input<string>;
     /**
      * Name of a queue. Name of a newly created resource queue. The name can contain
-     * only digits, letters, and underscores (\_), but cannot contain only digits or start with an underscore (_). Length
-     * range: 1 to 128 characters. Changing this parameter will create a new resource.
+     * only digits, lowercase letters, and underscores (\_), but cannot contain only digits or start with an underscore (_).
+     * Length range: `1` to `128` characters. Changing this parameter will create a new resource.
      */
     name?: pulumi.Input<string>;
     /**
@@ -344,12 +389,25 @@ export interface QueueArgs {
      */
     region?: pulumi.Input<string>;
     /**
-     * Queue resource mode. Changing this parameter will create a new
-     * resource. The options are as follows:
-     * + 0: indicates the shared resource mode.
+     * Specifies the queue resource mode.  
+     * The valid value is as follows:
      * + 1: indicates the exclusive resource mode.
      */
     resourceMode?: pulumi.Input<number>;
+    /**
+     * Specifies the list of scaling policies of the queue associated with
+     * an elastic resource pool.
+     * This parameter is only available if `resourceMode` is set to `1`.
+     * If you want to use this parameter, you must ensure that there is a scaling policy with a time period from `00:00` to `24:00`.
+     * The scalingPolicies structure is documented below.
+     */
+    scalingPolicies?: pulumi.Input<pulumi.Input<inputs.Dli.QueueScalingPolicy>[]>;
+    /**
+     * Specifies spark driver configuration of the queue.
+     * This parameter is only available if `queueType` is set to `sql`.
+     * The sparkDriver structure is documented below.
+     */
+    sparkDriver?: pulumi.Input<inputs.Dli.QueueSparkDriver>;
     /**
      * @deprecated subnet_cidr is Deprecated
      */
@@ -359,9 +417,7 @@ export interface QueueArgs {
      */
     tags?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
     /**
-     * The CIDR block of a queue. If use DLI enhanced datasource connections, the CIDR block
-     * cannot be the same as that of the data source.
-     * The CIDR blocks supported by different CU specifications:
+     * The CIDR block of the queue.
      */
     vpcCidr?: pulumi.Input<string>;
 }

@@ -78,7 +78,7 @@ class ConferenceConfiguration(dict):
                + **0**: All users.
                + **2**: Users within the enterprise.
                + **3**: The invited user.
-        :param str guest_password: Specifies the guest password (pure number which is 4 to 16 digits long).
+        :param str guest_password: Specifies the guest password (pure number which is `4` to `16` digits long).
         :param bool is_auto_mute: Specifies whether the soft terminal is automatically muted when the guest joins the
                conference.
         :param bool is_guest_free_password: Specifies whether the guest is password-free (only valid for random
@@ -139,7 +139,7 @@ class ConferenceConfiguration(dict):
     @pulumi.getter(name="guestPassword")
     def guest_password(self) -> Optional[str]:
         """
-        Specifies the guest password (pure number which is 4 to 16 digits long).
+        Specifies the guest password (pure number which is `4` to `16` digits long).
         """
         return pulumi.get(self, "guest_password")
 
@@ -260,7 +260,7 @@ class ConferenceCycleParams(dict):
                + **Month**: Means every few months, the value range is `1` to `3`.
         :param Sequence[int] points: Specifies the conference point in the cycle. Only valid by **Week** and **Month**.
                For different `cycle` types, the value range of elements are as follows:
-               + **Week**: The valid value is range from `0` to `6`. The **0** means Sunday, **6** means Saturday.
+               + **Week**: The valid value is range from `0` to `6`. The `0` means Sunday, `6` means Saturday.
                + **Month**: The valid range for the elements is `1` to `31`. If the value does not exist in the current month, the
                value means the end of the month.
         """
@@ -329,7 +329,7 @@ class ConferenceCycleParams(dict):
         """
         Specifies the conference point in the cycle. Only valid by **Week** and **Month**.
         For different `cycle` types, the value range of elements are as follows:
-        + **Week**: The valid value is range from `0` to `6`. The **0** means Sunday, **6** means Saturday.
+        + **Week**: The valid value is range from `0` to `6`. The `0` means Sunday, `6` means Saturday.
         + **Month**: The valid range for the elements is `1` to `31`. If the value does not exist in the current month, the
         value means the end of the month.
         """
@@ -414,7 +414,8 @@ class ConferenceParticipant(dict):
                (only effective when invited in the conference). The valid values are as follows:
                + **0**: No mute.
                + **1**: Mute.
-        :param str name: Specifies the attendee name or nickname.
+        :param str name: Specifies the attendee name or nickname.  
+               The valid length is limited from `1` to `96`.
         :param str phone: Specifies the SIP or TEL number, maximum of 127 characters.
         :param int role: Specifies the role in the conference. The valid values are as follows:
                + **0**: Normal attendee.
@@ -491,7 +492,8 @@ class ConferenceParticipant(dict):
     @pulumi.getter
     def name(self) -> Optional[str]:
         """
-        Specifies the attendee name or nickname.
+        Specifies the attendee name or nickname.  
+        The valid length is limited from `1` to `96`.
         """
         return pulumi.get(self, "name")
 
@@ -593,9 +595,9 @@ class ConferenceSubconference(dict):
                time, the system will select Video by default).
                + **Data**: Multimedia (If omitted, the system configuration will determines whether to automatically add **Data**).
         :param int record_auth_type: Specifies the recording authentication method.
-               **0**: Viewable/downloadable via link.
-               **1**: Enterprise users can watch/download.
-               **2**: Attendees can watch/download.
+               + **0**: Viewable/downloadable via link.
+               + **1**: Enterprise users can watch/download.
+               + **2**: Attendees can watch/download.
         :param str start_time: Specifies the conference start time (UTC time).
                The time format is `YYYY-MM-DD hh:mm`, e.g. `2006-01-02 15:04`.
                There is no need to set if you book a cyclical conference.
@@ -663,9 +665,9 @@ class ConferenceSubconference(dict):
     def record_auth_type(self) -> Optional[int]:
         """
         Specifies the recording authentication method.
-        **0**: Viewable/downloadable via link.
-        **1**: Enterprise users can watch/download.
-        **2**: Attendees can watch/download.
+        + **0**: Viewable/downloadable via link.
+        + **1**: Enterprise users can watch/download.
+        + **2**: Attendees can watch/download.
         """
         return pulumi.get(self, "record_auth_type")
 

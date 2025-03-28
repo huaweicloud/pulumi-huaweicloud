@@ -40,7 +40,7 @@ class AlarmRuleArgs:
         :param pulumi.Input[Sequence[pulumi.Input['AlarmRuleDimensionArgs']]] dimensions: Specifies the list of metric dimensions. The structure is described below.
                Changing this creates a new resource.
         :param pulumi.Input[int] evaluation_periods: Specifies the alarm checking evaluation periods.
-               The value can be **1**, **2**, **3**, **4** and **5**.
+               The value can be `1`, `2`, `3`, `4` and `5`.
         :param pulumi.Input[str] metric_name: Specifies the alarm metric name. Changing this creates a new resource.
         :param pulumi.Input[str] namespace: Specifies the alarm namespace. Changing this creates a new resource.
         :param pulumi.Input[int] period: Specifies the alarm checking period in milliseconds.
@@ -48,16 +48,18 @@ class AlarmRuleArgs:
         :param pulumi.Input[str] statistic: Specifies the data rollup methods. The value can be **maximum**,
                **minimum**, **average**, **sum** and **sampleCount**. Changing this creates a new resource.
         :param pulumi.Input[str] threshold: Specifies the alarm threshold.
-        :param pulumi.Input[str] unit: Specifies the data unit. Changing this creates a new resource.
+        :param pulumi.Input[str] unit: Specifies the data unit.  
+               The valid value is range from `1` to `32`.
+               Changing this creates a new resource.
         :param pulumi.Input[bool] alarm_action_enabled: Specifies whether to enable the action to be triggered by an alarm.
                The default value is true. Changing this creates a new resource.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] alarm_actions: Specifies the action triggered by an alarm. This is a list of strings.
                Changing this creates a new resource.
-        :param pulumi.Input[int] alarm_level: Specifies the alarm severity. The value can be **1**, **2**, **3** or **4**,
+        :param pulumi.Input[int] alarm_level: Specifies the alarm severity. The value can be `1`, `2`, `3` or `4`,
                which indicates *critical*, *major*, *minor*, and *informational*, respectively.
-               The default value is **2**.
+               The default value is `2`.
         :param pulumi.Input[str] description: Specifies the description of the alarm rule.
-               The value can be a string of 0 to 1000 characters.
+               The value can be a string of `0` to `1,000` characters.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] insufficient_data_actions: Specifies the action triggered when the data is not enough.
                This is a list of strings. Changing this creates a new resource.
         :param pulumi.Input[str] name: Specifies the dimension name. Changing this creates a new resource.
@@ -123,7 +125,7 @@ class AlarmRuleArgs:
     def evaluation_periods(self) -> pulumi.Input[int]:
         """
         Specifies the alarm checking evaluation periods.
-        The value can be **1**, **2**, **3**, **4** and **5**.
+        The value can be `1`, `2`, `3`, `4` and `5`.
         """
         return pulumi.get(self, "evaluation_periods")
 
@@ -197,7 +199,9 @@ class AlarmRuleArgs:
     @pulumi.getter
     def unit(self) -> pulumi.Input[str]:
         """
-        Specifies the data unit. Changing this creates a new resource.
+        Specifies the data unit.  
+        The valid value is range from `1` to `32`.
+        Changing this creates a new resource.
         """
         return pulumi.get(self, "unit")
 
@@ -235,9 +239,9 @@ class AlarmRuleArgs:
     @pulumi.getter(name="alarmLevel")
     def alarm_level(self) -> Optional[pulumi.Input[int]]:
         """
-        Specifies the alarm severity. The value can be **1**, **2**, **3** or **4**,
+        Specifies the alarm severity. The value can be `1`, `2`, `3` or `4`,
         which indicates *critical*, *major*, *minor*, and *informational*, respectively.
-        The default value is **2**.
+        The default value is `2`.
         """
         return pulumi.get(self, "alarm_level")
 
@@ -250,7 +254,7 @@ class AlarmRuleArgs:
     def description(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the description of the alarm rule.
-        The value can be a string of 0 to 1000 characters.
+        The value can be a string of `0` to `1,000` characters.
         """
         return pulumi.get(self, "description")
 
@@ -340,17 +344,17 @@ class _AlarmRuleState:
         :param pulumi.Input[Sequence[pulumi.Input[str]]] alarm_actions: Specifies the action triggered by an alarm. This is a list of strings.
                Changing this creates a new resource.
         :param pulumi.Input[bool] alarm_enabled: Indicates whether the alarm rule is enabled.
-        :param pulumi.Input[int] alarm_level: Specifies the alarm severity. The value can be **1**, **2**, **3** or **4**,
+        :param pulumi.Input[int] alarm_level: Specifies the alarm severity. The value can be `1`, `2`, `3` or `4`,
                which indicates *critical*, *major*, *minor*, and *informational*, respectively.
-               The default value is **2**.
+               The default value is `2`.
         :param pulumi.Input[str] comparison_operator: Specifies the comparison condition of alarm thresholds.
                The value can be **>**, **=**, **<**, **>=** or **<=**.
         :param pulumi.Input[str] description: Specifies the description of the alarm rule.
-               The value can be a string of 0 to 1000 characters.
+               The value can be a string of `0` to `1,000` characters.
         :param pulumi.Input[Sequence[pulumi.Input['AlarmRuleDimensionArgs']]] dimensions: Specifies the list of metric dimensions. The structure is described below.
                Changing this creates a new resource.
         :param pulumi.Input[int] evaluation_periods: Specifies the alarm checking evaluation periods.
-               The value can be **1**, **2**, **3**, **4** and **5**.
+               The value can be `1`, `2`, `3`, `4` and `5`.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] insufficient_data_actions: Specifies the action triggered when the data is not enough.
                This is a list of strings. Changing this creates a new resource.
         :param pulumi.Input[str] metric_name: Specifies the alarm metric name. Changing this creates a new resource.
@@ -367,7 +371,9 @@ class _AlarmRuleState:
         :param pulumi.Input[str] statistic: Specifies the data rollup methods. The value can be **maximum**,
                **minimum**, **average**, **sum** and **sampleCount**. Changing this creates a new resource.
         :param pulumi.Input[str] threshold: Specifies the alarm threshold.
-        :param pulumi.Input[str] unit: Specifies the data unit. Changing this creates a new resource.
+        :param pulumi.Input[str] unit: Specifies the data unit.  
+               The valid value is range from `1` to `32`.
+               Changing this creates a new resource.
         """
         if alarm_action_enabled is not None:
             pulumi.set(__self__, "alarm_action_enabled", alarm_action_enabled)
@@ -452,9 +458,9 @@ class _AlarmRuleState:
     @pulumi.getter(name="alarmLevel")
     def alarm_level(self) -> Optional[pulumi.Input[int]]:
         """
-        Specifies the alarm severity. The value can be **1**, **2**, **3** or **4**,
+        Specifies the alarm severity. The value can be `1`, `2`, `3` or `4`,
         which indicates *critical*, *major*, *minor*, and *informational*, respectively.
-        The default value is **2**.
+        The default value is `2`.
         """
         return pulumi.get(self, "alarm_level")
 
@@ -480,7 +486,7 @@ class _AlarmRuleState:
     def description(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the description of the alarm rule.
-        The value can be a string of 0 to 1000 characters.
+        The value can be a string of `0` to `1,000` characters.
         """
         return pulumi.get(self, "description")
 
@@ -506,7 +512,7 @@ class _AlarmRuleState:
     def evaluation_periods(self) -> Optional[pulumi.Input[int]]:
         """
         Specifies the alarm checking evaluation periods.
-        The value can be **1**, **2**, **3**, **4** and **5**.
+        The value can be `1`, `2`, `3`, `4` and `5`.
         """
         return pulumi.get(self, "evaluation_periods")
 
@@ -655,7 +661,9 @@ class _AlarmRuleState:
     @pulumi.getter
     def unit(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the data unit. Changing this creates a new resource.
+        Specifies the data unit.  
+        The valid value is range from `1` to `32`.
+        Changing this creates a new resource.
         """
         return pulumi.get(self, "unit")
 
@@ -715,10 +723,10 @@ class AlarmRule(pulumi.CustomResource):
 
         ## Import
 
-        AOM alarm rules can be imported using the `id`, e.g.
+        AOM alarm rules can be imported using the `id`, e.g. bash
 
         ```sh
-         $ pulumi import huaweicloud:Aom/alarmRule:AlarmRule alarm_rule 966746116613832710
+         $ pulumi import huaweicloud:Aom/alarmRule:AlarmRule alarm_rule <id>
         ```
 
         :param str resource_name: The name of the resource.
@@ -727,17 +735,17 @@ class AlarmRule(pulumi.CustomResource):
                The default value is true. Changing this creates a new resource.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] alarm_actions: Specifies the action triggered by an alarm. This is a list of strings.
                Changing this creates a new resource.
-        :param pulumi.Input[int] alarm_level: Specifies the alarm severity. The value can be **1**, **2**, **3** or **4**,
+        :param pulumi.Input[int] alarm_level: Specifies the alarm severity. The value can be `1`, `2`, `3` or `4`,
                which indicates *critical*, *major*, *minor*, and *informational*, respectively.
-               The default value is **2**.
+               The default value is `2`.
         :param pulumi.Input[str] comparison_operator: Specifies the comparison condition of alarm thresholds.
                The value can be **>**, **=**, **<**, **>=** or **<=**.
         :param pulumi.Input[str] description: Specifies the description of the alarm rule.
-               The value can be a string of 0 to 1000 characters.
+               The value can be a string of `0` to `1,000` characters.
         :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['AlarmRuleDimensionArgs']]]] dimensions: Specifies the list of metric dimensions. The structure is described below.
                Changing this creates a new resource.
         :param pulumi.Input[int] evaluation_periods: Specifies the alarm checking evaluation periods.
-               The value can be **1**, **2**, **3**, **4** and **5**.
+               The value can be `1`, `2`, `3`, `4` and `5`.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] insufficient_data_actions: Specifies the action triggered when the data is not enough.
                This is a list of strings. Changing this creates a new resource.
         :param pulumi.Input[str] metric_name: Specifies the alarm metric name. Changing this creates a new resource.
@@ -752,7 +760,9 @@ class AlarmRule(pulumi.CustomResource):
         :param pulumi.Input[str] statistic: Specifies the data rollup methods. The value can be **maximum**,
                **minimum**, **average**, **sum** and **sampleCount**. Changing this creates a new resource.
         :param pulumi.Input[str] threshold: Specifies the alarm threshold.
-        :param pulumi.Input[str] unit: Specifies the data unit. Changing this creates a new resource.
+        :param pulumi.Input[str] unit: Specifies the data unit.  
+               The valid value is range from `1` to `32`.
+               Changing this creates a new resource.
         """
         ...
     @overload
@@ -788,10 +798,10 @@ class AlarmRule(pulumi.CustomResource):
 
         ## Import
 
-        AOM alarm rules can be imported using the `id`, e.g.
+        AOM alarm rules can be imported using the `id`, e.g. bash
 
         ```sh
-         $ pulumi import huaweicloud:Aom/alarmRule:AlarmRule alarm_rule 966746116613832710
+         $ pulumi import huaweicloud:Aom/alarmRule:AlarmRule alarm_rule <id>
         ```
 
         :param str resource_name: The name of the resource.
@@ -915,17 +925,17 @@ class AlarmRule(pulumi.CustomResource):
         :param pulumi.Input[Sequence[pulumi.Input[str]]] alarm_actions: Specifies the action triggered by an alarm. This is a list of strings.
                Changing this creates a new resource.
         :param pulumi.Input[bool] alarm_enabled: Indicates whether the alarm rule is enabled.
-        :param pulumi.Input[int] alarm_level: Specifies the alarm severity. The value can be **1**, **2**, **3** or **4**,
+        :param pulumi.Input[int] alarm_level: Specifies the alarm severity. The value can be `1`, `2`, `3` or `4`,
                which indicates *critical*, *major*, *minor*, and *informational*, respectively.
-               The default value is **2**.
+               The default value is `2`.
         :param pulumi.Input[str] comparison_operator: Specifies the comparison condition of alarm thresholds.
                The value can be **>**, **=**, **<**, **>=** or **<=**.
         :param pulumi.Input[str] description: Specifies the description of the alarm rule.
-               The value can be a string of 0 to 1000 characters.
+               The value can be a string of `0` to `1,000` characters.
         :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['AlarmRuleDimensionArgs']]]] dimensions: Specifies the list of metric dimensions. The structure is described below.
                Changing this creates a new resource.
         :param pulumi.Input[int] evaluation_periods: Specifies the alarm checking evaluation periods.
-               The value can be **1**, **2**, **3**, **4** and **5**.
+               The value can be `1`, `2`, `3`, `4` and `5`.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] insufficient_data_actions: Specifies the action triggered when the data is not enough.
                This is a list of strings. Changing this creates a new resource.
         :param pulumi.Input[str] metric_name: Specifies the alarm metric name. Changing this creates a new resource.
@@ -942,7 +952,9 @@ class AlarmRule(pulumi.CustomResource):
         :param pulumi.Input[str] statistic: Specifies the data rollup methods. The value can be **maximum**,
                **minimum**, **average**, **sum** and **sampleCount**. Changing this creates a new resource.
         :param pulumi.Input[str] threshold: Specifies the alarm threshold.
-        :param pulumi.Input[str] unit: Specifies the data unit. Changing this creates a new resource.
+        :param pulumi.Input[str] unit: Specifies the data unit.  
+               The valid value is range from `1` to `32`.
+               Changing this creates a new resource.
         """
         opts = pulumi.ResourceOptions.merge(opts, pulumi.ResourceOptions(id=id))
 
@@ -1000,9 +1012,9 @@ class AlarmRule(pulumi.CustomResource):
     @pulumi.getter(name="alarmLevel")
     def alarm_level(self) -> pulumi.Output[Optional[int]]:
         """
-        Specifies the alarm severity. The value can be **1**, **2**, **3** or **4**,
+        Specifies the alarm severity. The value can be `1`, `2`, `3` or `4`,
         which indicates *critical*, *major*, *minor*, and *informational*, respectively.
-        The default value is **2**.
+        The default value is `2`.
         """
         return pulumi.get(self, "alarm_level")
 
@@ -1020,7 +1032,7 @@ class AlarmRule(pulumi.CustomResource):
     def description(self) -> pulumi.Output[Optional[str]]:
         """
         Specifies the description of the alarm rule.
-        The value can be a string of 0 to 1000 characters.
+        The value can be a string of `0` to `1,000` characters.
         """
         return pulumi.get(self, "description")
 
@@ -1038,7 +1050,7 @@ class AlarmRule(pulumi.CustomResource):
     def evaluation_periods(self) -> pulumi.Output[int]:
         """
         Specifies the alarm checking evaluation periods.
-        The value can be **1**, **2**, **3**, **4** and **5**.
+        The value can be `1`, `2`, `3`, `4` and `5`.
         """
         return pulumi.get(self, "evaluation_periods")
 
@@ -1139,7 +1151,9 @@ class AlarmRule(pulumi.CustomResource):
     @pulumi.getter
     def unit(self) -> pulumi.Output[str]:
         """
-        Specifies the data unit. Changing this creates a new resource.
+        Specifies the data unit.  
+        The valid value is range from `1` to `32`.
+        Changing this creates a new resource.
         """
         return pulumi.get(self, "unit")
 

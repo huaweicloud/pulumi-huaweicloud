@@ -87,7 +87,7 @@ def get_users(enabled: Optional[bool] = None,
     """
     Use this data source to query the IAM user list within HuaweiCloud.
 
-    > You *must* have IAM read privileges to use this data source.
+    > **NOTE:** You *must* have IAM read privileges to use this data source.
 
     ## Example Usage
 
@@ -123,7 +123,7 @@ def get_users_output(enabled: Optional[pulumi.Input[Optional[bool]]] = None,
     """
     Use this data source to query the IAM user list within HuaweiCloud.
 
-    > You *must* have IAM read privileges to use this data source.
+    > **NOTE:** You *must* have IAM read privileges to use this data source.
 
     ## Example Usage
 

@@ -14,40 +14,6 @@ import (
 // Manages a DNAT rule resource of the **public** NAT within HuaweiCloud.
 //
 // ## Example Usage
-// ### DNAT rule in Direct Connect scenario
-//
-// ```go
-// package main
-//
-// import (
-//
-//	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud/Nat"
-//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
-//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi/config"
-//
-// )
-//
-//	func main() {
-//		pulumi.Run(func(ctx *pulumi.Context) error {
-//			cfg := config.New(ctx, "")
-//			gatewayId := cfg.RequireObject("gatewayId")
-//			publicipId := cfg.RequireObject("publicipId")
-//			_, err := Nat.NewDnatRule(ctx, "test", &Nat.DnatRuleArgs{
-//				NatGatewayId:        pulumi.Any(gatewayId),
-//				FloatingIpId:        pulumi.Any(publicipId),
-//				PrivateIp:           pulumi.String("10.0.0.12"),
-//				Protocol:            pulumi.String("any"),
-//				InternalServicePort: pulumi.Int(0),
-//				ExternalServicePort: pulumi.Int(0),
-//			})
-//			if err != nil {
-//				return err
-//			}
-//			return nil
-//		})
-//	}
-//
-// ```
 //
 // ## Import
 //
@@ -80,7 +46,11 @@ type DnatRule struct {
 	// The actual floating IP address.
 	FloatingIpAddress pulumi.StringOutput `pulumi:"floatingIpAddress"`
 	// Specifies the ID of the floating IP address.
-	FloatingIpId pulumi.StringOutput `pulumi:"floatingIpId"`
+	FloatingIpId pulumi.StringPtrOutput `pulumi:"floatingIpId"`
+	// The global EIP address connected by the DNAT rule.
+	GlobalEipAddress pulumi.StringOutput `pulumi:"globalEipAddress"`
+	// Specifies the ID of the global EIP connected by the DNAT rule.
+	GlobalEipId pulumi.StringPtrOutput `pulumi:"globalEipId"`
 	// Specifies port used by Floating IP provide services for external
 	// systems.
 	// Exactly one of `internalServicePort` and `internalServicePortRange` must be set.
@@ -96,10 +66,10 @@ type DnatRule struct {
 	// Specifies the port ID of network. This parameter is mandatory in VPC scenario.\
 	// Use Vpc.Port to get the port if just know a fixed IP addresses
 	// on the port.
-	PortId pulumi.StringPtrOutput `pulumi:"portId"`
+	PortId pulumi.StringOutput `pulumi:"portId"`
 	// Specifies the private IP address of a user. This parameter is mandatory in
 	// Direct Connect scenario.
-	PrivateIp pulumi.StringPtrOutput `pulumi:"privateIp"`
+	PrivateIp pulumi.StringOutput `pulumi:"privateIp"`
 	// Specifies the protocol type.\
 	// The valid values are **tcp**, **udp**, and **any**.
 	Protocol pulumi.StringOutput `pulumi:"protocol"`
@@ -117,9 +87,6 @@ func NewDnatRule(ctx *pulumi.Context,
 		return nil, errors.New("missing one or more required arguments")
 	}
 
-	if args.FloatingIpId == nil {
-		return nil, errors.New("invalid value for required argument 'FloatingIpId'")
-	}
 	if args.NatGatewayId == nil {
 		return nil, errors.New("invalid value for required argument 'NatGatewayId'")
 	}
@@ -169,6 +136,10 @@ type dnatRuleState struct {
 	FloatingIpAddress *string `pulumi:"floatingIpAddress"`
 	// Specifies the ID of the floating IP address.
 	FloatingIpId *string `pulumi:"floatingIpId"`
+	// The global EIP address connected by the DNAT rule.
+	GlobalEipAddress *string `pulumi:"globalEipAddress"`
+	// Specifies the ID of the global EIP connected by the DNAT rule.
+	GlobalEipId *string `pulumi:"globalEipId"`
 	// Specifies port used by Floating IP provide services for external
 	// systems.
 	// Exactly one of `internalServicePort` and `internalServicePortRange` must be set.
@@ -219,6 +190,10 @@ type DnatRuleState struct {
 	FloatingIpAddress pulumi.StringPtrInput
 	// Specifies the ID of the floating IP address.
 	FloatingIpId pulumi.StringPtrInput
+	// The global EIP address connected by the DNAT rule.
+	GlobalEipAddress pulumi.StringPtrInput
+	// Specifies the ID of the global EIP connected by the DNAT rule.
+	GlobalEipId pulumi.StringPtrInput
 	// Specifies port used by Floating IP provide services for external
 	// systems.
 	// Exactly one of `internalServicePort` and `internalServicePortRange` must be set.
@@ -268,7 +243,9 @@ type dnatRuleArgs struct {
 	// Required if `internalServicePortRange` is set.
 	ExternalServicePortRange *string `pulumi:"externalServicePortRange"`
 	// Specifies the ID of the floating IP address.
-	FloatingIpId string `pulumi:"floatingIpId"`
+	FloatingIpId *string `pulumi:"floatingIpId"`
+	// Specifies the ID of the global EIP connected by the DNAT rule.
+	GlobalEipId *string `pulumi:"globalEipId"`
 	// Specifies port used by Floating IP provide services for external
 	// systems.
 	// Exactly one of `internalServicePort` and `internalServicePortRange` must be set.
@@ -313,7 +290,9 @@ type DnatRuleArgs struct {
 	// Required if `internalServicePortRange` is set.
 	ExternalServicePortRange pulumi.StringPtrInput
 	// Specifies the ID of the floating IP address.
-	FloatingIpId pulumi.StringInput
+	FloatingIpId pulumi.StringPtrInput
+	// Specifies the ID of the global EIP connected by the DNAT rule.
+	GlobalEipId pulumi.StringPtrInput
 	// Specifies port used by Floating IP provide services for external
 	// systems.
 	// Exactly one of `internalServicePort` and `internalServicePortRange` must be set.
@@ -462,8 +441,18 @@ func (o DnatRuleOutput) FloatingIpAddress() pulumi.StringOutput {
 }
 
 // Specifies the ID of the floating IP address.
-func (o DnatRuleOutput) FloatingIpId() pulumi.StringOutput {
-	return o.ApplyT(func(v *DnatRule) pulumi.StringOutput { return v.FloatingIpId }).(pulumi.StringOutput)
+func (o DnatRuleOutput) FloatingIpId() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *DnatRule) pulumi.StringPtrOutput { return v.FloatingIpId }).(pulumi.StringPtrOutput)
+}
+
+// The global EIP address connected by the DNAT rule.
+func (o DnatRuleOutput) GlobalEipAddress() pulumi.StringOutput {
+	return o.ApplyT(func(v *DnatRule) pulumi.StringOutput { return v.GlobalEipAddress }).(pulumi.StringOutput)
+}
+
+// Specifies the ID of the global EIP connected by the DNAT rule.
+func (o DnatRuleOutput) GlobalEipId() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *DnatRule) pulumi.StringPtrOutput { return v.GlobalEipId }).(pulumi.StringPtrOutput)
 }
 
 // Specifies port used by Floating IP provide services for external
@@ -490,14 +479,14 @@ func (o DnatRuleOutput) NatGatewayId() pulumi.StringOutput {
 // Specifies the port ID of network. This parameter is mandatory in VPC scenario.\
 // Use Vpc.Port to get the port if just know a fixed IP addresses
 // on the port.
-func (o DnatRuleOutput) PortId() pulumi.StringPtrOutput {
-	return o.ApplyT(func(v *DnatRule) pulumi.StringPtrOutput { return v.PortId }).(pulumi.StringPtrOutput)
+func (o DnatRuleOutput) PortId() pulumi.StringOutput {
+	return o.ApplyT(func(v *DnatRule) pulumi.StringOutput { return v.PortId }).(pulumi.StringOutput)
 }
 
 // Specifies the private IP address of a user. This parameter is mandatory in
 // Direct Connect scenario.
-func (o DnatRuleOutput) PrivateIp() pulumi.StringPtrOutput {
-	return o.ApplyT(func(v *DnatRule) pulumi.StringPtrOutput { return v.PrivateIp }).(pulumi.StringPtrOutput)
+func (o DnatRuleOutput) PrivateIp() pulumi.StringOutput {
+	return o.ApplyT(func(v *DnatRule) pulumi.StringOutput { return v.PrivateIp }).(pulumi.StringOutput)
 }
 
 // Specifies the protocol type.\

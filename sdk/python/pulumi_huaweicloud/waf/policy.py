@@ -16,146 +16,61 @@ __all__ = ['PolicyArgs', 'Policy']
 @pulumi.input_type
 class PolicyArgs:
     def __init__(__self__, *,
-                 enterprise_project_id: Optional[pulumi.Input[str]] = None,
-                 level: Optional[pulumi.Input[int]] = None,
-                 name: Optional[pulumi.Input[str]] = None,
-                 protection_mode: Optional[pulumi.Input[str]] = None,
-                 region: Optional[pulumi.Input[str]] = None):
-        """
-        The set of arguments for constructing a Policy resource.
-        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID of WAF policy.
-               Changing this parameter will create a new resource.
-        :param pulumi.Input[int] level: Specifies the protection level. Defaults to `2`. Valid values are:
-               + `1`: low
-               + `2`: medium
-               + `3`: high
-        :param pulumi.Input[str] name: Specifies the policy name. The maximum length is 256 characters. Only digits, letters,
-               underscores(_), and hyphens(-) are allowed.
-        :param pulumi.Input[str] protection_mode: Specifies the protective action after a rule is matched. Defaults to `log`.
-               Valid values are:
-               + `block`: WAF blocks and logs detected attacks.
-               + `log`: WAF logs detected attacks only.
-        :param pulumi.Input[str] region: The region in which to create the WAF policy resource. If omitted, the
-               provider-level region will be used. Changing this setting will push a new certificate.
-        """
-        if enterprise_project_id is not None:
-            pulumi.set(__self__, "enterprise_project_id", enterprise_project_id)
-        if level is not None:
-            pulumi.set(__self__, "level", level)
-        if name is not None:
-            pulumi.set(__self__, "name", name)
-        if protection_mode is not None:
-            pulumi.set(__self__, "protection_mode", protection_mode)
-        if region is not None:
-            pulumi.set(__self__, "region", region)
-
-    @property
-    @pulumi.getter(name="enterpriseProjectId")
-    def enterprise_project_id(self) -> Optional[pulumi.Input[str]]:
-        """
-        Specifies the enterprise project ID of WAF policy.
-        Changing this parameter will create a new resource.
-        """
-        return pulumi.get(self, "enterprise_project_id")
-
-    @enterprise_project_id.setter
-    def enterprise_project_id(self, value: Optional[pulumi.Input[str]]):
-        pulumi.set(self, "enterprise_project_id", value)
-
-    @property
-    @pulumi.getter
-    def level(self) -> Optional[pulumi.Input[int]]:
-        """
-        Specifies the protection level. Defaults to `2`. Valid values are:
-        + `1`: low
-        + `2`: medium
-        + `3`: high
-        """
-        return pulumi.get(self, "level")
-
-    @level.setter
-    def level(self, value: Optional[pulumi.Input[int]]):
-        pulumi.set(self, "level", value)
-
-    @property
-    @pulumi.getter
-    def name(self) -> Optional[pulumi.Input[str]]:
-        """
-        Specifies the policy name. The maximum length is 256 characters. Only digits, letters,
-        underscores(_), and hyphens(-) are allowed.
-        """
-        return pulumi.get(self, "name")
-
-    @name.setter
-    def name(self, value: Optional[pulumi.Input[str]]):
-        pulumi.set(self, "name", value)
-
-    @property
-    @pulumi.getter(name="protectionMode")
-    def protection_mode(self) -> Optional[pulumi.Input[str]]:
-        """
-        Specifies the protective action after a rule is matched. Defaults to `log`.
-        Valid values are:
-        + `block`: WAF blocks and logs detected attacks.
-        + `log`: WAF logs detected attacks only.
-        """
-        return pulumi.get(self, "protection_mode")
-
-    @protection_mode.setter
-    def protection_mode(self, value: Optional[pulumi.Input[str]]):
-        pulumi.set(self, "protection_mode", value)
-
-    @property
-    @pulumi.getter
-    def region(self) -> Optional[pulumi.Input[str]]:
-        """
-        The region in which to create the WAF policy resource. If omitted, the
-        provider-level region will be used. Changing this setting will push a new certificate.
-        """
-        return pulumi.get(self, "region")
-
-    @region.setter
-    def region(self, value: Optional[pulumi.Input[str]]):
-        pulumi.set(self, "region", value)
-
-
-@pulumi.input_type
-class _PolicyState:
-    def __init__(__self__, *,
+                 deep_inspection: Optional[pulumi.Input[bool]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  full_detection: Optional[pulumi.Input[bool]] = None,
+                 header_inspection: Optional[pulumi.Input[bool]] = None,
                  level: Optional[pulumi.Input[int]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  options: Optional[pulumi.Input[Sequence[pulumi.Input['PolicyOptionArgs']]]] = None,
                  protection_mode: Optional[pulumi.Input[str]] = None,
-                 region: Optional[pulumi.Input[str]] = None):
+                 region: Optional[pulumi.Input[str]] = None,
+                 robot_action: Optional[pulumi.Input[str]] = None,
+                 shiro_decryption_check: Optional[pulumi.Input[bool]] = None):
         """
-        Input properties used for looking up and filtering Policy resources.
+        The set of arguments for constructing a Policy resource.
+        :param pulumi.Input[bool] deep_inspection: Specifies the deep inspection in basic web protection. Defaults to **false**.
         :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID of WAF policy.
+               For enterprise users, if omitted, default enterprise project will be used.
                Changing this parameter will create a new resource.
-        :param pulumi.Input[bool] full_detection: The detection mode in Precise Protection.
-               + `true`: full detection, Full detection finishes all threat detections before blocking requests that meet Precise
-               Protection specified conditions.
-               + `false`: instant detection. Instant detection immediately ends threat detection after blocking a request that
-               meets Precise Protection specified conditions.
+        :param pulumi.Input[bool] full_detection: Specifies the detection mode in precise protection. Defaults to **false**.
+               + **false**: Instant detection. When a request hits the blocking conditions in precise protection, WAF terminates
+               checks and blocks the request immediately.
+               + **true**: Full detection. If a request hits the blocking conditions in precise protection, WAF does not block the
+               request immediately. Instead, it blocks the requests until other checks are finished.
+        :param pulumi.Input[bool] header_inspection: Specifies the header inspection in basic web protection. Defaults to **false**.
         :param pulumi.Input[int] level: Specifies the protection level. Defaults to `2`. Valid values are:
-               + `1`: low
-               + `2`: medium
-               + `3`: high
-        :param pulumi.Input[str] name: Specifies the policy name. The maximum length is 256 characters. Only digits, letters,
-               underscores(_), and hyphens(-) are allowed.
-        :param pulumi.Input[Sequence[pulumi.Input['PolicyOptionArgs']]] options: The protection switches. The options object structure is documented below.
-        :param pulumi.Input[str] protection_mode: Specifies the protective action after a rule is matched. Defaults to `log`.
+               + `1`: Low. At this protection level, WAF blocks only requests with obvious attack features. If a large number of
+               false alarms have been reported, this value is recommended.
+               + `2`: Medium. This protection level meets web protection requirements in most scenarios.
+               + `3`: High. At this protection level, WAF provides the finest granular protection and can intercept attacks with
+               complex bypass features, such as Jolokia cyberattacks, common gateway interface (CGI) vulnerability detection,
+               and Druid SQL injection attacks.
+        :param pulumi.Input[str] name: Specifies the policy name. The maximum length is `256` characters. Only digits, letters,
+               underscores (_), and hyphens (-) are allowed.
+        :param pulumi.Input[Sequence[pulumi.Input['PolicyOptionArgs']]] options: Specifies the switch options of the protection item in the policy.
+               The options structure is documented below.
+        :param pulumi.Input[str] protection_mode: Specifies the protective action after a rule is matched. Defaults to **log**.
                Valid values are:
-               + `block`: WAF blocks and logs detected attacks.
-               + `log`: WAF logs detected attacks only.
-        :param pulumi.Input[str] region: The region in which to create the WAF policy resource. If omitted, the
+               + **block**: WAF blocks and logs detected attacks.
+               + **log**: WAF logs detected attacks only.
+        :param pulumi.Input[str] region: Specifies the region in which to create the WAF policy resource. If omitted, the
                provider-level region will be used. Changing this setting will push a new certificate.
+        :param pulumi.Input[str] robot_action: Specifies the protective actions for each rule in anti-crawler protection.
+               Defaults to **log**. Valid values are:
+               + **block**: WAF blocks discovered attacks.
+               + **log**: WAF only logs discovered attacks.
+        :param pulumi.Input[bool] shiro_decryption_check: Specifies the shiro decryption check in basic web protection.
+               Defaults to **false**.
         """
+        if deep_inspection is not None:
+            pulumi.set(__self__, "deep_inspection", deep_inspection)
         if enterprise_project_id is not None:
             pulumi.set(__self__, "enterprise_project_id", enterprise_project_id)
         if full_detection is not None:
             pulumi.set(__self__, "full_detection", full_detection)
+        if header_inspection is not None:
+            pulumi.set(__self__, "header_inspection", header_inspection)
         if level is not None:
             pulumi.set(__self__, "level", level)
         if name is not None:
@@ -166,12 +81,29 @@ class _PolicyState:
             pulumi.set(__self__, "protection_mode", protection_mode)
         if region is not None:
             pulumi.set(__self__, "region", region)
+        if robot_action is not None:
+            pulumi.set(__self__, "robot_action", robot_action)
+        if shiro_decryption_check is not None:
+            pulumi.set(__self__, "shiro_decryption_check", shiro_decryption_check)
+
+    @property
+    @pulumi.getter(name="deepInspection")
+    def deep_inspection(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies the deep inspection in basic web protection. Defaults to **false**.
+        """
+        return pulumi.get(self, "deep_inspection")
+
+    @deep_inspection.setter
+    def deep_inspection(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "deep_inspection", value)
 
     @property
     @pulumi.getter(name="enterpriseProjectId")
     def enterprise_project_id(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the enterprise project ID of WAF policy.
+        For enterprise users, if omitted, default enterprise project will be used.
         Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "enterprise_project_id")
@@ -184,11 +116,11 @@ class _PolicyState:
     @pulumi.getter(name="fullDetection")
     def full_detection(self) -> Optional[pulumi.Input[bool]]:
         """
-        The detection mode in Precise Protection.
-        + `true`: full detection, Full detection finishes all threat detections before blocking requests that meet Precise
-        Protection specified conditions.
-        + `false`: instant detection. Instant detection immediately ends threat detection after blocking a request that
-        meets Precise Protection specified conditions.
+        Specifies the detection mode in precise protection. Defaults to **false**.
+        + **false**: Instant detection. When a request hits the blocking conditions in precise protection, WAF terminates
+        checks and blocks the request immediately.
+        + **true**: Full detection. If a request hits the blocking conditions in precise protection, WAF does not block the
+        request immediately. Instead, it blocks the requests until other checks are finished.
         """
         return pulumi.get(self, "full_detection")
 
@@ -197,13 +129,28 @@ class _PolicyState:
         pulumi.set(self, "full_detection", value)
 
     @property
+    @pulumi.getter(name="headerInspection")
+    def header_inspection(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies the header inspection in basic web protection. Defaults to **false**.
+        """
+        return pulumi.get(self, "header_inspection")
+
+    @header_inspection.setter
+    def header_inspection(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "header_inspection", value)
+
+    @property
     @pulumi.getter
     def level(self) -> Optional[pulumi.Input[int]]:
         """
         Specifies the protection level. Defaults to `2`. Valid values are:
-        + `1`: low
-        + `2`: medium
-        + `3`: high
+        + `1`: Low. At this protection level, WAF blocks only requests with obvious attack features. If a large number of
+        false alarms have been reported, this value is recommended.
+        + `2`: Medium. This protection level meets web protection requirements in most scenarios.
+        + `3`: High. At this protection level, WAF provides the finest granular protection and can intercept attacks with
+        complex bypass features, such as Jolokia cyberattacks, common gateway interface (CGI) vulnerability detection,
+        and Druid SQL injection attacks.
         """
         return pulumi.get(self, "level")
 
@@ -215,8 +162,8 @@ class _PolicyState:
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the policy name. The maximum length is 256 characters. Only digits, letters,
-        underscores(_), and hyphens(-) are allowed.
+        Specifies the policy name. The maximum length is `256` characters. Only digits, letters,
+        underscores (_), and hyphens (-) are allowed.
         """
         return pulumi.get(self, "name")
 
@@ -228,7 +175,8 @@ class _PolicyState:
     @pulumi.getter
     def options(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['PolicyOptionArgs']]]]:
         """
-        The protection switches. The options object structure is documented below.
+        Specifies the switch options of the protection item in the policy.
+        The options structure is documented below.
         """
         return pulumi.get(self, "options")
 
@@ -240,10 +188,10 @@ class _PolicyState:
     @pulumi.getter(name="protectionMode")
     def protection_mode(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the protective action after a rule is matched. Defaults to `log`.
+        Specifies the protective action after a rule is matched. Defaults to **log**.
         Valid values are:
-        + `block`: WAF blocks and logs detected attacks.
-        + `log`: WAF logs detected attacks only.
+        + **block**: WAF blocks and logs detected attacks.
+        + **log**: WAF logs detected attacks only.
         """
         return pulumi.get(self, "protection_mode")
 
@@ -255,7 +203,7 @@ class _PolicyState:
     @pulumi.getter
     def region(self) -> Optional[pulumi.Input[str]]:
         """
-        The region in which to create the WAF policy resource. If omitted, the
+        Specifies the region in which to create the WAF policy resource. If omitted, the
         provider-level region will be used. Changing this setting will push a new certificate.
         """
         return pulumi.get(self, "region")
@@ -264,37 +212,301 @@ class _PolicyState:
     def region(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "region", value)
 
+    @property
+    @pulumi.getter(name="robotAction")
+    def robot_action(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the protective actions for each rule in anti-crawler protection.
+        Defaults to **log**. Valid values are:
+        + **block**: WAF blocks discovered attacks.
+        + **log**: WAF only logs discovered attacks.
+        """
+        return pulumi.get(self, "robot_action")
+
+    @robot_action.setter
+    def robot_action(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "robot_action", value)
+
+    @property
+    @pulumi.getter(name="shiroDecryptionCheck")
+    def shiro_decryption_check(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies the shiro decryption check in basic web protection.
+        Defaults to **false**.
+        """
+        return pulumi.get(self, "shiro_decryption_check")
+
+    @shiro_decryption_check.setter
+    def shiro_decryption_check(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "shiro_decryption_check", value)
+
+
+@pulumi.input_type
+class _PolicyState:
+    def __init__(__self__, *,
+                 bind_hosts: Optional[pulumi.Input[Sequence[pulumi.Input['PolicyBindHostArgs']]]] = None,
+                 deep_inspection: Optional[pulumi.Input[bool]] = None,
+                 enterprise_project_id: Optional[pulumi.Input[str]] = None,
+                 full_detection: Optional[pulumi.Input[bool]] = None,
+                 header_inspection: Optional[pulumi.Input[bool]] = None,
+                 level: Optional[pulumi.Input[int]] = None,
+                 name: Optional[pulumi.Input[str]] = None,
+                 options: Optional[pulumi.Input[Sequence[pulumi.Input['PolicyOptionArgs']]]] = None,
+                 protection_mode: Optional[pulumi.Input[str]] = None,
+                 region: Optional[pulumi.Input[str]] = None,
+                 robot_action: Optional[pulumi.Input[str]] = None,
+                 shiro_decryption_check: Optional[pulumi.Input[bool]] = None):
+        """
+        Input properties used for looking up and filtering Policy resources.
+        :param pulumi.Input[Sequence[pulumi.Input['PolicyBindHostArgs']]] bind_hosts: The protection switches. The options object structure is documented below.
+        :param pulumi.Input[bool] deep_inspection: Specifies the deep inspection in basic web protection. Defaults to **false**.
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID of WAF policy.
+               For enterprise users, if omitted, default enterprise project will be used.
+               Changing this parameter will create a new resource.
+        :param pulumi.Input[bool] full_detection: Specifies the detection mode in precise protection. Defaults to **false**.
+               + **false**: Instant detection. When a request hits the blocking conditions in precise protection, WAF terminates
+               checks and blocks the request immediately.
+               + **true**: Full detection. If a request hits the blocking conditions in precise protection, WAF does not block the
+               request immediately. Instead, it blocks the requests until other checks are finished.
+        :param pulumi.Input[bool] header_inspection: Specifies the header inspection in basic web protection. Defaults to **false**.
+        :param pulumi.Input[int] level: Specifies the protection level. Defaults to `2`. Valid values are:
+               + `1`: Low. At this protection level, WAF blocks only requests with obvious attack features. If a large number of
+               false alarms have been reported, this value is recommended.
+               + `2`: Medium. This protection level meets web protection requirements in most scenarios.
+               + `3`: High. At this protection level, WAF provides the finest granular protection and can intercept attacks with
+               complex bypass features, such as Jolokia cyberattacks, common gateway interface (CGI) vulnerability detection,
+               and Druid SQL injection attacks.
+        :param pulumi.Input[str] name: Specifies the policy name. The maximum length is `256` characters. Only digits, letters,
+               underscores (_), and hyphens (-) are allowed.
+        :param pulumi.Input[Sequence[pulumi.Input['PolicyOptionArgs']]] options: Specifies the switch options of the protection item in the policy.
+               The options structure is documented below.
+        :param pulumi.Input[str] protection_mode: Specifies the protective action after a rule is matched. Defaults to **log**.
+               Valid values are:
+               + **block**: WAF blocks and logs detected attacks.
+               + **log**: WAF logs detected attacks only.
+        :param pulumi.Input[str] region: Specifies the region in which to create the WAF policy resource. If omitted, the
+               provider-level region will be used. Changing this setting will push a new certificate.
+        :param pulumi.Input[str] robot_action: Specifies the protective actions for each rule in anti-crawler protection.
+               Defaults to **log**. Valid values are:
+               + **block**: WAF blocks discovered attacks.
+               + **log**: WAF only logs discovered attacks.
+        :param pulumi.Input[bool] shiro_decryption_check: Specifies the shiro decryption check in basic web protection.
+               Defaults to **false**.
+        """
+        if bind_hosts is not None:
+            pulumi.set(__self__, "bind_hosts", bind_hosts)
+        if deep_inspection is not None:
+            pulumi.set(__self__, "deep_inspection", deep_inspection)
+        if enterprise_project_id is not None:
+            pulumi.set(__self__, "enterprise_project_id", enterprise_project_id)
+        if full_detection is not None:
+            pulumi.set(__self__, "full_detection", full_detection)
+        if header_inspection is not None:
+            pulumi.set(__self__, "header_inspection", header_inspection)
+        if level is not None:
+            pulumi.set(__self__, "level", level)
+        if name is not None:
+            pulumi.set(__self__, "name", name)
+        if options is not None:
+            pulumi.set(__self__, "options", options)
+        if protection_mode is not None:
+            pulumi.set(__self__, "protection_mode", protection_mode)
+        if region is not None:
+            pulumi.set(__self__, "region", region)
+        if robot_action is not None:
+            pulumi.set(__self__, "robot_action", robot_action)
+        if shiro_decryption_check is not None:
+            pulumi.set(__self__, "shiro_decryption_check", shiro_decryption_check)
+
+    @property
+    @pulumi.getter(name="bindHosts")
+    def bind_hosts(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['PolicyBindHostArgs']]]]:
+        """
+        The protection switches. The options object structure is documented below.
+        """
+        return pulumi.get(self, "bind_hosts")
+
+    @bind_hosts.setter
+    def bind_hosts(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['PolicyBindHostArgs']]]]):
+        pulumi.set(self, "bind_hosts", value)
+
+    @property
+    @pulumi.getter(name="deepInspection")
+    def deep_inspection(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies the deep inspection in basic web protection. Defaults to **false**.
+        """
+        return pulumi.get(self, "deep_inspection")
+
+    @deep_inspection.setter
+    def deep_inspection(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "deep_inspection", value)
+
+    @property
+    @pulumi.getter(name="enterpriseProjectId")
+    def enterprise_project_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the enterprise project ID of WAF policy.
+        For enterprise users, if omitted, default enterprise project will be used.
+        Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "enterprise_project_id")
+
+    @enterprise_project_id.setter
+    def enterprise_project_id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "enterprise_project_id", value)
+
+    @property
+    @pulumi.getter(name="fullDetection")
+    def full_detection(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies the detection mode in precise protection. Defaults to **false**.
+        + **false**: Instant detection. When a request hits the blocking conditions in precise protection, WAF terminates
+        checks and blocks the request immediately.
+        + **true**: Full detection. If a request hits the blocking conditions in precise protection, WAF does not block the
+        request immediately. Instead, it blocks the requests until other checks are finished.
+        """
+        return pulumi.get(self, "full_detection")
+
+    @full_detection.setter
+    def full_detection(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "full_detection", value)
+
+    @property
+    @pulumi.getter(name="headerInspection")
+    def header_inspection(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies the header inspection in basic web protection. Defaults to **false**.
+        """
+        return pulumi.get(self, "header_inspection")
+
+    @header_inspection.setter
+    def header_inspection(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "header_inspection", value)
+
+    @property
+    @pulumi.getter
+    def level(self) -> Optional[pulumi.Input[int]]:
+        """
+        Specifies the protection level. Defaults to `2`. Valid values are:
+        + `1`: Low. At this protection level, WAF blocks only requests with obvious attack features. If a large number of
+        false alarms have been reported, this value is recommended.
+        + `2`: Medium. This protection level meets web protection requirements in most scenarios.
+        + `3`: High. At this protection level, WAF provides the finest granular protection and can intercept attacks with
+        complex bypass features, such as Jolokia cyberattacks, common gateway interface (CGI) vulnerability detection,
+        and Druid SQL injection attacks.
+        """
+        return pulumi.get(self, "level")
+
+    @level.setter
+    def level(self, value: Optional[pulumi.Input[int]]):
+        pulumi.set(self, "level", value)
+
+    @property
+    @pulumi.getter
+    def name(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the policy name. The maximum length is `256` characters. Only digits, letters,
+        underscores (_), and hyphens (-) are allowed.
+        """
+        return pulumi.get(self, "name")
+
+    @name.setter
+    def name(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "name", value)
+
+    @property
+    @pulumi.getter
+    def options(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['PolicyOptionArgs']]]]:
+        """
+        Specifies the switch options of the protection item in the policy.
+        The options structure is documented below.
+        """
+        return pulumi.get(self, "options")
+
+    @options.setter
+    def options(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['PolicyOptionArgs']]]]):
+        pulumi.set(self, "options", value)
+
+    @property
+    @pulumi.getter(name="protectionMode")
+    def protection_mode(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the protective action after a rule is matched. Defaults to **log**.
+        Valid values are:
+        + **block**: WAF blocks and logs detected attacks.
+        + **log**: WAF logs detected attacks only.
+        """
+        return pulumi.get(self, "protection_mode")
+
+    @protection_mode.setter
+    def protection_mode(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "protection_mode", value)
+
+    @property
+    @pulumi.getter
+    def region(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the region in which to create the WAF policy resource. If omitted, the
+        provider-level region will be used. Changing this setting will push a new certificate.
+        """
+        return pulumi.get(self, "region")
+
+    @region.setter
+    def region(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "region", value)
+
+    @property
+    @pulumi.getter(name="robotAction")
+    def robot_action(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the protective actions for each rule in anti-crawler protection.
+        Defaults to **log**. Valid values are:
+        + **block**: WAF blocks discovered attacks.
+        + **log**: WAF only logs discovered attacks.
+        """
+        return pulumi.get(self, "robot_action")
+
+    @robot_action.setter
+    def robot_action(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "robot_action", value)
+
+    @property
+    @pulumi.getter(name="shiroDecryptionCheck")
+    def shiro_decryption_check(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies the shiro decryption check in basic web protection.
+        Defaults to **false**.
+        """
+        return pulumi.get(self, "shiro_decryption_check")
+
+    @shiro_decryption_check.setter
+    def shiro_decryption_check(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "shiro_decryption_check", value)
+
 
 class Policy(pulumi.CustomResource):
     @overload
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
+                 deep_inspection: Optional[pulumi.Input[bool]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
+                 full_detection: Optional[pulumi.Input[bool]] = None,
+                 header_inspection: Optional[pulumi.Input[bool]] = None,
                  level: Optional[pulumi.Input[int]] = None,
                  name: Optional[pulumi.Input[str]] = None,
+                 options: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['PolicyOptionArgs']]]]] = None,
                  protection_mode: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
+                 robot_action: Optional[pulumi.Input[str]] = None,
+                 shiro_decryption_check: Optional[pulumi.Input[bool]] = None,
                  __props__=None):
         """
         Manages a WAF policy resource within HuaweiCloud.
 
         > **NOTE:** All WAF resources depend on WAF instances, and the WAF instances need to be purchased before they can be
-        used. The policy resource can be used in Cloud Mode, Dedicated Mode and ELB Mode.
-
-        ## Example Usage
-
-        ```python
-        import pulumi
-        import pulumi_huaweicloud as huaweicloud
-
-        config = pulumi.Config()
-        enterprise_project_id = config.require_object("enterpriseProjectId")
-        policy1 = huaweicloud.waf.Policy("policy1",
-            protection_mode="log",
-            level=2,
-            enterprise_project_id=enterprise_project_id)
-        ```
+        used. The policy resource can be used in Cloud Mode and Dedicated Mode.
 
         ## Import
 
@@ -312,20 +524,39 @@ class Policy(pulumi.CustomResource):
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
+        :param pulumi.Input[bool] deep_inspection: Specifies the deep inspection in basic web protection. Defaults to **false**.
         :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID of WAF policy.
+               For enterprise users, if omitted, default enterprise project will be used.
                Changing this parameter will create a new resource.
+        :param pulumi.Input[bool] full_detection: Specifies the detection mode in precise protection. Defaults to **false**.
+               + **false**: Instant detection. When a request hits the blocking conditions in precise protection, WAF terminates
+               checks and blocks the request immediately.
+               + **true**: Full detection. If a request hits the blocking conditions in precise protection, WAF does not block the
+               request immediately. Instead, it blocks the requests until other checks are finished.
+        :param pulumi.Input[bool] header_inspection: Specifies the header inspection in basic web protection. Defaults to **false**.
         :param pulumi.Input[int] level: Specifies the protection level. Defaults to `2`. Valid values are:
-               + `1`: low
-               + `2`: medium
-               + `3`: high
-        :param pulumi.Input[str] name: Specifies the policy name. The maximum length is 256 characters. Only digits, letters,
-               underscores(_), and hyphens(-) are allowed.
-        :param pulumi.Input[str] protection_mode: Specifies the protective action after a rule is matched. Defaults to `log`.
+               + `1`: Low. At this protection level, WAF blocks only requests with obvious attack features. If a large number of
+               false alarms have been reported, this value is recommended.
+               + `2`: Medium. This protection level meets web protection requirements in most scenarios.
+               + `3`: High. At this protection level, WAF provides the finest granular protection and can intercept attacks with
+               complex bypass features, such as Jolokia cyberattacks, common gateway interface (CGI) vulnerability detection,
+               and Druid SQL injection attacks.
+        :param pulumi.Input[str] name: Specifies the policy name. The maximum length is `256` characters. Only digits, letters,
+               underscores (_), and hyphens (-) are allowed.
+        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['PolicyOptionArgs']]]] options: Specifies the switch options of the protection item in the policy.
+               The options structure is documented below.
+        :param pulumi.Input[str] protection_mode: Specifies the protective action after a rule is matched. Defaults to **log**.
                Valid values are:
-               + `block`: WAF blocks and logs detected attacks.
-               + `log`: WAF logs detected attacks only.
-        :param pulumi.Input[str] region: The region in which to create the WAF policy resource. If omitted, the
+               + **block**: WAF blocks and logs detected attacks.
+               + **log**: WAF logs detected attacks only.
+        :param pulumi.Input[str] region: Specifies the region in which to create the WAF policy resource. If omitted, the
                provider-level region will be used. Changing this setting will push a new certificate.
+        :param pulumi.Input[str] robot_action: Specifies the protective actions for each rule in anti-crawler protection.
+               Defaults to **log**. Valid values are:
+               + **block**: WAF blocks discovered attacks.
+               + **log**: WAF only logs discovered attacks.
+        :param pulumi.Input[bool] shiro_decryption_check: Specifies the shiro decryption check in basic web protection.
+               Defaults to **false**.
         """
         ...
     @overload
@@ -337,21 +568,7 @@ class Policy(pulumi.CustomResource):
         Manages a WAF policy resource within HuaweiCloud.
 
         > **NOTE:** All WAF resources depend on WAF instances, and the WAF instances need to be purchased before they can be
-        used. The policy resource can be used in Cloud Mode, Dedicated Mode and ELB Mode.
-
-        ## Example Usage
-
-        ```python
-        import pulumi
-        import pulumi_huaweicloud as huaweicloud
-
-        config = pulumi.Config()
-        enterprise_project_id = config.require_object("enterpriseProjectId")
-        policy1 = huaweicloud.waf.Policy("policy1",
-            protection_mode="log",
-            level=2,
-            enterprise_project_id=enterprise_project_id)
-        ```
+        used. The policy resource can be used in Cloud Mode and Dedicated Mode.
 
         ## Import
 
@@ -382,11 +599,17 @@ class Policy(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
+                 deep_inspection: Optional[pulumi.Input[bool]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
+                 full_detection: Optional[pulumi.Input[bool]] = None,
+                 header_inspection: Optional[pulumi.Input[bool]] = None,
                  level: Optional[pulumi.Input[int]] = None,
                  name: Optional[pulumi.Input[str]] = None,
+                 options: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['PolicyOptionArgs']]]]] = None,
                  protection_mode: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
+                 robot_action: Optional[pulumi.Input[str]] = None,
+                 shiro_decryption_check: Optional[pulumi.Input[bool]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -396,13 +619,18 @@ class Policy(pulumi.CustomResource):
                 raise TypeError('__props__ is only valid when passed in combination with a valid opts.id to get an existing resource')
             __props__ = PolicyArgs.__new__(PolicyArgs)
 
+            __props__.__dict__["deep_inspection"] = deep_inspection
             __props__.__dict__["enterprise_project_id"] = enterprise_project_id
+            __props__.__dict__["full_detection"] = full_detection
+            __props__.__dict__["header_inspection"] = header_inspection
             __props__.__dict__["level"] = level
             __props__.__dict__["name"] = name
+            __props__.__dict__["options"] = options
             __props__.__dict__["protection_mode"] = protection_mode
             __props__.__dict__["region"] = region
-            __props__.__dict__["full_detection"] = None
-            __props__.__dict__["options"] = None
+            __props__.__dict__["robot_action"] = robot_action
+            __props__.__dict__["shiro_decryption_check"] = shiro_decryption_check
+            __props__.__dict__["bind_hosts"] = None
         super(Policy, __self__).__init__(
             'huaweicloud:Waf/policy:Policy',
             resource_name,
@@ -413,13 +641,18 @@ class Policy(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
+            bind_hosts: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['PolicyBindHostArgs']]]]] = None,
+            deep_inspection: Optional[pulumi.Input[bool]] = None,
             enterprise_project_id: Optional[pulumi.Input[str]] = None,
             full_detection: Optional[pulumi.Input[bool]] = None,
+            header_inspection: Optional[pulumi.Input[bool]] = None,
             level: Optional[pulumi.Input[int]] = None,
             name: Optional[pulumi.Input[str]] = None,
             options: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['PolicyOptionArgs']]]]] = None,
             protection_mode: Optional[pulumi.Input[str]] = None,
-            region: Optional[pulumi.Input[str]] = None) -> 'Policy':
+            region: Optional[pulumi.Input[str]] = None,
+            robot_action: Optional[pulumi.Input[str]] = None,
+            shiro_decryption_check: Optional[pulumi.Input[bool]] = None) -> 'Policy':
         """
         Get an existing Policy resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.
@@ -427,69 +660,116 @@ class Policy(pulumi.CustomResource):
         :param str resource_name: The unique name of the resulting resource.
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
+        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['PolicyBindHostArgs']]]] bind_hosts: The protection switches. The options object structure is documented below.
+        :param pulumi.Input[bool] deep_inspection: Specifies the deep inspection in basic web protection. Defaults to **false**.
         :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID of WAF policy.
+               For enterprise users, if omitted, default enterprise project will be used.
                Changing this parameter will create a new resource.
-        :param pulumi.Input[bool] full_detection: The detection mode in Precise Protection.
-               + `true`: full detection, Full detection finishes all threat detections before blocking requests that meet Precise
-               Protection specified conditions.
-               + `false`: instant detection. Instant detection immediately ends threat detection after blocking a request that
-               meets Precise Protection specified conditions.
+        :param pulumi.Input[bool] full_detection: Specifies the detection mode in precise protection. Defaults to **false**.
+               + **false**: Instant detection. When a request hits the blocking conditions in precise protection, WAF terminates
+               checks and blocks the request immediately.
+               + **true**: Full detection. If a request hits the blocking conditions in precise protection, WAF does not block the
+               request immediately. Instead, it blocks the requests until other checks are finished.
+        :param pulumi.Input[bool] header_inspection: Specifies the header inspection in basic web protection. Defaults to **false**.
         :param pulumi.Input[int] level: Specifies the protection level. Defaults to `2`. Valid values are:
-               + `1`: low
-               + `2`: medium
-               + `3`: high
-        :param pulumi.Input[str] name: Specifies the policy name. The maximum length is 256 characters. Only digits, letters,
-               underscores(_), and hyphens(-) are allowed.
-        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['PolicyOptionArgs']]]] options: The protection switches. The options object structure is documented below.
-        :param pulumi.Input[str] protection_mode: Specifies the protective action after a rule is matched. Defaults to `log`.
+               + `1`: Low. At this protection level, WAF blocks only requests with obvious attack features. If a large number of
+               false alarms have been reported, this value is recommended.
+               + `2`: Medium. This protection level meets web protection requirements in most scenarios.
+               + `3`: High. At this protection level, WAF provides the finest granular protection and can intercept attacks with
+               complex bypass features, such as Jolokia cyberattacks, common gateway interface (CGI) vulnerability detection,
+               and Druid SQL injection attacks.
+        :param pulumi.Input[str] name: Specifies the policy name. The maximum length is `256` characters. Only digits, letters,
+               underscores (_), and hyphens (-) are allowed.
+        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['PolicyOptionArgs']]]] options: Specifies the switch options of the protection item in the policy.
+               The options structure is documented below.
+        :param pulumi.Input[str] protection_mode: Specifies the protective action after a rule is matched. Defaults to **log**.
                Valid values are:
-               + `block`: WAF blocks and logs detected attacks.
-               + `log`: WAF logs detected attacks only.
-        :param pulumi.Input[str] region: The region in which to create the WAF policy resource. If omitted, the
+               + **block**: WAF blocks and logs detected attacks.
+               + **log**: WAF logs detected attacks only.
+        :param pulumi.Input[str] region: Specifies the region in which to create the WAF policy resource. If omitted, the
                provider-level region will be used. Changing this setting will push a new certificate.
+        :param pulumi.Input[str] robot_action: Specifies the protective actions for each rule in anti-crawler protection.
+               Defaults to **log**. Valid values are:
+               + **block**: WAF blocks discovered attacks.
+               + **log**: WAF only logs discovered attacks.
+        :param pulumi.Input[bool] shiro_decryption_check: Specifies the shiro decryption check in basic web protection.
+               Defaults to **false**.
         """
         opts = pulumi.ResourceOptions.merge(opts, pulumi.ResourceOptions(id=id))
 
         __props__ = _PolicyState.__new__(_PolicyState)
 
+        __props__.__dict__["bind_hosts"] = bind_hosts
+        __props__.__dict__["deep_inspection"] = deep_inspection
         __props__.__dict__["enterprise_project_id"] = enterprise_project_id
         __props__.__dict__["full_detection"] = full_detection
+        __props__.__dict__["header_inspection"] = header_inspection
         __props__.__dict__["level"] = level
         __props__.__dict__["name"] = name
         __props__.__dict__["options"] = options
         __props__.__dict__["protection_mode"] = protection_mode
         __props__.__dict__["region"] = region
+        __props__.__dict__["robot_action"] = robot_action
+        __props__.__dict__["shiro_decryption_check"] = shiro_decryption_check
         return Policy(resource_name, opts=opts, __props__=__props__)
+
+    @property
+    @pulumi.getter(name="bindHosts")
+    def bind_hosts(self) -> pulumi.Output[Sequence['outputs.PolicyBindHost']]:
+        """
+        The protection switches. The options object structure is documented below.
+        """
+        return pulumi.get(self, "bind_hosts")
+
+    @property
+    @pulumi.getter(name="deepInspection")
+    def deep_inspection(self) -> pulumi.Output[bool]:
+        """
+        Specifies the deep inspection in basic web protection. Defaults to **false**.
+        """
+        return pulumi.get(self, "deep_inspection")
 
     @property
     @pulumi.getter(name="enterpriseProjectId")
     def enterprise_project_id(self) -> pulumi.Output[Optional[str]]:
         """
         Specifies the enterprise project ID of WAF policy.
+        For enterprise users, if omitted, default enterprise project will be used.
         Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "enterprise_project_id")
 
     @property
     @pulumi.getter(name="fullDetection")
-    def full_detection(self) -> pulumi.Output[bool]:
+    def full_detection(self) -> pulumi.Output[Optional[bool]]:
         """
-        The detection mode in Precise Protection.
-        + `true`: full detection, Full detection finishes all threat detections before blocking requests that meet Precise
-        Protection specified conditions.
-        + `false`: instant detection. Instant detection immediately ends threat detection after blocking a request that
-        meets Precise Protection specified conditions.
+        Specifies the detection mode in precise protection. Defaults to **false**.
+        + **false**: Instant detection. When a request hits the blocking conditions in precise protection, WAF terminates
+        checks and blocks the request immediately.
+        + **true**: Full detection. If a request hits the blocking conditions in precise protection, WAF does not block the
+        request immediately. Instead, it blocks the requests until other checks are finished.
         """
         return pulumi.get(self, "full_detection")
+
+    @property
+    @pulumi.getter(name="headerInspection")
+    def header_inspection(self) -> pulumi.Output[bool]:
+        """
+        Specifies the header inspection in basic web protection. Defaults to **false**.
+        """
+        return pulumi.get(self, "header_inspection")
 
     @property
     @pulumi.getter
     def level(self) -> pulumi.Output[int]:
         """
         Specifies the protection level. Defaults to `2`. Valid values are:
-        + `1`: low
-        + `2`: medium
-        + `3`: high
+        + `1`: Low. At this protection level, WAF blocks only requests with obvious attack features. If a large number of
+        false alarms have been reported, this value is recommended.
+        + `2`: Medium. This protection level meets web protection requirements in most scenarios.
+        + `3`: High. At this protection level, WAF provides the finest granular protection and can intercept attacks with
+        complex bypass features, such as Jolokia cyberattacks, common gateway interface (CGI) vulnerability detection,
+        and Druid SQL injection attacks.
         """
         return pulumi.get(self, "level")
 
@@ -497,8 +777,8 @@ class Policy(pulumi.CustomResource):
     @pulumi.getter
     def name(self) -> pulumi.Output[str]:
         """
-        Specifies the policy name. The maximum length is 256 characters. Only digits, letters,
-        underscores(_), and hyphens(-) are allowed.
+        Specifies the policy name. The maximum length is `256` characters. Only digits, letters,
+        underscores (_), and hyphens (-) are allowed.
         """
         return pulumi.get(self, "name")
 
@@ -506,7 +786,8 @@ class Policy(pulumi.CustomResource):
     @pulumi.getter
     def options(self) -> pulumi.Output[Sequence['outputs.PolicyOption']]:
         """
-        The protection switches. The options object structure is documented below.
+        Specifies the switch options of the protection item in the policy.
+        The options structure is documented below.
         """
         return pulumi.get(self, "options")
 
@@ -514,10 +795,10 @@ class Policy(pulumi.CustomResource):
     @pulumi.getter(name="protectionMode")
     def protection_mode(self) -> pulumi.Output[str]:
         """
-        Specifies the protective action after a rule is matched. Defaults to `log`.
+        Specifies the protective action after a rule is matched. Defaults to **log**.
         Valid values are:
-        + `block`: WAF blocks and logs detected attacks.
-        + `log`: WAF logs detected attacks only.
+        + **block**: WAF blocks and logs detected attacks.
+        + **log**: WAF logs detected attacks only.
         """
         return pulumi.get(self, "protection_mode")
 
@@ -525,8 +806,28 @@ class Policy(pulumi.CustomResource):
     @pulumi.getter
     def region(self) -> pulumi.Output[str]:
         """
-        The region in which to create the WAF policy resource. If omitted, the
+        Specifies the region in which to create the WAF policy resource. If omitted, the
         provider-level region will be used. Changing this setting will push a new certificate.
         """
         return pulumi.get(self, "region")
+
+    @property
+    @pulumi.getter(name="robotAction")
+    def robot_action(self) -> pulumi.Output[str]:
+        """
+        Specifies the protective actions for each rule in anti-crawler protection.
+        Defaults to **log**. Valid values are:
+        + **block**: WAF blocks discovered attacks.
+        + **log**: WAF only logs discovered attacks.
+        """
+        return pulumi.get(self, "robot_action")
+
+    @property
+    @pulumi.getter(name="shiroDecryptionCheck")
+    def shiro_decryption_check(self) -> pulumi.Output[bool]:
+        """
+        Specifies the shiro decryption check in basic web protection.
+        Defaults to **false**.
+        """
+        return pulumi.get(self, "shiro_decryption_check")
 

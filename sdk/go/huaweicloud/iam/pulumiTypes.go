@@ -334,11 +334,205 @@ func (o AgencyProjectRoleArrayOutput) Index(i pulumi.IntInput) AgencyProjectRole
 	}).(AgencyProjectRoleOutput)
 }
 
+type ProtectionPolicySelfManagement struct {
+	// Specifies whether to allow IAM users to manage access keys by themselves.
+	AccessKey *bool `pulumi:"accessKey"`
+	// Specifies whether to allow IAM users to change their email addresses.
+	Email *bool `pulumi:"email"`
+	// Specifies whether to allow IAM users to change their mobile numbers.
+	Mobile *bool `pulumi:"mobile"`
+	// Specifies whether to allow IAM users to change their passwords.
+	Password *bool `pulumi:"password"`
+}
+
+// ProtectionPolicySelfManagementInput is an input type that accepts ProtectionPolicySelfManagementArgs and ProtectionPolicySelfManagementOutput values.
+// You can construct a concrete instance of `ProtectionPolicySelfManagementInput` via:
+//
+//	ProtectionPolicySelfManagementArgs{...}
+type ProtectionPolicySelfManagementInput interface {
+	pulumi.Input
+
+	ToProtectionPolicySelfManagementOutput() ProtectionPolicySelfManagementOutput
+	ToProtectionPolicySelfManagementOutputWithContext(context.Context) ProtectionPolicySelfManagementOutput
+}
+
+type ProtectionPolicySelfManagementArgs struct {
+	// Specifies whether to allow IAM users to manage access keys by themselves.
+	AccessKey pulumi.BoolPtrInput `pulumi:"accessKey"`
+	// Specifies whether to allow IAM users to change their email addresses.
+	Email pulumi.BoolPtrInput `pulumi:"email"`
+	// Specifies whether to allow IAM users to change their mobile numbers.
+	Mobile pulumi.BoolPtrInput `pulumi:"mobile"`
+	// Specifies whether to allow IAM users to change their passwords.
+	Password pulumi.BoolPtrInput `pulumi:"password"`
+}
+
+func (ProtectionPolicySelfManagementArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*ProtectionPolicySelfManagement)(nil)).Elem()
+}
+
+func (i ProtectionPolicySelfManagementArgs) ToProtectionPolicySelfManagementOutput() ProtectionPolicySelfManagementOutput {
+	return i.ToProtectionPolicySelfManagementOutputWithContext(context.Background())
+}
+
+func (i ProtectionPolicySelfManagementArgs) ToProtectionPolicySelfManagementOutputWithContext(ctx context.Context) ProtectionPolicySelfManagementOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(ProtectionPolicySelfManagementOutput)
+}
+
+func (i ProtectionPolicySelfManagementArgs) ToProtectionPolicySelfManagementPtrOutput() ProtectionPolicySelfManagementPtrOutput {
+	return i.ToProtectionPolicySelfManagementPtrOutputWithContext(context.Background())
+}
+
+func (i ProtectionPolicySelfManagementArgs) ToProtectionPolicySelfManagementPtrOutputWithContext(ctx context.Context) ProtectionPolicySelfManagementPtrOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(ProtectionPolicySelfManagementOutput).ToProtectionPolicySelfManagementPtrOutputWithContext(ctx)
+}
+
+// ProtectionPolicySelfManagementPtrInput is an input type that accepts ProtectionPolicySelfManagementArgs, ProtectionPolicySelfManagementPtr and ProtectionPolicySelfManagementPtrOutput values.
+// You can construct a concrete instance of `ProtectionPolicySelfManagementPtrInput` via:
+//
+//	        ProtectionPolicySelfManagementArgs{...}
+//
+//	or:
+//
+//	        nil
+type ProtectionPolicySelfManagementPtrInput interface {
+	pulumi.Input
+
+	ToProtectionPolicySelfManagementPtrOutput() ProtectionPolicySelfManagementPtrOutput
+	ToProtectionPolicySelfManagementPtrOutputWithContext(context.Context) ProtectionPolicySelfManagementPtrOutput
+}
+
+type protectionPolicySelfManagementPtrType ProtectionPolicySelfManagementArgs
+
+func ProtectionPolicySelfManagementPtr(v *ProtectionPolicySelfManagementArgs) ProtectionPolicySelfManagementPtrInput {
+	return (*protectionPolicySelfManagementPtrType)(v)
+}
+
+func (*protectionPolicySelfManagementPtrType) ElementType() reflect.Type {
+	return reflect.TypeOf((**ProtectionPolicySelfManagement)(nil)).Elem()
+}
+
+func (i *protectionPolicySelfManagementPtrType) ToProtectionPolicySelfManagementPtrOutput() ProtectionPolicySelfManagementPtrOutput {
+	return i.ToProtectionPolicySelfManagementPtrOutputWithContext(context.Background())
+}
+
+func (i *protectionPolicySelfManagementPtrType) ToProtectionPolicySelfManagementPtrOutputWithContext(ctx context.Context) ProtectionPolicySelfManagementPtrOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(ProtectionPolicySelfManagementPtrOutput)
+}
+
+type ProtectionPolicySelfManagementOutput struct{ *pulumi.OutputState }
+
+func (ProtectionPolicySelfManagementOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*ProtectionPolicySelfManagement)(nil)).Elem()
+}
+
+func (o ProtectionPolicySelfManagementOutput) ToProtectionPolicySelfManagementOutput() ProtectionPolicySelfManagementOutput {
+	return o
+}
+
+func (o ProtectionPolicySelfManagementOutput) ToProtectionPolicySelfManagementOutputWithContext(ctx context.Context) ProtectionPolicySelfManagementOutput {
+	return o
+}
+
+func (o ProtectionPolicySelfManagementOutput) ToProtectionPolicySelfManagementPtrOutput() ProtectionPolicySelfManagementPtrOutput {
+	return o.ToProtectionPolicySelfManagementPtrOutputWithContext(context.Background())
+}
+
+func (o ProtectionPolicySelfManagementOutput) ToProtectionPolicySelfManagementPtrOutputWithContext(ctx context.Context) ProtectionPolicySelfManagementPtrOutput {
+	return o.ApplyTWithContext(ctx, func(_ context.Context, v ProtectionPolicySelfManagement) *ProtectionPolicySelfManagement {
+		return &v
+	}).(ProtectionPolicySelfManagementPtrOutput)
+}
+
+// Specifies whether to allow IAM users to manage access keys by themselves.
+func (o ProtectionPolicySelfManagementOutput) AccessKey() pulumi.BoolPtrOutput {
+	return o.ApplyT(func(v ProtectionPolicySelfManagement) *bool { return v.AccessKey }).(pulumi.BoolPtrOutput)
+}
+
+// Specifies whether to allow IAM users to change their email addresses.
+func (o ProtectionPolicySelfManagementOutput) Email() pulumi.BoolPtrOutput {
+	return o.ApplyT(func(v ProtectionPolicySelfManagement) *bool { return v.Email }).(pulumi.BoolPtrOutput)
+}
+
+// Specifies whether to allow IAM users to change their mobile numbers.
+func (o ProtectionPolicySelfManagementOutput) Mobile() pulumi.BoolPtrOutput {
+	return o.ApplyT(func(v ProtectionPolicySelfManagement) *bool { return v.Mobile }).(pulumi.BoolPtrOutput)
+}
+
+// Specifies whether to allow IAM users to change their passwords.
+func (o ProtectionPolicySelfManagementOutput) Password() pulumi.BoolPtrOutput {
+	return o.ApplyT(func(v ProtectionPolicySelfManagement) *bool { return v.Password }).(pulumi.BoolPtrOutput)
+}
+
+type ProtectionPolicySelfManagementPtrOutput struct{ *pulumi.OutputState }
+
+func (ProtectionPolicySelfManagementPtrOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((**ProtectionPolicySelfManagement)(nil)).Elem()
+}
+
+func (o ProtectionPolicySelfManagementPtrOutput) ToProtectionPolicySelfManagementPtrOutput() ProtectionPolicySelfManagementPtrOutput {
+	return o
+}
+
+func (o ProtectionPolicySelfManagementPtrOutput) ToProtectionPolicySelfManagementPtrOutputWithContext(ctx context.Context) ProtectionPolicySelfManagementPtrOutput {
+	return o
+}
+
+func (o ProtectionPolicySelfManagementPtrOutput) Elem() ProtectionPolicySelfManagementOutput {
+	return o.ApplyT(func(v *ProtectionPolicySelfManagement) ProtectionPolicySelfManagement {
+		if v != nil {
+			return *v
+		}
+		var ret ProtectionPolicySelfManagement
+		return ret
+	}).(ProtectionPolicySelfManagementOutput)
+}
+
+// Specifies whether to allow IAM users to manage access keys by themselves.
+func (o ProtectionPolicySelfManagementPtrOutput) AccessKey() pulumi.BoolPtrOutput {
+	return o.ApplyT(func(v *ProtectionPolicySelfManagement) *bool {
+		if v == nil {
+			return nil
+		}
+		return v.AccessKey
+	}).(pulumi.BoolPtrOutput)
+}
+
+// Specifies whether to allow IAM users to change their email addresses.
+func (o ProtectionPolicySelfManagementPtrOutput) Email() pulumi.BoolPtrOutput {
+	return o.ApplyT(func(v *ProtectionPolicySelfManagement) *bool {
+		if v == nil {
+			return nil
+		}
+		return v.Email
+	}).(pulumi.BoolPtrOutput)
+}
+
+// Specifies whether to allow IAM users to change their mobile numbers.
+func (o ProtectionPolicySelfManagementPtrOutput) Mobile() pulumi.BoolPtrOutput {
+	return o.ApplyT(func(v *ProtectionPolicySelfManagement) *bool {
+		if v == nil {
+			return nil
+		}
+		return v.Mobile
+	}).(pulumi.BoolPtrOutput)
+}
+
+// Specifies whether to allow IAM users to change their passwords.
+func (o ProtectionPolicySelfManagementPtrOutput) Password() pulumi.BoolPtrOutput {
+	return o.ApplyT(func(v *ProtectionPolicySelfManagement) *bool {
+		if v == nil {
+			return nil
+		}
+		return v.Password
+	}).(pulumi.BoolPtrOutput)
+}
+
 type ProviderAccessConfig struct {
 	// Specifies the access type of the identity provider.
 	// Available options are:
-	// + `program`: programmatic access only.
-	// + `programConsole`: programmatic access and management console access.
+	// + **program**: programmatic access only.
+	// + **program_console**: programmatic access and management console access.
 	AccessType string `pulumi:"accessType"`
 	// Specifies the authorization endpoint of the OpenID Connect identity
 	// provider. This field is required only if the access type is set to `programConsole`.
@@ -378,8 +572,8 @@ type ProviderAccessConfigInput interface {
 type ProviderAccessConfigArgs struct {
 	// Specifies the access type of the identity provider.
 	// Available options are:
-	// + `program`: programmatic access only.
-	// + `programConsole`: programmatic access and management console access.
+	// + **program**: programmatic access only.
+	// + **program_console**: programmatic access and management console access.
 	AccessType pulumi.StringInput `pulumi:"accessType"`
 	// Specifies the authorization endpoint of the OpenID Connect identity
 	// provider. This field is required only if the access type is set to `programConsole`.
@@ -484,8 +678,8 @@ func (o ProviderAccessConfigOutput) ToProviderAccessConfigPtrOutputWithContext(c
 
 // Specifies the access type of the identity provider.
 // Available options are:
-// + `program`: programmatic access only.
-// + `programConsole`: programmatic access and management console access.
+// + **program**: programmatic access only.
+// + **program_console**: programmatic access and management console access.
 func (o ProviderAccessConfigOutput) AccessType() pulumi.StringOutput {
 	return o.ApplyT(func(v ProviderAccessConfig) string { return v.AccessType }).(pulumi.StringOutput)
 }
@@ -559,8 +753,8 @@ func (o ProviderAccessConfigPtrOutput) Elem() ProviderAccessConfigOutput {
 
 // Specifies the access type of the identity provider.
 // Available options are:
-// + `program`: programmatic access only.
-// + `programConsole`: programmatic access and management console access.
+// + **program**: programmatic access only.
+// + **program_console**: programmatic access and management console access.
 func (o ProviderAccessConfigPtrOutput) AccessType() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *ProviderAccessConfig) *string {
 		if v == nil {
@@ -646,6 +840,342 @@ func (o ProviderAccessConfigPtrOutput) SigningKey() pulumi.StringPtrOutput {
 		}
 		return &v.SigningKey
 	}).(pulumi.StringPtrOutput)
+}
+
+type ProviderConversionConversionRule struct {
+	// Specifies the federated user information on the cloud platform.
+	Locals []ProviderConversionConversionRuleLocal `pulumi:"locals"`
+	// Specifies Federated user information in the IDP system.
+	Remotes []ProviderConversionConversionRuleRemote `pulumi:"remotes"`
+}
+
+// ProviderConversionConversionRuleInput is an input type that accepts ProviderConversionConversionRuleArgs and ProviderConversionConversionRuleOutput values.
+// You can construct a concrete instance of `ProviderConversionConversionRuleInput` via:
+//
+//	ProviderConversionConversionRuleArgs{...}
+type ProviderConversionConversionRuleInput interface {
+	pulumi.Input
+
+	ToProviderConversionConversionRuleOutput() ProviderConversionConversionRuleOutput
+	ToProviderConversionConversionRuleOutputWithContext(context.Context) ProviderConversionConversionRuleOutput
+}
+
+type ProviderConversionConversionRuleArgs struct {
+	// Specifies the federated user information on the cloud platform.
+	Locals ProviderConversionConversionRuleLocalArrayInput `pulumi:"locals"`
+	// Specifies Federated user information in the IDP system.
+	Remotes ProviderConversionConversionRuleRemoteArrayInput `pulumi:"remotes"`
+}
+
+func (ProviderConversionConversionRuleArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*ProviderConversionConversionRule)(nil)).Elem()
+}
+
+func (i ProviderConversionConversionRuleArgs) ToProviderConversionConversionRuleOutput() ProviderConversionConversionRuleOutput {
+	return i.ToProviderConversionConversionRuleOutputWithContext(context.Background())
+}
+
+func (i ProviderConversionConversionRuleArgs) ToProviderConversionConversionRuleOutputWithContext(ctx context.Context) ProviderConversionConversionRuleOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(ProviderConversionConversionRuleOutput)
+}
+
+// ProviderConversionConversionRuleArrayInput is an input type that accepts ProviderConversionConversionRuleArray and ProviderConversionConversionRuleArrayOutput values.
+// You can construct a concrete instance of `ProviderConversionConversionRuleArrayInput` via:
+//
+//	ProviderConversionConversionRuleArray{ ProviderConversionConversionRuleArgs{...} }
+type ProviderConversionConversionRuleArrayInput interface {
+	pulumi.Input
+
+	ToProviderConversionConversionRuleArrayOutput() ProviderConversionConversionRuleArrayOutput
+	ToProviderConversionConversionRuleArrayOutputWithContext(context.Context) ProviderConversionConversionRuleArrayOutput
+}
+
+type ProviderConversionConversionRuleArray []ProviderConversionConversionRuleInput
+
+func (ProviderConversionConversionRuleArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]ProviderConversionConversionRule)(nil)).Elem()
+}
+
+func (i ProviderConversionConversionRuleArray) ToProviderConversionConversionRuleArrayOutput() ProviderConversionConversionRuleArrayOutput {
+	return i.ToProviderConversionConversionRuleArrayOutputWithContext(context.Background())
+}
+
+func (i ProviderConversionConversionRuleArray) ToProviderConversionConversionRuleArrayOutputWithContext(ctx context.Context) ProviderConversionConversionRuleArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(ProviderConversionConversionRuleArrayOutput)
+}
+
+type ProviderConversionConversionRuleOutput struct{ *pulumi.OutputState }
+
+func (ProviderConversionConversionRuleOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*ProviderConversionConversionRule)(nil)).Elem()
+}
+
+func (o ProviderConversionConversionRuleOutput) ToProviderConversionConversionRuleOutput() ProviderConversionConversionRuleOutput {
+	return o
+}
+
+func (o ProviderConversionConversionRuleOutput) ToProviderConversionConversionRuleOutputWithContext(ctx context.Context) ProviderConversionConversionRuleOutput {
+	return o
+}
+
+// Specifies the federated user information on the cloud platform.
+func (o ProviderConversionConversionRuleOutput) Locals() ProviderConversionConversionRuleLocalArrayOutput {
+	return o.ApplyT(func(v ProviderConversionConversionRule) []ProviderConversionConversionRuleLocal { return v.Locals }).(ProviderConversionConversionRuleLocalArrayOutput)
+}
+
+// Specifies Federated user information in the IDP system.
+func (o ProviderConversionConversionRuleOutput) Remotes() ProviderConversionConversionRuleRemoteArrayOutput {
+	return o.ApplyT(func(v ProviderConversionConversionRule) []ProviderConversionConversionRuleRemote { return v.Remotes }).(ProviderConversionConversionRuleRemoteArrayOutput)
+}
+
+type ProviderConversionConversionRuleArrayOutput struct{ *pulumi.OutputState }
+
+func (ProviderConversionConversionRuleArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]ProviderConversionConversionRule)(nil)).Elem()
+}
+
+func (o ProviderConversionConversionRuleArrayOutput) ToProviderConversionConversionRuleArrayOutput() ProviderConversionConversionRuleArrayOutput {
+	return o
+}
+
+func (o ProviderConversionConversionRuleArrayOutput) ToProviderConversionConversionRuleArrayOutputWithContext(ctx context.Context) ProviderConversionConversionRuleArrayOutput {
+	return o
+}
+
+func (o ProviderConversionConversionRuleArrayOutput) Index(i pulumi.IntInput) ProviderConversionConversionRuleOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) ProviderConversionConversionRule {
+		return vs[0].([]ProviderConversionConversionRule)[vs[1].(int)]
+	}).(ProviderConversionConversionRuleOutput)
+}
+
+type ProviderConversionConversionRuleLocal struct {
+	// Specifies the user group to which the federated user belongs on the cloud platform.
+	Group *string `pulumi:"group"`
+	// Specifies the name of a federated user on the cloud platform.
+	Username *string `pulumi:"username"`
+}
+
+// ProviderConversionConversionRuleLocalInput is an input type that accepts ProviderConversionConversionRuleLocalArgs and ProviderConversionConversionRuleLocalOutput values.
+// You can construct a concrete instance of `ProviderConversionConversionRuleLocalInput` via:
+//
+//	ProviderConversionConversionRuleLocalArgs{...}
+type ProviderConversionConversionRuleLocalInput interface {
+	pulumi.Input
+
+	ToProviderConversionConversionRuleLocalOutput() ProviderConversionConversionRuleLocalOutput
+	ToProviderConversionConversionRuleLocalOutputWithContext(context.Context) ProviderConversionConversionRuleLocalOutput
+}
+
+type ProviderConversionConversionRuleLocalArgs struct {
+	// Specifies the user group to which the federated user belongs on the cloud platform.
+	Group pulumi.StringPtrInput `pulumi:"group"`
+	// Specifies the name of a federated user on the cloud platform.
+	Username pulumi.StringPtrInput `pulumi:"username"`
+}
+
+func (ProviderConversionConversionRuleLocalArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*ProviderConversionConversionRuleLocal)(nil)).Elem()
+}
+
+func (i ProviderConversionConversionRuleLocalArgs) ToProviderConversionConversionRuleLocalOutput() ProviderConversionConversionRuleLocalOutput {
+	return i.ToProviderConversionConversionRuleLocalOutputWithContext(context.Background())
+}
+
+func (i ProviderConversionConversionRuleLocalArgs) ToProviderConversionConversionRuleLocalOutputWithContext(ctx context.Context) ProviderConversionConversionRuleLocalOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(ProviderConversionConversionRuleLocalOutput)
+}
+
+// ProviderConversionConversionRuleLocalArrayInput is an input type that accepts ProviderConversionConversionRuleLocalArray and ProviderConversionConversionRuleLocalArrayOutput values.
+// You can construct a concrete instance of `ProviderConversionConversionRuleLocalArrayInput` via:
+//
+//	ProviderConversionConversionRuleLocalArray{ ProviderConversionConversionRuleLocalArgs{...} }
+type ProviderConversionConversionRuleLocalArrayInput interface {
+	pulumi.Input
+
+	ToProviderConversionConversionRuleLocalArrayOutput() ProviderConversionConversionRuleLocalArrayOutput
+	ToProviderConversionConversionRuleLocalArrayOutputWithContext(context.Context) ProviderConversionConversionRuleLocalArrayOutput
+}
+
+type ProviderConversionConversionRuleLocalArray []ProviderConversionConversionRuleLocalInput
+
+func (ProviderConversionConversionRuleLocalArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]ProviderConversionConversionRuleLocal)(nil)).Elem()
+}
+
+func (i ProviderConversionConversionRuleLocalArray) ToProviderConversionConversionRuleLocalArrayOutput() ProviderConversionConversionRuleLocalArrayOutput {
+	return i.ToProviderConversionConversionRuleLocalArrayOutputWithContext(context.Background())
+}
+
+func (i ProviderConversionConversionRuleLocalArray) ToProviderConversionConversionRuleLocalArrayOutputWithContext(ctx context.Context) ProviderConversionConversionRuleLocalArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(ProviderConversionConversionRuleLocalArrayOutput)
+}
+
+type ProviderConversionConversionRuleLocalOutput struct{ *pulumi.OutputState }
+
+func (ProviderConversionConversionRuleLocalOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*ProviderConversionConversionRuleLocal)(nil)).Elem()
+}
+
+func (o ProviderConversionConversionRuleLocalOutput) ToProviderConversionConversionRuleLocalOutput() ProviderConversionConversionRuleLocalOutput {
+	return o
+}
+
+func (o ProviderConversionConversionRuleLocalOutput) ToProviderConversionConversionRuleLocalOutputWithContext(ctx context.Context) ProviderConversionConversionRuleLocalOutput {
+	return o
+}
+
+// Specifies the user group to which the federated user belongs on the cloud platform.
+func (o ProviderConversionConversionRuleLocalOutput) Group() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v ProviderConversionConversionRuleLocal) *string { return v.Group }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the name of a federated user on the cloud platform.
+func (o ProviderConversionConversionRuleLocalOutput) Username() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v ProviderConversionConversionRuleLocal) *string { return v.Username }).(pulumi.StringPtrOutput)
+}
+
+type ProviderConversionConversionRuleLocalArrayOutput struct{ *pulumi.OutputState }
+
+func (ProviderConversionConversionRuleLocalArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]ProviderConversionConversionRuleLocal)(nil)).Elem()
+}
+
+func (o ProviderConversionConversionRuleLocalArrayOutput) ToProviderConversionConversionRuleLocalArrayOutput() ProviderConversionConversionRuleLocalArrayOutput {
+	return o
+}
+
+func (o ProviderConversionConversionRuleLocalArrayOutput) ToProviderConversionConversionRuleLocalArrayOutputWithContext(ctx context.Context) ProviderConversionConversionRuleLocalArrayOutput {
+	return o
+}
+
+func (o ProviderConversionConversionRuleLocalArrayOutput) Index(i pulumi.IntInput) ProviderConversionConversionRuleLocalOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) ProviderConversionConversionRuleLocal {
+		return vs[0].([]ProviderConversionConversionRuleLocal)[vs[1].(int)]
+	}).(ProviderConversionConversionRuleLocalOutput)
+}
+
+type ProviderConversionConversionRuleRemote struct {
+	// Specifies the attribute in the IDP assertion.
+	Attribute string `pulumi:"attribute"`
+	// Specifies the condition of conversion rule.
+	// Available options are:
+	// + `anyOneOf`: The rule is matched only if the specified strings appear in the attribute type.
+	// + `notAnyOf`: The rule is matched only if the specified strings do not appear in the attribute type.
+	Condition *string `pulumi:"condition"`
+	// Specifies the rule is matched only if the specified strings appear in the attribute type.
+	Values []string `pulumi:"values"`
+}
+
+// ProviderConversionConversionRuleRemoteInput is an input type that accepts ProviderConversionConversionRuleRemoteArgs and ProviderConversionConversionRuleRemoteOutput values.
+// You can construct a concrete instance of `ProviderConversionConversionRuleRemoteInput` via:
+//
+//	ProviderConversionConversionRuleRemoteArgs{...}
+type ProviderConversionConversionRuleRemoteInput interface {
+	pulumi.Input
+
+	ToProviderConversionConversionRuleRemoteOutput() ProviderConversionConversionRuleRemoteOutput
+	ToProviderConversionConversionRuleRemoteOutputWithContext(context.Context) ProviderConversionConversionRuleRemoteOutput
+}
+
+type ProviderConversionConversionRuleRemoteArgs struct {
+	// Specifies the attribute in the IDP assertion.
+	Attribute pulumi.StringInput `pulumi:"attribute"`
+	// Specifies the condition of conversion rule.
+	// Available options are:
+	// + `anyOneOf`: The rule is matched only if the specified strings appear in the attribute type.
+	// + `notAnyOf`: The rule is matched only if the specified strings do not appear in the attribute type.
+	Condition pulumi.StringPtrInput `pulumi:"condition"`
+	// Specifies the rule is matched only if the specified strings appear in the attribute type.
+	Values pulumi.StringArrayInput `pulumi:"values"`
+}
+
+func (ProviderConversionConversionRuleRemoteArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*ProviderConversionConversionRuleRemote)(nil)).Elem()
+}
+
+func (i ProviderConversionConversionRuleRemoteArgs) ToProviderConversionConversionRuleRemoteOutput() ProviderConversionConversionRuleRemoteOutput {
+	return i.ToProviderConversionConversionRuleRemoteOutputWithContext(context.Background())
+}
+
+func (i ProviderConversionConversionRuleRemoteArgs) ToProviderConversionConversionRuleRemoteOutputWithContext(ctx context.Context) ProviderConversionConversionRuleRemoteOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(ProviderConversionConversionRuleRemoteOutput)
+}
+
+// ProviderConversionConversionRuleRemoteArrayInput is an input type that accepts ProviderConversionConversionRuleRemoteArray and ProviderConversionConversionRuleRemoteArrayOutput values.
+// You can construct a concrete instance of `ProviderConversionConversionRuleRemoteArrayInput` via:
+//
+//	ProviderConversionConversionRuleRemoteArray{ ProviderConversionConversionRuleRemoteArgs{...} }
+type ProviderConversionConversionRuleRemoteArrayInput interface {
+	pulumi.Input
+
+	ToProviderConversionConversionRuleRemoteArrayOutput() ProviderConversionConversionRuleRemoteArrayOutput
+	ToProviderConversionConversionRuleRemoteArrayOutputWithContext(context.Context) ProviderConversionConversionRuleRemoteArrayOutput
+}
+
+type ProviderConversionConversionRuleRemoteArray []ProviderConversionConversionRuleRemoteInput
+
+func (ProviderConversionConversionRuleRemoteArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]ProviderConversionConversionRuleRemote)(nil)).Elem()
+}
+
+func (i ProviderConversionConversionRuleRemoteArray) ToProviderConversionConversionRuleRemoteArrayOutput() ProviderConversionConversionRuleRemoteArrayOutput {
+	return i.ToProviderConversionConversionRuleRemoteArrayOutputWithContext(context.Background())
+}
+
+func (i ProviderConversionConversionRuleRemoteArray) ToProviderConversionConversionRuleRemoteArrayOutputWithContext(ctx context.Context) ProviderConversionConversionRuleRemoteArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(ProviderConversionConversionRuleRemoteArrayOutput)
+}
+
+type ProviderConversionConversionRuleRemoteOutput struct{ *pulumi.OutputState }
+
+func (ProviderConversionConversionRuleRemoteOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*ProviderConversionConversionRuleRemote)(nil)).Elem()
+}
+
+func (o ProviderConversionConversionRuleRemoteOutput) ToProviderConversionConversionRuleRemoteOutput() ProviderConversionConversionRuleRemoteOutput {
+	return o
+}
+
+func (o ProviderConversionConversionRuleRemoteOutput) ToProviderConversionConversionRuleRemoteOutputWithContext(ctx context.Context) ProviderConversionConversionRuleRemoteOutput {
+	return o
+}
+
+// Specifies the attribute in the IDP assertion.
+func (o ProviderConversionConversionRuleRemoteOutput) Attribute() pulumi.StringOutput {
+	return o.ApplyT(func(v ProviderConversionConversionRuleRemote) string { return v.Attribute }).(pulumi.StringOutput)
+}
+
+// Specifies the condition of conversion rule.
+// Available options are:
+// + `anyOneOf`: The rule is matched only if the specified strings appear in the attribute type.
+// + `notAnyOf`: The rule is matched only if the specified strings do not appear in the attribute type.
+func (o ProviderConversionConversionRuleRemoteOutput) Condition() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v ProviderConversionConversionRuleRemote) *string { return v.Condition }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the rule is matched only if the specified strings appear in the attribute type.
+func (o ProviderConversionConversionRuleRemoteOutput) Values() pulumi.StringArrayOutput {
+	return o.ApplyT(func(v ProviderConversionConversionRuleRemote) []string { return v.Values }).(pulumi.StringArrayOutput)
+}
+
+type ProviderConversionConversionRuleRemoteArrayOutput struct{ *pulumi.OutputState }
+
+func (ProviderConversionConversionRuleRemoteArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]ProviderConversionConversionRuleRemote)(nil)).Elem()
+}
+
+func (o ProviderConversionConversionRuleRemoteArrayOutput) ToProviderConversionConversionRuleRemoteArrayOutput() ProviderConversionConversionRuleRemoteArrayOutput {
+	return o
+}
+
+func (o ProviderConversionConversionRuleRemoteArrayOutput) ToProviderConversionConversionRuleRemoteArrayOutputWithContext(ctx context.Context) ProviderConversionConversionRuleRemoteArrayOutput {
+	return o
+}
+
+func (o ProviderConversionConversionRuleRemoteArrayOutput) Index(i pulumi.IntInput) ProviderConversionConversionRuleRemoteOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) ProviderConversionConversionRuleRemote {
+		return vs[0].([]ProviderConversionConversionRuleRemote)[vs[1].(int)]
+	}).(ProviderConversionConversionRuleRemoteOutput)
 }
 
 type ProviderConversionRule struct {
@@ -975,6 +1505,166 @@ func (o ProviderConversionRuleRemoteArrayOutput) Index(i pulumi.IntInput) Provid
 	}).(ProviderConversionRuleRemoteOutput)
 }
 
+type GetAgenciesAgency struct {
+	// The time when the agency was created.
+	CreatedAt string `pulumi:"createdAt"`
+	// The supplementary information about the agency.
+	Description string `pulumi:"description"`
+	// The validity period of an agency.
+	Duration string `pulumi:"duration"`
+	// The expiration time of agency.
+	ExpiredAt string `pulumi:"expiredAt"`
+	// The agency ID.
+	Id string `pulumi:"id"`
+	// Specifies the name of agency. The name is a string of 1 to 64 characters.
+	Name string `pulumi:"name"`
+	// Specifies the ID of delegated user domain.
+	TrustDomainId string `pulumi:"trustDomainId"`
+	// The name of delegated user domain.
+	TrustDomainName string `pulumi:"trustDomainName"`
+}
+
+// GetAgenciesAgencyInput is an input type that accepts GetAgenciesAgencyArgs and GetAgenciesAgencyOutput values.
+// You can construct a concrete instance of `GetAgenciesAgencyInput` via:
+//
+//	GetAgenciesAgencyArgs{...}
+type GetAgenciesAgencyInput interface {
+	pulumi.Input
+
+	ToGetAgenciesAgencyOutput() GetAgenciesAgencyOutput
+	ToGetAgenciesAgencyOutputWithContext(context.Context) GetAgenciesAgencyOutput
+}
+
+type GetAgenciesAgencyArgs struct {
+	// The time when the agency was created.
+	CreatedAt pulumi.StringInput `pulumi:"createdAt"`
+	// The supplementary information about the agency.
+	Description pulumi.StringInput `pulumi:"description"`
+	// The validity period of an agency.
+	Duration pulumi.StringInput `pulumi:"duration"`
+	// The expiration time of agency.
+	ExpiredAt pulumi.StringInput `pulumi:"expiredAt"`
+	// The agency ID.
+	Id pulumi.StringInput `pulumi:"id"`
+	// Specifies the name of agency. The name is a string of 1 to 64 characters.
+	Name pulumi.StringInput `pulumi:"name"`
+	// Specifies the ID of delegated user domain.
+	TrustDomainId pulumi.StringInput `pulumi:"trustDomainId"`
+	// The name of delegated user domain.
+	TrustDomainName pulumi.StringInput `pulumi:"trustDomainName"`
+}
+
+func (GetAgenciesAgencyArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetAgenciesAgency)(nil)).Elem()
+}
+
+func (i GetAgenciesAgencyArgs) ToGetAgenciesAgencyOutput() GetAgenciesAgencyOutput {
+	return i.ToGetAgenciesAgencyOutputWithContext(context.Background())
+}
+
+func (i GetAgenciesAgencyArgs) ToGetAgenciesAgencyOutputWithContext(ctx context.Context) GetAgenciesAgencyOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetAgenciesAgencyOutput)
+}
+
+// GetAgenciesAgencyArrayInput is an input type that accepts GetAgenciesAgencyArray and GetAgenciesAgencyArrayOutput values.
+// You can construct a concrete instance of `GetAgenciesAgencyArrayInput` via:
+//
+//	GetAgenciesAgencyArray{ GetAgenciesAgencyArgs{...} }
+type GetAgenciesAgencyArrayInput interface {
+	pulumi.Input
+
+	ToGetAgenciesAgencyArrayOutput() GetAgenciesAgencyArrayOutput
+	ToGetAgenciesAgencyArrayOutputWithContext(context.Context) GetAgenciesAgencyArrayOutput
+}
+
+type GetAgenciesAgencyArray []GetAgenciesAgencyInput
+
+func (GetAgenciesAgencyArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetAgenciesAgency)(nil)).Elem()
+}
+
+func (i GetAgenciesAgencyArray) ToGetAgenciesAgencyArrayOutput() GetAgenciesAgencyArrayOutput {
+	return i.ToGetAgenciesAgencyArrayOutputWithContext(context.Background())
+}
+
+func (i GetAgenciesAgencyArray) ToGetAgenciesAgencyArrayOutputWithContext(ctx context.Context) GetAgenciesAgencyArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetAgenciesAgencyArrayOutput)
+}
+
+type GetAgenciesAgencyOutput struct{ *pulumi.OutputState }
+
+func (GetAgenciesAgencyOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetAgenciesAgency)(nil)).Elem()
+}
+
+func (o GetAgenciesAgencyOutput) ToGetAgenciesAgencyOutput() GetAgenciesAgencyOutput {
+	return o
+}
+
+func (o GetAgenciesAgencyOutput) ToGetAgenciesAgencyOutputWithContext(ctx context.Context) GetAgenciesAgencyOutput {
+	return o
+}
+
+// The time when the agency was created.
+func (o GetAgenciesAgencyOutput) CreatedAt() pulumi.StringOutput {
+	return o.ApplyT(func(v GetAgenciesAgency) string { return v.CreatedAt }).(pulumi.StringOutput)
+}
+
+// The supplementary information about the agency.
+func (o GetAgenciesAgencyOutput) Description() pulumi.StringOutput {
+	return o.ApplyT(func(v GetAgenciesAgency) string { return v.Description }).(pulumi.StringOutput)
+}
+
+// The validity period of an agency.
+func (o GetAgenciesAgencyOutput) Duration() pulumi.StringOutput {
+	return o.ApplyT(func(v GetAgenciesAgency) string { return v.Duration }).(pulumi.StringOutput)
+}
+
+// The expiration time of agency.
+func (o GetAgenciesAgencyOutput) ExpiredAt() pulumi.StringOutput {
+	return o.ApplyT(func(v GetAgenciesAgency) string { return v.ExpiredAt }).(pulumi.StringOutput)
+}
+
+// The agency ID.
+func (o GetAgenciesAgencyOutput) Id() pulumi.StringOutput {
+	return o.ApplyT(func(v GetAgenciesAgency) string { return v.Id }).(pulumi.StringOutput)
+}
+
+// Specifies the name of agency. The name is a string of 1 to 64 characters.
+func (o GetAgenciesAgencyOutput) Name() pulumi.StringOutput {
+	return o.ApplyT(func(v GetAgenciesAgency) string { return v.Name }).(pulumi.StringOutput)
+}
+
+// Specifies the ID of delegated user domain.
+func (o GetAgenciesAgencyOutput) TrustDomainId() pulumi.StringOutput {
+	return o.ApplyT(func(v GetAgenciesAgency) string { return v.TrustDomainId }).(pulumi.StringOutput)
+}
+
+// The name of delegated user domain.
+func (o GetAgenciesAgencyOutput) TrustDomainName() pulumi.StringOutput {
+	return o.ApplyT(func(v GetAgenciesAgency) string { return v.TrustDomainName }).(pulumi.StringOutput)
+}
+
+type GetAgenciesAgencyArrayOutput struct{ *pulumi.OutputState }
+
+func (GetAgenciesAgencyArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetAgenciesAgency)(nil)).Elem()
+}
+
+func (o GetAgenciesAgencyArrayOutput) ToGetAgenciesAgencyArrayOutput() GetAgenciesAgencyArrayOutput {
+	return o
+}
+
+func (o GetAgenciesAgencyArrayOutput) ToGetAgenciesAgencyArrayOutputWithContext(ctx context.Context) GetAgenciesAgencyArrayOutput {
+	return o
+}
+
+func (o GetAgenciesAgencyArrayOutput) Index(i pulumi.IntInput) GetAgenciesAgencyOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) GetAgenciesAgency {
+		return vs[0].([]GetAgenciesAgency)[vs[1].(int)]
+	}).(GetAgenciesAgencyOutput)
+}
+
 type GetGroupUser struct {
 	// Specifies the description of the identity group.
 	Description string `pulumi:"description"`
@@ -985,7 +1675,7 @@ type GetGroupUser struct {
 	// Specifies the name of the identity group.
 	Name string `pulumi:"name"`
 	// Indicates the time when the password will expire.
-	// Null indicates that the password has unlimited validity.
+	// If this value is not set, the password will not expire.
 	PasswordExpiresAt string `pulumi:"passwordExpiresAt"`
 	// Indicates the password status. True means that the password needs to be changed,
 	// and false means that the password is normal.
@@ -1015,7 +1705,7 @@ type GetGroupUserArgs struct {
 	// Specifies the name of the identity group.
 	Name pulumi.StringInput `pulumi:"name"`
 	// Indicates the time when the password will expire.
-	// Null indicates that the password has unlimited validity.
+	// If this value is not set, the password will not expire.
 	PasswordExpiresAt pulumi.StringInput `pulumi:"passwordExpiresAt"`
 	// Indicates the password status. True means that the password needs to be changed,
 	// and false means that the password is normal.
@@ -1096,7 +1786,7 @@ func (o GetGroupUserOutput) Name() pulumi.StringOutput {
 }
 
 // Indicates the time when the password will expire.
-// Null indicates that the password has unlimited validity.
+// If this value is not set, the password will not expire.
 func (o GetGroupUserOutput) PasswordExpiresAt() pulumi.StringOutput {
 	return o.ApplyT(func(v GetGroupUser) string { return v.PasswordExpiresAt }).(pulumi.StringOutput)
 }
@@ -1132,12 +1822,166 @@ func (o GetGroupUserArrayOutput) Index(i pulumi.IntInput) GetGroupUserOutput {
 	}).(GetGroupUserOutput)
 }
 
-type GetProjectsProject struct {
-	// Whether project is enabled.
-	Enabled bool `pulumi:"enabled"`
-	// The project ID.
+type GetPermissionsPermission struct {
+	// Specifies the service catalog of the permission.
+	Catalog string `pulumi:"catalog"`
+	// The description of the permission.
+	Description string `pulumi:"description"`
+	// The description of the permission in Chinese.
+	DescriptionCn string `pulumi:"descriptionCn"`
+	// The permission ID.
 	Id string `pulumi:"id"`
-	// Specifies the project name to query.
+	// Specifies the permission name or filter condition.
+	// + Permission name: For example, if you set this parameter to **ECS FullAccess**, information about the permission will
+	//   be returned.
+	// + Filter condition: For example, if you set this parameter to **Administrator**, all administrator permissions that
+	//   meet the conditions will be returned.
+	Name string `pulumi:"name"`
+	// The content of the permission.
+	Policy string `pulumi:"policy"`
+}
+
+// GetPermissionsPermissionInput is an input type that accepts GetPermissionsPermissionArgs and GetPermissionsPermissionOutput values.
+// You can construct a concrete instance of `GetPermissionsPermissionInput` via:
+//
+//	GetPermissionsPermissionArgs{...}
+type GetPermissionsPermissionInput interface {
+	pulumi.Input
+
+	ToGetPermissionsPermissionOutput() GetPermissionsPermissionOutput
+	ToGetPermissionsPermissionOutputWithContext(context.Context) GetPermissionsPermissionOutput
+}
+
+type GetPermissionsPermissionArgs struct {
+	// Specifies the service catalog of the permission.
+	Catalog pulumi.StringInput `pulumi:"catalog"`
+	// The description of the permission.
+	Description pulumi.StringInput `pulumi:"description"`
+	// The description of the permission in Chinese.
+	DescriptionCn pulumi.StringInput `pulumi:"descriptionCn"`
+	// The permission ID.
+	Id pulumi.StringInput `pulumi:"id"`
+	// Specifies the permission name or filter condition.
+	// + Permission name: For example, if you set this parameter to **ECS FullAccess**, information about the permission will
+	//   be returned.
+	// + Filter condition: For example, if you set this parameter to **Administrator**, all administrator permissions that
+	//   meet the conditions will be returned.
+	Name pulumi.StringInput `pulumi:"name"`
+	// The content of the permission.
+	Policy pulumi.StringInput `pulumi:"policy"`
+}
+
+func (GetPermissionsPermissionArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetPermissionsPermission)(nil)).Elem()
+}
+
+func (i GetPermissionsPermissionArgs) ToGetPermissionsPermissionOutput() GetPermissionsPermissionOutput {
+	return i.ToGetPermissionsPermissionOutputWithContext(context.Background())
+}
+
+func (i GetPermissionsPermissionArgs) ToGetPermissionsPermissionOutputWithContext(ctx context.Context) GetPermissionsPermissionOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetPermissionsPermissionOutput)
+}
+
+// GetPermissionsPermissionArrayInput is an input type that accepts GetPermissionsPermissionArray and GetPermissionsPermissionArrayOutput values.
+// You can construct a concrete instance of `GetPermissionsPermissionArrayInput` via:
+//
+//	GetPermissionsPermissionArray{ GetPermissionsPermissionArgs{...} }
+type GetPermissionsPermissionArrayInput interface {
+	pulumi.Input
+
+	ToGetPermissionsPermissionArrayOutput() GetPermissionsPermissionArrayOutput
+	ToGetPermissionsPermissionArrayOutputWithContext(context.Context) GetPermissionsPermissionArrayOutput
+}
+
+type GetPermissionsPermissionArray []GetPermissionsPermissionInput
+
+func (GetPermissionsPermissionArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetPermissionsPermission)(nil)).Elem()
+}
+
+func (i GetPermissionsPermissionArray) ToGetPermissionsPermissionArrayOutput() GetPermissionsPermissionArrayOutput {
+	return i.ToGetPermissionsPermissionArrayOutputWithContext(context.Background())
+}
+
+func (i GetPermissionsPermissionArray) ToGetPermissionsPermissionArrayOutputWithContext(ctx context.Context) GetPermissionsPermissionArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetPermissionsPermissionArrayOutput)
+}
+
+type GetPermissionsPermissionOutput struct{ *pulumi.OutputState }
+
+func (GetPermissionsPermissionOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetPermissionsPermission)(nil)).Elem()
+}
+
+func (o GetPermissionsPermissionOutput) ToGetPermissionsPermissionOutput() GetPermissionsPermissionOutput {
+	return o
+}
+
+func (o GetPermissionsPermissionOutput) ToGetPermissionsPermissionOutputWithContext(ctx context.Context) GetPermissionsPermissionOutput {
+	return o
+}
+
+// Specifies the service catalog of the permission.
+func (o GetPermissionsPermissionOutput) Catalog() pulumi.StringOutput {
+	return o.ApplyT(func(v GetPermissionsPermission) string { return v.Catalog }).(pulumi.StringOutput)
+}
+
+// The description of the permission.
+func (o GetPermissionsPermissionOutput) Description() pulumi.StringOutput {
+	return o.ApplyT(func(v GetPermissionsPermission) string { return v.Description }).(pulumi.StringOutput)
+}
+
+// The description of the permission in Chinese.
+func (o GetPermissionsPermissionOutput) DescriptionCn() pulumi.StringOutput {
+	return o.ApplyT(func(v GetPermissionsPermission) string { return v.DescriptionCn }).(pulumi.StringOutput)
+}
+
+// The permission ID.
+func (o GetPermissionsPermissionOutput) Id() pulumi.StringOutput {
+	return o.ApplyT(func(v GetPermissionsPermission) string { return v.Id }).(pulumi.StringOutput)
+}
+
+// Specifies the permission name or filter condition.
+//   - Permission name: For example, if you set this parameter to **ECS FullAccess**, information about the permission will
+//     be returned.
+//   - Filter condition: For example, if you set this parameter to **Administrator**, all administrator permissions that
+//     meet the conditions will be returned.
+func (o GetPermissionsPermissionOutput) Name() pulumi.StringOutput {
+	return o.ApplyT(func(v GetPermissionsPermission) string { return v.Name }).(pulumi.StringOutput)
+}
+
+// The content of the permission.
+func (o GetPermissionsPermissionOutput) Policy() pulumi.StringOutput {
+	return o.ApplyT(func(v GetPermissionsPermission) string { return v.Policy }).(pulumi.StringOutput)
+}
+
+type GetPermissionsPermissionArrayOutput struct{ *pulumi.OutputState }
+
+func (GetPermissionsPermissionArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetPermissionsPermission)(nil)).Elem()
+}
+
+func (o GetPermissionsPermissionArrayOutput) ToGetPermissionsPermissionArrayOutput() GetPermissionsPermissionArrayOutput {
+	return o
+}
+
+func (o GetPermissionsPermissionArrayOutput) ToGetPermissionsPermissionArrayOutputWithContext(ctx context.Context) GetPermissionsPermissionArrayOutput {
+	return o
+}
+
+func (o GetPermissionsPermissionArrayOutput) Index(i pulumi.IntInput) GetPermissionsPermissionOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) GetPermissionsPermission {
+		return vs[0].([]GetPermissionsPermission)[vs[1].(int)]
+	}).(GetPermissionsPermissionOutput)
+}
+
+type GetProjectsProject struct {
+	// Whether the IAM project is enabled.
+	Enabled bool `pulumi:"enabled"`
+	// The IAM project ID.
+	Id string `pulumi:"id"`
+	// Specifies the IAM project name to query.
 	Name string `pulumi:"name"`
 }
 
@@ -1153,11 +1997,11 @@ type GetProjectsProjectInput interface {
 }
 
 type GetProjectsProjectArgs struct {
-	// Whether project is enabled.
+	// Whether the IAM project is enabled.
 	Enabled pulumi.BoolInput `pulumi:"enabled"`
-	// The project ID.
+	// The IAM project ID.
 	Id pulumi.StringInput `pulumi:"id"`
-	// Specifies the project name to query.
+	// Specifies the IAM project name to query.
 	Name pulumi.StringInput `pulumi:"name"`
 }
 
@@ -1212,17 +2056,17 @@ func (o GetProjectsProjectOutput) ToGetProjectsProjectOutputWithContext(ctx cont
 	return o
 }
 
-// Whether project is enabled.
+// Whether the IAM project is enabled.
 func (o GetProjectsProjectOutput) Enabled() pulumi.BoolOutput {
 	return o.ApplyT(func(v GetProjectsProject) bool { return v.Enabled }).(pulumi.BoolOutput)
 }
 
-// The project ID.
+// The IAM project ID.
 func (o GetProjectsProjectOutput) Id() pulumi.StringOutput {
 	return o.ApplyT(func(v GetProjectsProject) string { return v.Id }).(pulumi.StringOutput)
 }
 
-// Specifies the project name to query.
+// Specifies the IAM project name to query.
 func (o GetProjectsProjectOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v GetProjectsProject) string { return v.Name }).(pulumi.StringOutput)
 }
@@ -1247,6 +2091,254 @@ func (o GetProjectsProjectArrayOutput) Index(i pulumi.IntInput) GetProjectsProje
 	}).(GetProjectsProjectOutput)
 }
 
+type GetProvidersIdentityProvider struct {
+	// The description of the identity provider.
+	Description string `pulumi:"description"`
+	// The identity provider ID which equals the identity provider name.
+	Id string `pulumi:"id"`
+	// The links of identity provider.
+	Links []GetProvidersIdentityProviderLink `pulumi:"links"`
+	// The list of federated user IDs configured for the identity provider.
+	RemoteIds []string `pulumi:"remoteIds"`
+	// Specifies the single sign-on type of the identity provider.
+	SsoType string `pulumi:"ssoType"`
+	// Specifies the status of the identity provider. The value can be **true** or **false**
+	Status bool `pulumi:"status"`
+}
+
+// GetProvidersIdentityProviderInput is an input type that accepts GetProvidersIdentityProviderArgs and GetProvidersIdentityProviderOutput values.
+// You can construct a concrete instance of `GetProvidersIdentityProviderInput` via:
+//
+//	GetProvidersIdentityProviderArgs{...}
+type GetProvidersIdentityProviderInput interface {
+	pulumi.Input
+
+	ToGetProvidersIdentityProviderOutput() GetProvidersIdentityProviderOutput
+	ToGetProvidersIdentityProviderOutputWithContext(context.Context) GetProvidersIdentityProviderOutput
+}
+
+type GetProvidersIdentityProviderArgs struct {
+	// The description of the identity provider.
+	Description pulumi.StringInput `pulumi:"description"`
+	// The identity provider ID which equals the identity provider name.
+	Id pulumi.StringInput `pulumi:"id"`
+	// The links of identity provider.
+	Links GetProvidersIdentityProviderLinkArrayInput `pulumi:"links"`
+	// The list of federated user IDs configured for the identity provider.
+	RemoteIds pulumi.StringArrayInput `pulumi:"remoteIds"`
+	// Specifies the single sign-on type of the identity provider.
+	SsoType pulumi.StringInput `pulumi:"ssoType"`
+	// Specifies the status of the identity provider. The value can be **true** or **false**
+	Status pulumi.BoolInput `pulumi:"status"`
+}
+
+func (GetProvidersIdentityProviderArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetProvidersIdentityProvider)(nil)).Elem()
+}
+
+func (i GetProvidersIdentityProviderArgs) ToGetProvidersIdentityProviderOutput() GetProvidersIdentityProviderOutput {
+	return i.ToGetProvidersIdentityProviderOutputWithContext(context.Background())
+}
+
+func (i GetProvidersIdentityProviderArgs) ToGetProvidersIdentityProviderOutputWithContext(ctx context.Context) GetProvidersIdentityProviderOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetProvidersIdentityProviderOutput)
+}
+
+// GetProvidersIdentityProviderArrayInput is an input type that accepts GetProvidersIdentityProviderArray and GetProvidersIdentityProviderArrayOutput values.
+// You can construct a concrete instance of `GetProvidersIdentityProviderArrayInput` via:
+//
+//	GetProvidersIdentityProviderArray{ GetProvidersIdentityProviderArgs{...} }
+type GetProvidersIdentityProviderArrayInput interface {
+	pulumi.Input
+
+	ToGetProvidersIdentityProviderArrayOutput() GetProvidersIdentityProviderArrayOutput
+	ToGetProvidersIdentityProviderArrayOutputWithContext(context.Context) GetProvidersIdentityProviderArrayOutput
+}
+
+type GetProvidersIdentityProviderArray []GetProvidersIdentityProviderInput
+
+func (GetProvidersIdentityProviderArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetProvidersIdentityProvider)(nil)).Elem()
+}
+
+func (i GetProvidersIdentityProviderArray) ToGetProvidersIdentityProviderArrayOutput() GetProvidersIdentityProviderArrayOutput {
+	return i.ToGetProvidersIdentityProviderArrayOutputWithContext(context.Background())
+}
+
+func (i GetProvidersIdentityProviderArray) ToGetProvidersIdentityProviderArrayOutputWithContext(ctx context.Context) GetProvidersIdentityProviderArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetProvidersIdentityProviderArrayOutput)
+}
+
+type GetProvidersIdentityProviderOutput struct{ *pulumi.OutputState }
+
+func (GetProvidersIdentityProviderOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetProvidersIdentityProvider)(nil)).Elem()
+}
+
+func (o GetProvidersIdentityProviderOutput) ToGetProvidersIdentityProviderOutput() GetProvidersIdentityProviderOutput {
+	return o
+}
+
+func (o GetProvidersIdentityProviderOutput) ToGetProvidersIdentityProviderOutputWithContext(ctx context.Context) GetProvidersIdentityProviderOutput {
+	return o
+}
+
+// The description of the identity provider.
+func (o GetProvidersIdentityProviderOutput) Description() pulumi.StringOutput {
+	return o.ApplyT(func(v GetProvidersIdentityProvider) string { return v.Description }).(pulumi.StringOutput)
+}
+
+// The identity provider ID which equals the identity provider name.
+func (o GetProvidersIdentityProviderOutput) Id() pulumi.StringOutput {
+	return o.ApplyT(func(v GetProvidersIdentityProvider) string { return v.Id }).(pulumi.StringOutput)
+}
+
+// The links of identity provider.
+func (o GetProvidersIdentityProviderOutput) Links() GetProvidersIdentityProviderLinkArrayOutput {
+	return o.ApplyT(func(v GetProvidersIdentityProvider) []GetProvidersIdentityProviderLink { return v.Links }).(GetProvidersIdentityProviderLinkArrayOutput)
+}
+
+// The list of federated user IDs configured for the identity provider.
+func (o GetProvidersIdentityProviderOutput) RemoteIds() pulumi.StringArrayOutput {
+	return o.ApplyT(func(v GetProvidersIdentityProvider) []string { return v.RemoteIds }).(pulumi.StringArrayOutput)
+}
+
+// Specifies the single sign-on type of the identity provider.
+func (o GetProvidersIdentityProviderOutput) SsoType() pulumi.StringOutput {
+	return o.ApplyT(func(v GetProvidersIdentityProvider) string { return v.SsoType }).(pulumi.StringOutput)
+}
+
+// Specifies the status of the identity provider. The value can be **true** or **false**
+func (o GetProvidersIdentityProviderOutput) Status() pulumi.BoolOutput {
+	return o.ApplyT(func(v GetProvidersIdentityProvider) bool { return v.Status }).(pulumi.BoolOutput)
+}
+
+type GetProvidersIdentityProviderArrayOutput struct{ *pulumi.OutputState }
+
+func (GetProvidersIdentityProviderArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetProvidersIdentityProvider)(nil)).Elem()
+}
+
+func (o GetProvidersIdentityProviderArrayOutput) ToGetProvidersIdentityProviderArrayOutput() GetProvidersIdentityProviderArrayOutput {
+	return o
+}
+
+func (o GetProvidersIdentityProviderArrayOutput) ToGetProvidersIdentityProviderArrayOutputWithContext(ctx context.Context) GetProvidersIdentityProviderArrayOutput {
+	return o
+}
+
+func (o GetProvidersIdentityProviderArrayOutput) Index(i pulumi.IntInput) GetProvidersIdentityProviderOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) GetProvidersIdentityProvider {
+		return vs[0].([]GetProvidersIdentityProvider)[vs[1].(int)]
+	}).(GetProvidersIdentityProviderOutput)
+}
+
+type GetProvidersIdentityProviderLink struct {
+	// The protocol resource link.
+	Protocols string `pulumi:"protocols"`
+	// The identity provider resource link.
+	Self string `pulumi:"self"`
+}
+
+// GetProvidersIdentityProviderLinkInput is an input type that accepts GetProvidersIdentityProviderLinkArgs and GetProvidersIdentityProviderLinkOutput values.
+// You can construct a concrete instance of `GetProvidersIdentityProviderLinkInput` via:
+//
+//	GetProvidersIdentityProviderLinkArgs{...}
+type GetProvidersIdentityProviderLinkInput interface {
+	pulumi.Input
+
+	ToGetProvidersIdentityProviderLinkOutput() GetProvidersIdentityProviderLinkOutput
+	ToGetProvidersIdentityProviderLinkOutputWithContext(context.Context) GetProvidersIdentityProviderLinkOutput
+}
+
+type GetProvidersIdentityProviderLinkArgs struct {
+	// The protocol resource link.
+	Protocols pulumi.StringInput `pulumi:"protocols"`
+	// The identity provider resource link.
+	Self pulumi.StringInput `pulumi:"self"`
+}
+
+func (GetProvidersIdentityProviderLinkArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetProvidersIdentityProviderLink)(nil)).Elem()
+}
+
+func (i GetProvidersIdentityProviderLinkArgs) ToGetProvidersIdentityProviderLinkOutput() GetProvidersIdentityProviderLinkOutput {
+	return i.ToGetProvidersIdentityProviderLinkOutputWithContext(context.Background())
+}
+
+func (i GetProvidersIdentityProviderLinkArgs) ToGetProvidersIdentityProviderLinkOutputWithContext(ctx context.Context) GetProvidersIdentityProviderLinkOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetProvidersIdentityProviderLinkOutput)
+}
+
+// GetProvidersIdentityProviderLinkArrayInput is an input type that accepts GetProvidersIdentityProviderLinkArray and GetProvidersIdentityProviderLinkArrayOutput values.
+// You can construct a concrete instance of `GetProvidersIdentityProviderLinkArrayInput` via:
+//
+//	GetProvidersIdentityProviderLinkArray{ GetProvidersIdentityProviderLinkArgs{...} }
+type GetProvidersIdentityProviderLinkArrayInput interface {
+	pulumi.Input
+
+	ToGetProvidersIdentityProviderLinkArrayOutput() GetProvidersIdentityProviderLinkArrayOutput
+	ToGetProvidersIdentityProviderLinkArrayOutputWithContext(context.Context) GetProvidersIdentityProviderLinkArrayOutput
+}
+
+type GetProvidersIdentityProviderLinkArray []GetProvidersIdentityProviderLinkInput
+
+func (GetProvidersIdentityProviderLinkArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetProvidersIdentityProviderLink)(nil)).Elem()
+}
+
+func (i GetProvidersIdentityProviderLinkArray) ToGetProvidersIdentityProviderLinkArrayOutput() GetProvidersIdentityProviderLinkArrayOutput {
+	return i.ToGetProvidersIdentityProviderLinkArrayOutputWithContext(context.Background())
+}
+
+func (i GetProvidersIdentityProviderLinkArray) ToGetProvidersIdentityProviderLinkArrayOutputWithContext(ctx context.Context) GetProvidersIdentityProviderLinkArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetProvidersIdentityProviderLinkArrayOutput)
+}
+
+type GetProvidersIdentityProviderLinkOutput struct{ *pulumi.OutputState }
+
+func (GetProvidersIdentityProviderLinkOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetProvidersIdentityProviderLink)(nil)).Elem()
+}
+
+func (o GetProvidersIdentityProviderLinkOutput) ToGetProvidersIdentityProviderLinkOutput() GetProvidersIdentityProviderLinkOutput {
+	return o
+}
+
+func (o GetProvidersIdentityProviderLinkOutput) ToGetProvidersIdentityProviderLinkOutputWithContext(ctx context.Context) GetProvidersIdentityProviderLinkOutput {
+	return o
+}
+
+// The protocol resource link.
+func (o GetProvidersIdentityProviderLinkOutput) Protocols() pulumi.StringOutput {
+	return o.ApplyT(func(v GetProvidersIdentityProviderLink) string { return v.Protocols }).(pulumi.StringOutput)
+}
+
+// The identity provider resource link.
+func (o GetProvidersIdentityProviderLinkOutput) Self() pulumi.StringOutput {
+	return o.ApplyT(func(v GetProvidersIdentityProviderLink) string { return v.Self }).(pulumi.StringOutput)
+}
+
+type GetProvidersIdentityProviderLinkArrayOutput struct{ *pulumi.OutputState }
+
+func (GetProvidersIdentityProviderLinkArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetProvidersIdentityProviderLink)(nil)).Elem()
+}
+
+func (o GetProvidersIdentityProviderLinkArrayOutput) ToGetProvidersIdentityProviderLinkArrayOutput() GetProvidersIdentityProviderLinkArrayOutput {
+	return o
+}
+
+func (o GetProvidersIdentityProviderLinkArrayOutput) ToGetProvidersIdentityProviderLinkArrayOutputWithContext(ctx context.Context) GetProvidersIdentityProviderLinkArrayOutput {
+	return o
+}
+
+func (o GetProvidersIdentityProviderLinkArrayOutput) Index(i pulumi.IntInput) GetProvidersIdentityProviderLinkOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) GetProvidersIdentityProviderLink {
+		return vs[0].([]GetProvidersIdentityProviderLink)[vs[1].(int)]
+	}).(GetProvidersIdentityProviderLinkOutput)
+}
+
 type GetUsersUser struct {
 	// Indicates the description of the IAM user.
 	Description string `pulumi:"description"`
@@ -1259,7 +2351,7 @@ type GetUsersUser struct {
 	// Specifies the IAM user name.
 	Name string `pulumi:"name"`
 	// Indicates the time when the password will expire.
-	// Null indicates that the password has unlimited validity.
+	// If this value is not set, the password will not expire.
 	PasswordExpiresAt string `pulumi:"passwordExpiresAt"`
 	// Indicates the password status. True means that the password needs to be changed,
 	// and false means that the password is normal.
@@ -1289,7 +2381,7 @@ type GetUsersUserArgs struct {
 	// Specifies the IAM user name.
 	Name pulumi.StringInput `pulumi:"name"`
 	// Indicates the time when the password will expire.
-	// Null indicates that the password has unlimited validity.
+	// If this value is not set, the password will not expire.
 	PasswordExpiresAt pulumi.StringInput `pulumi:"passwordExpiresAt"`
 	// Indicates the password status. True means that the password needs to be changed,
 	// and false means that the password is normal.
@@ -1373,7 +2465,7 @@ func (o GetUsersUserOutput) Name() pulumi.StringOutput {
 }
 
 // Indicates the time when the password will expire.
-// Null indicates that the password has unlimited validity.
+// If this value is not set, the password will not expire.
 func (o GetUsersUserOutput) PasswordExpiresAt() pulumi.StringOutput {
 	return o.ApplyT(func(v GetUsersUser) string { return v.PasswordExpiresAt }).(pulumi.StringOutput)
 }
@@ -1404,6 +2496,112 @@ func (o GetUsersUserArrayOutput) Index(i pulumi.IntInput) GetUsersUserOutput {
 	}).(GetUsersUserOutput)
 }
 
+type GetVirtualMfaDevicesVirtualMfaDevice struct {
+	// The virtual MFA device serial number.
+	SerialNumber string `pulumi:"serialNumber"`
+	// Specifies the user ID to which the virtual MFA device belongs.
+	UserId string `pulumi:"userId"`
+}
+
+// GetVirtualMfaDevicesVirtualMfaDeviceInput is an input type that accepts GetVirtualMfaDevicesVirtualMfaDeviceArgs and GetVirtualMfaDevicesVirtualMfaDeviceOutput values.
+// You can construct a concrete instance of `GetVirtualMfaDevicesVirtualMfaDeviceInput` via:
+//
+//	GetVirtualMfaDevicesVirtualMfaDeviceArgs{...}
+type GetVirtualMfaDevicesVirtualMfaDeviceInput interface {
+	pulumi.Input
+
+	ToGetVirtualMfaDevicesVirtualMfaDeviceOutput() GetVirtualMfaDevicesVirtualMfaDeviceOutput
+	ToGetVirtualMfaDevicesVirtualMfaDeviceOutputWithContext(context.Context) GetVirtualMfaDevicesVirtualMfaDeviceOutput
+}
+
+type GetVirtualMfaDevicesVirtualMfaDeviceArgs struct {
+	// The virtual MFA device serial number.
+	SerialNumber pulumi.StringInput `pulumi:"serialNumber"`
+	// Specifies the user ID to which the virtual MFA device belongs.
+	UserId pulumi.StringInput `pulumi:"userId"`
+}
+
+func (GetVirtualMfaDevicesVirtualMfaDeviceArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetVirtualMfaDevicesVirtualMfaDevice)(nil)).Elem()
+}
+
+func (i GetVirtualMfaDevicesVirtualMfaDeviceArgs) ToGetVirtualMfaDevicesVirtualMfaDeviceOutput() GetVirtualMfaDevicesVirtualMfaDeviceOutput {
+	return i.ToGetVirtualMfaDevicesVirtualMfaDeviceOutputWithContext(context.Background())
+}
+
+func (i GetVirtualMfaDevicesVirtualMfaDeviceArgs) ToGetVirtualMfaDevicesVirtualMfaDeviceOutputWithContext(ctx context.Context) GetVirtualMfaDevicesVirtualMfaDeviceOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetVirtualMfaDevicesVirtualMfaDeviceOutput)
+}
+
+// GetVirtualMfaDevicesVirtualMfaDeviceArrayInput is an input type that accepts GetVirtualMfaDevicesVirtualMfaDeviceArray and GetVirtualMfaDevicesVirtualMfaDeviceArrayOutput values.
+// You can construct a concrete instance of `GetVirtualMfaDevicesVirtualMfaDeviceArrayInput` via:
+//
+//	GetVirtualMfaDevicesVirtualMfaDeviceArray{ GetVirtualMfaDevicesVirtualMfaDeviceArgs{...} }
+type GetVirtualMfaDevicesVirtualMfaDeviceArrayInput interface {
+	pulumi.Input
+
+	ToGetVirtualMfaDevicesVirtualMfaDeviceArrayOutput() GetVirtualMfaDevicesVirtualMfaDeviceArrayOutput
+	ToGetVirtualMfaDevicesVirtualMfaDeviceArrayOutputWithContext(context.Context) GetVirtualMfaDevicesVirtualMfaDeviceArrayOutput
+}
+
+type GetVirtualMfaDevicesVirtualMfaDeviceArray []GetVirtualMfaDevicesVirtualMfaDeviceInput
+
+func (GetVirtualMfaDevicesVirtualMfaDeviceArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetVirtualMfaDevicesVirtualMfaDevice)(nil)).Elem()
+}
+
+func (i GetVirtualMfaDevicesVirtualMfaDeviceArray) ToGetVirtualMfaDevicesVirtualMfaDeviceArrayOutput() GetVirtualMfaDevicesVirtualMfaDeviceArrayOutput {
+	return i.ToGetVirtualMfaDevicesVirtualMfaDeviceArrayOutputWithContext(context.Background())
+}
+
+func (i GetVirtualMfaDevicesVirtualMfaDeviceArray) ToGetVirtualMfaDevicesVirtualMfaDeviceArrayOutputWithContext(ctx context.Context) GetVirtualMfaDevicesVirtualMfaDeviceArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetVirtualMfaDevicesVirtualMfaDeviceArrayOutput)
+}
+
+type GetVirtualMfaDevicesVirtualMfaDeviceOutput struct{ *pulumi.OutputState }
+
+func (GetVirtualMfaDevicesVirtualMfaDeviceOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetVirtualMfaDevicesVirtualMfaDevice)(nil)).Elem()
+}
+
+func (o GetVirtualMfaDevicesVirtualMfaDeviceOutput) ToGetVirtualMfaDevicesVirtualMfaDeviceOutput() GetVirtualMfaDevicesVirtualMfaDeviceOutput {
+	return o
+}
+
+func (o GetVirtualMfaDevicesVirtualMfaDeviceOutput) ToGetVirtualMfaDevicesVirtualMfaDeviceOutputWithContext(ctx context.Context) GetVirtualMfaDevicesVirtualMfaDeviceOutput {
+	return o
+}
+
+// The virtual MFA device serial number.
+func (o GetVirtualMfaDevicesVirtualMfaDeviceOutput) SerialNumber() pulumi.StringOutput {
+	return o.ApplyT(func(v GetVirtualMfaDevicesVirtualMfaDevice) string { return v.SerialNumber }).(pulumi.StringOutput)
+}
+
+// Specifies the user ID to which the virtual MFA device belongs.
+func (o GetVirtualMfaDevicesVirtualMfaDeviceOutput) UserId() pulumi.StringOutput {
+	return o.ApplyT(func(v GetVirtualMfaDevicesVirtualMfaDevice) string { return v.UserId }).(pulumi.StringOutput)
+}
+
+type GetVirtualMfaDevicesVirtualMfaDeviceArrayOutput struct{ *pulumi.OutputState }
+
+func (GetVirtualMfaDevicesVirtualMfaDeviceArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetVirtualMfaDevicesVirtualMfaDevice)(nil)).Elem()
+}
+
+func (o GetVirtualMfaDevicesVirtualMfaDeviceArrayOutput) ToGetVirtualMfaDevicesVirtualMfaDeviceArrayOutput() GetVirtualMfaDevicesVirtualMfaDeviceArrayOutput {
+	return o
+}
+
+func (o GetVirtualMfaDevicesVirtualMfaDeviceArrayOutput) ToGetVirtualMfaDevicesVirtualMfaDeviceArrayOutputWithContext(ctx context.Context) GetVirtualMfaDevicesVirtualMfaDeviceArrayOutput {
+	return o
+}
+
+func (o GetVirtualMfaDevicesVirtualMfaDeviceArrayOutput) Index(i pulumi.IntInput) GetVirtualMfaDevicesVirtualMfaDeviceOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) GetVirtualMfaDevicesVirtualMfaDevice {
+		return vs[0].([]GetVirtualMfaDevicesVirtualMfaDevice)[vs[1].(int)]
+	}).(GetVirtualMfaDevicesVirtualMfaDeviceOutput)
+}
+
 func init() {
 	pulumi.RegisterInputType(reflect.TypeOf((*AclIpCidrInput)(nil)).Elem(), AclIpCidrArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*AclIpCidrArrayInput)(nil)).Elem(), AclIpCidrArray{})
@@ -1411,38 +2609,74 @@ func init() {
 	pulumi.RegisterInputType(reflect.TypeOf((*AclIpRangeArrayInput)(nil)).Elem(), AclIpRangeArray{})
 	pulumi.RegisterInputType(reflect.TypeOf((*AgencyProjectRoleInput)(nil)).Elem(), AgencyProjectRoleArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*AgencyProjectRoleArrayInput)(nil)).Elem(), AgencyProjectRoleArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*ProtectionPolicySelfManagementInput)(nil)).Elem(), ProtectionPolicySelfManagementArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*ProtectionPolicySelfManagementPtrInput)(nil)).Elem(), ProtectionPolicySelfManagementArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*ProviderAccessConfigInput)(nil)).Elem(), ProviderAccessConfigArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*ProviderAccessConfigPtrInput)(nil)).Elem(), ProviderAccessConfigArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*ProviderConversionConversionRuleInput)(nil)).Elem(), ProviderConversionConversionRuleArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*ProviderConversionConversionRuleArrayInput)(nil)).Elem(), ProviderConversionConversionRuleArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*ProviderConversionConversionRuleLocalInput)(nil)).Elem(), ProviderConversionConversionRuleLocalArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*ProviderConversionConversionRuleLocalArrayInput)(nil)).Elem(), ProviderConversionConversionRuleLocalArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*ProviderConversionConversionRuleRemoteInput)(nil)).Elem(), ProviderConversionConversionRuleRemoteArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*ProviderConversionConversionRuleRemoteArrayInput)(nil)).Elem(), ProviderConversionConversionRuleRemoteArray{})
 	pulumi.RegisterInputType(reflect.TypeOf((*ProviderConversionRuleInput)(nil)).Elem(), ProviderConversionRuleArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*ProviderConversionRuleArrayInput)(nil)).Elem(), ProviderConversionRuleArray{})
 	pulumi.RegisterInputType(reflect.TypeOf((*ProviderConversionRuleLocalInput)(nil)).Elem(), ProviderConversionRuleLocalArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*ProviderConversionRuleLocalArrayInput)(nil)).Elem(), ProviderConversionRuleLocalArray{})
 	pulumi.RegisterInputType(reflect.TypeOf((*ProviderConversionRuleRemoteInput)(nil)).Elem(), ProviderConversionRuleRemoteArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*ProviderConversionRuleRemoteArrayInput)(nil)).Elem(), ProviderConversionRuleRemoteArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetAgenciesAgencyInput)(nil)).Elem(), GetAgenciesAgencyArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetAgenciesAgencyArrayInput)(nil)).Elem(), GetAgenciesAgencyArray{})
 	pulumi.RegisterInputType(reflect.TypeOf((*GetGroupUserInput)(nil)).Elem(), GetGroupUserArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*GetGroupUserArrayInput)(nil)).Elem(), GetGroupUserArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetPermissionsPermissionInput)(nil)).Elem(), GetPermissionsPermissionArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetPermissionsPermissionArrayInput)(nil)).Elem(), GetPermissionsPermissionArray{})
 	pulumi.RegisterInputType(reflect.TypeOf((*GetProjectsProjectInput)(nil)).Elem(), GetProjectsProjectArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*GetProjectsProjectArrayInput)(nil)).Elem(), GetProjectsProjectArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetProvidersIdentityProviderInput)(nil)).Elem(), GetProvidersIdentityProviderArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetProvidersIdentityProviderArrayInput)(nil)).Elem(), GetProvidersIdentityProviderArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetProvidersIdentityProviderLinkInput)(nil)).Elem(), GetProvidersIdentityProviderLinkArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetProvidersIdentityProviderLinkArrayInput)(nil)).Elem(), GetProvidersIdentityProviderLinkArray{})
 	pulumi.RegisterInputType(reflect.TypeOf((*GetUsersUserInput)(nil)).Elem(), GetUsersUserArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*GetUsersUserArrayInput)(nil)).Elem(), GetUsersUserArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetVirtualMfaDevicesVirtualMfaDeviceInput)(nil)).Elem(), GetVirtualMfaDevicesVirtualMfaDeviceArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetVirtualMfaDevicesVirtualMfaDeviceArrayInput)(nil)).Elem(), GetVirtualMfaDevicesVirtualMfaDeviceArray{})
 	pulumi.RegisterOutputType(AclIpCidrOutput{})
 	pulumi.RegisterOutputType(AclIpCidrArrayOutput{})
 	pulumi.RegisterOutputType(AclIpRangeOutput{})
 	pulumi.RegisterOutputType(AclIpRangeArrayOutput{})
 	pulumi.RegisterOutputType(AgencyProjectRoleOutput{})
 	pulumi.RegisterOutputType(AgencyProjectRoleArrayOutput{})
+	pulumi.RegisterOutputType(ProtectionPolicySelfManagementOutput{})
+	pulumi.RegisterOutputType(ProtectionPolicySelfManagementPtrOutput{})
 	pulumi.RegisterOutputType(ProviderAccessConfigOutput{})
 	pulumi.RegisterOutputType(ProviderAccessConfigPtrOutput{})
+	pulumi.RegisterOutputType(ProviderConversionConversionRuleOutput{})
+	pulumi.RegisterOutputType(ProviderConversionConversionRuleArrayOutput{})
+	pulumi.RegisterOutputType(ProviderConversionConversionRuleLocalOutput{})
+	pulumi.RegisterOutputType(ProviderConversionConversionRuleLocalArrayOutput{})
+	pulumi.RegisterOutputType(ProviderConversionConversionRuleRemoteOutput{})
+	pulumi.RegisterOutputType(ProviderConversionConversionRuleRemoteArrayOutput{})
 	pulumi.RegisterOutputType(ProviderConversionRuleOutput{})
 	pulumi.RegisterOutputType(ProviderConversionRuleArrayOutput{})
 	pulumi.RegisterOutputType(ProviderConversionRuleLocalOutput{})
 	pulumi.RegisterOutputType(ProviderConversionRuleLocalArrayOutput{})
 	pulumi.RegisterOutputType(ProviderConversionRuleRemoteOutput{})
 	pulumi.RegisterOutputType(ProviderConversionRuleRemoteArrayOutput{})
+	pulumi.RegisterOutputType(GetAgenciesAgencyOutput{})
+	pulumi.RegisterOutputType(GetAgenciesAgencyArrayOutput{})
 	pulumi.RegisterOutputType(GetGroupUserOutput{})
 	pulumi.RegisterOutputType(GetGroupUserArrayOutput{})
+	pulumi.RegisterOutputType(GetPermissionsPermissionOutput{})
+	pulumi.RegisterOutputType(GetPermissionsPermissionArrayOutput{})
 	pulumi.RegisterOutputType(GetProjectsProjectOutput{})
 	pulumi.RegisterOutputType(GetProjectsProjectArrayOutput{})
+	pulumi.RegisterOutputType(GetProvidersIdentityProviderOutput{})
+	pulumi.RegisterOutputType(GetProvidersIdentityProviderArrayOutput{})
+	pulumi.RegisterOutputType(GetProvidersIdentityProviderLinkOutput{})
+	pulumi.RegisterOutputType(GetProvidersIdentityProviderLinkArrayOutput{})
 	pulumi.RegisterOutputType(GetUsersUserOutput{})
 	pulumi.RegisterOutputType(GetUsersUserArrayOutput{})
+	pulumi.RegisterOutputType(GetVirtualMfaDevicesVirtualMfaDeviceOutput{})
+	pulumi.RegisterOutputType(GetVirtualMfaDevicesVirtualMfaDeviceArrayOutput{})
 }

@@ -12,7 +12,7 @@ import (
 
 // ## Import
 //
-// Security Groups can be imported using the `id`, e.g.
+// Security Groups can be imported using the `id`, e.g. bash
 //
 // ```sh
 //
@@ -40,6 +40,8 @@ type Secgroup struct {
 	// The array of security group rules associating with the security group.
 	// The rule object is documented below.
 	Rules SecgroupRuleTypeArrayOutput `pulumi:"rules"`
+	// Specifies the key/value pairs to associate with the security group.
+	Tags pulumi.StringMapOutput `pulumi:"tags"`
 	// The last update time, in UTC format.
 	UpdatedAt pulumi.StringOutput `pulumi:"updatedAt"`
 }
@@ -92,6 +94,8 @@ type secgroupState struct {
 	// The array of security group rules associating with the security group.
 	// The rule object is documented below.
 	Rules []SecgroupRuleType `pulumi:"rules"`
+	// Specifies the key/value pairs to associate with the security group.
+	Tags map[string]string `pulumi:"tags"`
 	// The last update time, in UTC format.
 	UpdatedAt *string `pulumi:"updatedAt"`
 }
@@ -115,6 +119,8 @@ type SecgroupState struct {
 	// The array of security group rules associating with the security group.
 	// The rule object is documented below.
 	Rules SecgroupRuleTypeArrayInput
+	// Specifies the key/value pairs to associate with the security group.
+	Tags pulumi.StringMapInput
 	// The last update time, in UTC format.
 	UpdatedAt pulumi.StringPtrInput
 }
@@ -137,6 +143,8 @@ type secgroupArgs struct {
 	// The region in which to create the security group resource. If omitted, the
 	// provider-level region will be used. Changing this creates a new security group resource.
 	Region *string `pulumi:"region"`
+	// Specifies the key/value pairs to associate with the security group.
+	Tags map[string]string `pulumi:"tags"`
 }
 
 // The set of arguments for constructing a Secgroup resource.
@@ -154,6 +162,8 @@ type SecgroupArgs struct {
 	// The region in which to create the security group resource. If omitted, the
 	// provider-level region will be used. Changing this creates a new security group resource.
 	Region pulumi.StringPtrInput
+	// Specifies the key/value pairs to associate with the security group.
+	Tags pulumi.StringMapInput
 }
 
 func (SecgroupArgs) ElementType() reflect.Type {
@@ -280,6 +290,11 @@ func (o SecgroupOutput) Region() pulumi.StringOutput {
 // The rule object is documented below.
 func (o SecgroupOutput) Rules() SecgroupRuleTypeArrayOutput {
 	return o.ApplyT(func(v *Secgroup) SecgroupRuleTypeArrayOutput { return v.Rules }).(SecgroupRuleTypeArrayOutput)
+}
+
+// Specifies the key/value pairs to associate with the security group.
+func (o SecgroupOutput) Tags() pulumi.StringMapOutput {
+	return o.ApplyT(func(v *Secgroup) pulumi.StringMapOutput { return v.Tags }).(pulumi.StringMapOutput)
 }
 
 // The last update time, in UTC format.

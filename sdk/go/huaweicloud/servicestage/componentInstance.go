@@ -170,7 +170,7 @@ import (
 //
 // ## Import
 //
-// Instances can be imported using their related `application_id`, `component_id` and `id`, separated by a slash (/), e.g.
+// Instances can be imported using their related `application_id`, `component_id` and `id`, separated by a slash (/), e.g. bash
 //
 // ```sh
 //

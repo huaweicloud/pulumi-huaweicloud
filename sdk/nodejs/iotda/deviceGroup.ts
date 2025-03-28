@@ -5,7 +5,14 @@ import * as pulumi from "@pulumi/pulumi";
 import * as utilities from "../utilities";
 
 /**
- * Manages an IoTDA device group within HuaweiCloud.
+ * Manages an IoTDA device group resource within HuaweiCloud.
+ *
+ * > When accessing an IoTDA **standard** or **enterprise** edition instance, you need to specify the IoTDA service
+ *   endpoint in `provider` block.
+ *   You can login to the IoTDA console, choose the instance **Overview** and click **Access Details**
+ *   to view the HTTPS application access address. An example of the access address might be
+ *   **9bc34xxxxx.st1.iotda-app.ap-southeast-1.myhuaweicloud.com**, then you need to configure the
+ *   `provider` block as follows:
  *
  * ## Example Usage
  *
@@ -14,9 +21,10 @@ import * as utilities from "../utilities";
  * import * as pulumi from "@huaweicloudos/pulumi";
  *
  * const config = new pulumi.Config();
+ * const name = config.requireObject("name");
  * const spaceId = config.requireObject("spaceId");
  * const deviceId = config.requireObject("deviceId");
- * const group = new huaweicloud.iotda.DeviceGroup("group", {
+ * const test = new huaweicloud.iotda.DeviceGroup("test", {
  *     spaceId: spaceId,
  *     deviceIds: [deviceId],
  * });
@@ -24,13 +32,13 @@ import * as utilities from "../utilities";
  *
  * ## Import
  *
- * Groups can be imported using the `id`, e.g.
+ * The device group can be imported using the `id`, e.g. bash
  *
  * ```sh
- *  $ pulumi import huaweicloud:IoTDA/deviceGroup:DeviceGroup test 10022532f4f94f26b01daa1e424853e1
+ *  $ pulumi import huaweicloud:IoTDA/deviceGroup:DeviceGroup test <id>
  * ```
  *
- *  Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`space_id`. It is generally recommended running `terraform plan` after importing the resource. You can then decide if changes should be applied to the resource, or the resource definition should be updated to align with the group. Also you can ignore changes as below. resource "huaweicloud_iotda_device_group" "test" {
+ *  Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`space_id`. It is generally recommended running `terraform plan` after importing the resource. You can then decide if changes should be applied to the resource, or the resource definition should be updated to align with the group. Also, you can ignore changes as below. hcl resource "huaweicloud_iotda_device_group" "test" {
  *
  *  ...
  *
@@ -73,9 +81,9 @@ export class DeviceGroup extends pulumi.CustomResource {
     }
 
     /**
-     * Specifies the description of device group. The description contains a maximum of 64
-     * characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special characters
-     * are allowed: `?'#().,&%@!`.
+     * Specifies the description of device group.
+     * The description contains a maximum of `64` characters. Only letters, Chinese characters, digits, hyphens (-),
+     * underscores (_) and the following special characters are allowed: `?'#().,&%@!`.
      */
     public readonly description!: pulumi.Output<string | undefined>;
     /**
@@ -83,7 +91,14 @@ export class DeviceGroup extends pulumi.CustomResource {
      */
     public readonly deviceIds!: pulumi.Output<string[]>;
     /**
-     * Specifies the name of device group. The name contains a maximum of 64 characters.
+     * Specifies the dynamic device group rule, just fill in the content
+     * of the **where** clause, the remaining clauses do not need to be filled in.
+     * e.g. **device_name = 'xxx' or deviceName = 'xxx'**.
+     * More grammar rules, please see [API docs](https://support.huaweicloud.com/intl/en-us/api-iothub/SearchDevices.html).
+     */
+    public readonly dynamicGroupRule!: pulumi.Output<string>;
+    /**
+     * Specifies the name of device group. The name contains a maximum of `64` characters.
      * Only letters, digits, hyphens (-) and underscores (_) are allowed.
      */
     public readonly name!: pulumi.Output<string>;
@@ -102,6 +117,13 @@ export class DeviceGroup extends pulumi.CustomResource {
      * Changing this parameter will create a new resource.
      */
     public readonly spaceId!: pulumi.Output<string>;
+    /**
+     * Specifies the device group type.
+     * The valid values are as follows:
+     * + **STATIC**: Static device group.
+     * + **DYNAMIC**: Dynamic device group.
+     */
+    public readonly type!: pulumi.Output<string>;
 
     /**
      * Create a DeviceGroup resource with the given unique name, arguments, and options.
@@ -118,10 +140,12 @@ export class DeviceGroup extends pulumi.CustomResource {
             const state = argsOrState as DeviceGroupState | undefined;
             resourceInputs["description"] = state ? state.description : undefined;
             resourceInputs["deviceIds"] = state ? state.deviceIds : undefined;
+            resourceInputs["dynamicGroupRule"] = state ? state.dynamicGroupRule : undefined;
             resourceInputs["name"] = state ? state.name : undefined;
             resourceInputs["parentGroupId"] = state ? state.parentGroupId : undefined;
             resourceInputs["region"] = state ? state.region : undefined;
             resourceInputs["spaceId"] = state ? state.spaceId : undefined;
+            resourceInputs["type"] = state ? state.type : undefined;
         } else {
             const args = argsOrState as DeviceGroupArgs | undefined;
             if ((!args || args.spaceId === undefined) && !opts.urn) {
@@ -129,10 +153,12 @@ export class DeviceGroup extends pulumi.CustomResource {
             }
             resourceInputs["description"] = args ? args.description : undefined;
             resourceInputs["deviceIds"] = args ? args.deviceIds : undefined;
+            resourceInputs["dynamicGroupRule"] = args ? args.dynamicGroupRule : undefined;
             resourceInputs["name"] = args ? args.name : undefined;
             resourceInputs["parentGroupId"] = args ? args.parentGroupId : undefined;
             resourceInputs["region"] = args ? args.region : undefined;
             resourceInputs["spaceId"] = args ? args.spaceId : undefined;
+            resourceInputs["type"] = args ? args.type : undefined;
         }
         opts = pulumi.mergeOptions(utilities.resourceOptsDefaults(), opts);
         super(DeviceGroup.__pulumiType, name, resourceInputs, opts);
@@ -144,9 +170,9 @@ export class DeviceGroup extends pulumi.CustomResource {
  */
 export interface DeviceGroupState {
     /**
-     * Specifies the description of device group. The description contains a maximum of 64
-     * characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special characters
-     * are allowed: `?'#().,&%@!`.
+     * Specifies the description of device group.
+     * The description contains a maximum of `64` characters. Only letters, Chinese characters, digits, hyphens (-),
+     * underscores (_) and the following special characters are allowed: `?'#().,&%@!`.
      */
     description?: pulumi.Input<string>;
     /**
@@ -154,7 +180,14 @@ export interface DeviceGroupState {
      */
     deviceIds?: pulumi.Input<pulumi.Input<string>[]>;
     /**
-     * Specifies the name of device group. The name contains a maximum of 64 characters.
+     * Specifies the dynamic device group rule, just fill in the content
+     * of the **where** clause, the remaining clauses do not need to be filled in.
+     * e.g. **device_name = 'xxx' or deviceName = 'xxx'**.
+     * More grammar rules, please see [API docs](https://support.huaweicloud.com/intl/en-us/api-iothub/SearchDevices.html).
+     */
+    dynamicGroupRule?: pulumi.Input<string>;
+    /**
+     * Specifies the name of device group. The name contains a maximum of `64` characters.
      * Only letters, digits, hyphens (-) and underscores (_) are allowed.
      */
     name?: pulumi.Input<string>;
@@ -173,6 +206,13 @@ export interface DeviceGroupState {
      * Changing this parameter will create a new resource.
      */
     spaceId?: pulumi.Input<string>;
+    /**
+     * Specifies the device group type.
+     * The valid values are as follows:
+     * + **STATIC**: Static device group.
+     * + **DYNAMIC**: Dynamic device group.
+     */
+    type?: pulumi.Input<string>;
 }
 
 /**
@@ -180,9 +220,9 @@ export interface DeviceGroupState {
  */
 export interface DeviceGroupArgs {
     /**
-     * Specifies the description of device group. The description contains a maximum of 64
-     * characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special characters
-     * are allowed: `?'#().,&%@!`.
+     * Specifies the description of device group.
+     * The description contains a maximum of `64` characters. Only letters, Chinese characters, digits, hyphens (-),
+     * underscores (_) and the following special characters are allowed: `?'#().,&%@!`.
      */
     description?: pulumi.Input<string>;
     /**
@@ -190,7 +230,14 @@ export interface DeviceGroupArgs {
      */
     deviceIds?: pulumi.Input<pulumi.Input<string>[]>;
     /**
-     * Specifies the name of device group. The name contains a maximum of 64 characters.
+     * Specifies the dynamic device group rule, just fill in the content
+     * of the **where** clause, the remaining clauses do not need to be filled in.
+     * e.g. **device_name = 'xxx' or deviceName = 'xxx'**.
+     * More grammar rules, please see [API docs](https://support.huaweicloud.com/intl/en-us/api-iothub/SearchDevices.html).
+     */
+    dynamicGroupRule?: pulumi.Input<string>;
+    /**
+     * Specifies the name of device group. The name contains a maximum of `64` characters.
      * Only letters, digits, hyphens (-) and underscores (_) are allowed.
      */
     name?: pulumi.Input<string>;
@@ -209,4 +256,11 @@ export interface DeviceGroupArgs {
      * Changing this parameter will create a new resource.
      */
     spaceId: pulumi.Input<string>;
+    /**
+     * Specifies the device group type.
+     * The valid values are as follows:
+     * + **STATIC**: Static device group.
+     * + **DYNAMIC**: Dynamic device group.
+     */
+    type?: pulumi.Input<string>;
 }

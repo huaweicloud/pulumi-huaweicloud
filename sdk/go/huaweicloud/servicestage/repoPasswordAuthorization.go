@@ -16,7 +16,7 @@ import (
 //
 // ## Import
 //
-// Authorizations can be imported using their `id` or `name`, e.g.
+// # Authorizations can be imported using their `id` or `name`, e.g.bash
 //
 // ```sh
 //
@@ -26,9 +26,9 @@ import (
 type RepoPasswordAuthorization struct {
 	pulumi.CustomResourceState
 
-	// Specified the authorization name. The name can contain of 4 to 63 characters,
-	// only letters, digits, underscores (_), hyphens (-) and dots (.) are allowed.
-	// Changing this parameter will create a new authorization.
+	// Specified the authorization name.\
+	// The name can contain of `4` to `63` characters, only letters, digits, underscores (_), hyphens (-) and dots (.) are
+	// allowed. Changing this parameter will create a new authorization.
 	Name pulumi.StringOutput `pulumi:"name"`
 	// Specified the repository password.
 	// Changing this parameter will create a new authorization.
@@ -86,9 +86,9 @@ func GetRepoPasswordAuthorization(ctx *pulumi.Context,
 
 // Input properties used for looking up and filtering RepoPasswordAuthorization resources.
 type repoPasswordAuthorizationState struct {
-	// Specified the authorization name. The name can contain of 4 to 63 characters,
-	// only letters, digits, underscores (_), hyphens (-) and dots (.) are allowed.
-	// Changing this parameter will create a new authorization.
+	// Specified the authorization name.\
+	// The name can contain of `4` to `63` characters, only letters, digits, underscores (_), hyphens (-) and dots (.) are
+	// allowed. Changing this parameter will create a new authorization.
 	Name *string `pulumi:"name"`
 	// Specified the repository password.
 	// Changing this parameter will create a new authorization.
@@ -108,9 +108,9 @@ type repoPasswordAuthorizationState struct {
 }
 
 type RepoPasswordAuthorizationState struct {
-	// Specified the authorization name. The name can contain of 4 to 63 characters,
-	// only letters, digits, underscores (_), hyphens (-) and dots (.) are allowed.
-	// Changing this parameter will create a new authorization.
+	// Specified the authorization name.\
+	// The name can contain of `4` to `63` characters, only letters, digits, underscores (_), hyphens (-) and dots (.) are
+	// allowed. Changing this parameter will create a new authorization.
 	Name pulumi.StringPtrInput
 	// Specified the repository password.
 	// Changing this parameter will create a new authorization.
@@ -134,9 +134,9 @@ func (RepoPasswordAuthorizationState) ElementType() reflect.Type {
 }
 
 type repoPasswordAuthorizationArgs struct {
-	// Specified the authorization name. The name can contain of 4 to 63 characters,
-	// only letters, digits, underscores (_), hyphens (-) and dots (.) are allowed.
-	// Changing this parameter will create a new authorization.
+	// Specified the authorization name.\
+	// The name can contain of `4` to `63` characters, only letters, digits, underscores (_), hyphens (-) and dots (.) are
+	// allowed. Changing this parameter will create a new authorization.
 	Name *string `pulumi:"name"`
 	// Specified the repository password.
 	// Changing this parameter will create a new authorization.
@@ -157,9 +157,9 @@ type repoPasswordAuthorizationArgs struct {
 
 // The set of arguments for constructing a RepoPasswordAuthorization resource.
 type RepoPasswordAuthorizationArgs struct {
-	// Specified the authorization name. The name can contain of 4 to 63 characters,
-	// only letters, digits, underscores (_), hyphens (-) and dots (.) are allowed.
-	// Changing this parameter will create a new authorization.
+	// Specified the authorization name.\
+	// The name can contain of `4` to `63` characters, only letters, digits, underscores (_), hyphens (-) and dots (.) are
+	// allowed. Changing this parameter will create a new authorization.
 	Name pulumi.StringPtrInput
 	// Specified the repository password.
 	// Changing this parameter will create a new authorization.
@@ -265,9 +265,9 @@ func (o RepoPasswordAuthorizationOutput) ToRepoPasswordAuthorizationOutputWithCo
 	return o
 }
 
-// Specified the authorization name. The name can contain of 4 to 63 characters,
-// only letters, digits, underscores (_), hyphens (-) and dots (.) are allowed.
-// Changing this parameter will create a new authorization.
+// Specified the authorization name.\
+// The name can contain of `4` to `63` characters, only letters, digits, underscores (_), hyphens (-) and dots (.) are
+// allowed. Changing this parameter will create a new authorization.
 func (o RepoPasswordAuthorizationOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v *RepoPasswordAuthorization) pulumi.StringOutput { return v.Name }).(pulumi.StringOutput)
 }

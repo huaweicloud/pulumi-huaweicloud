@@ -70,7 +70,7 @@ import (
 //
 // ## Import
 //
-// MPC transcoding template groups can be imported using the `id`, e.g.
+// MPC transcoding template groups can be imported using the `id`, e.g. bash
 //
 // ```sh
 //
@@ -82,11 +82,13 @@ type TranscodingTemplateGroup struct {
 
 	// Specifies the audio parameters. The object structure is documented below.
 	Audio TranscodingTemplateGroupAudioPtrOutput `pulumi:"audio"`
-	// Specifies the dash segment duration. This parameter is used only when `outputFormat`
-	// is set to 2 or 3. The value ranges from 2 to 10. The default value is 5. The unit is second.
+	// Specifies the dash segment duration, in second.\
+	// The valid value is range from `2` to `10`, and it is used only when `outputFormat` is set to `1` or `3`.
+	// The default value is `5`.
 	DashSegmentDuration pulumi.IntPtrOutput `pulumi:"dashSegmentDuration"`
-	// Specifies the HLS segment duration. This parameter is used only
-	// when `outputFormat` is set to 1 or 3. The value ranges from 2 to 10. The default value is 5. The unit is second.
+	// Specifies the HLS segment duration, in second.\
+	// The valid value is range from `2` to `10`, and it is used only when `outputFormat` is set to `1` or `3`.
+	// The default value is `5`.
 	HlsSegmentDuration pulumi.IntPtrOutput `pulumi:"hlsSegmentDuration"`
 	// Specifies Whether to enable low bitrate HD. The default value is false.
 	LowBitrateHd pulumi.BoolPtrOutput `pulumi:"lowBitrateHd"`
@@ -148,11 +150,13 @@ func GetTranscodingTemplateGroup(ctx *pulumi.Context,
 type transcodingTemplateGroupState struct {
 	// Specifies the audio parameters. The object structure is documented below.
 	Audio *TranscodingTemplateGroupAudio `pulumi:"audio"`
-	// Specifies the dash segment duration. This parameter is used only when `outputFormat`
-	// is set to 2 or 3. The value ranges from 2 to 10. The default value is 5. The unit is second.
+	// Specifies the dash segment duration, in second.\
+	// The valid value is range from `2` to `10`, and it is used only when `outputFormat` is set to `1` or `3`.
+	// The default value is `5`.
 	DashSegmentDuration *int `pulumi:"dashSegmentDuration"`
-	// Specifies the HLS segment duration. This parameter is used only
-	// when `outputFormat` is set to 1 or 3. The value ranges from 2 to 10. The default value is 5. The unit is second.
+	// Specifies the HLS segment duration, in second.\
+	// The valid value is range from `2` to `10`, and it is used only when `outputFormat` is set to `1` or `3`.
+	// The default value is `5`.
 	HlsSegmentDuration *int `pulumi:"hlsSegmentDuration"`
 	// Specifies Whether to enable low bitrate HD. The default value is false.
 	LowBitrateHd *bool `pulumi:"lowBitrateHd"`
@@ -182,11 +186,13 @@ type transcodingTemplateGroupState struct {
 type TranscodingTemplateGroupState struct {
 	// Specifies the audio parameters. The object structure is documented below.
 	Audio TranscodingTemplateGroupAudioPtrInput
-	// Specifies the dash segment duration. This parameter is used only when `outputFormat`
-	// is set to 2 or 3. The value ranges from 2 to 10. The default value is 5. The unit is second.
+	// Specifies the dash segment duration, in second.\
+	// The valid value is range from `2` to `10`, and it is used only when `outputFormat` is set to `1` or `3`.
+	// The default value is `5`.
 	DashSegmentDuration pulumi.IntPtrInput
-	// Specifies the HLS segment duration. This parameter is used only
-	// when `outputFormat` is set to 1 or 3. The value ranges from 2 to 10. The default value is 5. The unit is second.
+	// Specifies the HLS segment duration, in second.\
+	// The valid value is range from `2` to `10`, and it is used only when `outputFormat` is set to `1` or `3`.
+	// The default value is `5`.
 	HlsSegmentDuration pulumi.IntPtrInput
 	// Specifies Whether to enable low bitrate HD. The default value is false.
 	LowBitrateHd pulumi.BoolPtrInput
@@ -220,11 +226,13 @@ func (TranscodingTemplateGroupState) ElementType() reflect.Type {
 type transcodingTemplateGroupArgs struct {
 	// Specifies the audio parameters. The object structure is documented below.
 	Audio *TranscodingTemplateGroupAudio `pulumi:"audio"`
-	// Specifies the dash segment duration. This parameter is used only when `outputFormat`
-	// is set to 2 or 3. The value ranges from 2 to 10. The default value is 5. The unit is second.
+	// Specifies the dash segment duration, in second.\
+	// The valid value is range from `2` to `10`, and it is used only when `outputFormat` is set to `1` or `3`.
+	// The default value is `5`.
 	DashSegmentDuration *int `pulumi:"dashSegmentDuration"`
-	// Specifies the HLS segment duration. This parameter is used only
-	// when `outputFormat` is set to 1 or 3. The value ranges from 2 to 10. The default value is 5. The unit is second.
+	// Specifies the HLS segment duration, in second.\
+	// The valid value is range from `2` to `10`, and it is used only when `outputFormat` is set to `1` or `3`.
+	// The default value is `5`.
 	HlsSegmentDuration *int `pulumi:"hlsSegmentDuration"`
 	// Specifies Whether to enable low bitrate HD. The default value is false.
 	LowBitrateHd *bool `pulumi:"lowBitrateHd"`
@@ -253,11 +261,13 @@ type transcodingTemplateGroupArgs struct {
 type TranscodingTemplateGroupArgs struct {
 	// Specifies the audio parameters. The object structure is documented below.
 	Audio TranscodingTemplateGroupAudioPtrInput
-	// Specifies the dash segment duration. This parameter is used only when `outputFormat`
-	// is set to 2 or 3. The value ranges from 2 to 10. The default value is 5. The unit is second.
+	// Specifies the dash segment duration, in second.\
+	// The valid value is range from `2` to `10`, and it is used only when `outputFormat` is set to `1` or `3`.
+	// The default value is `5`.
 	DashSegmentDuration pulumi.IntPtrInput
-	// Specifies the HLS segment duration. This parameter is used only
-	// when `outputFormat` is set to 1 or 3. The value ranges from 2 to 10. The default value is 5. The unit is second.
+	// Specifies the HLS segment duration, in second.\
+	// The valid value is range from `2` to `10`, and it is used only when `outputFormat` is set to `1` or `3`.
+	// The default value is `5`.
 	HlsSegmentDuration pulumi.IntPtrInput
 	// Specifies Whether to enable low bitrate HD. The default value is false.
 	LowBitrateHd pulumi.BoolPtrInput
@@ -374,14 +384,16 @@ func (o TranscodingTemplateGroupOutput) Audio() TranscodingTemplateGroupAudioPtr
 	return o.ApplyT(func(v *TranscodingTemplateGroup) TranscodingTemplateGroupAudioPtrOutput { return v.Audio }).(TranscodingTemplateGroupAudioPtrOutput)
 }
 
-// Specifies the dash segment duration. This parameter is used only when `outputFormat`
-// is set to 2 or 3. The value ranges from 2 to 10. The default value is 5. The unit is second.
+// Specifies the dash segment duration, in second.\
+// The valid value is range from `2` to `10`, and it is used only when `outputFormat` is set to `1` or `3`.
+// The default value is `5`.
 func (o TranscodingTemplateGroupOutput) DashSegmentDuration() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v *TranscodingTemplateGroup) pulumi.IntPtrOutput { return v.DashSegmentDuration }).(pulumi.IntPtrOutput)
 }
 
-// Specifies the HLS segment duration. This parameter is used only
-// when `outputFormat` is set to 1 or 3. The value ranges from 2 to 10. The default value is 5. The unit is second.
+// Specifies the HLS segment duration, in second.\
+// The valid value is range from `2` to `10`, and it is used only when `outputFormat` is set to `1` or `3`.
+// The default value is `5`.
 func (o TranscodingTemplateGroupOutput) HlsSegmentDuration() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v *TranscodingTemplateGroup) pulumi.IntPtrOutput { return v.HlsSegmentDuration }).(pulumi.IntPtrOutput)
 }

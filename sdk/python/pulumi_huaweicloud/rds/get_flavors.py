@@ -166,7 +166,8 @@ def get_flavors(availability_zone: Optional[str] = None,
 
 
     :param str availability_zone: Specifies the availability zone which the RDS flavor belongs to.
-    :param str db_type: Specifies the DB engine. Value: MySQL, PostgreSQL, SQLServer.
+    :param str db_type: Specifies the DB engine. The value can be **MySQL**, **PostgreSQL**, **SQLServer**,
+           **MariaDB**.
     :param str db_version: Specifies the database version. For more detail, please see
            [DB Engines and Versions](https://support.huaweicloud.com/intl/en-us/productdesc-rds/en-us_topic_0043898356.html).
            Available value:
@@ -185,8 +186,8 @@ def get_flavors(availability_zone: Optional[str] = None,
            For MySQL engine: Dedicated (discontinued).
            For PostgreSQL and SQL Server engines: Dedicated, only supported by ultra-fast SSDs.
            + **bigmem**: Large memory type.
-    :param str instance_mode: The mode of instance. Value: *ha*(indicates primary/standby instance),
-           *single*(indicates single instance) and *replica*(indicates read replicas).
+    :param str instance_mode: The mode of instance. The value can be **ha**(indicates primary/standby
+           instance), **single**(indicates single instance) and **replica**(indicates read replicas).
     :param int memory: Specifies the memory size(GB) in the RDS flavor.
     :param str region: The region in which to obtain the RDS flavors. If omitted, the provider-level region
            will be used.
@@ -243,7 +244,8 @@ def get_flavors_output(availability_zone: Optional[pulumi.Input[Optional[str]]] 
 
 
     :param str availability_zone: Specifies the availability zone which the RDS flavor belongs to.
-    :param str db_type: Specifies the DB engine. Value: MySQL, PostgreSQL, SQLServer.
+    :param str db_type: Specifies the DB engine. The value can be **MySQL**, **PostgreSQL**, **SQLServer**,
+           **MariaDB**.
     :param str db_version: Specifies the database version. For more detail, please see
            [DB Engines and Versions](https://support.huaweicloud.com/intl/en-us/productdesc-rds/en-us_topic_0043898356.html).
            Available value:
@@ -262,8 +264,8 @@ def get_flavors_output(availability_zone: Optional[pulumi.Input[Optional[str]]] 
            For MySQL engine: Dedicated (discontinued).
            For PostgreSQL and SQL Server engines: Dedicated, only supported by ultra-fast SSDs.
            + **bigmem**: Large memory type.
-    :param str instance_mode: The mode of instance. Value: *ha*(indicates primary/standby instance),
-           *single*(indicates single instance) and *replica*(indicates read replicas).
+    :param str instance_mode: The mode of instance. The value can be **ha**(indicates primary/standby
+           instance), **single**(indicates single instance) and **replica**(indicates read replicas).
     :param int memory: Specifies the memory size(GB) in the RDS flavor.
     :param str region: The region in which to obtain the RDS flavors. If omitted, the provider-level region
            will be used.

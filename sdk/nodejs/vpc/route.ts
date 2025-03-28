@@ -49,7 +49,7 @@ import * as utilities from "../utilities";
  *
  * ## Import
  *
- * VPC routes can be imported using the route table ID and their `destination` separated by a slash, e.g.
+ * VPC routes can be imported using the route table ID and their `destination` separated by a slash, e.g. bash
  *
  * ```sh
  *  $ pulumi import huaweicloud:Vpc/route:Route test <route_table_id>/<destination>
@@ -85,7 +85,7 @@ export class Route extends pulumi.CustomResource {
 
     /**
      * Specifies the supplementary information about the route.
-     * The value is a string of no more than 255 characters and cannot contain angle brackets (< or >).
+     * The value is a string of no more than `255` characters and cannot contain angle brackets (< or >).
      */
     public readonly description!: pulumi.Output<string | undefined>;
     /**
@@ -104,6 +104,8 @@ export class Route extends pulumi.CustomResource {
      * + If the route type is **vpn**, the value is a VPN gateway ID.
      * + If the route type is **dc**, the value is a Direct Connect gateway ID.
      * + If the route type is **cc**, the value is a Cloud Connection ID.
+     * + If the route type is **egw**, the value is a VPCEP endpoint ID.
+     * + If the route type is **er**, the value is a ER instance ID.
      */
     public readonly nexthop!: pulumi.Output<string>;
     /**
@@ -122,7 +124,7 @@ export class Route extends pulumi.CustomResource {
     public /*out*/ readonly routeTableName!: pulumi.Output<string>;
     /**
      * Specifies the route type. Currently, the value can be:
-     * **ecs**, **eni**, **vip**, **nat**, **peering**, **vpn**, **dc** and **cc**.
+     * **ecs**, **eni**, **vip**, **nat**, **peering**, **vpn**, **dc**, **cc**, **egw** and **er**.
      */
     public readonly type!: pulumi.Output<string>;
     /**
@@ -186,7 +188,7 @@ export class Route extends pulumi.CustomResource {
 export interface RouteState {
     /**
      * Specifies the supplementary information about the route.
-     * The value is a string of no more than 255 characters and cannot contain angle brackets (< or >).
+     * The value is a string of no more than `255` characters and cannot contain angle brackets (< or >).
      */
     description?: pulumi.Input<string>;
     /**
@@ -205,6 +207,8 @@ export interface RouteState {
      * + If the route type is **vpn**, the value is a VPN gateway ID.
      * + If the route type is **dc**, the value is a Direct Connect gateway ID.
      * + If the route type is **cc**, the value is a Cloud Connection ID.
+     * + If the route type is **egw**, the value is a VPCEP endpoint ID.
+     * + If the route type is **er**, the value is a ER instance ID.
      */
     nexthop?: pulumi.Input<string>;
     /**
@@ -223,7 +227,7 @@ export interface RouteState {
     routeTableName?: pulumi.Input<string>;
     /**
      * Specifies the route type. Currently, the value can be:
-     * **ecs**, **eni**, **vip**, **nat**, **peering**, **vpn**, **dc** and **cc**.
+     * **ecs**, **eni**, **vip**, **nat**, **peering**, **vpn**, **dc**, **cc**, **egw** and **er**.
      */
     type?: pulumi.Input<string>;
     /**
@@ -239,7 +243,7 @@ export interface RouteState {
 export interface RouteArgs {
     /**
      * Specifies the supplementary information about the route.
-     * The value is a string of no more than 255 characters and cannot contain angle brackets (< or >).
+     * The value is a string of no more than `255` characters and cannot contain angle brackets (< or >).
      */
     description?: pulumi.Input<string>;
     /**
@@ -258,6 +262,8 @@ export interface RouteArgs {
      * + If the route type is **vpn**, the value is a VPN gateway ID.
      * + If the route type is **dc**, the value is a Direct Connect gateway ID.
      * + If the route type is **cc**, the value is a Cloud Connection ID.
+     * + If the route type is **egw**, the value is a VPCEP endpoint ID.
+     * + If the route type is **er**, the value is a ER instance ID.
      */
     nexthop: pulumi.Input<string>;
     /**
@@ -272,7 +278,7 @@ export interface RouteArgs {
     routeTableId?: pulumi.Input<string>;
     /**
      * Specifies the route type. Currently, the value can be:
-     * **ecs**, **eni**, **vip**, **nat**, **peering**, **vpn**, **dc** and **cc**.
+     * **ecs**, **eni**, **vip**, **nat**, **peering**, **vpn**, **dc**, **cc**, **egw** and **er**.
      */
     type: pulumi.Input<string>;
     /**

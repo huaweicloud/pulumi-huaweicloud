@@ -143,6 +143,8 @@ type GetEipsEip struct {
 	BandwidthShareType string `pulumi:"bandwidthShareType"`
 	// The bandwidth size of the EIP.
 	BandwidthSize int `pulumi:"bandwidthSize"`
+	// The create time of the EIP.
+	CreatedAt string `pulumi:"createdAt"`
 	// Specifies the enterprise project ID which the desired EIP belongs to.
 	EnterpriseProjectId string `pulumi:"enterpriseProjectId"`
 	// The ID of the EIP.
@@ -189,6 +191,8 @@ type GetEipsEipArgs struct {
 	BandwidthShareType pulumi.StringInput `pulumi:"bandwidthShareType"`
 	// The bandwidth size of the EIP.
 	BandwidthSize pulumi.IntInput `pulumi:"bandwidthSize"`
+	// The create time of the EIP.
+	CreatedAt pulumi.StringInput `pulumi:"createdAt"`
 	// Specifies the enterprise project ID which the desired EIP belongs to.
 	EnterpriseProjectId pulumi.StringInput `pulumi:"enterpriseProjectId"`
 	// The ID of the EIP.
@@ -284,6 +288,11 @@ func (o GetEipsEipOutput) BandwidthShareType() pulumi.StringOutput {
 // The bandwidth size of the EIP.
 func (o GetEipsEipOutput) BandwidthSize() pulumi.IntOutput {
 	return o.ApplyT(func(v GetEipsEip) int { return v.BandwidthSize }).(pulumi.IntOutput)
+}
+
+// The create time of the EIP.
+func (o GetEipsEipOutput) CreatedAt() pulumi.StringOutput {
+	return o.ApplyT(func(v GetEipsEip) string { return v.CreatedAt }).(pulumi.StringOutput)
 }
 
 // Specifies the enterprise project ID which the desired EIP belongs to.

@@ -10,9 +10,482 @@ from typing import Any, Mapping, Optional, Sequence, Union, overload
 from .. import _utilities
 
 __all__ = [
+    'ActiveStandbyPoolHealthmonitorArgs',
+    'ActiveStandbyPoolMemberArgs',
     'IpgroupIpListArgs',
+    'L7policyFixedResponseConfigArgs',
+    'L7policyFixedResponseConfigInsertHeadersConfigArgs',
+    'L7policyFixedResponseConfigInsertHeadersConfigConfigArgs',
+    'L7policyFixedResponseConfigRemoveHeadersConfigArgs',
+    'L7policyFixedResponseConfigRemoveHeadersConfigConfigArgs',
+    'L7policyFixedResponseConfigTrafficLimitConfigArgs',
+    'L7policyRedirectPoolsConfigArgs',
+    'L7policyRedirectPoolsExtendConfigArgs',
+    'L7policyRedirectPoolsExtendConfigInsertHeadersConfigArgs',
+    'L7policyRedirectPoolsExtendConfigInsertHeadersConfigConfigArgs',
+    'L7policyRedirectPoolsExtendConfigRemoveHeadersConfigArgs',
+    'L7policyRedirectPoolsExtendConfigRemoveHeadersConfigConfigArgs',
+    'L7policyRedirectPoolsExtendConfigRewriteUrlConfigArgs',
+    'L7policyRedirectPoolsExtendConfigTrafficLimitConfigArgs',
+    'L7policyRedirectPoolsStickySessionConfigArgs',
+    'L7policyRedirectUrlConfigArgs',
+    'L7policyRedirectUrlConfigInsertHeadersConfigArgs',
+    'L7policyRedirectUrlConfigInsertHeadersConfigConfigArgs',
+    'L7policyRedirectUrlConfigRemoveHeadersConfigArgs',
+    'L7policyRedirectUrlConfigRemoveHeadersConfigConfigArgs',
+    'L7ruleConditionArgs',
+    'ListenerPortRangeArgs',
     'PoolPersistenceArgs',
+    'SecurityPolicyListenerArgs',
 ]
+
+@pulumi.input_type
+class ActiveStandbyPoolHealthmonitorArgs:
+    def __init__(__self__, *,
+                 delay: pulumi.Input[int],
+                 max_retries: pulumi.Input[int],
+                 timeout: pulumi.Input[int],
+                 type: pulumi.Input[str],
+                 domain_name: Optional[pulumi.Input[str]] = None,
+                 expected_codes: Optional[pulumi.Input[str]] = None,
+                 http_method: Optional[pulumi.Input[str]] = None,
+                 id: Optional[pulumi.Input[str]] = None,
+                 max_retries_down: Optional[pulumi.Input[int]] = None,
+                 monitor_port: Optional[pulumi.Input[int]] = None,
+                 name: Optional[pulumi.Input[str]] = None,
+                 url_path: Optional[pulumi.Input[str]] = None):
+        """
+        :param pulumi.Input[int] delay: Specifies the interval between health checks, in seconds. The value range is from
+               `1` to `50`. Changing this parameter will create a new resource.
+        :param pulumi.Input[int] max_retries: Specifies the number of consecutive health checks when the health check
+               result of a backend server changes from **OFFLINE** to **ONLINE**. The value range is from `1` to `10`. Changing
+               this parameter will create a new resource.
+        :param pulumi.Input[int] timeout: Specifies the maximum time required for waiting for a response from the health
+               check, in seconds. It is recommended that you set the value less than that of parameter `delay`. The value range is
+               from `1` to `50`. Changing this parameter will create a new resource.
+        :param pulumi.Input[str] type: Specifies the health check protocol. Value options: **TCP**, **UDP_CONNECT**,
+               **HTTP**, and **HTTPS**.
+               + If the protocol of the backend server is **QUIC**, the value can only be **UDP_CONNECT**.
+               + If the protocol of the backend server is **UDP**, the value can only be **UDP_CONNECT**.
+               + If the protocol of the backend server is **TCP**, the value can only be **TCP**, **HTTP**, or **HTTPS**.
+               + If the protocol of the backend server is **HTTP**, the value can only be **TCP**, **HTTP**, or **HTTPS**.
+               + If the protocol of the backend server is **HTTPS**, the value can only be **TCP**, **HTTP**, or **HTTPS**.
+        :param pulumi.Input[str] domain_name: Specifies the domain name that HTTP requests are sent to during the health
+               check. The value can contain only digits, letters, hyphens (-), and periods (.) and must start with a digit or letter.
+               The value is left blank by default, indicating that the virtual IP address of the load balancer is used as the
+               destination address of HTTP requests. This parameter is available only when `type` is set to **HTTP**. The length
+               range of value is from `1` to `100`. Changing this parameter will create a new resource.
+        :param pulumi.Input[str] expected_codes: Specifies the expected HTTP status code. This parameter will take
+               effect only when `type` is set to **HTTP** or **HTTPS**. The default value is 200. Multiple status codes can be
+               queried in the format of expected_codes=xxx&expected_codes=xxx. The length range of value is from `1` to `64`.
+               Value options:
+               + A specific value, for example, **200**
+               + A list of values that are separated with commas (,), for example, **200**, **202**
+               + A value range, for example, **200-204**
+        :param pulumi.Input[str] http_method: Specifies the HTTP method. The value can be **GET**, **HEAD**, **POST**.
+               Default to **GET**. This parameter is available when `type` is set to **HTTP** or **HTTPS**.
+        :param pulumi.Input[str] id: The health check ID.
+        :param pulumi.Input[int] max_retries_down: Specifies the number of consecutive health checks when the health check
+               result of a backend server changes from ONLINE to OFFLINE. The value range is from `1` to `10`. Defaults to `3`.
+               Changing this parameter will create a new resource.
+        :param pulumi.Input[int] monitor_port: Specifies the port used for the health check. If this parameter is left
+               blank, a port of the backend server will be used by default. The value range is from `1` to `65,535`. Changing this
+               parameter will create a new resource.
+        :param pulumi.Input[str] name: Specifies the health check name. The length range of value is from `1` to `255`.
+               Changing this parameter will create a new resource.
+        :param pulumi.Input[str] url_path: Specifies the HTTP request path for the health check. The value must start
+               with a slash (/), and the default value is /. The value can contain letters, digits, hyphens (-), slashes (/),
+               periods (.), percentage signs (%), question marks (?), pound signs (#), ampersand signs (&), and the extended character
+               set **_;~!()*[]@$^:',+**. The length range of value is from `1` to `80`. Changing this parameter will create a new
+               resource.
+        """
+        pulumi.set(__self__, "delay", delay)
+        pulumi.set(__self__, "max_retries", max_retries)
+        pulumi.set(__self__, "timeout", timeout)
+        pulumi.set(__self__, "type", type)
+        if domain_name is not None:
+            pulumi.set(__self__, "domain_name", domain_name)
+        if expected_codes is not None:
+            pulumi.set(__self__, "expected_codes", expected_codes)
+        if http_method is not None:
+            pulumi.set(__self__, "http_method", http_method)
+        if id is not None:
+            pulumi.set(__self__, "id", id)
+        if max_retries_down is not None:
+            pulumi.set(__self__, "max_retries_down", max_retries_down)
+        if monitor_port is not None:
+            pulumi.set(__self__, "monitor_port", monitor_port)
+        if name is not None:
+            pulumi.set(__self__, "name", name)
+        if url_path is not None:
+            pulumi.set(__self__, "url_path", url_path)
+
+    @property
+    @pulumi.getter
+    def delay(self) -> pulumi.Input[int]:
+        """
+        Specifies the interval between health checks, in seconds. The value range is from
+        `1` to `50`. Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "delay")
+
+    @delay.setter
+    def delay(self, value: pulumi.Input[int]):
+        pulumi.set(self, "delay", value)
+
+    @property
+    @pulumi.getter(name="maxRetries")
+    def max_retries(self) -> pulumi.Input[int]:
+        """
+        Specifies the number of consecutive health checks when the health check
+        result of a backend server changes from **OFFLINE** to **ONLINE**. The value range is from `1` to `10`. Changing
+        this parameter will create a new resource.
+        """
+        return pulumi.get(self, "max_retries")
+
+    @max_retries.setter
+    def max_retries(self, value: pulumi.Input[int]):
+        pulumi.set(self, "max_retries", value)
+
+    @property
+    @pulumi.getter
+    def timeout(self) -> pulumi.Input[int]:
+        """
+        Specifies the maximum time required for waiting for a response from the health
+        check, in seconds. It is recommended that you set the value less than that of parameter `delay`. The value range is
+        from `1` to `50`. Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "timeout")
+
+    @timeout.setter
+    def timeout(self, value: pulumi.Input[int]):
+        pulumi.set(self, "timeout", value)
+
+    @property
+    @pulumi.getter
+    def type(self) -> pulumi.Input[str]:
+        """
+        Specifies the health check protocol. Value options: **TCP**, **UDP_CONNECT**,
+        **HTTP**, and **HTTPS**.
+        + If the protocol of the backend server is **QUIC**, the value can only be **UDP_CONNECT**.
+        + If the protocol of the backend server is **UDP**, the value can only be **UDP_CONNECT**.
+        + If the protocol of the backend server is **TCP**, the value can only be **TCP**, **HTTP**, or **HTTPS**.
+        + If the protocol of the backend server is **HTTP**, the value can only be **TCP**, **HTTP**, or **HTTPS**.
+        + If the protocol of the backend server is **HTTPS**, the value can only be **TCP**, **HTTP**, or **HTTPS**.
+        """
+        return pulumi.get(self, "type")
+
+    @type.setter
+    def type(self, value: pulumi.Input[str]):
+        pulumi.set(self, "type", value)
+
+    @property
+    @pulumi.getter(name="domainName")
+    def domain_name(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the domain name that HTTP requests are sent to during the health
+        check. The value can contain only digits, letters, hyphens (-), and periods (.) and must start with a digit or letter.
+        The value is left blank by default, indicating that the virtual IP address of the load balancer is used as the
+        destination address of HTTP requests. This parameter is available only when `type` is set to **HTTP**. The length
+        range of value is from `1` to `100`. Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "domain_name")
+
+    @domain_name.setter
+    def domain_name(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "domain_name", value)
+
+    @property
+    @pulumi.getter(name="expectedCodes")
+    def expected_codes(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the expected HTTP status code. This parameter will take
+        effect only when `type` is set to **HTTP** or **HTTPS**. The default value is 200. Multiple status codes can be
+        queried in the format of expected_codes=xxx&expected_codes=xxx. The length range of value is from `1` to `64`.
+        Value options:
+        + A specific value, for example, **200**
+        + A list of values that are separated with commas (,), for example, **200**, **202**
+        + A value range, for example, **200-204**
+        """
+        return pulumi.get(self, "expected_codes")
+
+    @expected_codes.setter
+    def expected_codes(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "expected_codes", value)
+
+    @property
+    @pulumi.getter(name="httpMethod")
+    def http_method(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the HTTP method. The value can be **GET**, **HEAD**, **POST**.
+        Default to **GET**. This parameter is available when `type` is set to **HTTP** or **HTTPS**.
+        """
+        return pulumi.get(self, "http_method")
+
+    @http_method.setter
+    def http_method(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "http_method", value)
+
+    @property
+    @pulumi.getter
+    def id(self) -> Optional[pulumi.Input[str]]:
+        """
+        The health check ID.
+        """
+        return pulumi.get(self, "id")
+
+    @id.setter
+    def id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "id", value)
+
+    @property
+    @pulumi.getter(name="maxRetriesDown")
+    def max_retries_down(self) -> Optional[pulumi.Input[int]]:
+        """
+        Specifies the number of consecutive health checks when the health check
+        result of a backend server changes from ONLINE to OFFLINE. The value range is from `1` to `10`. Defaults to `3`.
+        Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "max_retries_down")
+
+    @max_retries_down.setter
+    def max_retries_down(self, value: Optional[pulumi.Input[int]]):
+        pulumi.set(self, "max_retries_down", value)
+
+    @property
+    @pulumi.getter(name="monitorPort")
+    def monitor_port(self) -> Optional[pulumi.Input[int]]:
+        """
+        Specifies the port used for the health check. If this parameter is left
+        blank, a port of the backend server will be used by default. The value range is from `1` to `65,535`. Changing this
+        parameter will create a new resource.
+        """
+        return pulumi.get(self, "monitor_port")
+
+    @monitor_port.setter
+    def monitor_port(self, value: Optional[pulumi.Input[int]]):
+        pulumi.set(self, "monitor_port", value)
+
+    @property
+    @pulumi.getter
+    def name(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the health check name. The length range of value is from `1` to `255`.
+        Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "name")
+
+    @name.setter
+    def name(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "name", value)
+
+    @property
+    @pulumi.getter(name="urlPath")
+    def url_path(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the HTTP request path for the health check. The value must start
+        with a slash (/), and the default value is /. The value can contain letters, digits, hyphens (-), slashes (/),
+        periods (.), percentage signs (%), question marks (?), pound signs (#), ampersand signs (&), and the extended character
+        set **_;~!()*[]@$^:',+**. The length range of value is from `1` to `80`. Changing this parameter will create a new
+        resource.
+        """
+        return pulumi.get(self, "url_path")
+
+    @url_path.setter
+    def url_path(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "url_path", value)
+
+
+@pulumi.input_type
+class ActiveStandbyPoolMemberArgs:
+    def __init__(__self__, *,
+                 address: pulumi.Input[str],
+                 role: pulumi.Input[str],
+                 id: Optional[pulumi.Input[str]] = None,
+                 instance_id: Optional[pulumi.Input[str]] = None,
+                 ip_version: Optional[pulumi.Input[str]] = None,
+                 member_type: Optional[pulumi.Input[str]] = None,
+                 name: Optional[pulumi.Input[str]] = None,
+                 operating_status: Optional[pulumi.Input[str]] = None,
+                 protocol_port: Optional[pulumi.Input[int]] = None,
+                 subnet_id: Optional[pulumi.Input[str]] = None):
+        """
+        :param pulumi.Input[str] address: Specifies the private IP address bound to the member.
+               + If `subnet_id` is left blank, IP as a Backend is enabled. In this case, the IP address must be an **IPv4** address.
+               + If `subnet_id` is not left blank, the IP address can be **IPv4** or **IPv6**. It must be in the subnet specified
+               by `subnet_id` and can only be bound to the primary NIC of the backend server.
+        :param pulumi.Input[str] role: Specifies the type of the member. Value options:
+               + **master**: active backend server.
+               + **slave**: standby backend server.
+        :param pulumi.Input[str] id: The health check ID.
+        :param pulumi.Input[str] instance_id: The ID of the ECS used as the member.
+        :param pulumi.Input[str] ip_version: Specifies the IP address version supported by active-standby pool.
+               The value can be **dualstack**, **v6**, or **v4**. Changing this parameter will create a new resource.
+        :param pulumi.Input[str] member_type: The type of the member.
+        :param pulumi.Input[str] name: Specifies the health check name. The length range of value is from `1` to `255`.
+               Changing this parameter will create a new resource.
+        :param pulumi.Input[str] operating_status: The health status of the member.
+        :param pulumi.Input[int] protocol_port: Specifies the port used by the member to receive requests. It is mandatory
+               if `any_port_enable` is **false**, and it does not take effect if `any_port_enable` is set to **true**. The value range
+               is from `1` to `65,535`. Changing this parameter will create a new resource.
+        :param pulumi.Input[str] subnet_id: Specifies the ID of the IPv4 or IPv6 subnet where the member resides.
+               + The IPv4 or IPv6 subnet must be in the same VPC as the subnet of the load balancer.
+               + If this parameter is not passed, IP as a Backend has been enabled for the load balancer. In this case, IP as backend
+               servers must use private IPv4 addresses, and the protocol of the active-standby pool must be **TCP**, **HTTP**, or
+               **HTTPS**.
+        """
+        pulumi.set(__self__, "address", address)
+        pulumi.set(__self__, "role", role)
+        if id is not None:
+            pulumi.set(__self__, "id", id)
+        if instance_id is not None:
+            pulumi.set(__self__, "instance_id", instance_id)
+        if ip_version is not None:
+            pulumi.set(__self__, "ip_version", ip_version)
+        if member_type is not None:
+            pulumi.set(__self__, "member_type", member_type)
+        if name is not None:
+            pulumi.set(__self__, "name", name)
+        if operating_status is not None:
+            pulumi.set(__self__, "operating_status", operating_status)
+        if protocol_port is not None:
+            pulumi.set(__self__, "protocol_port", protocol_port)
+        if subnet_id is not None:
+            pulumi.set(__self__, "subnet_id", subnet_id)
+
+    @property
+    @pulumi.getter
+    def address(self) -> pulumi.Input[str]:
+        """
+        Specifies the private IP address bound to the member.
+        + If `subnet_id` is left blank, IP as a Backend is enabled. In this case, the IP address must be an **IPv4** address.
+        + If `subnet_id` is not left blank, the IP address can be **IPv4** or **IPv6**. It must be in the subnet specified
+        by `subnet_id` and can only be bound to the primary NIC of the backend server.
+        """
+        return pulumi.get(self, "address")
+
+    @address.setter
+    def address(self, value: pulumi.Input[str]):
+        pulumi.set(self, "address", value)
+
+    @property
+    @pulumi.getter
+    def role(self) -> pulumi.Input[str]:
+        """
+        Specifies the type of the member. Value options:
+        + **master**: active backend server.
+        + **slave**: standby backend server.
+        """
+        return pulumi.get(self, "role")
+
+    @role.setter
+    def role(self, value: pulumi.Input[str]):
+        pulumi.set(self, "role", value)
+
+    @property
+    @pulumi.getter
+    def id(self) -> Optional[pulumi.Input[str]]:
+        """
+        The health check ID.
+        """
+        return pulumi.get(self, "id")
+
+    @id.setter
+    def id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "id", value)
+
+    @property
+    @pulumi.getter(name="instanceId")
+    def instance_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        The ID of the ECS used as the member.
+        """
+        return pulumi.get(self, "instance_id")
+
+    @instance_id.setter
+    def instance_id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "instance_id", value)
+
+    @property
+    @pulumi.getter(name="ipVersion")
+    def ip_version(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the IP address version supported by active-standby pool.
+        The value can be **dualstack**, **v6**, or **v4**. Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "ip_version")
+
+    @ip_version.setter
+    def ip_version(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "ip_version", value)
+
+    @property
+    @pulumi.getter(name="memberType")
+    def member_type(self) -> Optional[pulumi.Input[str]]:
+        """
+        The type of the member.
+        """
+        return pulumi.get(self, "member_type")
+
+    @member_type.setter
+    def member_type(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "member_type", value)
+
+    @property
+    @pulumi.getter
+    def name(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the health check name. The length range of value is from `1` to `255`.
+        Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "name")
+
+    @name.setter
+    def name(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "name", value)
+
+    @property
+    @pulumi.getter(name="operatingStatus")
+    def operating_status(self) -> Optional[pulumi.Input[str]]:
+        """
+        The health status of the member.
+        """
+        return pulumi.get(self, "operating_status")
+
+    @operating_status.setter
+    def operating_status(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "operating_status", value)
+
+    @property
+    @pulumi.getter(name="protocolPort")
+    def protocol_port(self) -> Optional[pulumi.Input[int]]:
+        """
+        Specifies the port used by the member to receive requests. It is mandatory
+        if `any_port_enable` is **false**, and it does not take effect if `any_port_enable` is set to **true**. The value range
+        is from `1` to `65,535`. Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "protocol_port")
+
+    @protocol_port.setter
+    def protocol_port(self, value: Optional[pulumi.Input[int]]):
+        pulumi.set(self, "protocol_port", value)
+
+    @property
+    @pulumi.getter(name="subnetId")
+    def subnet_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the ID of the IPv4 or IPv6 subnet where the member resides.
+        + The IPv4 or IPv6 subnet must be in the same VPC as the subnet of the load balancer.
+        + If this parameter is not passed, IP as a Backend has been enabled for the load balancer. In this case, IP as backend
+        servers must use private IPv4 addresses, and the protocol of the active-standby pool must be **TCP**, **HTTP**, or
+        **HTTPS**.
+        """
+        return pulumi.get(self, "subnet_id")
+
+    @subnet_id.setter
+    def subnet_id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "subnet_id", value)
+
 
 @pulumi.input_type
 class IpgroupIpListArgs:
@@ -53,20 +526,1269 @@ class IpgroupIpListArgs:
 
 
 @pulumi.input_type
+class L7policyFixedResponseConfigArgs:
+    def __init__(__self__, *,
+                 status_code: pulumi.Input[str],
+                 content_type: Optional[pulumi.Input[str]] = None,
+                 insert_headers_config: Optional[pulumi.Input['L7policyFixedResponseConfigInsertHeadersConfigArgs']] = None,
+                 message_body: Optional[pulumi.Input[str]] = None,
+                 remove_headers_config: Optional[pulumi.Input['L7policyFixedResponseConfigRemoveHeadersConfigArgs']] = None,
+                 traffic_limit_config: Optional[pulumi.Input['L7policyFixedResponseConfigTrafficLimitConfigArgs']] = None):
+        """
+        :param pulumi.Input[str] status_code: The fixed HTTP status code configured in the forwarding rule. The value can be
+               any integer in the range of **200–299**, **400–499**, or **500–599**.
+        :param pulumi.Input[str] content_type: The format of the response body. Value options: **text/plain**, **text/css**,
+               **text/html**, **application/javascript**, or **application/json**. Defaults to: **text/plain**.
+        :param pulumi.Input['L7policyFixedResponseConfigInsertHeadersConfigArgs'] insert_headers_config: The header parameters to be added.
+               The insert_headers_config structure is documented below.
+        :param pulumi.Input[str] message_body: The content of the response message body.
+        :param pulumi.Input['L7policyFixedResponseConfigRemoveHeadersConfigArgs'] remove_headers_config: The header parameters to be removed.
+               The remove_headers_config structure is documented below.
+        :param pulumi.Input['L7policyFixedResponseConfigTrafficLimitConfigArgs'] traffic_limit_config: The traffic limit config of the policy.
+               The traffic_limit_config structure is documented below.
+        """
+        pulumi.set(__self__, "status_code", status_code)
+        if content_type is not None:
+            pulumi.set(__self__, "content_type", content_type)
+        if insert_headers_config is not None:
+            pulumi.set(__self__, "insert_headers_config", insert_headers_config)
+        if message_body is not None:
+            pulumi.set(__self__, "message_body", message_body)
+        if remove_headers_config is not None:
+            pulumi.set(__self__, "remove_headers_config", remove_headers_config)
+        if traffic_limit_config is not None:
+            pulumi.set(__self__, "traffic_limit_config", traffic_limit_config)
+
+    @property
+    @pulumi.getter(name="statusCode")
+    def status_code(self) -> pulumi.Input[str]:
+        """
+        The fixed HTTP status code configured in the forwarding rule. The value can be
+        any integer in the range of **200–299**, **400–499**, or **500–599**.
+        """
+        return pulumi.get(self, "status_code")
+
+    @status_code.setter
+    def status_code(self, value: pulumi.Input[str]):
+        pulumi.set(self, "status_code", value)
+
+    @property
+    @pulumi.getter(name="contentType")
+    def content_type(self) -> Optional[pulumi.Input[str]]:
+        """
+        The format of the response body. Value options: **text/plain**, **text/css**,
+        **text/html**, **application/javascript**, or **application/json**. Defaults to: **text/plain**.
+        """
+        return pulumi.get(self, "content_type")
+
+    @content_type.setter
+    def content_type(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "content_type", value)
+
+    @property
+    @pulumi.getter(name="insertHeadersConfig")
+    def insert_headers_config(self) -> Optional[pulumi.Input['L7policyFixedResponseConfigInsertHeadersConfigArgs']]:
+        """
+        The header parameters to be added.
+        The insert_headers_config structure is documented below.
+        """
+        return pulumi.get(self, "insert_headers_config")
+
+    @insert_headers_config.setter
+    def insert_headers_config(self, value: Optional[pulumi.Input['L7policyFixedResponseConfigInsertHeadersConfigArgs']]):
+        pulumi.set(self, "insert_headers_config", value)
+
+    @property
+    @pulumi.getter(name="messageBody")
+    def message_body(self) -> Optional[pulumi.Input[str]]:
+        """
+        The content of the response message body.
+        """
+        return pulumi.get(self, "message_body")
+
+    @message_body.setter
+    def message_body(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "message_body", value)
+
+    @property
+    @pulumi.getter(name="removeHeadersConfig")
+    def remove_headers_config(self) -> Optional[pulumi.Input['L7policyFixedResponseConfigRemoveHeadersConfigArgs']]:
+        """
+        The header parameters to be removed.
+        The remove_headers_config structure is documented below.
+        """
+        return pulumi.get(self, "remove_headers_config")
+
+    @remove_headers_config.setter
+    def remove_headers_config(self, value: Optional[pulumi.Input['L7policyFixedResponseConfigRemoveHeadersConfigArgs']]):
+        pulumi.set(self, "remove_headers_config", value)
+
+    @property
+    @pulumi.getter(name="trafficLimitConfig")
+    def traffic_limit_config(self) -> Optional[pulumi.Input['L7policyFixedResponseConfigTrafficLimitConfigArgs']]:
+        """
+        The traffic limit config of the policy.
+        The traffic_limit_config structure is documented below.
+        """
+        return pulumi.get(self, "traffic_limit_config")
+
+    @traffic_limit_config.setter
+    def traffic_limit_config(self, value: Optional[pulumi.Input['L7policyFixedResponseConfigTrafficLimitConfigArgs']]):
+        pulumi.set(self, "traffic_limit_config", value)
+
+
+@pulumi.input_type
+class L7policyFixedResponseConfigInsertHeadersConfigArgs:
+    def __init__(__self__, *,
+                 configs: pulumi.Input[Sequence[pulumi.Input['L7policyFixedResponseConfigInsertHeadersConfigConfigArgs']]]):
+        """
+        :param pulumi.Input[Sequence[pulumi.Input['L7policyFixedResponseConfigInsertHeadersConfigConfigArgs']]] configs: The list of request header parameters to be removed.
+               The remove_header_configs structure is documented below.
+        """
+        pulumi.set(__self__, "configs", configs)
+
+    @property
+    @pulumi.getter
+    def configs(self) -> pulumi.Input[Sequence[pulumi.Input['L7policyFixedResponseConfigInsertHeadersConfigConfigArgs']]]:
+        """
+        The list of request header parameters to be removed.
+        The remove_header_configs structure is documented below.
+        """
+        return pulumi.get(self, "configs")
+
+    @configs.setter
+    def configs(self, value: pulumi.Input[Sequence[pulumi.Input['L7policyFixedResponseConfigInsertHeadersConfigConfigArgs']]]):
+        pulumi.set(self, "configs", value)
+
+
+@pulumi.input_type
+class L7policyFixedResponseConfigInsertHeadersConfigConfigArgs:
+    def __init__(__self__, *,
+                 key: pulumi.Input[str],
+                 value: pulumi.Input[str],
+                 value_type: pulumi.Input[str]):
+        """
+        :param pulumi.Input[str] key: The parameter name of the removed request header. The value can contain `1` to `40`
+               characters, only a-z, digits, hyphens (-) and underscore (_) are allowed, and it can not be the following characters:
+               **connection**, **upgrade**, **content-length**, **transfer-encoding**, **keep-alive**, **te**, **host**, **cookie**,
+               **remoteip**, **authority**, **x-forwarded-host**, **x-forwarded-for**, **x-forwarded-for-port**,
+               **x-forwarded-tls-certificate-id**, **x-forwarded-tls-protocol**, **x-forwarded-tls-cipher**, **x-forwarded-elb-ip**,
+               **x-forwarded-port**, **x-forwarded-elb-id**, **x-forwarded-elb-vip**, **x-real-ip**, **x-forwarded-proto**,
+               **x-nuwa-trace-ne-in**, **x-nuwa-trace-ne-out**.
+        :param pulumi.Input[str] value: The value of the parameter. The value can contain `1` to `128`, only printable
+               characters in the range of ASCII code value 32<=ch<=127, asterisks (*) and question marks (?) are allowed, and it
+               cannot start or end with a space characters. If the value of `value_type` is **SYSTEM_DEFINED**, the value options is:
+               **CLIENT-PORT**, **CLIENT-IP**, **ELB-PROTOCOL**, **ELB-ID**, **ELB-PORT**, **ELB-EIP**, **ELB-VIP**.
+        :param pulumi.Input[str] value_type: The value type of the parameter. Value options: **USER_DEFINED**,
+               **REFERENCE_HEADER**, **SYSTEM_DEFINED**.
+        """
+        pulumi.set(__self__, "key", key)
+        pulumi.set(__self__, "value", value)
+        pulumi.set(__self__, "value_type", value_type)
+
+    @property
+    @pulumi.getter
+    def key(self) -> pulumi.Input[str]:
+        """
+        The parameter name of the removed request header. The value can contain `1` to `40`
+        characters, only a-z, digits, hyphens (-) and underscore (_) are allowed, and it can not be the following characters:
+        **connection**, **upgrade**, **content-length**, **transfer-encoding**, **keep-alive**, **te**, **host**, **cookie**,
+        **remoteip**, **authority**, **x-forwarded-host**, **x-forwarded-for**, **x-forwarded-for-port**,
+        **x-forwarded-tls-certificate-id**, **x-forwarded-tls-protocol**, **x-forwarded-tls-cipher**, **x-forwarded-elb-ip**,
+        **x-forwarded-port**, **x-forwarded-elb-id**, **x-forwarded-elb-vip**, **x-real-ip**, **x-forwarded-proto**,
+        **x-nuwa-trace-ne-in**, **x-nuwa-trace-ne-out**.
+        """
+        return pulumi.get(self, "key")
+
+    @key.setter
+    def key(self, value: pulumi.Input[str]):
+        pulumi.set(self, "key", value)
+
+    @property
+    @pulumi.getter
+    def value(self) -> pulumi.Input[str]:
+        """
+        The value of the parameter. The value can contain `1` to `128`, only printable
+        characters in the range of ASCII code value 32<=ch<=127, asterisks (*) and question marks (?) are allowed, and it
+        cannot start or end with a space characters. If the value of `value_type` is **SYSTEM_DEFINED**, the value options is:
+        **CLIENT-PORT**, **CLIENT-IP**, **ELB-PROTOCOL**, **ELB-ID**, **ELB-PORT**, **ELB-EIP**, **ELB-VIP**.
+        """
+        return pulumi.get(self, "value")
+
+    @value.setter
+    def value(self, value: pulumi.Input[str]):
+        pulumi.set(self, "value", value)
+
+    @property
+    @pulumi.getter(name="valueType")
+    def value_type(self) -> pulumi.Input[str]:
+        """
+        The value type of the parameter. Value options: **USER_DEFINED**,
+        **REFERENCE_HEADER**, **SYSTEM_DEFINED**.
+        """
+        return pulumi.get(self, "value_type")
+
+    @value_type.setter
+    def value_type(self, value: pulumi.Input[str]):
+        pulumi.set(self, "value_type", value)
+
+
+@pulumi.input_type
+class L7policyFixedResponseConfigRemoveHeadersConfigArgs:
+    def __init__(__self__, *,
+                 configs: pulumi.Input[Sequence[pulumi.Input['L7policyFixedResponseConfigRemoveHeadersConfigConfigArgs']]]):
+        """
+        :param pulumi.Input[Sequence[pulumi.Input['L7policyFixedResponseConfigRemoveHeadersConfigConfigArgs']]] configs: The list of request header parameters to be removed.
+               The remove_header_configs structure is documented below.
+        """
+        pulumi.set(__self__, "configs", configs)
+
+    @property
+    @pulumi.getter
+    def configs(self) -> pulumi.Input[Sequence[pulumi.Input['L7policyFixedResponseConfigRemoveHeadersConfigConfigArgs']]]:
+        """
+        The list of request header parameters to be removed.
+        The remove_header_configs structure is documented below.
+        """
+        return pulumi.get(self, "configs")
+
+    @configs.setter
+    def configs(self, value: pulumi.Input[Sequence[pulumi.Input['L7policyFixedResponseConfigRemoveHeadersConfigConfigArgs']]]):
+        pulumi.set(self, "configs", value)
+
+
+@pulumi.input_type
+class L7policyFixedResponseConfigRemoveHeadersConfigConfigArgs:
+    def __init__(__self__, *,
+                 key: pulumi.Input[str]):
+        """
+        :param pulumi.Input[str] key: The parameter name of the removed request header. The value can contain `1` to `40`
+               characters, only a-z, digits, hyphens (-) and underscore (_) are allowed, and it can not be the following characters:
+               **connection**, **upgrade**, **content-length**, **transfer-encoding**, **keep-alive**, **te**, **host**, **cookie**,
+               **remoteip**, **authority**, **x-forwarded-host**, **x-forwarded-for**, **x-forwarded-for-port**,
+               **x-forwarded-tls-certificate-id**, **x-forwarded-tls-protocol**, **x-forwarded-tls-cipher**, **x-forwarded-elb-ip**,
+               **x-forwarded-port**, **x-forwarded-elb-id**, **x-forwarded-elb-vip**, **x-real-ip**, **x-forwarded-proto**,
+               **x-nuwa-trace-ne-in**, **x-nuwa-trace-ne-out**.
+        """
+        pulumi.set(__self__, "key", key)
+
+    @property
+    @pulumi.getter
+    def key(self) -> pulumi.Input[str]:
+        """
+        The parameter name of the removed request header. The value can contain `1` to `40`
+        characters, only a-z, digits, hyphens (-) and underscore (_) are allowed, and it can not be the following characters:
+        **connection**, **upgrade**, **content-length**, **transfer-encoding**, **keep-alive**, **te**, **host**, **cookie**,
+        **remoteip**, **authority**, **x-forwarded-host**, **x-forwarded-for**, **x-forwarded-for-port**,
+        **x-forwarded-tls-certificate-id**, **x-forwarded-tls-protocol**, **x-forwarded-tls-cipher**, **x-forwarded-elb-ip**,
+        **x-forwarded-port**, **x-forwarded-elb-id**, **x-forwarded-elb-vip**, **x-real-ip**, **x-forwarded-proto**,
+        **x-nuwa-trace-ne-in**, **x-nuwa-trace-ne-out**.
+        """
+        return pulumi.get(self, "key")
+
+    @key.setter
+    def key(self, value: pulumi.Input[str]):
+        pulumi.set(self, "key", value)
+
+
+@pulumi.input_type
+class L7policyFixedResponseConfigTrafficLimitConfigArgs:
+    def __init__(__self__, *,
+                 burst: Optional[pulumi.Input[int]] = None,
+                 per_source_ip_qps: Optional[pulumi.Input[int]] = None,
+                 qps: Optional[pulumi.Input[int]] = None):
+        """
+        :param pulumi.Input[int] burst: The qps buffer.  
+               The valid value is range form `0` to `100,000`. When qps exceeds the limit, 503 will not be
+               returned, and requests that allow local burst size increases are supported.
+        :param pulumi.Input[int] per_source_ip_qps: The single source qps of the policy.  
+               The valid value is range form `0` to `100,000`, `0` indicates no limit.
+               If the value of `qps` is not `0`, then the value of `per_source_ip_qps` must less than the value of `qps`.
+               If the `protocol` of the listener that the policy associated with is **QUIC**, then `per_source_ip_qps` is not
+               supported, the value should be `0` or empty.
+        :param pulumi.Input[int] qps: The overall qps of the policy.  
+               The valid value is range form `0` to `100,000`, `0` indicates no limit.
+        """
+        if burst is not None:
+            pulumi.set(__self__, "burst", burst)
+        if per_source_ip_qps is not None:
+            pulumi.set(__self__, "per_source_ip_qps", per_source_ip_qps)
+        if qps is not None:
+            pulumi.set(__self__, "qps", qps)
+
+    @property
+    @pulumi.getter
+    def burst(self) -> Optional[pulumi.Input[int]]:
+        """
+        The qps buffer.  
+        The valid value is range form `0` to `100,000`. When qps exceeds the limit, 503 will not be
+        returned, and requests that allow local burst size increases are supported.
+        """
+        return pulumi.get(self, "burst")
+
+    @burst.setter
+    def burst(self, value: Optional[pulumi.Input[int]]):
+        pulumi.set(self, "burst", value)
+
+    @property
+    @pulumi.getter(name="perSourceIpQps")
+    def per_source_ip_qps(self) -> Optional[pulumi.Input[int]]:
+        """
+        The single source qps of the policy.  
+        The valid value is range form `0` to `100,000`, `0` indicates no limit.
+        If the value of `qps` is not `0`, then the value of `per_source_ip_qps` must less than the value of `qps`.
+        If the `protocol` of the listener that the policy associated with is **QUIC**, then `per_source_ip_qps` is not
+        supported, the value should be `0` or empty.
+        """
+        return pulumi.get(self, "per_source_ip_qps")
+
+    @per_source_ip_qps.setter
+    def per_source_ip_qps(self, value: Optional[pulumi.Input[int]]):
+        pulumi.set(self, "per_source_ip_qps", value)
+
+    @property
+    @pulumi.getter
+    def qps(self) -> Optional[pulumi.Input[int]]:
+        """
+        The overall qps of the policy.  
+        The valid value is range form `0` to `100,000`, `0` indicates no limit.
+        """
+        return pulumi.get(self, "qps")
+
+    @qps.setter
+    def qps(self, value: Optional[pulumi.Input[int]]):
+        pulumi.set(self, "qps", value)
+
+
+@pulumi.input_type
+class L7policyRedirectPoolsConfigArgs:
+    def __init__(__self__, *,
+                 pool_id: pulumi.Input[str],
+                 weight: Optional[pulumi.Input[int]] = None):
+        """
+        :param pulumi.Input[str] pool_id: The ID of the backend server group.
+        :param pulumi.Input[int] weight: The weight of the backend server group.
+        """
+        pulumi.set(__self__, "pool_id", pool_id)
+        if weight is not None:
+            pulumi.set(__self__, "weight", weight)
+
+    @property
+    @pulumi.getter(name="poolId")
+    def pool_id(self) -> pulumi.Input[str]:
+        """
+        The ID of the backend server group.
+        """
+        return pulumi.get(self, "pool_id")
+
+    @pool_id.setter
+    def pool_id(self, value: pulumi.Input[str]):
+        pulumi.set(self, "pool_id", value)
+
+    @property
+    @pulumi.getter
+    def weight(self) -> Optional[pulumi.Input[int]]:
+        """
+        The weight of the backend server group.
+        """
+        return pulumi.get(self, "weight")
+
+    @weight.setter
+    def weight(self, value: Optional[pulumi.Input[int]]):
+        pulumi.set(self, "weight", value)
+
+
+@pulumi.input_type
+class L7policyRedirectPoolsExtendConfigArgs:
+    def __init__(__self__, *,
+                 insert_headers_config: Optional[pulumi.Input['L7policyRedirectPoolsExtendConfigInsertHeadersConfigArgs']] = None,
+                 remove_headers_config: Optional[pulumi.Input['L7policyRedirectPoolsExtendConfigRemoveHeadersConfigArgs']] = None,
+                 rewrite_url_config: Optional[pulumi.Input['L7policyRedirectPoolsExtendConfigRewriteUrlConfigArgs']] = None,
+                 rewrite_url_enabled: Optional[pulumi.Input[bool]] = None,
+                 traffic_limit_config: Optional[pulumi.Input['L7policyRedirectPoolsExtendConfigTrafficLimitConfigArgs']] = None):
+        """
+        :param pulumi.Input['L7policyRedirectPoolsExtendConfigInsertHeadersConfigArgs'] insert_headers_config: The header parameters to be added.
+               The insert_headers_config structure is documented below.
+        :param pulumi.Input['L7policyRedirectPoolsExtendConfigRemoveHeadersConfigArgs'] remove_headers_config: The header parameters to be removed.
+               The remove_headers_config structure is documented below.
+        :param pulumi.Input['L7policyRedirectPoolsExtendConfigRewriteUrlConfigArgs'] rewrite_url_config: The rewrite url config. This parameter is mandatory when `rewrite_url_enabled`
+               is set to **true**.
+               The rewrite_url_config structure is documented below.
+        :param pulumi.Input[bool] rewrite_url_enabled: Whether the rewrite url is enabled.
+        :param pulumi.Input['L7policyRedirectPoolsExtendConfigTrafficLimitConfigArgs'] traffic_limit_config: The traffic limit config of the policy.
+               The traffic_limit_config structure is documented below.
+        """
+        if insert_headers_config is not None:
+            pulumi.set(__self__, "insert_headers_config", insert_headers_config)
+        if remove_headers_config is not None:
+            pulumi.set(__self__, "remove_headers_config", remove_headers_config)
+        if rewrite_url_config is not None:
+            pulumi.set(__self__, "rewrite_url_config", rewrite_url_config)
+        if rewrite_url_enabled is not None:
+            pulumi.set(__self__, "rewrite_url_enabled", rewrite_url_enabled)
+        if traffic_limit_config is not None:
+            pulumi.set(__self__, "traffic_limit_config", traffic_limit_config)
+
+    @property
+    @pulumi.getter(name="insertHeadersConfig")
+    def insert_headers_config(self) -> Optional[pulumi.Input['L7policyRedirectPoolsExtendConfigInsertHeadersConfigArgs']]:
+        """
+        The header parameters to be added.
+        The insert_headers_config structure is documented below.
+        """
+        return pulumi.get(self, "insert_headers_config")
+
+    @insert_headers_config.setter
+    def insert_headers_config(self, value: Optional[pulumi.Input['L7policyRedirectPoolsExtendConfigInsertHeadersConfigArgs']]):
+        pulumi.set(self, "insert_headers_config", value)
+
+    @property
+    @pulumi.getter(name="removeHeadersConfig")
+    def remove_headers_config(self) -> Optional[pulumi.Input['L7policyRedirectPoolsExtendConfigRemoveHeadersConfigArgs']]:
+        """
+        The header parameters to be removed.
+        The remove_headers_config structure is documented below.
+        """
+        return pulumi.get(self, "remove_headers_config")
+
+    @remove_headers_config.setter
+    def remove_headers_config(self, value: Optional[pulumi.Input['L7policyRedirectPoolsExtendConfigRemoveHeadersConfigArgs']]):
+        pulumi.set(self, "remove_headers_config", value)
+
+    @property
+    @pulumi.getter(name="rewriteUrlConfig")
+    def rewrite_url_config(self) -> Optional[pulumi.Input['L7policyRedirectPoolsExtendConfigRewriteUrlConfigArgs']]:
+        """
+        The rewrite url config. This parameter is mandatory when `rewrite_url_enabled`
+        is set to **true**.
+        The rewrite_url_config structure is documented below.
+        """
+        return pulumi.get(self, "rewrite_url_config")
+
+    @rewrite_url_config.setter
+    def rewrite_url_config(self, value: Optional[pulumi.Input['L7policyRedirectPoolsExtendConfigRewriteUrlConfigArgs']]):
+        pulumi.set(self, "rewrite_url_config", value)
+
+    @property
+    @pulumi.getter(name="rewriteUrlEnabled")
+    def rewrite_url_enabled(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Whether the rewrite url is enabled.
+        """
+        return pulumi.get(self, "rewrite_url_enabled")
+
+    @rewrite_url_enabled.setter
+    def rewrite_url_enabled(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "rewrite_url_enabled", value)
+
+    @property
+    @pulumi.getter(name="trafficLimitConfig")
+    def traffic_limit_config(self) -> Optional[pulumi.Input['L7policyRedirectPoolsExtendConfigTrafficLimitConfigArgs']]:
+        """
+        The traffic limit config of the policy.
+        The traffic_limit_config structure is documented below.
+        """
+        return pulumi.get(self, "traffic_limit_config")
+
+    @traffic_limit_config.setter
+    def traffic_limit_config(self, value: Optional[pulumi.Input['L7policyRedirectPoolsExtendConfigTrafficLimitConfigArgs']]):
+        pulumi.set(self, "traffic_limit_config", value)
+
+
+@pulumi.input_type
+class L7policyRedirectPoolsExtendConfigInsertHeadersConfigArgs:
+    def __init__(__self__, *,
+                 configs: pulumi.Input[Sequence[pulumi.Input['L7policyRedirectPoolsExtendConfigInsertHeadersConfigConfigArgs']]]):
+        """
+        :param pulumi.Input[Sequence[pulumi.Input['L7policyRedirectPoolsExtendConfigInsertHeadersConfigConfigArgs']]] configs: The list of request header parameters to be removed.
+               The remove_header_configs structure is documented below.
+        """
+        pulumi.set(__self__, "configs", configs)
+
+    @property
+    @pulumi.getter
+    def configs(self) -> pulumi.Input[Sequence[pulumi.Input['L7policyRedirectPoolsExtendConfigInsertHeadersConfigConfigArgs']]]:
+        """
+        The list of request header parameters to be removed.
+        The remove_header_configs structure is documented below.
+        """
+        return pulumi.get(self, "configs")
+
+    @configs.setter
+    def configs(self, value: pulumi.Input[Sequence[pulumi.Input['L7policyRedirectPoolsExtendConfigInsertHeadersConfigConfigArgs']]]):
+        pulumi.set(self, "configs", value)
+
+
+@pulumi.input_type
+class L7policyRedirectPoolsExtendConfigInsertHeadersConfigConfigArgs:
+    def __init__(__self__, *,
+                 key: pulumi.Input[str],
+                 value: pulumi.Input[str],
+                 value_type: pulumi.Input[str]):
+        """
+        :param pulumi.Input[str] key: The parameter name of the removed request header. The value can contain `1` to `40`
+               characters, only a-z, digits, hyphens (-) and underscore (_) are allowed, and it can not be the following characters:
+               **connection**, **upgrade**, **content-length**, **transfer-encoding**, **keep-alive**, **te**, **host**, **cookie**,
+               **remoteip**, **authority**, **x-forwarded-host**, **x-forwarded-for**, **x-forwarded-for-port**,
+               **x-forwarded-tls-certificate-id**, **x-forwarded-tls-protocol**, **x-forwarded-tls-cipher**, **x-forwarded-elb-ip**,
+               **x-forwarded-port**, **x-forwarded-elb-id**, **x-forwarded-elb-vip**, **x-real-ip**, **x-forwarded-proto**,
+               **x-nuwa-trace-ne-in**, **x-nuwa-trace-ne-out**.
+        :param pulumi.Input[str] value: The value of the parameter. The value can contain `1` to `128`, only printable
+               characters in the range of ASCII code value 32<=ch<=127, asterisks (*) and question marks (?) are allowed, and it
+               cannot start or end with a space characters. If the value of `value_type` is **SYSTEM_DEFINED**, the value options is:
+               **CLIENT-PORT**, **CLIENT-IP**, **ELB-PROTOCOL**, **ELB-ID**, **ELB-PORT**, **ELB-EIP**, **ELB-VIP**.
+        :param pulumi.Input[str] value_type: The value type of the parameter. Value options: **USER_DEFINED**,
+               **REFERENCE_HEADER**, **SYSTEM_DEFINED**.
+        """
+        pulumi.set(__self__, "key", key)
+        pulumi.set(__self__, "value", value)
+        pulumi.set(__self__, "value_type", value_type)
+
+    @property
+    @pulumi.getter
+    def key(self) -> pulumi.Input[str]:
+        """
+        The parameter name of the removed request header. The value can contain `1` to `40`
+        characters, only a-z, digits, hyphens (-) and underscore (_) are allowed, and it can not be the following characters:
+        **connection**, **upgrade**, **content-length**, **transfer-encoding**, **keep-alive**, **te**, **host**, **cookie**,
+        **remoteip**, **authority**, **x-forwarded-host**, **x-forwarded-for**, **x-forwarded-for-port**,
+        **x-forwarded-tls-certificate-id**, **x-forwarded-tls-protocol**, **x-forwarded-tls-cipher**, **x-forwarded-elb-ip**,
+        **x-forwarded-port**, **x-forwarded-elb-id**, **x-forwarded-elb-vip**, **x-real-ip**, **x-forwarded-proto**,
+        **x-nuwa-trace-ne-in**, **x-nuwa-trace-ne-out**.
+        """
+        return pulumi.get(self, "key")
+
+    @key.setter
+    def key(self, value: pulumi.Input[str]):
+        pulumi.set(self, "key", value)
+
+    @property
+    @pulumi.getter
+    def value(self) -> pulumi.Input[str]:
+        """
+        The value of the parameter. The value can contain `1` to `128`, only printable
+        characters in the range of ASCII code value 32<=ch<=127, asterisks (*) and question marks (?) are allowed, and it
+        cannot start or end with a space characters. If the value of `value_type` is **SYSTEM_DEFINED**, the value options is:
+        **CLIENT-PORT**, **CLIENT-IP**, **ELB-PROTOCOL**, **ELB-ID**, **ELB-PORT**, **ELB-EIP**, **ELB-VIP**.
+        """
+        return pulumi.get(self, "value")
+
+    @value.setter
+    def value(self, value: pulumi.Input[str]):
+        pulumi.set(self, "value", value)
+
+    @property
+    @pulumi.getter(name="valueType")
+    def value_type(self) -> pulumi.Input[str]:
+        """
+        The value type of the parameter. Value options: **USER_DEFINED**,
+        **REFERENCE_HEADER**, **SYSTEM_DEFINED**.
+        """
+        return pulumi.get(self, "value_type")
+
+    @value_type.setter
+    def value_type(self, value: pulumi.Input[str]):
+        pulumi.set(self, "value_type", value)
+
+
+@pulumi.input_type
+class L7policyRedirectPoolsExtendConfigRemoveHeadersConfigArgs:
+    def __init__(__self__, *,
+                 configs: pulumi.Input[Sequence[pulumi.Input['L7policyRedirectPoolsExtendConfigRemoveHeadersConfigConfigArgs']]]):
+        """
+        :param pulumi.Input[Sequence[pulumi.Input['L7policyRedirectPoolsExtendConfigRemoveHeadersConfigConfigArgs']]] configs: The list of request header parameters to be removed.
+               The remove_header_configs structure is documented below.
+        """
+        pulumi.set(__self__, "configs", configs)
+
+    @property
+    @pulumi.getter
+    def configs(self) -> pulumi.Input[Sequence[pulumi.Input['L7policyRedirectPoolsExtendConfigRemoveHeadersConfigConfigArgs']]]:
+        """
+        The list of request header parameters to be removed.
+        The remove_header_configs structure is documented below.
+        """
+        return pulumi.get(self, "configs")
+
+    @configs.setter
+    def configs(self, value: pulumi.Input[Sequence[pulumi.Input['L7policyRedirectPoolsExtendConfigRemoveHeadersConfigConfigArgs']]]):
+        pulumi.set(self, "configs", value)
+
+
+@pulumi.input_type
+class L7policyRedirectPoolsExtendConfigRemoveHeadersConfigConfigArgs:
+    def __init__(__self__, *,
+                 key: pulumi.Input[str]):
+        """
+        :param pulumi.Input[str] key: The parameter name of the removed request header. The value can contain `1` to `40`
+               characters, only a-z, digits, hyphens (-) and underscore (_) are allowed, and it can not be the following characters:
+               **connection**, **upgrade**, **content-length**, **transfer-encoding**, **keep-alive**, **te**, **host**, **cookie**,
+               **remoteip**, **authority**, **x-forwarded-host**, **x-forwarded-for**, **x-forwarded-for-port**,
+               **x-forwarded-tls-certificate-id**, **x-forwarded-tls-protocol**, **x-forwarded-tls-cipher**, **x-forwarded-elb-ip**,
+               **x-forwarded-port**, **x-forwarded-elb-id**, **x-forwarded-elb-vip**, **x-real-ip**, **x-forwarded-proto**,
+               **x-nuwa-trace-ne-in**, **x-nuwa-trace-ne-out**.
+        """
+        pulumi.set(__self__, "key", key)
+
+    @property
+    @pulumi.getter
+    def key(self) -> pulumi.Input[str]:
+        """
+        The parameter name of the removed request header. The value can contain `1` to `40`
+        characters, only a-z, digits, hyphens (-) and underscore (_) are allowed, and it can not be the following characters:
+        **connection**, **upgrade**, **content-length**, **transfer-encoding**, **keep-alive**, **te**, **host**, **cookie**,
+        **remoteip**, **authority**, **x-forwarded-host**, **x-forwarded-for**, **x-forwarded-for-port**,
+        **x-forwarded-tls-certificate-id**, **x-forwarded-tls-protocol**, **x-forwarded-tls-cipher**, **x-forwarded-elb-ip**,
+        **x-forwarded-port**, **x-forwarded-elb-id**, **x-forwarded-elb-vip**, **x-real-ip**, **x-forwarded-proto**,
+        **x-nuwa-trace-ne-in**, **x-nuwa-trace-ne-out**.
+        """
+        return pulumi.get(self, "key")
+
+    @key.setter
+    def key(self, value: pulumi.Input[str]):
+        pulumi.set(self, "key", value)
+
+
+@pulumi.input_type
+class L7policyRedirectPoolsExtendConfigRewriteUrlConfigArgs:
+    def __init__(__self__, *,
+                 host: Optional[pulumi.Input[str]] = None,
+                 path: Optional[pulumi.Input[str]] = None,
+                 query: Optional[pulumi.Input[str]] = None):
+        """
+        :param pulumi.Input[str] host: The host name that requests are redirected to. The value can contain only letters,
+               digits, hyphens (-), and periods (.) and must start with a letter or digit. Defaults to **${host}**, indicating
+               that the host of the request will be used.
+        :param pulumi.Input[str] path: The path that requests are redirected to. The value can contain only letters, digits,
+               and special characters _~';@^- %#&$.*+?,=!:|/()[]{} and must start with a slash (/).
+               Defaults to **${path}**, indicating that the path of the request will be used.
+        :param pulumi.Input[str] query: The query string set in the URL for redirection. The value is case-sensitive and can
+               contain only letters, digits, and special characters !$&'()*+,-./:;=?@^_\\`. Defaults to **${query}**, indicating that
+               the query string of the request will be used.
+               For example, in the URL `https://www.xxx.com:8080/elb?type=loadbalancer`, **${query}** indicates **type=loadbalancer**.
+               If this parameter is set to **${query}&name=my_name**, the URL will be redirected to
+               URL `https://www.xxx.com:8080/elb?type=loadbalancer&name=my_name`.
+        """
+        if host is not None:
+            pulumi.set(__self__, "host", host)
+        if path is not None:
+            pulumi.set(__self__, "path", path)
+        if query is not None:
+            pulumi.set(__self__, "query", query)
+
+    @property
+    @pulumi.getter
+    def host(self) -> Optional[pulumi.Input[str]]:
+        """
+        The host name that requests are redirected to. The value can contain only letters,
+        digits, hyphens (-), and periods (.) and must start with a letter or digit. Defaults to **${host}**, indicating
+        that the host of the request will be used.
+        """
+        return pulumi.get(self, "host")
+
+    @host.setter
+    def host(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "host", value)
+
+    @property
+    @pulumi.getter
+    def path(self) -> Optional[pulumi.Input[str]]:
+        """
+        The path that requests are redirected to. The value can contain only letters, digits,
+        and special characters _~';@^- %#&$.*+?,=!:|/()[]{} and must start with a slash (/).
+        Defaults to **${path}**, indicating that the path of the request will be used.
+        """
+        return pulumi.get(self, "path")
+
+    @path.setter
+    def path(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "path", value)
+
+    @property
+    @pulumi.getter
+    def query(self) -> Optional[pulumi.Input[str]]:
+        """
+        The query string set in the URL for redirection. The value is case-sensitive and can
+        contain only letters, digits, and special characters !$&'()*+,-./:;=?@^_\\`. Defaults to **${query}**, indicating that
+        the query string of the request will be used.
+        For example, in the URL `https://www.xxx.com:8080/elb?type=loadbalancer`, **${query}** indicates **type=loadbalancer**.
+        If this parameter is set to **${query}&name=my_name**, the URL will be redirected to
+        URL `https://www.xxx.com:8080/elb?type=loadbalancer&name=my_name`.
+        """
+        return pulumi.get(self, "query")
+
+    @query.setter
+    def query(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "query", value)
+
+
+@pulumi.input_type
+class L7policyRedirectPoolsExtendConfigTrafficLimitConfigArgs:
+    def __init__(__self__, *,
+                 burst: Optional[pulumi.Input[int]] = None,
+                 per_source_ip_qps: Optional[pulumi.Input[int]] = None,
+                 qps: Optional[pulumi.Input[int]] = None):
+        """
+        :param pulumi.Input[int] burst: The qps buffer.  
+               The valid value is range form `0` to `100,000`. When qps exceeds the limit, 503 will not be
+               returned, and requests that allow local burst size increases are supported.
+        :param pulumi.Input[int] per_source_ip_qps: The single source qps of the policy.  
+               The valid value is range form `0` to `100,000`, `0` indicates no limit.
+               If the value of `qps` is not `0`, then the value of `per_source_ip_qps` must less than the value of `qps`.
+               If the `protocol` of the listener that the policy associated with is **QUIC**, then `per_source_ip_qps` is not
+               supported, the value should be `0` or empty.
+        :param pulumi.Input[int] qps: The overall qps of the policy.  
+               The valid value is range form `0` to `100,000`, `0` indicates no limit.
+        """
+        if burst is not None:
+            pulumi.set(__self__, "burst", burst)
+        if per_source_ip_qps is not None:
+            pulumi.set(__self__, "per_source_ip_qps", per_source_ip_qps)
+        if qps is not None:
+            pulumi.set(__self__, "qps", qps)
+
+    @property
+    @pulumi.getter
+    def burst(self) -> Optional[pulumi.Input[int]]:
+        """
+        The qps buffer.  
+        The valid value is range form `0` to `100,000`. When qps exceeds the limit, 503 will not be
+        returned, and requests that allow local burst size increases are supported.
+        """
+        return pulumi.get(self, "burst")
+
+    @burst.setter
+    def burst(self, value: Optional[pulumi.Input[int]]):
+        pulumi.set(self, "burst", value)
+
+    @property
+    @pulumi.getter(name="perSourceIpQps")
+    def per_source_ip_qps(self) -> Optional[pulumi.Input[int]]:
+        """
+        The single source qps of the policy.  
+        The valid value is range form `0` to `100,000`, `0` indicates no limit.
+        If the value of `qps` is not `0`, then the value of `per_source_ip_qps` must less than the value of `qps`.
+        If the `protocol` of the listener that the policy associated with is **QUIC**, then `per_source_ip_qps` is not
+        supported, the value should be `0` or empty.
+        """
+        return pulumi.get(self, "per_source_ip_qps")
+
+    @per_source_ip_qps.setter
+    def per_source_ip_qps(self, value: Optional[pulumi.Input[int]]):
+        pulumi.set(self, "per_source_ip_qps", value)
+
+    @property
+    @pulumi.getter
+    def qps(self) -> Optional[pulumi.Input[int]]:
+        """
+        The overall qps of the policy.  
+        The valid value is range form `0` to `100,000`, `0` indicates no limit.
+        """
+        return pulumi.get(self, "qps")
+
+    @qps.setter
+    def qps(self, value: Optional[pulumi.Input[int]]):
+        pulumi.set(self, "qps", value)
+
+
+@pulumi.input_type
+class L7policyRedirectPoolsStickySessionConfigArgs:
+    def __init__(__self__, *,
+                 enable: Optional[pulumi.Input[bool]] = None,
+                 timeout: Optional[pulumi.Input[int]] = None):
+        """
+        :param pulumi.Input[bool] enable: Whether enable config session persistence between backend server groups.
+        :param pulumi.Input[int] timeout: The timeout of the session persistence.
+        """
+        if enable is not None:
+            pulumi.set(__self__, "enable", enable)
+        if timeout is not None:
+            pulumi.set(__self__, "timeout", timeout)
+
+    @property
+    @pulumi.getter
+    def enable(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Whether enable config session persistence between backend server groups.
+        """
+        return pulumi.get(self, "enable")
+
+    @enable.setter
+    def enable(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "enable", value)
+
+    @property
+    @pulumi.getter
+    def timeout(self) -> Optional[pulumi.Input[int]]:
+        """
+        The timeout of the session persistence.
+        """
+        return pulumi.get(self, "timeout")
+
+    @timeout.setter
+    def timeout(self, value: Optional[pulumi.Input[int]]):
+        pulumi.set(self, "timeout", value)
+
+
+@pulumi.input_type
+class L7policyRedirectUrlConfigArgs:
+    def __init__(__self__, *,
+                 status_code: pulumi.Input[str],
+                 host: Optional[pulumi.Input[str]] = None,
+                 insert_headers_config: Optional[pulumi.Input['L7policyRedirectUrlConfigInsertHeadersConfigArgs']] = None,
+                 path: Optional[pulumi.Input[str]] = None,
+                 port: Optional[pulumi.Input[str]] = None,
+                 protocol: Optional[pulumi.Input[str]] = None,
+                 query: Optional[pulumi.Input[str]] = None,
+                 remove_headers_config: Optional[pulumi.Input['L7policyRedirectUrlConfigRemoveHeadersConfigArgs']] = None):
+        """
+        :param pulumi.Input[str] status_code: The fixed HTTP status code configured in the forwarding rule. The value can be
+               any integer in the range of **200–299**, **400–499**, or **500–599**.
+        :param pulumi.Input[str] host: The host name that requests are redirected to. The value can contain only letters,
+               digits, hyphens (-), and periods (.) and must start with a letter or digit. Defaults to **${host}**, indicating
+               that the host of the request will be used.
+        :param pulumi.Input['L7policyRedirectUrlConfigInsertHeadersConfigArgs'] insert_headers_config: The header parameters to be added.
+               The insert_headers_config structure is documented below.
+        :param pulumi.Input[str] path: The path that requests are redirected to. The value can contain only letters, digits,
+               and special characters _~';@^- %#&$.*+?,=!:|/()[]{} and must start with a slash (/).
+               Defaults to **${path}**, indicating that the path of the request will be used.
+        :param pulumi.Input[str] port: The  port that requests are redirected to. Defaults to **${port}**, indicating that
+               the port of the request will be used.
+        :param pulumi.Input[str] protocol: The protocol for redirection. Value options: **HTTP**, **HTTPS**, **${protocol}**.
+               Defaults to **${protocol}**, indicating that the path of the request will be used.
+        :param pulumi.Input[str] query: The query string set in the URL for redirection. The value is case-sensitive and can
+               contain only letters, digits, and special characters !$&'()*+,-./:;=?@^_\\`. Defaults to **${query}**, indicating that
+               the query string of the request will be used.
+               For example, in the URL `https://www.xxx.com:8080/elb?type=loadbalancer`, **${query}** indicates **type=loadbalancer**.
+               If this parameter is set to **${query}&name=my_name**, the URL will be redirected to
+               URL `https://www.xxx.com:8080/elb?type=loadbalancer&name=my_name`.
+        :param pulumi.Input['L7policyRedirectUrlConfigRemoveHeadersConfigArgs'] remove_headers_config: The header parameters to be removed.
+               The remove_headers_config structure is documented below.
+        """
+        pulumi.set(__self__, "status_code", status_code)
+        if host is not None:
+            pulumi.set(__self__, "host", host)
+        if insert_headers_config is not None:
+            pulumi.set(__self__, "insert_headers_config", insert_headers_config)
+        if path is not None:
+            pulumi.set(__self__, "path", path)
+        if port is not None:
+            pulumi.set(__self__, "port", port)
+        if protocol is not None:
+            pulumi.set(__self__, "protocol", protocol)
+        if query is not None:
+            pulumi.set(__self__, "query", query)
+        if remove_headers_config is not None:
+            pulumi.set(__self__, "remove_headers_config", remove_headers_config)
+
+    @property
+    @pulumi.getter(name="statusCode")
+    def status_code(self) -> pulumi.Input[str]:
+        """
+        The fixed HTTP status code configured in the forwarding rule. The value can be
+        any integer in the range of **200–299**, **400–499**, or **500–599**.
+        """
+        return pulumi.get(self, "status_code")
+
+    @status_code.setter
+    def status_code(self, value: pulumi.Input[str]):
+        pulumi.set(self, "status_code", value)
+
+    @property
+    @pulumi.getter
+    def host(self) -> Optional[pulumi.Input[str]]:
+        """
+        The host name that requests are redirected to. The value can contain only letters,
+        digits, hyphens (-), and periods (.) and must start with a letter or digit. Defaults to **${host}**, indicating
+        that the host of the request will be used.
+        """
+        return pulumi.get(self, "host")
+
+    @host.setter
+    def host(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "host", value)
+
+    @property
+    @pulumi.getter(name="insertHeadersConfig")
+    def insert_headers_config(self) -> Optional[pulumi.Input['L7policyRedirectUrlConfigInsertHeadersConfigArgs']]:
+        """
+        The header parameters to be added.
+        The insert_headers_config structure is documented below.
+        """
+        return pulumi.get(self, "insert_headers_config")
+
+    @insert_headers_config.setter
+    def insert_headers_config(self, value: Optional[pulumi.Input['L7policyRedirectUrlConfigInsertHeadersConfigArgs']]):
+        pulumi.set(self, "insert_headers_config", value)
+
+    @property
+    @pulumi.getter
+    def path(self) -> Optional[pulumi.Input[str]]:
+        """
+        The path that requests are redirected to. The value can contain only letters, digits,
+        and special characters _~';@^- %#&$.*+?,=!:|/()[]{} and must start with a slash (/).
+        Defaults to **${path}**, indicating that the path of the request will be used.
+        """
+        return pulumi.get(self, "path")
+
+    @path.setter
+    def path(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "path", value)
+
+    @property
+    @pulumi.getter
+    def port(self) -> Optional[pulumi.Input[str]]:
+        """
+        The  port that requests are redirected to. Defaults to **${port}**, indicating that
+        the port of the request will be used.
+        """
+        return pulumi.get(self, "port")
+
+    @port.setter
+    def port(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "port", value)
+
+    @property
+    @pulumi.getter
+    def protocol(self) -> Optional[pulumi.Input[str]]:
+        """
+        The protocol for redirection. Value options: **HTTP**, **HTTPS**, **${protocol}**.
+        Defaults to **${protocol}**, indicating that the path of the request will be used.
+        """
+        return pulumi.get(self, "protocol")
+
+    @protocol.setter
+    def protocol(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "protocol", value)
+
+    @property
+    @pulumi.getter
+    def query(self) -> Optional[pulumi.Input[str]]:
+        """
+        The query string set in the URL for redirection. The value is case-sensitive and can
+        contain only letters, digits, and special characters !$&'()*+,-./:;=?@^_\\`. Defaults to **${query}**, indicating that
+        the query string of the request will be used.
+        For example, in the URL `https://www.xxx.com:8080/elb?type=loadbalancer`, **${query}** indicates **type=loadbalancer**.
+        If this parameter is set to **${query}&name=my_name**, the URL will be redirected to
+        URL `https://www.xxx.com:8080/elb?type=loadbalancer&name=my_name`.
+        """
+        return pulumi.get(self, "query")
+
+    @query.setter
+    def query(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "query", value)
+
+    @property
+    @pulumi.getter(name="removeHeadersConfig")
+    def remove_headers_config(self) -> Optional[pulumi.Input['L7policyRedirectUrlConfigRemoveHeadersConfigArgs']]:
+        """
+        The header parameters to be removed.
+        The remove_headers_config structure is documented below.
+        """
+        return pulumi.get(self, "remove_headers_config")
+
+    @remove_headers_config.setter
+    def remove_headers_config(self, value: Optional[pulumi.Input['L7policyRedirectUrlConfigRemoveHeadersConfigArgs']]):
+        pulumi.set(self, "remove_headers_config", value)
+
+
+@pulumi.input_type
+class L7policyRedirectUrlConfigInsertHeadersConfigArgs:
+    def __init__(__self__, *,
+                 configs: pulumi.Input[Sequence[pulumi.Input['L7policyRedirectUrlConfigInsertHeadersConfigConfigArgs']]]):
+        """
+        :param pulumi.Input[Sequence[pulumi.Input['L7policyRedirectUrlConfigInsertHeadersConfigConfigArgs']]] configs: The list of request header parameters to be removed.
+               The remove_header_configs structure is documented below.
+        """
+        pulumi.set(__self__, "configs", configs)
+
+    @property
+    @pulumi.getter
+    def configs(self) -> pulumi.Input[Sequence[pulumi.Input['L7policyRedirectUrlConfigInsertHeadersConfigConfigArgs']]]:
+        """
+        The list of request header parameters to be removed.
+        The remove_header_configs structure is documented below.
+        """
+        return pulumi.get(self, "configs")
+
+    @configs.setter
+    def configs(self, value: pulumi.Input[Sequence[pulumi.Input['L7policyRedirectUrlConfigInsertHeadersConfigConfigArgs']]]):
+        pulumi.set(self, "configs", value)
+
+
+@pulumi.input_type
+class L7policyRedirectUrlConfigInsertHeadersConfigConfigArgs:
+    def __init__(__self__, *,
+                 key: pulumi.Input[str],
+                 value: pulumi.Input[str],
+                 value_type: pulumi.Input[str]):
+        """
+        :param pulumi.Input[str] key: The parameter name of the removed request header. The value can contain `1` to `40`
+               characters, only a-z, digits, hyphens (-) and underscore (_) are allowed, and it can not be the following characters:
+               **connection**, **upgrade**, **content-length**, **transfer-encoding**, **keep-alive**, **te**, **host**, **cookie**,
+               **remoteip**, **authority**, **x-forwarded-host**, **x-forwarded-for**, **x-forwarded-for-port**,
+               **x-forwarded-tls-certificate-id**, **x-forwarded-tls-protocol**, **x-forwarded-tls-cipher**, **x-forwarded-elb-ip**,
+               **x-forwarded-port**, **x-forwarded-elb-id**, **x-forwarded-elb-vip**, **x-real-ip**, **x-forwarded-proto**,
+               **x-nuwa-trace-ne-in**, **x-nuwa-trace-ne-out**.
+        :param pulumi.Input[str] value: The value of the parameter. The value can contain `1` to `128`, only printable
+               characters in the range of ASCII code value 32<=ch<=127, asterisks (*) and question marks (?) are allowed, and it
+               cannot start or end with a space characters. If the value of `value_type` is **SYSTEM_DEFINED**, the value options is:
+               **CLIENT-PORT**, **CLIENT-IP**, **ELB-PROTOCOL**, **ELB-ID**, **ELB-PORT**, **ELB-EIP**, **ELB-VIP**.
+        :param pulumi.Input[str] value_type: The value type of the parameter. Value options: **USER_DEFINED**,
+               **REFERENCE_HEADER**, **SYSTEM_DEFINED**.
+        """
+        pulumi.set(__self__, "key", key)
+        pulumi.set(__self__, "value", value)
+        pulumi.set(__self__, "value_type", value_type)
+
+    @property
+    @pulumi.getter
+    def key(self) -> pulumi.Input[str]:
+        """
+        The parameter name of the removed request header. The value can contain `1` to `40`
+        characters, only a-z, digits, hyphens (-) and underscore (_) are allowed, and it can not be the following characters:
+        **connection**, **upgrade**, **content-length**, **transfer-encoding**, **keep-alive**, **te**, **host**, **cookie**,
+        **remoteip**, **authority**, **x-forwarded-host**, **x-forwarded-for**, **x-forwarded-for-port**,
+        **x-forwarded-tls-certificate-id**, **x-forwarded-tls-protocol**, **x-forwarded-tls-cipher**, **x-forwarded-elb-ip**,
+        **x-forwarded-port**, **x-forwarded-elb-id**, **x-forwarded-elb-vip**, **x-real-ip**, **x-forwarded-proto**,
+        **x-nuwa-trace-ne-in**, **x-nuwa-trace-ne-out**.
+        """
+        return pulumi.get(self, "key")
+
+    @key.setter
+    def key(self, value: pulumi.Input[str]):
+        pulumi.set(self, "key", value)
+
+    @property
+    @pulumi.getter
+    def value(self) -> pulumi.Input[str]:
+        """
+        The value of the parameter. The value can contain `1` to `128`, only printable
+        characters in the range of ASCII code value 32<=ch<=127, asterisks (*) and question marks (?) are allowed, and it
+        cannot start or end with a space characters. If the value of `value_type` is **SYSTEM_DEFINED**, the value options is:
+        **CLIENT-PORT**, **CLIENT-IP**, **ELB-PROTOCOL**, **ELB-ID**, **ELB-PORT**, **ELB-EIP**, **ELB-VIP**.
+        """
+        return pulumi.get(self, "value")
+
+    @value.setter
+    def value(self, value: pulumi.Input[str]):
+        pulumi.set(self, "value", value)
+
+    @property
+    @pulumi.getter(name="valueType")
+    def value_type(self) -> pulumi.Input[str]:
+        """
+        The value type of the parameter. Value options: **USER_DEFINED**,
+        **REFERENCE_HEADER**, **SYSTEM_DEFINED**.
+        """
+        return pulumi.get(self, "value_type")
+
+    @value_type.setter
+    def value_type(self, value: pulumi.Input[str]):
+        pulumi.set(self, "value_type", value)
+
+
+@pulumi.input_type
+class L7policyRedirectUrlConfigRemoveHeadersConfigArgs:
+    def __init__(__self__, *,
+                 configs: pulumi.Input[Sequence[pulumi.Input['L7policyRedirectUrlConfigRemoveHeadersConfigConfigArgs']]]):
+        """
+        :param pulumi.Input[Sequence[pulumi.Input['L7policyRedirectUrlConfigRemoveHeadersConfigConfigArgs']]] configs: The list of request header parameters to be removed.
+               The remove_header_configs structure is documented below.
+        """
+        pulumi.set(__self__, "configs", configs)
+
+    @property
+    @pulumi.getter
+    def configs(self) -> pulumi.Input[Sequence[pulumi.Input['L7policyRedirectUrlConfigRemoveHeadersConfigConfigArgs']]]:
+        """
+        The list of request header parameters to be removed.
+        The remove_header_configs structure is documented below.
+        """
+        return pulumi.get(self, "configs")
+
+    @configs.setter
+    def configs(self, value: pulumi.Input[Sequence[pulumi.Input['L7policyRedirectUrlConfigRemoveHeadersConfigConfigArgs']]]):
+        pulumi.set(self, "configs", value)
+
+
+@pulumi.input_type
+class L7policyRedirectUrlConfigRemoveHeadersConfigConfigArgs:
+    def __init__(__self__, *,
+                 key: pulumi.Input[str]):
+        """
+        :param pulumi.Input[str] key: The parameter name of the removed request header. The value can contain `1` to `40`
+               characters, only a-z, digits, hyphens (-) and underscore (_) are allowed, and it can not be the following characters:
+               **connection**, **upgrade**, **content-length**, **transfer-encoding**, **keep-alive**, **te**, **host**, **cookie**,
+               **remoteip**, **authority**, **x-forwarded-host**, **x-forwarded-for**, **x-forwarded-for-port**,
+               **x-forwarded-tls-certificate-id**, **x-forwarded-tls-protocol**, **x-forwarded-tls-cipher**, **x-forwarded-elb-ip**,
+               **x-forwarded-port**, **x-forwarded-elb-id**, **x-forwarded-elb-vip**, **x-real-ip**, **x-forwarded-proto**,
+               **x-nuwa-trace-ne-in**, **x-nuwa-trace-ne-out**.
+        """
+        pulumi.set(__self__, "key", key)
+
+    @property
+    @pulumi.getter
+    def key(self) -> pulumi.Input[str]:
+        """
+        The parameter name of the removed request header. The value can contain `1` to `40`
+        characters, only a-z, digits, hyphens (-) and underscore (_) are allowed, and it can not be the following characters:
+        **connection**, **upgrade**, **content-length**, **transfer-encoding**, **keep-alive**, **te**, **host**, **cookie**,
+        **remoteip**, **authority**, **x-forwarded-host**, **x-forwarded-for**, **x-forwarded-for-port**,
+        **x-forwarded-tls-certificate-id**, **x-forwarded-tls-protocol**, **x-forwarded-tls-cipher**, **x-forwarded-elb-ip**,
+        **x-forwarded-port**, **x-forwarded-elb-id**, **x-forwarded-elb-vip**, **x-real-ip**, **x-forwarded-proto**,
+        **x-nuwa-trace-ne-in**, **x-nuwa-trace-ne-out**.
+        """
+        return pulumi.get(self, "key")
+
+    @key.setter
+    def key(self, value: pulumi.Input[str]):
+        pulumi.set(self, "key", value)
+
+
+@pulumi.input_type
+class L7ruleConditionArgs:
+    def __init__(__self__, *,
+                 value: pulumi.Input[str],
+                 key: Optional[pulumi.Input[str]] = None):
+        """
+        :param pulumi.Input[str] value: Specifies the value of the match item.
+               + If `type` is set to **HOST_NAME**, it indicates the domain name, which can contain 1 to 128 characters, including
+               letters, digits, hyphens (-), periods (.), and asterisks (), and must start with a letter, digit, or asterisk ().
+               If you want to use a wildcard domain name, enter an asterisk (*) as the leftmost label of the domain name.
+               + If `type` is set to **PATH**, it indicates the request path, which can contain 1 to 128 characters. If
+               `compare_type` is set to **STARTS_WITH** or **EQUAL_TO** for the forwarding rule, the value must start with a
+               slash (/) and can contain only letters, digits, and special characters _~';@^-%#&$.*+?,=!:|/()[]{}.
+               + If `type` is set to **HEADER**, it indicates the value of the HTTP header parameter. The value can contain 1 to 128
+               characters. Asterisks (*) and question marks (?)are allowed, but spaces and double quotation marks are not allowed.
+               An asterisk can match zero or more characters, and a question mark can match 1 character.
+               + If `type` is set to **QUERY_STRING**, it indicates the value of the query parameter. The value is case-sensitive
+               and can contain 1 to 128 characters. Spaces, square brackets ([]), curly brackets ({}), angle brackets (<>),
+               backslashes (), double quotation marks (""), pound signs (#), ampersands (&), vertical bars (|), percent signs (%),
+               and tildes (~) are not supported. Asterisks (*)and question marks (?) are allowed. An asterisk can match zero or
+               more characters, and a question mark can match 1 character.
+               + If `type` is set to **METHOD**, it indicates the HTTP method. The value can be **GET**, **PUT**, **POST**,
+               **DELETE**, **PATCH**, **HEAD**, or **OPTIONS**.
+               + If `type` is set to **SOURCE_IP**, it indicates the source IP address of the request. The value is an **IPv4** or
+               **IPv6** CIDR block, for example, 192.168.0.2/32 or 2049::49/64.
+        :param pulumi.Input[str] key: Specifies the key of match item.
+               + If `type` is set to **HOST_NAME**, **PATH**, **METHOD**, or **SOURCE_IP**, this parameter is left blank.
+               + If `type` is set to **HEADER**, it indicates the name of the HTTP header parameter. It can contain 1 to 40
+               characters, including letters, digits, hyphens (-), and underscores (_).
+               + If `type` is set to **QUERY_STRING**, it indicates the name of the query parameter. It is case-sensitive and can
+               contain 1 to 128 characters. Spaces, square brackets ([]), curly brackets ({}), angle brackets (<>), backslashes (),
+               double quotation marks (" "), pound signs (#), ampersands (&), vertical bars (|), percent signs (%), and tildes (~)
+               are not supported.
+        """
+        pulumi.set(__self__, "value", value)
+        if key is not None:
+            pulumi.set(__self__, "key", key)
+
+    @property
+    @pulumi.getter
+    def value(self) -> pulumi.Input[str]:
+        """
+        Specifies the value of the match item.
+        + If `type` is set to **HOST_NAME**, it indicates the domain name, which can contain 1 to 128 characters, including
+        letters, digits, hyphens (-), periods (.), and asterisks (), and must start with a letter, digit, or asterisk ().
+        If you want to use a wildcard domain name, enter an asterisk (*) as the leftmost label of the domain name.
+        + If `type` is set to **PATH**, it indicates the request path, which can contain 1 to 128 characters. If
+        `compare_type` is set to **STARTS_WITH** or **EQUAL_TO** for the forwarding rule, the value must start with a
+        slash (/) and can contain only letters, digits, and special characters _~';@^-%#&$.*+?,=!:|/()[]{}.
+        + If `type` is set to **HEADER**, it indicates the value of the HTTP header parameter. The value can contain 1 to 128
+        characters. Asterisks (*) and question marks (?)are allowed, but spaces and double quotation marks are not allowed.
+        An asterisk can match zero or more characters, and a question mark can match 1 character.
+        + If `type` is set to **QUERY_STRING**, it indicates the value of the query parameter. The value is case-sensitive
+        and can contain 1 to 128 characters. Spaces, square brackets ([]), curly brackets ({}), angle brackets (<>),
+        backslashes (), double quotation marks (""), pound signs (#), ampersands (&), vertical bars (|), percent signs (%),
+        and tildes (~) are not supported. Asterisks (*)and question marks (?) are allowed. An asterisk can match zero or
+        more characters, and a question mark can match 1 character.
+        + If `type` is set to **METHOD**, it indicates the HTTP method. The value can be **GET**, **PUT**, **POST**,
+        **DELETE**, **PATCH**, **HEAD**, or **OPTIONS**.
+        + If `type` is set to **SOURCE_IP**, it indicates the source IP address of the request. The value is an **IPv4** or
+        **IPv6** CIDR block, for example, 192.168.0.2/32 or 2049::49/64.
+        """
+        return pulumi.get(self, "value")
+
+    @value.setter
+    def value(self, value: pulumi.Input[str]):
+        pulumi.set(self, "value", value)
+
+    @property
+    @pulumi.getter
+    def key(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the key of match item.
+        + If `type` is set to **HOST_NAME**, **PATH**, **METHOD**, or **SOURCE_IP**, this parameter is left blank.
+        + If `type` is set to **HEADER**, it indicates the name of the HTTP header parameter. It can contain 1 to 40
+        characters, including letters, digits, hyphens (-), and underscores (_).
+        + If `type` is set to **QUERY_STRING**, it indicates the name of the query parameter. It is case-sensitive and can
+        contain 1 to 128 characters. Spaces, square brackets ([]), curly brackets ({}), angle brackets (<>), backslashes (),
+        double quotation marks (" "), pound signs (#), ampersands (&), vertical bars (|), percent signs (%), and tildes (~)
+        are not supported.
+        """
+        return pulumi.get(self, "key")
+
+    @key.setter
+    def key(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "key", value)
+
+
+@pulumi.input_type
+class ListenerPortRangeArgs:
+    def __init__(__self__, *,
+                 end_port: pulumi.Input[int],
+                 start_port: pulumi.Input[int]):
+        """
+        :param pulumi.Input[int] end_port: Specifies the end port. Changing this creates a new listener.
+        :param pulumi.Input[int] start_port: Specifies the start port. Changing this creates a new listener.
+        """
+        pulumi.set(__self__, "end_port", end_port)
+        pulumi.set(__self__, "start_port", start_port)
+
+    @property
+    @pulumi.getter(name="endPort")
+    def end_port(self) -> pulumi.Input[int]:
+        """
+        Specifies the end port. Changing this creates a new listener.
+        """
+        return pulumi.get(self, "end_port")
+
+    @end_port.setter
+    def end_port(self, value: pulumi.Input[int]):
+        pulumi.set(self, "end_port", value)
+
+    @property
+    @pulumi.getter(name="startPort")
+    def start_port(self) -> pulumi.Input[int]:
+        """
+        Specifies the start port. Changing this creates a new listener.
+        """
+        return pulumi.get(self, "start_port")
+
+    @start_port.setter
+    def start_port(self, value: pulumi.Input[int]):
+        pulumi.set(self, "start_port", value)
+
+
+@pulumi.input_type
 class PoolPersistenceArgs:
     def __init__(__self__, *,
                  type: pulumi.Input[str],
                  cookie_name: Optional[pulumi.Input[str]] = None,
                  timeout: Optional[pulumi.Input[int]] = None):
         """
-        :param pulumi.Input[str] type: The type of persistence mode. The current specification supports SOURCE_IP,
-               HTTP_COOKIE, and APP_COOKIE.
-        :param pulumi.Input[str] cookie_name: The name of the cookie if persistence mode is set appropriately. Required
-               if `type = APP_COOKIE`.
+        :param pulumi.Input[str] type: Specifies the sticky session type. Value options: **SOURCE_IP**,
+               **HTTP_COOKIE**, and **APP_COOKIE**.
+        :param pulumi.Input[str] cookie_name: Specifies the cookie name. The value can contain only letters, digits,
+               hyphens (-), underscores (_), and periods (.). It is required if `type` of `persistence` is set to **APP_COOKIE**.
         :param pulumi.Input[int] timeout: Specifies the sticky session timeout duration in minutes. This parameter is
-               invalid when type is set to APP_COOKIE. The value range varies depending on the protocol of the backend server group:
-               + When the protocol of the backend server group is TCP or UDP, the value ranges from 1 to 60.
-               + When the protocol of the backend server group is HTTP or HTTPS, the value ranges from 1 to 1440.
+               invalid when `type` is set to **APP_COOKIE**. The value range varies depending on the protocol of the backend server
+               group:
+               + When the protocol of the backend server group is **TCP** or **UDP**, the value ranges from `1` to `60`, and
+               defaults to `1`.
+               + When the protocol of the backend server group is **HTTP** or **HTTPS**, the value ranges from `1` to `1,440`,
+               and defaults to `1,440`.
         """
         pulumi.set(__self__, "type", type)
         if cookie_name is not None:
@@ -78,8 +1800,8 @@ class PoolPersistenceArgs:
     @pulumi.getter
     def type(self) -> pulumi.Input[str]:
         """
-        The type of persistence mode. The current specification supports SOURCE_IP,
-        HTTP_COOKIE, and APP_COOKIE.
+        Specifies the sticky session type. Value options: **SOURCE_IP**,
+        **HTTP_COOKIE**, and **APP_COOKIE**.
         """
         return pulumi.get(self, "type")
 
@@ -91,8 +1813,8 @@ class PoolPersistenceArgs:
     @pulumi.getter(name="cookieName")
     def cookie_name(self) -> Optional[pulumi.Input[str]]:
         """
-        The name of the cookie if persistence mode is set appropriately. Required
-        if `type = APP_COOKIE`.
+        Specifies the cookie name. The value can contain only letters, digits,
+        hyphens (-), underscores (_), and periods (.). It is required if `type` of `persistence` is set to **APP_COOKIE**.
         """
         return pulumi.get(self, "cookie_name")
 
@@ -105,14 +1827,40 @@ class PoolPersistenceArgs:
     def timeout(self) -> Optional[pulumi.Input[int]]:
         """
         Specifies the sticky session timeout duration in minutes. This parameter is
-        invalid when type is set to APP_COOKIE. The value range varies depending on the protocol of the backend server group:
-        + When the protocol of the backend server group is TCP or UDP, the value ranges from 1 to 60.
-        + When the protocol of the backend server group is HTTP or HTTPS, the value ranges from 1 to 1440.
+        invalid when `type` is set to **APP_COOKIE**. The value range varies depending on the protocol of the backend server
+        group:
+        + When the protocol of the backend server group is **TCP** or **UDP**, the value ranges from `1` to `60`, and
+        defaults to `1`.
+        + When the protocol of the backend server group is **HTTP** or **HTTPS**, the value ranges from `1` to `1,440`,
+        and defaults to `1,440`.
         """
         return pulumi.get(self, "timeout")
 
     @timeout.setter
     def timeout(self, value: Optional[pulumi.Input[int]]):
         pulumi.set(self, "timeout", value)
+
+
+@pulumi.input_type
+class SecurityPolicyListenerArgs:
+    def __init__(__self__, *,
+                 id: Optional[pulumi.Input[str]] = None):
+        """
+        :param pulumi.Input[str] id: The listener id.
+        """
+        if id is not None:
+            pulumi.set(__self__, "id", id)
+
+    @property
+    @pulumi.getter
+    def id(self) -> Optional[pulumi.Input[str]]:
+        """
+        The listener id.
+        """
+        return pulumi.get(self, "id")
+
+    @id.setter
+    def id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "id", value)
 
 

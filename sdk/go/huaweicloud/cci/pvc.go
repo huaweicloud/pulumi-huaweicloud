@@ -149,7 +149,7 @@ import (
 //
 // ## Import
 //
-// PVCs can be imported using the `namespace`, `volume_type` and `id`, e.g.
+// PVCs can be imported using the `namespace`, `volume_type` and `id`, e.g. bash
 //
 // ```sh
 //
@@ -164,8 +164,8 @@ type Pvc struct {
 	// The server time when PVC was created.
 	CreationTimestamp pulumi.StringOutput `pulumi:"creationTimestamp"`
 	// Specifies the share path of the SFS storage bound to the CCI
-	// Namespace. Required if `volumeType` is *nfs-rw*, *efs-standard* or *efs-performance*. Changing this will create a new
-	// PVC resource.
+	// Namespace. Required if `volumeType` is **nfs-rw**, **efs-standard** or **efs-performance**.
+	// Changing this will create a new PVC resource.
 	DeviceMountPath pulumi.StringOutput `pulumi:"deviceMountPath"`
 	// Whether the PVC is available.
 	Enable pulumi.BoolOutput `pulumi:"enable"`
@@ -185,8 +185,8 @@ type Pvc struct {
 	// will create a new PVC resource.
 	VolumeId pulumi.StringOutput `pulumi:"volumeId"`
 	// Specifies the type of the storage bound to the CCI Namespace. The valid
-	// values are *sas*, *ssd*, *sata*, *obs*, *nfs-rw*, *efs-standard* and *efs-performance*, Defalut to *sas*. Changing
-	// this will create a new PVC resource.
+	// values are **sas**, **ssd**, **sata**, **obs**, **nfs-rw**, **efs-standard** and **efs-performance**,
+	// Default to **sas**. Changing this will create a new PVC resource.
 	VolumeType pulumi.StringPtrOutput `pulumi:"volumeType"`
 }
 
@@ -231,8 +231,8 @@ type pvcState struct {
 	// The server time when PVC was created.
 	CreationTimestamp *string `pulumi:"creationTimestamp"`
 	// Specifies the share path of the SFS storage bound to the CCI
-	// Namespace. Required if `volumeType` is *nfs-rw*, *efs-standard* or *efs-performance*. Changing this will create a new
-	// PVC resource.
+	// Namespace. Required if `volumeType` is **nfs-rw**, **efs-standard** or **efs-performance**.
+	// Changing this will create a new PVC resource.
 	DeviceMountPath *string `pulumi:"deviceMountPath"`
 	// Whether the PVC is available.
 	Enable *bool `pulumi:"enable"`
@@ -252,8 +252,8 @@ type pvcState struct {
 	// will create a new PVC resource.
 	VolumeId *string `pulumi:"volumeId"`
 	// Specifies the type of the storage bound to the CCI Namespace. The valid
-	// values are *sas*, *ssd*, *sata*, *obs*, *nfs-rw*, *efs-standard* and *efs-performance*, Defalut to *sas*. Changing
-	// this will create a new PVC resource.
+	// values are **sas**, **ssd**, **sata**, **obs**, **nfs-rw**, **efs-standard** and **efs-performance**,
+	// Default to **sas**. Changing this will create a new PVC resource.
 	VolumeType *string `pulumi:"volumeType"`
 }
 
@@ -263,8 +263,8 @@ type PvcState struct {
 	// The server time when PVC was created.
 	CreationTimestamp pulumi.StringPtrInput
 	// Specifies the share path of the SFS storage bound to the CCI
-	// Namespace. Required if `volumeType` is *nfs-rw*, *efs-standard* or *efs-performance*. Changing this will create a new
-	// PVC resource.
+	// Namespace. Required if `volumeType` is **nfs-rw**, **efs-standard** or **efs-performance**.
+	// Changing this will create a new PVC resource.
 	DeviceMountPath pulumi.StringPtrInput
 	// Whether the PVC is available.
 	Enable pulumi.BoolPtrInput
@@ -284,8 +284,8 @@ type PvcState struct {
 	// will create a new PVC resource.
 	VolumeId pulumi.StringPtrInput
 	// Specifies the type of the storage bound to the CCI Namespace. The valid
-	// values are *sas*, *ssd*, *sata*, *obs*, *nfs-rw*, *efs-standard* and *efs-performance*, Defalut to *sas*. Changing
-	// this will create a new PVC resource.
+	// values are **sas**, **ssd**, **sata**, **obs**, **nfs-rw**, **efs-standard** and **efs-performance**,
+	// Default to **sas**. Changing this will create a new PVC resource.
 	VolumeType pulumi.StringPtrInput
 }
 
@@ -295,8 +295,8 @@ func (PvcState) ElementType() reflect.Type {
 
 type pvcArgs struct {
 	// Specifies the share path of the SFS storage bound to the CCI
-	// Namespace. Required if `volumeType` is *nfs-rw*, *efs-standard* or *efs-performance*. Changing this will create a new
-	// PVC resource.
+	// Namespace. Required if `volumeType` is **nfs-rw**, **efs-standard** or **efs-performance**.
+	// Changing this will create a new PVC resource.
 	DeviceMountPath *string `pulumi:"deviceMountPath"`
 	// Specifies the unique name of the PVC resource. This parameter can contain a
 	// maximum of 63 characters, which may consist of lowercase letters, digits and hyphens, and must start and end with
@@ -312,16 +312,16 @@ type pvcArgs struct {
 	// will create a new PVC resource.
 	VolumeId string `pulumi:"volumeId"`
 	// Specifies the type of the storage bound to the CCI Namespace. The valid
-	// values are *sas*, *ssd*, *sata*, *obs*, *nfs-rw*, *efs-standard* and *efs-performance*, Defalut to *sas*. Changing
-	// this will create a new PVC resource.
+	// values are **sas**, **ssd**, **sata**, **obs**, **nfs-rw**, **efs-standard** and **efs-performance**,
+	// Default to **sas**. Changing this will create a new PVC resource.
 	VolumeType *string `pulumi:"volumeType"`
 }
 
 // The set of arguments for constructing a Pvc resource.
 type PvcArgs struct {
 	// Specifies the share path of the SFS storage bound to the CCI
-	// Namespace. Required if `volumeType` is *nfs-rw*, *efs-standard* or *efs-performance*. Changing this will create a new
-	// PVC resource.
+	// Namespace. Required if `volumeType` is **nfs-rw**, **efs-standard** or **efs-performance**.
+	// Changing this will create a new PVC resource.
 	DeviceMountPath pulumi.StringPtrInput
 	// Specifies the unique name of the PVC resource. This parameter can contain a
 	// maximum of 63 characters, which may consist of lowercase letters, digits and hyphens, and must start and end with
@@ -337,8 +337,8 @@ type PvcArgs struct {
 	// will create a new PVC resource.
 	VolumeId pulumi.StringInput
 	// Specifies the type of the storage bound to the CCI Namespace. The valid
-	// values are *sas*, *ssd*, *sata*, *obs*, *nfs-rw*, *efs-standard* and *efs-performance*, Defalut to *sas*. Changing
-	// this will create a new PVC resource.
+	// values are **sas**, **ssd**, **sata**, **obs**, **nfs-rw**, **efs-standard** and **efs-performance**,
+	// Default to **sas**. Changing this will create a new PVC resource.
 	VolumeType pulumi.StringPtrInput
 }
 
@@ -440,8 +440,8 @@ func (o PvcOutput) CreationTimestamp() pulumi.StringOutput {
 }
 
 // Specifies the share path of the SFS storage bound to the CCI
-// Namespace. Required if `volumeType` is *nfs-rw*, *efs-standard* or *efs-performance*. Changing this will create a new
-// PVC resource.
+// Namespace. Required if `volumeType` is **nfs-rw**, **efs-standard** or **efs-performance**.
+// Changing this will create a new PVC resource.
 func (o PvcOutput) DeviceMountPath() pulumi.StringOutput {
 	return o.ApplyT(func(v *Pvc) pulumi.StringOutput { return v.DeviceMountPath }).(pulumi.StringOutput)
 }
@@ -482,8 +482,8 @@ func (o PvcOutput) VolumeId() pulumi.StringOutput {
 }
 
 // Specifies the type of the storage bound to the CCI Namespace. The valid
-// values are *sas*, *ssd*, *sata*, *obs*, *nfs-rw*, *efs-standard* and *efs-performance*, Defalut to *sas*. Changing
-// this will create a new PVC resource.
+// values are **sas**, **ssd**, **sata**, **obs**, **nfs-rw**, **efs-standard** and **efs-performance**,
+// Default to **sas**. Changing this will create a new PVC resource.
 func (o PvcOutput) VolumeType() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Pvc) pulumi.StringPtrOutput { return v.VolumeType }).(pulumi.StringPtrOutput)
 }

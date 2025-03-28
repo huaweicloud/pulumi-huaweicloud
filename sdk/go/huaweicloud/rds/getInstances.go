@@ -50,7 +50,8 @@ func GetInstances(ctx *pulumi.Context, args *GetInstancesArgs, opts ...pulumi.In
 
 // A collection of arguments for invoking getInstances.
 type GetInstancesArgs struct {
-	// Specifies the type of the database. Valid values are: MySQL, PostgreSQL, and SQLServer.
+	// Specifies the type of the database. Valid values are **MySQL**, **PostgreSQL**,
+	// **SQLServer** and **MariaDB**.
 	DatastoreType *string `pulumi:"datastoreType"`
 	// Specifies the enterprise project id.
 	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
@@ -61,7 +62,8 @@ type GetInstancesArgs struct {
 	Region *string `pulumi:"region"`
 	// Specifies the network ID of a subnet.
 	SubnetId *string `pulumi:"subnetId"`
-	// Specifies the type of the instance. Valid values are: Single, Ha, Replica, and Enterprise.
+	// Specifies the type of the instance. Valid values are **Single**, **Ha**, **Replica**,
+	// and **Enterprise**.
 	Type *string `pulumi:"type"`
 	// Specifies the VPC ID.
 	VpcId *string `pulumi:"vpcId"`
@@ -103,7 +105,8 @@ func GetInstancesOutput(ctx *pulumi.Context, args GetInstancesOutputArgs, opts .
 
 // A collection of arguments for invoking getInstances.
 type GetInstancesOutputArgs struct {
-	// Specifies the type of the database. Valid values are: MySQL, PostgreSQL, and SQLServer.
+	// Specifies the type of the database. Valid values are **MySQL**, **PostgreSQL**,
+	// **SQLServer** and **MariaDB**.
 	DatastoreType pulumi.StringPtrInput `pulumi:"datastoreType"`
 	// Specifies the enterprise project id.
 	EnterpriseProjectId pulumi.StringPtrInput `pulumi:"enterpriseProjectId"`
@@ -114,7 +117,8 @@ type GetInstancesOutputArgs struct {
 	Region pulumi.StringPtrInput `pulumi:"region"`
 	// Specifies the network ID of a subnet.
 	SubnetId pulumi.StringPtrInput `pulumi:"subnetId"`
-	// Specifies the type of the instance. Valid values are: Single, Ha, Replica, and Enterprise.
+	// Specifies the type of the instance. Valid values are **Single**, **Ha**, **Replica**,
+	// and **Enterprise**.
 	Type pulumi.StringPtrInput `pulumi:"type"`
 	// Specifies the VPC ID.
 	VpcId pulumi.StringPtrInput `pulumi:"vpcId"`

@@ -64,11 +64,11 @@ import (
 //
 // ## Import
 //
-// Recording templates can be imported using the `id`, e.g.
+// Recording templates can be imported using the `id`, e.g. bash
 //
 // ```sh
 //
-//	$ pulumi import huaweicloud:Live/recording:Recording test 55534eaa-533a-419d-9b40-ec427ea7195a
+//	$ pulumi import huaweicloud:Live/recording:Recording test <id>
 //
 // ```
 type Recording struct {

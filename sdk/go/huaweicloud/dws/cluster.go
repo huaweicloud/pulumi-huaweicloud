@@ -11,7 +11,7 @@ import (
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
-// Manages a DWS cluster resource within HuaweiCloud.
+// Manages a GaussDB(DWS) cluster resource within HuaweiCloud.
 //
 // ## Example Usage
 //
@@ -22,6 +22,7 @@ import (
 //
 //	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud/Dws"
 //	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud/Vpc"
+//	"github.com/pulumi/pulumi-huaweicloud/sdk/go/huaweicloud/Dws"
 //	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 //	"github.com/pulumi/pulumi/sdk/v3/go/pulumi/config"
 //
@@ -47,12 +48,17 @@ import (
 //				Version:          pulumi.Any(dwsClusterVersion),
 //				NodeType:         pulumi.String("dws.m3.xlarge"),
 //				NumberOfNode:     pulumi.Int(3),
+//				NumberOfCn:       pulumi.Int(3),
 //				AvailabilityZone: pulumi.Any(availabilityZone),
 //				UserName:         pulumi.Any(userName),
 //				UserPwd:          pulumi.Any(userPwd),
 //				VpcId:            pulumi.Any(vpcId),
 //				NetworkId:        pulumi.Any(networkId),
 //				SecurityGroupId:  secgroup.ID(),
+//				Volume: &dws.ClusterVolumeArgs{
+//					Type:     pulumi.String("SSD"),
+//					Capacity: pulumi.String("300"),
+//				},
 //			})
 //			if err != nil {
 //				return err
@@ -65,15 +71,15 @@ import (
 //
 // ## Import
 //
-// # Cluster can be imported using the following format
+// The resource can be imported using the `id`, e.g. bash
 //
 // ```sh
 //
-//	$ pulumi import huaweicloud:Dws/cluster:Cluster test 47ad727e-9dcc-4833-bde0-bb298607c719
+//	$ pulumi import huaweicloud:Dws/cluster:Cluster test <id>
 //
 // ```
 //
-//	Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`user_pwd`, `number_of_cn`, `kms_key_id`, `volume`, `dss_pool_id`. It is generally recommended running `terraform plan` after importing a cluster. You can then decide if changes should be applied to the cluster, or the resource definition should be updated to align with the cluster. Also you can ignore changes as below. resource "huaweicloud_dws_cluster" "test" {
+//	Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`user_pwd`, `number_of_cn`, `kms_key_id`, `volume`, `dss_pool_id`, `logical_cluster_enable`, `lts_enable`, `force_backup`. It is generally recommended running `terraform plan` after importing a cluster. You can then decide if changes should be applied to the cluster, or the resource definition should be updated to align with the cluster. Also you can ignore changes as below. hcl resource "huaweicloud_dws_cluster" "test" {
 //
 //	...
 //
@@ -81,7 +87,7 @@ import (
 //
 //	ignore_changes = [
 //
-//	user_pwd, number_of_cn, kms_key_id, volume, dss_pool_id
+//	user_pwd, number_of_cn, kms_key_id, volume, dss_pool_id, logical_cluster_enable, lts_enable, `force_backup`,
 //
 //	]
 //
@@ -90,26 +96,42 @@ type Cluster struct {
 	pulumi.CustomResourceState
 
 	// The availability zone in which to create the cluster instance.
-	// Changing this parameter will create a new resource.
+	// If there are multiple available zones, separate by commas, e.g. **cn-north-4a,cn-north-4b,cn-north-4g**.
+	// Currently, multi-AZ clusters only support selecting `3` AZs. Changing this parameter will create a new resource.
 	AvailabilityZone pulumi.StringOutput `pulumi:"availabilityZone"`
 	// The creation time of the cluster.\
 	// Format: ISO8601: **YYYY-MM-DDThh:mm:ssZ**.
 	Created pulumi.StringOutput `pulumi:"created"`
+	// Specifies the description of the cluster.
+	Description pulumi.StringPtrOutput `pulumi:"description"`
 	// Dedicated storage pool ID.
 	// Changing this parameter will create a new resource.
 	DssPoolId pulumi.StringOutput `pulumi:"dssPoolId"`
+	// Specifies the ID of the ELB load balancer.
+	ElbId pulumi.StringPtrOutput `pulumi:"elbId"`
+	// The ELB information bound to the cluster.
+	// The elb structure is documented below.
+	Elbs ClusterElbArrayOutput `pulumi:"elbs"`
 	// Private network connection information about the cluster.
 	// The Endpoint structure is documented below.
 	Endpoints ClusterEndpointArrayOutput `pulumi:"endpoints"`
 	// The enterprise project ID.
-	// Changing this parameter will create a new resource.
 	EnterpriseProjectId pulumi.StringOutput `pulumi:"enterpriseProjectId"`
+	// Specified whether to automatically execute snapshot when shrinking the number of nodes.
+	// The default value is **true**.
+	// This parameter is required and available only when scaling-in the `numberOfNode` parameter value.
+	ForceBackup pulumi.BoolPtrOutput `pulumi:"forceBackup"`
 	// The number of latest manual snapshots that need to be
 	// retained when deleting the cluster.
 	KeepLastManualSnapshot pulumi.IntPtrOutput `pulumi:"keepLastManualSnapshot"`
 	// The KMS key ID.
 	// Changing this parameter will create a new resource.
 	KmsKeyId pulumi.StringOutput `pulumi:"kmsKeyId"`
+	// Specifies whether to enable logical cluster. The switch needs to be turned
+	// on before creating a logical cluster.
+	LogicalClusterEnable pulumi.BoolPtrOutput `pulumi:"logicalClusterEnable"`
+	// Specifies whether to enable LTS. The default value is **false**.
+	LtsEnable pulumi.BoolPtrOutput `pulumi:"ltsEnable"`
 	// Cluster maintenance window.
 	// The MaintainWindow structure is documented below.
 	MaintainWindows ClusterMaintainWindowArrayOutput `pulumi:"maintainWindows"`
@@ -125,16 +147,17 @@ type Cluster struct {
 	// Changing this parameter will create a new resource.
 	NodeType pulumi.StringOutput `pulumi:"nodeType"`
 	// The number of CN.\
-	// The value ranges from 2 to **number_of_node**, the maximum value is 20. Defaults to 3.
+	// The value ranges from 2 to **number_of_node**, the maximum value is 20.
+	// This parameter must be used together with `version`.
 	// Changing this parameter will create a new resource.
 	NumberOfCn pulumi.IntPtrOutput `pulumi:"numberOfCn"`
 	// Number of nodes in a cluster.\
-	// The value ranges from 3 to 32 in cluster mode. The value of stream warehouse(stand-alone mode) is 1.
+	// The value ranges from 3 to 256 in cluster mode. The value of stream warehouse(stand-alone mode) is 1.
 	NumberOfNode pulumi.IntOutput `pulumi:"numberOfNode"`
 	// Service port of a cluster (8000 to 10000). The default value is 8000.\
 	// Changing this parameter will create a new resource.
 	Port pulumi.IntPtrOutput `pulumi:"port"`
-	// List of private network IP addresses.
+	// The private IP address of the ELB load balancer.
 	PrivateIps pulumi.StringArrayOutput `pulumi:"privateIps"`
 	// Public network connection information about the cluster.
 	// The PublicEndpoint structure is documented below.
@@ -146,7 +169,7 @@ type Cluster struct {
 	// Specifies the region in which to create the resource.
 	// If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
 	Region pulumi.StringOutput `pulumi:"region"`
-	// The security group ID.
+	// Specifies the security group ID of the cluster.
 	// Changing this parameter will create a new resource.
 	SecurityGroupId pulumi.StringOutput `pulumi:"securityGroupId"`
 	// The cluster status.\
@@ -173,7 +196,6 @@ type Cluster struct {
 	// + DEGRADED | UNBALANCED | READONLY
 	SubStatus pulumi.StringOutput `pulumi:"subStatus"`
 	// The key/value pairs to associate with the cluster.
-	// Changing this parameter will create a new resource.
 	Tags pulumi.StringMapOutput `pulumi:"tags"`
 	// Cluster management task.\
 	// The value can be one of the following:
@@ -203,9 +225,12 @@ type Cluster struct {
 	// It cannot be the same as the username or the username written in reverse order.
 	UserPwd pulumi.StringOutput `pulumi:"userPwd"`
 	// The cluster version.
+	// [For details](https://support.huaweicloud.com/intl/en-us/bulletin-dws/dws_12_0000.html).
 	// Changing this parameter will create a new resource.
 	Version pulumi.StringOutput `pulumi:"version"`
 	// The information about the volume.
+	// Changing this parameter will create a new resource.
+	// For local disks, this parameter can not be specified.
 	Volume ClusterVolumeOutput `pulumi:"volume"`
 	// The VPC ID.
 	// Changing this parameter will create a new resource.
@@ -267,26 +292,42 @@ func GetCluster(ctx *pulumi.Context,
 // Input properties used for looking up and filtering Cluster resources.
 type clusterState struct {
 	// The availability zone in which to create the cluster instance.
-	// Changing this parameter will create a new resource.
+	// If there are multiple available zones, separate by commas, e.g. **cn-north-4a,cn-north-4b,cn-north-4g**.
+	// Currently, multi-AZ clusters only support selecting `3` AZs. Changing this parameter will create a new resource.
 	AvailabilityZone *string `pulumi:"availabilityZone"`
 	// The creation time of the cluster.\
 	// Format: ISO8601: **YYYY-MM-DDThh:mm:ssZ**.
 	Created *string `pulumi:"created"`
+	// Specifies the description of the cluster.
+	Description *string `pulumi:"description"`
 	// Dedicated storage pool ID.
 	// Changing this parameter will create a new resource.
 	DssPoolId *string `pulumi:"dssPoolId"`
+	// Specifies the ID of the ELB load balancer.
+	ElbId *string `pulumi:"elbId"`
+	// The ELB information bound to the cluster.
+	// The elb structure is documented below.
+	Elbs []ClusterElb `pulumi:"elbs"`
 	// Private network connection information about the cluster.
 	// The Endpoint structure is documented below.
 	Endpoints []ClusterEndpoint `pulumi:"endpoints"`
 	// The enterprise project ID.
-	// Changing this parameter will create a new resource.
 	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
+	// Specified whether to automatically execute snapshot when shrinking the number of nodes.
+	// The default value is **true**.
+	// This parameter is required and available only when scaling-in the `numberOfNode` parameter value.
+	ForceBackup *bool `pulumi:"forceBackup"`
 	// The number of latest manual snapshots that need to be
 	// retained when deleting the cluster.
 	KeepLastManualSnapshot *int `pulumi:"keepLastManualSnapshot"`
 	// The KMS key ID.
 	// Changing this parameter will create a new resource.
 	KmsKeyId *string `pulumi:"kmsKeyId"`
+	// Specifies whether to enable logical cluster. The switch needs to be turned
+	// on before creating a logical cluster.
+	LogicalClusterEnable *bool `pulumi:"logicalClusterEnable"`
+	// Specifies whether to enable LTS. The default value is **false**.
+	LtsEnable *bool `pulumi:"ltsEnable"`
 	// Cluster maintenance window.
 	// The MaintainWindow structure is documented below.
 	MaintainWindows []ClusterMaintainWindow `pulumi:"maintainWindows"`
@@ -302,16 +343,17 @@ type clusterState struct {
 	// Changing this parameter will create a new resource.
 	NodeType *string `pulumi:"nodeType"`
 	// The number of CN.\
-	// The value ranges from 2 to **number_of_node**, the maximum value is 20. Defaults to 3.
+	// The value ranges from 2 to **number_of_node**, the maximum value is 20.
+	// This parameter must be used together with `version`.
 	// Changing this parameter will create a new resource.
 	NumberOfCn *int `pulumi:"numberOfCn"`
 	// Number of nodes in a cluster.\
-	// The value ranges from 3 to 32 in cluster mode. The value of stream warehouse(stand-alone mode) is 1.
+	// The value ranges from 3 to 256 in cluster mode. The value of stream warehouse(stand-alone mode) is 1.
 	NumberOfNode *int `pulumi:"numberOfNode"`
 	// Service port of a cluster (8000 to 10000). The default value is 8000.\
 	// Changing this parameter will create a new resource.
 	Port *int `pulumi:"port"`
-	// List of private network IP addresses.
+	// The private IP address of the ELB load balancer.
 	PrivateIps []string `pulumi:"privateIps"`
 	// Public network connection information about the cluster.
 	// The PublicEndpoint structure is documented below.
@@ -323,7 +365,7 @@ type clusterState struct {
 	// Specifies the region in which to create the resource.
 	// If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
 	Region *string `pulumi:"region"`
-	// The security group ID.
+	// Specifies the security group ID of the cluster.
 	// Changing this parameter will create a new resource.
 	SecurityGroupId *string `pulumi:"securityGroupId"`
 	// The cluster status.\
@@ -350,7 +392,6 @@ type clusterState struct {
 	// + DEGRADED | UNBALANCED | READONLY
 	SubStatus *string `pulumi:"subStatus"`
 	// The key/value pairs to associate with the cluster.
-	// Changing this parameter will create a new resource.
 	Tags map[string]string `pulumi:"tags"`
 	// Cluster management task.\
 	// The value can be one of the following:
@@ -380,9 +421,12 @@ type clusterState struct {
 	// It cannot be the same as the username or the username written in reverse order.
 	UserPwd *string `pulumi:"userPwd"`
 	// The cluster version.
+	// [For details](https://support.huaweicloud.com/intl/en-us/bulletin-dws/dws_12_0000.html).
 	// Changing this parameter will create a new resource.
 	Version *string `pulumi:"version"`
 	// The information about the volume.
+	// Changing this parameter will create a new resource.
+	// For local disks, this parameter can not be specified.
 	Volume *ClusterVolume `pulumi:"volume"`
 	// The VPC ID.
 	// Changing this parameter will create a new resource.
@@ -391,26 +435,42 @@ type clusterState struct {
 
 type ClusterState struct {
 	// The availability zone in which to create the cluster instance.
-	// Changing this parameter will create a new resource.
+	// If there are multiple available zones, separate by commas, e.g. **cn-north-4a,cn-north-4b,cn-north-4g**.
+	// Currently, multi-AZ clusters only support selecting `3` AZs. Changing this parameter will create a new resource.
 	AvailabilityZone pulumi.StringPtrInput
 	// The creation time of the cluster.\
 	// Format: ISO8601: **YYYY-MM-DDThh:mm:ssZ**.
 	Created pulumi.StringPtrInput
+	// Specifies the description of the cluster.
+	Description pulumi.StringPtrInput
 	// Dedicated storage pool ID.
 	// Changing this parameter will create a new resource.
 	DssPoolId pulumi.StringPtrInput
+	// Specifies the ID of the ELB load balancer.
+	ElbId pulumi.StringPtrInput
+	// The ELB information bound to the cluster.
+	// The elb structure is documented below.
+	Elbs ClusterElbArrayInput
 	// Private network connection information about the cluster.
 	// The Endpoint structure is documented below.
 	Endpoints ClusterEndpointArrayInput
 	// The enterprise project ID.
-	// Changing this parameter will create a new resource.
 	EnterpriseProjectId pulumi.StringPtrInput
+	// Specified whether to automatically execute snapshot when shrinking the number of nodes.
+	// The default value is **true**.
+	// This parameter is required and available only when scaling-in the `numberOfNode` parameter value.
+	ForceBackup pulumi.BoolPtrInput
 	// The number of latest manual snapshots that need to be
 	// retained when deleting the cluster.
 	KeepLastManualSnapshot pulumi.IntPtrInput
 	// The KMS key ID.
 	// Changing this parameter will create a new resource.
 	KmsKeyId pulumi.StringPtrInput
+	// Specifies whether to enable logical cluster. The switch needs to be turned
+	// on before creating a logical cluster.
+	LogicalClusterEnable pulumi.BoolPtrInput
+	// Specifies whether to enable LTS. The default value is **false**.
+	LtsEnable pulumi.BoolPtrInput
 	// Cluster maintenance window.
 	// The MaintainWindow structure is documented below.
 	MaintainWindows ClusterMaintainWindowArrayInput
@@ -426,16 +486,17 @@ type ClusterState struct {
 	// Changing this parameter will create a new resource.
 	NodeType pulumi.StringPtrInput
 	// The number of CN.\
-	// The value ranges from 2 to **number_of_node**, the maximum value is 20. Defaults to 3.
+	// The value ranges from 2 to **number_of_node**, the maximum value is 20.
+	// This parameter must be used together with `version`.
 	// Changing this parameter will create a new resource.
 	NumberOfCn pulumi.IntPtrInput
 	// Number of nodes in a cluster.\
-	// The value ranges from 3 to 32 in cluster mode. The value of stream warehouse(stand-alone mode) is 1.
+	// The value ranges from 3 to 256 in cluster mode. The value of stream warehouse(stand-alone mode) is 1.
 	NumberOfNode pulumi.IntPtrInput
 	// Service port of a cluster (8000 to 10000). The default value is 8000.\
 	// Changing this parameter will create a new resource.
 	Port pulumi.IntPtrInput
-	// List of private network IP addresses.
+	// The private IP address of the ELB load balancer.
 	PrivateIps pulumi.StringArrayInput
 	// Public network connection information about the cluster.
 	// The PublicEndpoint structure is documented below.
@@ -447,7 +508,7 @@ type ClusterState struct {
 	// Specifies the region in which to create the resource.
 	// If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
 	Region pulumi.StringPtrInput
-	// The security group ID.
+	// Specifies the security group ID of the cluster.
 	// Changing this parameter will create a new resource.
 	SecurityGroupId pulumi.StringPtrInput
 	// The cluster status.\
@@ -474,7 +535,6 @@ type ClusterState struct {
 	// + DEGRADED | UNBALANCED | READONLY
 	SubStatus pulumi.StringPtrInput
 	// The key/value pairs to associate with the cluster.
-	// Changing this parameter will create a new resource.
 	Tags pulumi.StringMapInput
 	// Cluster management task.\
 	// The value can be one of the following:
@@ -504,9 +564,12 @@ type ClusterState struct {
 	// It cannot be the same as the username or the username written in reverse order.
 	UserPwd pulumi.StringPtrInput
 	// The cluster version.
+	// [For details](https://support.huaweicloud.com/intl/en-us/bulletin-dws/dws_12_0000.html).
 	// Changing this parameter will create a new resource.
 	Version pulumi.StringPtrInput
 	// The information about the volume.
+	// Changing this parameter will create a new resource.
+	// For local disks, this parameter can not be specified.
 	Volume ClusterVolumePtrInput
 	// The VPC ID.
 	// Changing this parameter will create a new resource.
@@ -519,20 +582,33 @@ func (ClusterState) ElementType() reflect.Type {
 
 type clusterArgs struct {
 	// The availability zone in which to create the cluster instance.
-	// Changing this parameter will create a new resource.
+	// If there are multiple available zones, separate by commas, e.g. **cn-north-4a,cn-north-4b,cn-north-4g**.
+	// Currently, multi-AZ clusters only support selecting `3` AZs. Changing this parameter will create a new resource.
 	AvailabilityZone string `pulumi:"availabilityZone"`
+	// Specifies the description of the cluster.
+	Description *string `pulumi:"description"`
 	// Dedicated storage pool ID.
 	// Changing this parameter will create a new resource.
 	DssPoolId *string `pulumi:"dssPoolId"`
+	// Specifies the ID of the ELB load balancer.
+	ElbId *string `pulumi:"elbId"`
 	// The enterprise project ID.
-	// Changing this parameter will create a new resource.
 	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
+	// Specified whether to automatically execute snapshot when shrinking the number of nodes.
+	// The default value is **true**.
+	// This parameter is required and available only when scaling-in the `numberOfNode` parameter value.
+	ForceBackup *bool `pulumi:"forceBackup"`
 	// The number of latest manual snapshots that need to be
 	// retained when deleting the cluster.
 	KeepLastManualSnapshot *int `pulumi:"keepLastManualSnapshot"`
 	// The KMS key ID.
 	// Changing this parameter will create a new resource.
 	KmsKeyId *string `pulumi:"kmsKeyId"`
+	// Specifies whether to enable logical cluster. The switch needs to be turned
+	// on before creating a logical cluster.
+	LogicalClusterEnable *bool `pulumi:"logicalClusterEnable"`
+	// Specifies whether to enable LTS. The default value is **false**.
+	LtsEnable *bool `pulumi:"ltsEnable"`
 	// Cluster name, which must be unique and contains 4 to 64 characters, which
 	// consist of letters, digits, hyphens(-), or underscores(_) only and must start with a letter.
 	// Changing this creates a new cluster resource.
@@ -545,11 +621,12 @@ type clusterArgs struct {
 	// Changing this parameter will create a new resource.
 	NodeType string `pulumi:"nodeType"`
 	// The number of CN.\
-	// The value ranges from 2 to **number_of_node**, the maximum value is 20. Defaults to 3.
+	// The value ranges from 2 to **number_of_node**, the maximum value is 20.
+	// This parameter must be used together with `version`.
 	// Changing this parameter will create a new resource.
 	NumberOfCn *int `pulumi:"numberOfCn"`
 	// Number of nodes in a cluster.\
-	// The value ranges from 3 to 32 in cluster mode. The value of stream warehouse(stand-alone mode) is 1.
+	// The value ranges from 3 to 256 in cluster mode. The value of stream warehouse(stand-alone mode) is 1.
 	NumberOfNode int `pulumi:"numberOfNode"`
 	// Service port of a cluster (8000 to 10000). The default value is 8000.\
 	// Changing this parameter will create a new resource.
@@ -559,11 +636,10 @@ type clusterArgs struct {
 	// Specifies the region in which to create the resource.
 	// If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
 	Region *string `pulumi:"region"`
-	// The security group ID.
+	// Specifies the security group ID of the cluster.
 	// Changing this parameter will create a new resource.
 	SecurityGroupId string `pulumi:"securityGroupId"`
 	// The key/value pairs to associate with the cluster.
-	// Changing this parameter will create a new resource.
 	Tags map[string]string `pulumi:"tags"`
 	// Administrator username for logging in to a data warehouse cluster.\
 	// The administrator username must: Consist of lowercase letters, digits, or underscores.
@@ -576,9 +652,12 @@ type clusterArgs struct {
 	// It cannot be the same as the username or the username written in reverse order.
 	UserPwd string `pulumi:"userPwd"`
 	// The cluster version.
+	// [For details](https://support.huaweicloud.com/intl/en-us/bulletin-dws/dws_12_0000.html).
 	// Changing this parameter will create a new resource.
 	Version *string `pulumi:"version"`
 	// The information about the volume.
+	// Changing this parameter will create a new resource.
+	// For local disks, this parameter can not be specified.
 	Volume *ClusterVolume `pulumi:"volume"`
 	// The VPC ID.
 	// Changing this parameter will create a new resource.
@@ -588,20 +667,33 @@ type clusterArgs struct {
 // The set of arguments for constructing a Cluster resource.
 type ClusterArgs struct {
 	// The availability zone in which to create the cluster instance.
-	// Changing this parameter will create a new resource.
+	// If there are multiple available zones, separate by commas, e.g. **cn-north-4a,cn-north-4b,cn-north-4g**.
+	// Currently, multi-AZ clusters only support selecting `3` AZs. Changing this parameter will create a new resource.
 	AvailabilityZone pulumi.StringInput
+	// Specifies the description of the cluster.
+	Description pulumi.StringPtrInput
 	// Dedicated storage pool ID.
 	// Changing this parameter will create a new resource.
 	DssPoolId pulumi.StringPtrInput
+	// Specifies the ID of the ELB load balancer.
+	ElbId pulumi.StringPtrInput
 	// The enterprise project ID.
-	// Changing this parameter will create a new resource.
 	EnterpriseProjectId pulumi.StringPtrInput
+	// Specified whether to automatically execute snapshot when shrinking the number of nodes.
+	// The default value is **true**.
+	// This parameter is required and available only when scaling-in the `numberOfNode` parameter value.
+	ForceBackup pulumi.BoolPtrInput
 	// The number of latest manual snapshots that need to be
 	// retained when deleting the cluster.
 	KeepLastManualSnapshot pulumi.IntPtrInput
 	// The KMS key ID.
 	// Changing this parameter will create a new resource.
 	KmsKeyId pulumi.StringPtrInput
+	// Specifies whether to enable logical cluster. The switch needs to be turned
+	// on before creating a logical cluster.
+	LogicalClusterEnable pulumi.BoolPtrInput
+	// Specifies whether to enable LTS. The default value is **false**.
+	LtsEnable pulumi.BoolPtrInput
 	// Cluster name, which must be unique and contains 4 to 64 characters, which
 	// consist of letters, digits, hyphens(-), or underscores(_) only and must start with a letter.
 	// Changing this creates a new cluster resource.
@@ -614,11 +706,12 @@ type ClusterArgs struct {
 	// Changing this parameter will create a new resource.
 	NodeType pulumi.StringInput
 	// The number of CN.\
-	// The value ranges from 2 to **number_of_node**, the maximum value is 20. Defaults to 3.
+	// The value ranges from 2 to **number_of_node**, the maximum value is 20.
+	// This parameter must be used together with `version`.
 	// Changing this parameter will create a new resource.
 	NumberOfCn pulumi.IntPtrInput
 	// Number of nodes in a cluster.\
-	// The value ranges from 3 to 32 in cluster mode. The value of stream warehouse(stand-alone mode) is 1.
+	// The value ranges from 3 to 256 in cluster mode. The value of stream warehouse(stand-alone mode) is 1.
 	NumberOfNode pulumi.IntInput
 	// Service port of a cluster (8000 to 10000). The default value is 8000.\
 	// Changing this parameter will create a new resource.
@@ -628,11 +721,10 @@ type ClusterArgs struct {
 	// Specifies the region in which to create the resource.
 	// If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
 	Region pulumi.StringPtrInput
-	// The security group ID.
+	// Specifies the security group ID of the cluster.
 	// Changing this parameter will create a new resource.
 	SecurityGroupId pulumi.StringInput
 	// The key/value pairs to associate with the cluster.
-	// Changing this parameter will create a new resource.
 	Tags pulumi.StringMapInput
 	// Administrator username for logging in to a data warehouse cluster.\
 	// The administrator username must: Consist of lowercase letters, digits, or underscores.
@@ -645,9 +737,12 @@ type ClusterArgs struct {
 	// It cannot be the same as the username or the username written in reverse order.
 	UserPwd pulumi.StringInput
 	// The cluster version.
+	// [For details](https://support.huaweicloud.com/intl/en-us/bulletin-dws/dws_12_0000.html).
 	// Changing this parameter will create a new resource.
 	Version pulumi.StringPtrInput
 	// The information about the volume.
+	// Changing this parameter will create a new resource.
+	// For local disks, this parameter can not be specified.
 	Volume ClusterVolumePtrInput
 	// The VPC ID.
 	// Changing this parameter will create a new resource.
@@ -742,7 +837,8 @@ func (o ClusterOutput) ToClusterOutputWithContext(ctx context.Context) ClusterOu
 }
 
 // The availability zone in which to create the cluster instance.
-// Changing this parameter will create a new resource.
+// If there are multiple available zones, separate by commas, e.g. **cn-north-4a,cn-north-4b,cn-north-4g**.
+// Currently, multi-AZ clusters only support selecting `3` AZs. Changing this parameter will create a new resource.
 func (o ClusterOutput) AvailabilityZone() pulumi.StringOutput {
 	return o.ApplyT(func(v *Cluster) pulumi.StringOutput { return v.AvailabilityZone }).(pulumi.StringOutput)
 }
@@ -753,10 +849,26 @@ func (o ClusterOutput) Created() pulumi.StringOutput {
 	return o.ApplyT(func(v *Cluster) pulumi.StringOutput { return v.Created }).(pulumi.StringOutput)
 }
 
+// Specifies the description of the cluster.
+func (o ClusterOutput) Description() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *Cluster) pulumi.StringPtrOutput { return v.Description }).(pulumi.StringPtrOutput)
+}
+
 // Dedicated storage pool ID.
 // Changing this parameter will create a new resource.
 func (o ClusterOutput) DssPoolId() pulumi.StringOutput {
 	return o.ApplyT(func(v *Cluster) pulumi.StringOutput { return v.DssPoolId }).(pulumi.StringOutput)
+}
+
+// Specifies the ID of the ELB load balancer.
+func (o ClusterOutput) ElbId() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *Cluster) pulumi.StringPtrOutput { return v.ElbId }).(pulumi.StringPtrOutput)
+}
+
+// The ELB information bound to the cluster.
+// The elb structure is documented below.
+func (o ClusterOutput) Elbs() ClusterElbArrayOutput {
+	return o.ApplyT(func(v *Cluster) ClusterElbArrayOutput { return v.Elbs }).(ClusterElbArrayOutput)
 }
 
 // Private network connection information about the cluster.
@@ -766,9 +878,15 @@ func (o ClusterOutput) Endpoints() ClusterEndpointArrayOutput {
 }
 
 // The enterprise project ID.
-// Changing this parameter will create a new resource.
 func (o ClusterOutput) EnterpriseProjectId() pulumi.StringOutput {
 	return o.ApplyT(func(v *Cluster) pulumi.StringOutput { return v.EnterpriseProjectId }).(pulumi.StringOutput)
+}
+
+// Specified whether to automatically execute snapshot when shrinking the number of nodes.
+// The default value is **true**.
+// This parameter is required and available only when scaling-in the `numberOfNode` parameter value.
+func (o ClusterOutput) ForceBackup() pulumi.BoolPtrOutput {
+	return o.ApplyT(func(v *Cluster) pulumi.BoolPtrOutput { return v.ForceBackup }).(pulumi.BoolPtrOutput)
 }
 
 // The number of latest manual snapshots that need to be
@@ -781,6 +899,17 @@ func (o ClusterOutput) KeepLastManualSnapshot() pulumi.IntPtrOutput {
 // Changing this parameter will create a new resource.
 func (o ClusterOutput) KmsKeyId() pulumi.StringOutput {
 	return o.ApplyT(func(v *Cluster) pulumi.StringOutput { return v.KmsKeyId }).(pulumi.StringOutput)
+}
+
+// Specifies whether to enable logical cluster. The switch needs to be turned
+// on before creating a logical cluster.
+func (o ClusterOutput) LogicalClusterEnable() pulumi.BoolPtrOutput {
+	return o.ApplyT(func(v *Cluster) pulumi.BoolPtrOutput { return v.LogicalClusterEnable }).(pulumi.BoolPtrOutput)
+}
+
+// Specifies whether to enable LTS. The default value is **false**.
+func (o ClusterOutput) LtsEnable() pulumi.BoolPtrOutput {
+	return o.ApplyT(func(v *Cluster) pulumi.BoolPtrOutput { return v.LtsEnable }).(pulumi.BoolPtrOutput)
 }
 
 // Cluster maintenance window.
@@ -810,14 +939,15 @@ func (o ClusterOutput) NodeType() pulumi.StringOutput {
 }
 
 // The number of CN.\
-// The value ranges from 2 to **number_of_node**, the maximum value is 20. Defaults to 3.
+// The value ranges from 2 to **number_of_node**, the maximum value is 20.
+// This parameter must be used together with `version`.
 // Changing this parameter will create a new resource.
 func (o ClusterOutput) NumberOfCn() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v *Cluster) pulumi.IntPtrOutput { return v.NumberOfCn }).(pulumi.IntPtrOutput)
 }
 
 // Number of nodes in a cluster.\
-// The value ranges from 3 to 32 in cluster mode. The value of stream warehouse(stand-alone mode) is 1.
+// The value ranges from 3 to 256 in cluster mode. The value of stream warehouse(stand-alone mode) is 1.
 func (o ClusterOutput) NumberOfNode() pulumi.IntOutput {
 	return o.ApplyT(func(v *Cluster) pulumi.IntOutput { return v.NumberOfNode }).(pulumi.IntOutput)
 }
@@ -828,7 +958,7 @@ func (o ClusterOutput) Port() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v *Cluster) pulumi.IntPtrOutput { return v.Port }).(pulumi.IntPtrOutput)
 }
 
-// List of private network IP addresses.
+// The private IP address of the ELB load balancer.
 func (o ClusterOutput) PrivateIps() pulumi.StringArrayOutput {
 	return o.ApplyT(func(v *Cluster) pulumi.StringArrayOutput { return v.PrivateIps }).(pulumi.StringArrayOutput)
 }
@@ -855,7 +985,7 @@ func (o ClusterOutput) Region() pulumi.StringOutput {
 	return o.ApplyT(func(v *Cluster) pulumi.StringOutput { return v.Region }).(pulumi.StringOutput)
 }
 
-// The security group ID.
+// Specifies the security group ID of the cluster.
 // Changing this parameter will create a new resource.
 func (o ClusterOutput) SecurityGroupId() pulumi.StringOutput {
 	return o.ApplyT(func(v *Cluster) pulumi.StringOutput { return v.SecurityGroupId }).(pulumi.StringOutput)
@@ -891,7 +1021,6 @@ func (o ClusterOutput) SubStatus() pulumi.StringOutput {
 }
 
 // The key/value pairs to associate with the cluster.
-// Changing this parameter will create a new resource.
 func (o ClusterOutput) Tags() pulumi.StringMapOutput {
 	return o.ApplyT(func(v *Cluster) pulumi.StringMapOutput { return v.Tags }).(pulumi.StringMapOutput)
 }
@@ -936,12 +1065,15 @@ func (o ClusterOutput) UserPwd() pulumi.StringOutput {
 }
 
 // The cluster version.
+// [For details](https://support.huaweicloud.com/intl/en-us/bulletin-dws/dws_12_0000.html).
 // Changing this parameter will create a new resource.
 func (o ClusterOutput) Version() pulumi.StringOutput {
 	return o.ApplyT(func(v *Cluster) pulumi.StringOutput { return v.Version }).(pulumi.StringOutput)
 }
 
 // The information about the volume.
+// Changing this parameter will create a new resource.
+// For local disks, this parameter can not be specified.
 func (o ClusterOutput) Volume() ClusterVolumeOutput {
 	return o.ApplyT(func(v *Cluster) ClusterVolumeOutput { return v.Volume }).(ClusterVolumeOutput)
 }

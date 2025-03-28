@@ -93,15 +93,20 @@ export class Instance extends pulumi.CustomResource {
     }
 
     /**
-     * Specifies the administrative password to assign to the instance. Changing
-     * this creates a new instance.
+     * Specifies the login password of the administrator for logging in to the
+     * BMS using password authentication. Changing this creates a new instance. The password must meet the following
+     * complexity requirements:
+     * + Contains 8 to 26 characters.
+     * + Contains at least three of the following character types: uppercase letters, lowercase letters, digits, and special
+     * characters !@$%^-_=+[{}]:,./?
+     * + Cannot contain the username or the username in reverse.
      */
     public readonly adminPass!: pulumi.Output<string | undefined>;
     /**
      * Specifies the IAM agency name which is created on IAM to provide
-     * temporary credentials for BMS to access cloud services. Changing this creates a new instance.
+     * temporary credentials for BMS to access cloud services.
      */
-    public readonly agencyName!: pulumi.Output<string | undefined>;
+    public readonly agencyName!: pulumi.Output<string>;
     /**
      * Specifies whether auto renew is enabled. Valid values are "true" and "
      * false", defaults to *false*.
@@ -155,8 +160,7 @@ export class Instance extends pulumi.CustomResource {
      */
     public readonly eipId!: pulumi.Output<string | undefined>;
     /**
-     * Specifies a unique id in UUID format of enterprise project .
-     * Changing this creates a new instance.
+     * Specifies a unique id in UUID format of enterprise project.
      */
     public readonly enterpriseProjectId!: pulumi.Output<string>;
     /**
@@ -185,10 +189,18 @@ export class Instance extends pulumi.CustomResource {
      */
     public readonly iptype!: pulumi.Output<string | undefined>;
     /**
-     * Specifies the name of a key pair to put on the instance. The key pair must
-     * already be created and associated with the tenant's account. Changing this creates a new instance.
+     * Specifies the name of a key pair for logging in to the BMS using key pair
+     * authentication. The key pair must already be created and associated with the tenant's account. The parameter is
+     * required when using a Windows image to create a BMS. Changing this creates a new instance.
      */
     public readonly keyPair!: pulumi.Output<string | undefined>;
+    /**
+     * Specifies the user-defined metadata key-value pair.
+     * + A metadata key contains of a maximum of 255 Unicode characters which can be letters, digits, hyphens (-),
+     * underscores (_), colons (:), and point (.).
+     * + A metadata value consists of a maximum of 255 Unicode characters.
+     */
+    public readonly metadata!: pulumi.Output<{[key: string]: string} | undefined>;
     /**
      * Specifies a unique name for the instance. The name consists of 1 to 63 characters,
      * including letters, digits, underscores (_), hyphens (-), and periods (.).
@@ -196,7 +208,7 @@ export class Instance extends pulumi.CustomResource {
     public readonly name!: pulumi.Output<string>;
     /**
      * Specifies an array of one or more networks to attach to the instance. The network
-     * object structure is documented below. Changing this creates a new instance.
+     * object structure is documented below.
      */
     public readonly nics!: pulumi.Output<outputs.Bms.InstanceNic[]>;
     /**
@@ -212,7 +224,7 @@ export class Instance extends pulumi.CustomResource {
      */
     public readonly periodUnit!: pulumi.Output<string | undefined>;
     /**
-     * The EIP address that is associted to the instance.
+     * The EIP address that is associated to the instance.
      */
     public /*out*/ readonly publicIp!: pulumi.Output<string>;
     /**
@@ -253,16 +265,15 @@ export class Instance extends pulumi.CustomResource {
      */
     public readonly systemDiskType!: pulumi.Output<string | undefined>;
     /**
-     * Specifies the key/value pairs to associate with the instance. Changing this creates
-     * a new instance.
+     * Specifies the key/value pairs to associate with the instance.
      */
     public readonly tags!: pulumi.Output<{[key: string]: string} | undefined>;
     /**
      * Specifies the user data to be injected during the instance creation. Text
-     * and text files can be injected. `userData` can come from a variety of sources: inline, read in from the
-     * *file* function. Changing this creates a new instance.
+     * and text files can be injected. `userData` can come from a variety of sources: inline, read in from the *file*
+     * function. The content of `userData` can be plaint text or encoded with base64. Changing this creates a new instance.
      */
-    public readonly userData!: pulumi.Output<string | undefined>;
+    public readonly userData!: pulumi.Output<string>;
     /**
      * Specifies the user ID. You can obtain the user ID from My Credential on the
      * management console. Changing this creates a new instance.
@@ -306,6 +317,7 @@ export class Instance extends pulumi.CustomResource {
             resourceInputs["imageName"] = state ? state.imageName : undefined;
             resourceInputs["iptype"] = state ? state.iptype : undefined;
             resourceInputs["keyPair"] = state ? state.keyPair : undefined;
+            resourceInputs["metadata"] = state ? state.metadata : undefined;
             resourceInputs["name"] = state ? state.name : undefined;
             resourceInputs["nics"] = state ? state.nics : undefined;
             resourceInputs["period"] = state ? state.period : undefined;
@@ -356,6 +368,7 @@ export class Instance extends pulumi.CustomResource {
             resourceInputs["imageId"] = args ? args.imageId : undefined;
             resourceInputs["iptype"] = args ? args.iptype : undefined;
             resourceInputs["keyPair"] = args ? args.keyPair : undefined;
+            resourceInputs["metadata"] = args ? args.metadata : undefined;
             resourceInputs["name"] = args ? args.name : undefined;
             resourceInputs["nics"] = args ? args.nics : undefined;
             resourceInputs["period"] = args ? args.period : undefined;
@@ -386,13 +399,18 @@ export class Instance extends pulumi.CustomResource {
  */
 export interface InstanceState {
     /**
-     * Specifies the administrative password to assign to the instance. Changing
-     * this creates a new instance.
+     * Specifies the login password of the administrator for logging in to the
+     * BMS using password authentication. Changing this creates a new instance. The password must meet the following
+     * complexity requirements:
+     * + Contains 8 to 26 characters.
+     * + Contains at least three of the following character types: uppercase letters, lowercase letters, digits, and special
+     * characters !@$%^-_=+[{}]:,./?
+     * + Cannot contain the username or the username in reverse.
      */
     adminPass?: pulumi.Input<string>;
     /**
      * Specifies the IAM agency name which is created on IAM to provide
-     * temporary credentials for BMS to access cloud services. Changing this creates a new instance.
+     * temporary credentials for BMS to access cloud services.
      */
     agencyName?: pulumi.Input<string>;
     /**
@@ -448,8 +466,7 @@ export interface InstanceState {
      */
     eipId?: pulumi.Input<string>;
     /**
-     * Specifies a unique id in UUID format of enterprise project .
-     * Changing this creates a new instance.
+     * Specifies a unique id in UUID format of enterprise project.
      */
     enterpriseProjectId?: pulumi.Input<string>;
     /**
@@ -478,10 +495,18 @@ export interface InstanceState {
      */
     iptype?: pulumi.Input<string>;
     /**
-     * Specifies the name of a key pair to put on the instance. The key pair must
-     * already be created and associated with the tenant's account. Changing this creates a new instance.
+     * Specifies the name of a key pair for logging in to the BMS using key pair
+     * authentication. The key pair must already be created and associated with the tenant's account. The parameter is
+     * required when using a Windows image to create a BMS. Changing this creates a new instance.
      */
     keyPair?: pulumi.Input<string>;
+    /**
+     * Specifies the user-defined metadata key-value pair.
+     * + A metadata key contains of a maximum of 255 Unicode characters which can be letters, digits, hyphens (-),
+     * underscores (_), colons (:), and point (.).
+     * + A metadata value consists of a maximum of 255 Unicode characters.
+     */
+    metadata?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
     /**
      * Specifies a unique name for the instance. The name consists of 1 to 63 characters,
      * including letters, digits, underscores (_), hyphens (-), and periods (.).
@@ -489,7 +514,7 @@ export interface InstanceState {
     name?: pulumi.Input<string>;
     /**
      * Specifies an array of one or more networks to attach to the instance. The network
-     * object structure is documented below. Changing this creates a new instance.
+     * object structure is documented below.
      */
     nics?: pulumi.Input<pulumi.Input<inputs.Bms.InstanceNic>[]>;
     /**
@@ -505,7 +530,7 @@ export interface InstanceState {
      */
     periodUnit?: pulumi.Input<string>;
     /**
-     * The EIP address that is associted to the instance.
+     * The EIP address that is associated to the instance.
      */
     publicIp?: pulumi.Input<string>;
     /**
@@ -546,14 +571,13 @@ export interface InstanceState {
      */
     systemDiskType?: pulumi.Input<string>;
     /**
-     * Specifies the key/value pairs to associate with the instance. Changing this creates
-     * a new instance.
+     * Specifies the key/value pairs to associate with the instance.
      */
     tags?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
     /**
      * Specifies the user data to be injected during the instance creation. Text
-     * and text files can be injected. `userData` can come from a variety of sources: inline, read in from the
-     * *file* function. Changing this creates a new instance.
+     * and text files can be injected. `userData` can come from a variety of sources: inline, read in from the *file*
+     * function. The content of `userData` can be plaint text or encoded with base64. Changing this creates a new instance.
      */
     userData?: pulumi.Input<string>;
     /**
@@ -573,13 +597,18 @@ export interface InstanceState {
  */
 export interface InstanceArgs {
     /**
-     * Specifies the administrative password to assign to the instance. Changing
-     * this creates a new instance.
+     * Specifies the login password of the administrator for logging in to the
+     * BMS using password authentication. Changing this creates a new instance. The password must meet the following
+     * complexity requirements:
+     * + Contains 8 to 26 characters.
+     * + Contains at least three of the following character types: uppercase letters, lowercase letters, digits, and special
+     * characters !@$%^-_=+[{}]:,./?
+     * + Cannot contain the username or the username in reverse.
      */
     adminPass?: pulumi.Input<string>;
     /**
      * Specifies the IAM agency name which is created on IAM to provide
-     * temporary credentials for BMS to access cloud services. Changing this creates a new instance.
+     * temporary credentials for BMS to access cloud services.
      */
     agencyName?: pulumi.Input<string>;
     /**
@@ -627,8 +656,7 @@ export interface InstanceArgs {
      */
     eipId?: pulumi.Input<string>;
     /**
-     * Specifies a unique id in UUID format of enterprise project .
-     * Changing this creates a new instance.
+     * Specifies a unique id in UUID format of enterprise project.
      */
     enterpriseProjectId?: pulumi.Input<string>;
     /**
@@ -649,10 +677,18 @@ export interface InstanceArgs {
      */
     iptype?: pulumi.Input<string>;
     /**
-     * Specifies the name of a key pair to put on the instance. The key pair must
-     * already be created and associated with the tenant's account. Changing this creates a new instance.
+     * Specifies the name of a key pair for logging in to the BMS using key pair
+     * authentication. The key pair must already be created and associated with the tenant's account. The parameter is
+     * required when using a Windows image to create a BMS. Changing this creates a new instance.
      */
     keyPair?: pulumi.Input<string>;
+    /**
+     * Specifies the user-defined metadata key-value pair.
+     * + A metadata key contains of a maximum of 255 Unicode characters which can be letters, digits, hyphens (-),
+     * underscores (_), colons (:), and point (.).
+     * + A metadata value consists of a maximum of 255 Unicode characters.
+     */
+    metadata?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
     /**
      * Specifies a unique name for the instance. The name consists of 1 to 63 characters,
      * including letters, digits, underscores (_), hyphens (-), and periods (.).
@@ -660,7 +696,7 @@ export interface InstanceArgs {
     name?: pulumi.Input<string>;
     /**
      * Specifies an array of one or more networks to attach to the instance. The network
-     * object structure is documented below. Changing this creates a new instance.
+     * object structure is documented below.
      */
     nics: pulumi.Input<pulumi.Input<inputs.Bms.InstanceNic>[]>;
     /**
@@ -709,14 +745,13 @@ export interface InstanceArgs {
      */
     systemDiskType?: pulumi.Input<string>;
     /**
-     * Specifies the key/value pairs to associate with the instance. Changing this creates
-     * a new instance.
+     * Specifies the key/value pairs to associate with the instance.
      */
     tags?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
     /**
      * Specifies the user data to be injected during the instance creation. Text
-     * and text files can be injected. `userData` can come from a variety of sources: inline, read in from the
-     * *file* function. Changing this creates a new instance.
+     * and text files can be injected. `userData` can come from a variety of sources: inline, read in from the *file*
+     * function. The content of `userData` can be plaint text or encoded with base64. Changing this creates a new instance.
      */
     userData?: pulumi.Input<string>;
     /**

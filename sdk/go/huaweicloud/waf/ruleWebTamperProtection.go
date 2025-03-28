@@ -14,7 +14,7 @@ import (
 // Manages a WAF web tamper protection rule resource within HuaweiCloud.
 //
 // > **NOTE:** All WAF resources depend on WAF instances, and the WAF instances need to be purchased before they can be
-// used. The web tamper protection rule resource can be used in Cloud Mode, Dedicated Mode and ELB Mode.
+// used. The web tamper protection rule resource can be used in Cloud Mode and Dedicated Mode.
 //
 // ## Example Usage
 //
@@ -34,11 +34,12 @@ import (
 //			cfg := config.New(ctx, "")
 //			enterpriseProjectId := cfg.RequireObject("enterpriseProjectId")
 //			policyId := cfg.RequireObject("policyId")
-//			_, err := Waf.NewRuleWebTamperProtection(ctx, "rule1", &Waf.RuleWebTamperProtectionArgs{
+//			_, err := Waf.NewRuleWebTamperProtection(ctx, "test", &Waf.RuleWebTamperProtectionArgs{
 //				PolicyId:            pulumi.Any(policyId),
 //				EnterpriseProjectId: pulumi.Any(enterpriseProjectId),
 //				Domain:              pulumi.String("www.your-domain.com"),
 //				Path:                pulumi.String("/payment"),
+//				Description:         pulumi.String("test description"),
 //			})
 //			if err != nil {
 //				return err
@@ -69,19 +70,28 @@ import (
 type RuleWebTamperProtection struct {
 	pulumi.CustomResourceState
 
+	// Specifies the description of WAF web tamper protection rule.
+	// Changing this creates a new rule.
+	Description pulumi.StringOutput `pulumi:"description"`
 	// Specifies the domain name. Changing this creates a new rule.
 	Domain pulumi.StringOutput `pulumi:"domain"`
 	// Specifies the enterprise project ID of WAF tamper protection
-	// rule. Changing this parameter will create a new resource.
+	// rule. For enterprise users, if omitted, default enterprise project will be used.
+	// Changing this parameter will create a new resource.
 	EnterpriseProjectId pulumi.StringPtrOutput `pulumi:"enterpriseProjectId"`
 	// Specifies the URL protected by the web tamper protection rule, excluding a
 	// domain name. Changing this creates a new rule.
 	Path pulumi.StringOutput `pulumi:"path"`
 	// Specifies the WAF policy ID. Changing this creates a new rule.
 	PolicyId pulumi.StringOutput `pulumi:"policyId"`
-	// The region in which to create the WAF web tamper protection rules resource. If
-	// omitted, the provider-level region will be used. Changing this creates a new rule.
+	// Specifies the region in which to create the WAF web tamper protection rules
+	// resource. If omitted, the provider-level region will be used. Changing this creates a new rule.
 	Region pulumi.StringOutput `pulumi:"region"`
+	// Specifies the status of WAF web tamper protection rule.
+	// Valid values are as follows:
+	// + `0`: Disabled.
+	// + `1`: Enabled.
+	Status pulumi.IntPtrOutput `pulumi:"status"`
 }
 
 // NewRuleWebTamperProtection registers a new resource with the given unique name, arguments, and options.
@@ -123,35 +133,53 @@ func GetRuleWebTamperProtection(ctx *pulumi.Context,
 
 // Input properties used for looking up and filtering RuleWebTamperProtection resources.
 type ruleWebTamperProtectionState struct {
+	// Specifies the description of WAF web tamper protection rule.
+	// Changing this creates a new rule.
+	Description *string `pulumi:"description"`
 	// Specifies the domain name. Changing this creates a new rule.
 	Domain *string `pulumi:"domain"`
 	// Specifies the enterprise project ID of WAF tamper protection
-	// rule. Changing this parameter will create a new resource.
+	// rule. For enterprise users, if omitted, default enterprise project will be used.
+	// Changing this parameter will create a new resource.
 	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
 	// Specifies the URL protected by the web tamper protection rule, excluding a
 	// domain name. Changing this creates a new rule.
 	Path *string `pulumi:"path"`
 	// Specifies the WAF policy ID. Changing this creates a new rule.
 	PolicyId *string `pulumi:"policyId"`
-	// The region in which to create the WAF web tamper protection rules resource. If
-	// omitted, the provider-level region will be used. Changing this creates a new rule.
+	// Specifies the region in which to create the WAF web tamper protection rules
+	// resource. If omitted, the provider-level region will be used. Changing this creates a new rule.
 	Region *string `pulumi:"region"`
+	// Specifies the status of WAF web tamper protection rule.
+	// Valid values are as follows:
+	// + `0`: Disabled.
+	// + `1`: Enabled.
+	Status *int `pulumi:"status"`
 }
 
 type RuleWebTamperProtectionState struct {
+	// Specifies the description of WAF web tamper protection rule.
+	// Changing this creates a new rule.
+	Description pulumi.StringPtrInput
 	// Specifies the domain name. Changing this creates a new rule.
 	Domain pulumi.StringPtrInput
 	// Specifies the enterprise project ID of WAF tamper protection
-	// rule. Changing this parameter will create a new resource.
+	// rule. For enterprise users, if omitted, default enterprise project will be used.
+	// Changing this parameter will create a new resource.
 	EnterpriseProjectId pulumi.StringPtrInput
 	// Specifies the URL protected by the web tamper protection rule, excluding a
 	// domain name. Changing this creates a new rule.
 	Path pulumi.StringPtrInput
 	// Specifies the WAF policy ID. Changing this creates a new rule.
 	PolicyId pulumi.StringPtrInput
-	// The region in which to create the WAF web tamper protection rules resource. If
-	// omitted, the provider-level region will be used. Changing this creates a new rule.
+	// Specifies the region in which to create the WAF web tamper protection rules
+	// resource. If omitted, the provider-level region will be used. Changing this creates a new rule.
 	Region pulumi.StringPtrInput
+	// Specifies the status of WAF web tamper protection rule.
+	// Valid values are as follows:
+	// + `0`: Disabled.
+	// + `1`: Enabled.
+	Status pulumi.IntPtrInput
 }
 
 func (RuleWebTamperProtectionState) ElementType() reflect.Type {
@@ -159,36 +187,54 @@ func (RuleWebTamperProtectionState) ElementType() reflect.Type {
 }
 
 type ruleWebTamperProtectionArgs struct {
+	// Specifies the description of WAF web tamper protection rule.
+	// Changing this creates a new rule.
+	Description *string `pulumi:"description"`
 	// Specifies the domain name. Changing this creates a new rule.
 	Domain string `pulumi:"domain"`
 	// Specifies the enterprise project ID of WAF tamper protection
-	// rule. Changing this parameter will create a new resource.
+	// rule. For enterprise users, if omitted, default enterprise project will be used.
+	// Changing this parameter will create a new resource.
 	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
 	// Specifies the URL protected by the web tamper protection rule, excluding a
 	// domain name. Changing this creates a new rule.
 	Path string `pulumi:"path"`
 	// Specifies the WAF policy ID. Changing this creates a new rule.
 	PolicyId string `pulumi:"policyId"`
-	// The region in which to create the WAF web tamper protection rules resource. If
-	// omitted, the provider-level region will be used. Changing this creates a new rule.
+	// Specifies the region in which to create the WAF web tamper protection rules
+	// resource. If omitted, the provider-level region will be used. Changing this creates a new rule.
 	Region *string `pulumi:"region"`
+	// Specifies the status of WAF web tamper protection rule.
+	// Valid values are as follows:
+	// + `0`: Disabled.
+	// + `1`: Enabled.
+	Status *int `pulumi:"status"`
 }
 
 // The set of arguments for constructing a RuleWebTamperProtection resource.
 type RuleWebTamperProtectionArgs struct {
+	// Specifies the description of WAF web tamper protection rule.
+	// Changing this creates a new rule.
+	Description pulumi.StringPtrInput
 	// Specifies the domain name. Changing this creates a new rule.
 	Domain pulumi.StringInput
 	// Specifies the enterprise project ID of WAF tamper protection
-	// rule. Changing this parameter will create a new resource.
+	// rule. For enterprise users, if omitted, default enterprise project will be used.
+	// Changing this parameter will create a new resource.
 	EnterpriseProjectId pulumi.StringPtrInput
 	// Specifies the URL protected by the web tamper protection rule, excluding a
 	// domain name. Changing this creates a new rule.
 	Path pulumi.StringInput
 	// Specifies the WAF policy ID. Changing this creates a new rule.
 	PolicyId pulumi.StringInput
-	// The region in which to create the WAF web tamper protection rules resource. If
-	// omitted, the provider-level region will be used. Changing this creates a new rule.
+	// Specifies the region in which to create the WAF web tamper protection rules
+	// resource. If omitted, the provider-level region will be used. Changing this creates a new rule.
 	Region pulumi.StringPtrInput
+	// Specifies the status of WAF web tamper protection rule.
+	// Valid values are as follows:
+	// + `0`: Disabled.
+	// + `1`: Enabled.
+	Status pulumi.IntPtrInput
 }
 
 func (RuleWebTamperProtectionArgs) ElementType() reflect.Type {
@@ -278,13 +324,20 @@ func (o RuleWebTamperProtectionOutput) ToRuleWebTamperProtectionOutputWithContex
 	return o
 }
 
+// Specifies the description of WAF web tamper protection rule.
+// Changing this creates a new rule.
+func (o RuleWebTamperProtectionOutput) Description() pulumi.StringOutput {
+	return o.ApplyT(func(v *RuleWebTamperProtection) pulumi.StringOutput { return v.Description }).(pulumi.StringOutput)
+}
+
 // Specifies the domain name. Changing this creates a new rule.
 func (o RuleWebTamperProtectionOutput) Domain() pulumi.StringOutput {
 	return o.ApplyT(func(v *RuleWebTamperProtection) pulumi.StringOutput { return v.Domain }).(pulumi.StringOutput)
 }
 
 // Specifies the enterprise project ID of WAF tamper protection
-// rule. Changing this parameter will create a new resource.
+// rule. For enterprise users, if omitted, default enterprise project will be used.
+// Changing this parameter will create a new resource.
 func (o RuleWebTamperProtectionOutput) EnterpriseProjectId() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *RuleWebTamperProtection) pulumi.StringPtrOutput { return v.EnterpriseProjectId }).(pulumi.StringPtrOutput)
 }
@@ -300,10 +353,18 @@ func (o RuleWebTamperProtectionOutput) PolicyId() pulumi.StringOutput {
 	return o.ApplyT(func(v *RuleWebTamperProtection) pulumi.StringOutput { return v.PolicyId }).(pulumi.StringOutput)
 }
 
-// The region in which to create the WAF web tamper protection rules resource. If
-// omitted, the provider-level region will be used. Changing this creates a new rule.
+// Specifies the region in which to create the WAF web tamper protection rules
+// resource. If omitted, the provider-level region will be used. Changing this creates a new rule.
 func (o RuleWebTamperProtectionOutput) Region() pulumi.StringOutput {
 	return o.ApplyT(func(v *RuleWebTamperProtection) pulumi.StringOutput { return v.Region }).(pulumi.StringOutput)
+}
+
+// Specifies the status of WAF web tamper protection rule.
+// Valid values are as follows:
+// + `0`: Disabled.
+// + `1`: Enabled.
+func (o RuleWebTamperProtectionOutput) Status() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v *RuleWebTamperProtection) pulumi.IntPtrOutput { return v.Status }).(pulumi.IntPtrOutput)
 }
 
 type RuleWebTamperProtectionArrayOutput struct{ *pulumi.OutputState }

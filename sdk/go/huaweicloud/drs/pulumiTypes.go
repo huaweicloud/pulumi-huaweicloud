@@ -10,47 +10,287 @@ import (
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
+type JobAlarmNotify struct {
+	// Specifies the Delay threshold between the source and destination database,
+	// in seconds. Value ranges from `1` to `3,600`. Default is `0` and no notifications will be sent to recipient. If
+	// the delay exceeds a specified value and lasts for 6 minutes, DRS will notify specified recipients. This option is
+	// available only for **full+incremental** tasks.
+	DelayTime *int `pulumi:"delayTime"`
+	// Specifies the RPO delay threshold, in seconds.\
+	// Value ranges from `1` to `3,600`. Default is `0` and no notifications will be sent to recipient.
+	// If the RPO delay between the service database and the DRS instance exceeds a specified value and lasts for `6`
+	// minutes, DRS will notify specified recipients.
+	RpoDelay *int `pulumi:"rpoDelay"`
+	// Specifies the RTO delay threshold, in seconds.\
+	// Value ranges from `1` to `3,600`. Default is `0` and no notifications will be sent to recipient.
+	// If the RTO delay between the DRS instance and the DR database exceeds a specified value and lasts for `6` minutes,
+	// DRS will notify specified recipients.
+	RtoDelay *int `pulumi:"rtoDelay"`
+	// Specifies the SMN topic URN which is subscribed.
+	TopicUrn string `pulumi:"topicUrn"`
+}
+
+// JobAlarmNotifyInput is an input type that accepts JobAlarmNotifyArgs and JobAlarmNotifyOutput values.
+// You can construct a concrete instance of `JobAlarmNotifyInput` via:
+//
+//	JobAlarmNotifyArgs{...}
+type JobAlarmNotifyInput interface {
+	pulumi.Input
+
+	ToJobAlarmNotifyOutput() JobAlarmNotifyOutput
+	ToJobAlarmNotifyOutputWithContext(context.Context) JobAlarmNotifyOutput
+}
+
+type JobAlarmNotifyArgs struct {
+	// Specifies the Delay threshold between the source and destination database,
+	// in seconds. Value ranges from `1` to `3,600`. Default is `0` and no notifications will be sent to recipient. If
+	// the delay exceeds a specified value and lasts for 6 minutes, DRS will notify specified recipients. This option is
+	// available only for **full+incremental** tasks.
+	DelayTime pulumi.IntPtrInput `pulumi:"delayTime"`
+	// Specifies the RPO delay threshold, in seconds.\
+	// Value ranges from `1` to `3,600`. Default is `0` and no notifications will be sent to recipient.
+	// If the RPO delay between the service database and the DRS instance exceeds a specified value and lasts for `6`
+	// minutes, DRS will notify specified recipients.
+	RpoDelay pulumi.IntPtrInput `pulumi:"rpoDelay"`
+	// Specifies the RTO delay threshold, in seconds.\
+	// Value ranges from `1` to `3,600`. Default is `0` and no notifications will be sent to recipient.
+	// If the RTO delay between the DRS instance and the DR database exceeds a specified value and lasts for `6` minutes,
+	// DRS will notify specified recipients.
+	RtoDelay pulumi.IntPtrInput `pulumi:"rtoDelay"`
+	// Specifies the SMN topic URN which is subscribed.
+	TopicUrn pulumi.StringInput `pulumi:"topicUrn"`
+}
+
+func (JobAlarmNotifyArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*JobAlarmNotify)(nil)).Elem()
+}
+
+func (i JobAlarmNotifyArgs) ToJobAlarmNotifyOutput() JobAlarmNotifyOutput {
+	return i.ToJobAlarmNotifyOutputWithContext(context.Background())
+}
+
+func (i JobAlarmNotifyArgs) ToJobAlarmNotifyOutputWithContext(ctx context.Context) JobAlarmNotifyOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(JobAlarmNotifyOutput)
+}
+
+func (i JobAlarmNotifyArgs) ToJobAlarmNotifyPtrOutput() JobAlarmNotifyPtrOutput {
+	return i.ToJobAlarmNotifyPtrOutputWithContext(context.Background())
+}
+
+func (i JobAlarmNotifyArgs) ToJobAlarmNotifyPtrOutputWithContext(ctx context.Context) JobAlarmNotifyPtrOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(JobAlarmNotifyOutput).ToJobAlarmNotifyPtrOutputWithContext(ctx)
+}
+
+// JobAlarmNotifyPtrInput is an input type that accepts JobAlarmNotifyArgs, JobAlarmNotifyPtr and JobAlarmNotifyPtrOutput values.
+// You can construct a concrete instance of `JobAlarmNotifyPtrInput` via:
+//
+//	        JobAlarmNotifyArgs{...}
+//
+//	or:
+//
+//	        nil
+type JobAlarmNotifyPtrInput interface {
+	pulumi.Input
+
+	ToJobAlarmNotifyPtrOutput() JobAlarmNotifyPtrOutput
+	ToJobAlarmNotifyPtrOutputWithContext(context.Context) JobAlarmNotifyPtrOutput
+}
+
+type jobAlarmNotifyPtrType JobAlarmNotifyArgs
+
+func JobAlarmNotifyPtr(v *JobAlarmNotifyArgs) JobAlarmNotifyPtrInput {
+	return (*jobAlarmNotifyPtrType)(v)
+}
+
+func (*jobAlarmNotifyPtrType) ElementType() reflect.Type {
+	return reflect.TypeOf((**JobAlarmNotify)(nil)).Elem()
+}
+
+func (i *jobAlarmNotifyPtrType) ToJobAlarmNotifyPtrOutput() JobAlarmNotifyPtrOutput {
+	return i.ToJobAlarmNotifyPtrOutputWithContext(context.Background())
+}
+
+func (i *jobAlarmNotifyPtrType) ToJobAlarmNotifyPtrOutputWithContext(ctx context.Context) JobAlarmNotifyPtrOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(JobAlarmNotifyPtrOutput)
+}
+
+type JobAlarmNotifyOutput struct{ *pulumi.OutputState }
+
+func (JobAlarmNotifyOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*JobAlarmNotify)(nil)).Elem()
+}
+
+func (o JobAlarmNotifyOutput) ToJobAlarmNotifyOutput() JobAlarmNotifyOutput {
+	return o
+}
+
+func (o JobAlarmNotifyOutput) ToJobAlarmNotifyOutputWithContext(ctx context.Context) JobAlarmNotifyOutput {
+	return o
+}
+
+func (o JobAlarmNotifyOutput) ToJobAlarmNotifyPtrOutput() JobAlarmNotifyPtrOutput {
+	return o.ToJobAlarmNotifyPtrOutputWithContext(context.Background())
+}
+
+func (o JobAlarmNotifyOutput) ToJobAlarmNotifyPtrOutputWithContext(ctx context.Context) JobAlarmNotifyPtrOutput {
+	return o.ApplyTWithContext(ctx, func(_ context.Context, v JobAlarmNotify) *JobAlarmNotify {
+		return &v
+	}).(JobAlarmNotifyPtrOutput)
+}
+
+// Specifies the Delay threshold between the source and destination database,
+// in seconds. Value ranges from `1` to `3,600`. Default is `0` and no notifications will be sent to recipient. If
+// the delay exceeds a specified value and lasts for 6 minutes, DRS will notify specified recipients. This option is
+// available only for **full+incremental** tasks.
+func (o JobAlarmNotifyOutput) DelayTime() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v JobAlarmNotify) *int { return v.DelayTime }).(pulumi.IntPtrOutput)
+}
+
+// Specifies the RPO delay threshold, in seconds.\
+// Value ranges from `1` to `3,600`. Default is `0` and no notifications will be sent to recipient.
+// If the RPO delay between the service database and the DRS instance exceeds a specified value and lasts for `6`
+// minutes, DRS will notify specified recipients.
+func (o JobAlarmNotifyOutput) RpoDelay() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v JobAlarmNotify) *int { return v.RpoDelay }).(pulumi.IntPtrOutput)
+}
+
+// Specifies the RTO delay threshold, in seconds.\
+// Value ranges from `1` to `3,600`. Default is `0` and no notifications will be sent to recipient.
+// If the RTO delay between the DRS instance and the DR database exceeds a specified value and lasts for `6` minutes,
+// DRS will notify specified recipients.
+func (o JobAlarmNotifyOutput) RtoDelay() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v JobAlarmNotify) *int { return v.RtoDelay }).(pulumi.IntPtrOutput)
+}
+
+// Specifies the SMN topic URN which is subscribed.
+func (o JobAlarmNotifyOutput) TopicUrn() pulumi.StringOutput {
+	return o.ApplyT(func(v JobAlarmNotify) string { return v.TopicUrn }).(pulumi.StringOutput)
+}
+
+type JobAlarmNotifyPtrOutput struct{ *pulumi.OutputState }
+
+func (JobAlarmNotifyPtrOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((**JobAlarmNotify)(nil)).Elem()
+}
+
+func (o JobAlarmNotifyPtrOutput) ToJobAlarmNotifyPtrOutput() JobAlarmNotifyPtrOutput {
+	return o
+}
+
+func (o JobAlarmNotifyPtrOutput) ToJobAlarmNotifyPtrOutputWithContext(ctx context.Context) JobAlarmNotifyPtrOutput {
+	return o
+}
+
+func (o JobAlarmNotifyPtrOutput) Elem() JobAlarmNotifyOutput {
+	return o.ApplyT(func(v *JobAlarmNotify) JobAlarmNotify {
+		if v != nil {
+			return *v
+		}
+		var ret JobAlarmNotify
+		return ret
+	}).(JobAlarmNotifyOutput)
+}
+
+// Specifies the Delay threshold between the source and destination database,
+// in seconds. Value ranges from `1` to `3,600`. Default is `0` and no notifications will be sent to recipient. If
+// the delay exceeds a specified value and lasts for 6 minutes, DRS will notify specified recipients. This option is
+// available only for **full+incremental** tasks.
+func (o JobAlarmNotifyPtrOutput) DelayTime() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v *JobAlarmNotify) *int {
+		if v == nil {
+			return nil
+		}
+		return v.DelayTime
+	}).(pulumi.IntPtrOutput)
+}
+
+// Specifies the RPO delay threshold, in seconds.\
+// Value ranges from `1` to `3,600`. Default is `0` and no notifications will be sent to recipient.
+// If the RPO delay between the service database and the DRS instance exceeds a specified value and lasts for `6`
+// minutes, DRS will notify specified recipients.
+func (o JobAlarmNotifyPtrOutput) RpoDelay() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v *JobAlarmNotify) *int {
+		if v == nil {
+			return nil
+		}
+		return v.RpoDelay
+	}).(pulumi.IntPtrOutput)
+}
+
+// Specifies the RTO delay threshold, in seconds.\
+// Value ranges from `1` to `3,600`. Default is `0` and no notifications will be sent to recipient.
+// If the RTO delay between the DRS instance and the DR database exceeds a specified value and lasts for `6` minutes,
+// DRS will notify specified recipients.
+func (o JobAlarmNotifyPtrOutput) RtoDelay() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v *JobAlarmNotify) *int {
+		if v == nil {
+			return nil
+		}
+		return v.RtoDelay
+	}).(pulumi.IntPtrOutput)
+}
+
+// Specifies the SMN topic URN which is subscribed.
+func (o JobAlarmNotifyPtrOutput) TopicUrn() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *JobAlarmNotify) *string {
+		if v == nil {
+			return nil
+		}
+		return &v.TopicUrn
+	}).(pulumi.StringPtrOutput)
+}
+
 type JobDestinationDb struct {
 	// Specifies the engine type of database. Changing this parameter will
-	// create a new resource. The options are as follows: `mysql`, `mongodb`, `gaussdbv5`.
+	// create a new resource. The options are as follows: **mysql**, **mongodb**, **gaussdbv5**, **taurus**, **gaussdbv5ha**,
+	// **kafka**, **postgresql**.
 	EngineType string `pulumi:"engineType"`
 	// Specifies the instance id of database when it is a RDS database.
 	// Changing this parameter will create a new resource.
 	InstanceId *string `pulumi:"instanceId"`
 	// Specifies the IP of database. Changing this parameter will create a new resource.
 	Ip string `pulumi:"ip"`
+	// Specifies the kafka security authentication info.
+	// Changing this parameter will create a new resource.
+	// The kafkaSecurityConfig structure is documented below.
+	KafkaSecurityConfig *JobDestinationDbKafkaSecurityConfig `pulumi:"kafkaSecurityConfig"`
 	// Specifies the name of database.
 	// Changing this parameter will create a new resource.
 	Name *string `pulumi:"name"`
 	// Specifies the password of database.
 	// Changing this parameter will create a new resource.
-	Password string `pulumi:"password"`
+	Password *string `pulumi:"password"`
 	// Specifies the port of database. Changing this parameter will create a new resource.
-	Port int `pulumi:"port"`
+	Port *int `pulumi:"port"`
 	// Specifies the region which the database belongs when it is a RDS database.
 	// Changing this parameter will create a new resource.
 	Region *string `pulumi:"region"`
+	// The security group ID to which the databese instance belongs.
+	SecurityGroupId *string `pulumi:"securityGroupId"`
 	// Specifies the checksum of SSL certificate content.
-	// It is mandatory when `sslEnabled` is `true`. Changing this parameter will create a new resource.
+	// It is mandatory when `sslEnabled` is **true**. Changing this parameter will create a new resource.
 	SslCertCheckSum *string `pulumi:"sslCertCheckSum"`
 	// Specifies the SSL certificate content, encrypted with base64.
-	// It is mandatory when `sslEnabled` is `true`. Changing this parameter will create a new resource.
+	// It is mandatory when `sslEnabled` is **true**. Changing this parameter will create a new resource.
 	SslCertKey *string `pulumi:"sslCertKey"`
 	// Specifies SSL certificate name.
-	// It is mandatory when `sslEnabled` is `true`. Changing this parameter will create a new resource.
+	// It is mandatory when `sslEnabled` is **true**. Changing this parameter will create a new resource.
 	SslCertName *string `pulumi:"sslCertName"`
 	// Specifies SSL certificate password. It is mandatory when
-	// `sslEnabled` is `true` and the certificate file suffix is `.p12`. Changing this parameter will create a new resource.
+	// `sslEnabled` is **true** and the certificate file suffix is **.p12**. Changing this parameter will create a new resource.
 	SslCertPassword *string `pulumi:"sslCertPassword"`
 	// Specifies whether to enable SSL connection.
 	// Changing this parameter will create a new resource.
 	SslEnabled *bool `pulumi:"sslEnabled"`
 	// Specifies subnet ID of database when it is a RDS database.
-	// It is mandatory when `direction` is `down`. Changing this parameter will create a new resource.
+	// It is mandatory when `direction` is **down**. Changing this parameter will create a new resource.
 	SubnetId *string `pulumi:"subnetId"`
 	// Specifies the user name of database.
 	// Changing this parameter will create a new resource.
-	User string `pulumi:"user"`
+	User *string `pulumi:"user"`
+	// Specifies vpc ID of database.
+	// Changing this parameter will create a new resource.
+	VpcId *string `pulumi:"vpcId"`
 }
 
 // JobDestinationDbInput is an input type that accepts JobDestinationDbArgs and JobDestinationDbOutput values.
@@ -66,45 +306,55 @@ type JobDestinationDbInput interface {
 
 type JobDestinationDbArgs struct {
 	// Specifies the engine type of database. Changing this parameter will
-	// create a new resource. The options are as follows: `mysql`, `mongodb`, `gaussdbv5`.
+	// create a new resource. The options are as follows: **mysql**, **mongodb**, **gaussdbv5**, **taurus**, **gaussdbv5ha**,
+	// **kafka**, **postgresql**.
 	EngineType pulumi.StringInput `pulumi:"engineType"`
 	// Specifies the instance id of database when it is a RDS database.
 	// Changing this parameter will create a new resource.
 	InstanceId pulumi.StringPtrInput `pulumi:"instanceId"`
 	// Specifies the IP of database. Changing this parameter will create a new resource.
 	Ip pulumi.StringInput `pulumi:"ip"`
+	// Specifies the kafka security authentication info.
+	// Changing this parameter will create a new resource.
+	// The kafkaSecurityConfig structure is documented below.
+	KafkaSecurityConfig JobDestinationDbKafkaSecurityConfigPtrInput `pulumi:"kafkaSecurityConfig"`
 	// Specifies the name of database.
 	// Changing this parameter will create a new resource.
 	Name pulumi.StringPtrInput `pulumi:"name"`
 	// Specifies the password of database.
 	// Changing this parameter will create a new resource.
-	Password pulumi.StringInput `pulumi:"password"`
+	Password pulumi.StringPtrInput `pulumi:"password"`
 	// Specifies the port of database. Changing this parameter will create a new resource.
-	Port pulumi.IntInput `pulumi:"port"`
+	Port pulumi.IntPtrInput `pulumi:"port"`
 	// Specifies the region which the database belongs when it is a RDS database.
 	// Changing this parameter will create a new resource.
 	Region pulumi.StringPtrInput `pulumi:"region"`
+	// The security group ID to which the databese instance belongs.
+	SecurityGroupId pulumi.StringPtrInput `pulumi:"securityGroupId"`
 	// Specifies the checksum of SSL certificate content.
-	// It is mandatory when `sslEnabled` is `true`. Changing this parameter will create a new resource.
+	// It is mandatory when `sslEnabled` is **true**. Changing this parameter will create a new resource.
 	SslCertCheckSum pulumi.StringPtrInput `pulumi:"sslCertCheckSum"`
 	// Specifies the SSL certificate content, encrypted with base64.
-	// It is mandatory when `sslEnabled` is `true`. Changing this parameter will create a new resource.
+	// It is mandatory when `sslEnabled` is **true**. Changing this parameter will create a new resource.
 	SslCertKey pulumi.StringPtrInput `pulumi:"sslCertKey"`
 	// Specifies SSL certificate name.
-	// It is mandatory when `sslEnabled` is `true`. Changing this parameter will create a new resource.
+	// It is mandatory when `sslEnabled` is **true**. Changing this parameter will create a new resource.
 	SslCertName pulumi.StringPtrInput `pulumi:"sslCertName"`
 	// Specifies SSL certificate password. It is mandatory when
-	// `sslEnabled` is `true` and the certificate file suffix is `.p12`. Changing this parameter will create a new resource.
+	// `sslEnabled` is **true** and the certificate file suffix is **.p12**. Changing this parameter will create a new resource.
 	SslCertPassword pulumi.StringPtrInput `pulumi:"sslCertPassword"`
 	// Specifies whether to enable SSL connection.
 	// Changing this parameter will create a new resource.
 	SslEnabled pulumi.BoolPtrInput `pulumi:"sslEnabled"`
 	// Specifies subnet ID of database when it is a RDS database.
-	// It is mandatory when `direction` is `down`. Changing this parameter will create a new resource.
+	// It is mandatory when `direction` is **down**. Changing this parameter will create a new resource.
 	SubnetId pulumi.StringPtrInput `pulumi:"subnetId"`
 	// Specifies the user name of database.
 	// Changing this parameter will create a new resource.
-	User pulumi.StringInput `pulumi:"user"`
+	User pulumi.StringPtrInput `pulumi:"user"`
+	// Specifies vpc ID of database.
+	// Changing this parameter will create a new resource.
+	VpcId pulumi.StringPtrInput `pulumi:"vpcId"`
 }
 
 func (JobDestinationDbArgs) ElementType() reflect.Type {
@@ -185,7 +435,8 @@ func (o JobDestinationDbOutput) ToJobDestinationDbPtrOutputWithContext(ctx conte
 }
 
 // Specifies the engine type of database. Changing this parameter will
-// create a new resource. The options are as follows: `mysql`, `mongodb`, `gaussdbv5`.
+// create a new resource. The options are as follows: **mysql**, **mongodb**, **gaussdbv5**, **taurus**, **gaussdbv5ha**,
+// **kafka**, **postgresql**.
 func (o JobDestinationDbOutput) EngineType() pulumi.StringOutput {
 	return o.ApplyT(func(v JobDestinationDb) string { return v.EngineType }).(pulumi.StringOutput)
 }
@@ -201,6 +452,13 @@ func (o JobDestinationDbOutput) Ip() pulumi.StringOutput {
 	return o.ApplyT(func(v JobDestinationDb) string { return v.Ip }).(pulumi.StringOutput)
 }
 
+// Specifies the kafka security authentication info.
+// Changing this parameter will create a new resource.
+// The kafkaSecurityConfig structure is documented below.
+func (o JobDestinationDbOutput) KafkaSecurityConfig() JobDestinationDbKafkaSecurityConfigPtrOutput {
+	return o.ApplyT(func(v JobDestinationDb) *JobDestinationDbKafkaSecurityConfig { return v.KafkaSecurityConfig }).(JobDestinationDbKafkaSecurityConfigPtrOutput)
+}
+
 // Specifies the name of database.
 // Changing this parameter will create a new resource.
 func (o JobDestinationDbOutput) Name() pulumi.StringPtrOutput {
@@ -209,13 +467,13 @@ func (o JobDestinationDbOutput) Name() pulumi.StringPtrOutput {
 
 // Specifies the password of database.
 // Changing this parameter will create a new resource.
-func (o JobDestinationDbOutput) Password() pulumi.StringOutput {
-	return o.ApplyT(func(v JobDestinationDb) string { return v.Password }).(pulumi.StringOutput)
+func (o JobDestinationDbOutput) Password() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v JobDestinationDb) *string { return v.Password }).(pulumi.StringPtrOutput)
 }
 
 // Specifies the port of database. Changing this parameter will create a new resource.
-func (o JobDestinationDbOutput) Port() pulumi.IntOutput {
-	return o.ApplyT(func(v JobDestinationDb) int { return v.Port }).(pulumi.IntOutput)
+func (o JobDestinationDbOutput) Port() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v JobDestinationDb) *int { return v.Port }).(pulumi.IntPtrOutput)
 }
 
 // Specifies the region which the database belongs when it is a RDS database.
@@ -224,26 +482,31 @@ func (o JobDestinationDbOutput) Region() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v JobDestinationDb) *string { return v.Region }).(pulumi.StringPtrOutput)
 }
 
+// The security group ID to which the databese instance belongs.
+func (o JobDestinationDbOutput) SecurityGroupId() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v JobDestinationDb) *string { return v.SecurityGroupId }).(pulumi.StringPtrOutput)
+}
+
 // Specifies the checksum of SSL certificate content.
-// It is mandatory when `sslEnabled` is `true`. Changing this parameter will create a new resource.
+// It is mandatory when `sslEnabled` is **true**. Changing this parameter will create a new resource.
 func (o JobDestinationDbOutput) SslCertCheckSum() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v JobDestinationDb) *string { return v.SslCertCheckSum }).(pulumi.StringPtrOutput)
 }
 
 // Specifies the SSL certificate content, encrypted with base64.
-// It is mandatory when `sslEnabled` is `true`. Changing this parameter will create a new resource.
+// It is mandatory when `sslEnabled` is **true**. Changing this parameter will create a new resource.
 func (o JobDestinationDbOutput) SslCertKey() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v JobDestinationDb) *string { return v.SslCertKey }).(pulumi.StringPtrOutput)
 }
 
 // Specifies SSL certificate name.
-// It is mandatory when `sslEnabled` is `true`. Changing this parameter will create a new resource.
+// It is mandatory when `sslEnabled` is **true**. Changing this parameter will create a new resource.
 func (o JobDestinationDbOutput) SslCertName() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v JobDestinationDb) *string { return v.SslCertName }).(pulumi.StringPtrOutput)
 }
 
 // Specifies SSL certificate password. It is mandatory when
-// `sslEnabled` is `true` and the certificate file suffix is `.p12`. Changing this parameter will create a new resource.
+// `sslEnabled` is **true** and the certificate file suffix is **.p12**. Changing this parameter will create a new resource.
 func (o JobDestinationDbOutput) SslCertPassword() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v JobDestinationDb) *string { return v.SslCertPassword }).(pulumi.StringPtrOutput)
 }
@@ -255,15 +518,21 @@ func (o JobDestinationDbOutput) SslEnabled() pulumi.BoolPtrOutput {
 }
 
 // Specifies subnet ID of database when it is a RDS database.
-// It is mandatory when `direction` is `down`. Changing this parameter will create a new resource.
+// It is mandatory when `direction` is **down**. Changing this parameter will create a new resource.
 func (o JobDestinationDbOutput) SubnetId() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v JobDestinationDb) *string { return v.SubnetId }).(pulumi.StringPtrOutput)
 }
 
 // Specifies the user name of database.
 // Changing this parameter will create a new resource.
-func (o JobDestinationDbOutput) User() pulumi.StringOutput {
-	return o.ApplyT(func(v JobDestinationDb) string { return v.User }).(pulumi.StringOutput)
+func (o JobDestinationDbOutput) User() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v JobDestinationDb) *string { return v.User }).(pulumi.StringPtrOutput)
+}
+
+// Specifies vpc ID of database.
+// Changing this parameter will create a new resource.
+func (o JobDestinationDbOutput) VpcId() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v JobDestinationDb) *string { return v.VpcId }).(pulumi.StringPtrOutput)
 }
 
 type JobDestinationDbPtrOutput struct{ *pulumi.OutputState }
@@ -291,7 +560,8 @@ func (o JobDestinationDbPtrOutput) Elem() JobDestinationDbOutput {
 }
 
 // Specifies the engine type of database. Changing this parameter will
-// create a new resource. The options are as follows: `mysql`, `mongodb`, `gaussdbv5`.
+// create a new resource. The options are as follows: **mysql**, **mongodb**, **gaussdbv5**, **taurus**, **gaussdbv5ha**,
+// **kafka**, **postgresql**.
 func (o JobDestinationDbPtrOutput) EngineType() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *JobDestinationDb) *string {
 		if v == nil {
@@ -322,6 +592,18 @@ func (o JobDestinationDbPtrOutput) Ip() pulumi.StringPtrOutput {
 	}).(pulumi.StringPtrOutput)
 }
 
+// Specifies the kafka security authentication info.
+// Changing this parameter will create a new resource.
+// The kafkaSecurityConfig structure is documented below.
+func (o JobDestinationDbPtrOutput) KafkaSecurityConfig() JobDestinationDbKafkaSecurityConfigPtrOutput {
+	return o.ApplyT(func(v *JobDestinationDb) *JobDestinationDbKafkaSecurityConfig {
+		if v == nil {
+			return nil
+		}
+		return v.KafkaSecurityConfig
+	}).(JobDestinationDbKafkaSecurityConfigPtrOutput)
+}
+
 // Specifies the name of database.
 // Changing this parameter will create a new resource.
 func (o JobDestinationDbPtrOutput) Name() pulumi.StringPtrOutput {
@@ -340,7 +622,7 @@ func (o JobDestinationDbPtrOutput) Password() pulumi.StringPtrOutput {
 		if v == nil {
 			return nil
 		}
-		return &v.Password
+		return v.Password
 	}).(pulumi.StringPtrOutput)
 }
 
@@ -350,7 +632,7 @@ func (o JobDestinationDbPtrOutput) Port() pulumi.IntPtrOutput {
 		if v == nil {
 			return nil
 		}
-		return &v.Port
+		return v.Port
 	}).(pulumi.IntPtrOutput)
 }
 
@@ -365,8 +647,18 @@ func (o JobDestinationDbPtrOutput) Region() pulumi.StringPtrOutput {
 	}).(pulumi.StringPtrOutput)
 }
 
+// The security group ID to which the databese instance belongs.
+func (o JobDestinationDbPtrOutput) SecurityGroupId() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *JobDestinationDb) *string {
+		if v == nil {
+			return nil
+		}
+		return v.SecurityGroupId
+	}).(pulumi.StringPtrOutput)
+}
+
 // Specifies the checksum of SSL certificate content.
-// It is mandatory when `sslEnabled` is `true`. Changing this parameter will create a new resource.
+// It is mandatory when `sslEnabled` is **true**. Changing this parameter will create a new resource.
 func (o JobDestinationDbPtrOutput) SslCertCheckSum() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *JobDestinationDb) *string {
 		if v == nil {
@@ -377,7 +669,7 @@ func (o JobDestinationDbPtrOutput) SslCertCheckSum() pulumi.StringPtrOutput {
 }
 
 // Specifies the SSL certificate content, encrypted with base64.
-// It is mandatory when `sslEnabled` is `true`. Changing this parameter will create a new resource.
+// It is mandatory when `sslEnabled` is **true**. Changing this parameter will create a new resource.
 func (o JobDestinationDbPtrOutput) SslCertKey() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *JobDestinationDb) *string {
 		if v == nil {
@@ -388,7 +680,7 @@ func (o JobDestinationDbPtrOutput) SslCertKey() pulumi.StringPtrOutput {
 }
 
 // Specifies SSL certificate name.
-// It is mandatory when `sslEnabled` is `true`. Changing this parameter will create a new resource.
+// It is mandatory when `sslEnabled` is **true**. Changing this parameter will create a new resource.
 func (o JobDestinationDbPtrOutput) SslCertName() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *JobDestinationDb) *string {
 		if v == nil {
@@ -399,7 +691,7 @@ func (o JobDestinationDbPtrOutput) SslCertName() pulumi.StringPtrOutput {
 }
 
 // Specifies SSL certificate password. It is mandatory when
-// `sslEnabled` is `true` and the certificate file suffix is `.p12`. Changing this parameter will create a new resource.
+// `sslEnabled` is **true** and the certificate file suffix is **.p12**. Changing this parameter will create a new resource.
 func (o JobDestinationDbPtrOutput) SslCertPassword() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *JobDestinationDb) *string {
 		if v == nil {
@@ -421,7 +713,7 @@ func (o JobDestinationDbPtrOutput) SslEnabled() pulumi.BoolPtrOutput {
 }
 
 // Specifies subnet ID of database when it is a RDS database.
-// It is mandatory when `direction` is `down`. Changing this parameter will create a new resource.
+// It is mandatory when `direction` is **down**. Changing this parameter will create a new resource.
 func (o JobDestinationDbPtrOutput) SubnetId() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *JobDestinationDb) *string {
 		if v == nil {
@@ -438,19 +730,487 @@ func (o JobDestinationDbPtrOutput) User() pulumi.StringPtrOutput {
 		if v == nil {
 			return nil
 		}
-		return &v.User
+		return v.User
+	}).(pulumi.StringPtrOutput)
+}
+
+// Specifies vpc ID of database.
+// Changing this parameter will create a new resource.
+func (o JobDestinationDbPtrOutput) VpcId() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *JobDestinationDb) *string {
+		if v == nil {
+			return nil
+		}
+		return v.VpcId
+	}).(pulumi.StringPtrOutput)
+}
+
+type JobDestinationDbKafkaSecurityConfig struct {
+	// Specifies whether to use token authentication. It is valid only when
+	// the security protocol is set to **SASL_SSL** or **SASL_PLAINTEXT** and the SASL mechanism is set to **SCRAM-SHA-256**
+	// or **SCRAM-SHA-512**. Defaults to false. Changing this parameter will create a new resource.
+	DelegationTokens *bool `pulumi:"delegationTokens"`
+	// Specifies Whether to enable two-way SSL authentication.
+	// Defaults to false. Changing this parameter will create a new resource.
+	EnableKeyStore *bool `pulumi:"enableKeyStore"`
+	// Specifies the host name endpoint identification algorithm, which
+	// specifies the endpoint identification algorithm for verifying the server host name using the server certificate.
+	// If it is not specified, host name verification is disabled. The corresponding field for Kafka is
+	// **ssl.endpoint.identification.algorithm**. Changing this parameter will create a new resource.
+	EndpointAlgorithm *string `pulumi:"endpointAlgorithm"`
+	// Specifies the keystore private key password. It is mandatory when
+	// two-way SSL authentication is enabled and `setPrivateKeyPassword` is set to **true**.
+	// Changing this parameter will create a new resource.
+	KeyPassword *string `pulumi:"keyPassword"`
+	// Specifies the keystore certificate. It is mandatory when two-way SSL
+	// authentication is enabled. Changing this parameter will create a new resource.
+	KeyStoreKey *string `pulumi:"keyStoreKey"`
+	// Specifies the keystore certificate name. It is mandatory when
+	// two-way SSL authentication is enabled. Changing this parameter will create a new resource.
+	KeyStoreKeyName *string `pulumi:"keyStoreKeyName"`
+	// Specifies the keystore certificate password. It is mandatory when
+	// a password is set for the keystore certificate. Changing this parameter will create a new resource.
+	KeyStorePassword *string `pulumi:"keyStorePassword"`
+	// Specifies the SASL mechanism used for client connection.
+	// The value can be **GSSAPI**, **PLAIN**, **SCRAM-SHA-256**, **SCRAM-SHA-512**.
+	// Changing this parameter will create a new resource.
+	SaslMechanism *string `pulumi:"saslMechanism"`
+	// Specifies whether to set the keystore private key password.
+	// Defaults to false. Changing this parameter will create a new resource.
+	SetPrivateKeyPassword *bool `pulumi:"setPrivateKeyPassword"`
+	// Specifies the value of the security certificate after Base64 transcoding.
+	// It is mandatory when the security protocol is set to **SSL** or **SASL_SSL**.
+	// Changing this parameter will create a new resource.
+	TrustStoreKey *string `pulumi:"trustStoreKey"`
+	// Specifies the certificate name.
+	// It is mandatory when the security protocol is set to **SSL** or **SASL_SSL**.
+	// Changing this parameter will create a new resource.
+	TrustStoreKeyName *string `pulumi:"trustStoreKeyName"`
+	// Specifies the certificate password.
+	// It is mandatory when the security protocol is set to **SSL** or **SASL_SSL**.
+	// Changing this parameter will create a new resource.
+	TrustStorePassword *string `pulumi:"trustStorePassword"`
+	// Specifies the type of a task with an EIP bound.
+	// Valid values are **master** and **slave**.
+	// + In a primary/standby task, **master** indicates the primary task, and **slave** indicates the standby task.
+	// + In other cases, the value is fixed to **master**.
+	Type *string `pulumi:"type"`
+}
+
+// JobDestinationDbKafkaSecurityConfigInput is an input type that accepts JobDestinationDbKafkaSecurityConfigArgs and JobDestinationDbKafkaSecurityConfigOutput values.
+// You can construct a concrete instance of `JobDestinationDbKafkaSecurityConfigInput` via:
+//
+//	JobDestinationDbKafkaSecurityConfigArgs{...}
+type JobDestinationDbKafkaSecurityConfigInput interface {
+	pulumi.Input
+
+	ToJobDestinationDbKafkaSecurityConfigOutput() JobDestinationDbKafkaSecurityConfigOutput
+	ToJobDestinationDbKafkaSecurityConfigOutputWithContext(context.Context) JobDestinationDbKafkaSecurityConfigOutput
+}
+
+type JobDestinationDbKafkaSecurityConfigArgs struct {
+	// Specifies whether to use token authentication. It is valid only when
+	// the security protocol is set to **SASL_SSL** or **SASL_PLAINTEXT** and the SASL mechanism is set to **SCRAM-SHA-256**
+	// or **SCRAM-SHA-512**. Defaults to false. Changing this parameter will create a new resource.
+	DelegationTokens pulumi.BoolPtrInput `pulumi:"delegationTokens"`
+	// Specifies Whether to enable two-way SSL authentication.
+	// Defaults to false. Changing this parameter will create a new resource.
+	EnableKeyStore pulumi.BoolPtrInput `pulumi:"enableKeyStore"`
+	// Specifies the host name endpoint identification algorithm, which
+	// specifies the endpoint identification algorithm for verifying the server host name using the server certificate.
+	// If it is not specified, host name verification is disabled. The corresponding field for Kafka is
+	// **ssl.endpoint.identification.algorithm**. Changing this parameter will create a new resource.
+	EndpointAlgorithm pulumi.StringPtrInput `pulumi:"endpointAlgorithm"`
+	// Specifies the keystore private key password. It is mandatory when
+	// two-way SSL authentication is enabled and `setPrivateKeyPassword` is set to **true**.
+	// Changing this parameter will create a new resource.
+	KeyPassword pulumi.StringPtrInput `pulumi:"keyPassword"`
+	// Specifies the keystore certificate. It is mandatory when two-way SSL
+	// authentication is enabled. Changing this parameter will create a new resource.
+	KeyStoreKey pulumi.StringPtrInput `pulumi:"keyStoreKey"`
+	// Specifies the keystore certificate name. It is mandatory when
+	// two-way SSL authentication is enabled. Changing this parameter will create a new resource.
+	KeyStoreKeyName pulumi.StringPtrInput `pulumi:"keyStoreKeyName"`
+	// Specifies the keystore certificate password. It is mandatory when
+	// a password is set for the keystore certificate. Changing this parameter will create a new resource.
+	KeyStorePassword pulumi.StringPtrInput `pulumi:"keyStorePassword"`
+	// Specifies the SASL mechanism used for client connection.
+	// The value can be **GSSAPI**, **PLAIN**, **SCRAM-SHA-256**, **SCRAM-SHA-512**.
+	// Changing this parameter will create a new resource.
+	SaslMechanism pulumi.StringPtrInput `pulumi:"saslMechanism"`
+	// Specifies whether to set the keystore private key password.
+	// Defaults to false. Changing this parameter will create a new resource.
+	SetPrivateKeyPassword pulumi.BoolPtrInput `pulumi:"setPrivateKeyPassword"`
+	// Specifies the value of the security certificate after Base64 transcoding.
+	// It is mandatory when the security protocol is set to **SSL** or **SASL_SSL**.
+	// Changing this parameter will create a new resource.
+	TrustStoreKey pulumi.StringPtrInput `pulumi:"trustStoreKey"`
+	// Specifies the certificate name.
+	// It is mandatory when the security protocol is set to **SSL** or **SASL_SSL**.
+	// Changing this parameter will create a new resource.
+	TrustStoreKeyName pulumi.StringPtrInput `pulumi:"trustStoreKeyName"`
+	// Specifies the certificate password.
+	// It is mandatory when the security protocol is set to **SSL** or **SASL_SSL**.
+	// Changing this parameter will create a new resource.
+	TrustStorePassword pulumi.StringPtrInput `pulumi:"trustStorePassword"`
+	// Specifies the type of a task with an EIP bound.
+	// Valid values are **master** and **slave**.
+	// + In a primary/standby task, **master** indicates the primary task, and **slave** indicates the standby task.
+	// + In other cases, the value is fixed to **master**.
+	Type pulumi.StringPtrInput `pulumi:"type"`
+}
+
+func (JobDestinationDbKafkaSecurityConfigArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*JobDestinationDbKafkaSecurityConfig)(nil)).Elem()
+}
+
+func (i JobDestinationDbKafkaSecurityConfigArgs) ToJobDestinationDbKafkaSecurityConfigOutput() JobDestinationDbKafkaSecurityConfigOutput {
+	return i.ToJobDestinationDbKafkaSecurityConfigOutputWithContext(context.Background())
+}
+
+func (i JobDestinationDbKafkaSecurityConfigArgs) ToJobDestinationDbKafkaSecurityConfigOutputWithContext(ctx context.Context) JobDestinationDbKafkaSecurityConfigOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(JobDestinationDbKafkaSecurityConfigOutput)
+}
+
+func (i JobDestinationDbKafkaSecurityConfigArgs) ToJobDestinationDbKafkaSecurityConfigPtrOutput() JobDestinationDbKafkaSecurityConfigPtrOutput {
+	return i.ToJobDestinationDbKafkaSecurityConfigPtrOutputWithContext(context.Background())
+}
+
+func (i JobDestinationDbKafkaSecurityConfigArgs) ToJobDestinationDbKafkaSecurityConfigPtrOutputWithContext(ctx context.Context) JobDestinationDbKafkaSecurityConfigPtrOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(JobDestinationDbKafkaSecurityConfigOutput).ToJobDestinationDbKafkaSecurityConfigPtrOutputWithContext(ctx)
+}
+
+// JobDestinationDbKafkaSecurityConfigPtrInput is an input type that accepts JobDestinationDbKafkaSecurityConfigArgs, JobDestinationDbKafkaSecurityConfigPtr and JobDestinationDbKafkaSecurityConfigPtrOutput values.
+// You can construct a concrete instance of `JobDestinationDbKafkaSecurityConfigPtrInput` via:
+//
+//	        JobDestinationDbKafkaSecurityConfigArgs{...}
+//
+//	or:
+//
+//	        nil
+type JobDestinationDbKafkaSecurityConfigPtrInput interface {
+	pulumi.Input
+
+	ToJobDestinationDbKafkaSecurityConfigPtrOutput() JobDestinationDbKafkaSecurityConfigPtrOutput
+	ToJobDestinationDbKafkaSecurityConfigPtrOutputWithContext(context.Context) JobDestinationDbKafkaSecurityConfigPtrOutput
+}
+
+type jobDestinationDbKafkaSecurityConfigPtrType JobDestinationDbKafkaSecurityConfigArgs
+
+func JobDestinationDbKafkaSecurityConfigPtr(v *JobDestinationDbKafkaSecurityConfigArgs) JobDestinationDbKafkaSecurityConfigPtrInput {
+	return (*jobDestinationDbKafkaSecurityConfigPtrType)(v)
+}
+
+func (*jobDestinationDbKafkaSecurityConfigPtrType) ElementType() reflect.Type {
+	return reflect.TypeOf((**JobDestinationDbKafkaSecurityConfig)(nil)).Elem()
+}
+
+func (i *jobDestinationDbKafkaSecurityConfigPtrType) ToJobDestinationDbKafkaSecurityConfigPtrOutput() JobDestinationDbKafkaSecurityConfigPtrOutput {
+	return i.ToJobDestinationDbKafkaSecurityConfigPtrOutputWithContext(context.Background())
+}
+
+func (i *jobDestinationDbKafkaSecurityConfigPtrType) ToJobDestinationDbKafkaSecurityConfigPtrOutputWithContext(ctx context.Context) JobDestinationDbKafkaSecurityConfigPtrOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(JobDestinationDbKafkaSecurityConfigPtrOutput)
+}
+
+type JobDestinationDbKafkaSecurityConfigOutput struct{ *pulumi.OutputState }
+
+func (JobDestinationDbKafkaSecurityConfigOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*JobDestinationDbKafkaSecurityConfig)(nil)).Elem()
+}
+
+func (o JobDestinationDbKafkaSecurityConfigOutput) ToJobDestinationDbKafkaSecurityConfigOutput() JobDestinationDbKafkaSecurityConfigOutput {
+	return o
+}
+
+func (o JobDestinationDbKafkaSecurityConfigOutput) ToJobDestinationDbKafkaSecurityConfigOutputWithContext(ctx context.Context) JobDestinationDbKafkaSecurityConfigOutput {
+	return o
+}
+
+func (o JobDestinationDbKafkaSecurityConfigOutput) ToJobDestinationDbKafkaSecurityConfigPtrOutput() JobDestinationDbKafkaSecurityConfigPtrOutput {
+	return o.ToJobDestinationDbKafkaSecurityConfigPtrOutputWithContext(context.Background())
+}
+
+func (o JobDestinationDbKafkaSecurityConfigOutput) ToJobDestinationDbKafkaSecurityConfigPtrOutputWithContext(ctx context.Context) JobDestinationDbKafkaSecurityConfigPtrOutput {
+	return o.ApplyTWithContext(ctx, func(_ context.Context, v JobDestinationDbKafkaSecurityConfig) *JobDestinationDbKafkaSecurityConfig {
+		return &v
+	}).(JobDestinationDbKafkaSecurityConfigPtrOutput)
+}
+
+// Specifies whether to use token authentication. It is valid only when
+// the security protocol is set to **SASL_SSL** or **SASL_PLAINTEXT** and the SASL mechanism is set to **SCRAM-SHA-256**
+// or **SCRAM-SHA-512**. Defaults to false. Changing this parameter will create a new resource.
+func (o JobDestinationDbKafkaSecurityConfigOutput) DelegationTokens() pulumi.BoolPtrOutput {
+	return o.ApplyT(func(v JobDestinationDbKafkaSecurityConfig) *bool { return v.DelegationTokens }).(pulumi.BoolPtrOutput)
+}
+
+// Specifies Whether to enable two-way SSL authentication.
+// Defaults to false. Changing this parameter will create a new resource.
+func (o JobDestinationDbKafkaSecurityConfigOutput) EnableKeyStore() pulumi.BoolPtrOutput {
+	return o.ApplyT(func(v JobDestinationDbKafkaSecurityConfig) *bool { return v.EnableKeyStore }).(pulumi.BoolPtrOutput)
+}
+
+// Specifies the host name endpoint identification algorithm, which
+// specifies the endpoint identification algorithm for verifying the server host name using the server certificate.
+// If it is not specified, host name verification is disabled. The corresponding field for Kafka is
+// **ssl.endpoint.identification.algorithm**. Changing this parameter will create a new resource.
+func (o JobDestinationDbKafkaSecurityConfigOutput) EndpointAlgorithm() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v JobDestinationDbKafkaSecurityConfig) *string { return v.EndpointAlgorithm }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the keystore private key password. It is mandatory when
+// two-way SSL authentication is enabled and `setPrivateKeyPassword` is set to **true**.
+// Changing this parameter will create a new resource.
+func (o JobDestinationDbKafkaSecurityConfigOutput) KeyPassword() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v JobDestinationDbKafkaSecurityConfig) *string { return v.KeyPassword }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the keystore certificate. It is mandatory when two-way SSL
+// authentication is enabled. Changing this parameter will create a new resource.
+func (o JobDestinationDbKafkaSecurityConfigOutput) KeyStoreKey() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v JobDestinationDbKafkaSecurityConfig) *string { return v.KeyStoreKey }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the keystore certificate name. It is mandatory when
+// two-way SSL authentication is enabled. Changing this parameter will create a new resource.
+func (o JobDestinationDbKafkaSecurityConfigOutput) KeyStoreKeyName() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v JobDestinationDbKafkaSecurityConfig) *string { return v.KeyStoreKeyName }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the keystore certificate password. It is mandatory when
+// a password is set for the keystore certificate. Changing this parameter will create a new resource.
+func (o JobDestinationDbKafkaSecurityConfigOutput) KeyStorePassword() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v JobDestinationDbKafkaSecurityConfig) *string { return v.KeyStorePassword }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the SASL mechanism used for client connection.
+// The value can be **GSSAPI**, **PLAIN**, **SCRAM-SHA-256**, **SCRAM-SHA-512**.
+// Changing this parameter will create a new resource.
+func (o JobDestinationDbKafkaSecurityConfigOutput) SaslMechanism() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v JobDestinationDbKafkaSecurityConfig) *string { return v.SaslMechanism }).(pulumi.StringPtrOutput)
+}
+
+// Specifies whether to set the keystore private key password.
+// Defaults to false. Changing this parameter will create a new resource.
+func (o JobDestinationDbKafkaSecurityConfigOutput) SetPrivateKeyPassword() pulumi.BoolPtrOutput {
+	return o.ApplyT(func(v JobDestinationDbKafkaSecurityConfig) *bool { return v.SetPrivateKeyPassword }).(pulumi.BoolPtrOutput)
+}
+
+// Specifies the value of the security certificate after Base64 transcoding.
+// It is mandatory when the security protocol is set to **SSL** or **SASL_SSL**.
+// Changing this parameter will create a new resource.
+func (o JobDestinationDbKafkaSecurityConfigOutput) TrustStoreKey() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v JobDestinationDbKafkaSecurityConfig) *string { return v.TrustStoreKey }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the certificate name.
+// It is mandatory when the security protocol is set to **SSL** or **SASL_SSL**.
+// Changing this parameter will create a new resource.
+func (o JobDestinationDbKafkaSecurityConfigOutput) TrustStoreKeyName() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v JobDestinationDbKafkaSecurityConfig) *string { return v.TrustStoreKeyName }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the certificate password.
+// It is mandatory when the security protocol is set to **SSL** or **SASL_SSL**.
+// Changing this parameter will create a new resource.
+func (o JobDestinationDbKafkaSecurityConfigOutput) TrustStorePassword() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v JobDestinationDbKafkaSecurityConfig) *string { return v.TrustStorePassword }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the type of a task with an EIP bound.
+// Valid values are **master** and **slave**.
+// + In a primary/standby task, **master** indicates the primary task, and **slave** indicates the standby task.
+// + In other cases, the value is fixed to **master**.
+func (o JobDestinationDbKafkaSecurityConfigOutput) Type() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v JobDestinationDbKafkaSecurityConfig) *string { return v.Type }).(pulumi.StringPtrOutput)
+}
+
+type JobDestinationDbKafkaSecurityConfigPtrOutput struct{ *pulumi.OutputState }
+
+func (JobDestinationDbKafkaSecurityConfigPtrOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((**JobDestinationDbKafkaSecurityConfig)(nil)).Elem()
+}
+
+func (o JobDestinationDbKafkaSecurityConfigPtrOutput) ToJobDestinationDbKafkaSecurityConfigPtrOutput() JobDestinationDbKafkaSecurityConfigPtrOutput {
+	return o
+}
+
+func (o JobDestinationDbKafkaSecurityConfigPtrOutput) ToJobDestinationDbKafkaSecurityConfigPtrOutputWithContext(ctx context.Context) JobDestinationDbKafkaSecurityConfigPtrOutput {
+	return o
+}
+
+func (o JobDestinationDbKafkaSecurityConfigPtrOutput) Elem() JobDestinationDbKafkaSecurityConfigOutput {
+	return o.ApplyT(func(v *JobDestinationDbKafkaSecurityConfig) JobDestinationDbKafkaSecurityConfig {
+		if v != nil {
+			return *v
+		}
+		var ret JobDestinationDbKafkaSecurityConfig
+		return ret
+	}).(JobDestinationDbKafkaSecurityConfigOutput)
+}
+
+// Specifies whether to use token authentication. It is valid only when
+// the security protocol is set to **SASL_SSL** or **SASL_PLAINTEXT** and the SASL mechanism is set to **SCRAM-SHA-256**
+// or **SCRAM-SHA-512**. Defaults to false. Changing this parameter will create a new resource.
+func (o JobDestinationDbKafkaSecurityConfigPtrOutput) DelegationTokens() pulumi.BoolPtrOutput {
+	return o.ApplyT(func(v *JobDestinationDbKafkaSecurityConfig) *bool {
+		if v == nil {
+			return nil
+		}
+		return v.DelegationTokens
+	}).(pulumi.BoolPtrOutput)
+}
+
+// Specifies Whether to enable two-way SSL authentication.
+// Defaults to false. Changing this parameter will create a new resource.
+func (o JobDestinationDbKafkaSecurityConfigPtrOutput) EnableKeyStore() pulumi.BoolPtrOutput {
+	return o.ApplyT(func(v *JobDestinationDbKafkaSecurityConfig) *bool {
+		if v == nil {
+			return nil
+		}
+		return v.EnableKeyStore
+	}).(pulumi.BoolPtrOutput)
+}
+
+// Specifies the host name endpoint identification algorithm, which
+// specifies the endpoint identification algorithm for verifying the server host name using the server certificate.
+// If it is not specified, host name verification is disabled. The corresponding field for Kafka is
+// **ssl.endpoint.identification.algorithm**. Changing this parameter will create a new resource.
+func (o JobDestinationDbKafkaSecurityConfigPtrOutput) EndpointAlgorithm() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *JobDestinationDbKafkaSecurityConfig) *string {
+		if v == nil {
+			return nil
+		}
+		return v.EndpointAlgorithm
+	}).(pulumi.StringPtrOutput)
+}
+
+// Specifies the keystore private key password. It is mandatory when
+// two-way SSL authentication is enabled and `setPrivateKeyPassword` is set to **true**.
+// Changing this parameter will create a new resource.
+func (o JobDestinationDbKafkaSecurityConfigPtrOutput) KeyPassword() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *JobDestinationDbKafkaSecurityConfig) *string {
+		if v == nil {
+			return nil
+		}
+		return v.KeyPassword
+	}).(pulumi.StringPtrOutput)
+}
+
+// Specifies the keystore certificate. It is mandatory when two-way SSL
+// authentication is enabled. Changing this parameter will create a new resource.
+func (o JobDestinationDbKafkaSecurityConfigPtrOutput) KeyStoreKey() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *JobDestinationDbKafkaSecurityConfig) *string {
+		if v == nil {
+			return nil
+		}
+		return v.KeyStoreKey
+	}).(pulumi.StringPtrOutput)
+}
+
+// Specifies the keystore certificate name. It is mandatory when
+// two-way SSL authentication is enabled. Changing this parameter will create a new resource.
+func (o JobDestinationDbKafkaSecurityConfigPtrOutput) KeyStoreKeyName() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *JobDestinationDbKafkaSecurityConfig) *string {
+		if v == nil {
+			return nil
+		}
+		return v.KeyStoreKeyName
+	}).(pulumi.StringPtrOutput)
+}
+
+// Specifies the keystore certificate password. It is mandatory when
+// a password is set for the keystore certificate. Changing this parameter will create a new resource.
+func (o JobDestinationDbKafkaSecurityConfigPtrOutput) KeyStorePassword() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *JobDestinationDbKafkaSecurityConfig) *string {
+		if v == nil {
+			return nil
+		}
+		return v.KeyStorePassword
+	}).(pulumi.StringPtrOutput)
+}
+
+// Specifies the SASL mechanism used for client connection.
+// The value can be **GSSAPI**, **PLAIN**, **SCRAM-SHA-256**, **SCRAM-SHA-512**.
+// Changing this parameter will create a new resource.
+func (o JobDestinationDbKafkaSecurityConfigPtrOutput) SaslMechanism() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *JobDestinationDbKafkaSecurityConfig) *string {
+		if v == nil {
+			return nil
+		}
+		return v.SaslMechanism
+	}).(pulumi.StringPtrOutput)
+}
+
+// Specifies whether to set the keystore private key password.
+// Defaults to false. Changing this parameter will create a new resource.
+func (o JobDestinationDbKafkaSecurityConfigPtrOutput) SetPrivateKeyPassword() pulumi.BoolPtrOutput {
+	return o.ApplyT(func(v *JobDestinationDbKafkaSecurityConfig) *bool {
+		if v == nil {
+			return nil
+		}
+		return v.SetPrivateKeyPassword
+	}).(pulumi.BoolPtrOutput)
+}
+
+// Specifies the value of the security certificate after Base64 transcoding.
+// It is mandatory when the security protocol is set to **SSL** or **SASL_SSL**.
+// Changing this parameter will create a new resource.
+func (o JobDestinationDbKafkaSecurityConfigPtrOutput) TrustStoreKey() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *JobDestinationDbKafkaSecurityConfig) *string {
+		if v == nil {
+			return nil
+		}
+		return v.TrustStoreKey
+	}).(pulumi.StringPtrOutput)
+}
+
+// Specifies the certificate name.
+// It is mandatory when the security protocol is set to **SSL** or **SASL_SSL**.
+// Changing this parameter will create a new resource.
+func (o JobDestinationDbKafkaSecurityConfigPtrOutput) TrustStoreKeyName() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *JobDestinationDbKafkaSecurityConfig) *string {
+		if v == nil {
+			return nil
+		}
+		return v.TrustStoreKeyName
+	}).(pulumi.StringPtrOutput)
+}
+
+// Specifies the certificate password.
+// It is mandatory when the security protocol is set to **SSL** or **SASL_SSL**.
+// Changing this parameter will create a new resource.
+func (o JobDestinationDbKafkaSecurityConfigPtrOutput) TrustStorePassword() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *JobDestinationDbKafkaSecurityConfig) *string {
+		if v == nil {
+			return nil
+		}
+		return v.TrustStorePassword
+	}).(pulumi.StringPtrOutput)
+}
+
+// Specifies the type of a task with an EIP bound.
+// Valid values are **master** and **slave**.
+// + In a primary/standby task, **master** indicates the primary task, and **slave** indicates the standby task.
+// + In other cases, the value is fixed to **master**.
+func (o JobDestinationDbKafkaSecurityConfigPtrOutput) Type() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *JobDestinationDbKafkaSecurityConfig) *string {
+		if v == nil {
+			return nil
+		}
+		return v.Type
 	}).(pulumi.StringPtrOutput)
 }
 
 type JobLimitSpeed struct {
 	// Specifies the time to end speed limit, this time is UTC time. The input must
-	// end at 59 minutes, the format is `hh:mm`, for example: 15:59. Changing this parameter will create a new resource.
+	// end at 59 minutes, the format is **hh:mm**, for example: 15:59. Changing this parameter will create a new resource.
 	EndTime string `pulumi:"endTime"`
-	// Specifies the transmission speed, the value range is 1 to 9999, unit: `MB/s`.
+	// Specifies the transmission speed, the value range is 1 to 9999, unit: **MB/s**.
 	// Changing this parameter will create a new resource.
 	Speed string `pulumi:"speed"`
 	// Specifies the time to start speed limit, this time is UTC time. The start
-	// time is the whole hour, if there is a minute, it will be ignored, the format is `hh:mm`, and the hour number
+	// time is the whole hour, if there is a minute, it will be ignored, the format is **hh:mm**, and the hour number
 	// is two digits, for example: 01:00. Changing this parameter will create a new resource.
 	StartTime string `pulumi:"startTime"`
 }
@@ -468,13 +1228,13 @@ type JobLimitSpeedInput interface {
 
 type JobLimitSpeedArgs struct {
 	// Specifies the time to end speed limit, this time is UTC time. The input must
-	// end at 59 minutes, the format is `hh:mm`, for example: 15:59. Changing this parameter will create a new resource.
+	// end at 59 minutes, the format is **hh:mm**, for example: 15:59. Changing this parameter will create a new resource.
 	EndTime pulumi.StringInput `pulumi:"endTime"`
-	// Specifies the transmission speed, the value range is 1 to 9999, unit: `MB/s`.
+	// Specifies the transmission speed, the value range is 1 to 9999, unit: **MB/s**.
 	// Changing this parameter will create a new resource.
 	Speed pulumi.StringInput `pulumi:"speed"`
 	// Specifies the time to start speed limit, this time is UTC time. The start
-	// time is the whole hour, if there is a minute, it will be ignored, the format is `hh:mm`, and the hour number
+	// time is the whole hour, if there is a minute, it will be ignored, the format is **hh:mm**, and the hour number
 	// is two digits, for example: 01:00. Changing this parameter will create a new resource.
 	StartTime pulumi.StringInput `pulumi:"startTime"`
 }
@@ -531,19 +1291,19 @@ func (o JobLimitSpeedOutput) ToJobLimitSpeedOutputWithContext(ctx context.Contex
 }
 
 // Specifies the time to end speed limit, this time is UTC time. The input must
-// end at 59 minutes, the format is `hh:mm`, for example: 15:59. Changing this parameter will create a new resource.
+// end at 59 minutes, the format is **hh:mm**, for example: 15:59. Changing this parameter will create a new resource.
 func (o JobLimitSpeedOutput) EndTime() pulumi.StringOutput {
 	return o.ApplyT(func(v JobLimitSpeed) string { return v.EndTime }).(pulumi.StringOutput)
 }
 
-// Specifies the transmission speed, the value range is 1 to 9999, unit: `MB/s`.
+// Specifies the transmission speed, the value range is 1 to 9999, unit: **MB/s**.
 // Changing this parameter will create a new resource.
 func (o JobLimitSpeedOutput) Speed() pulumi.StringOutput {
 	return o.ApplyT(func(v JobLimitSpeed) string { return v.Speed }).(pulumi.StringOutput)
 }
 
 // Specifies the time to start speed limit, this time is UTC time. The start
-// time is the whole hour, if there is a minute, it will be ignored, the format is `hh:mm`, and the hour number
+// time is the whole hour, if there is a minute, it will be ignored, the format is **hh:mm**, and the hour number
 // is two digits, for example: 01:00. Changing this parameter will create a new resource.
 func (o JobLimitSpeedOutput) StartTime() pulumi.StringOutput {
 	return o.ApplyT(func(v JobLimitSpeed) string { return v.StartTime }).(pulumi.StringOutput)
@@ -569,47 +1329,750 @@ func (o JobLimitSpeedArrayOutput) Index(i pulumi.IntInput) JobLimitSpeedOutput {
 	}).(JobLimitSpeedOutput)
 }
 
+type JobPolicyConfig struct {
+	// Specifies the incremental conflict policy.
+	ConflictPolicy *string `pulumi:"conflictPolicy"`
+	// Specifies Whether to export data in snapshot mode in the PostgreSQL
+	// full migration or synchronization phase. Defaults to **false**.
+	// Changing this parameter will create a new resource.
+	ExportSnapshot *bool `pulumi:"exportSnapshot"`
+	// Specifies the file and position, The value is in the format of
+	// **File_name.file_number:Event_position**. Changing this parameter will create a new resource.
+	FileAndPosition *string `pulumi:"fileAndPosition"`
+	// Specifies the DDL filtering policy. Valid value is **drop_database**.
+	// For MySQL synchronization, this parameter can only be set to **drop_database**.
+	// Changing this parameter will create a new resource.
+	FilterDdlPolicy *string `pulumi:"filterDdlPolicy"`
+	// Specifies the gtid set. Enter a maximum of 2048 characters. Chinese
+	// characters and the following special characters are not allowed: < > & " ' / \\.
+	// Changing this parameter will create a new resource.
+	GtidSet *string `pulumi:"gtidSet"`
+	// Specifies the object synchronization scope, indicating whether to
+	// synchronize normal indexes. If it's **true**, all indexes will be synchronized, otherwise, only primary key or unique
+	// indexes are synchronized. Changing this parameter will create a new resource.
+	IndexTrans *bool `pulumi:"indexTrans"`
+	// Specifies whether to fill the materialized view in the
+	// PostgreSQL full migration or synchronization phase. Defaults to **false**.
+	// Changing this parameter will create a new resource.
+	IsFillMaterializedView *bool `pulumi:"isFillMaterializedView"`
+	// Specifies the data format delivered to Kafka.
+	// Valid values are **json**, **avro** and **json_c**. Defaults to **json**.
+	// + The value can be **json** and **json_c** for synchronization from MySQL to Kafka and from GaussDB(for MySQL) to Kafka.
+	// + The value can be **json** and **avro** for synchronization from GaussDB Primary/Standby to Kafka.
+	KafkaDataFormat *string `pulumi:"kafkaDataFormat"`
+	// Specifies the policy for synchronizing topics to the Kafka partitions.
+	// It is mandatory when the destination database is Kafka.
+	// + Valid values are as follows:
+	// - **0**: Partitions are differentiated by the hash values of *database_name.schema_name.table_name*.
+	// - **1**: Topics are synchronized to partition 0.
+	// - **2**: Partitions are identified by the hash values of the primary key.
+	// - **3**: Partitions are differentiated by the hash values of *database_name.schema_name*.
+	// - **5**: Partitions are differentiated by the hash values of non-primary-key columns
+	PartitionPolicy *string `pulumi:"partitionPolicy"`
+	// Specifies the number of partitions. The value ranges from **1** to
+	// **2147483647**. It can be specified if `policy_config.0.topic_policy` is set to **1**, **2**, or **3**.
+	// Defaults to **1**. Changing this parameter will create a new resource.
+	PartitionsNum *string `pulumi:"partitionsNum"`
+	// Specifies the number of replicas. The value ranges from **1** to
+	// **32767**. It can be specified if `policy_config.0.topic_policy` is set to **1**, **2**, or **3**.
+	// Defaults to **1**. Changing this parameter will create a new resource.
+	ReplicationFactor *string `pulumi:"replicationFactor"`
+	// Specifies the replication slot name. It is mandatory for primary and standby
+	// tasks from GaussDB Primary/Standby to Kafka. Changing this parameter will create a new resource.
+	SlotName *string `pulumi:"slotName"`
+	// Specifies the topic name. It is mandatory when `policy_config.0.topic_policy`
+	// is set to **0**. Ensure that the topic exists. Changing this parameter will create a new resource.
+	Topic *string `pulumi:"topic"`
+	// Specifies the topic name format.
+	// Valid value are as follows:
+	// + If `policy_config.0.topic_policy` is set to **1**, the topic name supports the database and table names as variables.
+	//   Other characters are considered as constants. Replace **$database$** with the database name and **$tablename$** with the
+	//   table name. Defaults to **$database$-$tablename$**.
+	// + If `policy_config.0.topic_policy` is set to **2**, the topic name supports the database name as a variable. Other
+	//   characters are regarded as constants. Defaults to **$database$**.
+	// + If `policy_config.0.topic_policy` is set to **3**, the topic name supports the names of database, schema, and table
+	//   as variables. Other characters are considered as constants. **$database$** indicates the database name, **$schema$**
+	//   indicates the schema name, and **$tablename$** indicates the table name. The default value is **$database$-$schema$-$tablename$**.
+	TopicNameFormat *string `pulumi:"topicNameFormat"`
+	// Specifies the topic synchronization policy. It is mandatory when
+	// destination database is Kafka.
+	// + Values for synchronization from MySQL to Kafka and from GaussDB(for MySQL) to Kafka:
+	// - **0**: A specified topic.
+	// - **1**: Auto-generated topics.
+	TopicPolicy *string `pulumi:"topicPolicy"`
+}
+
+// JobPolicyConfigInput is an input type that accepts JobPolicyConfigArgs and JobPolicyConfigOutput values.
+// You can construct a concrete instance of `JobPolicyConfigInput` via:
+//
+//	JobPolicyConfigArgs{...}
+type JobPolicyConfigInput interface {
+	pulumi.Input
+
+	ToJobPolicyConfigOutput() JobPolicyConfigOutput
+	ToJobPolicyConfigOutputWithContext(context.Context) JobPolicyConfigOutput
+}
+
+type JobPolicyConfigArgs struct {
+	// Specifies the incremental conflict policy.
+	ConflictPolicy pulumi.StringPtrInput `pulumi:"conflictPolicy"`
+	// Specifies Whether to export data in snapshot mode in the PostgreSQL
+	// full migration or synchronization phase. Defaults to **false**.
+	// Changing this parameter will create a new resource.
+	ExportSnapshot pulumi.BoolPtrInput `pulumi:"exportSnapshot"`
+	// Specifies the file and position, The value is in the format of
+	// **File_name.file_number:Event_position**. Changing this parameter will create a new resource.
+	FileAndPosition pulumi.StringPtrInput `pulumi:"fileAndPosition"`
+	// Specifies the DDL filtering policy. Valid value is **drop_database**.
+	// For MySQL synchronization, this parameter can only be set to **drop_database**.
+	// Changing this parameter will create a new resource.
+	FilterDdlPolicy pulumi.StringPtrInput `pulumi:"filterDdlPolicy"`
+	// Specifies the gtid set. Enter a maximum of 2048 characters. Chinese
+	// characters and the following special characters are not allowed: < > & " ' / \\.
+	// Changing this parameter will create a new resource.
+	GtidSet pulumi.StringPtrInput `pulumi:"gtidSet"`
+	// Specifies the object synchronization scope, indicating whether to
+	// synchronize normal indexes. If it's **true**, all indexes will be synchronized, otherwise, only primary key or unique
+	// indexes are synchronized. Changing this parameter will create a new resource.
+	IndexTrans pulumi.BoolPtrInput `pulumi:"indexTrans"`
+	// Specifies whether to fill the materialized view in the
+	// PostgreSQL full migration or synchronization phase. Defaults to **false**.
+	// Changing this parameter will create a new resource.
+	IsFillMaterializedView pulumi.BoolPtrInput `pulumi:"isFillMaterializedView"`
+	// Specifies the data format delivered to Kafka.
+	// Valid values are **json**, **avro** and **json_c**. Defaults to **json**.
+	// + The value can be **json** and **json_c** for synchronization from MySQL to Kafka and from GaussDB(for MySQL) to Kafka.
+	// + The value can be **json** and **avro** for synchronization from GaussDB Primary/Standby to Kafka.
+	KafkaDataFormat pulumi.StringPtrInput `pulumi:"kafkaDataFormat"`
+	// Specifies the policy for synchronizing topics to the Kafka partitions.
+	// It is mandatory when the destination database is Kafka.
+	// + Valid values are as follows:
+	// - **0**: Partitions are differentiated by the hash values of *database_name.schema_name.table_name*.
+	// - **1**: Topics are synchronized to partition 0.
+	// - **2**: Partitions are identified by the hash values of the primary key.
+	// - **3**: Partitions are differentiated by the hash values of *database_name.schema_name*.
+	// - **5**: Partitions are differentiated by the hash values of non-primary-key columns
+	PartitionPolicy pulumi.StringPtrInput `pulumi:"partitionPolicy"`
+	// Specifies the number of partitions. The value ranges from **1** to
+	// **2147483647**. It can be specified if `policy_config.0.topic_policy` is set to **1**, **2**, or **3**.
+	// Defaults to **1**. Changing this parameter will create a new resource.
+	PartitionsNum pulumi.StringPtrInput `pulumi:"partitionsNum"`
+	// Specifies the number of replicas. The value ranges from **1** to
+	// **32767**. It can be specified if `policy_config.0.topic_policy` is set to **1**, **2**, or **3**.
+	// Defaults to **1**. Changing this parameter will create a new resource.
+	ReplicationFactor pulumi.StringPtrInput `pulumi:"replicationFactor"`
+	// Specifies the replication slot name. It is mandatory for primary and standby
+	// tasks from GaussDB Primary/Standby to Kafka. Changing this parameter will create a new resource.
+	SlotName pulumi.StringPtrInput `pulumi:"slotName"`
+	// Specifies the topic name. It is mandatory when `policy_config.0.topic_policy`
+	// is set to **0**. Ensure that the topic exists. Changing this parameter will create a new resource.
+	Topic pulumi.StringPtrInput `pulumi:"topic"`
+	// Specifies the topic name format.
+	// Valid value are as follows:
+	// + If `policy_config.0.topic_policy` is set to **1**, the topic name supports the database and table names as variables.
+	//   Other characters are considered as constants. Replace **$database$** with the database name and **$tablename$** with the
+	//   table name. Defaults to **$database$-$tablename$**.
+	// + If `policy_config.0.topic_policy` is set to **2**, the topic name supports the database name as a variable. Other
+	//   characters are regarded as constants. Defaults to **$database$**.
+	// + If `policy_config.0.topic_policy` is set to **3**, the topic name supports the names of database, schema, and table
+	//   as variables. Other characters are considered as constants. **$database$** indicates the database name, **$schema$**
+	//   indicates the schema name, and **$tablename$** indicates the table name. The default value is **$database$-$schema$-$tablename$**.
+	TopicNameFormat pulumi.StringPtrInput `pulumi:"topicNameFormat"`
+	// Specifies the topic synchronization policy. It is mandatory when
+	// destination database is Kafka.
+	// + Values for synchronization from MySQL to Kafka and from GaussDB(for MySQL) to Kafka:
+	// - **0**: A specified topic.
+	// - **1**: Auto-generated topics.
+	TopicPolicy pulumi.StringPtrInput `pulumi:"topicPolicy"`
+}
+
+func (JobPolicyConfigArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*JobPolicyConfig)(nil)).Elem()
+}
+
+func (i JobPolicyConfigArgs) ToJobPolicyConfigOutput() JobPolicyConfigOutput {
+	return i.ToJobPolicyConfigOutputWithContext(context.Background())
+}
+
+func (i JobPolicyConfigArgs) ToJobPolicyConfigOutputWithContext(ctx context.Context) JobPolicyConfigOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(JobPolicyConfigOutput)
+}
+
+func (i JobPolicyConfigArgs) ToJobPolicyConfigPtrOutput() JobPolicyConfigPtrOutput {
+	return i.ToJobPolicyConfigPtrOutputWithContext(context.Background())
+}
+
+func (i JobPolicyConfigArgs) ToJobPolicyConfigPtrOutputWithContext(ctx context.Context) JobPolicyConfigPtrOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(JobPolicyConfigOutput).ToJobPolicyConfigPtrOutputWithContext(ctx)
+}
+
+// JobPolicyConfigPtrInput is an input type that accepts JobPolicyConfigArgs, JobPolicyConfigPtr and JobPolicyConfigPtrOutput values.
+// You can construct a concrete instance of `JobPolicyConfigPtrInput` via:
+//
+//	        JobPolicyConfigArgs{...}
+//
+//	or:
+//
+//	        nil
+type JobPolicyConfigPtrInput interface {
+	pulumi.Input
+
+	ToJobPolicyConfigPtrOutput() JobPolicyConfigPtrOutput
+	ToJobPolicyConfigPtrOutputWithContext(context.Context) JobPolicyConfigPtrOutput
+}
+
+type jobPolicyConfigPtrType JobPolicyConfigArgs
+
+func JobPolicyConfigPtr(v *JobPolicyConfigArgs) JobPolicyConfigPtrInput {
+	return (*jobPolicyConfigPtrType)(v)
+}
+
+func (*jobPolicyConfigPtrType) ElementType() reflect.Type {
+	return reflect.TypeOf((**JobPolicyConfig)(nil)).Elem()
+}
+
+func (i *jobPolicyConfigPtrType) ToJobPolicyConfigPtrOutput() JobPolicyConfigPtrOutput {
+	return i.ToJobPolicyConfigPtrOutputWithContext(context.Background())
+}
+
+func (i *jobPolicyConfigPtrType) ToJobPolicyConfigPtrOutputWithContext(ctx context.Context) JobPolicyConfigPtrOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(JobPolicyConfigPtrOutput)
+}
+
+type JobPolicyConfigOutput struct{ *pulumi.OutputState }
+
+func (JobPolicyConfigOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*JobPolicyConfig)(nil)).Elem()
+}
+
+func (o JobPolicyConfigOutput) ToJobPolicyConfigOutput() JobPolicyConfigOutput {
+	return o
+}
+
+func (o JobPolicyConfigOutput) ToJobPolicyConfigOutputWithContext(ctx context.Context) JobPolicyConfigOutput {
+	return o
+}
+
+func (o JobPolicyConfigOutput) ToJobPolicyConfigPtrOutput() JobPolicyConfigPtrOutput {
+	return o.ToJobPolicyConfigPtrOutputWithContext(context.Background())
+}
+
+func (o JobPolicyConfigOutput) ToJobPolicyConfigPtrOutputWithContext(ctx context.Context) JobPolicyConfigPtrOutput {
+	return o.ApplyTWithContext(ctx, func(_ context.Context, v JobPolicyConfig) *JobPolicyConfig {
+		return &v
+	}).(JobPolicyConfigPtrOutput)
+}
+
+// Specifies the incremental conflict policy.
+func (o JobPolicyConfigOutput) ConflictPolicy() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v JobPolicyConfig) *string { return v.ConflictPolicy }).(pulumi.StringPtrOutput)
+}
+
+// Specifies Whether to export data in snapshot mode in the PostgreSQL
+// full migration or synchronization phase. Defaults to **false**.
+// Changing this parameter will create a new resource.
+func (o JobPolicyConfigOutput) ExportSnapshot() pulumi.BoolPtrOutput {
+	return o.ApplyT(func(v JobPolicyConfig) *bool { return v.ExportSnapshot }).(pulumi.BoolPtrOutput)
+}
+
+// Specifies the file and position, The value is in the format of
+// **File_name.file_number:Event_position**. Changing this parameter will create a new resource.
+func (o JobPolicyConfigOutput) FileAndPosition() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v JobPolicyConfig) *string { return v.FileAndPosition }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the DDL filtering policy. Valid value is **drop_database**.
+// For MySQL synchronization, this parameter can only be set to **drop_database**.
+// Changing this parameter will create a new resource.
+func (o JobPolicyConfigOutput) FilterDdlPolicy() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v JobPolicyConfig) *string { return v.FilterDdlPolicy }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the gtid set. Enter a maximum of 2048 characters. Chinese
+// characters and the following special characters are not allowed: < > & " ' / \\.
+// Changing this parameter will create a new resource.
+func (o JobPolicyConfigOutput) GtidSet() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v JobPolicyConfig) *string { return v.GtidSet }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the object synchronization scope, indicating whether to
+// synchronize normal indexes. If it's **true**, all indexes will be synchronized, otherwise, only primary key or unique
+// indexes are synchronized. Changing this parameter will create a new resource.
+func (o JobPolicyConfigOutput) IndexTrans() pulumi.BoolPtrOutput {
+	return o.ApplyT(func(v JobPolicyConfig) *bool { return v.IndexTrans }).(pulumi.BoolPtrOutput)
+}
+
+// Specifies whether to fill the materialized view in the
+// PostgreSQL full migration or synchronization phase. Defaults to **false**.
+// Changing this parameter will create a new resource.
+func (o JobPolicyConfigOutput) IsFillMaterializedView() pulumi.BoolPtrOutput {
+	return o.ApplyT(func(v JobPolicyConfig) *bool { return v.IsFillMaterializedView }).(pulumi.BoolPtrOutput)
+}
+
+// Specifies the data format delivered to Kafka.
+// Valid values are **json**, **avro** and **json_c**. Defaults to **json**.
+// + The value can be **json** and **json_c** for synchronization from MySQL to Kafka and from GaussDB(for MySQL) to Kafka.
+// + The value can be **json** and **avro** for synchronization from GaussDB Primary/Standby to Kafka.
+func (o JobPolicyConfigOutput) KafkaDataFormat() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v JobPolicyConfig) *string { return v.KafkaDataFormat }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the policy for synchronizing topics to the Kafka partitions.
+// It is mandatory when the destination database is Kafka.
+// + Valid values are as follows:
+// - **0**: Partitions are differentiated by the hash values of *database_name.schema_name.table_name*.
+// - **1**: Topics are synchronized to partition 0.
+// - **2**: Partitions are identified by the hash values of the primary key.
+// - **3**: Partitions are differentiated by the hash values of *database_name.schema_name*.
+// - **5**: Partitions are differentiated by the hash values of non-primary-key columns
+func (o JobPolicyConfigOutput) PartitionPolicy() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v JobPolicyConfig) *string { return v.PartitionPolicy }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the number of partitions. The value ranges from **1** to
+// **2147483647**. It can be specified if `policy_config.0.topic_policy` is set to **1**, **2**, or **3**.
+// Defaults to **1**. Changing this parameter will create a new resource.
+func (o JobPolicyConfigOutput) PartitionsNum() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v JobPolicyConfig) *string { return v.PartitionsNum }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the number of replicas. The value ranges from **1** to
+// **32767**. It can be specified if `policy_config.0.topic_policy` is set to **1**, **2**, or **3**.
+// Defaults to **1**. Changing this parameter will create a new resource.
+func (o JobPolicyConfigOutput) ReplicationFactor() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v JobPolicyConfig) *string { return v.ReplicationFactor }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the replication slot name. It is mandatory for primary and standby
+// tasks from GaussDB Primary/Standby to Kafka. Changing this parameter will create a new resource.
+func (o JobPolicyConfigOutput) SlotName() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v JobPolicyConfig) *string { return v.SlotName }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the topic name. It is mandatory when `policy_config.0.topic_policy`
+// is set to **0**. Ensure that the topic exists. Changing this parameter will create a new resource.
+func (o JobPolicyConfigOutput) Topic() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v JobPolicyConfig) *string { return v.Topic }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the topic name format.
+// Valid value are as follows:
+//   - If `policy_config.0.topic_policy` is set to **1**, the topic name supports the database and table names as variables.
+//     Other characters are considered as constants. Replace **$database$** with the database name and **$tablename$** with the
+//     table name. Defaults to **$database$-$tablename$**.
+//   - If `policy_config.0.topic_policy` is set to **2**, the topic name supports the database name as a variable. Other
+//     characters are regarded as constants. Defaults to **$database$**.
+//   - If `policy_config.0.topic_policy` is set to **3**, the topic name supports the names of database, schema, and table
+//     as variables. Other characters are considered as constants. **$database$** indicates the database name, **$schema$**
+//     indicates the schema name, and **$tablename$** indicates the table name. The default value is **$database$-$schema$-$tablename$**.
+func (o JobPolicyConfigOutput) TopicNameFormat() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v JobPolicyConfig) *string { return v.TopicNameFormat }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the topic synchronization policy. It is mandatory when
+// destination database is Kafka.
+// + Values for synchronization from MySQL to Kafka and from GaussDB(for MySQL) to Kafka:
+// - **0**: A specified topic.
+// - **1**: Auto-generated topics.
+func (o JobPolicyConfigOutput) TopicPolicy() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v JobPolicyConfig) *string { return v.TopicPolicy }).(pulumi.StringPtrOutput)
+}
+
+type JobPolicyConfigPtrOutput struct{ *pulumi.OutputState }
+
+func (JobPolicyConfigPtrOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((**JobPolicyConfig)(nil)).Elem()
+}
+
+func (o JobPolicyConfigPtrOutput) ToJobPolicyConfigPtrOutput() JobPolicyConfigPtrOutput {
+	return o
+}
+
+func (o JobPolicyConfigPtrOutput) ToJobPolicyConfigPtrOutputWithContext(ctx context.Context) JobPolicyConfigPtrOutput {
+	return o
+}
+
+func (o JobPolicyConfigPtrOutput) Elem() JobPolicyConfigOutput {
+	return o.ApplyT(func(v *JobPolicyConfig) JobPolicyConfig {
+		if v != nil {
+			return *v
+		}
+		var ret JobPolicyConfig
+		return ret
+	}).(JobPolicyConfigOutput)
+}
+
+// Specifies the incremental conflict policy.
+func (o JobPolicyConfigPtrOutput) ConflictPolicy() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *JobPolicyConfig) *string {
+		if v == nil {
+			return nil
+		}
+		return v.ConflictPolicy
+	}).(pulumi.StringPtrOutput)
+}
+
+// Specifies Whether to export data in snapshot mode in the PostgreSQL
+// full migration or synchronization phase. Defaults to **false**.
+// Changing this parameter will create a new resource.
+func (o JobPolicyConfigPtrOutput) ExportSnapshot() pulumi.BoolPtrOutput {
+	return o.ApplyT(func(v *JobPolicyConfig) *bool {
+		if v == nil {
+			return nil
+		}
+		return v.ExportSnapshot
+	}).(pulumi.BoolPtrOutput)
+}
+
+// Specifies the file and position, The value is in the format of
+// **File_name.file_number:Event_position**. Changing this parameter will create a new resource.
+func (o JobPolicyConfigPtrOutput) FileAndPosition() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *JobPolicyConfig) *string {
+		if v == nil {
+			return nil
+		}
+		return v.FileAndPosition
+	}).(pulumi.StringPtrOutput)
+}
+
+// Specifies the DDL filtering policy. Valid value is **drop_database**.
+// For MySQL synchronization, this parameter can only be set to **drop_database**.
+// Changing this parameter will create a new resource.
+func (o JobPolicyConfigPtrOutput) FilterDdlPolicy() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *JobPolicyConfig) *string {
+		if v == nil {
+			return nil
+		}
+		return v.FilterDdlPolicy
+	}).(pulumi.StringPtrOutput)
+}
+
+// Specifies the gtid set. Enter a maximum of 2048 characters. Chinese
+// characters and the following special characters are not allowed: < > & " ' / \\.
+// Changing this parameter will create a new resource.
+func (o JobPolicyConfigPtrOutput) GtidSet() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *JobPolicyConfig) *string {
+		if v == nil {
+			return nil
+		}
+		return v.GtidSet
+	}).(pulumi.StringPtrOutput)
+}
+
+// Specifies the object synchronization scope, indicating whether to
+// synchronize normal indexes. If it's **true**, all indexes will be synchronized, otherwise, only primary key or unique
+// indexes are synchronized. Changing this parameter will create a new resource.
+func (o JobPolicyConfigPtrOutput) IndexTrans() pulumi.BoolPtrOutput {
+	return o.ApplyT(func(v *JobPolicyConfig) *bool {
+		if v == nil {
+			return nil
+		}
+		return v.IndexTrans
+	}).(pulumi.BoolPtrOutput)
+}
+
+// Specifies whether to fill the materialized view in the
+// PostgreSQL full migration or synchronization phase. Defaults to **false**.
+// Changing this parameter will create a new resource.
+func (o JobPolicyConfigPtrOutput) IsFillMaterializedView() pulumi.BoolPtrOutput {
+	return o.ApplyT(func(v *JobPolicyConfig) *bool {
+		if v == nil {
+			return nil
+		}
+		return v.IsFillMaterializedView
+	}).(pulumi.BoolPtrOutput)
+}
+
+// Specifies the data format delivered to Kafka.
+// Valid values are **json**, **avro** and **json_c**. Defaults to **json**.
+// + The value can be **json** and **json_c** for synchronization from MySQL to Kafka and from GaussDB(for MySQL) to Kafka.
+// + The value can be **json** and **avro** for synchronization from GaussDB Primary/Standby to Kafka.
+func (o JobPolicyConfigPtrOutput) KafkaDataFormat() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *JobPolicyConfig) *string {
+		if v == nil {
+			return nil
+		}
+		return v.KafkaDataFormat
+	}).(pulumi.StringPtrOutput)
+}
+
+// Specifies the policy for synchronizing topics to the Kafka partitions.
+// It is mandatory when the destination database is Kafka.
+// + Valid values are as follows:
+// - **0**: Partitions are differentiated by the hash values of *database_name.schema_name.table_name*.
+// - **1**: Topics are synchronized to partition 0.
+// - **2**: Partitions are identified by the hash values of the primary key.
+// - **3**: Partitions are differentiated by the hash values of *database_name.schema_name*.
+// - **5**: Partitions are differentiated by the hash values of non-primary-key columns
+func (o JobPolicyConfigPtrOutput) PartitionPolicy() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *JobPolicyConfig) *string {
+		if v == nil {
+			return nil
+		}
+		return v.PartitionPolicy
+	}).(pulumi.StringPtrOutput)
+}
+
+// Specifies the number of partitions. The value ranges from **1** to
+// **2147483647**. It can be specified if `policy_config.0.topic_policy` is set to **1**, **2**, or **3**.
+// Defaults to **1**. Changing this parameter will create a new resource.
+func (o JobPolicyConfigPtrOutput) PartitionsNum() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *JobPolicyConfig) *string {
+		if v == nil {
+			return nil
+		}
+		return v.PartitionsNum
+	}).(pulumi.StringPtrOutput)
+}
+
+// Specifies the number of replicas. The value ranges from **1** to
+// **32767**. It can be specified if `policy_config.0.topic_policy` is set to **1**, **2**, or **3**.
+// Defaults to **1**. Changing this parameter will create a new resource.
+func (o JobPolicyConfigPtrOutput) ReplicationFactor() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *JobPolicyConfig) *string {
+		if v == nil {
+			return nil
+		}
+		return v.ReplicationFactor
+	}).(pulumi.StringPtrOutput)
+}
+
+// Specifies the replication slot name. It is mandatory for primary and standby
+// tasks from GaussDB Primary/Standby to Kafka. Changing this parameter will create a new resource.
+func (o JobPolicyConfigPtrOutput) SlotName() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *JobPolicyConfig) *string {
+		if v == nil {
+			return nil
+		}
+		return v.SlotName
+	}).(pulumi.StringPtrOutput)
+}
+
+// Specifies the topic name. It is mandatory when `policy_config.0.topic_policy`
+// is set to **0**. Ensure that the topic exists. Changing this parameter will create a new resource.
+func (o JobPolicyConfigPtrOutput) Topic() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *JobPolicyConfig) *string {
+		if v == nil {
+			return nil
+		}
+		return v.Topic
+	}).(pulumi.StringPtrOutput)
+}
+
+// Specifies the topic name format.
+// Valid value are as follows:
+//   - If `policy_config.0.topic_policy` is set to **1**, the topic name supports the database and table names as variables.
+//     Other characters are considered as constants. Replace **$database$** with the database name and **$tablename$** with the
+//     table name. Defaults to **$database$-$tablename$**.
+//   - If `policy_config.0.topic_policy` is set to **2**, the topic name supports the database name as a variable. Other
+//     characters are regarded as constants. Defaults to **$database$**.
+//   - If `policy_config.0.topic_policy` is set to **3**, the topic name supports the names of database, schema, and table
+//     as variables. Other characters are considered as constants. **$database$** indicates the database name, **$schema$**
+//     indicates the schema name, and **$tablename$** indicates the table name. The default value is **$database$-$schema$-$tablename$**.
+func (o JobPolicyConfigPtrOutput) TopicNameFormat() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *JobPolicyConfig) *string {
+		if v == nil {
+			return nil
+		}
+		return v.TopicNameFormat
+	}).(pulumi.StringPtrOutput)
+}
+
+// Specifies the topic synchronization policy. It is mandatory when
+// destination database is Kafka.
+// + Values for synchronization from MySQL to Kafka and from GaussDB(for MySQL) to Kafka:
+// - **0**: A specified topic.
+// - **1**: Auto-generated topics.
+func (o JobPolicyConfigPtrOutput) TopicPolicy() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *JobPolicyConfig) *string {
+		if v == nil {
+			return nil
+		}
+		return v.TopicPolicy
+	}).(pulumi.StringPtrOutput)
+}
+
+type JobPublicIpList struct {
+	// Specifies the ID of a specified EIP.
+	// Changing this parameter will create a new resource.
+	Id string `pulumi:"id"`
+	// Specifies public IP.
+	// Changing this parameter will create a new resource.
+	PublicIp string `pulumi:"publicIp"`
+	// Specifies the type of a task with an EIP bound.
+	// Valid values are **master** and **slave**.
+	// + In a primary/standby task, **master** indicates the primary task, and **slave** indicates the standby task.
+	// + In other cases, the value is fixed to **master**.
+	Type string `pulumi:"type"`
+}
+
+// JobPublicIpListInput is an input type that accepts JobPublicIpListArgs and JobPublicIpListOutput values.
+// You can construct a concrete instance of `JobPublicIpListInput` via:
+//
+//	JobPublicIpListArgs{...}
+type JobPublicIpListInput interface {
+	pulumi.Input
+
+	ToJobPublicIpListOutput() JobPublicIpListOutput
+	ToJobPublicIpListOutputWithContext(context.Context) JobPublicIpListOutput
+}
+
+type JobPublicIpListArgs struct {
+	// Specifies the ID of a specified EIP.
+	// Changing this parameter will create a new resource.
+	Id pulumi.StringInput `pulumi:"id"`
+	// Specifies public IP.
+	// Changing this parameter will create a new resource.
+	PublicIp pulumi.StringInput `pulumi:"publicIp"`
+	// Specifies the type of a task with an EIP bound.
+	// Valid values are **master** and **slave**.
+	// + In a primary/standby task, **master** indicates the primary task, and **slave** indicates the standby task.
+	// + In other cases, the value is fixed to **master**.
+	Type pulumi.StringInput `pulumi:"type"`
+}
+
+func (JobPublicIpListArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*JobPublicIpList)(nil)).Elem()
+}
+
+func (i JobPublicIpListArgs) ToJobPublicIpListOutput() JobPublicIpListOutput {
+	return i.ToJobPublicIpListOutputWithContext(context.Background())
+}
+
+func (i JobPublicIpListArgs) ToJobPublicIpListOutputWithContext(ctx context.Context) JobPublicIpListOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(JobPublicIpListOutput)
+}
+
+// JobPublicIpListArrayInput is an input type that accepts JobPublicIpListArray and JobPublicIpListArrayOutput values.
+// You can construct a concrete instance of `JobPublicIpListArrayInput` via:
+//
+//	JobPublicIpListArray{ JobPublicIpListArgs{...} }
+type JobPublicIpListArrayInput interface {
+	pulumi.Input
+
+	ToJobPublicIpListArrayOutput() JobPublicIpListArrayOutput
+	ToJobPublicIpListArrayOutputWithContext(context.Context) JobPublicIpListArrayOutput
+}
+
+type JobPublicIpListArray []JobPublicIpListInput
+
+func (JobPublicIpListArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]JobPublicIpList)(nil)).Elem()
+}
+
+func (i JobPublicIpListArray) ToJobPublicIpListArrayOutput() JobPublicIpListArrayOutput {
+	return i.ToJobPublicIpListArrayOutputWithContext(context.Background())
+}
+
+func (i JobPublicIpListArray) ToJobPublicIpListArrayOutputWithContext(ctx context.Context) JobPublicIpListArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(JobPublicIpListArrayOutput)
+}
+
+type JobPublicIpListOutput struct{ *pulumi.OutputState }
+
+func (JobPublicIpListOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*JobPublicIpList)(nil)).Elem()
+}
+
+func (o JobPublicIpListOutput) ToJobPublicIpListOutput() JobPublicIpListOutput {
+	return o
+}
+
+func (o JobPublicIpListOutput) ToJobPublicIpListOutputWithContext(ctx context.Context) JobPublicIpListOutput {
+	return o
+}
+
+// Specifies the ID of a specified EIP.
+// Changing this parameter will create a new resource.
+func (o JobPublicIpListOutput) Id() pulumi.StringOutput {
+	return o.ApplyT(func(v JobPublicIpList) string { return v.Id }).(pulumi.StringOutput)
+}
+
+// Specifies public IP.
+// Changing this parameter will create a new resource.
+func (o JobPublicIpListOutput) PublicIp() pulumi.StringOutput {
+	return o.ApplyT(func(v JobPublicIpList) string { return v.PublicIp }).(pulumi.StringOutput)
+}
+
+// Specifies the type of a task with an EIP bound.
+// Valid values are **master** and **slave**.
+// + In a primary/standby task, **master** indicates the primary task, and **slave** indicates the standby task.
+// + In other cases, the value is fixed to **master**.
+func (o JobPublicIpListOutput) Type() pulumi.StringOutput {
+	return o.ApplyT(func(v JobPublicIpList) string { return v.Type }).(pulumi.StringOutput)
+}
+
+type JobPublicIpListArrayOutput struct{ *pulumi.OutputState }
+
+func (JobPublicIpListArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]JobPublicIpList)(nil)).Elem()
+}
+
+func (o JobPublicIpListArrayOutput) ToJobPublicIpListArrayOutput() JobPublicIpListArrayOutput {
+	return o
+}
+
+func (o JobPublicIpListArrayOutput) ToJobPublicIpListArrayOutputWithContext(ctx context.Context) JobPublicIpListArrayOutput {
+	return o
+}
+
+func (o JobPublicIpListArrayOutput) Index(i pulumi.IntInput) JobPublicIpListOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) JobPublicIpList {
+		return vs[0].([]JobPublicIpList)[vs[1].(int)]
+	}).(JobPublicIpListOutput)
+}
+
 type JobSourceDb struct {
 	// Specifies the engine type of database. Changing this parameter will
-	// create a new resource. The options are as follows: `mysql`, `mongodb`, `gaussdbv5`.
+	// create a new resource. The options are as follows: **mysql**, **mongodb**, **gaussdbv5**, **taurus**, **gaussdbv5ha**,
+	// **kafka**, **postgresql**.
 	EngineType string `pulumi:"engineType"`
 	// Specifies the instance id of database when it is a RDS database.
 	// Changing this parameter will create a new resource.
 	InstanceId *string `pulumi:"instanceId"`
 	// Specifies the IP of database. Changing this parameter will create a new resource.
 	Ip string `pulumi:"ip"`
+	// Specifies the kafka security authentication info.
+	// Changing this parameter will create a new resource.
+	// The kafkaSecurityConfig structure is documented below.
+	KafkaSecurityConfig *JobSourceDbKafkaSecurityConfig `pulumi:"kafkaSecurityConfig"`
 	// Specifies the name of database.
 	// Changing this parameter will create a new resource.
 	Name *string `pulumi:"name"`
 	// Specifies the password of database.
 	// Changing this parameter will create a new resource.
-	Password string `pulumi:"password"`
+	Password *string `pulumi:"password"`
 	// Specifies the port of database. Changing this parameter will create a new resource.
-	Port int `pulumi:"port"`
+	Port *int `pulumi:"port"`
 	// Specifies the region which the database belongs when it is a RDS database.
 	// Changing this parameter will create a new resource.
 	Region *string `pulumi:"region"`
+	// The security group ID to which the databese instance belongs.
+	SecurityGroupId *string `pulumi:"securityGroupId"`
 	// Specifies the checksum of SSL certificate content.
-	// It is mandatory when `sslEnabled` is `true`. Changing this parameter will create a new resource.
+	// It is mandatory when `sslEnabled` is **true**. Changing this parameter will create a new resource.
 	SslCertCheckSum *string `pulumi:"sslCertCheckSum"`
 	// Specifies the SSL certificate content, encrypted with base64.
-	// It is mandatory when `sslEnabled` is `true`. Changing this parameter will create a new resource.
+	// It is mandatory when `sslEnabled` is **true**. Changing this parameter will create a new resource.
 	SslCertKey *string `pulumi:"sslCertKey"`
 	// Specifies SSL certificate name.
-	// It is mandatory when `sslEnabled` is `true`. Changing this parameter will create a new resource.
+	// It is mandatory when `sslEnabled` is **true**. Changing this parameter will create a new resource.
 	SslCertName *string `pulumi:"sslCertName"`
 	// Specifies SSL certificate password. It is mandatory when
-	// `sslEnabled` is `true` and the certificate file suffix is `.p12`. Changing this parameter will create a new resource.
+	// `sslEnabled` is **true** and the certificate file suffix is **.p12**. Changing this parameter will create a new resource.
 	SslCertPassword *string `pulumi:"sslCertPassword"`
 	// Specifies whether to enable SSL connection.
 	// Changing this parameter will create a new resource.
 	SslEnabled *bool `pulumi:"sslEnabled"`
 	// Specifies subnet ID of database when it is a RDS database.
-	// It is mandatory when `direction` is `down`. Changing this parameter will create a new resource.
+	// It is mandatory when `direction` is **down**. Changing this parameter will create a new resource.
 	SubnetId *string `pulumi:"subnetId"`
 	// Specifies the user name of database.
 	// Changing this parameter will create a new resource.
-	User string `pulumi:"user"`
+	User *string `pulumi:"user"`
+	// Specifies vpc ID of database.
+	// Changing this parameter will create a new resource.
+	VpcId *string `pulumi:"vpcId"`
 }
 
 // JobSourceDbInput is an input type that accepts JobSourceDbArgs and JobSourceDbOutput values.
@@ -625,45 +2088,55 @@ type JobSourceDbInput interface {
 
 type JobSourceDbArgs struct {
 	// Specifies the engine type of database. Changing this parameter will
-	// create a new resource. The options are as follows: `mysql`, `mongodb`, `gaussdbv5`.
+	// create a new resource. The options are as follows: **mysql**, **mongodb**, **gaussdbv5**, **taurus**, **gaussdbv5ha**,
+	// **kafka**, **postgresql**.
 	EngineType pulumi.StringInput `pulumi:"engineType"`
 	// Specifies the instance id of database when it is a RDS database.
 	// Changing this parameter will create a new resource.
 	InstanceId pulumi.StringPtrInput `pulumi:"instanceId"`
 	// Specifies the IP of database. Changing this parameter will create a new resource.
 	Ip pulumi.StringInput `pulumi:"ip"`
+	// Specifies the kafka security authentication info.
+	// Changing this parameter will create a new resource.
+	// The kafkaSecurityConfig structure is documented below.
+	KafkaSecurityConfig JobSourceDbKafkaSecurityConfigPtrInput `pulumi:"kafkaSecurityConfig"`
 	// Specifies the name of database.
 	// Changing this parameter will create a new resource.
 	Name pulumi.StringPtrInput `pulumi:"name"`
 	// Specifies the password of database.
 	// Changing this parameter will create a new resource.
-	Password pulumi.StringInput `pulumi:"password"`
+	Password pulumi.StringPtrInput `pulumi:"password"`
 	// Specifies the port of database. Changing this parameter will create a new resource.
-	Port pulumi.IntInput `pulumi:"port"`
+	Port pulumi.IntPtrInput `pulumi:"port"`
 	// Specifies the region which the database belongs when it is a RDS database.
 	// Changing this parameter will create a new resource.
 	Region pulumi.StringPtrInput `pulumi:"region"`
+	// The security group ID to which the databese instance belongs.
+	SecurityGroupId pulumi.StringPtrInput `pulumi:"securityGroupId"`
 	// Specifies the checksum of SSL certificate content.
-	// It is mandatory when `sslEnabled` is `true`. Changing this parameter will create a new resource.
+	// It is mandatory when `sslEnabled` is **true**. Changing this parameter will create a new resource.
 	SslCertCheckSum pulumi.StringPtrInput `pulumi:"sslCertCheckSum"`
 	// Specifies the SSL certificate content, encrypted with base64.
-	// It is mandatory when `sslEnabled` is `true`. Changing this parameter will create a new resource.
+	// It is mandatory when `sslEnabled` is **true**. Changing this parameter will create a new resource.
 	SslCertKey pulumi.StringPtrInput `pulumi:"sslCertKey"`
 	// Specifies SSL certificate name.
-	// It is mandatory when `sslEnabled` is `true`. Changing this parameter will create a new resource.
+	// It is mandatory when `sslEnabled` is **true**. Changing this parameter will create a new resource.
 	SslCertName pulumi.StringPtrInput `pulumi:"sslCertName"`
 	// Specifies SSL certificate password. It is mandatory when
-	// `sslEnabled` is `true` and the certificate file suffix is `.p12`. Changing this parameter will create a new resource.
+	// `sslEnabled` is **true** and the certificate file suffix is **.p12**. Changing this parameter will create a new resource.
 	SslCertPassword pulumi.StringPtrInput `pulumi:"sslCertPassword"`
 	// Specifies whether to enable SSL connection.
 	// Changing this parameter will create a new resource.
 	SslEnabled pulumi.BoolPtrInput `pulumi:"sslEnabled"`
 	// Specifies subnet ID of database when it is a RDS database.
-	// It is mandatory when `direction` is `down`. Changing this parameter will create a new resource.
+	// It is mandatory when `direction` is **down**. Changing this parameter will create a new resource.
 	SubnetId pulumi.StringPtrInput `pulumi:"subnetId"`
 	// Specifies the user name of database.
 	// Changing this parameter will create a new resource.
-	User pulumi.StringInput `pulumi:"user"`
+	User pulumi.StringPtrInput `pulumi:"user"`
+	// Specifies vpc ID of database.
+	// Changing this parameter will create a new resource.
+	VpcId pulumi.StringPtrInput `pulumi:"vpcId"`
 }
 
 func (JobSourceDbArgs) ElementType() reflect.Type {
@@ -744,7 +2217,8 @@ func (o JobSourceDbOutput) ToJobSourceDbPtrOutputWithContext(ctx context.Context
 }
 
 // Specifies the engine type of database. Changing this parameter will
-// create a new resource. The options are as follows: `mysql`, `mongodb`, `gaussdbv5`.
+// create a new resource. The options are as follows: **mysql**, **mongodb**, **gaussdbv5**, **taurus**, **gaussdbv5ha**,
+// **kafka**, **postgresql**.
 func (o JobSourceDbOutput) EngineType() pulumi.StringOutput {
 	return o.ApplyT(func(v JobSourceDb) string { return v.EngineType }).(pulumi.StringOutput)
 }
@@ -760,6 +2234,13 @@ func (o JobSourceDbOutput) Ip() pulumi.StringOutput {
 	return o.ApplyT(func(v JobSourceDb) string { return v.Ip }).(pulumi.StringOutput)
 }
 
+// Specifies the kafka security authentication info.
+// Changing this parameter will create a new resource.
+// The kafkaSecurityConfig structure is documented below.
+func (o JobSourceDbOutput) KafkaSecurityConfig() JobSourceDbKafkaSecurityConfigPtrOutput {
+	return o.ApplyT(func(v JobSourceDb) *JobSourceDbKafkaSecurityConfig { return v.KafkaSecurityConfig }).(JobSourceDbKafkaSecurityConfigPtrOutput)
+}
+
 // Specifies the name of database.
 // Changing this parameter will create a new resource.
 func (o JobSourceDbOutput) Name() pulumi.StringPtrOutput {
@@ -768,13 +2249,13 @@ func (o JobSourceDbOutput) Name() pulumi.StringPtrOutput {
 
 // Specifies the password of database.
 // Changing this parameter will create a new resource.
-func (o JobSourceDbOutput) Password() pulumi.StringOutput {
-	return o.ApplyT(func(v JobSourceDb) string { return v.Password }).(pulumi.StringOutput)
+func (o JobSourceDbOutput) Password() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v JobSourceDb) *string { return v.Password }).(pulumi.StringPtrOutput)
 }
 
 // Specifies the port of database. Changing this parameter will create a new resource.
-func (o JobSourceDbOutput) Port() pulumi.IntOutput {
-	return o.ApplyT(func(v JobSourceDb) int { return v.Port }).(pulumi.IntOutput)
+func (o JobSourceDbOutput) Port() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v JobSourceDb) *int { return v.Port }).(pulumi.IntPtrOutput)
 }
 
 // Specifies the region which the database belongs when it is a RDS database.
@@ -783,26 +2264,31 @@ func (o JobSourceDbOutput) Region() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v JobSourceDb) *string { return v.Region }).(pulumi.StringPtrOutput)
 }
 
+// The security group ID to which the databese instance belongs.
+func (o JobSourceDbOutput) SecurityGroupId() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v JobSourceDb) *string { return v.SecurityGroupId }).(pulumi.StringPtrOutput)
+}
+
 // Specifies the checksum of SSL certificate content.
-// It is mandatory when `sslEnabled` is `true`. Changing this parameter will create a new resource.
+// It is mandatory when `sslEnabled` is **true**. Changing this parameter will create a new resource.
 func (o JobSourceDbOutput) SslCertCheckSum() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v JobSourceDb) *string { return v.SslCertCheckSum }).(pulumi.StringPtrOutput)
 }
 
 // Specifies the SSL certificate content, encrypted with base64.
-// It is mandatory when `sslEnabled` is `true`. Changing this parameter will create a new resource.
+// It is mandatory when `sslEnabled` is **true**. Changing this parameter will create a new resource.
 func (o JobSourceDbOutput) SslCertKey() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v JobSourceDb) *string { return v.SslCertKey }).(pulumi.StringPtrOutput)
 }
 
 // Specifies SSL certificate name.
-// It is mandatory when `sslEnabled` is `true`. Changing this parameter will create a new resource.
+// It is mandatory when `sslEnabled` is **true**. Changing this parameter will create a new resource.
 func (o JobSourceDbOutput) SslCertName() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v JobSourceDb) *string { return v.SslCertName }).(pulumi.StringPtrOutput)
 }
 
 // Specifies SSL certificate password. It is mandatory when
-// `sslEnabled` is `true` and the certificate file suffix is `.p12`. Changing this parameter will create a new resource.
+// `sslEnabled` is **true** and the certificate file suffix is **.p12**. Changing this parameter will create a new resource.
 func (o JobSourceDbOutput) SslCertPassword() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v JobSourceDb) *string { return v.SslCertPassword }).(pulumi.StringPtrOutput)
 }
@@ -814,15 +2300,21 @@ func (o JobSourceDbOutput) SslEnabled() pulumi.BoolPtrOutput {
 }
 
 // Specifies subnet ID of database when it is a RDS database.
-// It is mandatory when `direction` is `down`. Changing this parameter will create a new resource.
+// It is mandatory when `direction` is **down**. Changing this parameter will create a new resource.
 func (o JobSourceDbOutput) SubnetId() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v JobSourceDb) *string { return v.SubnetId }).(pulumi.StringPtrOutput)
 }
 
 // Specifies the user name of database.
 // Changing this parameter will create a new resource.
-func (o JobSourceDbOutput) User() pulumi.StringOutput {
-	return o.ApplyT(func(v JobSourceDb) string { return v.User }).(pulumi.StringOutput)
+func (o JobSourceDbOutput) User() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v JobSourceDb) *string { return v.User }).(pulumi.StringPtrOutput)
+}
+
+// Specifies vpc ID of database.
+// Changing this parameter will create a new resource.
+func (o JobSourceDbOutput) VpcId() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v JobSourceDb) *string { return v.VpcId }).(pulumi.StringPtrOutput)
 }
 
 type JobSourceDbPtrOutput struct{ *pulumi.OutputState }
@@ -850,7 +2342,8 @@ func (o JobSourceDbPtrOutput) Elem() JobSourceDbOutput {
 }
 
 // Specifies the engine type of database. Changing this parameter will
-// create a new resource. The options are as follows: `mysql`, `mongodb`, `gaussdbv5`.
+// create a new resource. The options are as follows: **mysql**, **mongodb**, **gaussdbv5**, **taurus**, **gaussdbv5ha**,
+// **kafka**, **postgresql**.
 func (o JobSourceDbPtrOutput) EngineType() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *JobSourceDb) *string {
 		if v == nil {
@@ -881,6 +2374,18 @@ func (o JobSourceDbPtrOutput) Ip() pulumi.StringPtrOutput {
 	}).(pulumi.StringPtrOutput)
 }
 
+// Specifies the kafka security authentication info.
+// Changing this parameter will create a new resource.
+// The kafkaSecurityConfig structure is documented below.
+func (o JobSourceDbPtrOutput) KafkaSecurityConfig() JobSourceDbKafkaSecurityConfigPtrOutput {
+	return o.ApplyT(func(v *JobSourceDb) *JobSourceDbKafkaSecurityConfig {
+		if v == nil {
+			return nil
+		}
+		return v.KafkaSecurityConfig
+	}).(JobSourceDbKafkaSecurityConfigPtrOutput)
+}
+
 // Specifies the name of database.
 // Changing this parameter will create a new resource.
 func (o JobSourceDbPtrOutput) Name() pulumi.StringPtrOutput {
@@ -899,7 +2404,7 @@ func (o JobSourceDbPtrOutput) Password() pulumi.StringPtrOutput {
 		if v == nil {
 			return nil
 		}
-		return &v.Password
+		return v.Password
 	}).(pulumi.StringPtrOutput)
 }
 
@@ -909,7 +2414,7 @@ func (o JobSourceDbPtrOutput) Port() pulumi.IntPtrOutput {
 		if v == nil {
 			return nil
 		}
-		return &v.Port
+		return v.Port
 	}).(pulumi.IntPtrOutput)
 }
 
@@ -924,8 +2429,18 @@ func (o JobSourceDbPtrOutput) Region() pulumi.StringPtrOutput {
 	}).(pulumi.StringPtrOutput)
 }
 
+// The security group ID to which the databese instance belongs.
+func (o JobSourceDbPtrOutput) SecurityGroupId() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *JobSourceDb) *string {
+		if v == nil {
+			return nil
+		}
+		return v.SecurityGroupId
+	}).(pulumi.StringPtrOutput)
+}
+
 // Specifies the checksum of SSL certificate content.
-// It is mandatory when `sslEnabled` is `true`. Changing this parameter will create a new resource.
+// It is mandatory when `sslEnabled` is **true**. Changing this parameter will create a new resource.
 func (o JobSourceDbPtrOutput) SslCertCheckSum() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *JobSourceDb) *string {
 		if v == nil {
@@ -936,7 +2451,7 @@ func (o JobSourceDbPtrOutput) SslCertCheckSum() pulumi.StringPtrOutput {
 }
 
 // Specifies the SSL certificate content, encrypted with base64.
-// It is mandatory when `sslEnabled` is `true`. Changing this parameter will create a new resource.
+// It is mandatory when `sslEnabled` is **true**. Changing this parameter will create a new resource.
 func (o JobSourceDbPtrOutput) SslCertKey() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *JobSourceDb) *string {
 		if v == nil {
@@ -947,7 +2462,7 @@ func (o JobSourceDbPtrOutput) SslCertKey() pulumi.StringPtrOutput {
 }
 
 // Specifies SSL certificate name.
-// It is mandatory when `sslEnabled` is `true`. Changing this parameter will create a new resource.
+// It is mandatory when `sslEnabled` is **true**. Changing this parameter will create a new resource.
 func (o JobSourceDbPtrOutput) SslCertName() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *JobSourceDb) *string {
 		if v == nil {
@@ -958,7 +2473,7 @@ func (o JobSourceDbPtrOutput) SslCertName() pulumi.StringPtrOutput {
 }
 
 // Specifies SSL certificate password. It is mandatory when
-// `sslEnabled` is `true` and the certificate file suffix is `.p12`. Changing this parameter will create a new resource.
+// `sslEnabled` is **true** and the certificate file suffix is **.p12**. Changing this parameter will create a new resource.
 func (o JobSourceDbPtrOutput) SslCertPassword() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *JobSourceDb) *string {
 		if v == nil {
@@ -980,7 +2495,7 @@ func (o JobSourceDbPtrOutput) SslEnabled() pulumi.BoolPtrOutput {
 }
 
 // Specifies subnet ID of database when it is a RDS database.
-// It is mandatory when `direction` is `down`. Changing this parameter will create a new resource.
+// It is mandatory when `direction` is **down**. Changing this parameter will create a new resource.
 func (o JobSourceDbPtrOutput) SubnetId() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *JobSourceDb) *string {
 		if v == nil {
@@ -997,21 +2512,619 @@ func (o JobSourceDbPtrOutput) User() pulumi.StringPtrOutput {
 		if v == nil {
 			return nil
 		}
-		return &v.User
+		return v.User
 	}).(pulumi.StringPtrOutput)
 }
 
+// Specifies vpc ID of database.
+// Changing this parameter will create a new resource.
+func (o JobSourceDbPtrOutput) VpcId() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *JobSourceDb) *string {
+		if v == nil {
+			return nil
+		}
+		return v.VpcId
+	}).(pulumi.StringPtrOutput)
+}
+
+type JobSourceDbKafkaSecurityConfig struct {
+	// Specifies whether to use token authentication. It is valid only when
+	// the security protocol is set to **SASL_SSL** or **SASL_PLAINTEXT** and the SASL mechanism is set to **SCRAM-SHA-256**
+	// or **SCRAM-SHA-512**. Defaults to false. Changing this parameter will create a new resource.
+	DelegationTokens *bool `pulumi:"delegationTokens"`
+	// Specifies Whether to enable two-way SSL authentication.
+	// Defaults to false. Changing this parameter will create a new resource.
+	EnableKeyStore *bool `pulumi:"enableKeyStore"`
+	// Specifies the host name endpoint identification algorithm, which
+	// specifies the endpoint identification algorithm for verifying the server host name using the server certificate.
+	// If it is not specified, host name verification is disabled. The corresponding field for Kafka is
+	// **ssl.endpoint.identification.algorithm**. Changing this parameter will create a new resource.
+	EndpointAlgorithm *string `pulumi:"endpointAlgorithm"`
+	// Specifies the keystore private key password. It is mandatory when
+	// two-way SSL authentication is enabled and `setPrivateKeyPassword` is set to **true**.
+	// Changing this parameter will create a new resource.
+	KeyPassword *string `pulumi:"keyPassword"`
+	// Specifies the keystore certificate. It is mandatory when two-way SSL
+	// authentication is enabled. Changing this parameter will create a new resource.
+	KeyStoreKey *string `pulumi:"keyStoreKey"`
+	// Specifies the keystore certificate name. It is mandatory when
+	// two-way SSL authentication is enabled. Changing this parameter will create a new resource.
+	KeyStoreKeyName *string `pulumi:"keyStoreKeyName"`
+	// Specifies the keystore certificate password. It is mandatory when
+	// a password is set for the keystore certificate. Changing this parameter will create a new resource.
+	KeyStorePassword *string `pulumi:"keyStorePassword"`
+	// Specifies the SASL mechanism used for client connection.
+	// The value can be **GSSAPI**, **PLAIN**, **SCRAM-SHA-256**, **SCRAM-SHA-512**.
+	// Changing this parameter will create a new resource.
+	SaslMechanism *string `pulumi:"saslMechanism"`
+	// Specifies whether to set the keystore private key password.
+	// Defaults to false. Changing this parameter will create a new resource.
+	SetPrivateKeyPassword *bool `pulumi:"setPrivateKeyPassword"`
+	// Specifies the value of the security certificate after Base64 transcoding.
+	// It is mandatory when the security protocol is set to **SSL** or **SASL_SSL**.
+	// Changing this parameter will create a new resource.
+	TrustStoreKey *string `pulumi:"trustStoreKey"`
+	// Specifies the certificate name.
+	// It is mandatory when the security protocol is set to **SSL** or **SASL_SSL**.
+	// Changing this parameter will create a new resource.
+	TrustStoreKeyName *string `pulumi:"trustStoreKeyName"`
+	// Specifies the certificate password.
+	// It is mandatory when the security protocol is set to **SSL** or **SASL_SSL**.
+	// Changing this parameter will create a new resource.
+	TrustStorePassword *string `pulumi:"trustStorePassword"`
+	// Specifies the type of a task with an EIP bound.
+	// Valid values are **master** and **slave**.
+	// + In a primary/standby task, **master** indicates the primary task, and **slave** indicates the standby task.
+	// + In other cases, the value is fixed to **master**.
+	Type *string `pulumi:"type"`
+}
+
+// JobSourceDbKafkaSecurityConfigInput is an input type that accepts JobSourceDbKafkaSecurityConfigArgs and JobSourceDbKafkaSecurityConfigOutput values.
+// You can construct a concrete instance of `JobSourceDbKafkaSecurityConfigInput` via:
+//
+//	JobSourceDbKafkaSecurityConfigArgs{...}
+type JobSourceDbKafkaSecurityConfigInput interface {
+	pulumi.Input
+
+	ToJobSourceDbKafkaSecurityConfigOutput() JobSourceDbKafkaSecurityConfigOutput
+	ToJobSourceDbKafkaSecurityConfigOutputWithContext(context.Context) JobSourceDbKafkaSecurityConfigOutput
+}
+
+type JobSourceDbKafkaSecurityConfigArgs struct {
+	// Specifies whether to use token authentication. It is valid only when
+	// the security protocol is set to **SASL_SSL** or **SASL_PLAINTEXT** and the SASL mechanism is set to **SCRAM-SHA-256**
+	// or **SCRAM-SHA-512**. Defaults to false. Changing this parameter will create a new resource.
+	DelegationTokens pulumi.BoolPtrInput `pulumi:"delegationTokens"`
+	// Specifies Whether to enable two-way SSL authentication.
+	// Defaults to false. Changing this parameter will create a new resource.
+	EnableKeyStore pulumi.BoolPtrInput `pulumi:"enableKeyStore"`
+	// Specifies the host name endpoint identification algorithm, which
+	// specifies the endpoint identification algorithm for verifying the server host name using the server certificate.
+	// If it is not specified, host name verification is disabled. The corresponding field for Kafka is
+	// **ssl.endpoint.identification.algorithm**. Changing this parameter will create a new resource.
+	EndpointAlgorithm pulumi.StringPtrInput `pulumi:"endpointAlgorithm"`
+	// Specifies the keystore private key password. It is mandatory when
+	// two-way SSL authentication is enabled and `setPrivateKeyPassword` is set to **true**.
+	// Changing this parameter will create a new resource.
+	KeyPassword pulumi.StringPtrInput `pulumi:"keyPassword"`
+	// Specifies the keystore certificate. It is mandatory when two-way SSL
+	// authentication is enabled. Changing this parameter will create a new resource.
+	KeyStoreKey pulumi.StringPtrInput `pulumi:"keyStoreKey"`
+	// Specifies the keystore certificate name. It is mandatory when
+	// two-way SSL authentication is enabled. Changing this parameter will create a new resource.
+	KeyStoreKeyName pulumi.StringPtrInput `pulumi:"keyStoreKeyName"`
+	// Specifies the keystore certificate password. It is mandatory when
+	// a password is set for the keystore certificate. Changing this parameter will create a new resource.
+	KeyStorePassword pulumi.StringPtrInput `pulumi:"keyStorePassword"`
+	// Specifies the SASL mechanism used for client connection.
+	// The value can be **GSSAPI**, **PLAIN**, **SCRAM-SHA-256**, **SCRAM-SHA-512**.
+	// Changing this parameter will create a new resource.
+	SaslMechanism pulumi.StringPtrInput `pulumi:"saslMechanism"`
+	// Specifies whether to set the keystore private key password.
+	// Defaults to false. Changing this parameter will create a new resource.
+	SetPrivateKeyPassword pulumi.BoolPtrInput `pulumi:"setPrivateKeyPassword"`
+	// Specifies the value of the security certificate after Base64 transcoding.
+	// It is mandatory when the security protocol is set to **SSL** or **SASL_SSL**.
+	// Changing this parameter will create a new resource.
+	TrustStoreKey pulumi.StringPtrInput `pulumi:"trustStoreKey"`
+	// Specifies the certificate name.
+	// It is mandatory when the security protocol is set to **SSL** or **SASL_SSL**.
+	// Changing this parameter will create a new resource.
+	TrustStoreKeyName pulumi.StringPtrInput `pulumi:"trustStoreKeyName"`
+	// Specifies the certificate password.
+	// It is mandatory when the security protocol is set to **SSL** or **SASL_SSL**.
+	// Changing this parameter will create a new resource.
+	TrustStorePassword pulumi.StringPtrInput `pulumi:"trustStorePassword"`
+	// Specifies the type of a task with an EIP bound.
+	// Valid values are **master** and **slave**.
+	// + In a primary/standby task, **master** indicates the primary task, and **slave** indicates the standby task.
+	// + In other cases, the value is fixed to **master**.
+	Type pulumi.StringPtrInput `pulumi:"type"`
+}
+
+func (JobSourceDbKafkaSecurityConfigArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*JobSourceDbKafkaSecurityConfig)(nil)).Elem()
+}
+
+func (i JobSourceDbKafkaSecurityConfigArgs) ToJobSourceDbKafkaSecurityConfigOutput() JobSourceDbKafkaSecurityConfigOutput {
+	return i.ToJobSourceDbKafkaSecurityConfigOutputWithContext(context.Background())
+}
+
+func (i JobSourceDbKafkaSecurityConfigArgs) ToJobSourceDbKafkaSecurityConfigOutputWithContext(ctx context.Context) JobSourceDbKafkaSecurityConfigOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(JobSourceDbKafkaSecurityConfigOutput)
+}
+
+func (i JobSourceDbKafkaSecurityConfigArgs) ToJobSourceDbKafkaSecurityConfigPtrOutput() JobSourceDbKafkaSecurityConfigPtrOutput {
+	return i.ToJobSourceDbKafkaSecurityConfigPtrOutputWithContext(context.Background())
+}
+
+func (i JobSourceDbKafkaSecurityConfigArgs) ToJobSourceDbKafkaSecurityConfigPtrOutputWithContext(ctx context.Context) JobSourceDbKafkaSecurityConfigPtrOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(JobSourceDbKafkaSecurityConfigOutput).ToJobSourceDbKafkaSecurityConfigPtrOutputWithContext(ctx)
+}
+
+// JobSourceDbKafkaSecurityConfigPtrInput is an input type that accepts JobSourceDbKafkaSecurityConfigArgs, JobSourceDbKafkaSecurityConfigPtr and JobSourceDbKafkaSecurityConfigPtrOutput values.
+// You can construct a concrete instance of `JobSourceDbKafkaSecurityConfigPtrInput` via:
+//
+//	        JobSourceDbKafkaSecurityConfigArgs{...}
+//
+//	or:
+//
+//	        nil
+type JobSourceDbKafkaSecurityConfigPtrInput interface {
+	pulumi.Input
+
+	ToJobSourceDbKafkaSecurityConfigPtrOutput() JobSourceDbKafkaSecurityConfigPtrOutput
+	ToJobSourceDbKafkaSecurityConfigPtrOutputWithContext(context.Context) JobSourceDbKafkaSecurityConfigPtrOutput
+}
+
+type jobSourceDbKafkaSecurityConfigPtrType JobSourceDbKafkaSecurityConfigArgs
+
+func JobSourceDbKafkaSecurityConfigPtr(v *JobSourceDbKafkaSecurityConfigArgs) JobSourceDbKafkaSecurityConfigPtrInput {
+	return (*jobSourceDbKafkaSecurityConfigPtrType)(v)
+}
+
+func (*jobSourceDbKafkaSecurityConfigPtrType) ElementType() reflect.Type {
+	return reflect.TypeOf((**JobSourceDbKafkaSecurityConfig)(nil)).Elem()
+}
+
+func (i *jobSourceDbKafkaSecurityConfigPtrType) ToJobSourceDbKafkaSecurityConfigPtrOutput() JobSourceDbKafkaSecurityConfigPtrOutput {
+	return i.ToJobSourceDbKafkaSecurityConfigPtrOutputWithContext(context.Background())
+}
+
+func (i *jobSourceDbKafkaSecurityConfigPtrType) ToJobSourceDbKafkaSecurityConfigPtrOutputWithContext(ctx context.Context) JobSourceDbKafkaSecurityConfigPtrOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(JobSourceDbKafkaSecurityConfigPtrOutput)
+}
+
+type JobSourceDbKafkaSecurityConfigOutput struct{ *pulumi.OutputState }
+
+func (JobSourceDbKafkaSecurityConfigOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*JobSourceDbKafkaSecurityConfig)(nil)).Elem()
+}
+
+func (o JobSourceDbKafkaSecurityConfigOutput) ToJobSourceDbKafkaSecurityConfigOutput() JobSourceDbKafkaSecurityConfigOutput {
+	return o
+}
+
+func (o JobSourceDbKafkaSecurityConfigOutput) ToJobSourceDbKafkaSecurityConfigOutputWithContext(ctx context.Context) JobSourceDbKafkaSecurityConfigOutput {
+	return o
+}
+
+func (o JobSourceDbKafkaSecurityConfigOutput) ToJobSourceDbKafkaSecurityConfigPtrOutput() JobSourceDbKafkaSecurityConfigPtrOutput {
+	return o.ToJobSourceDbKafkaSecurityConfigPtrOutputWithContext(context.Background())
+}
+
+func (o JobSourceDbKafkaSecurityConfigOutput) ToJobSourceDbKafkaSecurityConfigPtrOutputWithContext(ctx context.Context) JobSourceDbKafkaSecurityConfigPtrOutput {
+	return o.ApplyTWithContext(ctx, func(_ context.Context, v JobSourceDbKafkaSecurityConfig) *JobSourceDbKafkaSecurityConfig {
+		return &v
+	}).(JobSourceDbKafkaSecurityConfigPtrOutput)
+}
+
+// Specifies whether to use token authentication. It is valid only when
+// the security protocol is set to **SASL_SSL** or **SASL_PLAINTEXT** and the SASL mechanism is set to **SCRAM-SHA-256**
+// or **SCRAM-SHA-512**. Defaults to false. Changing this parameter will create a new resource.
+func (o JobSourceDbKafkaSecurityConfigOutput) DelegationTokens() pulumi.BoolPtrOutput {
+	return o.ApplyT(func(v JobSourceDbKafkaSecurityConfig) *bool { return v.DelegationTokens }).(pulumi.BoolPtrOutput)
+}
+
+// Specifies Whether to enable two-way SSL authentication.
+// Defaults to false. Changing this parameter will create a new resource.
+func (o JobSourceDbKafkaSecurityConfigOutput) EnableKeyStore() pulumi.BoolPtrOutput {
+	return o.ApplyT(func(v JobSourceDbKafkaSecurityConfig) *bool { return v.EnableKeyStore }).(pulumi.BoolPtrOutput)
+}
+
+// Specifies the host name endpoint identification algorithm, which
+// specifies the endpoint identification algorithm for verifying the server host name using the server certificate.
+// If it is not specified, host name verification is disabled. The corresponding field for Kafka is
+// **ssl.endpoint.identification.algorithm**. Changing this parameter will create a new resource.
+func (o JobSourceDbKafkaSecurityConfigOutput) EndpointAlgorithm() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v JobSourceDbKafkaSecurityConfig) *string { return v.EndpointAlgorithm }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the keystore private key password. It is mandatory when
+// two-way SSL authentication is enabled and `setPrivateKeyPassword` is set to **true**.
+// Changing this parameter will create a new resource.
+func (o JobSourceDbKafkaSecurityConfigOutput) KeyPassword() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v JobSourceDbKafkaSecurityConfig) *string { return v.KeyPassword }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the keystore certificate. It is mandatory when two-way SSL
+// authentication is enabled. Changing this parameter will create a new resource.
+func (o JobSourceDbKafkaSecurityConfigOutput) KeyStoreKey() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v JobSourceDbKafkaSecurityConfig) *string { return v.KeyStoreKey }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the keystore certificate name. It is mandatory when
+// two-way SSL authentication is enabled. Changing this parameter will create a new resource.
+func (o JobSourceDbKafkaSecurityConfigOutput) KeyStoreKeyName() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v JobSourceDbKafkaSecurityConfig) *string { return v.KeyStoreKeyName }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the keystore certificate password. It is mandatory when
+// a password is set for the keystore certificate. Changing this parameter will create a new resource.
+func (o JobSourceDbKafkaSecurityConfigOutput) KeyStorePassword() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v JobSourceDbKafkaSecurityConfig) *string { return v.KeyStorePassword }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the SASL mechanism used for client connection.
+// The value can be **GSSAPI**, **PLAIN**, **SCRAM-SHA-256**, **SCRAM-SHA-512**.
+// Changing this parameter will create a new resource.
+func (o JobSourceDbKafkaSecurityConfigOutput) SaslMechanism() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v JobSourceDbKafkaSecurityConfig) *string { return v.SaslMechanism }).(pulumi.StringPtrOutput)
+}
+
+// Specifies whether to set the keystore private key password.
+// Defaults to false. Changing this parameter will create a new resource.
+func (o JobSourceDbKafkaSecurityConfigOutput) SetPrivateKeyPassword() pulumi.BoolPtrOutput {
+	return o.ApplyT(func(v JobSourceDbKafkaSecurityConfig) *bool { return v.SetPrivateKeyPassword }).(pulumi.BoolPtrOutput)
+}
+
+// Specifies the value of the security certificate after Base64 transcoding.
+// It is mandatory when the security protocol is set to **SSL** or **SASL_SSL**.
+// Changing this parameter will create a new resource.
+func (o JobSourceDbKafkaSecurityConfigOutput) TrustStoreKey() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v JobSourceDbKafkaSecurityConfig) *string { return v.TrustStoreKey }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the certificate name.
+// It is mandatory when the security protocol is set to **SSL** or **SASL_SSL**.
+// Changing this parameter will create a new resource.
+func (o JobSourceDbKafkaSecurityConfigOutput) TrustStoreKeyName() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v JobSourceDbKafkaSecurityConfig) *string { return v.TrustStoreKeyName }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the certificate password.
+// It is mandatory when the security protocol is set to **SSL** or **SASL_SSL**.
+// Changing this parameter will create a new resource.
+func (o JobSourceDbKafkaSecurityConfigOutput) TrustStorePassword() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v JobSourceDbKafkaSecurityConfig) *string { return v.TrustStorePassword }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the type of a task with an EIP bound.
+// Valid values are **master** and **slave**.
+// + In a primary/standby task, **master** indicates the primary task, and **slave** indicates the standby task.
+// + In other cases, the value is fixed to **master**.
+func (o JobSourceDbKafkaSecurityConfigOutput) Type() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v JobSourceDbKafkaSecurityConfig) *string { return v.Type }).(pulumi.StringPtrOutput)
+}
+
+type JobSourceDbKafkaSecurityConfigPtrOutput struct{ *pulumi.OutputState }
+
+func (JobSourceDbKafkaSecurityConfigPtrOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((**JobSourceDbKafkaSecurityConfig)(nil)).Elem()
+}
+
+func (o JobSourceDbKafkaSecurityConfigPtrOutput) ToJobSourceDbKafkaSecurityConfigPtrOutput() JobSourceDbKafkaSecurityConfigPtrOutput {
+	return o
+}
+
+func (o JobSourceDbKafkaSecurityConfigPtrOutput) ToJobSourceDbKafkaSecurityConfigPtrOutputWithContext(ctx context.Context) JobSourceDbKafkaSecurityConfigPtrOutput {
+	return o
+}
+
+func (o JobSourceDbKafkaSecurityConfigPtrOutput) Elem() JobSourceDbKafkaSecurityConfigOutput {
+	return o.ApplyT(func(v *JobSourceDbKafkaSecurityConfig) JobSourceDbKafkaSecurityConfig {
+		if v != nil {
+			return *v
+		}
+		var ret JobSourceDbKafkaSecurityConfig
+		return ret
+	}).(JobSourceDbKafkaSecurityConfigOutput)
+}
+
+// Specifies whether to use token authentication. It is valid only when
+// the security protocol is set to **SASL_SSL** or **SASL_PLAINTEXT** and the SASL mechanism is set to **SCRAM-SHA-256**
+// or **SCRAM-SHA-512**. Defaults to false. Changing this parameter will create a new resource.
+func (o JobSourceDbKafkaSecurityConfigPtrOutput) DelegationTokens() pulumi.BoolPtrOutput {
+	return o.ApplyT(func(v *JobSourceDbKafkaSecurityConfig) *bool {
+		if v == nil {
+			return nil
+		}
+		return v.DelegationTokens
+	}).(pulumi.BoolPtrOutput)
+}
+
+// Specifies Whether to enable two-way SSL authentication.
+// Defaults to false. Changing this parameter will create a new resource.
+func (o JobSourceDbKafkaSecurityConfigPtrOutput) EnableKeyStore() pulumi.BoolPtrOutput {
+	return o.ApplyT(func(v *JobSourceDbKafkaSecurityConfig) *bool {
+		if v == nil {
+			return nil
+		}
+		return v.EnableKeyStore
+	}).(pulumi.BoolPtrOutput)
+}
+
+// Specifies the host name endpoint identification algorithm, which
+// specifies the endpoint identification algorithm for verifying the server host name using the server certificate.
+// If it is not specified, host name verification is disabled. The corresponding field for Kafka is
+// **ssl.endpoint.identification.algorithm**. Changing this parameter will create a new resource.
+func (o JobSourceDbKafkaSecurityConfigPtrOutput) EndpointAlgorithm() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *JobSourceDbKafkaSecurityConfig) *string {
+		if v == nil {
+			return nil
+		}
+		return v.EndpointAlgorithm
+	}).(pulumi.StringPtrOutput)
+}
+
+// Specifies the keystore private key password. It is mandatory when
+// two-way SSL authentication is enabled and `setPrivateKeyPassword` is set to **true**.
+// Changing this parameter will create a new resource.
+func (o JobSourceDbKafkaSecurityConfigPtrOutput) KeyPassword() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *JobSourceDbKafkaSecurityConfig) *string {
+		if v == nil {
+			return nil
+		}
+		return v.KeyPassword
+	}).(pulumi.StringPtrOutput)
+}
+
+// Specifies the keystore certificate. It is mandatory when two-way SSL
+// authentication is enabled. Changing this parameter will create a new resource.
+func (o JobSourceDbKafkaSecurityConfigPtrOutput) KeyStoreKey() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *JobSourceDbKafkaSecurityConfig) *string {
+		if v == nil {
+			return nil
+		}
+		return v.KeyStoreKey
+	}).(pulumi.StringPtrOutput)
+}
+
+// Specifies the keystore certificate name. It is mandatory when
+// two-way SSL authentication is enabled. Changing this parameter will create a new resource.
+func (o JobSourceDbKafkaSecurityConfigPtrOutput) KeyStoreKeyName() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *JobSourceDbKafkaSecurityConfig) *string {
+		if v == nil {
+			return nil
+		}
+		return v.KeyStoreKeyName
+	}).(pulumi.StringPtrOutput)
+}
+
+// Specifies the keystore certificate password. It is mandatory when
+// a password is set for the keystore certificate. Changing this parameter will create a new resource.
+func (o JobSourceDbKafkaSecurityConfigPtrOutput) KeyStorePassword() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *JobSourceDbKafkaSecurityConfig) *string {
+		if v == nil {
+			return nil
+		}
+		return v.KeyStorePassword
+	}).(pulumi.StringPtrOutput)
+}
+
+// Specifies the SASL mechanism used for client connection.
+// The value can be **GSSAPI**, **PLAIN**, **SCRAM-SHA-256**, **SCRAM-SHA-512**.
+// Changing this parameter will create a new resource.
+func (o JobSourceDbKafkaSecurityConfigPtrOutput) SaslMechanism() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *JobSourceDbKafkaSecurityConfig) *string {
+		if v == nil {
+			return nil
+		}
+		return v.SaslMechanism
+	}).(pulumi.StringPtrOutput)
+}
+
+// Specifies whether to set the keystore private key password.
+// Defaults to false. Changing this parameter will create a new resource.
+func (o JobSourceDbKafkaSecurityConfigPtrOutput) SetPrivateKeyPassword() pulumi.BoolPtrOutput {
+	return o.ApplyT(func(v *JobSourceDbKafkaSecurityConfig) *bool {
+		if v == nil {
+			return nil
+		}
+		return v.SetPrivateKeyPassword
+	}).(pulumi.BoolPtrOutput)
+}
+
+// Specifies the value of the security certificate after Base64 transcoding.
+// It is mandatory when the security protocol is set to **SSL** or **SASL_SSL**.
+// Changing this parameter will create a new resource.
+func (o JobSourceDbKafkaSecurityConfigPtrOutput) TrustStoreKey() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *JobSourceDbKafkaSecurityConfig) *string {
+		if v == nil {
+			return nil
+		}
+		return v.TrustStoreKey
+	}).(pulumi.StringPtrOutput)
+}
+
+// Specifies the certificate name.
+// It is mandatory when the security protocol is set to **SSL** or **SASL_SSL**.
+// Changing this parameter will create a new resource.
+func (o JobSourceDbKafkaSecurityConfigPtrOutput) TrustStoreKeyName() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *JobSourceDbKafkaSecurityConfig) *string {
+		if v == nil {
+			return nil
+		}
+		return v.TrustStoreKeyName
+	}).(pulumi.StringPtrOutput)
+}
+
+// Specifies the certificate password.
+// It is mandatory when the security protocol is set to **SSL** or **SASL_SSL**.
+// Changing this parameter will create a new resource.
+func (o JobSourceDbKafkaSecurityConfigPtrOutput) TrustStorePassword() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *JobSourceDbKafkaSecurityConfig) *string {
+		if v == nil {
+			return nil
+		}
+		return v.TrustStorePassword
+	}).(pulumi.StringPtrOutput)
+}
+
+// Specifies the type of a task with an EIP bound.
+// Valid values are **master** and **slave**.
+// + In a primary/standby task, **master** indicates the primary task, and **slave** indicates the standby task.
+// + In other cases, the value is fixed to **master**.
+func (o JobSourceDbKafkaSecurityConfigPtrOutput) Type() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *JobSourceDbKafkaSecurityConfig) *string {
+		if v == nil {
+			return nil
+		}
+		return v.Type
+	}).(pulumi.StringPtrOutput)
+}
+
+type JobTable struct {
+	// Specifies the name of database to which the tables belong.
+	Database string `pulumi:"database"`
+	// Specifies the names of table which belong to a same datebase.
+	TableNames []string `pulumi:"tableNames"`
+}
+
+// JobTableInput is an input type that accepts JobTableArgs and JobTableOutput values.
+// You can construct a concrete instance of `JobTableInput` via:
+//
+//	JobTableArgs{...}
+type JobTableInput interface {
+	pulumi.Input
+
+	ToJobTableOutput() JobTableOutput
+	ToJobTableOutputWithContext(context.Context) JobTableOutput
+}
+
+type JobTableArgs struct {
+	// Specifies the name of database to which the tables belong.
+	Database pulumi.StringInput `pulumi:"database"`
+	// Specifies the names of table which belong to a same datebase.
+	TableNames pulumi.StringArrayInput `pulumi:"tableNames"`
+}
+
+func (JobTableArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*JobTable)(nil)).Elem()
+}
+
+func (i JobTableArgs) ToJobTableOutput() JobTableOutput {
+	return i.ToJobTableOutputWithContext(context.Background())
+}
+
+func (i JobTableArgs) ToJobTableOutputWithContext(ctx context.Context) JobTableOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(JobTableOutput)
+}
+
+// JobTableArrayInput is an input type that accepts JobTableArray and JobTableArrayOutput values.
+// You can construct a concrete instance of `JobTableArrayInput` via:
+//
+//	JobTableArray{ JobTableArgs{...} }
+type JobTableArrayInput interface {
+	pulumi.Input
+
+	ToJobTableArrayOutput() JobTableArrayOutput
+	ToJobTableArrayOutputWithContext(context.Context) JobTableArrayOutput
+}
+
+type JobTableArray []JobTableInput
+
+func (JobTableArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]JobTable)(nil)).Elem()
+}
+
+func (i JobTableArray) ToJobTableArrayOutput() JobTableArrayOutput {
+	return i.ToJobTableArrayOutputWithContext(context.Background())
+}
+
+func (i JobTableArray) ToJobTableArrayOutputWithContext(ctx context.Context) JobTableArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(JobTableArrayOutput)
+}
+
+type JobTableOutput struct{ *pulumi.OutputState }
+
+func (JobTableOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*JobTable)(nil)).Elem()
+}
+
+func (o JobTableOutput) ToJobTableOutput() JobTableOutput {
+	return o
+}
+
+func (o JobTableOutput) ToJobTableOutputWithContext(ctx context.Context) JobTableOutput {
+	return o
+}
+
+// Specifies the name of database to which the tables belong.
+func (o JobTableOutput) Database() pulumi.StringOutput {
+	return o.ApplyT(func(v JobTable) string { return v.Database }).(pulumi.StringOutput)
+}
+
+// Specifies the names of table which belong to a same datebase.
+func (o JobTableOutput) TableNames() pulumi.StringArrayOutput {
+	return o.ApplyT(func(v JobTable) []string { return v.TableNames }).(pulumi.StringArrayOutput)
+}
+
+type JobTableArrayOutput struct{ *pulumi.OutputState }
+
+func (JobTableArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]JobTable)(nil)).Elem()
+}
+
+func (o JobTableArrayOutput) ToJobTableArrayOutput() JobTableArrayOutput {
+	return o
+}
+
+func (o JobTableArrayOutput) ToJobTableArrayOutputWithContext(ctx context.Context) JobTableArrayOutput {
+	return o
+}
+
+func (o JobTableArrayOutput) Index(i pulumi.IntInput) JobTableOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) JobTable {
+		return vs[0].([]JobTable)[vs[1].(int)]
+	}).(JobTableOutput)
+}
+
 func init() {
+	pulumi.RegisterInputType(reflect.TypeOf((*JobAlarmNotifyInput)(nil)).Elem(), JobAlarmNotifyArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*JobAlarmNotifyPtrInput)(nil)).Elem(), JobAlarmNotifyArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*JobDestinationDbInput)(nil)).Elem(), JobDestinationDbArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*JobDestinationDbPtrInput)(nil)).Elem(), JobDestinationDbArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*JobDestinationDbKafkaSecurityConfigInput)(nil)).Elem(), JobDestinationDbKafkaSecurityConfigArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*JobDestinationDbKafkaSecurityConfigPtrInput)(nil)).Elem(), JobDestinationDbKafkaSecurityConfigArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*JobLimitSpeedInput)(nil)).Elem(), JobLimitSpeedArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*JobLimitSpeedArrayInput)(nil)).Elem(), JobLimitSpeedArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*JobPolicyConfigInput)(nil)).Elem(), JobPolicyConfigArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*JobPolicyConfigPtrInput)(nil)).Elem(), JobPolicyConfigArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*JobPublicIpListInput)(nil)).Elem(), JobPublicIpListArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*JobPublicIpListArrayInput)(nil)).Elem(), JobPublicIpListArray{})
 	pulumi.RegisterInputType(reflect.TypeOf((*JobSourceDbInput)(nil)).Elem(), JobSourceDbArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*JobSourceDbPtrInput)(nil)).Elem(), JobSourceDbArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*JobSourceDbKafkaSecurityConfigInput)(nil)).Elem(), JobSourceDbKafkaSecurityConfigArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*JobSourceDbKafkaSecurityConfigPtrInput)(nil)).Elem(), JobSourceDbKafkaSecurityConfigArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*JobTableInput)(nil)).Elem(), JobTableArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*JobTableArrayInput)(nil)).Elem(), JobTableArray{})
+	pulumi.RegisterOutputType(JobAlarmNotifyOutput{})
+	pulumi.RegisterOutputType(JobAlarmNotifyPtrOutput{})
 	pulumi.RegisterOutputType(JobDestinationDbOutput{})
 	pulumi.RegisterOutputType(JobDestinationDbPtrOutput{})
+	pulumi.RegisterOutputType(JobDestinationDbKafkaSecurityConfigOutput{})
+	pulumi.RegisterOutputType(JobDestinationDbKafkaSecurityConfigPtrOutput{})
 	pulumi.RegisterOutputType(JobLimitSpeedOutput{})
 	pulumi.RegisterOutputType(JobLimitSpeedArrayOutput{})
+	pulumi.RegisterOutputType(JobPolicyConfigOutput{})
+	pulumi.RegisterOutputType(JobPolicyConfigPtrOutput{})
+	pulumi.RegisterOutputType(JobPublicIpListOutput{})
+	pulumi.RegisterOutputType(JobPublicIpListArrayOutput{})
 	pulumi.RegisterOutputType(JobSourceDbOutput{})
 	pulumi.RegisterOutputType(JobSourceDbPtrOutput{})
+	pulumi.RegisterOutputType(JobSourceDbKafkaSecurityConfigOutput{})
+	pulumi.RegisterOutputType(JobSourceDbKafkaSecurityConfigPtrOutput{})
+	pulumi.RegisterOutputType(JobTableOutput{})
+	pulumi.RegisterOutputType(JobTableArrayOutput{})
 }

@@ -5,20 +5,6 @@ import * as pulumi from "@pulumi/pulumi";
 import { input as inputs, output as outputs } from "../types";
 import * as utilities from "../utilities";
 
-/**
- * Use this data source to get a list of WAF instance groups.
- *
- * ## Example Usage
- *
- * ```typescript
- * import * as pulumi from "@pulumi/pulumi";
- * import * as huaweicloud from "@pulumi/huaweicloud";
- *
- * const groups1 = pulumi.output(huaweicloud.Waf.getInstanceGroups({
- *     name: "example_name",
- * }));
- * ```
- */
 export function getInstanceGroups(args?: GetInstanceGroupsArgs, opts?: pulumi.InvokeOptions): Promise<GetInstanceGroupsResult> {
     args = args || {};
     if (!opts) {
@@ -37,19 +23,8 @@ export function getInstanceGroups(args?: GetInstanceGroupsArgs, opts?: pulumi.In
  * A collection of arguments for invoking getInstanceGroups.
  */
 export interface GetInstanceGroupsArgs {
-    /**
-     * The name of WAF instance group used for matching.
-     * The value is not case-sensitive and supports fuzzy matching.
-     */
     name?: string;
-    /**
-     * The region in which to obtain the WAF instance groups.
-     * If omitted, the provider-level region will be used.
-     */
     region?: string;
-    /**
-     * The id of the VPC that the WAF dedicated instances belongs to.
-     */
     vpcId?: string;
 }
 
@@ -57,25 +32,13 @@ export interface GetInstanceGroupsArgs {
  * A collection of values returned by getInstanceGroups.
  */
 export interface GetInstanceGroupsResult {
-    /**
-     * A list of WAF instance groups.
-     */
     readonly groups: outputs.Waf.GetInstanceGroupsGroup[];
     /**
      * The provider-assigned unique ID for this managed resource.
      */
     readonly id: string;
-    /**
-     * The instance group name.
-     */
     readonly name?: string;
-    /**
-     * The region in which to create the instance group.
-     */
     readonly region: string;
-    /**
-     * The id of the VPC that the WAF dedicated instances belongs to.
-     */
     readonly vpcId?: string;
 }
 
@@ -87,18 +50,7 @@ export function getInstanceGroupsOutput(args?: GetInstanceGroupsOutputArgs, opts
  * A collection of arguments for invoking getInstanceGroups.
  */
 export interface GetInstanceGroupsOutputArgs {
-    /**
-     * The name of WAF instance group used for matching.
-     * The value is not case-sensitive and supports fuzzy matching.
-     */
     name?: pulumi.Input<string>;
-    /**
-     * The region in which to obtain the WAF instance groups.
-     * If omitted, the provider-level region will be used.
-     */
     region?: pulumi.Input<string>;
-    /**
-     * The id of the VPC that the WAF dedicated instances belongs to.
-     */
     vpcId?: pulumi.Input<string>;
 }

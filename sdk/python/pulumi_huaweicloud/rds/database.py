@@ -21,6 +21,10 @@ class DatabaseArgs:
                  region: Optional[pulumi.Input[str]] = None):
         """
         The set of arguments for constructing a Database resource.
+        :param pulumi.Input[str] character_set: Specifies the character set used by the database.
+        :param pulumi.Input[str] instance_id: Specifies the ID of the RDS Mysql instance.
+        :param pulumi.Input[str] description: Specifies the database description.
+        :param pulumi.Input[str] name: Specifies the database name.
         """
         pulumi.set(__self__, "character_set", character_set)
         pulumi.set(__self__, "instance_id", instance_id)
@@ -34,6 +38,9 @@ class DatabaseArgs:
     @property
     @pulumi.getter(name="characterSet")
     def character_set(self) -> pulumi.Input[str]:
+        """
+        Specifies the character set used by the database.
+        """
         return pulumi.get(self, "character_set")
 
     @character_set.setter
@@ -43,6 +50,9 @@ class DatabaseArgs:
     @property
     @pulumi.getter(name="instanceId")
     def instance_id(self) -> pulumi.Input[str]:
+        """
+        Specifies the ID of the RDS Mysql instance.
+        """
         return pulumi.get(self, "instance_id")
 
     @instance_id.setter
@@ -52,6 +62,9 @@ class DatabaseArgs:
     @property
     @pulumi.getter
     def description(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the database description.
+        """
         return pulumi.get(self, "description")
 
     @description.setter
@@ -61,6 +74,9 @@ class DatabaseArgs:
     @property
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the database name.
+        """
         return pulumi.get(self, "name")
 
     @name.setter
@@ -87,6 +103,10 @@ class _DatabaseState:
                  region: Optional[pulumi.Input[str]] = None):
         """
         Input properties used for looking up and filtering Database resources.
+        :param pulumi.Input[str] character_set: Specifies the character set used by the database.
+        :param pulumi.Input[str] description: Specifies the database description.
+        :param pulumi.Input[str] instance_id: Specifies the ID of the RDS Mysql instance.
+        :param pulumi.Input[str] name: Specifies the database name.
         """
         if character_set is not None:
             pulumi.set(__self__, "character_set", character_set)
@@ -102,6 +122,9 @@ class _DatabaseState:
     @property
     @pulumi.getter(name="characterSet")
     def character_set(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the character set used by the database.
+        """
         return pulumi.get(self, "character_set")
 
     @character_set.setter
@@ -111,6 +134,9 @@ class _DatabaseState:
     @property
     @pulumi.getter
     def description(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the database description.
+        """
         return pulumi.get(self, "description")
 
     @description.setter
@@ -120,6 +146,9 @@ class _DatabaseState:
     @property
     @pulumi.getter(name="instanceId")
     def instance_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the ID of the RDS Mysql instance.
+        """
         return pulumi.get(self, "instance_id")
 
     @instance_id.setter
@@ -129,6 +158,9 @@ class _DatabaseState:
     @property
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the database name.
+        """
         return pulumi.get(self, "name")
 
     @name.setter
@@ -160,6 +192,10 @@ class Database(pulumi.CustomResource):
         Create a Database resource with the given unique name, props, and options.
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
+        :param pulumi.Input[str] character_set: Specifies the character set used by the database.
+        :param pulumi.Input[str] description: Specifies the database description.
+        :param pulumi.Input[str] instance_id: Specifies the ID of the RDS Mysql instance.
+        :param pulumi.Input[str] name: Specifies the database name.
         """
         ...
     @overload
@@ -229,6 +265,10 @@ class Database(pulumi.CustomResource):
         :param str resource_name: The unique name of the resulting resource.
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
+        :param pulumi.Input[str] character_set: Specifies the character set used by the database.
+        :param pulumi.Input[str] description: Specifies the database description.
+        :param pulumi.Input[str] instance_id: Specifies the ID of the RDS Mysql instance.
+        :param pulumi.Input[str] name: Specifies the database name.
         """
         opts = pulumi.ResourceOptions.merge(opts, pulumi.ResourceOptions(id=id))
 
@@ -244,21 +284,33 @@ class Database(pulumi.CustomResource):
     @property
     @pulumi.getter(name="characterSet")
     def character_set(self) -> pulumi.Output[str]:
+        """
+        Specifies the character set used by the database.
+        """
         return pulumi.get(self, "character_set")
 
     @property
     @pulumi.getter
     def description(self) -> pulumi.Output[Optional[str]]:
+        """
+        Specifies the database description.
+        """
         return pulumi.get(self, "description")
 
     @property
     @pulumi.getter(name="instanceId")
     def instance_id(self) -> pulumi.Output[str]:
+        """
+        Specifies the ID of the RDS Mysql instance.
+        """
         return pulumi.get(self, "instance_id")
 
     @property
     @pulumi.getter
     def name(self) -> pulumi.Output[str]:
+        """
+        Specifies the database name.
+        """
         return pulumi.get(self, "name")
 
     @property

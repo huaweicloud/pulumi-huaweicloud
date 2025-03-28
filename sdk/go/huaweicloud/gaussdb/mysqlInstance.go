@@ -11,7 +11,7 @@ import (
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
-// GaussDB mysql instance management within HuaweiCoud.
+// GaussDB mysql instance management within HuaweiCould.
 //
 // ## Example Usage
 // ### create a basic instance
@@ -80,13 +80,27 @@ import (
 //
 // ## Import
 //
-// GaussDB instance can be imported using the `id`, e.g.
+// GaussDB instance can be imported using the `id`, e.g. bash
 //
 // ```sh
 //
-//	$ pulumi import huaweicloud:GaussDB/mysqlInstance:MysqlInstance instance_1 1a801c1e01e6458d8eed810912e29d0cin07
+//	$ pulumi import huaweicloud:GaussDB/mysqlInstance:MysqlInstance test <id>
 //
 // ```
+//
+//	Note that the imported state may not be identical to your resource definition, due to the attribute missing from the API response. The missing attribute is`table_name_case_sensitivity`, `enterprise_project_id`, `password`, `ssl_option`, `encryption_type`, `kms_key_id` and `parameters`. It is generally recommended running `terraform plan` after importing a GaussDB MySQL instance. You can then decide if changes should be applied to the GaussDB MySQL instance, or the resource definition should be updated to align with the GaussDB MySQL instance. Also you can ignore changes as below. hcl resource "huaweicloud_gaussdb_mysql_instance" "test" {
+//
+//	...
+//
+//	lifecycle {
+//
+//	ignore_changes = [
+//
+//	new_node_weight, proxy_mode, readonly_nodes_weight, parameters, ssl_option, encryption_type, kms_key_id
+//
+//	]
+//
+//	} }
 type MysqlInstance struct {
 	pulumi.CustomResourceState
 
@@ -94,22 +108,29 @@ type MysqlInstance struct {
 	AuditLogEnabled pulumi.BoolOutput      `pulumi:"auditLogEnabled"`
 	AutoPay         pulumi.StringPtrOutput `pulumi:"autoPay"`
 	// Specifies whether auto renew is enabled.
-	// Valid values are "true" and "false".
+	// Valid values are **true** and **false**.
 	AutoRenew pulumi.StringPtrOutput `pulumi:"autoRenew"`
+	// Specifies the auto-scaling policies.
+	// The autoScaling structure is documented below.
+	AutoScaling MysqlInstanceAutoScalingOutput `pulumi:"autoScaling"`
 	// Specifies the availability zone mode: "single" or "multi".
 	// Defaults to "single". Changing this parameter will create a new resource.
 	AvailabilityZoneMode pulumi.StringPtrOutput `pulumi:"availabilityZoneMode"`
 	// Specifies the advanced backup policy. Structure is documented below.
 	BackupStrategy MysqlInstanceBackupStrategyOutput `pulumi:"backupStrategy"`
-	// Specifies the charging mode of the instance. Valid values are *prePaid*
-	// and *postPaid*, defaults to *postPaid*. Changing this will do nothing.
+	// Specifies the charging mode of the instance. Valid values are **prePaid**
+	// and **postPaid**, defaults to **postPaid**. Changing this will do nothing.
 	ChargingMode pulumi.StringPtrOutput `pulumi:"chargingMode"`
-	// Specifies the configuration ID. Changing this parameter will create
-	// a new resource.
+	// Specifies the configuration ID.
 	ConfigurationId pulumi.StringOutput `pulumi:"configurationId"`
-	// Specifies the configuration name. Changing this parameter will create
-	// a new resource.
+	// Deprecated: Deprecated
 	ConfigurationName pulumi.StringOutput `pulumi:"configurationName"`
+	// Indicates the creation time in the **yyyy-mm-ddThh:mm:ssZ** format.
+	CreatedAt pulumi.StringOutput `pulumi:"createdAt"`
+	// Indicates the current database kernel version.
+	CurrentKernelVersion pulumi.StringOutput `pulumi:"currentKernelVersion"`
+	// Indicates the current database version.
+	CurrentVersion pulumi.StringOutput `pulumi:"currentVersion"`
 	// Specifies the database information. Structure is documented below. Changing
 	// this parameter will create a new resource.
 	Datastore MysqlInstanceDatastoreOutput `pulumi:"datastore"`
@@ -121,8 +142,16 @@ type MysqlInstance struct {
 	// Specifies the dedicated resource name. Changing this parameter
 	// will create a new resource.
 	DedicatedResourceName pulumi.StringOutput `pulumi:"dedicatedResourceName"`
+	// Specifies the description of the instance.
+	Description pulumi.StringPtrOutput `pulumi:"description"`
+	// Specifies whether to enable or disable encrypted backup. Value options:
+	// + **ON**: enabled
+	// + **OFF**: disabled
+	EncryptionStatus pulumi.StringOutput `pulumi:"encryptionStatus"`
+	// Specifies the encryption type. Currently, only **kms (case-insensitive)** is
+	// supported. It is mandatory when `encryptionStatus` is set to **ON**.
+	EncryptionType pulumi.StringPtrOutput `pulumi:"encryptionType"`
 	// Specifies the enterprise project id. Required if EPS enabled.
-	// Changing this parameter will create a new resource.
 	EnterpriseProjectId pulumi.StringPtrOutput `pulumi:"enterpriseProjectId"`
 	// Specifies the instance specifications. Please use
 	// `gaussdbMysqlFlavors` data source to fetch the available flavors.
@@ -130,34 +159,48 @@ type MysqlInstance struct {
 	// If specified, try to import the instance instead of creating if the name already
 	// existed.
 	ForceImport pulumi.BoolPtrOutput `pulumi:"forceImport"`
+	// Specifies the KMS ID. It is mandatory when `encryptionStatus` is set to **ON**.
+	KmsKeyId pulumi.StringPtrOutput `pulumi:"kmsKeyId"`
+	// Specifies the start time for a maintenance window, for example, **22:00**.
+	MaintainBegin pulumi.StringOutput `pulumi:"maintainBegin"`
+	// Specifies the end time for a maintenance window, for example, **01:00**.
+	MaintainEnd pulumi.StringOutput `pulumi:"maintainEnd"`
 	// Specifies the availability zone where the master node
 	// resides. The parameter is required in multi availability zone mode. Changing this parameter will create a new
 	// resource.
 	MasterAvailabilityZone pulumi.StringOutput `pulumi:"masterAvailabilityZone"`
 	// Indicates the instance mode.
 	Mode pulumi.StringOutput `pulumi:"mode"`
-	// Specifies the instance name, which can be the same as an existing instance name. The value
-	// must be 4 to 64 characters in length and start with a letter. It is case-sensitive and can contain only letters,
-	// digits, hyphens (-), and underscores (_).
+	// Specifies the name of the parameter.
 	Name pulumi.StringOutput `pulumi:"name"`
-	// Indicates the instance nodes information. Structure is documented below.
+	// Indicates the instance nodes information.
+	// The nodes structure is documented below.
 	Nodes MysqlInstanceNodeArrayOutput `pulumi:"nodes"`
-	// Specifies the database password. The value must be 8 to 32 characters in length,
+	// Specifies an array of one or more parameters to be set to the instance after launched.
+	// The parameters structure is documented below.
+	Parameters MysqlInstanceParameterArrayOutput `pulumi:"parameters"`
+	// Specifies the database password. The value must be `8` to `32` characters in length,
 	// including uppercase and lowercase letters, digits, and special characters, such as ~!@#%^*-_=+? You are advised to
 	// enter a strong password to improve security, preventing security risks such as brute force cracking.
 	Password pulumi.StringOutput `pulumi:"password"`
-	// Specifies the charging period of the instance.
-	// If `periodUnit` is set to *month* , the value ranges from 1 to 9. If `periodUnit` is set to *year*, the value
-	// ranges from 1 to 3. This parameter is mandatory if `chargingMode` is set to *prePaid*. Changing this will
-	// do nothing.
+	// Specifies the charging period of the instance.\
+	// If `periodUnit` is set to **month** , the value ranges from `1` to `9`.
+	// If `periodUnit` is set to **year**, the value ranges from `1` to `3`.
+	// This parameter is mandatory if `chargingMode` is set to **prePaid**.
+	// Changing this will do nothing.
 	Period pulumi.IntPtrOutput `pulumi:"period"`
 	// Specifies the charging period unit of the instance.
-	// Valid values are *month* and *year*. This parameter is mandatory if `chargingMode` is set to *prePaid*.
+	// Valid values are **month** and **year**. This parameter is mandatory if `chargingMode` is set to **prePaid**.
 	// Changing this will do nothing.
 	PeriodUnit pulumi.StringPtrOutput `pulumi:"periodUnit"`
-	// Indicates the database port.
+	// Specifies the database port.
 	Port pulumi.IntOutput `pulumi:"port"`
-	// Indicates the private IP address of the DB instance.
+	// Indicates the private domain name.
+	PrivateDnsName pulumi.StringOutput `pulumi:"privateDnsName"`
+	// Specifies the prefix of the private domain name. The value contains
+	// `8` to `63` characters. Only uppercase letters, lowercase letters, and digits are allowed.
+	PrivateDnsNamePrefix pulumi.StringOutput `pulumi:"privateDnsNamePrefix"`
+	// Specifies the private IP address of the DB instance.
 	PrivateWriteIp pulumi.StringOutput `pulumi:"privateWriteIp"`
 	// Deprecated: use huaweicloud_gaussdb_mysql_proxy instead
 	ProxyAddress pulumi.StringOutput `pulumi:"proxyAddress"`
@@ -167,17 +210,34 @@ type MysqlInstance struct {
 	ProxyNodeNum pulumi.IntOutput `pulumi:"proxyNodeNum"`
 	// Deprecated: use huaweicloud_gaussdb_mysql_proxy instead
 	ProxyPort pulumi.IntOutput `pulumi:"proxyPort"`
-	// Specifies the count of read replicas. Defaults to 1.
+	// Specifies the count of read replicas. Defaults to `1`.
 	ReadReplicas pulumi.IntPtrOutput `pulumi:"readReplicas"`
 	// The region in which to create the GaussDB mysql instance resource. If omitted,
 	// the provider-level region will be used. Changing this creates a new instance resource.
 	Region pulumi.StringOutput `pulumi:"region"`
-	// Specifies the security group ID. Required if the selected subnet
-	// doesn't enable network ACL. Changing this parameter will create a new resource.
-	SecurityGroupId pulumi.StringPtrOutput `pulumi:"securityGroupId"`
+	// Specifies whether to enable seconds level monitoring.
+	SecondsLevelMonitoringEnabled pulumi.BoolOutput `pulumi:"secondsLevelMonitoringEnabled"`
+	// Specifies the seconds level collection period.
+	// + This parameter is valid only when `secondsLevelMonitoringEnabled` is set to **true**.
+	// + This parameter can not be specified when `secondsLevelMonitoringEnabled` is set to **false**.
+	// + Value options:
+	// - **1**: The collection period is 1s.
+	// - **5** (default value): The collection period is 5s.
+	SecondsLevelMonitoringPeriod pulumi.IntPtrOutput `pulumi:"secondsLevelMonitoringPeriod"`
+	// Specifies the security group ID. Required if the selected subnet doesn't
+	// enable network ACL.
+	SecurityGroupId pulumi.StringOutput `pulumi:"securityGroupId"`
+	// Specifies the slow log show original switch of the instance.
+	SlowLogShowOriginalSwitch pulumi.BoolOutput `pulumi:"slowLogShowOriginalSwitch"`
 	// Specifies whether sql filter is enabled. The default value is `false`.
 	SqlFilterEnabled pulumi.BoolOutput `pulumi:"sqlFilterEnabled"`
-	// Indicates the node status.
+	// Specifies whether to enable SSL. Value options:
+	// + **true**: SSL is enabled.
+	// + **false**: SSL is disabled.
+	SslOption pulumi.StringPtrOutput `pulumi:"sslOption"`
+	// Specifies whether auto-scaling is enabled. Value options:
+	// + **ON**: enabled.
+	// + **OFF**: disabled.
 	Status pulumi.StringOutput `pulumi:"status"`
 	// Specifies the network ID of a subnet. Changing this parameter will create a
 	// new resource.
@@ -191,8 +251,12 @@ type MysqlInstance struct {
 	// Specifies the time zone. Defaults to "UTC+08:00". Changing this parameter
 	// will create a new resource.
 	TimeZone pulumi.StringPtrOutput `pulumi:"timeZone"`
+	// Indicates the Update time in the **yyyy-mm-ddThh:mm:ssZ** format.
+	UpdatedAt pulumi.StringOutput `pulumi:"updatedAt"`
+	// Indicates whether the version can be upgraded.
+	UpgradeFlag pulumi.BoolOutput `pulumi:"upgradeFlag"`
 	// Specifies the volume size of the instance. The new storage space must be greater than
-	// the current storage and must be a multiple of 10 GB. Only valid when in prePaid mode.
+	// the current storage and must be a multiple of `10` GB. Only valid when in prePaid mode.
 	VolumeSize pulumi.IntOutput `pulumi:"volumeSize"`
 	// Specifies the VPC ID. Changing this parameter will create a new resource.
 	VpcId pulumi.StringOutput `pulumi:"vpcId"`
@@ -244,22 +308,29 @@ type mysqlInstanceState struct {
 	AuditLogEnabled *bool   `pulumi:"auditLogEnabled"`
 	AutoPay         *string `pulumi:"autoPay"`
 	// Specifies whether auto renew is enabled.
-	// Valid values are "true" and "false".
+	// Valid values are **true** and **false**.
 	AutoRenew *string `pulumi:"autoRenew"`
+	// Specifies the auto-scaling policies.
+	// The autoScaling structure is documented below.
+	AutoScaling *MysqlInstanceAutoScaling `pulumi:"autoScaling"`
 	// Specifies the availability zone mode: "single" or "multi".
 	// Defaults to "single". Changing this parameter will create a new resource.
 	AvailabilityZoneMode *string `pulumi:"availabilityZoneMode"`
 	// Specifies the advanced backup policy. Structure is documented below.
 	BackupStrategy *MysqlInstanceBackupStrategy `pulumi:"backupStrategy"`
-	// Specifies the charging mode of the instance. Valid values are *prePaid*
-	// and *postPaid*, defaults to *postPaid*. Changing this will do nothing.
+	// Specifies the charging mode of the instance. Valid values are **prePaid**
+	// and **postPaid**, defaults to **postPaid**. Changing this will do nothing.
 	ChargingMode *string `pulumi:"chargingMode"`
-	// Specifies the configuration ID. Changing this parameter will create
-	// a new resource.
+	// Specifies the configuration ID.
 	ConfigurationId *string `pulumi:"configurationId"`
-	// Specifies the configuration name. Changing this parameter will create
-	// a new resource.
+	// Deprecated: Deprecated
 	ConfigurationName *string `pulumi:"configurationName"`
+	// Indicates the creation time in the **yyyy-mm-ddThh:mm:ssZ** format.
+	CreatedAt *string `pulumi:"createdAt"`
+	// Indicates the current database kernel version.
+	CurrentKernelVersion *string `pulumi:"currentKernelVersion"`
+	// Indicates the current database version.
+	CurrentVersion *string `pulumi:"currentVersion"`
 	// Specifies the database information. Structure is documented below. Changing
 	// this parameter will create a new resource.
 	Datastore *MysqlInstanceDatastore `pulumi:"datastore"`
@@ -271,8 +342,16 @@ type mysqlInstanceState struct {
 	// Specifies the dedicated resource name. Changing this parameter
 	// will create a new resource.
 	DedicatedResourceName *string `pulumi:"dedicatedResourceName"`
+	// Specifies the description of the instance.
+	Description *string `pulumi:"description"`
+	// Specifies whether to enable or disable encrypted backup. Value options:
+	// + **ON**: enabled
+	// + **OFF**: disabled
+	EncryptionStatus *string `pulumi:"encryptionStatus"`
+	// Specifies the encryption type. Currently, only **kms (case-insensitive)** is
+	// supported. It is mandatory when `encryptionStatus` is set to **ON**.
+	EncryptionType *string `pulumi:"encryptionType"`
 	// Specifies the enterprise project id. Required if EPS enabled.
-	// Changing this parameter will create a new resource.
 	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
 	// Specifies the instance specifications. Please use
 	// `gaussdbMysqlFlavors` data source to fetch the available flavors.
@@ -280,34 +359,48 @@ type mysqlInstanceState struct {
 	// If specified, try to import the instance instead of creating if the name already
 	// existed.
 	ForceImport *bool `pulumi:"forceImport"`
+	// Specifies the KMS ID. It is mandatory when `encryptionStatus` is set to **ON**.
+	KmsKeyId *string `pulumi:"kmsKeyId"`
+	// Specifies the start time for a maintenance window, for example, **22:00**.
+	MaintainBegin *string `pulumi:"maintainBegin"`
+	// Specifies the end time for a maintenance window, for example, **01:00**.
+	MaintainEnd *string `pulumi:"maintainEnd"`
 	// Specifies the availability zone where the master node
 	// resides. The parameter is required in multi availability zone mode. Changing this parameter will create a new
 	// resource.
 	MasterAvailabilityZone *string `pulumi:"masterAvailabilityZone"`
 	// Indicates the instance mode.
 	Mode *string `pulumi:"mode"`
-	// Specifies the instance name, which can be the same as an existing instance name. The value
-	// must be 4 to 64 characters in length and start with a letter. It is case-sensitive and can contain only letters,
-	// digits, hyphens (-), and underscores (_).
+	// Specifies the name of the parameter.
 	Name *string `pulumi:"name"`
-	// Indicates the instance nodes information. Structure is documented below.
+	// Indicates the instance nodes information.
+	// The nodes structure is documented below.
 	Nodes []MysqlInstanceNode `pulumi:"nodes"`
-	// Specifies the database password. The value must be 8 to 32 characters in length,
+	// Specifies an array of one or more parameters to be set to the instance after launched.
+	// The parameters structure is documented below.
+	Parameters []MysqlInstanceParameter `pulumi:"parameters"`
+	// Specifies the database password. The value must be `8` to `32` characters in length,
 	// including uppercase and lowercase letters, digits, and special characters, such as ~!@#%^*-_=+? You are advised to
 	// enter a strong password to improve security, preventing security risks such as brute force cracking.
 	Password *string `pulumi:"password"`
-	// Specifies the charging period of the instance.
-	// If `periodUnit` is set to *month* , the value ranges from 1 to 9. If `periodUnit` is set to *year*, the value
-	// ranges from 1 to 3. This parameter is mandatory if `chargingMode` is set to *prePaid*. Changing this will
-	// do nothing.
+	// Specifies the charging period of the instance.\
+	// If `periodUnit` is set to **month** , the value ranges from `1` to `9`.
+	// If `periodUnit` is set to **year**, the value ranges from `1` to `3`.
+	// This parameter is mandatory if `chargingMode` is set to **prePaid**.
+	// Changing this will do nothing.
 	Period *int `pulumi:"period"`
 	// Specifies the charging period unit of the instance.
-	// Valid values are *month* and *year*. This parameter is mandatory if `chargingMode` is set to *prePaid*.
+	// Valid values are **month** and **year**. This parameter is mandatory if `chargingMode` is set to **prePaid**.
 	// Changing this will do nothing.
 	PeriodUnit *string `pulumi:"periodUnit"`
-	// Indicates the database port.
+	// Specifies the database port.
 	Port *int `pulumi:"port"`
-	// Indicates the private IP address of the DB instance.
+	// Indicates the private domain name.
+	PrivateDnsName *string `pulumi:"privateDnsName"`
+	// Specifies the prefix of the private domain name. The value contains
+	// `8` to `63` characters. Only uppercase letters, lowercase letters, and digits are allowed.
+	PrivateDnsNamePrefix *string `pulumi:"privateDnsNamePrefix"`
+	// Specifies the private IP address of the DB instance.
 	PrivateWriteIp *string `pulumi:"privateWriteIp"`
 	// Deprecated: use huaweicloud_gaussdb_mysql_proxy instead
 	ProxyAddress *string `pulumi:"proxyAddress"`
@@ -317,17 +410,34 @@ type mysqlInstanceState struct {
 	ProxyNodeNum *int `pulumi:"proxyNodeNum"`
 	// Deprecated: use huaweicloud_gaussdb_mysql_proxy instead
 	ProxyPort *int `pulumi:"proxyPort"`
-	// Specifies the count of read replicas. Defaults to 1.
+	// Specifies the count of read replicas. Defaults to `1`.
 	ReadReplicas *int `pulumi:"readReplicas"`
 	// The region in which to create the GaussDB mysql instance resource. If omitted,
 	// the provider-level region will be used. Changing this creates a new instance resource.
 	Region *string `pulumi:"region"`
-	// Specifies the security group ID. Required if the selected subnet
-	// doesn't enable network ACL. Changing this parameter will create a new resource.
+	// Specifies whether to enable seconds level monitoring.
+	SecondsLevelMonitoringEnabled *bool `pulumi:"secondsLevelMonitoringEnabled"`
+	// Specifies the seconds level collection period.
+	// + This parameter is valid only when `secondsLevelMonitoringEnabled` is set to **true**.
+	// + This parameter can not be specified when `secondsLevelMonitoringEnabled` is set to **false**.
+	// + Value options:
+	// - **1**: The collection period is 1s.
+	// - **5** (default value): The collection period is 5s.
+	SecondsLevelMonitoringPeriod *int `pulumi:"secondsLevelMonitoringPeriod"`
+	// Specifies the security group ID. Required if the selected subnet doesn't
+	// enable network ACL.
 	SecurityGroupId *string `pulumi:"securityGroupId"`
+	// Specifies the slow log show original switch of the instance.
+	SlowLogShowOriginalSwitch *bool `pulumi:"slowLogShowOriginalSwitch"`
 	// Specifies whether sql filter is enabled. The default value is `false`.
 	SqlFilterEnabled *bool `pulumi:"sqlFilterEnabled"`
-	// Indicates the node status.
+	// Specifies whether to enable SSL. Value options:
+	// + **true**: SSL is enabled.
+	// + **false**: SSL is disabled.
+	SslOption *string `pulumi:"sslOption"`
+	// Specifies whether auto-scaling is enabled. Value options:
+	// + **ON**: enabled.
+	// + **OFF**: disabled.
 	Status *string `pulumi:"status"`
 	// Specifies the network ID of a subnet. Changing this parameter will create a
 	// new resource.
@@ -341,8 +451,12 @@ type mysqlInstanceState struct {
 	// Specifies the time zone. Defaults to "UTC+08:00". Changing this parameter
 	// will create a new resource.
 	TimeZone *string `pulumi:"timeZone"`
+	// Indicates the Update time in the **yyyy-mm-ddThh:mm:ssZ** format.
+	UpdatedAt *string `pulumi:"updatedAt"`
+	// Indicates whether the version can be upgraded.
+	UpgradeFlag *bool `pulumi:"upgradeFlag"`
 	// Specifies the volume size of the instance. The new storage space must be greater than
-	// the current storage and must be a multiple of 10 GB. Only valid when in prePaid mode.
+	// the current storage and must be a multiple of `10` GB. Only valid when in prePaid mode.
 	VolumeSize *int `pulumi:"volumeSize"`
 	// Specifies the VPC ID. Changing this parameter will create a new resource.
 	VpcId *string `pulumi:"vpcId"`
@@ -353,22 +467,29 @@ type MysqlInstanceState struct {
 	AuditLogEnabled pulumi.BoolPtrInput
 	AutoPay         pulumi.StringPtrInput
 	// Specifies whether auto renew is enabled.
-	// Valid values are "true" and "false".
+	// Valid values are **true** and **false**.
 	AutoRenew pulumi.StringPtrInput
+	// Specifies the auto-scaling policies.
+	// The autoScaling structure is documented below.
+	AutoScaling MysqlInstanceAutoScalingPtrInput
 	// Specifies the availability zone mode: "single" or "multi".
 	// Defaults to "single". Changing this parameter will create a new resource.
 	AvailabilityZoneMode pulumi.StringPtrInput
 	// Specifies the advanced backup policy. Structure is documented below.
 	BackupStrategy MysqlInstanceBackupStrategyPtrInput
-	// Specifies the charging mode of the instance. Valid values are *prePaid*
-	// and *postPaid*, defaults to *postPaid*. Changing this will do nothing.
+	// Specifies the charging mode of the instance. Valid values are **prePaid**
+	// and **postPaid**, defaults to **postPaid**. Changing this will do nothing.
 	ChargingMode pulumi.StringPtrInput
-	// Specifies the configuration ID. Changing this parameter will create
-	// a new resource.
+	// Specifies the configuration ID.
 	ConfigurationId pulumi.StringPtrInput
-	// Specifies the configuration name. Changing this parameter will create
-	// a new resource.
+	// Deprecated: Deprecated
 	ConfigurationName pulumi.StringPtrInput
+	// Indicates the creation time in the **yyyy-mm-ddThh:mm:ssZ** format.
+	CreatedAt pulumi.StringPtrInput
+	// Indicates the current database kernel version.
+	CurrentKernelVersion pulumi.StringPtrInput
+	// Indicates the current database version.
+	CurrentVersion pulumi.StringPtrInput
 	// Specifies the database information. Structure is documented below. Changing
 	// this parameter will create a new resource.
 	Datastore MysqlInstanceDatastorePtrInput
@@ -380,8 +501,16 @@ type MysqlInstanceState struct {
 	// Specifies the dedicated resource name. Changing this parameter
 	// will create a new resource.
 	DedicatedResourceName pulumi.StringPtrInput
+	// Specifies the description of the instance.
+	Description pulumi.StringPtrInput
+	// Specifies whether to enable or disable encrypted backup. Value options:
+	// + **ON**: enabled
+	// + **OFF**: disabled
+	EncryptionStatus pulumi.StringPtrInput
+	// Specifies the encryption type. Currently, only **kms (case-insensitive)** is
+	// supported. It is mandatory when `encryptionStatus` is set to **ON**.
+	EncryptionType pulumi.StringPtrInput
 	// Specifies the enterprise project id. Required if EPS enabled.
-	// Changing this parameter will create a new resource.
 	EnterpriseProjectId pulumi.StringPtrInput
 	// Specifies the instance specifications. Please use
 	// `gaussdbMysqlFlavors` data source to fetch the available flavors.
@@ -389,34 +518,48 @@ type MysqlInstanceState struct {
 	// If specified, try to import the instance instead of creating if the name already
 	// existed.
 	ForceImport pulumi.BoolPtrInput
+	// Specifies the KMS ID. It is mandatory when `encryptionStatus` is set to **ON**.
+	KmsKeyId pulumi.StringPtrInput
+	// Specifies the start time for a maintenance window, for example, **22:00**.
+	MaintainBegin pulumi.StringPtrInput
+	// Specifies the end time for a maintenance window, for example, **01:00**.
+	MaintainEnd pulumi.StringPtrInput
 	// Specifies the availability zone where the master node
 	// resides. The parameter is required in multi availability zone mode. Changing this parameter will create a new
 	// resource.
 	MasterAvailabilityZone pulumi.StringPtrInput
 	// Indicates the instance mode.
 	Mode pulumi.StringPtrInput
-	// Specifies the instance name, which can be the same as an existing instance name. The value
-	// must be 4 to 64 characters in length and start with a letter. It is case-sensitive and can contain only letters,
-	// digits, hyphens (-), and underscores (_).
+	// Specifies the name of the parameter.
 	Name pulumi.StringPtrInput
-	// Indicates the instance nodes information. Structure is documented below.
+	// Indicates the instance nodes information.
+	// The nodes structure is documented below.
 	Nodes MysqlInstanceNodeArrayInput
-	// Specifies the database password. The value must be 8 to 32 characters in length,
+	// Specifies an array of one or more parameters to be set to the instance after launched.
+	// The parameters structure is documented below.
+	Parameters MysqlInstanceParameterArrayInput
+	// Specifies the database password. The value must be `8` to `32` characters in length,
 	// including uppercase and lowercase letters, digits, and special characters, such as ~!@#%^*-_=+? You are advised to
 	// enter a strong password to improve security, preventing security risks such as brute force cracking.
 	Password pulumi.StringPtrInput
-	// Specifies the charging period of the instance.
-	// If `periodUnit` is set to *month* , the value ranges from 1 to 9. If `periodUnit` is set to *year*, the value
-	// ranges from 1 to 3. This parameter is mandatory if `chargingMode` is set to *prePaid*. Changing this will
-	// do nothing.
+	// Specifies the charging period of the instance.\
+	// If `periodUnit` is set to **month** , the value ranges from `1` to `9`.
+	// If `periodUnit` is set to **year**, the value ranges from `1` to `3`.
+	// This parameter is mandatory if `chargingMode` is set to **prePaid**.
+	// Changing this will do nothing.
 	Period pulumi.IntPtrInput
 	// Specifies the charging period unit of the instance.
-	// Valid values are *month* and *year*. This parameter is mandatory if `chargingMode` is set to *prePaid*.
+	// Valid values are **month** and **year**. This parameter is mandatory if `chargingMode` is set to **prePaid**.
 	// Changing this will do nothing.
 	PeriodUnit pulumi.StringPtrInput
-	// Indicates the database port.
+	// Specifies the database port.
 	Port pulumi.IntPtrInput
-	// Indicates the private IP address of the DB instance.
+	// Indicates the private domain name.
+	PrivateDnsName pulumi.StringPtrInput
+	// Specifies the prefix of the private domain name. The value contains
+	// `8` to `63` characters. Only uppercase letters, lowercase letters, and digits are allowed.
+	PrivateDnsNamePrefix pulumi.StringPtrInput
+	// Specifies the private IP address of the DB instance.
 	PrivateWriteIp pulumi.StringPtrInput
 	// Deprecated: use huaweicloud_gaussdb_mysql_proxy instead
 	ProxyAddress pulumi.StringPtrInput
@@ -426,17 +569,34 @@ type MysqlInstanceState struct {
 	ProxyNodeNum pulumi.IntPtrInput
 	// Deprecated: use huaweicloud_gaussdb_mysql_proxy instead
 	ProxyPort pulumi.IntPtrInput
-	// Specifies the count of read replicas. Defaults to 1.
+	// Specifies the count of read replicas. Defaults to `1`.
 	ReadReplicas pulumi.IntPtrInput
 	// The region in which to create the GaussDB mysql instance resource. If omitted,
 	// the provider-level region will be used. Changing this creates a new instance resource.
 	Region pulumi.StringPtrInput
-	// Specifies the security group ID. Required if the selected subnet
-	// doesn't enable network ACL. Changing this parameter will create a new resource.
+	// Specifies whether to enable seconds level monitoring.
+	SecondsLevelMonitoringEnabled pulumi.BoolPtrInput
+	// Specifies the seconds level collection period.
+	// + This parameter is valid only when `secondsLevelMonitoringEnabled` is set to **true**.
+	// + This parameter can not be specified when `secondsLevelMonitoringEnabled` is set to **false**.
+	// + Value options:
+	// - **1**: The collection period is 1s.
+	// - **5** (default value): The collection period is 5s.
+	SecondsLevelMonitoringPeriod pulumi.IntPtrInput
+	// Specifies the security group ID. Required if the selected subnet doesn't
+	// enable network ACL.
 	SecurityGroupId pulumi.StringPtrInput
+	// Specifies the slow log show original switch of the instance.
+	SlowLogShowOriginalSwitch pulumi.BoolPtrInput
 	// Specifies whether sql filter is enabled. The default value is `false`.
 	SqlFilterEnabled pulumi.BoolPtrInput
-	// Indicates the node status.
+	// Specifies whether to enable SSL. Value options:
+	// + **true**: SSL is enabled.
+	// + **false**: SSL is disabled.
+	SslOption pulumi.StringPtrInput
+	// Specifies whether auto-scaling is enabled. Value options:
+	// + **ON**: enabled.
+	// + **OFF**: disabled.
 	Status pulumi.StringPtrInput
 	// Specifies the network ID of a subnet. Changing this parameter will create a
 	// new resource.
@@ -450,8 +610,12 @@ type MysqlInstanceState struct {
 	// Specifies the time zone. Defaults to "UTC+08:00". Changing this parameter
 	// will create a new resource.
 	TimeZone pulumi.StringPtrInput
+	// Indicates the Update time in the **yyyy-mm-ddThh:mm:ssZ** format.
+	UpdatedAt pulumi.StringPtrInput
+	// Indicates whether the version can be upgraded.
+	UpgradeFlag pulumi.BoolPtrInput
 	// Specifies the volume size of the instance. The new storage space must be greater than
-	// the current storage and must be a multiple of 10 GB. Only valid when in prePaid mode.
+	// the current storage and must be a multiple of `10` GB. Only valid when in prePaid mode.
 	VolumeSize pulumi.IntPtrInput
 	// Specifies the VPC ID. Changing this parameter will create a new resource.
 	VpcId pulumi.StringPtrInput
@@ -466,21 +630,22 @@ type mysqlInstanceArgs struct {
 	AuditLogEnabled *bool   `pulumi:"auditLogEnabled"`
 	AutoPay         *string `pulumi:"autoPay"`
 	// Specifies whether auto renew is enabled.
-	// Valid values are "true" and "false".
+	// Valid values are **true** and **false**.
 	AutoRenew *string `pulumi:"autoRenew"`
+	// Specifies the auto-scaling policies.
+	// The autoScaling structure is documented below.
+	AutoScaling *MysqlInstanceAutoScaling `pulumi:"autoScaling"`
 	// Specifies the availability zone mode: "single" or "multi".
 	// Defaults to "single". Changing this parameter will create a new resource.
 	AvailabilityZoneMode *string `pulumi:"availabilityZoneMode"`
 	// Specifies the advanced backup policy. Structure is documented below.
 	BackupStrategy *MysqlInstanceBackupStrategy `pulumi:"backupStrategy"`
-	// Specifies the charging mode of the instance. Valid values are *prePaid*
-	// and *postPaid*, defaults to *postPaid*. Changing this will do nothing.
+	// Specifies the charging mode of the instance. Valid values are **prePaid**
+	// and **postPaid**, defaults to **postPaid**. Changing this will do nothing.
 	ChargingMode *string `pulumi:"chargingMode"`
-	// Specifies the configuration ID. Changing this parameter will create
-	// a new resource.
+	// Specifies the configuration ID.
 	ConfigurationId *string `pulumi:"configurationId"`
-	// Specifies the configuration name. Changing this parameter will create
-	// a new resource.
+	// Deprecated: Deprecated
 	ConfigurationName *string `pulumi:"configurationName"`
 	// Specifies the database information. Structure is documented below. Changing
 	// this parameter will create a new resource.
@@ -491,8 +656,16 @@ type mysqlInstanceArgs struct {
 	// Specifies the dedicated resource name. Changing this parameter
 	// will create a new resource.
 	DedicatedResourceName *string `pulumi:"dedicatedResourceName"`
+	// Specifies the description of the instance.
+	Description *string `pulumi:"description"`
+	// Specifies whether to enable or disable encrypted backup. Value options:
+	// + **ON**: enabled
+	// + **OFF**: disabled
+	EncryptionStatus *string `pulumi:"encryptionStatus"`
+	// Specifies the encryption type. Currently, only **kms (case-insensitive)** is
+	// supported. It is mandatory when `encryptionStatus` is set to **ON**.
+	EncryptionType *string `pulumi:"encryptionType"`
 	// Specifies the enterprise project id. Required if EPS enabled.
-	// Changing this parameter will create a new resource.
 	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
 	// Specifies the instance specifications. Please use
 	// `gaussdbMysqlFlavors` data source to fetch the available flavors.
@@ -500,41 +673,71 @@ type mysqlInstanceArgs struct {
 	// If specified, try to import the instance instead of creating if the name already
 	// existed.
 	ForceImport *bool `pulumi:"forceImport"`
+	// Specifies the KMS ID. It is mandatory when `encryptionStatus` is set to **ON**.
+	KmsKeyId *string `pulumi:"kmsKeyId"`
+	// Specifies the start time for a maintenance window, for example, **22:00**.
+	MaintainBegin *string `pulumi:"maintainBegin"`
+	// Specifies the end time for a maintenance window, for example, **01:00**.
+	MaintainEnd *string `pulumi:"maintainEnd"`
 	// Specifies the availability zone where the master node
 	// resides. The parameter is required in multi availability zone mode. Changing this parameter will create a new
 	// resource.
 	MasterAvailabilityZone *string `pulumi:"masterAvailabilityZone"`
-	// Specifies the instance name, which can be the same as an existing instance name. The value
-	// must be 4 to 64 characters in length and start with a letter. It is case-sensitive and can contain only letters,
-	// digits, hyphens (-), and underscores (_).
+	// Specifies the name of the parameter.
 	Name *string `pulumi:"name"`
-	// Specifies the database password. The value must be 8 to 32 characters in length,
+	// Specifies an array of one or more parameters to be set to the instance after launched.
+	// The parameters structure is documented below.
+	Parameters []MysqlInstanceParameter `pulumi:"parameters"`
+	// Specifies the database password. The value must be `8` to `32` characters in length,
 	// including uppercase and lowercase letters, digits, and special characters, such as ~!@#%^*-_=+? You are advised to
 	// enter a strong password to improve security, preventing security risks such as brute force cracking.
 	Password string `pulumi:"password"`
-	// Specifies the charging period of the instance.
-	// If `periodUnit` is set to *month* , the value ranges from 1 to 9. If `periodUnit` is set to *year*, the value
-	// ranges from 1 to 3. This parameter is mandatory if `chargingMode` is set to *prePaid*. Changing this will
-	// do nothing.
+	// Specifies the charging period of the instance.\
+	// If `periodUnit` is set to **month** , the value ranges from `1` to `9`.
+	// If `periodUnit` is set to **year**, the value ranges from `1` to `3`.
+	// This parameter is mandatory if `chargingMode` is set to **prePaid**.
+	// Changing this will do nothing.
 	Period *int `pulumi:"period"`
 	// Specifies the charging period unit of the instance.
-	// Valid values are *month* and *year*. This parameter is mandatory if `chargingMode` is set to *prePaid*.
+	// Valid values are **month** and **year**. This parameter is mandatory if `chargingMode` is set to **prePaid**.
 	// Changing this will do nothing.
 	PeriodUnit *string `pulumi:"periodUnit"`
+	// Specifies the database port.
+	Port *int `pulumi:"port"`
+	// Specifies the prefix of the private domain name. The value contains
+	// `8` to `63` characters. Only uppercase letters, lowercase letters, and digits are allowed.
+	PrivateDnsNamePrefix *string `pulumi:"privateDnsNamePrefix"`
+	// Specifies the private IP address of the DB instance.
+	PrivateWriteIp *string `pulumi:"privateWriteIp"`
 	// Deprecated: use huaweicloud_gaussdb_mysql_proxy instead
 	ProxyFlavor *string `pulumi:"proxyFlavor"`
 	// Deprecated: use huaweicloud_gaussdb_mysql_proxy instead
 	ProxyNodeNum *int `pulumi:"proxyNodeNum"`
-	// Specifies the count of read replicas. Defaults to 1.
+	// Specifies the count of read replicas. Defaults to `1`.
 	ReadReplicas *int `pulumi:"readReplicas"`
 	// The region in which to create the GaussDB mysql instance resource. If omitted,
 	// the provider-level region will be used. Changing this creates a new instance resource.
 	Region *string `pulumi:"region"`
-	// Specifies the security group ID. Required if the selected subnet
-	// doesn't enable network ACL. Changing this parameter will create a new resource.
+	// Specifies whether to enable seconds level monitoring.
+	SecondsLevelMonitoringEnabled *bool `pulumi:"secondsLevelMonitoringEnabled"`
+	// Specifies the seconds level collection period.
+	// + This parameter is valid only when `secondsLevelMonitoringEnabled` is set to **true**.
+	// + This parameter can not be specified when `secondsLevelMonitoringEnabled` is set to **false**.
+	// + Value options:
+	// - **1**: The collection period is 1s.
+	// - **5** (default value): The collection period is 5s.
+	SecondsLevelMonitoringPeriod *int `pulumi:"secondsLevelMonitoringPeriod"`
+	// Specifies the security group ID. Required if the selected subnet doesn't
+	// enable network ACL.
 	SecurityGroupId *string `pulumi:"securityGroupId"`
+	// Specifies the slow log show original switch of the instance.
+	SlowLogShowOriginalSwitch *bool `pulumi:"slowLogShowOriginalSwitch"`
 	// Specifies whether sql filter is enabled. The default value is `false`.
 	SqlFilterEnabled *bool `pulumi:"sqlFilterEnabled"`
+	// Specifies whether to enable SSL. Value options:
+	// + **true**: SSL is enabled.
+	// + **false**: SSL is disabled.
+	SslOption *string `pulumi:"sslOption"`
 	// Specifies the network ID of a subnet. Changing this parameter will create a
 	// new resource.
 	SubnetId string `pulumi:"subnetId"`
@@ -548,7 +751,7 @@ type mysqlInstanceArgs struct {
 	// will create a new resource.
 	TimeZone *string `pulumi:"timeZone"`
 	// Specifies the volume size of the instance. The new storage space must be greater than
-	// the current storage and must be a multiple of 10 GB. Only valid when in prePaid mode.
+	// the current storage and must be a multiple of `10` GB. Only valid when in prePaid mode.
 	VolumeSize *int `pulumi:"volumeSize"`
 	// Specifies the VPC ID. Changing this parameter will create a new resource.
 	VpcId string `pulumi:"vpcId"`
@@ -560,21 +763,22 @@ type MysqlInstanceArgs struct {
 	AuditLogEnabled pulumi.BoolPtrInput
 	AutoPay         pulumi.StringPtrInput
 	// Specifies whether auto renew is enabled.
-	// Valid values are "true" and "false".
+	// Valid values are **true** and **false**.
 	AutoRenew pulumi.StringPtrInput
+	// Specifies the auto-scaling policies.
+	// The autoScaling structure is documented below.
+	AutoScaling MysqlInstanceAutoScalingPtrInput
 	// Specifies the availability zone mode: "single" or "multi".
 	// Defaults to "single". Changing this parameter will create a new resource.
 	AvailabilityZoneMode pulumi.StringPtrInput
 	// Specifies the advanced backup policy. Structure is documented below.
 	BackupStrategy MysqlInstanceBackupStrategyPtrInput
-	// Specifies the charging mode of the instance. Valid values are *prePaid*
-	// and *postPaid*, defaults to *postPaid*. Changing this will do nothing.
+	// Specifies the charging mode of the instance. Valid values are **prePaid**
+	// and **postPaid**, defaults to **postPaid**. Changing this will do nothing.
 	ChargingMode pulumi.StringPtrInput
-	// Specifies the configuration ID. Changing this parameter will create
-	// a new resource.
+	// Specifies the configuration ID.
 	ConfigurationId pulumi.StringPtrInput
-	// Specifies the configuration name. Changing this parameter will create
-	// a new resource.
+	// Deprecated: Deprecated
 	ConfigurationName pulumi.StringPtrInput
 	// Specifies the database information. Structure is documented below. Changing
 	// this parameter will create a new resource.
@@ -585,8 +789,16 @@ type MysqlInstanceArgs struct {
 	// Specifies the dedicated resource name. Changing this parameter
 	// will create a new resource.
 	DedicatedResourceName pulumi.StringPtrInput
+	// Specifies the description of the instance.
+	Description pulumi.StringPtrInput
+	// Specifies whether to enable or disable encrypted backup. Value options:
+	// + **ON**: enabled
+	// + **OFF**: disabled
+	EncryptionStatus pulumi.StringPtrInput
+	// Specifies the encryption type. Currently, only **kms (case-insensitive)** is
+	// supported. It is mandatory when `encryptionStatus` is set to **ON**.
+	EncryptionType pulumi.StringPtrInput
 	// Specifies the enterprise project id. Required if EPS enabled.
-	// Changing this parameter will create a new resource.
 	EnterpriseProjectId pulumi.StringPtrInput
 	// Specifies the instance specifications. Please use
 	// `gaussdbMysqlFlavors` data source to fetch the available flavors.
@@ -594,41 +806,71 @@ type MysqlInstanceArgs struct {
 	// If specified, try to import the instance instead of creating if the name already
 	// existed.
 	ForceImport pulumi.BoolPtrInput
+	// Specifies the KMS ID. It is mandatory when `encryptionStatus` is set to **ON**.
+	KmsKeyId pulumi.StringPtrInput
+	// Specifies the start time for a maintenance window, for example, **22:00**.
+	MaintainBegin pulumi.StringPtrInput
+	// Specifies the end time for a maintenance window, for example, **01:00**.
+	MaintainEnd pulumi.StringPtrInput
 	// Specifies the availability zone where the master node
 	// resides. The parameter is required in multi availability zone mode. Changing this parameter will create a new
 	// resource.
 	MasterAvailabilityZone pulumi.StringPtrInput
-	// Specifies the instance name, which can be the same as an existing instance name. The value
-	// must be 4 to 64 characters in length and start with a letter. It is case-sensitive and can contain only letters,
-	// digits, hyphens (-), and underscores (_).
+	// Specifies the name of the parameter.
 	Name pulumi.StringPtrInput
-	// Specifies the database password. The value must be 8 to 32 characters in length,
+	// Specifies an array of one or more parameters to be set to the instance after launched.
+	// The parameters structure is documented below.
+	Parameters MysqlInstanceParameterArrayInput
+	// Specifies the database password. The value must be `8` to `32` characters in length,
 	// including uppercase and lowercase letters, digits, and special characters, such as ~!@#%^*-_=+? You are advised to
 	// enter a strong password to improve security, preventing security risks such as brute force cracking.
 	Password pulumi.StringInput
-	// Specifies the charging period of the instance.
-	// If `periodUnit` is set to *month* , the value ranges from 1 to 9. If `periodUnit` is set to *year*, the value
-	// ranges from 1 to 3. This parameter is mandatory if `chargingMode` is set to *prePaid*. Changing this will
-	// do nothing.
+	// Specifies the charging period of the instance.\
+	// If `periodUnit` is set to **month** , the value ranges from `1` to `9`.
+	// If `periodUnit` is set to **year**, the value ranges from `1` to `3`.
+	// This parameter is mandatory if `chargingMode` is set to **prePaid**.
+	// Changing this will do nothing.
 	Period pulumi.IntPtrInput
 	// Specifies the charging period unit of the instance.
-	// Valid values are *month* and *year*. This parameter is mandatory if `chargingMode` is set to *prePaid*.
+	// Valid values are **month** and **year**. This parameter is mandatory if `chargingMode` is set to **prePaid**.
 	// Changing this will do nothing.
 	PeriodUnit pulumi.StringPtrInput
+	// Specifies the database port.
+	Port pulumi.IntPtrInput
+	// Specifies the prefix of the private domain name. The value contains
+	// `8` to `63` characters. Only uppercase letters, lowercase letters, and digits are allowed.
+	PrivateDnsNamePrefix pulumi.StringPtrInput
+	// Specifies the private IP address of the DB instance.
+	PrivateWriteIp pulumi.StringPtrInput
 	// Deprecated: use huaweicloud_gaussdb_mysql_proxy instead
 	ProxyFlavor pulumi.StringPtrInput
 	// Deprecated: use huaweicloud_gaussdb_mysql_proxy instead
 	ProxyNodeNum pulumi.IntPtrInput
-	// Specifies the count of read replicas. Defaults to 1.
+	// Specifies the count of read replicas. Defaults to `1`.
 	ReadReplicas pulumi.IntPtrInput
 	// The region in which to create the GaussDB mysql instance resource. If omitted,
 	// the provider-level region will be used. Changing this creates a new instance resource.
 	Region pulumi.StringPtrInput
-	// Specifies the security group ID. Required if the selected subnet
-	// doesn't enable network ACL. Changing this parameter will create a new resource.
+	// Specifies whether to enable seconds level monitoring.
+	SecondsLevelMonitoringEnabled pulumi.BoolPtrInput
+	// Specifies the seconds level collection period.
+	// + This parameter is valid only when `secondsLevelMonitoringEnabled` is set to **true**.
+	// + This parameter can not be specified when `secondsLevelMonitoringEnabled` is set to **false**.
+	// + Value options:
+	// - **1**: The collection period is 1s.
+	// - **5** (default value): The collection period is 5s.
+	SecondsLevelMonitoringPeriod pulumi.IntPtrInput
+	// Specifies the security group ID. Required if the selected subnet doesn't
+	// enable network ACL.
 	SecurityGroupId pulumi.StringPtrInput
+	// Specifies the slow log show original switch of the instance.
+	SlowLogShowOriginalSwitch pulumi.BoolPtrInput
 	// Specifies whether sql filter is enabled. The default value is `false`.
 	SqlFilterEnabled pulumi.BoolPtrInput
+	// Specifies whether to enable SSL. Value options:
+	// + **true**: SSL is enabled.
+	// + **false**: SSL is disabled.
+	SslOption pulumi.StringPtrInput
 	// Specifies the network ID of a subnet. Changing this parameter will create a
 	// new resource.
 	SubnetId pulumi.StringInput
@@ -642,7 +884,7 @@ type MysqlInstanceArgs struct {
 	// will create a new resource.
 	TimeZone pulumi.StringPtrInput
 	// Specifies the volume size of the instance. The new storage space must be greater than
-	// the current storage and must be a multiple of 10 GB. Only valid when in prePaid mode.
+	// the current storage and must be a multiple of `10` GB. Only valid when in prePaid mode.
 	VolumeSize pulumi.IntPtrInput
 	// Specifies the VPC ID. Changing this parameter will create a new resource.
 	VpcId pulumi.StringInput
@@ -745,9 +987,15 @@ func (o MysqlInstanceOutput) AutoPay() pulumi.StringPtrOutput {
 }
 
 // Specifies whether auto renew is enabled.
-// Valid values are "true" and "false".
+// Valid values are **true** and **false**.
 func (o MysqlInstanceOutput) AutoRenew() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *MysqlInstance) pulumi.StringPtrOutput { return v.AutoRenew }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the auto-scaling policies.
+// The autoScaling structure is documented below.
+func (o MysqlInstanceOutput) AutoScaling() MysqlInstanceAutoScalingOutput {
+	return o.ApplyT(func(v *MysqlInstance) MysqlInstanceAutoScalingOutput { return v.AutoScaling }).(MysqlInstanceAutoScalingOutput)
 }
 
 // Specifies the availability zone mode: "single" or "multi".
@@ -761,22 +1009,35 @@ func (o MysqlInstanceOutput) BackupStrategy() MysqlInstanceBackupStrategyOutput 
 	return o.ApplyT(func(v *MysqlInstance) MysqlInstanceBackupStrategyOutput { return v.BackupStrategy }).(MysqlInstanceBackupStrategyOutput)
 }
 
-// Specifies the charging mode of the instance. Valid values are *prePaid*
-// and *postPaid*, defaults to *postPaid*. Changing this will do nothing.
+// Specifies the charging mode of the instance. Valid values are **prePaid**
+// and **postPaid**, defaults to **postPaid**. Changing this will do nothing.
 func (o MysqlInstanceOutput) ChargingMode() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *MysqlInstance) pulumi.StringPtrOutput { return v.ChargingMode }).(pulumi.StringPtrOutput)
 }
 
-// Specifies the configuration ID. Changing this parameter will create
-// a new resource.
+// Specifies the configuration ID.
 func (o MysqlInstanceOutput) ConfigurationId() pulumi.StringOutput {
 	return o.ApplyT(func(v *MysqlInstance) pulumi.StringOutput { return v.ConfigurationId }).(pulumi.StringOutput)
 }
 
-// Specifies the configuration name. Changing this parameter will create
-// a new resource.
+// Deprecated: Deprecated
 func (o MysqlInstanceOutput) ConfigurationName() pulumi.StringOutput {
 	return o.ApplyT(func(v *MysqlInstance) pulumi.StringOutput { return v.ConfigurationName }).(pulumi.StringOutput)
+}
+
+// Indicates the creation time in the **yyyy-mm-ddThh:mm:ssZ** format.
+func (o MysqlInstanceOutput) CreatedAt() pulumi.StringOutput {
+	return o.ApplyT(func(v *MysqlInstance) pulumi.StringOutput { return v.CreatedAt }).(pulumi.StringOutput)
+}
+
+// Indicates the current database kernel version.
+func (o MysqlInstanceOutput) CurrentKernelVersion() pulumi.StringOutput {
+	return o.ApplyT(func(v *MysqlInstance) pulumi.StringOutput { return v.CurrentKernelVersion }).(pulumi.StringOutput)
+}
+
+// Indicates the current database version.
+func (o MysqlInstanceOutput) CurrentVersion() pulumi.StringOutput {
+	return o.ApplyT(func(v *MysqlInstance) pulumi.StringOutput { return v.CurrentVersion }).(pulumi.StringOutput)
 }
 
 // Specifies the database information. Structure is documented below. Changing
@@ -802,8 +1063,25 @@ func (o MysqlInstanceOutput) DedicatedResourceName() pulumi.StringOutput {
 	return o.ApplyT(func(v *MysqlInstance) pulumi.StringOutput { return v.DedicatedResourceName }).(pulumi.StringOutput)
 }
 
+// Specifies the description of the instance.
+func (o MysqlInstanceOutput) Description() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *MysqlInstance) pulumi.StringPtrOutput { return v.Description }).(pulumi.StringPtrOutput)
+}
+
+// Specifies whether to enable or disable encrypted backup. Value options:
+// + **ON**: enabled
+// + **OFF**: disabled
+func (o MysqlInstanceOutput) EncryptionStatus() pulumi.StringOutput {
+	return o.ApplyT(func(v *MysqlInstance) pulumi.StringOutput { return v.EncryptionStatus }).(pulumi.StringOutput)
+}
+
+// Specifies the encryption type. Currently, only **kms (case-insensitive)** is
+// supported. It is mandatory when `encryptionStatus` is set to **ON**.
+func (o MysqlInstanceOutput) EncryptionType() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *MysqlInstance) pulumi.StringPtrOutput { return v.EncryptionType }).(pulumi.StringPtrOutput)
+}
+
 // Specifies the enterprise project id. Required if EPS enabled.
-// Changing this parameter will create a new resource.
 func (o MysqlInstanceOutput) EnterpriseProjectId() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *MysqlInstance) pulumi.StringPtrOutput { return v.EnterpriseProjectId }).(pulumi.StringPtrOutput)
 }
@@ -820,6 +1098,21 @@ func (o MysqlInstanceOutput) ForceImport() pulumi.BoolPtrOutput {
 	return o.ApplyT(func(v *MysqlInstance) pulumi.BoolPtrOutput { return v.ForceImport }).(pulumi.BoolPtrOutput)
 }
 
+// Specifies the KMS ID. It is mandatory when `encryptionStatus` is set to **ON**.
+func (o MysqlInstanceOutput) KmsKeyId() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *MysqlInstance) pulumi.StringPtrOutput { return v.KmsKeyId }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the start time for a maintenance window, for example, **22:00**.
+func (o MysqlInstanceOutput) MaintainBegin() pulumi.StringOutput {
+	return o.ApplyT(func(v *MysqlInstance) pulumi.StringOutput { return v.MaintainBegin }).(pulumi.StringOutput)
+}
+
+// Specifies the end time for a maintenance window, for example, **01:00**.
+func (o MysqlInstanceOutput) MaintainEnd() pulumi.StringOutput {
+	return o.ApplyT(func(v *MysqlInstance) pulumi.StringOutput { return v.MaintainEnd }).(pulumi.StringOutput)
+}
+
 // Specifies the availability zone where the master node
 // resides. The parameter is required in multi availability zone mode. Changing this parameter will create a new
 // resource.
@@ -832,46 +1125,63 @@ func (o MysqlInstanceOutput) Mode() pulumi.StringOutput {
 	return o.ApplyT(func(v *MysqlInstance) pulumi.StringOutput { return v.Mode }).(pulumi.StringOutput)
 }
 
-// Specifies the instance name, which can be the same as an existing instance name. The value
-// must be 4 to 64 characters in length and start with a letter. It is case-sensitive and can contain only letters,
-// digits, hyphens (-), and underscores (_).
+// Specifies the name of the parameter.
 func (o MysqlInstanceOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v *MysqlInstance) pulumi.StringOutput { return v.Name }).(pulumi.StringOutput)
 }
 
-// Indicates the instance nodes information. Structure is documented below.
+// Indicates the instance nodes information.
+// The nodes structure is documented below.
 func (o MysqlInstanceOutput) Nodes() MysqlInstanceNodeArrayOutput {
 	return o.ApplyT(func(v *MysqlInstance) MysqlInstanceNodeArrayOutput { return v.Nodes }).(MysqlInstanceNodeArrayOutput)
 }
 
-// Specifies the database password. The value must be 8 to 32 characters in length,
+// Specifies an array of one or more parameters to be set to the instance after launched.
+// The parameters structure is documented below.
+func (o MysqlInstanceOutput) Parameters() MysqlInstanceParameterArrayOutput {
+	return o.ApplyT(func(v *MysqlInstance) MysqlInstanceParameterArrayOutput { return v.Parameters }).(MysqlInstanceParameterArrayOutput)
+}
+
+// Specifies the database password. The value must be `8` to `32` characters in length,
 // including uppercase and lowercase letters, digits, and special characters, such as ~!@#%^*-_=+? You are advised to
 // enter a strong password to improve security, preventing security risks such as brute force cracking.
 func (o MysqlInstanceOutput) Password() pulumi.StringOutput {
 	return o.ApplyT(func(v *MysqlInstance) pulumi.StringOutput { return v.Password }).(pulumi.StringOutput)
 }
 
-// Specifies the charging period of the instance.
-// If `periodUnit` is set to *month* , the value ranges from 1 to 9. If `periodUnit` is set to *year*, the value
-// ranges from 1 to 3. This parameter is mandatory if `chargingMode` is set to *prePaid*. Changing this will
-// do nothing.
+// Specifies the charging period of the instance.\
+// If `periodUnit` is set to **month** , the value ranges from `1` to `9`.
+// If `periodUnit` is set to **year**, the value ranges from `1` to `3`.
+// This parameter is mandatory if `chargingMode` is set to **prePaid**.
+// Changing this will do nothing.
 func (o MysqlInstanceOutput) Period() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v *MysqlInstance) pulumi.IntPtrOutput { return v.Period }).(pulumi.IntPtrOutput)
 }
 
 // Specifies the charging period unit of the instance.
-// Valid values are *month* and *year*. This parameter is mandatory if `chargingMode` is set to *prePaid*.
+// Valid values are **month** and **year**. This parameter is mandatory if `chargingMode` is set to **prePaid**.
 // Changing this will do nothing.
 func (o MysqlInstanceOutput) PeriodUnit() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *MysqlInstance) pulumi.StringPtrOutput { return v.PeriodUnit }).(pulumi.StringPtrOutput)
 }
 
-// Indicates the database port.
+// Specifies the database port.
 func (o MysqlInstanceOutput) Port() pulumi.IntOutput {
 	return o.ApplyT(func(v *MysqlInstance) pulumi.IntOutput { return v.Port }).(pulumi.IntOutput)
 }
 
-// Indicates the private IP address of the DB instance.
+// Indicates the private domain name.
+func (o MysqlInstanceOutput) PrivateDnsName() pulumi.StringOutput {
+	return o.ApplyT(func(v *MysqlInstance) pulumi.StringOutput { return v.PrivateDnsName }).(pulumi.StringOutput)
+}
+
+// Specifies the prefix of the private domain name. The value contains
+// `8` to `63` characters. Only uppercase letters, lowercase letters, and digits are allowed.
+func (o MysqlInstanceOutput) PrivateDnsNamePrefix() pulumi.StringOutput {
+	return o.ApplyT(func(v *MysqlInstance) pulumi.StringOutput { return v.PrivateDnsNamePrefix }).(pulumi.StringOutput)
+}
+
+// Specifies the private IP address of the DB instance.
 func (o MysqlInstanceOutput) PrivateWriteIp() pulumi.StringOutput {
 	return o.ApplyT(func(v *MysqlInstance) pulumi.StringOutput { return v.PrivateWriteIp }).(pulumi.StringOutput)
 }
@@ -896,7 +1206,7 @@ func (o MysqlInstanceOutput) ProxyPort() pulumi.IntOutput {
 	return o.ApplyT(func(v *MysqlInstance) pulumi.IntOutput { return v.ProxyPort }).(pulumi.IntOutput)
 }
 
-// Specifies the count of read replicas. Defaults to 1.
+// Specifies the count of read replicas. Defaults to `1`.
 func (o MysqlInstanceOutput) ReadReplicas() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v *MysqlInstance) pulumi.IntPtrOutput { return v.ReadReplicas }).(pulumi.IntPtrOutput)
 }
@@ -907,10 +1217,30 @@ func (o MysqlInstanceOutput) Region() pulumi.StringOutput {
 	return o.ApplyT(func(v *MysqlInstance) pulumi.StringOutput { return v.Region }).(pulumi.StringOutput)
 }
 
-// Specifies the security group ID. Required if the selected subnet
-// doesn't enable network ACL. Changing this parameter will create a new resource.
-func (o MysqlInstanceOutput) SecurityGroupId() pulumi.StringPtrOutput {
-	return o.ApplyT(func(v *MysqlInstance) pulumi.StringPtrOutput { return v.SecurityGroupId }).(pulumi.StringPtrOutput)
+// Specifies whether to enable seconds level monitoring.
+func (o MysqlInstanceOutput) SecondsLevelMonitoringEnabled() pulumi.BoolOutput {
+	return o.ApplyT(func(v *MysqlInstance) pulumi.BoolOutput { return v.SecondsLevelMonitoringEnabled }).(pulumi.BoolOutput)
+}
+
+// Specifies the seconds level collection period.
+// + This parameter is valid only when `secondsLevelMonitoringEnabled` is set to **true**.
+// + This parameter can not be specified when `secondsLevelMonitoringEnabled` is set to **false**.
+// + Value options:
+// - **1**: The collection period is 1s.
+// - **5** (default value): The collection period is 5s.
+func (o MysqlInstanceOutput) SecondsLevelMonitoringPeriod() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v *MysqlInstance) pulumi.IntPtrOutput { return v.SecondsLevelMonitoringPeriod }).(pulumi.IntPtrOutput)
+}
+
+// Specifies the security group ID. Required if the selected subnet doesn't
+// enable network ACL.
+func (o MysqlInstanceOutput) SecurityGroupId() pulumi.StringOutput {
+	return o.ApplyT(func(v *MysqlInstance) pulumi.StringOutput { return v.SecurityGroupId }).(pulumi.StringOutput)
+}
+
+// Specifies the slow log show original switch of the instance.
+func (o MysqlInstanceOutput) SlowLogShowOriginalSwitch() pulumi.BoolOutput {
+	return o.ApplyT(func(v *MysqlInstance) pulumi.BoolOutput { return v.SlowLogShowOriginalSwitch }).(pulumi.BoolOutput)
 }
 
 // Specifies whether sql filter is enabled. The default value is `false`.
@@ -918,7 +1248,16 @@ func (o MysqlInstanceOutput) SqlFilterEnabled() pulumi.BoolOutput {
 	return o.ApplyT(func(v *MysqlInstance) pulumi.BoolOutput { return v.SqlFilterEnabled }).(pulumi.BoolOutput)
 }
 
-// Indicates the node status.
+// Specifies whether to enable SSL. Value options:
+// + **true**: SSL is enabled.
+// + **false**: SSL is disabled.
+func (o MysqlInstanceOutput) SslOption() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *MysqlInstance) pulumi.StringPtrOutput { return v.SslOption }).(pulumi.StringPtrOutput)
+}
+
+// Specifies whether auto-scaling is enabled. Value options:
+// + **ON**: enabled.
+// + **OFF**: disabled.
 func (o MysqlInstanceOutput) Status() pulumi.StringOutput {
 	return o.ApplyT(func(v *MysqlInstance) pulumi.StringOutput { return v.Status }).(pulumi.StringOutput)
 }
@@ -947,8 +1286,18 @@ func (o MysqlInstanceOutput) TimeZone() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *MysqlInstance) pulumi.StringPtrOutput { return v.TimeZone }).(pulumi.StringPtrOutput)
 }
 
+// Indicates the Update time in the **yyyy-mm-ddThh:mm:ssZ** format.
+func (o MysqlInstanceOutput) UpdatedAt() pulumi.StringOutput {
+	return o.ApplyT(func(v *MysqlInstance) pulumi.StringOutput { return v.UpdatedAt }).(pulumi.StringOutput)
+}
+
+// Indicates whether the version can be upgraded.
+func (o MysqlInstanceOutput) UpgradeFlag() pulumi.BoolOutput {
+	return o.ApplyT(func(v *MysqlInstance) pulumi.BoolOutput { return v.UpgradeFlag }).(pulumi.BoolOutput)
+}
+
 // Specifies the volume size of the instance. The new storage space must be greater than
-// the current storage and must be a multiple of 10 GB. Only valid when in prePaid mode.
+// the current storage and must be a multiple of `10` GB. Only valid when in prePaid mode.
 func (o MysqlInstanceOutput) VolumeSize() pulumi.IntOutput {
 	return o.ApplyT(func(v *MysqlInstance) pulumi.IntOutput { return v.VolumeSize }).(pulumi.IntOutput)
 }

@@ -21,24 +21,40 @@ class JobArgs:
                  engine_type: pulumi.Input[str],
                  source_db: pulumi.Input['JobSourceDbArgs'],
                  type: pulumi.Input[str],
+                 action: Optional[pulumi.Input[str]] = None,
+                 alarm_notify: Optional[pulumi.Input['JobAlarmNotifyArgs']] = None,
+                 auto_renew: Optional[pulumi.Input[str]] = None,
+                 charging_mode: Optional[pulumi.Input[str]] = None,
+                 databases: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  description: Optional[pulumi.Input[str]] = None,
                  destination_db_readnoly: Optional[pulumi.Input[bool]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  expired_days: Optional[pulumi.Input[int]] = None,
                  force_destroy: Optional[pulumi.Input[bool]] = None,
+                 is_open_fast_clean: Optional[pulumi.Input[bool]] = None,
+                 is_sync_re_edit: Optional[pulumi.Input[bool]] = None,
                  limit_speeds: Optional[pulumi.Input[Sequence[pulumi.Input['JobLimitSpeedArgs']]]] = None,
+                 master_az: Optional[pulumi.Input[str]] = None,
                  migrate_definer: Optional[pulumi.Input[bool]] = None,
                  migration_type: Optional[pulumi.Input[str]] = None,
                  multi_write: Optional[pulumi.Input[bool]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  net_type: Optional[pulumi.Input[str]] = None,
+                 node_type: Optional[pulumi.Input[str]] = None,
+                 pause_mode: Optional[pulumi.Input[str]] = None,
+                 period: Optional[pulumi.Input[int]] = None,
+                 period_unit: Optional[pulumi.Input[str]] = None,
+                 policy_config: Optional[pulumi.Input['JobPolicyConfigArgs']] = None,
+                 public_ip_lists: Optional[pulumi.Input[Sequence[pulumi.Input['JobPublicIpListArgs']]]] = None,
                  region: Optional[pulumi.Input[str]] = None,
+                 slave_az: Optional[pulumi.Input[str]] = None,
                  start_time: Optional[pulumi.Input[str]] = None,
+                 tables: Optional[pulumi.Input[Sequence[pulumi.Input['JobTableArgs']]]] = None,
                  tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None):
         """
         The set of arguments for constructing a Job resource.
         :param pulumi.Input['JobDestinationDbArgs'] destination_db: Specifies the destination database configuration.
-               The `db_info` object structure of the `destination_db` is documented below.
+               The db_info structure of the `destination_db` is documented below.
                Changing this parameter will create a new resource.
         :param pulumi.Input[str] direction: Specifies the direction of data flow.
                Changing this parameter will create a new resource. The options are as follows:
@@ -46,34 +62,53 @@ class JobArgs:
                + **down**: Out of the cloud. The source database must be a database in the current cloud.
                + **non-dbs**: self-built database.
         :param pulumi.Input[str] engine_type: Specifies the engine type of database. Changing this parameter will
-               create a new resource. The options are as follows: `mysql`, `mongodb`, `gaussdbv5`.
+               create a new resource. The options are as follows: **mysql**, **mongodb**, **gaussdbv5**, **taurus**, **gaussdbv5ha**,
+               **kafka**, **postgresql**.
         :param pulumi.Input['JobSourceDbArgs'] source_db: Specifies the source database configuration.
-               The `db_info` object structure of the `source_db` is documented below.
+               The db_info structure of the `source_db` is documented below.
                Changing this parameter will create a new resource.
-        :param pulumi.Input[str] type: Specifies the job type. Changing this parameter will create a new
-               resource. The options are as follows:
-               + **migration**: Online Migration.
-               + **sync**: Data Synchronization.
-               + **cloudDataGuard**: Disaster Recovery.
+        :param pulumi.Input[str] type: Specifies the type of a task with an EIP bound.
+               Valid values are **master** and **slave**.
+               + In a primary/standby task, **master** indicates the primary task, and **slave** indicates the standby task.
+               + In other cases, the value is fixed to **master**.
+        :param pulumi.Input[str] action: Specifies the action of job. The options are as follows:
+               + **stop**: Stop the job. Available when job status is **FULL_TRANSFER_STARTED**, **FULL_TRANSFER_COMPLETE** or
+               **INCRE_TRANSFER_STARTED**.
+               + **restart**: Continue the job. Available when job status is **PAUSING**.
+               + **reset**: Retry the job. Available when job status is **FULL_TRANSFER_FAILED** or **INCRE_TRANSFER_FAILED**.
+               + **start**: Start the job. Available when job status is **WAITING_FOR_START**.
+        :param pulumi.Input['JobAlarmNotifyArgs'] alarm_notify: Specifies the information body for setting task exception notification.
+               Changing this parameter will create a new resource.
+               The alarm_notify structure is documented below.
+        :param pulumi.Input[str] auto_renew: schema: Internal
+        :param pulumi.Input[str] charging_mode: schema: Internal
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] databases: Specifies the list of the databases which the job migrates or synchronizes. Means to
+               transfer database level data. This parameter conflicts with `tables`.
         :param pulumi.Input[str] description: Specifies the description of the job, which contain a
                maximum of 256 characters, and certain special characters (including !<>&'"\\\\) are not allowed.
         :param pulumi.Input[bool] destination_db_readnoly: Specifies the destination DB instance as read-only helps
                ensure the migration is successful. Once the migration is complete, the DB instance automatically changes to
-               Read/Write. The default value is `true`. Changing this parameter will create a new resource.
+               Read/Write. Changing this parameter will create a new resource.
         :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project id.
                Changing this parameter will create a new resource.
         :param pulumi.Input[int] expired_days: Specifies how many days after the task is abnormal, it will automatically
                end. The value ranges from 14 to 100. the default value is `14`. Changing this parameter will create a new resource.
         :param pulumi.Input[bool] force_destroy: Specifies whether to forcibly destroy the job even if it is running.
-               The default value is `false`.
+               The default value is **false**.
+        :param pulumi.Input[bool] is_open_fast_clean: Specifies whether to enable binlog clearing for RDS for MySQL or RDS
+               for MariaDB. Defaults to **false**.
+               Changing this parameter will create a new resource.
+        :param pulumi.Input[bool] is_sync_re_edit: Specifies whether to start the sync re-edit job. It's valid when `action` is **restart**.
         :param pulumi.Input[Sequence[pulumi.Input['JobLimitSpeedArgs']]] limit_speeds: Specifies the migration speed by setting a time period.
-               The default is no speed limit. The maximum length is 3. Structure is documented below.
+               The default is no speed limit. The maximum length is 3. The limit_speed structure is documented
+               below. Changing this parameter will create a new resource.
+        :param pulumi.Input[str] master_az: Specifies the AZ where the primary task is located.
                Changing this parameter will create a new resource.
         :param pulumi.Input[bool] migrate_definer: Specifies whether to migrate the definers of all source database
-               objects to the `user` of `destination_db`. The default value is `true`.
+               objects to the `user` of `destination_db`. The default value is **true**.
                Changing this parameter will create a new resource.
         :param pulumi.Input[str] migration_type: Specifies migration type.
-               Changing this parameter will create a new resource. The options are as follows:
+               Changing this parameter will create a new resource. The default value is **FULL_INCR_TRANS**. The options are as follows:
                + **FULL_TRANS**: Full migration. Suitable for scenarios where services can be interrupted. It migrates all database
                objects and data, in a non-system database, to a destination database at a time.
                + **INCR_TRANS**: Incremental migration. Suitable for migration from an on-premises self-built database to a
@@ -82,30 +117,59 @@ class JobArgs:
                migration initializes the destination database, an incremental migration parses logs to ensure data consistency
                between the source and destination databases.
         :param pulumi.Input[bool] multi_write: Specifies whether to enable multi write. It is mandatory when `type`
-               is `cloudDataGuard`. When the disaster recovery type is dual-active disaster recovery, set `multi_write` to `true`,
-               otherwise to `false`. The default value is `false`. Changing this parameter will create a new resource.
+               is **cloudDataGuard**. When the disaster recovery type is dual-active disaster recovery, set `multi_write` to **true**,
+               otherwise to **false**. The default value is **false**. Changing this parameter will create a new resource.
         :param pulumi.Input[str] name: Specifies the name of database.
                Changing this parameter will create a new resource.
         :param pulumi.Input[str] net_type: Specifies the network type.
-               Changing this parameter will create a new resource. The options are as follows:
+               Changing this parameter will create a new resource. The default value is **eip**. The options are as follows:
                + **eip**: suitable for migration from an on-premises or other cloud database to a destination cloud database.
                An EIP will be automatically bound to the replication instance and released after the replication task is complete.
                + **vpc**: suitable for migration from one cloud database to another.
                + **vpn**: suitable for migration from an on-premises self-built database to a destination cloud database,
                or from one cloud database to another in a different region.
+        :param pulumi.Input[str] node_type: Specifies the node flavor type. Valid values are **micro**, **small**,
+               **medium**, **high**, **xlarge**, **2xlarge**. Default to **high**.
+        :param pulumi.Input[str] pause_mode: Specifies the stop type of job. It's valid when `action` is **stop**.
+               Default value is **target**. The options are as follows:
+               + **target**: Stop playback.
+               + **all**: Stop log capture and playback.
+        :param pulumi.Input[int] period: schema: Internal
+        :param pulumi.Input[str] period_unit: schema: Internal
+        :param pulumi.Input['JobPolicyConfigArgs'] policy_config: Specifies the policy information used to configure migration and
+               synchronization policies. The policy_config structure is documented below.
+               Changing this parameter will create a new resource.
+        :param pulumi.Input[Sequence[pulumi.Input['JobPublicIpListArgs']]] public_ip_lists: Specifies the public IP list.
+               It can be specified when `net_type` is **eip**, and if it's not specified, DRS job will automatically bind a public IP.
+               Changing this parameter will create a new resource.
+               The public_ip_list structure is documented below.
         :param pulumi.Input[str] region: Specifies the region which the database belongs when it is a RDS database.
                Changing this parameter will create a new resource.
-        :param pulumi.Input[str] start_time: Specifies the time to start speed limit, this time is UTC time. The start
-               time is the whole hour, if there is a minute, it will be ignored, the format is `hh:mm`, and the hour number
-               is two digits, for example: 01:00. Changing this parameter will create a new resource.
-        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the DRS job.
+        :param pulumi.Input[str] slave_az: Specifies the AZ where the standby task is located.
                Changing this parameter will create a new resource.
+        :param pulumi.Input[str] start_time: Specifies the time to start speed limit, this time is UTC time. The start
+               time is the whole hour, if there is a minute, it will be ignored, the format is **hh:mm**, and the hour number
+               is two digits, for example: 01:00. Changing this parameter will create a new resource.
+        :param pulumi.Input[Sequence[pulumi.Input['JobTableArgs']]] tables: Specifies the list of the tables which the job migrates or synchronizes. Means to transfer
+               table level data. This parameter conflicts with `databases`.
+               The tables structure is documented below.
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the DRS job.
         """
         pulumi.set(__self__, "destination_db", destination_db)
         pulumi.set(__self__, "direction", direction)
         pulumi.set(__self__, "engine_type", engine_type)
         pulumi.set(__self__, "source_db", source_db)
         pulumi.set(__self__, "type", type)
+        if action is not None:
+            pulumi.set(__self__, "action", action)
+        if alarm_notify is not None:
+            pulumi.set(__self__, "alarm_notify", alarm_notify)
+        if auto_renew is not None:
+            pulumi.set(__self__, "auto_renew", auto_renew)
+        if charging_mode is not None:
+            pulumi.set(__self__, "charging_mode", charging_mode)
+        if databases is not None:
+            pulumi.set(__self__, "databases", databases)
         if description is not None:
             pulumi.set(__self__, "description", description)
         if destination_db_readnoly is not None:
@@ -116,8 +180,14 @@ class JobArgs:
             pulumi.set(__self__, "expired_days", expired_days)
         if force_destroy is not None:
             pulumi.set(__self__, "force_destroy", force_destroy)
+        if is_open_fast_clean is not None:
+            pulumi.set(__self__, "is_open_fast_clean", is_open_fast_clean)
+        if is_sync_re_edit is not None:
+            pulumi.set(__self__, "is_sync_re_edit", is_sync_re_edit)
         if limit_speeds is not None:
             pulumi.set(__self__, "limit_speeds", limit_speeds)
+        if master_az is not None:
+            pulumi.set(__self__, "master_az", master_az)
         if migrate_definer is not None:
             pulumi.set(__self__, "migrate_definer", migrate_definer)
         if migration_type is not None:
@@ -128,10 +198,26 @@ class JobArgs:
             pulumi.set(__self__, "name", name)
         if net_type is not None:
             pulumi.set(__self__, "net_type", net_type)
+        if node_type is not None:
+            pulumi.set(__self__, "node_type", node_type)
+        if pause_mode is not None:
+            pulumi.set(__self__, "pause_mode", pause_mode)
+        if period is not None:
+            pulumi.set(__self__, "period", period)
+        if period_unit is not None:
+            pulumi.set(__self__, "period_unit", period_unit)
+        if policy_config is not None:
+            pulumi.set(__self__, "policy_config", policy_config)
+        if public_ip_lists is not None:
+            pulumi.set(__self__, "public_ip_lists", public_ip_lists)
         if region is not None:
             pulumi.set(__self__, "region", region)
+        if slave_az is not None:
+            pulumi.set(__self__, "slave_az", slave_az)
         if start_time is not None:
             pulumi.set(__self__, "start_time", start_time)
+        if tables is not None:
+            pulumi.set(__self__, "tables", tables)
         if tags is not None:
             pulumi.set(__self__, "tags", tags)
 
@@ -140,7 +226,7 @@ class JobArgs:
     def destination_db(self) -> pulumi.Input['JobDestinationDbArgs']:
         """
         Specifies the destination database configuration.
-        The `db_info` object structure of the `destination_db` is documented below.
+        The db_info structure of the `destination_db` is documented below.
         Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "destination_db")
@@ -170,7 +256,8 @@ class JobArgs:
     def engine_type(self) -> pulumi.Input[str]:
         """
         Specifies the engine type of database. Changing this parameter will
-        create a new resource. The options are as follows: `mysql`, `mongodb`, `gaussdbv5`.
+        create a new resource. The options are as follows: **mysql**, **mongodb**, **gaussdbv5**, **taurus**, **gaussdbv5ha**,
+        **kafka**, **postgresql**.
         """
         return pulumi.get(self, "engine_type")
 
@@ -183,7 +270,7 @@ class JobArgs:
     def source_db(self) -> pulumi.Input['JobSourceDbArgs']:
         """
         Specifies the source database configuration.
-        The `db_info` object structure of the `source_db` is documented below.
+        The db_info structure of the `source_db` is documented below.
         Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "source_db")
@@ -196,17 +283,84 @@ class JobArgs:
     @pulumi.getter
     def type(self) -> pulumi.Input[str]:
         """
-        Specifies the job type. Changing this parameter will create a new
-        resource. The options are as follows:
-        + **migration**: Online Migration.
-        + **sync**: Data Synchronization.
-        + **cloudDataGuard**: Disaster Recovery.
+        Specifies the type of a task with an EIP bound.
+        Valid values are **master** and **slave**.
+        + In a primary/standby task, **master** indicates the primary task, and **slave** indicates the standby task.
+        + In other cases, the value is fixed to **master**.
         """
         return pulumi.get(self, "type")
 
     @type.setter
     def type(self, value: pulumi.Input[str]):
         pulumi.set(self, "type", value)
+
+    @property
+    @pulumi.getter
+    def action(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the action of job. The options are as follows:
+        + **stop**: Stop the job. Available when job status is **FULL_TRANSFER_STARTED**, **FULL_TRANSFER_COMPLETE** or
+        **INCRE_TRANSFER_STARTED**.
+        + **restart**: Continue the job. Available when job status is **PAUSING**.
+        + **reset**: Retry the job. Available when job status is **FULL_TRANSFER_FAILED** or **INCRE_TRANSFER_FAILED**.
+        + **start**: Start the job. Available when job status is **WAITING_FOR_START**.
+        """
+        return pulumi.get(self, "action")
+
+    @action.setter
+    def action(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "action", value)
+
+    @property
+    @pulumi.getter(name="alarmNotify")
+    def alarm_notify(self) -> Optional[pulumi.Input['JobAlarmNotifyArgs']]:
+        """
+        Specifies the information body for setting task exception notification.
+        Changing this parameter will create a new resource.
+        The alarm_notify structure is documented below.
+        """
+        return pulumi.get(self, "alarm_notify")
+
+    @alarm_notify.setter
+    def alarm_notify(self, value: Optional[pulumi.Input['JobAlarmNotifyArgs']]):
+        pulumi.set(self, "alarm_notify", value)
+
+    @property
+    @pulumi.getter(name="autoRenew")
+    def auto_renew(self) -> Optional[pulumi.Input[str]]:
+        """
+        schema: Internal
+        """
+        return pulumi.get(self, "auto_renew")
+
+    @auto_renew.setter
+    def auto_renew(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "auto_renew", value)
+
+    @property
+    @pulumi.getter(name="chargingMode")
+    def charging_mode(self) -> Optional[pulumi.Input[str]]:
+        """
+        schema: Internal
+        """
+        return pulumi.get(self, "charging_mode")
+
+    @charging_mode.setter
+    def charging_mode(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "charging_mode", value)
+
+    @property
+    @pulumi.getter
+    def databases(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]:
+        """
+        Specifies the list of the databases which the job migrates or synchronizes. Means to
+        transfer database level data. This parameter conflicts with `tables`.
+        """
+        return pulumi.get(self, "databases")
+
+    @databases.setter
+    def databases(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]):
+        pulumi.set(self, "databases", value)
 
     @property
     @pulumi.getter
@@ -227,7 +381,7 @@ class JobArgs:
         """
         Specifies the destination DB instance as read-only helps
         ensure the migration is successful. Once the migration is complete, the DB instance automatically changes to
-        Read/Write. The default value is `true`. Changing this parameter will create a new resource.
+        Read/Write. Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "destination_db_readnoly")
 
@@ -266,7 +420,7 @@ class JobArgs:
     def force_destroy(self) -> Optional[pulumi.Input[bool]]:
         """
         Specifies whether to forcibly destroy the job even if it is running.
-        The default value is `false`.
+        The default value is **false**.
         """
         return pulumi.get(self, "force_destroy")
 
@@ -275,12 +429,38 @@ class JobArgs:
         pulumi.set(self, "force_destroy", value)
 
     @property
+    @pulumi.getter(name="isOpenFastClean")
+    def is_open_fast_clean(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies whether to enable binlog clearing for RDS for MySQL or RDS
+        for MariaDB. Defaults to **false**.
+        Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "is_open_fast_clean")
+
+    @is_open_fast_clean.setter
+    def is_open_fast_clean(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "is_open_fast_clean", value)
+
+    @property
+    @pulumi.getter(name="isSyncReEdit")
+    def is_sync_re_edit(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies whether to start the sync re-edit job. It's valid when `action` is **restart**.
+        """
+        return pulumi.get(self, "is_sync_re_edit")
+
+    @is_sync_re_edit.setter
+    def is_sync_re_edit(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "is_sync_re_edit", value)
+
+    @property
     @pulumi.getter(name="limitSpeeds")
     def limit_speeds(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['JobLimitSpeedArgs']]]]:
         """
         Specifies the migration speed by setting a time period.
-        The default is no speed limit. The maximum length is 3. Structure is documented below.
-        Changing this parameter will create a new resource.
+        The default is no speed limit. The maximum length is 3. The limit_speed structure is documented
+        below. Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "limit_speeds")
 
@@ -289,11 +469,24 @@ class JobArgs:
         pulumi.set(self, "limit_speeds", value)
 
     @property
+    @pulumi.getter(name="masterAz")
+    def master_az(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the AZ where the primary task is located.
+        Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "master_az")
+
+    @master_az.setter
+    def master_az(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "master_az", value)
+
+    @property
     @pulumi.getter(name="migrateDefiner")
     def migrate_definer(self) -> Optional[pulumi.Input[bool]]:
         """
         Specifies whether to migrate the definers of all source database
-        objects to the `user` of `destination_db`. The default value is `true`.
+        objects to the `user` of `destination_db`. The default value is **true**.
         Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "migrate_definer")
@@ -307,7 +500,7 @@ class JobArgs:
     def migration_type(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies migration type.
-        Changing this parameter will create a new resource. The options are as follows:
+        Changing this parameter will create a new resource. The default value is **FULL_INCR_TRANS**. The options are as follows:
         + **FULL_TRANS**: Full migration. Suitable for scenarios where services can be interrupted. It migrates all database
         objects and data, in a non-system database, to a destination database at a time.
         + **INCR_TRANS**: Incremental migration. Suitable for migration from an on-premises self-built database to a
@@ -327,8 +520,8 @@ class JobArgs:
     def multi_write(self) -> Optional[pulumi.Input[bool]]:
         """
         Specifies whether to enable multi write. It is mandatory when `type`
-        is `cloudDataGuard`. When the disaster recovery type is dual-active disaster recovery, set `multi_write` to `true`,
-        otherwise to `false`. The default value is `false`. Changing this parameter will create a new resource.
+        is **cloudDataGuard**. When the disaster recovery type is dual-active disaster recovery, set `multi_write` to **true**,
+        otherwise to **false**. The default value is **false**. Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "multi_write")
 
@@ -354,7 +547,7 @@ class JobArgs:
     def net_type(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the network type.
-        Changing this parameter will create a new resource. The options are as follows:
+        Changing this parameter will create a new resource. The default value is **eip**. The options are as follows:
         + **eip**: suitable for migration from an on-premises or other cloud database to a destination cloud database.
         An EIP will be automatically bound to the replication instance and released after the replication task is complete.
         + **vpc**: suitable for migration from one cloud database to another.
@@ -366,6 +559,87 @@ class JobArgs:
     @net_type.setter
     def net_type(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "net_type", value)
+
+    @property
+    @pulumi.getter(name="nodeType")
+    def node_type(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the node flavor type. Valid values are **micro**, **small**,
+        **medium**, **high**, **xlarge**, **2xlarge**. Default to **high**.
+        """
+        return pulumi.get(self, "node_type")
+
+    @node_type.setter
+    def node_type(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "node_type", value)
+
+    @property
+    @pulumi.getter(name="pauseMode")
+    def pause_mode(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the stop type of job. It's valid when `action` is **stop**.
+        Default value is **target**. The options are as follows:
+        + **target**: Stop playback.
+        + **all**: Stop log capture and playback.
+        """
+        return pulumi.get(self, "pause_mode")
+
+    @pause_mode.setter
+    def pause_mode(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "pause_mode", value)
+
+    @property
+    @pulumi.getter
+    def period(self) -> Optional[pulumi.Input[int]]:
+        """
+        schema: Internal
+        """
+        return pulumi.get(self, "period")
+
+    @period.setter
+    def period(self, value: Optional[pulumi.Input[int]]):
+        pulumi.set(self, "period", value)
+
+    @property
+    @pulumi.getter(name="periodUnit")
+    def period_unit(self) -> Optional[pulumi.Input[str]]:
+        """
+        schema: Internal
+        """
+        return pulumi.get(self, "period_unit")
+
+    @period_unit.setter
+    def period_unit(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "period_unit", value)
+
+    @property
+    @pulumi.getter(name="policyConfig")
+    def policy_config(self) -> Optional[pulumi.Input['JobPolicyConfigArgs']]:
+        """
+        Specifies the policy information used to configure migration and
+        synchronization policies. The policy_config structure is documented below.
+        Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "policy_config")
+
+    @policy_config.setter
+    def policy_config(self, value: Optional[pulumi.Input['JobPolicyConfigArgs']]):
+        pulumi.set(self, "policy_config", value)
+
+    @property
+    @pulumi.getter(name="publicIpLists")
+    def public_ip_lists(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['JobPublicIpListArgs']]]]:
+        """
+        Specifies the public IP list.
+        It can be specified when `net_type` is **eip**, and if it's not specified, DRS job will automatically bind a public IP.
+        Changing this parameter will create a new resource.
+        The public_ip_list structure is documented below.
+        """
+        return pulumi.get(self, "public_ip_lists")
+
+    @public_ip_lists.setter
+    def public_ip_lists(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['JobPublicIpListArgs']]]]):
+        pulumi.set(self, "public_ip_lists", value)
 
     @property
     @pulumi.getter
@@ -381,11 +655,24 @@ class JobArgs:
         pulumi.set(self, "region", value)
 
     @property
+    @pulumi.getter(name="slaveAz")
+    def slave_az(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the AZ where the standby task is located.
+        Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "slave_az")
+
+    @slave_az.setter
+    def slave_az(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "slave_az", value)
+
+    @property
     @pulumi.getter(name="startTime")
     def start_time(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the time to start speed limit, this time is UTC time. The start
-        time is the whole hour, if there is a minute, it will be ignored, the format is `hh:mm`, and the hour number
+        time is the whole hour, if there is a minute, it will be ignored, the format is **hh:mm**, and the hour number
         is two digits, for example: 01:00. Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "start_time")
@@ -396,10 +683,23 @@ class JobArgs:
 
     @property
     @pulumi.getter
+    def tables(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['JobTableArgs']]]]:
+        """
+        Specifies the list of the tables which the job migrates or synchronizes. Means to transfer
+        table level data. This parameter conflicts with `databases`.
+        The tables structure is documented below.
+        """
+        return pulumi.get(self, "tables")
+
+    @tables.setter
+    def tables(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['JobTableArgs']]]]):
+        pulumi.set(self, "tables", value)
+
+    @property
+    @pulumi.getter
     def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]:
         """
         Specifies the key/value pairs to associate with the DRS job.
-        Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "tags")
 
@@ -411,7 +711,12 @@ class JobArgs:
 @pulumi.input_type
 class _JobState:
     def __init__(__self__, *,
+                 action: Optional[pulumi.Input[str]] = None,
+                 alarm_notify: Optional[pulumi.Input['JobAlarmNotifyArgs']] = None,
+                 auto_renew: Optional[pulumi.Input[str]] = None,
+                 charging_mode: Optional[pulumi.Input[str]] = None,
                  created_at: Optional[pulumi.Input[str]] = None,
+                 databases: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  description: Optional[pulumi.Input[str]] = None,
                  destination_db: Optional[pulumi.Input['JobDestinationDbArgs']] = None,
                  destination_db_readnoly: Optional[pulumi.Input[bool]] = None,
@@ -420,52 +725,93 @@ class _JobState:
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  expired_days: Optional[pulumi.Input[int]] = None,
                  force_destroy: Optional[pulumi.Input[bool]] = None,
+                 is_open_fast_clean: Optional[pulumi.Input[bool]] = None,
+                 is_sync_re_edit: Optional[pulumi.Input[bool]] = None,
                  limit_speeds: Optional[pulumi.Input[Sequence[pulumi.Input['JobLimitSpeedArgs']]]] = None,
+                 master_az: Optional[pulumi.Input[str]] = None,
+                 master_job_id: Optional[pulumi.Input[str]] = None,
                  migrate_definer: Optional[pulumi.Input[bool]] = None,
                  migration_type: Optional[pulumi.Input[str]] = None,
                  multi_write: Optional[pulumi.Input[bool]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  net_type: Optional[pulumi.Input[str]] = None,
+                 node_type: Optional[pulumi.Input[str]] = None,
+                 order_id: Optional[pulumi.Input[str]] = None,
+                 original_job_direction: Optional[pulumi.Input[str]] = None,
+                 pause_mode: Optional[pulumi.Input[str]] = None,
+                 period: Optional[pulumi.Input[int]] = None,
+                 period_unit: Optional[pulumi.Input[str]] = None,
+                 policy_config: Optional[pulumi.Input['JobPolicyConfigArgs']] = None,
                  private_ip: Optional[pulumi.Input[str]] = None,
+                 progress: Optional[pulumi.Input[str]] = None,
                  public_ip: Optional[pulumi.Input[str]] = None,
+                 public_ip_lists: Optional[pulumi.Input[Sequence[pulumi.Input['JobPublicIpListArgs']]]] = None,
                  region: Optional[pulumi.Input[str]] = None,
+                 security_group_id: Optional[pulumi.Input[str]] = None,
+                 slave_az: Optional[pulumi.Input[str]] = None,
+                 slave_job_id: Optional[pulumi.Input[str]] = None,
                  source_db: Optional[pulumi.Input['JobSourceDbArgs']] = None,
                  start_time: Optional[pulumi.Input[str]] = None,
                  status: Optional[pulumi.Input[str]] = None,
+                 subnet_id: Optional[pulumi.Input[str]] = None,
+                 tables: Optional[pulumi.Input[Sequence[pulumi.Input['JobTableArgs']]]] = None,
                  tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
-                 type: Optional[pulumi.Input[str]] = None):
+                 type: Optional[pulumi.Input[str]] = None,
+                 updated_at: Optional[pulumi.Input[str]] = None,
+                 vpc_id: Optional[pulumi.Input[str]] = None):
         """
         Input properties used for looking up and filtering Job resources.
-        :param pulumi.Input[str] created_at: Create time. The format is ISO8601:YYYY-MM-DDThh:mm:ssZ
+        :param pulumi.Input[str] action: Specifies the action of job. The options are as follows:
+               + **stop**: Stop the job. Available when job status is **FULL_TRANSFER_STARTED**, **FULL_TRANSFER_COMPLETE** or
+               **INCRE_TRANSFER_STARTED**.
+               + **restart**: Continue the job. Available when job status is **PAUSING**.
+               + **reset**: Retry the job. Available when job status is **FULL_TRANSFER_FAILED** or **INCRE_TRANSFER_FAILED**.
+               + **start**: Start the job. Available when job status is **WAITING_FOR_START**.
+        :param pulumi.Input['JobAlarmNotifyArgs'] alarm_notify: Specifies the information body for setting task exception notification.
+               Changing this parameter will create a new resource.
+               The alarm_notify structure is documented below.
+        :param pulumi.Input[str] auto_renew: schema: Internal
+        :param pulumi.Input[str] charging_mode: schema: Internal
+        :param pulumi.Input[str] created_at: Create time. The format is ISO8601:YYYY-MM-DDThh:mm:ssZ.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] databases: Specifies the list of the databases which the job migrates or synchronizes. Means to
+               transfer database level data. This parameter conflicts with `tables`.
         :param pulumi.Input[str] description: Specifies the description of the job, which contain a
                maximum of 256 characters, and certain special characters (including !<>&'"\\\\) are not allowed.
         :param pulumi.Input['JobDestinationDbArgs'] destination_db: Specifies the destination database configuration.
-               The `db_info` object structure of the `destination_db` is documented below.
+               The db_info structure of the `destination_db` is documented below.
                Changing this parameter will create a new resource.
         :param pulumi.Input[bool] destination_db_readnoly: Specifies the destination DB instance as read-only helps
                ensure the migration is successful. Once the migration is complete, the DB instance automatically changes to
-               Read/Write. The default value is `true`. Changing this parameter will create a new resource.
+               Read/Write. Changing this parameter will create a new resource.
         :param pulumi.Input[str] direction: Specifies the direction of data flow.
                Changing this parameter will create a new resource. The options are as follows:
                + **up**: To the cloud. The destination database must be a database in the current cloud.
                + **down**: Out of the cloud. The source database must be a database in the current cloud.
                + **non-dbs**: self-built database.
         :param pulumi.Input[str] engine_type: Specifies the engine type of database. Changing this parameter will
-               create a new resource. The options are as follows: `mysql`, `mongodb`, `gaussdbv5`.
+               create a new resource. The options are as follows: **mysql**, **mongodb**, **gaussdbv5**, **taurus**, **gaussdbv5ha**,
+               **kafka**, **postgresql**.
         :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project id.
                Changing this parameter will create a new resource.
         :param pulumi.Input[int] expired_days: Specifies how many days after the task is abnormal, it will automatically
                end. The value ranges from 14 to 100. the default value is `14`. Changing this parameter will create a new resource.
         :param pulumi.Input[bool] force_destroy: Specifies whether to forcibly destroy the job even if it is running.
-               The default value is `false`.
-        :param pulumi.Input[Sequence[pulumi.Input['JobLimitSpeedArgs']]] limit_speeds: Specifies the migration speed by setting a time period.
-               The default is no speed limit. The maximum length is 3. Structure is documented below.
+               The default value is **false**.
+        :param pulumi.Input[bool] is_open_fast_clean: Specifies whether to enable binlog clearing for RDS for MySQL or RDS
+               for MariaDB. Defaults to **false**.
                Changing this parameter will create a new resource.
+        :param pulumi.Input[bool] is_sync_re_edit: Specifies whether to start the sync re-edit job. It's valid when `action` is **restart**.
+        :param pulumi.Input[Sequence[pulumi.Input['JobLimitSpeedArgs']]] limit_speeds: Specifies the migration speed by setting a time period.
+               The default is no speed limit. The maximum length is 3. The limit_speed structure is documented
+               below. Changing this parameter will create a new resource.
+        :param pulumi.Input[str] master_az: Specifies the AZ where the primary task is located.
+               Changing this parameter will create a new resource.
+        :param pulumi.Input[str] master_job_id: The master job ID which will return if job is dual-AZ.
         :param pulumi.Input[bool] migrate_definer: Specifies whether to migrate the definers of all source database
-               objects to the `user` of `destination_db`. The default value is `true`.
+               objects to the `user` of `destination_db`. The default value is **true**.
                Changing this parameter will create a new resource.
         :param pulumi.Input[str] migration_type: Specifies migration type.
-               Changing this parameter will create a new resource. The options are as follows:
+               Changing this parameter will create a new resource. The default value is **FULL_INCR_TRANS**. The options are as follows:
                + **FULL_TRANS**: Full migration. Suitable for scenarios where services can be interrupted. It migrates all database
                objects and data, in a non-system database, to a destination database at a time.
                + **INCR_TRANS**: Incremental migration. Suitable for migration from an on-premises self-built database to a
@@ -474,38 +820,77 @@ class _JobState:
                migration initializes the destination database, an incremental migration parses logs to ensure data consistency
                between the source and destination databases.
         :param pulumi.Input[bool] multi_write: Specifies whether to enable multi write. It is mandatory when `type`
-               is `cloudDataGuard`. When the disaster recovery type is dual-active disaster recovery, set `multi_write` to `true`,
-               otherwise to `false`. The default value is `false`. Changing this parameter will create a new resource.
+               is **cloudDataGuard**. When the disaster recovery type is dual-active disaster recovery, set `multi_write` to **true**,
+               otherwise to **false**. The default value is **false**. Changing this parameter will create a new resource.
         :param pulumi.Input[str] name: Specifies the name of database.
                Changing this parameter will create a new resource.
         :param pulumi.Input[str] net_type: Specifies the network type.
-               Changing this parameter will create a new resource. The options are as follows:
+               Changing this parameter will create a new resource. The default value is **eip**. The options are as follows:
                + **eip**: suitable for migration from an on-premises or other cloud database to a destination cloud database.
                An EIP will be automatically bound to the replication instance and released after the replication task is complete.
                + **vpc**: suitable for migration from one cloud database to another.
                + **vpn**: suitable for migration from an on-premises self-built database to a destination cloud database,
                or from one cloud database to another in a different region.
+        :param pulumi.Input[str] node_type: Specifies the node flavor type. Valid values are **micro**, **small**,
+               **medium**, **high**, **xlarge**, **2xlarge**. Default to **high**.
+        :param pulumi.Input[str] order_id: The order ID which will return if `charging_mode` is **prePaid**.
+        :param pulumi.Input[str] original_job_direction: The original job direction.
+        :param pulumi.Input[str] pause_mode: Specifies the stop type of job. It's valid when `action` is **stop**.
+               Default value is **target**. The options are as follows:
+               + **target**: Stop playback.
+               + **all**: Stop log capture and playback.
+        :param pulumi.Input[int] period: schema: Internal
+        :param pulumi.Input[str] period_unit: schema: Internal
+        :param pulumi.Input['JobPolicyConfigArgs'] policy_config: Specifies the policy information used to configure migration and
+               synchronization policies. The policy_config structure is documented below.
+               Changing this parameter will create a new resource.
         :param pulumi.Input[str] private_ip: Private IP.
-        :param pulumi.Input[str] public_ip: Public IP.
+        :param pulumi.Input[str] progress: Progress.
+        :param pulumi.Input[str] public_ip: Specifies public IP.
+               Changing this parameter will create a new resource.
+        :param pulumi.Input[Sequence[pulumi.Input['JobPublicIpListArgs']]] public_ip_lists: Specifies the public IP list.
+               It can be specified when `net_type` is **eip**, and if it's not specified, DRS job will automatically bind a public IP.
+               Changing this parameter will create a new resource.
+               The public_ip_list structure is documented below.
         :param pulumi.Input[str] region: Specifies the region which the database belongs when it is a RDS database.
                Changing this parameter will create a new resource.
+        :param pulumi.Input[str] security_group_id: The security group ID to which the databese instance belongs.
+        :param pulumi.Input[str] slave_az: Specifies the AZ where the standby task is located.
+               Changing this parameter will create a new resource.
+        :param pulumi.Input[str] slave_job_id: The slave job ID which will return if job is dual-AZ.
         :param pulumi.Input['JobSourceDbArgs'] source_db: Specifies the source database configuration.
-               The `db_info` object structure of the `source_db` is documented below.
+               The db_info structure of the `source_db` is documented below.
                Changing this parameter will create a new resource.
         :param pulumi.Input[str] start_time: Specifies the time to start speed limit, this time is UTC time. The start
-               time is the whole hour, if there is a minute, it will be ignored, the format is `hh:mm`, and the hour number
+               time is the whole hour, if there is a minute, it will be ignored, the format is **hh:mm**, and the hour number
                is two digits, for example: 01:00. Changing this parameter will create a new resource.
         :param pulumi.Input[str] status: Status.
+        :param pulumi.Input[str] subnet_id: Specifies subnet ID of database when it is a RDS database.
+               It is mandatory when `direction` is **down**. Changing this parameter will create a new resource.
+        :param pulumi.Input[Sequence[pulumi.Input['JobTableArgs']]] tables: Specifies the list of the tables which the job migrates or synchronizes. Means to transfer
+               table level data. This parameter conflicts with `databases`.
+               The tables structure is documented below.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the DRS job.
+        :param pulumi.Input[str] type: Specifies the type of a task with an EIP bound.
+               Valid values are **master** and **slave**.
+               + In a primary/standby task, **master** indicates the primary task, and **slave** indicates the standby task.
+               + In other cases, the value is fixed to **master**.
+        :param pulumi.Input[str] updated_at: Update time. The format is ISO8601:YYYY-MM-DDThh:mm:ssZ.
+        :param pulumi.Input[str] vpc_id: Specifies vpc ID of database.
                Changing this parameter will create a new resource.
-        :param pulumi.Input[str] type: Specifies the job type. Changing this parameter will create a new
-               resource. The options are as follows:
-               + **migration**: Online Migration.
-               + **sync**: Data Synchronization.
-               + **cloudDataGuard**: Disaster Recovery.
         """
+        if action is not None:
+            pulumi.set(__self__, "action", action)
+        if alarm_notify is not None:
+            pulumi.set(__self__, "alarm_notify", alarm_notify)
+        if auto_renew is not None:
+            pulumi.set(__self__, "auto_renew", auto_renew)
+        if charging_mode is not None:
+            pulumi.set(__self__, "charging_mode", charging_mode)
         if created_at is not None:
             pulumi.set(__self__, "created_at", created_at)
+        if databases is not None:
+            pulumi.set(__self__, "databases", databases)
         if description is not None:
             pulumi.set(__self__, "description", description)
         if destination_db is not None:
@@ -522,8 +907,16 @@ class _JobState:
             pulumi.set(__self__, "expired_days", expired_days)
         if force_destroy is not None:
             pulumi.set(__self__, "force_destroy", force_destroy)
+        if is_open_fast_clean is not None:
+            pulumi.set(__self__, "is_open_fast_clean", is_open_fast_clean)
+        if is_sync_re_edit is not None:
+            pulumi.set(__self__, "is_sync_re_edit", is_sync_re_edit)
         if limit_speeds is not None:
             pulumi.set(__self__, "limit_speeds", limit_speeds)
+        if master_az is not None:
+            pulumi.set(__self__, "master_az", master_az)
+        if master_job_id is not None:
+            pulumi.set(__self__, "master_job_id", master_job_id)
         if migrate_definer is not None:
             pulumi.set(__self__, "migrate_definer", migrate_definer)
         if migration_type is not None:
@@ -534,34 +927,134 @@ class _JobState:
             pulumi.set(__self__, "name", name)
         if net_type is not None:
             pulumi.set(__self__, "net_type", net_type)
+        if node_type is not None:
+            pulumi.set(__self__, "node_type", node_type)
+        if order_id is not None:
+            pulumi.set(__self__, "order_id", order_id)
+        if original_job_direction is not None:
+            pulumi.set(__self__, "original_job_direction", original_job_direction)
+        if pause_mode is not None:
+            pulumi.set(__self__, "pause_mode", pause_mode)
+        if period is not None:
+            pulumi.set(__self__, "period", period)
+        if period_unit is not None:
+            pulumi.set(__self__, "period_unit", period_unit)
+        if policy_config is not None:
+            pulumi.set(__self__, "policy_config", policy_config)
         if private_ip is not None:
             pulumi.set(__self__, "private_ip", private_ip)
+        if progress is not None:
+            pulumi.set(__self__, "progress", progress)
         if public_ip is not None:
             pulumi.set(__self__, "public_ip", public_ip)
+        if public_ip_lists is not None:
+            pulumi.set(__self__, "public_ip_lists", public_ip_lists)
         if region is not None:
             pulumi.set(__self__, "region", region)
+        if security_group_id is not None:
+            pulumi.set(__self__, "security_group_id", security_group_id)
+        if slave_az is not None:
+            pulumi.set(__self__, "slave_az", slave_az)
+        if slave_job_id is not None:
+            pulumi.set(__self__, "slave_job_id", slave_job_id)
         if source_db is not None:
             pulumi.set(__self__, "source_db", source_db)
         if start_time is not None:
             pulumi.set(__self__, "start_time", start_time)
         if status is not None:
             pulumi.set(__self__, "status", status)
+        if subnet_id is not None:
+            pulumi.set(__self__, "subnet_id", subnet_id)
+        if tables is not None:
+            pulumi.set(__self__, "tables", tables)
         if tags is not None:
             pulumi.set(__self__, "tags", tags)
         if type is not None:
             pulumi.set(__self__, "type", type)
+        if updated_at is not None:
+            pulumi.set(__self__, "updated_at", updated_at)
+        if vpc_id is not None:
+            pulumi.set(__self__, "vpc_id", vpc_id)
+
+    @property
+    @pulumi.getter
+    def action(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the action of job. The options are as follows:
+        + **stop**: Stop the job. Available when job status is **FULL_TRANSFER_STARTED**, **FULL_TRANSFER_COMPLETE** or
+        **INCRE_TRANSFER_STARTED**.
+        + **restart**: Continue the job. Available when job status is **PAUSING**.
+        + **reset**: Retry the job. Available when job status is **FULL_TRANSFER_FAILED** or **INCRE_TRANSFER_FAILED**.
+        + **start**: Start the job. Available when job status is **WAITING_FOR_START**.
+        """
+        return pulumi.get(self, "action")
+
+    @action.setter
+    def action(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "action", value)
+
+    @property
+    @pulumi.getter(name="alarmNotify")
+    def alarm_notify(self) -> Optional[pulumi.Input['JobAlarmNotifyArgs']]:
+        """
+        Specifies the information body for setting task exception notification.
+        Changing this parameter will create a new resource.
+        The alarm_notify structure is documented below.
+        """
+        return pulumi.get(self, "alarm_notify")
+
+    @alarm_notify.setter
+    def alarm_notify(self, value: Optional[pulumi.Input['JobAlarmNotifyArgs']]):
+        pulumi.set(self, "alarm_notify", value)
+
+    @property
+    @pulumi.getter(name="autoRenew")
+    def auto_renew(self) -> Optional[pulumi.Input[str]]:
+        """
+        schema: Internal
+        """
+        return pulumi.get(self, "auto_renew")
+
+    @auto_renew.setter
+    def auto_renew(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "auto_renew", value)
+
+    @property
+    @pulumi.getter(name="chargingMode")
+    def charging_mode(self) -> Optional[pulumi.Input[str]]:
+        """
+        schema: Internal
+        """
+        return pulumi.get(self, "charging_mode")
+
+    @charging_mode.setter
+    def charging_mode(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "charging_mode", value)
 
     @property
     @pulumi.getter(name="createdAt")
     def created_at(self) -> Optional[pulumi.Input[str]]:
         """
-        Create time. The format is ISO8601:YYYY-MM-DDThh:mm:ssZ
+        Create time. The format is ISO8601:YYYY-MM-DDThh:mm:ssZ.
         """
         return pulumi.get(self, "created_at")
 
     @created_at.setter
     def created_at(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "created_at", value)
+
+    @property
+    @pulumi.getter
+    def databases(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]:
+        """
+        Specifies the list of the databases which the job migrates or synchronizes. Means to
+        transfer database level data. This parameter conflicts with `tables`.
+        """
+        return pulumi.get(self, "databases")
+
+    @databases.setter
+    def databases(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]):
+        pulumi.set(self, "databases", value)
 
     @property
     @pulumi.getter
@@ -581,7 +1074,7 @@ class _JobState:
     def destination_db(self) -> Optional[pulumi.Input['JobDestinationDbArgs']]:
         """
         Specifies the destination database configuration.
-        The `db_info` object structure of the `destination_db` is documented below.
+        The db_info structure of the `destination_db` is documented below.
         Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "destination_db")
@@ -596,7 +1089,7 @@ class _JobState:
         """
         Specifies the destination DB instance as read-only helps
         ensure the migration is successful. Once the migration is complete, the DB instance automatically changes to
-        Read/Write. The default value is `true`. Changing this parameter will create a new resource.
+        Read/Write. Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "destination_db_readnoly")
 
@@ -625,7 +1118,8 @@ class _JobState:
     def engine_type(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the engine type of database. Changing this parameter will
-        create a new resource. The options are as follows: `mysql`, `mongodb`, `gaussdbv5`.
+        create a new resource. The options are as follows: **mysql**, **mongodb**, **gaussdbv5**, **taurus**, **gaussdbv5ha**,
+        **kafka**, **postgresql**.
         """
         return pulumi.get(self, "engine_type")
 
@@ -664,7 +1158,7 @@ class _JobState:
     def force_destroy(self) -> Optional[pulumi.Input[bool]]:
         """
         Specifies whether to forcibly destroy the job even if it is running.
-        The default value is `false`.
+        The default value is **false**.
         """
         return pulumi.get(self, "force_destroy")
 
@@ -673,12 +1167,38 @@ class _JobState:
         pulumi.set(self, "force_destroy", value)
 
     @property
+    @pulumi.getter(name="isOpenFastClean")
+    def is_open_fast_clean(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies whether to enable binlog clearing for RDS for MySQL or RDS
+        for MariaDB. Defaults to **false**.
+        Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "is_open_fast_clean")
+
+    @is_open_fast_clean.setter
+    def is_open_fast_clean(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "is_open_fast_clean", value)
+
+    @property
+    @pulumi.getter(name="isSyncReEdit")
+    def is_sync_re_edit(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies whether to start the sync re-edit job. It's valid when `action` is **restart**.
+        """
+        return pulumi.get(self, "is_sync_re_edit")
+
+    @is_sync_re_edit.setter
+    def is_sync_re_edit(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "is_sync_re_edit", value)
+
+    @property
     @pulumi.getter(name="limitSpeeds")
     def limit_speeds(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['JobLimitSpeedArgs']]]]:
         """
         Specifies the migration speed by setting a time period.
-        The default is no speed limit. The maximum length is 3. Structure is documented below.
-        Changing this parameter will create a new resource.
+        The default is no speed limit. The maximum length is 3. The limit_speed structure is documented
+        below. Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "limit_speeds")
 
@@ -687,11 +1207,36 @@ class _JobState:
         pulumi.set(self, "limit_speeds", value)
 
     @property
+    @pulumi.getter(name="masterAz")
+    def master_az(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the AZ where the primary task is located.
+        Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "master_az")
+
+    @master_az.setter
+    def master_az(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "master_az", value)
+
+    @property
+    @pulumi.getter(name="masterJobId")
+    def master_job_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        The master job ID which will return if job is dual-AZ.
+        """
+        return pulumi.get(self, "master_job_id")
+
+    @master_job_id.setter
+    def master_job_id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "master_job_id", value)
+
+    @property
     @pulumi.getter(name="migrateDefiner")
     def migrate_definer(self) -> Optional[pulumi.Input[bool]]:
         """
         Specifies whether to migrate the definers of all source database
-        objects to the `user` of `destination_db`. The default value is `true`.
+        objects to the `user` of `destination_db`. The default value is **true**.
         Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "migrate_definer")
@@ -705,7 +1250,7 @@ class _JobState:
     def migration_type(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies migration type.
-        Changing this parameter will create a new resource. The options are as follows:
+        Changing this parameter will create a new resource. The default value is **FULL_INCR_TRANS**. The options are as follows:
         + **FULL_TRANS**: Full migration. Suitable for scenarios where services can be interrupted. It migrates all database
         objects and data, in a non-system database, to a destination database at a time.
         + **INCR_TRANS**: Incremental migration. Suitable for migration from an on-premises self-built database to a
@@ -725,8 +1270,8 @@ class _JobState:
     def multi_write(self) -> Optional[pulumi.Input[bool]]:
         """
         Specifies whether to enable multi write. It is mandatory when `type`
-        is `cloudDataGuard`. When the disaster recovery type is dual-active disaster recovery, set `multi_write` to `true`,
-        otherwise to `false`. The default value is `false`. Changing this parameter will create a new resource.
+        is **cloudDataGuard**. When the disaster recovery type is dual-active disaster recovery, set `multi_write` to **true**,
+        otherwise to **false**. The default value is **false**. Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "multi_write")
 
@@ -752,7 +1297,7 @@ class _JobState:
     def net_type(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the network type.
-        Changing this parameter will create a new resource. The options are as follows:
+        Changing this parameter will create a new resource. The default value is **eip**. The options are as follows:
         + **eip**: suitable for migration from an on-premises or other cloud database to a destination cloud database.
         An EIP will be automatically bound to the replication instance and released after the replication task is complete.
         + **vpc**: suitable for migration from one cloud database to another.
@@ -764,6 +1309,96 @@ class _JobState:
     @net_type.setter
     def net_type(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "net_type", value)
+
+    @property
+    @pulumi.getter(name="nodeType")
+    def node_type(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the node flavor type. Valid values are **micro**, **small**,
+        **medium**, **high**, **xlarge**, **2xlarge**. Default to **high**.
+        """
+        return pulumi.get(self, "node_type")
+
+    @node_type.setter
+    def node_type(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "node_type", value)
+
+    @property
+    @pulumi.getter(name="orderId")
+    def order_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        The order ID which will return if `charging_mode` is **prePaid**.
+        """
+        return pulumi.get(self, "order_id")
+
+    @order_id.setter
+    def order_id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "order_id", value)
+
+    @property
+    @pulumi.getter(name="originalJobDirection")
+    def original_job_direction(self) -> Optional[pulumi.Input[str]]:
+        """
+        The original job direction.
+        """
+        return pulumi.get(self, "original_job_direction")
+
+    @original_job_direction.setter
+    def original_job_direction(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "original_job_direction", value)
+
+    @property
+    @pulumi.getter(name="pauseMode")
+    def pause_mode(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the stop type of job. It's valid when `action` is **stop**.
+        Default value is **target**. The options are as follows:
+        + **target**: Stop playback.
+        + **all**: Stop log capture and playback.
+        """
+        return pulumi.get(self, "pause_mode")
+
+    @pause_mode.setter
+    def pause_mode(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "pause_mode", value)
+
+    @property
+    @pulumi.getter
+    def period(self) -> Optional[pulumi.Input[int]]:
+        """
+        schema: Internal
+        """
+        return pulumi.get(self, "period")
+
+    @period.setter
+    def period(self, value: Optional[pulumi.Input[int]]):
+        pulumi.set(self, "period", value)
+
+    @property
+    @pulumi.getter(name="periodUnit")
+    def period_unit(self) -> Optional[pulumi.Input[str]]:
+        """
+        schema: Internal
+        """
+        return pulumi.get(self, "period_unit")
+
+    @period_unit.setter
+    def period_unit(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "period_unit", value)
+
+    @property
+    @pulumi.getter(name="policyConfig")
+    def policy_config(self) -> Optional[pulumi.Input['JobPolicyConfigArgs']]:
+        """
+        Specifies the policy information used to configure migration and
+        synchronization policies. The policy_config structure is documented below.
+        Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "policy_config")
+
+    @policy_config.setter
+    def policy_config(self, value: Optional[pulumi.Input['JobPolicyConfigArgs']]):
+        pulumi.set(self, "policy_config", value)
 
     @property
     @pulumi.getter(name="privateIp")
@@ -778,16 +1413,44 @@ class _JobState:
         pulumi.set(self, "private_ip", value)
 
     @property
+    @pulumi.getter
+    def progress(self) -> Optional[pulumi.Input[str]]:
+        """
+        Progress.
+        """
+        return pulumi.get(self, "progress")
+
+    @progress.setter
+    def progress(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "progress", value)
+
+    @property
     @pulumi.getter(name="publicIp")
     def public_ip(self) -> Optional[pulumi.Input[str]]:
         """
-        Public IP.
+        Specifies public IP.
+        Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "public_ip")
 
     @public_ip.setter
     def public_ip(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "public_ip", value)
+
+    @property
+    @pulumi.getter(name="publicIpLists")
+    def public_ip_lists(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['JobPublicIpListArgs']]]]:
+        """
+        Specifies the public IP list.
+        It can be specified when `net_type` is **eip**, and if it's not specified, DRS job will automatically bind a public IP.
+        Changing this parameter will create a new resource.
+        The public_ip_list structure is documented below.
+        """
+        return pulumi.get(self, "public_ip_lists")
+
+    @public_ip_lists.setter
+    def public_ip_lists(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['JobPublicIpListArgs']]]]):
+        pulumi.set(self, "public_ip_lists", value)
 
     @property
     @pulumi.getter
@@ -803,11 +1466,48 @@ class _JobState:
         pulumi.set(self, "region", value)
 
     @property
+    @pulumi.getter(name="securityGroupId")
+    def security_group_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        The security group ID to which the databese instance belongs.
+        """
+        return pulumi.get(self, "security_group_id")
+
+    @security_group_id.setter
+    def security_group_id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "security_group_id", value)
+
+    @property
+    @pulumi.getter(name="slaveAz")
+    def slave_az(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the AZ where the standby task is located.
+        Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "slave_az")
+
+    @slave_az.setter
+    def slave_az(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "slave_az", value)
+
+    @property
+    @pulumi.getter(name="slaveJobId")
+    def slave_job_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        The slave job ID which will return if job is dual-AZ.
+        """
+        return pulumi.get(self, "slave_job_id")
+
+    @slave_job_id.setter
+    def slave_job_id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "slave_job_id", value)
+
+    @property
     @pulumi.getter(name="sourceDb")
     def source_db(self) -> Optional[pulumi.Input['JobSourceDbArgs']]:
         """
         Specifies the source database configuration.
-        The `db_info` object structure of the `source_db` is documented below.
+        The db_info structure of the `source_db` is documented below.
         Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "source_db")
@@ -821,7 +1521,7 @@ class _JobState:
     def start_time(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the time to start speed limit, this time is UTC time. The start
-        time is the whole hour, if there is a minute, it will be ignored, the format is `hh:mm`, and the hour number
+        time is the whole hour, if there is a minute, it will be ignored, the format is **hh:mm**, and the hour number
         is two digits, for example: 01:00. Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "start_time")
@@ -843,11 +1543,37 @@ class _JobState:
         pulumi.set(self, "status", value)
 
     @property
+    @pulumi.getter(name="subnetId")
+    def subnet_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies subnet ID of database when it is a RDS database.
+        It is mandatory when `direction` is **down**. Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "subnet_id")
+
+    @subnet_id.setter
+    def subnet_id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "subnet_id", value)
+
+    @property
+    @pulumi.getter
+    def tables(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['JobTableArgs']]]]:
+        """
+        Specifies the list of the tables which the job migrates or synchronizes. Means to transfer
+        table level data. This parameter conflicts with `databases`.
+        The tables structure is documented below.
+        """
+        return pulumi.get(self, "tables")
+
+    @tables.setter
+    def tables(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['JobTableArgs']]]]):
+        pulumi.set(self, "tables", value)
+
+    @property
     @pulumi.getter
     def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]:
         """
         Specifies the key/value pairs to associate with the DRS job.
-        Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "tags")
 
@@ -859,11 +1585,10 @@ class _JobState:
     @pulumi.getter
     def type(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the job type. Changing this parameter will create a new
-        resource. The options are as follows:
-        + **migration**: Online Migration.
-        + **sync**: Data Synchronization.
-        + **cloudDataGuard**: Disaster Recovery.
+        Specifies the type of a task with an EIP bound.
+        Valid values are **master** and **slave**.
+        + In a primary/standby task, **master** indicates the primary task, and **slave** indicates the standby task.
+        + In other cases, the value is fixed to **master**.
         """
         return pulumi.get(self, "type")
 
@@ -871,12 +1596,42 @@ class _JobState:
     def type(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "type", value)
 
+    @property
+    @pulumi.getter(name="updatedAt")
+    def updated_at(self) -> Optional[pulumi.Input[str]]:
+        """
+        Update time. The format is ISO8601:YYYY-MM-DDThh:mm:ssZ.
+        """
+        return pulumi.get(self, "updated_at")
+
+    @updated_at.setter
+    def updated_at(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "updated_at", value)
+
+    @property
+    @pulumi.getter(name="vpcId")
+    def vpc_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies vpc ID of database.
+        Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "vpc_id")
+
+    @vpc_id.setter
+    def vpc_id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "vpc_id", value)
+
 
 class Job(pulumi.CustomResource):
     @overload
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
+                 action: Optional[pulumi.Input[str]] = None,
+                 alarm_notify: Optional[pulumi.Input[pulumi.InputType['JobAlarmNotifyArgs']]] = None,
+                 auto_renew: Optional[pulumi.Input[str]] = None,
+                 charging_mode: Optional[pulumi.Input[str]] = None,
+                 databases: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  description: Optional[pulumi.Input[str]] = None,
                  destination_db: Optional[pulumi.Input[pulumi.InputType['JobDestinationDbArgs']]] = None,
                  destination_db_readnoly: Optional[pulumi.Input[bool]] = None,
@@ -885,15 +1640,26 @@ class Job(pulumi.CustomResource):
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  expired_days: Optional[pulumi.Input[int]] = None,
                  force_destroy: Optional[pulumi.Input[bool]] = None,
+                 is_open_fast_clean: Optional[pulumi.Input[bool]] = None,
+                 is_sync_re_edit: Optional[pulumi.Input[bool]] = None,
                  limit_speeds: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['JobLimitSpeedArgs']]]]] = None,
+                 master_az: Optional[pulumi.Input[str]] = None,
                  migrate_definer: Optional[pulumi.Input[bool]] = None,
                  migration_type: Optional[pulumi.Input[str]] = None,
                  multi_write: Optional[pulumi.Input[bool]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  net_type: Optional[pulumi.Input[str]] = None,
+                 node_type: Optional[pulumi.Input[str]] = None,
+                 pause_mode: Optional[pulumi.Input[str]] = None,
+                 period: Optional[pulumi.Input[int]] = None,
+                 period_unit: Optional[pulumi.Input[str]] = None,
+                 policy_config: Optional[pulumi.Input[pulumi.InputType['JobPolicyConfigArgs']]] = None,
+                 public_ip_lists: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['JobPublicIpListArgs']]]]] = None,
                  region: Optional[pulumi.Input[str]] = None,
+                 slave_az: Optional[pulumi.Input[str]] = None,
                  source_db: Optional[pulumi.Input[pulumi.InputType['JobSourceDbArgs']]] = None,
                  start_time: Optional[pulumi.Input[str]] = None,
+                 tables: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['JobTableArgs']]]]] = None,
                  tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  type: Optional[pulumi.Input[str]] = None,
                  __props__=None):
@@ -904,13 +1670,13 @@ class Job(pulumi.CustomResource):
 
         ## Import
 
-        The DRS job can be imported by `id`. For example,
+        The DRS job can be imported by `id`. e.g. bash
 
         ```sh
-         $ pulumi import huaweicloud:Drs/job:Job test b11b407c-e604-4e8d-8bc4-92398320b847
+         $ pulumi import huaweicloud:Drs/job:Job test <id>
         ```
 
-         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`enterprise_project_id`, `tags`, `force_destroy`, `source_db.0.password` and `destination_db.0.password`.It is generally recommended running `terraform plan` after importing a job. You can then decide if changes should be applied to the job, or the resource definition should be updated to align with the job. Also you can ignore changes as below. resource "huaweicloud_drs_job" "test" {
+         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`enterprise_project_id`, `force_destroy`, `source_db.0.password`, `destination_db.0.password`, `source_db.0.ip`, `destination_db.0.ip`, `source_db.0.kafka_security_config.0.trust_store_password`, `destination_db.0.kafka_security_config.0.trust_store_password`, `source_db.0.kafka_security_config.0.key_store_password`,`destination_db.0.kafka_security_config.0.key_store_password`, `source_db.0.kafka_security_config.0.key_password`, `destination_db.0.kafka_security_config.0.key_password`, `action`, `is_sync_re_edit`, `pause_mode`, `auto_renew`, `alarm_notify.0.topic_urn`, `policy_config`, `engine_type`, `public_ip_list`, `start_time`. It is generally recommended running **terraform plan** after importing a job. You can then decide if changes should be applied to the job, or the resource definition should be updated to align with the job. Also you can ignore changes as below. hcl resource "huaweicloud_drs_job" "test" {
 
          ...
 
@@ -918,7 +1684,7 @@ class Job(pulumi.CustomResource):
 
          ignore_changes = [
 
-         source_db.0.password,destination_db.0.password
+         source_db.0.password, destination_db.0.password, action,
 
          ]
 
@@ -926,35 +1692,55 @@ class Job(pulumi.CustomResource):
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
+        :param pulumi.Input[str] action: Specifies the action of job. The options are as follows:
+               + **stop**: Stop the job. Available when job status is **FULL_TRANSFER_STARTED**, **FULL_TRANSFER_COMPLETE** or
+               **INCRE_TRANSFER_STARTED**.
+               + **restart**: Continue the job. Available when job status is **PAUSING**.
+               + **reset**: Retry the job. Available when job status is **FULL_TRANSFER_FAILED** or **INCRE_TRANSFER_FAILED**.
+               + **start**: Start the job. Available when job status is **WAITING_FOR_START**.
+        :param pulumi.Input[pulumi.InputType['JobAlarmNotifyArgs']] alarm_notify: Specifies the information body for setting task exception notification.
+               Changing this parameter will create a new resource.
+               The alarm_notify structure is documented below.
+        :param pulumi.Input[str] auto_renew: schema: Internal
+        :param pulumi.Input[str] charging_mode: schema: Internal
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] databases: Specifies the list of the databases which the job migrates or synchronizes. Means to
+               transfer database level data. This parameter conflicts with `tables`.
         :param pulumi.Input[str] description: Specifies the description of the job, which contain a
                maximum of 256 characters, and certain special characters (including !<>&'"\\\\) are not allowed.
         :param pulumi.Input[pulumi.InputType['JobDestinationDbArgs']] destination_db: Specifies the destination database configuration.
-               The `db_info` object structure of the `destination_db` is documented below.
+               The db_info structure of the `destination_db` is documented below.
                Changing this parameter will create a new resource.
         :param pulumi.Input[bool] destination_db_readnoly: Specifies the destination DB instance as read-only helps
                ensure the migration is successful. Once the migration is complete, the DB instance automatically changes to
-               Read/Write. The default value is `true`. Changing this parameter will create a new resource.
+               Read/Write. Changing this parameter will create a new resource.
         :param pulumi.Input[str] direction: Specifies the direction of data flow.
                Changing this parameter will create a new resource. The options are as follows:
                + **up**: To the cloud. The destination database must be a database in the current cloud.
                + **down**: Out of the cloud. The source database must be a database in the current cloud.
                + **non-dbs**: self-built database.
         :param pulumi.Input[str] engine_type: Specifies the engine type of database. Changing this parameter will
-               create a new resource. The options are as follows: `mysql`, `mongodb`, `gaussdbv5`.
+               create a new resource. The options are as follows: **mysql**, **mongodb**, **gaussdbv5**, **taurus**, **gaussdbv5ha**,
+               **kafka**, **postgresql**.
         :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project id.
                Changing this parameter will create a new resource.
         :param pulumi.Input[int] expired_days: Specifies how many days after the task is abnormal, it will automatically
                end. The value ranges from 14 to 100. the default value is `14`. Changing this parameter will create a new resource.
         :param pulumi.Input[bool] force_destroy: Specifies whether to forcibly destroy the job even if it is running.
-               The default value is `false`.
+               The default value is **false**.
+        :param pulumi.Input[bool] is_open_fast_clean: Specifies whether to enable binlog clearing for RDS for MySQL or RDS
+               for MariaDB. Defaults to **false**.
+               Changing this parameter will create a new resource.
+        :param pulumi.Input[bool] is_sync_re_edit: Specifies whether to start the sync re-edit job. It's valid when `action` is **restart**.
         :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['JobLimitSpeedArgs']]]] limit_speeds: Specifies the migration speed by setting a time period.
-               The default is no speed limit. The maximum length is 3. Structure is documented below.
+               The default is no speed limit. The maximum length is 3. The limit_speed structure is documented
+               below. Changing this parameter will create a new resource.
+        :param pulumi.Input[str] master_az: Specifies the AZ where the primary task is located.
                Changing this parameter will create a new resource.
         :param pulumi.Input[bool] migrate_definer: Specifies whether to migrate the definers of all source database
-               objects to the `user` of `destination_db`. The default value is `true`.
+               objects to the `user` of `destination_db`. The default value is **true**.
                Changing this parameter will create a new resource.
         :param pulumi.Input[str] migration_type: Specifies migration type.
-               Changing this parameter will create a new resource. The options are as follows:
+               Changing this parameter will create a new resource. The default value is **FULL_INCR_TRANS**. The options are as follows:
                + **FULL_TRANS**: Full migration. Suitable for scenarios where services can be interrupted. It migrates all database
                objects and data, in a non-system database, to a destination database at a time.
                + **INCR_TRANS**: Incremental migration. Suitable for migration from an on-premises self-built database to a
@@ -963,32 +1749,50 @@ class Job(pulumi.CustomResource):
                migration initializes the destination database, an incremental migration parses logs to ensure data consistency
                between the source and destination databases.
         :param pulumi.Input[bool] multi_write: Specifies whether to enable multi write. It is mandatory when `type`
-               is `cloudDataGuard`. When the disaster recovery type is dual-active disaster recovery, set `multi_write` to `true`,
-               otherwise to `false`. The default value is `false`. Changing this parameter will create a new resource.
+               is **cloudDataGuard**. When the disaster recovery type is dual-active disaster recovery, set `multi_write` to **true**,
+               otherwise to **false**. The default value is **false**. Changing this parameter will create a new resource.
         :param pulumi.Input[str] name: Specifies the name of database.
                Changing this parameter will create a new resource.
         :param pulumi.Input[str] net_type: Specifies the network type.
-               Changing this parameter will create a new resource. The options are as follows:
+               Changing this parameter will create a new resource. The default value is **eip**. The options are as follows:
                + **eip**: suitable for migration from an on-premises or other cloud database to a destination cloud database.
                An EIP will be automatically bound to the replication instance and released after the replication task is complete.
                + **vpc**: suitable for migration from one cloud database to another.
                + **vpn**: suitable for migration from an on-premises self-built database to a destination cloud database,
                or from one cloud database to another in a different region.
+        :param pulumi.Input[str] node_type: Specifies the node flavor type. Valid values are **micro**, **small**,
+               **medium**, **high**, **xlarge**, **2xlarge**. Default to **high**.
+        :param pulumi.Input[str] pause_mode: Specifies the stop type of job. It's valid when `action` is **stop**.
+               Default value is **target**. The options are as follows:
+               + **target**: Stop playback.
+               + **all**: Stop log capture and playback.
+        :param pulumi.Input[int] period: schema: Internal
+        :param pulumi.Input[str] period_unit: schema: Internal
+        :param pulumi.Input[pulumi.InputType['JobPolicyConfigArgs']] policy_config: Specifies the policy information used to configure migration and
+               synchronization policies. The policy_config structure is documented below.
+               Changing this parameter will create a new resource.
+        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['JobPublicIpListArgs']]]] public_ip_lists: Specifies the public IP list.
+               It can be specified when `net_type` is **eip**, and if it's not specified, DRS job will automatically bind a public IP.
+               Changing this parameter will create a new resource.
+               The public_ip_list structure is documented below.
         :param pulumi.Input[str] region: Specifies the region which the database belongs when it is a RDS database.
                Changing this parameter will create a new resource.
+        :param pulumi.Input[str] slave_az: Specifies the AZ where the standby task is located.
+               Changing this parameter will create a new resource.
         :param pulumi.Input[pulumi.InputType['JobSourceDbArgs']] source_db: Specifies the source database configuration.
-               The `db_info` object structure of the `source_db` is documented below.
+               The db_info structure of the `source_db` is documented below.
                Changing this parameter will create a new resource.
         :param pulumi.Input[str] start_time: Specifies the time to start speed limit, this time is UTC time. The start
-               time is the whole hour, if there is a minute, it will be ignored, the format is `hh:mm`, and the hour number
+               time is the whole hour, if there is a minute, it will be ignored, the format is **hh:mm**, and the hour number
                is two digits, for example: 01:00. Changing this parameter will create a new resource.
+        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['JobTableArgs']]]] tables: Specifies the list of the tables which the job migrates or synchronizes. Means to transfer
+               table level data. This parameter conflicts with `databases`.
+               The tables structure is documented below.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the DRS job.
-               Changing this parameter will create a new resource.
-        :param pulumi.Input[str] type: Specifies the job type. Changing this parameter will create a new
-               resource. The options are as follows:
-               + **migration**: Online Migration.
-               + **sync**: Data Synchronization.
-               + **cloudDataGuard**: Disaster Recovery.
+        :param pulumi.Input[str] type: Specifies the type of a task with an EIP bound.
+               Valid values are **master** and **slave**.
+               + In a primary/standby task, **master** indicates the primary task, and **slave** indicates the standby task.
+               + In other cases, the value is fixed to **master**.
         """
         ...
     @overload
@@ -1003,13 +1807,13 @@ class Job(pulumi.CustomResource):
 
         ## Import
 
-        The DRS job can be imported by `id`. For example,
+        The DRS job can be imported by `id`. e.g. bash
 
         ```sh
-         $ pulumi import huaweicloud:Drs/job:Job test b11b407c-e604-4e8d-8bc4-92398320b847
+         $ pulumi import huaweicloud:Drs/job:Job test <id>
         ```
 
-         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`enterprise_project_id`, `tags`, `force_destroy`, `source_db.0.password` and `destination_db.0.password`.It is generally recommended running `terraform plan` after importing a job. You can then decide if changes should be applied to the job, or the resource definition should be updated to align with the job. Also you can ignore changes as below. resource "huaweicloud_drs_job" "test" {
+         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`enterprise_project_id`, `force_destroy`, `source_db.0.password`, `destination_db.0.password`, `source_db.0.ip`, `destination_db.0.ip`, `source_db.0.kafka_security_config.0.trust_store_password`, `destination_db.0.kafka_security_config.0.trust_store_password`, `source_db.0.kafka_security_config.0.key_store_password`,`destination_db.0.kafka_security_config.0.key_store_password`, `source_db.0.kafka_security_config.0.key_password`, `destination_db.0.kafka_security_config.0.key_password`, `action`, `is_sync_re_edit`, `pause_mode`, `auto_renew`, `alarm_notify.0.topic_urn`, `policy_config`, `engine_type`, `public_ip_list`, `start_time`. It is generally recommended running **terraform plan** after importing a job. You can then decide if changes should be applied to the job, or the resource definition should be updated to align with the job. Also you can ignore changes as below. hcl resource "huaweicloud_drs_job" "test" {
 
          ...
 
@@ -1017,7 +1821,7 @@ class Job(pulumi.CustomResource):
 
          ignore_changes = [
 
-         source_db.0.password,destination_db.0.password
+         source_db.0.password, destination_db.0.password, action,
 
          ]
 
@@ -1038,6 +1842,11 @@ class Job(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
+                 action: Optional[pulumi.Input[str]] = None,
+                 alarm_notify: Optional[pulumi.Input[pulumi.InputType['JobAlarmNotifyArgs']]] = None,
+                 auto_renew: Optional[pulumi.Input[str]] = None,
+                 charging_mode: Optional[pulumi.Input[str]] = None,
+                 databases: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  description: Optional[pulumi.Input[str]] = None,
                  destination_db: Optional[pulumi.Input[pulumi.InputType['JobDestinationDbArgs']]] = None,
                  destination_db_readnoly: Optional[pulumi.Input[bool]] = None,
@@ -1046,15 +1855,26 @@ class Job(pulumi.CustomResource):
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  expired_days: Optional[pulumi.Input[int]] = None,
                  force_destroy: Optional[pulumi.Input[bool]] = None,
+                 is_open_fast_clean: Optional[pulumi.Input[bool]] = None,
+                 is_sync_re_edit: Optional[pulumi.Input[bool]] = None,
                  limit_speeds: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['JobLimitSpeedArgs']]]]] = None,
+                 master_az: Optional[pulumi.Input[str]] = None,
                  migrate_definer: Optional[pulumi.Input[bool]] = None,
                  migration_type: Optional[pulumi.Input[str]] = None,
                  multi_write: Optional[pulumi.Input[bool]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  net_type: Optional[pulumi.Input[str]] = None,
+                 node_type: Optional[pulumi.Input[str]] = None,
+                 pause_mode: Optional[pulumi.Input[str]] = None,
+                 period: Optional[pulumi.Input[int]] = None,
+                 period_unit: Optional[pulumi.Input[str]] = None,
+                 policy_config: Optional[pulumi.Input[pulumi.InputType['JobPolicyConfigArgs']]] = None,
+                 public_ip_lists: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['JobPublicIpListArgs']]]]] = None,
                  region: Optional[pulumi.Input[str]] = None,
+                 slave_az: Optional[pulumi.Input[str]] = None,
                  source_db: Optional[pulumi.Input[pulumi.InputType['JobSourceDbArgs']]] = None,
                  start_time: Optional[pulumi.Input[str]] = None,
+                 tables: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['JobTableArgs']]]]] = None,
                  tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  type: Optional[pulumi.Input[str]] = None,
                  __props__=None):
@@ -1066,6 +1886,11 @@ class Job(pulumi.CustomResource):
                 raise TypeError('__props__ is only valid when passed in combination with a valid opts.id to get an existing resource')
             __props__ = JobArgs.__new__(JobArgs)
 
+            __props__.__dict__["action"] = action
+            __props__.__dict__["alarm_notify"] = alarm_notify
+            __props__.__dict__["auto_renew"] = auto_renew
+            __props__.__dict__["charging_mode"] = charging_mode
+            __props__.__dict__["databases"] = databases
             __props__.__dict__["description"] = description
             if destination_db is None and not opts.urn:
                 raise TypeError("Missing required property 'destination_db'")
@@ -1080,25 +1905,45 @@ class Job(pulumi.CustomResource):
             __props__.__dict__["enterprise_project_id"] = enterprise_project_id
             __props__.__dict__["expired_days"] = expired_days
             __props__.__dict__["force_destroy"] = force_destroy
+            __props__.__dict__["is_open_fast_clean"] = is_open_fast_clean
+            __props__.__dict__["is_sync_re_edit"] = is_sync_re_edit
             __props__.__dict__["limit_speeds"] = limit_speeds
+            __props__.__dict__["master_az"] = master_az
             __props__.__dict__["migrate_definer"] = migrate_definer
             __props__.__dict__["migration_type"] = migration_type
             __props__.__dict__["multi_write"] = multi_write
             __props__.__dict__["name"] = name
             __props__.__dict__["net_type"] = net_type
+            __props__.__dict__["node_type"] = node_type
+            __props__.__dict__["pause_mode"] = pause_mode
+            __props__.__dict__["period"] = period
+            __props__.__dict__["period_unit"] = period_unit
+            __props__.__dict__["policy_config"] = policy_config
+            __props__.__dict__["public_ip_lists"] = public_ip_lists
             __props__.__dict__["region"] = region
+            __props__.__dict__["slave_az"] = slave_az
             if source_db is None and not opts.urn:
                 raise TypeError("Missing required property 'source_db'")
             __props__.__dict__["source_db"] = source_db
             __props__.__dict__["start_time"] = start_time
+            __props__.__dict__["tables"] = tables
             __props__.__dict__["tags"] = tags
             if type is None and not opts.urn:
                 raise TypeError("Missing required property 'type'")
             __props__.__dict__["type"] = type
             __props__.__dict__["created_at"] = None
+            __props__.__dict__["master_job_id"] = None
+            __props__.__dict__["order_id"] = None
+            __props__.__dict__["original_job_direction"] = None
             __props__.__dict__["private_ip"] = None
+            __props__.__dict__["progress"] = None
             __props__.__dict__["public_ip"] = None
+            __props__.__dict__["security_group_id"] = None
+            __props__.__dict__["slave_job_id"] = None
             __props__.__dict__["status"] = None
+            __props__.__dict__["subnet_id"] = None
+            __props__.__dict__["updated_at"] = None
+            __props__.__dict__["vpc_id"] = None
         super(Job, __self__).__init__(
             'huaweicloud:Drs/job:Job',
             resource_name,
@@ -1109,7 +1954,12 @@ class Job(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
+            action: Optional[pulumi.Input[str]] = None,
+            alarm_notify: Optional[pulumi.Input[pulumi.InputType['JobAlarmNotifyArgs']]] = None,
+            auto_renew: Optional[pulumi.Input[str]] = None,
+            charging_mode: Optional[pulumi.Input[str]] = None,
             created_at: Optional[pulumi.Input[str]] = None,
+            databases: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
             description: Optional[pulumi.Input[str]] = None,
             destination_db: Optional[pulumi.Input[pulumi.InputType['JobDestinationDbArgs']]] = None,
             destination_db_readnoly: Optional[pulumi.Input[bool]] = None,
@@ -1118,20 +1968,40 @@ class Job(pulumi.CustomResource):
             enterprise_project_id: Optional[pulumi.Input[str]] = None,
             expired_days: Optional[pulumi.Input[int]] = None,
             force_destroy: Optional[pulumi.Input[bool]] = None,
+            is_open_fast_clean: Optional[pulumi.Input[bool]] = None,
+            is_sync_re_edit: Optional[pulumi.Input[bool]] = None,
             limit_speeds: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['JobLimitSpeedArgs']]]]] = None,
+            master_az: Optional[pulumi.Input[str]] = None,
+            master_job_id: Optional[pulumi.Input[str]] = None,
             migrate_definer: Optional[pulumi.Input[bool]] = None,
             migration_type: Optional[pulumi.Input[str]] = None,
             multi_write: Optional[pulumi.Input[bool]] = None,
             name: Optional[pulumi.Input[str]] = None,
             net_type: Optional[pulumi.Input[str]] = None,
+            node_type: Optional[pulumi.Input[str]] = None,
+            order_id: Optional[pulumi.Input[str]] = None,
+            original_job_direction: Optional[pulumi.Input[str]] = None,
+            pause_mode: Optional[pulumi.Input[str]] = None,
+            period: Optional[pulumi.Input[int]] = None,
+            period_unit: Optional[pulumi.Input[str]] = None,
+            policy_config: Optional[pulumi.Input[pulumi.InputType['JobPolicyConfigArgs']]] = None,
             private_ip: Optional[pulumi.Input[str]] = None,
+            progress: Optional[pulumi.Input[str]] = None,
             public_ip: Optional[pulumi.Input[str]] = None,
+            public_ip_lists: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['JobPublicIpListArgs']]]]] = None,
             region: Optional[pulumi.Input[str]] = None,
+            security_group_id: Optional[pulumi.Input[str]] = None,
+            slave_az: Optional[pulumi.Input[str]] = None,
+            slave_job_id: Optional[pulumi.Input[str]] = None,
             source_db: Optional[pulumi.Input[pulumi.InputType['JobSourceDbArgs']]] = None,
             start_time: Optional[pulumi.Input[str]] = None,
             status: Optional[pulumi.Input[str]] = None,
+            subnet_id: Optional[pulumi.Input[str]] = None,
+            tables: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['JobTableArgs']]]]] = None,
             tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
-            type: Optional[pulumi.Input[str]] = None) -> 'Job':
+            type: Optional[pulumi.Input[str]] = None,
+            updated_at: Optional[pulumi.Input[str]] = None,
+            vpc_id: Optional[pulumi.Input[str]] = None) -> 'Job':
         """
         Get an existing Job resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.
@@ -1139,36 +2009,57 @@ class Job(pulumi.CustomResource):
         :param str resource_name: The unique name of the resulting resource.
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[str] created_at: Create time. The format is ISO8601:YYYY-MM-DDThh:mm:ssZ
+        :param pulumi.Input[str] action: Specifies the action of job. The options are as follows:
+               + **stop**: Stop the job. Available when job status is **FULL_TRANSFER_STARTED**, **FULL_TRANSFER_COMPLETE** or
+               **INCRE_TRANSFER_STARTED**.
+               + **restart**: Continue the job. Available when job status is **PAUSING**.
+               + **reset**: Retry the job. Available when job status is **FULL_TRANSFER_FAILED** or **INCRE_TRANSFER_FAILED**.
+               + **start**: Start the job. Available when job status is **WAITING_FOR_START**.
+        :param pulumi.Input[pulumi.InputType['JobAlarmNotifyArgs']] alarm_notify: Specifies the information body for setting task exception notification.
+               Changing this parameter will create a new resource.
+               The alarm_notify structure is documented below.
+        :param pulumi.Input[str] auto_renew: schema: Internal
+        :param pulumi.Input[str] charging_mode: schema: Internal
+        :param pulumi.Input[str] created_at: Create time. The format is ISO8601:YYYY-MM-DDThh:mm:ssZ.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] databases: Specifies the list of the databases which the job migrates or synchronizes. Means to
+               transfer database level data. This parameter conflicts with `tables`.
         :param pulumi.Input[str] description: Specifies the description of the job, which contain a
                maximum of 256 characters, and certain special characters (including !<>&'"\\\\) are not allowed.
         :param pulumi.Input[pulumi.InputType['JobDestinationDbArgs']] destination_db: Specifies the destination database configuration.
-               The `db_info` object structure of the `destination_db` is documented below.
+               The db_info structure of the `destination_db` is documented below.
                Changing this parameter will create a new resource.
         :param pulumi.Input[bool] destination_db_readnoly: Specifies the destination DB instance as read-only helps
                ensure the migration is successful. Once the migration is complete, the DB instance automatically changes to
-               Read/Write. The default value is `true`. Changing this parameter will create a new resource.
+               Read/Write. Changing this parameter will create a new resource.
         :param pulumi.Input[str] direction: Specifies the direction of data flow.
                Changing this parameter will create a new resource. The options are as follows:
                + **up**: To the cloud. The destination database must be a database in the current cloud.
                + **down**: Out of the cloud. The source database must be a database in the current cloud.
                + **non-dbs**: self-built database.
         :param pulumi.Input[str] engine_type: Specifies the engine type of database. Changing this parameter will
-               create a new resource. The options are as follows: `mysql`, `mongodb`, `gaussdbv5`.
+               create a new resource. The options are as follows: **mysql**, **mongodb**, **gaussdbv5**, **taurus**, **gaussdbv5ha**,
+               **kafka**, **postgresql**.
         :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project id.
                Changing this parameter will create a new resource.
         :param pulumi.Input[int] expired_days: Specifies how many days after the task is abnormal, it will automatically
                end. The value ranges from 14 to 100. the default value is `14`. Changing this parameter will create a new resource.
         :param pulumi.Input[bool] force_destroy: Specifies whether to forcibly destroy the job even if it is running.
-               The default value is `false`.
-        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['JobLimitSpeedArgs']]]] limit_speeds: Specifies the migration speed by setting a time period.
-               The default is no speed limit. The maximum length is 3. Structure is documented below.
+               The default value is **false**.
+        :param pulumi.Input[bool] is_open_fast_clean: Specifies whether to enable binlog clearing for RDS for MySQL or RDS
+               for MariaDB. Defaults to **false**.
                Changing this parameter will create a new resource.
+        :param pulumi.Input[bool] is_sync_re_edit: Specifies whether to start the sync re-edit job. It's valid when `action` is **restart**.
+        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['JobLimitSpeedArgs']]]] limit_speeds: Specifies the migration speed by setting a time period.
+               The default is no speed limit. The maximum length is 3. The limit_speed structure is documented
+               below. Changing this parameter will create a new resource.
+        :param pulumi.Input[str] master_az: Specifies the AZ where the primary task is located.
+               Changing this parameter will create a new resource.
+        :param pulumi.Input[str] master_job_id: The master job ID which will return if job is dual-AZ.
         :param pulumi.Input[bool] migrate_definer: Specifies whether to migrate the definers of all source database
-               objects to the `user` of `destination_db`. The default value is `true`.
+               objects to the `user` of `destination_db`. The default value is **true**.
                Changing this parameter will create a new resource.
         :param pulumi.Input[str] migration_type: Specifies migration type.
-               Changing this parameter will create a new resource. The options are as follows:
+               Changing this parameter will create a new resource. The default value is **FULL_INCR_TRANS**. The options are as follows:
                + **FULL_TRANS**: Full migration. Suitable for scenarios where services can be interrupted. It migrates all database
                objects and data, in a non-system database, to a destination database at a time.
                + **INCR_TRANS**: Incremental migration. Suitable for migration from an on-premises self-built database to a
@@ -1177,41 +2068,75 @@ class Job(pulumi.CustomResource):
                migration initializes the destination database, an incremental migration parses logs to ensure data consistency
                between the source and destination databases.
         :param pulumi.Input[bool] multi_write: Specifies whether to enable multi write. It is mandatory when `type`
-               is `cloudDataGuard`. When the disaster recovery type is dual-active disaster recovery, set `multi_write` to `true`,
-               otherwise to `false`. The default value is `false`. Changing this parameter will create a new resource.
+               is **cloudDataGuard**. When the disaster recovery type is dual-active disaster recovery, set `multi_write` to **true**,
+               otherwise to **false**. The default value is **false**. Changing this parameter will create a new resource.
         :param pulumi.Input[str] name: Specifies the name of database.
                Changing this parameter will create a new resource.
         :param pulumi.Input[str] net_type: Specifies the network type.
-               Changing this parameter will create a new resource. The options are as follows:
+               Changing this parameter will create a new resource. The default value is **eip**. The options are as follows:
                + **eip**: suitable for migration from an on-premises or other cloud database to a destination cloud database.
                An EIP will be automatically bound to the replication instance and released after the replication task is complete.
                + **vpc**: suitable for migration from one cloud database to another.
                + **vpn**: suitable for migration from an on-premises self-built database to a destination cloud database,
                or from one cloud database to another in a different region.
+        :param pulumi.Input[str] node_type: Specifies the node flavor type. Valid values are **micro**, **small**,
+               **medium**, **high**, **xlarge**, **2xlarge**. Default to **high**.
+        :param pulumi.Input[str] order_id: The order ID which will return if `charging_mode` is **prePaid**.
+        :param pulumi.Input[str] original_job_direction: The original job direction.
+        :param pulumi.Input[str] pause_mode: Specifies the stop type of job. It's valid when `action` is **stop**.
+               Default value is **target**. The options are as follows:
+               + **target**: Stop playback.
+               + **all**: Stop log capture and playback.
+        :param pulumi.Input[int] period: schema: Internal
+        :param pulumi.Input[str] period_unit: schema: Internal
+        :param pulumi.Input[pulumi.InputType['JobPolicyConfigArgs']] policy_config: Specifies the policy information used to configure migration and
+               synchronization policies. The policy_config structure is documented below.
+               Changing this parameter will create a new resource.
         :param pulumi.Input[str] private_ip: Private IP.
-        :param pulumi.Input[str] public_ip: Public IP.
+        :param pulumi.Input[str] progress: Progress.
+        :param pulumi.Input[str] public_ip: Specifies public IP.
+               Changing this parameter will create a new resource.
+        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['JobPublicIpListArgs']]]] public_ip_lists: Specifies the public IP list.
+               It can be specified when `net_type` is **eip**, and if it's not specified, DRS job will automatically bind a public IP.
+               Changing this parameter will create a new resource.
+               The public_ip_list structure is documented below.
         :param pulumi.Input[str] region: Specifies the region which the database belongs when it is a RDS database.
                Changing this parameter will create a new resource.
+        :param pulumi.Input[str] security_group_id: The security group ID to which the databese instance belongs.
+        :param pulumi.Input[str] slave_az: Specifies the AZ where the standby task is located.
+               Changing this parameter will create a new resource.
+        :param pulumi.Input[str] slave_job_id: The slave job ID which will return if job is dual-AZ.
         :param pulumi.Input[pulumi.InputType['JobSourceDbArgs']] source_db: Specifies the source database configuration.
-               The `db_info` object structure of the `source_db` is documented below.
+               The db_info structure of the `source_db` is documented below.
                Changing this parameter will create a new resource.
         :param pulumi.Input[str] start_time: Specifies the time to start speed limit, this time is UTC time. The start
-               time is the whole hour, if there is a minute, it will be ignored, the format is `hh:mm`, and the hour number
+               time is the whole hour, if there is a minute, it will be ignored, the format is **hh:mm**, and the hour number
                is two digits, for example: 01:00. Changing this parameter will create a new resource.
         :param pulumi.Input[str] status: Status.
+        :param pulumi.Input[str] subnet_id: Specifies subnet ID of database when it is a RDS database.
+               It is mandatory when `direction` is **down**. Changing this parameter will create a new resource.
+        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['JobTableArgs']]]] tables: Specifies the list of the tables which the job migrates or synchronizes. Means to transfer
+               table level data. This parameter conflicts with `databases`.
+               The tables structure is documented below.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the DRS job.
+        :param pulumi.Input[str] type: Specifies the type of a task with an EIP bound.
+               Valid values are **master** and **slave**.
+               + In a primary/standby task, **master** indicates the primary task, and **slave** indicates the standby task.
+               + In other cases, the value is fixed to **master**.
+        :param pulumi.Input[str] updated_at: Update time. The format is ISO8601:YYYY-MM-DDThh:mm:ssZ.
+        :param pulumi.Input[str] vpc_id: Specifies vpc ID of database.
                Changing this parameter will create a new resource.
-        :param pulumi.Input[str] type: Specifies the job type. Changing this parameter will create a new
-               resource. The options are as follows:
-               + **migration**: Online Migration.
-               + **sync**: Data Synchronization.
-               + **cloudDataGuard**: Disaster Recovery.
         """
         opts = pulumi.ResourceOptions.merge(opts, pulumi.ResourceOptions(id=id))
 
         __props__ = _JobState.__new__(_JobState)
 
+        __props__.__dict__["action"] = action
+        __props__.__dict__["alarm_notify"] = alarm_notify
+        __props__.__dict__["auto_renew"] = auto_renew
+        __props__.__dict__["charging_mode"] = charging_mode
         __props__.__dict__["created_at"] = created_at
+        __props__.__dict__["databases"] = databases
         __props__.__dict__["description"] = description
         __props__.__dict__["destination_db"] = destination_db
         __props__.__dict__["destination_db_readnoly"] = destination_db_readnoly
@@ -1220,29 +2145,97 @@ class Job(pulumi.CustomResource):
         __props__.__dict__["enterprise_project_id"] = enterprise_project_id
         __props__.__dict__["expired_days"] = expired_days
         __props__.__dict__["force_destroy"] = force_destroy
+        __props__.__dict__["is_open_fast_clean"] = is_open_fast_clean
+        __props__.__dict__["is_sync_re_edit"] = is_sync_re_edit
         __props__.__dict__["limit_speeds"] = limit_speeds
+        __props__.__dict__["master_az"] = master_az
+        __props__.__dict__["master_job_id"] = master_job_id
         __props__.__dict__["migrate_definer"] = migrate_definer
         __props__.__dict__["migration_type"] = migration_type
         __props__.__dict__["multi_write"] = multi_write
         __props__.__dict__["name"] = name
         __props__.__dict__["net_type"] = net_type
+        __props__.__dict__["node_type"] = node_type
+        __props__.__dict__["order_id"] = order_id
+        __props__.__dict__["original_job_direction"] = original_job_direction
+        __props__.__dict__["pause_mode"] = pause_mode
+        __props__.__dict__["period"] = period
+        __props__.__dict__["period_unit"] = period_unit
+        __props__.__dict__["policy_config"] = policy_config
         __props__.__dict__["private_ip"] = private_ip
+        __props__.__dict__["progress"] = progress
         __props__.__dict__["public_ip"] = public_ip
+        __props__.__dict__["public_ip_lists"] = public_ip_lists
         __props__.__dict__["region"] = region
+        __props__.__dict__["security_group_id"] = security_group_id
+        __props__.__dict__["slave_az"] = slave_az
+        __props__.__dict__["slave_job_id"] = slave_job_id
         __props__.__dict__["source_db"] = source_db
         __props__.__dict__["start_time"] = start_time
         __props__.__dict__["status"] = status
+        __props__.__dict__["subnet_id"] = subnet_id
+        __props__.__dict__["tables"] = tables
         __props__.__dict__["tags"] = tags
         __props__.__dict__["type"] = type
+        __props__.__dict__["updated_at"] = updated_at
+        __props__.__dict__["vpc_id"] = vpc_id
         return Job(resource_name, opts=opts, __props__=__props__)
+
+    @property
+    @pulumi.getter
+    def action(self) -> pulumi.Output[Optional[str]]:
+        """
+        Specifies the action of job. The options are as follows:
+        + **stop**: Stop the job. Available when job status is **FULL_TRANSFER_STARTED**, **FULL_TRANSFER_COMPLETE** or
+        **INCRE_TRANSFER_STARTED**.
+        + **restart**: Continue the job. Available when job status is **PAUSING**.
+        + **reset**: Retry the job. Available when job status is **FULL_TRANSFER_FAILED** or **INCRE_TRANSFER_FAILED**.
+        + **start**: Start the job. Available when job status is **WAITING_FOR_START**.
+        """
+        return pulumi.get(self, "action")
+
+    @property
+    @pulumi.getter(name="alarmNotify")
+    def alarm_notify(self) -> pulumi.Output['outputs.JobAlarmNotify']:
+        """
+        Specifies the information body for setting task exception notification.
+        Changing this parameter will create a new resource.
+        The alarm_notify structure is documented below.
+        """
+        return pulumi.get(self, "alarm_notify")
+
+    @property
+    @pulumi.getter(name="autoRenew")
+    def auto_renew(self) -> pulumi.Output[Optional[str]]:
+        """
+        schema: Internal
+        """
+        return pulumi.get(self, "auto_renew")
+
+    @property
+    @pulumi.getter(name="chargingMode")
+    def charging_mode(self) -> pulumi.Output[str]:
+        """
+        schema: Internal
+        """
+        return pulumi.get(self, "charging_mode")
 
     @property
     @pulumi.getter(name="createdAt")
     def created_at(self) -> pulumi.Output[str]:
         """
-        Create time. The format is ISO8601:YYYY-MM-DDThh:mm:ssZ
+        Create time. The format is ISO8601:YYYY-MM-DDThh:mm:ssZ.
         """
         return pulumi.get(self, "created_at")
+
+    @property
+    @pulumi.getter
+    def databases(self) -> pulumi.Output[Optional[Sequence[str]]]:
+        """
+        Specifies the list of the databases which the job migrates or synchronizes. Means to
+        transfer database level data. This parameter conflicts with `tables`.
+        """
+        return pulumi.get(self, "databases")
 
     @property
     @pulumi.getter
@@ -1258,7 +2251,7 @@ class Job(pulumi.CustomResource):
     def destination_db(self) -> pulumi.Output['outputs.JobDestinationDb']:
         """
         Specifies the destination database configuration.
-        The `db_info` object structure of the `destination_db` is documented below.
+        The db_info structure of the `destination_db` is documented below.
         Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "destination_db")
@@ -1269,7 +2262,7 @@ class Job(pulumi.CustomResource):
         """
         Specifies the destination DB instance as read-only helps
         ensure the migration is successful. Once the migration is complete, the DB instance automatically changes to
-        Read/Write. The default value is `true`. Changing this parameter will create a new resource.
+        Read/Write. Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "destination_db_readnoly")
 
@@ -1290,7 +2283,8 @@ class Job(pulumi.CustomResource):
     def engine_type(self) -> pulumi.Output[str]:
         """
         Specifies the engine type of database. Changing this parameter will
-        create a new resource. The options are as follows: `mysql`, `mongodb`, `gaussdbv5`.
+        create a new resource. The options are as follows: **mysql**, **mongodb**, **gaussdbv5**, **taurus**, **gaussdbv5ha**,
+        **kafka**, **postgresql**.
         """
         return pulumi.get(self, "engine_type")
 
@@ -1317,26 +2311,61 @@ class Job(pulumi.CustomResource):
     def force_destroy(self) -> pulumi.Output[Optional[bool]]:
         """
         Specifies whether to forcibly destroy the job even if it is running.
-        The default value is `false`.
+        The default value is **false**.
         """
         return pulumi.get(self, "force_destroy")
+
+    @property
+    @pulumi.getter(name="isOpenFastClean")
+    def is_open_fast_clean(self) -> pulumi.Output[bool]:
+        """
+        Specifies whether to enable binlog clearing for RDS for MySQL or RDS
+        for MariaDB. Defaults to **false**.
+        Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "is_open_fast_clean")
+
+    @property
+    @pulumi.getter(name="isSyncReEdit")
+    def is_sync_re_edit(self) -> pulumi.Output[Optional[bool]]:
+        """
+        Specifies whether to start the sync re-edit job. It's valid when `action` is **restart**.
+        """
+        return pulumi.get(self, "is_sync_re_edit")
 
     @property
     @pulumi.getter(name="limitSpeeds")
     def limit_speeds(self) -> pulumi.Output[Optional[Sequence['outputs.JobLimitSpeed']]]:
         """
         Specifies the migration speed by setting a time period.
-        The default is no speed limit. The maximum length is 3. Structure is documented below.
-        Changing this parameter will create a new resource.
+        The default is no speed limit. The maximum length is 3. The limit_speed structure is documented
+        below. Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "limit_speeds")
+
+    @property
+    @pulumi.getter(name="masterAz")
+    def master_az(self) -> pulumi.Output[Optional[str]]:
+        """
+        Specifies the AZ where the primary task is located.
+        Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "master_az")
+
+    @property
+    @pulumi.getter(name="masterJobId")
+    def master_job_id(self) -> pulumi.Output[str]:
+        """
+        The master job ID which will return if job is dual-AZ.
+        """
+        return pulumi.get(self, "master_job_id")
 
     @property
     @pulumi.getter(name="migrateDefiner")
     def migrate_definer(self) -> pulumi.Output[Optional[bool]]:
         """
         Specifies whether to migrate the definers of all source database
-        objects to the `user` of `destination_db`. The default value is `true`.
+        objects to the `user` of `destination_db`. The default value is **true**.
         Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "migrate_definer")
@@ -1346,7 +2375,7 @@ class Job(pulumi.CustomResource):
     def migration_type(self) -> pulumi.Output[Optional[str]]:
         """
         Specifies migration type.
-        Changing this parameter will create a new resource. The options are as follows:
+        Changing this parameter will create a new resource. The default value is **FULL_INCR_TRANS**. The options are as follows:
         + **FULL_TRANS**: Full migration. Suitable for scenarios where services can be interrupted. It migrates all database
         objects and data, in a non-system database, to a destination database at a time.
         + **INCR_TRANS**: Incremental migration. Suitable for migration from an on-premises self-built database to a
@@ -1362,8 +2391,8 @@ class Job(pulumi.CustomResource):
     def multi_write(self) -> pulumi.Output[Optional[bool]]:
         """
         Specifies whether to enable multi write. It is mandatory when `type`
-        is `cloudDataGuard`. When the disaster recovery type is dual-active disaster recovery, set `multi_write` to `true`,
-        otherwise to `false`. The default value is `false`. Changing this parameter will create a new resource.
+        is **cloudDataGuard**. When the disaster recovery type is dual-active disaster recovery, set `multi_write` to **true**,
+        otherwise to **false**. The default value is **false**. Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "multi_write")
 
@@ -1381,7 +2410,7 @@ class Job(pulumi.CustomResource):
     def net_type(self) -> pulumi.Output[Optional[str]]:
         """
         Specifies the network type.
-        Changing this parameter will create a new resource. The options are as follows:
+        Changing this parameter will create a new resource. The default value is **eip**. The options are as follows:
         + **eip**: suitable for migration from an on-premises or other cloud database to a destination cloud database.
         An EIP will be automatically bound to the replication instance and released after the replication task is complete.
         + **vpc**: suitable for migration from one cloud database to another.
@@ -1389,6 +2418,68 @@ class Job(pulumi.CustomResource):
         or from one cloud database to another in a different region.
         """
         return pulumi.get(self, "net_type")
+
+    @property
+    @pulumi.getter(name="nodeType")
+    def node_type(self) -> pulumi.Output[Optional[str]]:
+        """
+        Specifies the node flavor type. Valid values are **micro**, **small**,
+        **medium**, **high**, **xlarge**, **2xlarge**. Default to **high**.
+        """
+        return pulumi.get(self, "node_type")
+
+    @property
+    @pulumi.getter(name="orderId")
+    def order_id(self) -> pulumi.Output[str]:
+        """
+        The order ID which will return if `charging_mode` is **prePaid**.
+        """
+        return pulumi.get(self, "order_id")
+
+    @property
+    @pulumi.getter(name="originalJobDirection")
+    def original_job_direction(self) -> pulumi.Output[str]:
+        """
+        The original job direction.
+        """
+        return pulumi.get(self, "original_job_direction")
+
+    @property
+    @pulumi.getter(name="pauseMode")
+    def pause_mode(self) -> pulumi.Output[Optional[str]]:
+        """
+        Specifies the stop type of job. It's valid when `action` is **stop**.
+        Default value is **target**. The options are as follows:
+        + **target**: Stop playback.
+        + **all**: Stop log capture and playback.
+        """
+        return pulumi.get(self, "pause_mode")
+
+    @property
+    @pulumi.getter
+    def period(self) -> pulumi.Output[Optional[int]]:
+        """
+        schema: Internal
+        """
+        return pulumi.get(self, "period")
+
+    @property
+    @pulumi.getter(name="periodUnit")
+    def period_unit(self) -> pulumi.Output[Optional[str]]:
+        """
+        schema: Internal
+        """
+        return pulumi.get(self, "period_unit")
+
+    @property
+    @pulumi.getter(name="policyConfig")
+    def policy_config(self) -> pulumi.Output[Optional['outputs.JobPolicyConfig']]:
+        """
+        Specifies the policy information used to configure migration and
+        synchronization policies. The policy_config structure is documented below.
+        Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "policy_config")
 
     @property
     @pulumi.getter(name="privateIp")
@@ -1399,12 +2490,32 @@ class Job(pulumi.CustomResource):
         return pulumi.get(self, "private_ip")
 
     @property
+    @pulumi.getter
+    def progress(self) -> pulumi.Output[str]:
+        """
+        Progress.
+        """
+        return pulumi.get(self, "progress")
+
+    @property
     @pulumi.getter(name="publicIp")
     def public_ip(self) -> pulumi.Output[str]:
         """
-        Public IP.
+        Specifies public IP.
+        Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "public_ip")
+
+    @property
+    @pulumi.getter(name="publicIpLists")
+    def public_ip_lists(self) -> pulumi.Output[Optional[Sequence['outputs.JobPublicIpList']]]:
+        """
+        Specifies the public IP list.
+        It can be specified when `net_type` is **eip**, and if it's not specified, DRS job will automatically bind a public IP.
+        Changing this parameter will create a new resource.
+        The public_ip_list structure is documented below.
+        """
+        return pulumi.get(self, "public_ip_lists")
 
     @property
     @pulumi.getter
@@ -1416,11 +2527,36 @@ class Job(pulumi.CustomResource):
         return pulumi.get(self, "region")
 
     @property
+    @pulumi.getter(name="securityGroupId")
+    def security_group_id(self) -> pulumi.Output[str]:
+        """
+        The security group ID to which the databese instance belongs.
+        """
+        return pulumi.get(self, "security_group_id")
+
+    @property
+    @pulumi.getter(name="slaveAz")
+    def slave_az(self) -> pulumi.Output[Optional[str]]:
+        """
+        Specifies the AZ where the standby task is located.
+        Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "slave_az")
+
+    @property
+    @pulumi.getter(name="slaveJobId")
+    def slave_job_id(self) -> pulumi.Output[str]:
+        """
+        The slave job ID which will return if job is dual-AZ.
+        """
+        return pulumi.get(self, "slave_job_id")
+
+    @property
     @pulumi.getter(name="sourceDb")
     def source_db(self) -> pulumi.Output['outputs.JobSourceDb']:
         """
         Specifies the source database configuration.
-        The `db_info` object structure of the `source_db` is documented below.
+        The db_info structure of the `source_db` is documented below.
         Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "source_db")
@@ -1430,7 +2566,7 @@ class Job(pulumi.CustomResource):
     def start_time(self) -> pulumi.Output[Optional[str]]:
         """
         Specifies the time to start speed limit, this time is UTC time. The start
-        time is the whole hour, if there is a minute, it will be ignored, the format is `hh:mm`, and the hour number
+        time is the whole hour, if there is a minute, it will be ignored, the format is **hh:mm**, and the hour number
         is two digits, for example: 01:00. Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "start_time")
@@ -1444,11 +2580,29 @@ class Job(pulumi.CustomResource):
         return pulumi.get(self, "status")
 
     @property
+    @pulumi.getter(name="subnetId")
+    def subnet_id(self) -> pulumi.Output[str]:
+        """
+        Specifies subnet ID of database when it is a RDS database.
+        It is mandatory when `direction` is **down**. Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "subnet_id")
+
+    @property
+    @pulumi.getter
+    def tables(self) -> pulumi.Output[Optional[Sequence['outputs.JobTable']]]:
+        """
+        Specifies the list of the tables which the job migrates or synchronizes. Means to transfer
+        table level data. This parameter conflicts with `databases`.
+        The tables structure is documented below.
+        """
+        return pulumi.get(self, "tables")
+
+    @property
     @pulumi.getter
     def tags(self) -> pulumi.Output[Optional[Mapping[str, str]]]:
         """
         Specifies the key/value pairs to associate with the DRS job.
-        Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "tags")
 
@@ -1456,11 +2610,27 @@ class Job(pulumi.CustomResource):
     @pulumi.getter
     def type(self) -> pulumi.Output[str]:
         """
-        Specifies the job type. Changing this parameter will create a new
-        resource. The options are as follows:
-        + **migration**: Online Migration.
-        + **sync**: Data Synchronization.
-        + **cloudDataGuard**: Disaster Recovery.
+        Specifies the type of a task with an EIP bound.
+        Valid values are **master** and **slave**.
+        + In a primary/standby task, **master** indicates the primary task, and **slave** indicates the standby task.
+        + In other cases, the value is fixed to **master**.
         """
         return pulumi.get(self, "type")
+
+    @property
+    @pulumi.getter(name="updatedAt")
+    def updated_at(self) -> pulumi.Output[str]:
+        """
+        Update time. The format is ISO8601:YYYY-MM-DDThh:mm:ssZ.
+        """
+        return pulumi.get(self, "updated_at")
+
+    @property
+    @pulumi.getter(name="vpcId")
+    def vpc_id(self) -> pulumi.Output[str]:
+        """
+        Specifies vpc ID of database.
+        Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "vpc_id")
 

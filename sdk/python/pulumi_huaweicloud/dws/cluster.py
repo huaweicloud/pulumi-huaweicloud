@@ -24,10 +24,15 @@ class ClusterArgs:
                  user_name: pulumi.Input[str],
                  user_pwd: pulumi.Input[str],
                  vpc_id: pulumi.Input[str],
+                 description: Optional[pulumi.Input[str]] = None,
                  dss_pool_id: Optional[pulumi.Input[str]] = None,
+                 elb_id: Optional[pulumi.Input[str]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
+                 force_backup: Optional[pulumi.Input[bool]] = None,
                  keep_last_manual_snapshot: Optional[pulumi.Input[int]] = None,
                  kms_key_id: Optional[pulumi.Input[str]] = None,
+                 logical_cluster_enable: Optional[pulumi.Input[bool]] = None,
+                 lts_enable: Optional[pulumi.Input[bool]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  number_of_cn: Optional[pulumi.Input[int]] = None,
                  port: Optional[pulumi.Input[int]] = None,
@@ -39,15 +44,16 @@ class ClusterArgs:
         """
         The set of arguments for constructing a Cluster resource.
         :param pulumi.Input[str] availability_zone: The availability zone in which to create the cluster instance.
-               Changing this parameter will create a new resource.
+               If there are multiple available zones, separate by commas, e.g. **cn-north-4a,cn-north-4b,cn-north-4g**.
+               Currently, multi-AZ clusters only support selecting `3` AZs. Changing this parameter will create a new resource.
         :param pulumi.Input[str] network_id: The subnet ID.
                Changing this parameter will create a new resource.
         :param pulumi.Input[str] node_type: The flavor of the cluster.  
                [For details](https://support.huaweicloud.com/intl/en-us/productdesc-dws/dws_01_00018.html).
                Changing this parameter will create a new resource.
         :param pulumi.Input[int] number_of_node: Number of nodes in a cluster.  
-               The value ranges from 3 to 32 in cluster mode. The value of stream warehouse(stand-alone mode) is 1.
-        :param pulumi.Input[str] security_group_id: The security group ID.
+               The value ranges from 3 to 256 in cluster mode. The value of stream warehouse(stand-alone mode) is 1.
+        :param pulumi.Input[str] security_group_id: Specifies the security group ID of the cluster.
                Changing this parameter will create a new resource.
         :param pulumi.Input[str] user_name: Administrator username for logging in to a data warehouse cluster.  
                The administrator username must: Consist of lowercase letters, digits, or underscores.
@@ -59,19 +65,27 @@ class ClusterArgs:
                It cannot be the same as the username or the username written in reverse order.
         :param pulumi.Input[str] vpc_id: The VPC ID.
                Changing this parameter will create a new resource.
+        :param pulumi.Input[str] description: Specifies the description of the cluster.
         :param pulumi.Input[str] dss_pool_id: Dedicated storage pool ID.
                Changing this parameter will create a new resource.
+        :param pulumi.Input[str] elb_id: Specifies the ID of the ELB load balancer.
         :param pulumi.Input[str] enterprise_project_id: The enterprise project ID.
-               Changing this parameter will create a new resource.
+        :param pulumi.Input[bool] force_backup: Specified whether to automatically execute snapshot when shrinking the number of nodes.
+               The default value is **true**.
+               This parameter is required and available only when scaling-in the `number_of_node` parameter value.
         :param pulumi.Input[int] keep_last_manual_snapshot: The number of latest manual snapshots that need to be
                retained when deleting the cluster.
         :param pulumi.Input[str] kms_key_id: The KMS key ID.
                Changing this parameter will create a new resource.
+        :param pulumi.Input[bool] logical_cluster_enable: Specifies whether to enable logical cluster. The switch needs to be turned
+               on before creating a logical cluster.
+        :param pulumi.Input[bool] lts_enable: Specifies whether to enable LTS. The default value is **false**.
         :param pulumi.Input[str] name: Cluster name, which must be unique and contains 4 to 64 characters, which
                consist of letters, digits, hyphens(-), or underscores(_) only and must start with a letter.
                Changing this creates a new cluster resource.
         :param pulumi.Input[int] number_of_cn: The number of CN.  
-               The value ranges from 2 to **number_of_node**, the maximum value is 20. Defaults to 3.
+               The value ranges from 2 to **number_of_node**, the maximum value is 20.
+               This parameter must be used together with `version`.
                Changing this parameter will create a new resource.
         :param pulumi.Input[int] port: Service port of a cluster (8000 to 10000). The default value is 8000.  
                Changing this parameter will create a new resource.
@@ -79,10 +93,12 @@ class ClusterArgs:
         :param pulumi.Input[str] region: Specifies the region in which to create the resource.
                If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: The key/value pairs to associate with the cluster.
-               Changing this parameter will create a new resource.
         :param pulumi.Input[str] version: The cluster version.
+               [For details](https://support.huaweicloud.com/intl/en-us/bulletin-dws/dws_12_0000.html).
                Changing this parameter will create a new resource.
         :param pulumi.Input['ClusterVolumeArgs'] volume: The information about the volume.
+               Changing this parameter will create a new resource.
+               For local disks, this parameter can not be specified.
         """
         pulumi.set(__self__, "availability_zone", availability_zone)
         pulumi.set(__self__, "network_id", network_id)
@@ -92,14 +108,24 @@ class ClusterArgs:
         pulumi.set(__self__, "user_name", user_name)
         pulumi.set(__self__, "user_pwd", user_pwd)
         pulumi.set(__self__, "vpc_id", vpc_id)
+        if description is not None:
+            pulumi.set(__self__, "description", description)
         if dss_pool_id is not None:
             pulumi.set(__self__, "dss_pool_id", dss_pool_id)
+        if elb_id is not None:
+            pulumi.set(__self__, "elb_id", elb_id)
         if enterprise_project_id is not None:
             pulumi.set(__self__, "enterprise_project_id", enterprise_project_id)
+        if force_backup is not None:
+            pulumi.set(__self__, "force_backup", force_backup)
         if keep_last_manual_snapshot is not None:
             pulumi.set(__self__, "keep_last_manual_snapshot", keep_last_manual_snapshot)
         if kms_key_id is not None:
             pulumi.set(__self__, "kms_key_id", kms_key_id)
+        if logical_cluster_enable is not None:
+            pulumi.set(__self__, "logical_cluster_enable", logical_cluster_enable)
+        if lts_enable is not None:
+            pulumi.set(__self__, "lts_enable", lts_enable)
         if name is not None:
             pulumi.set(__self__, "name", name)
         if number_of_cn is not None:
@@ -122,7 +148,8 @@ class ClusterArgs:
     def availability_zone(self) -> pulumi.Input[str]:
         """
         The availability zone in which to create the cluster instance.
-        Changing this parameter will create a new resource.
+        If there are multiple available zones, separate by commas, e.g. **cn-north-4a,cn-north-4b,cn-north-4g**.
+        Currently, multi-AZ clusters only support selecting `3` AZs. Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "availability_zone")
 
@@ -162,7 +189,7 @@ class ClusterArgs:
     def number_of_node(self) -> pulumi.Input[int]:
         """
         Number of nodes in a cluster.  
-        The value ranges from 3 to 32 in cluster mode. The value of stream warehouse(stand-alone mode) is 1.
+        The value ranges from 3 to 256 in cluster mode. The value of stream warehouse(stand-alone mode) is 1.
         """
         return pulumi.get(self, "number_of_node")
 
@@ -174,7 +201,7 @@ class ClusterArgs:
     @pulumi.getter(name="securityGroupId")
     def security_group_id(self) -> pulumi.Input[str]:
         """
-        The security group ID.
+        Specifies the security group ID of the cluster.
         Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "security_group_id")
@@ -227,6 +254,18 @@ class ClusterArgs:
         pulumi.set(self, "vpc_id", value)
 
     @property
+    @pulumi.getter
+    def description(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the description of the cluster.
+        """
+        return pulumi.get(self, "description")
+
+    @description.setter
+    def description(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "description", value)
+
+    @property
     @pulumi.getter(name="dssPoolId")
     def dss_pool_id(self) -> Optional[pulumi.Input[str]]:
         """
@@ -240,17 +279,42 @@ class ClusterArgs:
         pulumi.set(self, "dss_pool_id", value)
 
     @property
+    @pulumi.getter(name="elbId")
+    def elb_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the ID of the ELB load balancer.
+        """
+        return pulumi.get(self, "elb_id")
+
+    @elb_id.setter
+    def elb_id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "elb_id", value)
+
+    @property
     @pulumi.getter(name="enterpriseProjectId")
     def enterprise_project_id(self) -> Optional[pulumi.Input[str]]:
         """
         The enterprise project ID.
-        Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "enterprise_project_id")
 
     @enterprise_project_id.setter
     def enterprise_project_id(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "enterprise_project_id", value)
+
+    @property
+    @pulumi.getter(name="forceBackup")
+    def force_backup(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specified whether to automatically execute snapshot when shrinking the number of nodes.
+        The default value is **true**.
+        This parameter is required and available only when scaling-in the `number_of_node` parameter value.
+        """
+        return pulumi.get(self, "force_backup")
+
+    @force_backup.setter
+    def force_backup(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "force_backup", value)
 
     @property
     @pulumi.getter(name="keepLastManualSnapshot")
@@ -279,6 +343,31 @@ class ClusterArgs:
         pulumi.set(self, "kms_key_id", value)
 
     @property
+    @pulumi.getter(name="logicalClusterEnable")
+    def logical_cluster_enable(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies whether to enable logical cluster. The switch needs to be turned
+        on before creating a logical cluster.
+        """
+        return pulumi.get(self, "logical_cluster_enable")
+
+    @logical_cluster_enable.setter
+    def logical_cluster_enable(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "logical_cluster_enable", value)
+
+    @property
+    @pulumi.getter(name="ltsEnable")
+    def lts_enable(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies whether to enable LTS. The default value is **false**.
+        """
+        return pulumi.get(self, "lts_enable")
+
+    @lts_enable.setter
+    def lts_enable(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "lts_enable", value)
+
+    @property
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
@@ -297,7 +386,8 @@ class ClusterArgs:
     def number_of_cn(self) -> Optional[pulumi.Input[int]]:
         """
         The number of CN.  
-        The value ranges from 2 to **number_of_node**, the maximum value is 20. Defaults to 3.
+        The value ranges from 2 to **number_of_node**, the maximum value is 20.
+        This parameter must be used together with `version`.
         Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "number_of_cn")
@@ -349,7 +439,6 @@ class ClusterArgs:
     def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]:
         """
         The key/value pairs to associate with the cluster.
-        Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "tags")
 
@@ -362,6 +451,7 @@ class ClusterArgs:
     def version(self) -> Optional[pulumi.Input[str]]:
         """
         The cluster version.
+        [For details](https://support.huaweicloud.com/intl/en-us/bulletin-dws/dws_12_0000.html).
         Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "version")
@@ -375,6 +465,8 @@ class ClusterArgs:
     def volume(self) -> Optional[pulumi.Input['ClusterVolumeArgs']]:
         """
         The information about the volume.
+        Changing this parameter will create a new resource.
+        For local disks, this parameter can not be specified.
         """
         return pulumi.get(self, "volume")
 
@@ -388,11 +480,17 @@ class _ClusterState:
     def __init__(__self__, *,
                  availability_zone: Optional[pulumi.Input[str]] = None,
                  created: Optional[pulumi.Input[str]] = None,
+                 description: Optional[pulumi.Input[str]] = None,
                  dss_pool_id: Optional[pulumi.Input[str]] = None,
+                 elb_id: Optional[pulumi.Input[str]] = None,
+                 elbs: Optional[pulumi.Input[Sequence[pulumi.Input['ClusterElbArgs']]]] = None,
                  endpoints: Optional[pulumi.Input[Sequence[pulumi.Input['ClusterEndpointArgs']]]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
+                 force_backup: Optional[pulumi.Input[bool]] = None,
                  keep_last_manual_snapshot: Optional[pulumi.Input[int]] = None,
                  kms_key_id: Optional[pulumi.Input[str]] = None,
+                 logical_cluster_enable: Optional[pulumi.Input[bool]] = None,
+                 lts_enable: Optional[pulumi.Input[bool]] = None,
                  maintain_windows: Optional[pulumi.Input[Sequence[pulumi.Input['ClusterMaintainWindowArgs']]]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  network_id: Optional[pulumi.Input[str]] = None,
@@ -419,19 +517,29 @@ class _ClusterState:
         """
         Input properties used for looking up and filtering Cluster resources.
         :param pulumi.Input[str] availability_zone: The availability zone in which to create the cluster instance.
-               Changing this parameter will create a new resource.
+               If there are multiple available zones, separate by commas, e.g. **cn-north-4a,cn-north-4b,cn-north-4g**.
+               Currently, multi-AZ clusters only support selecting `3` AZs. Changing this parameter will create a new resource.
         :param pulumi.Input[str] created: The creation time of the cluster.  
                Format: ISO8601: **YYYY-MM-DDThh:mm:ssZ**.
+        :param pulumi.Input[str] description: Specifies the description of the cluster.
         :param pulumi.Input[str] dss_pool_id: Dedicated storage pool ID.
                Changing this parameter will create a new resource.
+        :param pulumi.Input[str] elb_id: Specifies the ID of the ELB load balancer.
+        :param pulumi.Input[Sequence[pulumi.Input['ClusterElbArgs']]] elbs: The ELB information bound to the cluster.
+               The elb structure is documented below.
         :param pulumi.Input[Sequence[pulumi.Input['ClusterEndpointArgs']]] endpoints: Private network connection information about the cluster.
                The Endpoint structure is documented below.
         :param pulumi.Input[str] enterprise_project_id: The enterprise project ID.
-               Changing this parameter will create a new resource.
+        :param pulumi.Input[bool] force_backup: Specified whether to automatically execute snapshot when shrinking the number of nodes.
+               The default value is **true**.
+               This parameter is required and available only when scaling-in the `number_of_node` parameter value.
         :param pulumi.Input[int] keep_last_manual_snapshot: The number of latest manual snapshots that need to be
                retained when deleting the cluster.
         :param pulumi.Input[str] kms_key_id: The KMS key ID.
                Changing this parameter will create a new resource.
+        :param pulumi.Input[bool] logical_cluster_enable: Specifies whether to enable logical cluster. The switch needs to be turned
+               on before creating a logical cluster.
+        :param pulumi.Input[bool] lts_enable: Specifies whether to enable LTS. The default value is **false**.
         :param pulumi.Input[Sequence[pulumi.Input['ClusterMaintainWindowArgs']]] maintain_windows: Cluster maintenance window.
                The MaintainWindow structure is documented below.
         :param pulumi.Input[str] name: Cluster name, which must be unique and contains 4 to 64 characters, which
@@ -443,20 +551,21 @@ class _ClusterState:
                [For details](https://support.huaweicloud.com/intl/en-us/productdesc-dws/dws_01_00018.html).
                Changing this parameter will create a new resource.
         :param pulumi.Input[int] number_of_cn: The number of CN.  
-               The value ranges from 2 to **number_of_node**, the maximum value is 20. Defaults to 3.
+               The value ranges from 2 to **number_of_node**, the maximum value is 20.
+               This parameter must be used together with `version`.
                Changing this parameter will create a new resource.
         :param pulumi.Input[int] number_of_node: Number of nodes in a cluster.  
-               The value ranges from 3 to 32 in cluster mode. The value of stream warehouse(stand-alone mode) is 1.
+               The value ranges from 3 to 256 in cluster mode. The value of stream warehouse(stand-alone mode) is 1.
         :param pulumi.Input[int] port: Service port of a cluster (8000 to 10000). The default value is 8000.  
                Changing this parameter will create a new resource.
-        :param pulumi.Input[Sequence[pulumi.Input[str]]] private_ips: List of private network IP addresses.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] private_ips: The private IP address of the ELB load balancer.
         :param pulumi.Input[Sequence[pulumi.Input['ClusterPublicEndpointArgs']]] public_endpoints: Public network connection information about the cluster.
                The PublicEndpoint structure is documented below.
         :param pulumi.Input['ClusterPublicIpArgs'] public_ip: The information about public IP.
         :param pulumi.Input[int] recent_event: The recent event number.
         :param pulumi.Input[str] region: Specifies the region in which to create the resource.
                If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
-        :param pulumi.Input[str] security_group_id: The security group ID.
+        :param pulumi.Input[str] security_group_id: Specifies the security group ID of the cluster.
                Changing this parameter will create a new resource.
         :param pulumi.Input[str] status: The cluster status.  
                The valid values are **CREATING**, **AVAILABLE**, **ACTIVE**, **FAILED**, **CREATE_FAILED**,
@@ -480,7 +589,6 @@ class _ClusterState:
                + DEGRADED | UNBALANCED | READONLY | REDISTRIBUTION-FAILURE
                + DEGRADED | UNBALANCED | READONLY
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: The key/value pairs to associate with the cluster.
-               Changing this parameter will create a new resource.
         :param pulumi.Input[str] task_status: Cluster management task.  
                The value can be one of the following:
                + UNFREEZING
@@ -505,8 +613,11 @@ class _ClusterState:
                and special characters(~!@#%^&*()-_=+|[{}];:,<.>/?).
                It cannot be the same as the username or the username written in reverse order.
         :param pulumi.Input[str] version: The cluster version.
+               [For details](https://support.huaweicloud.com/intl/en-us/bulletin-dws/dws_12_0000.html).
                Changing this parameter will create a new resource.
         :param pulumi.Input['ClusterVolumeArgs'] volume: The information about the volume.
+               Changing this parameter will create a new resource.
+               For local disks, this parameter can not be specified.
         :param pulumi.Input[str] vpc_id: The VPC ID.
                Changing this parameter will create a new resource.
         """
@@ -514,16 +625,28 @@ class _ClusterState:
             pulumi.set(__self__, "availability_zone", availability_zone)
         if created is not None:
             pulumi.set(__self__, "created", created)
+        if description is not None:
+            pulumi.set(__self__, "description", description)
         if dss_pool_id is not None:
             pulumi.set(__self__, "dss_pool_id", dss_pool_id)
+        if elb_id is not None:
+            pulumi.set(__self__, "elb_id", elb_id)
+        if elbs is not None:
+            pulumi.set(__self__, "elbs", elbs)
         if endpoints is not None:
             pulumi.set(__self__, "endpoints", endpoints)
         if enterprise_project_id is not None:
             pulumi.set(__self__, "enterprise_project_id", enterprise_project_id)
+        if force_backup is not None:
+            pulumi.set(__self__, "force_backup", force_backup)
         if keep_last_manual_snapshot is not None:
             pulumi.set(__self__, "keep_last_manual_snapshot", keep_last_manual_snapshot)
         if kms_key_id is not None:
             pulumi.set(__self__, "kms_key_id", kms_key_id)
+        if logical_cluster_enable is not None:
+            pulumi.set(__self__, "logical_cluster_enable", logical_cluster_enable)
+        if lts_enable is not None:
+            pulumi.set(__self__, "lts_enable", lts_enable)
         if maintain_windows is not None:
             pulumi.set(__self__, "maintain_windows", maintain_windows)
         if name is not None:
@@ -576,7 +699,8 @@ class _ClusterState:
     def availability_zone(self) -> Optional[pulumi.Input[str]]:
         """
         The availability zone in which to create the cluster instance.
-        Changing this parameter will create a new resource.
+        If there are multiple available zones, separate by commas, e.g. **cn-north-4a,cn-north-4b,cn-north-4g**.
+        Currently, multi-AZ clusters only support selecting `3` AZs. Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "availability_zone")
 
@@ -598,6 +722,18 @@ class _ClusterState:
         pulumi.set(self, "created", value)
 
     @property
+    @pulumi.getter
+    def description(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the description of the cluster.
+        """
+        return pulumi.get(self, "description")
+
+    @description.setter
+    def description(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "description", value)
+
+    @property
     @pulumi.getter(name="dssPoolId")
     def dss_pool_id(self) -> Optional[pulumi.Input[str]]:
         """
@@ -609,6 +745,31 @@ class _ClusterState:
     @dss_pool_id.setter
     def dss_pool_id(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "dss_pool_id", value)
+
+    @property
+    @pulumi.getter(name="elbId")
+    def elb_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the ID of the ELB load balancer.
+        """
+        return pulumi.get(self, "elb_id")
+
+    @elb_id.setter
+    def elb_id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "elb_id", value)
+
+    @property
+    @pulumi.getter
+    def elbs(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['ClusterElbArgs']]]]:
+        """
+        The ELB information bound to the cluster.
+        The elb structure is documented below.
+        """
+        return pulumi.get(self, "elbs")
+
+    @elbs.setter
+    def elbs(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['ClusterElbArgs']]]]):
+        pulumi.set(self, "elbs", value)
 
     @property
     @pulumi.getter
@@ -628,13 +789,26 @@ class _ClusterState:
     def enterprise_project_id(self) -> Optional[pulumi.Input[str]]:
         """
         The enterprise project ID.
-        Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "enterprise_project_id")
 
     @enterprise_project_id.setter
     def enterprise_project_id(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "enterprise_project_id", value)
+
+    @property
+    @pulumi.getter(name="forceBackup")
+    def force_backup(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specified whether to automatically execute snapshot when shrinking the number of nodes.
+        The default value is **true**.
+        This parameter is required and available only when scaling-in the `number_of_node` parameter value.
+        """
+        return pulumi.get(self, "force_backup")
+
+    @force_backup.setter
+    def force_backup(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "force_backup", value)
 
     @property
     @pulumi.getter(name="keepLastManualSnapshot")
@@ -661,6 +835,31 @@ class _ClusterState:
     @kms_key_id.setter
     def kms_key_id(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "kms_key_id", value)
+
+    @property
+    @pulumi.getter(name="logicalClusterEnable")
+    def logical_cluster_enable(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies whether to enable logical cluster. The switch needs to be turned
+        on before creating a logical cluster.
+        """
+        return pulumi.get(self, "logical_cluster_enable")
+
+    @logical_cluster_enable.setter
+    def logical_cluster_enable(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "logical_cluster_enable", value)
+
+    @property
+    @pulumi.getter(name="ltsEnable")
+    def lts_enable(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies whether to enable LTS. The default value is **false**.
+        """
+        return pulumi.get(self, "lts_enable")
+
+    @lts_enable.setter
+    def lts_enable(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "lts_enable", value)
 
     @property
     @pulumi.getter(name="maintainWindows")
@@ -721,7 +920,8 @@ class _ClusterState:
     def number_of_cn(self) -> Optional[pulumi.Input[int]]:
         """
         The number of CN.  
-        The value ranges from 2 to **number_of_node**, the maximum value is 20. Defaults to 3.
+        The value ranges from 2 to **number_of_node**, the maximum value is 20.
+        This parameter must be used together with `version`.
         Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "number_of_cn")
@@ -735,7 +935,7 @@ class _ClusterState:
     def number_of_node(self) -> Optional[pulumi.Input[int]]:
         """
         Number of nodes in a cluster.  
-        The value ranges from 3 to 32 in cluster mode. The value of stream warehouse(stand-alone mode) is 1.
+        The value ranges from 3 to 256 in cluster mode. The value of stream warehouse(stand-alone mode) is 1.
         """
         return pulumi.get(self, "number_of_node")
 
@@ -760,7 +960,7 @@ class _ClusterState:
     @pulumi.getter(name="privateIps")
     def private_ips(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]:
         """
-        List of private network IP addresses.
+        The private IP address of the ELB load balancer.
         """
         return pulumi.get(self, "private_ips")
 
@@ -822,7 +1022,7 @@ class _ClusterState:
     @pulumi.getter(name="securityGroupId")
     def security_group_id(self) -> Optional[pulumi.Input[str]]:
         """
-        The security group ID.
+        Specifies the security group ID of the cluster.
         Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "security_group_id")
@@ -879,7 +1079,6 @@ class _ClusterState:
     def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]:
         """
         The key/value pairs to associate with the cluster.
-        Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "tags")
 
@@ -959,6 +1158,7 @@ class _ClusterState:
     def version(self) -> Optional[pulumi.Input[str]]:
         """
         The cluster version.
+        [For details](https://support.huaweicloud.com/intl/en-us/bulletin-dws/dws_12_0000.html).
         Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "version")
@@ -972,6 +1172,8 @@ class _ClusterState:
     def volume(self) -> Optional[pulumi.Input['ClusterVolumeArgs']]:
         """
         The information about the volume.
+        Changing this parameter will create a new resource.
+        For local disks, this parameter can not be specified.
         """
         return pulumi.get(self, "volume")
 
@@ -999,10 +1201,15 @@ class Cluster(pulumi.CustomResource):
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
                  availability_zone: Optional[pulumi.Input[str]] = None,
+                 description: Optional[pulumi.Input[str]] = None,
                  dss_pool_id: Optional[pulumi.Input[str]] = None,
+                 elb_id: Optional[pulumi.Input[str]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
+                 force_backup: Optional[pulumi.Input[bool]] = None,
                  keep_last_manual_snapshot: Optional[pulumi.Input[int]] = None,
                  kms_key_id: Optional[pulumi.Input[str]] = None,
+                 logical_cluster_enable: Optional[pulumi.Input[bool]] = None,
+                 lts_enable: Optional[pulumi.Input[bool]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  network_id: Optional[pulumi.Input[str]] = None,
                  node_type: Optional[pulumi.Input[str]] = None,
@@ -1020,7 +1227,7 @@ class Cluster(pulumi.CustomResource):
                  vpc_id: Optional[pulumi.Input[str]] = None,
                  __props__=None):
         """
-        Manages a DWS cluster resource within HuaweiCloud.
+        Manages a GaussDB(DWS) cluster resource within HuaweiCloud.
 
         ## Example Usage
 
@@ -1041,23 +1248,28 @@ class Cluster(pulumi.CustomResource):
             version=dws_cluster_version,
             node_type="dws.m3.xlarge",
             number_of_node=3,
+            number_of_cn=3,
             availability_zone=availability_zone,
             user_name=user_name,
             user_pwd=user_pwd,
             vpc_id=vpc_id,
             network_id=network_id,
-            security_group_id=secgroup.id)
+            security_group_id=secgroup.id,
+            volume=huaweicloud.dws.ClusterVolumeArgs(
+                type="SSD",
+                capacity="300",
+            ))
         ```
 
         ## Import
 
-        Cluster can be imported using the following format
+        The resource can be imported using the `id`, e.g. bash
 
         ```sh
-         $ pulumi import huaweicloud:Dws/cluster:Cluster test 47ad727e-9dcc-4833-bde0-bb298607c719
+         $ pulumi import huaweicloud:Dws/cluster:Cluster test <id>
         ```
 
-         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`user_pwd`, `number_of_cn`, `kms_key_id`, `volume`, `dss_pool_id`. It is generally recommended running `terraform plan` after importing a cluster. You can then decide if changes should be applied to the cluster, or the resource definition should be updated to align with the cluster. Also you can ignore changes as below. resource "huaweicloud_dws_cluster" "test" {
+         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`user_pwd`, `number_of_cn`, `kms_key_id`, `volume`, `dss_pool_id`, `logical_cluster_enable`, `lts_enable`, `force_backup`. It is generally recommended running `terraform plan` after importing a cluster. You can then decide if changes should be applied to the cluster, or the resource definition should be updated to align with the cluster. Also you can ignore changes as below. hcl resource "huaweicloud_dws_cluster" "test" {
 
          ...
 
@@ -1065,7 +1277,7 @@ class Cluster(pulumi.CustomResource):
 
          ignore_changes = [
 
-         user_pwd, number_of_cn, kms_key_id, volume, dss_pool_id
+         user_pwd, number_of_cn, kms_key_id, volume, dss_pool_id, logical_cluster_enable, lts_enable, `force_backup`,
 
          ]
 
@@ -1074,15 +1286,23 @@ class Cluster(pulumi.CustomResource):
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[str] availability_zone: The availability zone in which to create the cluster instance.
-               Changing this parameter will create a new resource.
+               If there are multiple available zones, separate by commas, e.g. **cn-north-4a,cn-north-4b,cn-north-4g**.
+               Currently, multi-AZ clusters only support selecting `3` AZs. Changing this parameter will create a new resource.
+        :param pulumi.Input[str] description: Specifies the description of the cluster.
         :param pulumi.Input[str] dss_pool_id: Dedicated storage pool ID.
                Changing this parameter will create a new resource.
+        :param pulumi.Input[str] elb_id: Specifies the ID of the ELB load balancer.
         :param pulumi.Input[str] enterprise_project_id: The enterprise project ID.
-               Changing this parameter will create a new resource.
+        :param pulumi.Input[bool] force_backup: Specified whether to automatically execute snapshot when shrinking the number of nodes.
+               The default value is **true**.
+               This parameter is required and available only when scaling-in the `number_of_node` parameter value.
         :param pulumi.Input[int] keep_last_manual_snapshot: The number of latest manual snapshots that need to be
                retained when deleting the cluster.
         :param pulumi.Input[str] kms_key_id: The KMS key ID.
                Changing this parameter will create a new resource.
+        :param pulumi.Input[bool] logical_cluster_enable: Specifies whether to enable logical cluster. The switch needs to be turned
+               on before creating a logical cluster.
+        :param pulumi.Input[bool] lts_enable: Specifies whether to enable LTS. The default value is **false**.
         :param pulumi.Input[str] name: Cluster name, which must be unique and contains 4 to 64 characters, which
                consist of letters, digits, hyphens(-), or underscores(_) only and must start with a letter.
                Changing this creates a new cluster resource.
@@ -1092,19 +1312,19 @@ class Cluster(pulumi.CustomResource):
                [For details](https://support.huaweicloud.com/intl/en-us/productdesc-dws/dws_01_00018.html).
                Changing this parameter will create a new resource.
         :param pulumi.Input[int] number_of_cn: The number of CN.  
-               The value ranges from 2 to **number_of_node**, the maximum value is 20. Defaults to 3.
+               The value ranges from 2 to **number_of_node**, the maximum value is 20.
+               This parameter must be used together with `version`.
                Changing this parameter will create a new resource.
         :param pulumi.Input[int] number_of_node: Number of nodes in a cluster.  
-               The value ranges from 3 to 32 in cluster mode. The value of stream warehouse(stand-alone mode) is 1.
+               The value ranges from 3 to 256 in cluster mode. The value of stream warehouse(stand-alone mode) is 1.
         :param pulumi.Input[int] port: Service port of a cluster (8000 to 10000). The default value is 8000.  
                Changing this parameter will create a new resource.
         :param pulumi.Input[pulumi.InputType['ClusterPublicIpArgs']] public_ip: The information about public IP.
         :param pulumi.Input[str] region: Specifies the region in which to create the resource.
                If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
-        :param pulumi.Input[str] security_group_id: The security group ID.
+        :param pulumi.Input[str] security_group_id: Specifies the security group ID of the cluster.
                Changing this parameter will create a new resource.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: The key/value pairs to associate with the cluster.
-               Changing this parameter will create a new resource.
         :param pulumi.Input[str] user_name: Administrator username for logging in to a data warehouse cluster.  
                The administrator username must: Consist of lowercase letters, digits, or underscores.
                Start with a lowercase letter or an underscore.
@@ -1114,8 +1334,11 @@ class Cluster(pulumi.CustomResource):
                and special characters(~!@#%^&*()-_=+|[{}];:,<.>/?).
                It cannot be the same as the username or the username written in reverse order.
         :param pulumi.Input[str] version: The cluster version.
+               [For details](https://support.huaweicloud.com/intl/en-us/bulletin-dws/dws_12_0000.html).
                Changing this parameter will create a new resource.
         :param pulumi.Input[pulumi.InputType['ClusterVolumeArgs']] volume: The information about the volume.
+               Changing this parameter will create a new resource.
+               For local disks, this parameter can not be specified.
         :param pulumi.Input[str] vpc_id: The VPC ID.
                Changing this parameter will create a new resource.
         """
@@ -1126,7 +1349,7 @@ class Cluster(pulumi.CustomResource):
                  args: ClusterArgs,
                  opts: Optional[pulumi.ResourceOptions] = None):
         """
-        Manages a DWS cluster resource within HuaweiCloud.
+        Manages a GaussDB(DWS) cluster resource within HuaweiCloud.
 
         ## Example Usage
 
@@ -1147,23 +1370,28 @@ class Cluster(pulumi.CustomResource):
             version=dws_cluster_version,
             node_type="dws.m3.xlarge",
             number_of_node=3,
+            number_of_cn=3,
             availability_zone=availability_zone,
             user_name=user_name,
             user_pwd=user_pwd,
             vpc_id=vpc_id,
             network_id=network_id,
-            security_group_id=secgroup.id)
+            security_group_id=secgroup.id,
+            volume=huaweicloud.dws.ClusterVolumeArgs(
+                type="SSD",
+                capacity="300",
+            ))
         ```
 
         ## Import
 
-        Cluster can be imported using the following format
+        The resource can be imported using the `id`, e.g. bash
 
         ```sh
-         $ pulumi import huaweicloud:Dws/cluster:Cluster test 47ad727e-9dcc-4833-bde0-bb298607c719
+         $ pulumi import huaweicloud:Dws/cluster:Cluster test <id>
         ```
 
-         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`user_pwd`, `number_of_cn`, `kms_key_id`, `volume`, `dss_pool_id`. It is generally recommended running `terraform plan` after importing a cluster. You can then decide if changes should be applied to the cluster, or the resource definition should be updated to align with the cluster. Also you can ignore changes as below. resource "huaweicloud_dws_cluster" "test" {
+         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`user_pwd`, `number_of_cn`, `kms_key_id`, `volume`, `dss_pool_id`, `logical_cluster_enable`, `lts_enable`, `force_backup`. It is generally recommended running `terraform plan` after importing a cluster. You can then decide if changes should be applied to the cluster, or the resource definition should be updated to align with the cluster. Also you can ignore changes as below. hcl resource "huaweicloud_dws_cluster" "test" {
 
          ...
 
@@ -1171,7 +1399,7 @@ class Cluster(pulumi.CustomResource):
 
          ignore_changes = [
 
-         user_pwd, number_of_cn, kms_key_id, volume, dss_pool_id
+         user_pwd, number_of_cn, kms_key_id, volume, dss_pool_id, logical_cluster_enable, lts_enable, `force_backup`,
 
          ]
 
@@ -1193,10 +1421,15 @@ class Cluster(pulumi.CustomResource):
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
                  availability_zone: Optional[pulumi.Input[str]] = None,
+                 description: Optional[pulumi.Input[str]] = None,
                  dss_pool_id: Optional[pulumi.Input[str]] = None,
+                 elb_id: Optional[pulumi.Input[str]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
+                 force_backup: Optional[pulumi.Input[bool]] = None,
                  keep_last_manual_snapshot: Optional[pulumi.Input[int]] = None,
                  kms_key_id: Optional[pulumi.Input[str]] = None,
+                 logical_cluster_enable: Optional[pulumi.Input[bool]] = None,
+                 lts_enable: Optional[pulumi.Input[bool]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  network_id: Optional[pulumi.Input[str]] = None,
                  node_type: Optional[pulumi.Input[str]] = None,
@@ -1224,10 +1457,15 @@ class Cluster(pulumi.CustomResource):
             if availability_zone is None and not opts.urn:
                 raise TypeError("Missing required property 'availability_zone'")
             __props__.__dict__["availability_zone"] = availability_zone
+            __props__.__dict__["description"] = description
             __props__.__dict__["dss_pool_id"] = dss_pool_id
+            __props__.__dict__["elb_id"] = elb_id
             __props__.__dict__["enterprise_project_id"] = enterprise_project_id
+            __props__.__dict__["force_backup"] = force_backup
             __props__.__dict__["keep_last_manual_snapshot"] = keep_last_manual_snapshot
             __props__.__dict__["kms_key_id"] = kms_key_id
+            __props__.__dict__["logical_cluster_enable"] = logical_cluster_enable
+            __props__.__dict__["lts_enable"] = lts_enable
             __props__.__dict__["name"] = name
             if network_id is None and not opts.urn:
                 raise TypeError("Missing required property 'network_id'")
@@ -1258,6 +1496,7 @@ class Cluster(pulumi.CustomResource):
                 raise TypeError("Missing required property 'vpc_id'")
             __props__.__dict__["vpc_id"] = vpc_id
             __props__.__dict__["created"] = None
+            __props__.__dict__["elbs"] = None
             __props__.__dict__["endpoints"] = None
             __props__.__dict__["maintain_windows"] = None
             __props__.__dict__["private_ips"] = None
@@ -1279,11 +1518,17 @@ class Cluster(pulumi.CustomResource):
             opts: Optional[pulumi.ResourceOptions] = None,
             availability_zone: Optional[pulumi.Input[str]] = None,
             created: Optional[pulumi.Input[str]] = None,
+            description: Optional[pulumi.Input[str]] = None,
             dss_pool_id: Optional[pulumi.Input[str]] = None,
+            elb_id: Optional[pulumi.Input[str]] = None,
+            elbs: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ClusterElbArgs']]]]] = None,
             endpoints: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ClusterEndpointArgs']]]]] = None,
             enterprise_project_id: Optional[pulumi.Input[str]] = None,
+            force_backup: Optional[pulumi.Input[bool]] = None,
             keep_last_manual_snapshot: Optional[pulumi.Input[int]] = None,
             kms_key_id: Optional[pulumi.Input[str]] = None,
+            logical_cluster_enable: Optional[pulumi.Input[bool]] = None,
+            lts_enable: Optional[pulumi.Input[bool]] = None,
             maintain_windows: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ClusterMaintainWindowArgs']]]]] = None,
             name: Optional[pulumi.Input[str]] = None,
             network_id: Optional[pulumi.Input[str]] = None,
@@ -1315,19 +1560,29 @@ class Cluster(pulumi.CustomResource):
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[str] availability_zone: The availability zone in which to create the cluster instance.
-               Changing this parameter will create a new resource.
+               If there are multiple available zones, separate by commas, e.g. **cn-north-4a,cn-north-4b,cn-north-4g**.
+               Currently, multi-AZ clusters only support selecting `3` AZs. Changing this parameter will create a new resource.
         :param pulumi.Input[str] created: The creation time of the cluster.  
                Format: ISO8601: **YYYY-MM-DDThh:mm:ssZ**.
+        :param pulumi.Input[str] description: Specifies the description of the cluster.
         :param pulumi.Input[str] dss_pool_id: Dedicated storage pool ID.
                Changing this parameter will create a new resource.
+        :param pulumi.Input[str] elb_id: Specifies the ID of the ELB load balancer.
+        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ClusterElbArgs']]]] elbs: The ELB information bound to the cluster.
+               The elb structure is documented below.
         :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ClusterEndpointArgs']]]] endpoints: Private network connection information about the cluster.
                The Endpoint structure is documented below.
         :param pulumi.Input[str] enterprise_project_id: The enterprise project ID.
-               Changing this parameter will create a new resource.
+        :param pulumi.Input[bool] force_backup: Specified whether to automatically execute snapshot when shrinking the number of nodes.
+               The default value is **true**.
+               This parameter is required and available only when scaling-in the `number_of_node` parameter value.
         :param pulumi.Input[int] keep_last_manual_snapshot: The number of latest manual snapshots that need to be
                retained when deleting the cluster.
         :param pulumi.Input[str] kms_key_id: The KMS key ID.
                Changing this parameter will create a new resource.
+        :param pulumi.Input[bool] logical_cluster_enable: Specifies whether to enable logical cluster. The switch needs to be turned
+               on before creating a logical cluster.
+        :param pulumi.Input[bool] lts_enable: Specifies whether to enable LTS. The default value is **false**.
         :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ClusterMaintainWindowArgs']]]] maintain_windows: Cluster maintenance window.
                The MaintainWindow structure is documented below.
         :param pulumi.Input[str] name: Cluster name, which must be unique and contains 4 to 64 characters, which
@@ -1339,20 +1594,21 @@ class Cluster(pulumi.CustomResource):
                [For details](https://support.huaweicloud.com/intl/en-us/productdesc-dws/dws_01_00018.html).
                Changing this parameter will create a new resource.
         :param pulumi.Input[int] number_of_cn: The number of CN.  
-               The value ranges from 2 to **number_of_node**, the maximum value is 20. Defaults to 3.
+               The value ranges from 2 to **number_of_node**, the maximum value is 20.
+               This parameter must be used together with `version`.
                Changing this parameter will create a new resource.
         :param pulumi.Input[int] number_of_node: Number of nodes in a cluster.  
-               The value ranges from 3 to 32 in cluster mode. The value of stream warehouse(stand-alone mode) is 1.
+               The value ranges from 3 to 256 in cluster mode. The value of stream warehouse(stand-alone mode) is 1.
         :param pulumi.Input[int] port: Service port of a cluster (8000 to 10000). The default value is 8000.  
                Changing this parameter will create a new resource.
-        :param pulumi.Input[Sequence[pulumi.Input[str]]] private_ips: List of private network IP addresses.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] private_ips: The private IP address of the ELB load balancer.
         :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ClusterPublicEndpointArgs']]]] public_endpoints: Public network connection information about the cluster.
                The PublicEndpoint structure is documented below.
         :param pulumi.Input[pulumi.InputType['ClusterPublicIpArgs']] public_ip: The information about public IP.
         :param pulumi.Input[int] recent_event: The recent event number.
         :param pulumi.Input[str] region: Specifies the region in which to create the resource.
                If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
-        :param pulumi.Input[str] security_group_id: The security group ID.
+        :param pulumi.Input[str] security_group_id: Specifies the security group ID of the cluster.
                Changing this parameter will create a new resource.
         :param pulumi.Input[str] status: The cluster status.  
                The valid values are **CREATING**, **AVAILABLE**, **ACTIVE**, **FAILED**, **CREATE_FAILED**,
@@ -1376,7 +1632,6 @@ class Cluster(pulumi.CustomResource):
                + DEGRADED | UNBALANCED | READONLY | REDISTRIBUTION-FAILURE
                + DEGRADED | UNBALANCED | READONLY
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: The key/value pairs to associate with the cluster.
-               Changing this parameter will create a new resource.
         :param pulumi.Input[str] task_status: Cluster management task.  
                The value can be one of the following:
                + UNFREEZING
@@ -1401,8 +1656,11 @@ class Cluster(pulumi.CustomResource):
                and special characters(~!@#%^&*()-_=+|[{}];:,<.>/?).
                It cannot be the same as the username or the username written in reverse order.
         :param pulumi.Input[str] version: The cluster version.
+               [For details](https://support.huaweicloud.com/intl/en-us/bulletin-dws/dws_12_0000.html).
                Changing this parameter will create a new resource.
         :param pulumi.Input[pulumi.InputType['ClusterVolumeArgs']] volume: The information about the volume.
+               Changing this parameter will create a new resource.
+               For local disks, this parameter can not be specified.
         :param pulumi.Input[str] vpc_id: The VPC ID.
                Changing this parameter will create a new resource.
         """
@@ -1412,11 +1670,17 @@ class Cluster(pulumi.CustomResource):
 
         __props__.__dict__["availability_zone"] = availability_zone
         __props__.__dict__["created"] = created
+        __props__.__dict__["description"] = description
         __props__.__dict__["dss_pool_id"] = dss_pool_id
+        __props__.__dict__["elb_id"] = elb_id
+        __props__.__dict__["elbs"] = elbs
         __props__.__dict__["endpoints"] = endpoints
         __props__.__dict__["enterprise_project_id"] = enterprise_project_id
+        __props__.__dict__["force_backup"] = force_backup
         __props__.__dict__["keep_last_manual_snapshot"] = keep_last_manual_snapshot
         __props__.__dict__["kms_key_id"] = kms_key_id
+        __props__.__dict__["logical_cluster_enable"] = logical_cluster_enable
+        __props__.__dict__["lts_enable"] = lts_enable
         __props__.__dict__["maintain_windows"] = maintain_windows
         __props__.__dict__["name"] = name
         __props__.__dict__["network_id"] = network_id
@@ -1447,7 +1711,8 @@ class Cluster(pulumi.CustomResource):
     def availability_zone(self) -> pulumi.Output[str]:
         """
         The availability zone in which to create the cluster instance.
-        Changing this parameter will create a new resource.
+        If there are multiple available zones, separate by commas, e.g. **cn-north-4a,cn-north-4b,cn-north-4g**.
+        Currently, multi-AZ clusters only support selecting `3` AZs. Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "availability_zone")
 
@@ -1461,6 +1726,14 @@ class Cluster(pulumi.CustomResource):
         return pulumi.get(self, "created")
 
     @property
+    @pulumi.getter
+    def description(self) -> pulumi.Output[Optional[str]]:
+        """
+        Specifies the description of the cluster.
+        """
+        return pulumi.get(self, "description")
+
+    @property
     @pulumi.getter(name="dssPoolId")
     def dss_pool_id(self) -> pulumi.Output[str]:
         """
@@ -1468,6 +1741,23 @@ class Cluster(pulumi.CustomResource):
         Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "dss_pool_id")
+
+    @property
+    @pulumi.getter(name="elbId")
+    def elb_id(self) -> pulumi.Output[Optional[str]]:
+        """
+        Specifies the ID of the ELB load balancer.
+        """
+        return pulumi.get(self, "elb_id")
+
+    @property
+    @pulumi.getter
+    def elbs(self) -> pulumi.Output[Sequence['outputs.ClusterElb']]:
+        """
+        The ELB information bound to the cluster.
+        The elb structure is documented below.
+        """
+        return pulumi.get(self, "elbs")
 
     @property
     @pulumi.getter
@@ -1483,9 +1773,18 @@ class Cluster(pulumi.CustomResource):
     def enterprise_project_id(self) -> pulumi.Output[str]:
         """
         The enterprise project ID.
-        Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "enterprise_project_id")
+
+    @property
+    @pulumi.getter(name="forceBackup")
+    def force_backup(self) -> pulumi.Output[Optional[bool]]:
+        """
+        Specified whether to automatically execute snapshot when shrinking the number of nodes.
+        The default value is **true**.
+        This parameter is required and available only when scaling-in the `number_of_node` parameter value.
+        """
+        return pulumi.get(self, "force_backup")
 
     @property
     @pulumi.getter(name="keepLastManualSnapshot")
@@ -1504,6 +1803,23 @@ class Cluster(pulumi.CustomResource):
         Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "kms_key_id")
+
+    @property
+    @pulumi.getter(name="logicalClusterEnable")
+    def logical_cluster_enable(self) -> pulumi.Output[Optional[bool]]:
+        """
+        Specifies whether to enable logical cluster. The switch needs to be turned
+        on before creating a logical cluster.
+        """
+        return pulumi.get(self, "logical_cluster_enable")
+
+    @property
+    @pulumi.getter(name="ltsEnable")
+    def lts_enable(self) -> pulumi.Output[Optional[bool]]:
+        """
+        Specifies whether to enable LTS. The default value is **false**.
+        """
+        return pulumi.get(self, "lts_enable")
 
     @property
     @pulumi.getter(name="maintainWindows")
@@ -1548,7 +1864,8 @@ class Cluster(pulumi.CustomResource):
     def number_of_cn(self) -> pulumi.Output[Optional[int]]:
         """
         The number of CN.  
-        The value ranges from 2 to **number_of_node**, the maximum value is 20. Defaults to 3.
+        The value ranges from 2 to **number_of_node**, the maximum value is 20.
+        This parameter must be used together with `version`.
         Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "number_of_cn")
@@ -1558,7 +1875,7 @@ class Cluster(pulumi.CustomResource):
     def number_of_node(self) -> pulumi.Output[int]:
         """
         Number of nodes in a cluster.  
-        The value ranges from 3 to 32 in cluster mode. The value of stream warehouse(stand-alone mode) is 1.
+        The value ranges from 3 to 256 in cluster mode. The value of stream warehouse(stand-alone mode) is 1.
         """
         return pulumi.get(self, "number_of_node")
 
@@ -1575,7 +1892,7 @@ class Cluster(pulumi.CustomResource):
     @pulumi.getter(name="privateIps")
     def private_ips(self) -> pulumi.Output[Sequence[str]]:
         """
-        List of private network IP addresses.
+        The private IP address of the ELB load balancer.
         """
         return pulumi.get(self, "private_ips")
 
@@ -1617,7 +1934,7 @@ class Cluster(pulumi.CustomResource):
     @pulumi.getter(name="securityGroupId")
     def security_group_id(self) -> pulumi.Output[str]:
         """
-        The security group ID.
+        Specifies the security group ID of the cluster.
         Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "security_group_id")
@@ -1659,10 +1976,9 @@ class Cluster(pulumi.CustomResource):
 
     @property
     @pulumi.getter
-    def tags(self) -> pulumi.Output[Mapping[str, str]]:
+    def tags(self) -> pulumi.Output[Optional[Mapping[str, str]]]:
         """
         The key/value pairs to associate with the cluster.
-        Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "tags")
 
@@ -1722,6 +2038,7 @@ class Cluster(pulumi.CustomResource):
     def version(self) -> pulumi.Output[str]:
         """
         The cluster version.
+        [For details](https://support.huaweicloud.com/intl/en-us/bulletin-dws/dws_12_0000.html).
         Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "version")
@@ -1731,6 +2048,8 @@ class Cluster(pulumi.CustomResource):
     def volume(self) -> pulumi.Output['outputs.ClusterVolume']:
         """
         The information about the volume.
+        Changing this parameter will create a new resource.
+        For local disks, this parameter can not be specified.
         """
         return pulumi.get(self, "volume")
 

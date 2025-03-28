@@ -6,7 +6,7 @@ import { input as inputs, output as outputs } from "../types";
 import * as utilities from "../utilities";
 
 /**
- * Manages a database role resource within HuaweiCloud.
+ * Manages a DDS database role resource within HuaweiCloud.
  *
  * ## Example Usage
  *
@@ -32,10 +32,10 @@ import * as utilities from "../utilities";
  *
  * ## Import
  *
- * Database roles can be imported using their `id` (combination of `instance_id`, `db_name` and `name`), separated by a slash (/), e.g.
+ * DDS database roles can be imported using the `instance_id`, `db_name` and `name` separated by slashes (/), e.g. bash
  *
  * ```sh
- *  $ pulumi import huaweicloud:Dds/databaseRole:DatabaseRole test &ltinstance_id&gt/&ltdb_name&gt/&ltname&gt
+ *  $ pulumi import huaweicloud:Dds/databaseRole:DatabaseRole test <instance_id>/<db_name>/<name>
  * ```
  */
 export class DatabaseRole extends pulumi.CustomResource {
@@ -73,7 +73,7 @@ export class DatabaseRole extends pulumi.CustomResource {
     public readonly dbName!: pulumi.Output<string>;
     /**
      * The list of database privileges owned by the current role, includes all privileges
-     * inherited by owned roles. The object structure is documented below.
+     * inherited by owned roles. The inheritedPrivileges structure is documented below.
      */
     public /*out*/ readonly inheritedPrivileges!: pulumi.Output<outputs.Dds.DatabaseRoleInheritedPrivilege[]>;
     /**
@@ -89,7 +89,7 @@ export class DatabaseRole extends pulumi.CustomResource {
     public readonly name!: pulumi.Output<string>;
     /**
      * The list of database privileges owned by the current role.
-     * The object structure is documented below.
+     * The privileges structure is documented below.
      */
     public /*out*/ readonly privileges!: pulumi.Output<outputs.Dds.DatabaseRolePrivilege[]>;
     /**
@@ -99,7 +99,7 @@ export class DatabaseRole extends pulumi.CustomResource {
     public readonly region!: pulumi.Output<string>;
     /**
      * Specifies the list of roles owned by the current role.
-     * The object structure is documented below.
+     * The roles structure is documented below.
      * Changing this parameter will create a new role.
      */
     public readonly roles!: pulumi.Output<outputs.Dds.DatabaseRoleRole[]>;
@@ -156,7 +156,7 @@ export interface DatabaseRoleState {
     dbName?: pulumi.Input<string>;
     /**
      * The list of database privileges owned by the current role, includes all privileges
-     * inherited by owned roles. The object structure is documented below.
+     * inherited by owned roles. The inheritedPrivileges structure is documented below.
      */
     inheritedPrivileges?: pulumi.Input<pulumi.Input<inputs.Dds.DatabaseRoleInheritedPrivilege>[]>;
     /**
@@ -172,7 +172,7 @@ export interface DatabaseRoleState {
     name?: pulumi.Input<string>;
     /**
      * The list of database privileges owned by the current role.
-     * The object structure is documented below.
+     * The privileges structure is documented below.
      */
     privileges?: pulumi.Input<pulumi.Input<inputs.Dds.DatabaseRolePrivilege>[]>;
     /**
@@ -182,7 +182,7 @@ export interface DatabaseRoleState {
     region?: pulumi.Input<string>;
     /**
      * Specifies the list of roles owned by the current role.
-     * The object structure is documented below.
+     * The roles structure is documented below.
      * Changing this parameter will create a new role.
      */
     roles?: pulumi.Input<pulumi.Input<inputs.Dds.DatabaseRoleRole>[]>;
@@ -215,7 +215,7 @@ export interface DatabaseRoleArgs {
     region?: pulumi.Input<string>;
     /**
      * Specifies the list of roles owned by the current role.
-     * The object structure is documented below.
+     * The roles structure is documented below.
      * Changing this parameter will create a new role.
      */
     roles?: pulumi.Input<pulumi.Input<inputs.Dds.DatabaseRoleRole>[]>;

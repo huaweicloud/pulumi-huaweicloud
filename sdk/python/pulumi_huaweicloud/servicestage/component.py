@@ -40,8 +40,8 @@ class ComponentArgs:
                **Dubbo**.
                + The framework of type **Common** can be empty.
         :param pulumi.Input[str] name: Specifies the authorization name.
-               The name can contain of 2 to 64 characters, only letters, digits, underscores (_) and hyphens (-) are allowed, and the
-               name must start with a letter and end with a letter or digit.
+               The name can contain of `2` to `64` characters, only letters, digits, underscores (_) and hyphens (-) are allowed,
+               and the name must start with a letter and end with a letter or digit.
         :param pulumi.Input[str] region: Specifies the region where the application and component are located.
                If omitted, the provider-level region will be used. Changing this parameter will create a new component.
         :param pulumi.Input['ComponentSourceArgs'] source: Specifies the repository source.
@@ -134,8 +134,8 @@ class ComponentArgs:
     def name(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the authorization name.
-        The name can contain of 2 to 64 characters, only letters, digits, underscores (_) and hyphens (-) are allowed, and the
-        name must start with a letter and end with a letter or digit.
+        The name can contain of `2` to `64` characters, only letters, digits, underscores (_) and hyphens (-) are allowed,
+        and the name must start with a letter and end with a letter or digit.
         """
         return pulumi.get(self, "name")
 
@@ -193,8 +193,8 @@ class _ComponentState:
                **Dubbo**.
                + The framework of type **Common** can be empty.
         :param pulumi.Input[str] name: Specifies the authorization name.
-               The name can contain of 2 to 64 characters, only letters, digits, underscores (_) and hyphens (-) are allowed, and the
-               name must start with a letter and end with a letter or digit.
+               The name can contain of `2` to `64` characters, only letters, digits, underscores (_) and hyphens (-) are allowed,
+               and the name must start with a letter and end with a letter or digit.
         :param pulumi.Input[str] region: Specifies the region where the application and component are located.
                If omitted, the provider-level region will be used. Changing this parameter will create a new component.
         :param pulumi.Input[str] runtime: Specifies the component runtime, such as **Docker**, **Java8**, etc.
@@ -268,8 +268,8 @@ class _ComponentState:
     def name(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the authorization name.
-        The name can contain of 2 to 64 characters, only letters, digits, underscores (_) and hyphens (-) are allowed, and the
-        name must start with a letter and end with a letter or digit.
+        The name can contain of `2` to `64` characters, only letters, digits, underscores (_) and hyphens (-) are allowed,
+        and the name must start with a letter and end with a letter or digit.
         """
         return pulumi.get(self, "name")
 
@@ -351,7 +351,7 @@ class Component(pulumi.CustomResource):
 
         ## Import
 
-        Components can be imported using their `application_id` and `id`, separated by a slash (/), e.g.
+        Components can be imported using their `application_id` and `id`, separated by a slash (/), e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:ServiceStage/component:Component test dd7a1ce2-c48c-4f41-85bb-d0d09969eec9/9ab8ef79-d318-4de5-acf9-e1e1e25a0395
@@ -369,8 +369,8 @@ class Component(pulumi.CustomResource):
                **Dubbo**.
                + The framework of type **Common** can be empty.
         :param pulumi.Input[str] name: Specifies the authorization name.
-               The name can contain of 2 to 64 characters, only letters, digits, underscores (_) and hyphens (-) are allowed, and the
-               name must start with a letter and end with a letter or digit.
+               The name can contain of `2` to `64` characters, only letters, digits, underscores (_) and hyphens (-) are allowed,
+               and the name must start with a letter and end with a letter or digit.
         :param pulumi.Input[str] region: Specifies the region where the application and component are located.
                If omitted, the provider-level region will be used. Changing this parameter will create a new component.
         :param pulumi.Input[str] runtime: Specifies the component runtime, such as **Docker**, **Java8**, etc.
@@ -393,7 +393,7 @@ class Component(pulumi.CustomResource):
 
         ## Import
 
-        Components can be imported using their `application_id` and `id`, separated by a slash (/), e.g.
+        Components can be imported using their `application_id` and `id`, separated by a slash (/), e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:ServiceStage/component:Component test dd7a1ce2-c48c-4f41-85bb-d0d09969eec9/9ab8ef79-d318-4de5-acf9-e1e1e25a0395
@@ -480,8 +480,8 @@ class Component(pulumi.CustomResource):
                **Dubbo**.
                + The framework of type **Common** can be empty.
         :param pulumi.Input[str] name: Specifies the authorization name.
-               The name can contain of 2 to 64 characters, only letters, digits, underscores (_) and hyphens (-) are allowed, and the
-               name must start with a letter and end with a letter or digit.
+               The name can contain of `2` to `64` characters, only letters, digits, underscores (_) and hyphens (-) are allowed,
+               and the name must start with a letter and end with a letter or digit.
         :param pulumi.Input[str] region: Specifies the region where the application and component are located.
                If omitted, the provider-level region will be used. Changing this parameter will create a new component.
         :param pulumi.Input[str] runtime: Specifies the component runtime, such as **Docker**, **Java8**, etc.
@@ -540,8 +540,8 @@ class Component(pulumi.CustomResource):
     def name(self) -> pulumi.Output[str]:
         """
         Specifies the authorization name.
-        The name can contain of 2 to 64 characters, only letters, digits, underscores (_) and hyphens (-) are allowed, and the
-        name must start with a letter and end with a letter or digit.
+        The name can contain of `2` to `64` characters, only letters, digits, underscores (_) and hyphens (-) are allowed,
+        and the name must start with a letter and end with a letter or digit.
         """
         return pulumi.get(self, "name")
 

@@ -237,8 +237,8 @@ type ServiceDiscoveryRuleLogPathRule struct {
 	// Specifies the value type. The value can be **cmdLineHash**, **cmdLine**, **env**
 	// and **str**.
 	NameType string `pulumi:"nameType"`
-	// Specifies the application name, which is mandatory only when the value of
-	// `nameType` is **cmdLineHash**.
+	// Specifies the application name, which is mandatory only when the value of `nameType` is
+	// **cmdLineHash**.
 	Values []string `pulumi:"values"`
 }
 
@@ -259,8 +259,8 @@ type ServiceDiscoveryRuleLogPathRuleArgs struct {
 	// Specifies the value type. The value can be **cmdLineHash**, **cmdLine**, **env**
 	// and **str**.
 	NameType pulumi.StringInput `pulumi:"nameType"`
-	// Specifies the application name, which is mandatory only when the value of
-	// `nameType` is **cmdLineHash**.
+	// Specifies the application name, which is mandatory only when the value of `nameType` is
+	// **cmdLineHash**.
 	Values pulumi.StringArrayInput `pulumi:"values"`
 }
 
@@ -326,8 +326,8 @@ func (o ServiceDiscoveryRuleLogPathRuleOutput) NameType() pulumi.StringOutput {
 	return o.ApplyT(func(v ServiceDiscoveryRuleLogPathRule) string { return v.NameType }).(pulumi.StringOutput)
 }
 
-// Specifies the application name, which is mandatory only when the value of
-// `nameType` is **cmdLineHash**.
+// Specifies the application name, which is mandatory only when the value of `nameType` is
+// **cmdLineHash**.
 func (o ServiceDiscoveryRuleLogPathRuleOutput) Values() pulumi.StringArrayOutput {
 	return o.ApplyT(func(v ServiceDiscoveryRuleLogPathRule) []string { return v.Values }).(pulumi.StringArrayOutput)
 }
@@ -574,8 +574,8 @@ type ServiceDiscoveryRuleNameRulesApplicationNameRule struct {
 	// Specifies the value type. The value can be **cmdLineHash**, **cmdLine**, **env**
 	// and **str**.
 	NameType string `pulumi:"nameType"`
-	// Specifies the application name, which is mandatory only when the value of
-	// `nameType` is **cmdLineHash**.
+	// Specifies the application name, which is mandatory only when the value of `nameType` is
+	// **cmdLineHash**.
 	Values []string `pulumi:"values"`
 }
 
@@ -596,8 +596,8 @@ type ServiceDiscoveryRuleNameRulesApplicationNameRuleArgs struct {
 	// Specifies the value type. The value can be **cmdLineHash**, **cmdLine**, **env**
 	// and **str**.
 	NameType pulumi.StringInput `pulumi:"nameType"`
-	// Specifies the application name, which is mandatory only when the value of
-	// `nameType` is **cmdLineHash**.
+	// Specifies the application name, which is mandatory only when the value of `nameType` is
+	// **cmdLineHash**.
 	Values pulumi.StringArrayInput `pulumi:"values"`
 }
 
@@ -663,8 +663,8 @@ func (o ServiceDiscoveryRuleNameRulesApplicationNameRuleOutput) NameType() pulum
 	return o.ApplyT(func(v ServiceDiscoveryRuleNameRulesApplicationNameRule) string { return v.NameType }).(pulumi.StringOutput)
 }
 
-// Specifies the application name, which is mandatory only when the value of
-// `nameType` is **cmdLineHash**.
+// Specifies the application name, which is mandatory only when the value of `nameType` is
+// **cmdLineHash**.
 func (o ServiceDiscoveryRuleNameRulesApplicationNameRuleOutput) Values() pulumi.StringArrayOutput {
 	return o.ApplyT(func(v ServiceDiscoveryRuleNameRulesApplicationNameRule) []string { return v.Values }).(pulumi.StringArrayOutput)
 }
@@ -695,8 +695,8 @@ type ServiceDiscoveryRuleNameRulesServiceNameRule struct {
 	// Specifies the value type. The value can be **cmdLineHash**, **cmdLine**, **env**
 	// and **str**.
 	NameType string `pulumi:"nameType"`
-	// Specifies the application name, which is mandatory only when the value of
-	// `nameType` is **cmdLineHash**.
+	// Specifies the application name, which is mandatory only when the value of `nameType` is
+	// **cmdLineHash**.
 	Values []string `pulumi:"values"`
 }
 
@@ -717,8 +717,8 @@ type ServiceDiscoveryRuleNameRulesServiceNameRuleArgs struct {
 	// Specifies the value type. The value can be **cmdLineHash**, **cmdLine**, **env**
 	// and **str**.
 	NameType pulumi.StringInput `pulumi:"nameType"`
-	// Specifies the application name, which is mandatory only when the value of
-	// `nameType` is **cmdLineHash**.
+	// Specifies the application name, which is mandatory only when the value of `nameType` is
+	// **cmdLineHash**.
 	Values pulumi.StringArrayInput `pulumi:"values"`
 }
 
@@ -784,8 +784,8 @@ func (o ServiceDiscoveryRuleNameRulesServiceNameRuleOutput) NameType() pulumi.St
 	return o.ApplyT(func(v ServiceDiscoveryRuleNameRulesServiceNameRule) string { return v.NameType }).(pulumi.StringOutput)
 }
 
-// Specifies the application name, which is mandatory only when the value of
-// `nameType` is **cmdLineHash**.
+// Specifies the application name, which is mandatory only when the value of `nameType` is
+// **cmdLineHash**.
 func (o ServiceDiscoveryRuleNameRulesServiceNameRuleOutput) Values() pulumi.StringArrayOutput {
 	return o.ApplyT(func(v ServiceDiscoveryRuleNameRulesServiceNameRule) []string { return v.Values }).(pulumi.StringArrayOutput)
 }

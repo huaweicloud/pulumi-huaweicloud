@@ -31,30 +31,6 @@ import * as utilities from "../utilities";
  *     networks: [{
  *         id: subnetId,
  *     }],
- * });
- * ```
- * ### Autoscaling Group with tags
- *
- * ```typescript
- * import * as pulumi from "@pulumi/pulumi";
- * import * as pulumi from "@huaweicloudos/pulumi";
- *
- * const config = new pulumi.Config();
- * const configurationId = config.requireObject("configurationId");
- * const vpcId = config.requireObject("vpcId");
- * const subnetId = config.requireObject("subnetId");
- * const myAsGroupTags = new huaweicloud.as.Group("myAsGroupTags", {
- *     scalingGroupName: "my_as_group_tags",
- *     scalingConfigurationId: configurationId,
- *     desireInstanceNumber: 2,
- *     minInstanceNumber: 0,
- *     maxInstanceNumber: 10,
- *     vpcId: vpcId,
- *     deletePublicip: true,
- *     deleteInstances: "yes",
- *     networks: [{
- *         id: subnetId,
- *     }],
  *     tags: {
  *         foo: "bar",
  *         key: "value",
@@ -96,16 +72,16 @@ import * as utilities from "../utilities";
  * const vpcId = config.requireObject("vpcId");
  * const subnetId = config.requireObject("subnetId");
  * const ipv4SubnetId = config.requireObject("ipv4SubnetId");
- * const loadbalancer1 = new huaweicloud.elb.Loadbalancer("loadbalancer1", {vipSubnetId: ipv4SubnetId});
- * const listener1 = new huaweicloud.elb.Listener("listener1", {
+ * const testLoadbalancer = new huaweicloud.elb.Loadbalancer("testLoadbalancer", {vipSubnetId: ipv4SubnetId});
+ * const testListener = new huaweicloud.elb.Listener("testListener", {
  *     protocol: "HTTP",
  *     protocolPort: 8080,
- *     loadbalancerId: loadbalancer1.id,
+ *     loadbalancerId: testLoadbalancer.id,
  * });
- * const pool1 = new huaweicloud.elb.Pool("pool1", {
+ * const testPool = new huaweicloud.elb.Pool("testPool", {
  *     protocol: "HTTP",
  *     lbMethod: "ROUND_ROBIN",
- *     listenerId: listener1.id,
+ *     listenerId: testListener.id,
  * });
  * const myAsGroupWithEnhancedLb = new huaweicloud.as.Group("myAsGroupWithEnhancedLb", {
  *     scalingGroupName: "my_as_group_with_enhanced_lb",
@@ -118,19 +94,33 @@ import * as utilities from "../utilities";
  *         id: subnetId,
  *     }],
  *     lbaasListeners: [{
- *         poolId: pool1.id,
- *         protocolPort: listener1.protocolPort,
+ *         poolId: testPool.id,
+ *         protocolPort: testListener.protocolPort,
  *     }],
  * });
  * ```
  *
  * ## Import
  *
- * AS groups can be imported by their `id`. For example,
+ * AS groups can be imported by their `id`. For example, bash
  *
  * ```sh
- *  $ pulumi import huaweicloud:As/group:Group my_as_group 9ec5bea6-a728-4082-8109-5a7dc5c7af74
+ *  $ pulumi import huaweicloud:As/group:Group test <id>
  * ```
+ *
+ *  Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`delete_instances`. It is generally recommended running `terraform plan` after importing the resource. You can then decide if changes should be applied to the resource, or the resource definition should be updated to align with the group. Also, you can ignore changes as below. hcl resource "huaweicloud_as_group" "test" {
+ *
+ *  ...
+ *
+ *  lifecycle {
+ *
+ *  ignore_changes = [
+ *
+ *  delete_instances,
+ *
+ *  ]
+ *
+ *  } }
  */
 export class Group extends pulumi.CustomResource {
     /**
@@ -167,7 +157,7 @@ export class Group extends pulumi.CustomResource {
     public readonly agencyName!: pulumi.Output<string>;
     /**
      * Specifies the availability zones in which to create the instances in the
-     * autoscaling group.
+     * autoscaling group. If this field is not specified, the system will automatically specify one.
      */
     public readonly availabilityZones!: pulumi.Output<string[]>;
     /**
@@ -175,8 +165,8 @@ export class Group extends pulumi.CustomResource {
      */
     public readonly availableZones!: pulumi.Output<string[] | undefined>;
     /**
-     * Specifies the cooling duration (in seconds). The value ranges from 0 to 86400,
-     * and is 300 by default.
+     * Specifies the cooling duration (in seconds). The value ranges from `0` to `86,400`.
+     * Defaults to `300`.
      */
     public readonly coolDownTime!: pulumi.Output<number | undefined>;
     /**
@@ -185,17 +175,22 @@ export class Group extends pulumi.CustomResource {
     public /*out*/ readonly currentInstanceNumber!: pulumi.Output<number>;
     /**
      * Specifies whether to delete the instances in the AS group when deleting
-     * the AS group. The options are `yes` and `no`.
+     * the AS group. The options are **yes** and **no**.
      */
     public readonly deleteInstances!: pulumi.Output<string | undefined>;
     /**
-     * Specifies whether to delete the elastic IP address bound to the instances of
-     * AS group when deleting the instances. The options are `true` and `false`.
+     * Specifies whether to release the EIPs bound to ECSs when the ECSs are removed
+     * from the AS group. Defaults to **false**.
      */
     public readonly deletePublicip!: pulumi.Output<boolean | undefined>;
     /**
+     * Specifies whether to delete the data disks attached to ECSs when the ECSs are removed.
+     * Defaults to **false**.
+     */
+    public readonly deleteVolume!: pulumi.Output<boolean>;
+    /**
      * Specifies the description of the AS group.
-     * The value can contain 0 to 256 characters.
+     * The value can contain `0` to `256` characters.
      */
     public readonly description!: pulumi.Output<string>;
     /**
@@ -204,38 +199,38 @@ export class Group extends pulumi.CustomResource {
      */
     public readonly desireInstanceNumber!: pulumi.Output<number>;
     /**
-     * Specifies whether to enable the AS Group. The options are `true` and `false`.
-     * The default value is `true`.
+     * Specifies whether to enable the AS Group. Defaults to **true**.
      */
     public readonly enable!: pulumi.Output<boolean | undefined>;
     /**
-     * Specifies the enterprise project id of the AS group.
+     * Specifies the enterprise project ID of the AS group.
      */
     public readonly enterpriseProjectId!: pulumi.Output<string>;
     /**
      * Specifies whether to forcibly delete the AS group, remove the ECS instances and
-     * release them. The default value is `false`.
+     * release them. Defaults to **false**.
      */
     public readonly forceDelete!: pulumi.Output<boolean | undefined>;
     /**
      * Specifies the health check grace period for instances.
-     * The unit is second and the value ranges from 0 to 86400. The default value is 600.
+     * The unit is second and the value ranges from `0` to `86,400`. Defaults to `600`.
      */
     public readonly healthPeriodicAuditGracePeriod!: pulumi.Output<number>;
     /**
      * Specifies the health check method for instances in the AS group.
-     * The health check methods include `ELB_AUDIT` and `NOVA_AUDIT`. If load balancing is configured, the default value of
-     * this parameter is `ELB_AUDIT`. Otherwise, the default value is `NOVA_AUDIT`.
+     * The health check methods include **ELB_AUDIT** and **NOVA_AUDIT**. If load balancing is configured, the default value of
+     * this parameter is **ELB_AUDIT**. Otherwise, the default value is **NOVA_AUDIT**.
      */
     public readonly healthPeriodicAuditMethod!: pulumi.Output<string | undefined>;
     /**
      * Specifies the health check period for instances. The unit is minute
-     * and value includes 0, 1, 5 (default), 15, 60, and 180. If the value is set to 0, health check is performed every 10 seconds.
+     * and value includes **0**, **1**, **5** (default), **15**, **60**, and **180**.
+     * If the value is set to **0**, health check is performed every 10 seconds.
      */
     public readonly healthPeriodicAuditTime!: pulumi.Output<number | undefined>;
     /**
      * Specifies the instance removal policy. The policy has four
-     * options: `OLD_CONFIG_OLD_INSTANCE` (default), `OLD_CONFIG_NEW_INSTANCE`, `OLD_INSTANCE`, and `NEW_INSTANCE`.
+     * options: **OLD_CONFIG_OLD_INSTANCE** (default), **OLD_CONFIG_NEW_INSTANCE**, **OLD_INSTANCE**, and **NEW_INSTANCE**.
      */
     public readonly instanceTerminatePolicy!: pulumi.Output<string | undefined>;
     /**
@@ -250,25 +245,26 @@ export class Group extends pulumi.CustomResource {
     public readonly lbListenerId!: pulumi.Output<string | undefined>;
     /**
      * Specifies an array of one or more enhanced load balancer. The system supports
-     * the binding of up to six load balancers. The object structure is documented below.
+     * the binding of up to six load balancers. The lbaasListeners structure is documented below.
      */
     public readonly lbaasListeners!: pulumi.Output<outputs.As.GroupLbaasListener[]>;
     /**
-     * Specifies the maximum number of instances. The default value is 0.
+     * Specifies the maximum number of instances. The value ranges from `0` to `300`.
+     * Defaults to `0`.
      */
     public readonly maxInstanceNumber!: pulumi.Output<number | undefined>;
     /**
-     * Specifies the minimum number of instances. The default value is 0.
+     * Specifies the minimum number of instances. Defaults to `0`.
      */
     public readonly minInstanceNumber!: pulumi.Output<number | undefined>;
     /**
      * Specifies the priority policy used to select target AZs when adjusting
-     * the number of instances in an AS group. The value can be `EQUILIBRIUM_DISTRIBUTE` and `PICK_FIRST`.
+     * the number of instances in an AS group. The value can be **EQUILIBRIUM_DISTRIBUTE** or **PICK_FIRST**.
      */
     public readonly multiAzScalingPolicy!: pulumi.Output<string>;
     /**
      * Specifies an array of one or more network IDs. The system supports up to five networks.
-     * The object structure is documented below.
+     * The networks structure is documented below.
      */
     public readonly networks!: pulumi.Output<outputs.As.GroupNetwork[]>;
     /**
@@ -292,7 +288,7 @@ export class Group extends pulumi.CustomResource {
     public readonly scalingGroupName!: pulumi.Output<string>;
     /**
      * Specifies an array of one or more security group IDs to associate with the group.
-     * The object structure is documented below.
+     * The securityGroups structure is documented below.
      */
     public readonly securityGroups!: pulumi.Output<outputs.As.GroupSecurityGroup[]>;
     /**
@@ -328,6 +324,7 @@ export class Group extends pulumi.CustomResource {
             resourceInputs["currentInstanceNumber"] = state ? state.currentInstanceNumber : undefined;
             resourceInputs["deleteInstances"] = state ? state.deleteInstances : undefined;
             resourceInputs["deletePublicip"] = state ? state.deletePublicip : undefined;
+            resourceInputs["deleteVolume"] = state ? state.deleteVolume : undefined;
             resourceInputs["description"] = state ? state.description : undefined;
             resourceInputs["desireInstanceNumber"] = state ? state.desireInstanceNumber : undefined;
             resourceInputs["enable"] = state ? state.enable : undefined;
@@ -369,6 +366,7 @@ export class Group extends pulumi.CustomResource {
             resourceInputs["coolDownTime"] = args ? args.coolDownTime : undefined;
             resourceInputs["deleteInstances"] = args ? args.deleteInstances : undefined;
             resourceInputs["deletePublicip"] = args ? args.deletePublicip : undefined;
+            resourceInputs["deleteVolume"] = args ? args.deleteVolume : undefined;
             resourceInputs["description"] = args ? args.description : undefined;
             resourceInputs["desireInstanceNumber"] = args ? args.desireInstanceNumber : undefined;
             resourceInputs["enable"] = args ? args.enable : undefined;
@@ -411,7 +409,7 @@ export interface GroupState {
     agencyName?: pulumi.Input<string>;
     /**
      * Specifies the availability zones in which to create the instances in the
-     * autoscaling group.
+     * autoscaling group. If this field is not specified, the system will automatically specify one.
      */
     availabilityZones?: pulumi.Input<pulumi.Input<string>[]>;
     /**
@@ -419,8 +417,8 @@ export interface GroupState {
      */
     availableZones?: pulumi.Input<pulumi.Input<string>[]>;
     /**
-     * Specifies the cooling duration (in seconds). The value ranges from 0 to 86400,
-     * and is 300 by default.
+     * Specifies the cooling duration (in seconds). The value ranges from `0` to `86,400`.
+     * Defaults to `300`.
      */
     coolDownTime?: pulumi.Input<number>;
     /**
@@ -429,17 +427,22 @@ export interface GroupState {
     currentInstanceNumber?: pulumi.Input<number>;
     /**
      * Specifies whether to delete the instances in the AS group when deleting
-     * the AS group. The options are `yes` and `no`.
+     * the AS group. The options are **yes** and **no**.
      */
     deleteInstances?: pulumi.Input<string>;
     /**
-     * Specifies whether to delete the elastic IP address bound to the instances of
-     * AS group when deleting the instances. The options are `true` and `false`.
+     * Specifies whether to release the EIPs bound to ECSs when the ECSs are removed
+     * from the AS group. Defaults to **false**.
      */
     deletePublicip?: pulumi.Input<boolean>;
     /**
+     * Specifies whether to delete the data disks attached to ECSs when the ECSs are removed.
+     * Defaults to **false**.
+     */
+    deleteVolume?: pulumi.Input<boolean>;
+    /**
      * Specifies the description of the AS group.
-     * The value can contain 0 to 256 characters.
+     * The value can contain `0` to `256` characters.
      */
     description?: pulumi.Input<string>;
     /**
@@ -448,38 +451,38 @@ export interface GroupState {
      */
     desireInstanceNumber?: pulumi.Input<number>;
     /**
-     * Specifies whether to enable the AS Group. The options are `true` and `false`.
-     * The default value is `true`.
+     * Specifies whether to enable the AS Group. Defaults to **true**.
      */
     enable?: pulumi.Input<boolean>;
     /**
-     * Specifies the enterprise project id of the AS group.
+     * Specifies the enterprise project ID of the AS group.
      */
     enterpriseProjectId?: pulumi.Input<string>;
     /**
      * Specifies whether to forcibly delete the AS group, remove the ECS instances and
-     * release them. The default value is `false`.
+     * release them. Defaults to **false**.
      */
     forceDelete?: pulumi.Input<boolean>;
     /**
      * Specifies the health check grace period for instances.
-     * The unit is second and the value ranges from 0 to 86400. The default value is 600.
+     * The unit is second and the value ranges from `0` to `86,400`. Defaults to `600`.
      */
     healthPeriodicAuditGracePeriod?: pulumi.Input<number>;
     /**
      * Specifies the health check method for instances in the AS group.
-     * The health check methods include `ELB_AUDIT` and `NOVA_AUDIT`. If load balancing is configured, the default value of
-     * this parameter is `ELB_AUDIT`. Otherwise, the default value is `NOVA_AUDIT`.
+     * The health check methods include **ELB_AUDIT** and **NOVA_AUDIT**. If load balancing is configured, the default value of
+     * this parameter is **ELB_AUDIT**. Otherwise, the default value is **NOVA_AUDIT**.
      */
     healthPeriodicAuditMethod?: pulumi.Input<string>;
     /**
      * Specifies the health check period for instances. The unit is minute
-     * and value includes 0, 1, 5 (default), 15, 60, and 180. If the value is set to 0, health check is performed every 10 seconds.
+     * and value includes **0**, **1**, **5** (default), **15**, **60**, and **180**.
+     * If the value is set to **0**, health check is performed every 10 seconds.
      */
     healthPeriodicAuditTime?: pulumi.Input<number>;
     /**
      * Specifies the instance removal policy. The policy has four
-     * options: `OLD_CONFIG_OLD_INSTANCE` (default), `OLD_CONFIG_NEW_INSTANCE`, `OLD_INSTANCE`, and `NEW_INSTANCE`.
+     * options: **OLD_CONFIG_OLD_INSTANCE** (default), **OLD_CONFIG_NEW_INSTANCE**, **OLD_INSTANCE**, and **NEW_INSTANCE**.
      */
     instanceTerminatePolicy?: pulumi.Input<string>;
     /**
@@ -494,25 +497,26 @@ export interface GroupState {
     lbListenerId?: pulumi.Input<string>;
     /**
      * Specifies an array of one or more enhanced load balancer. The system supports
-     * the binding of up to six load balancers. The object structure is documented below.
+     * the binding of up to six load balancers. The lbaasListeners structure is documented below.
      */
     lbaasListeners?: pulumi.Input<pulumi.Input<inputs.As.GroupLbaasListener>[]>;
     /**
-     * Specifies the maximum number of instances. The default value is 0.
+     * Specifies the maximum number of instances. The value ranges from `0` to `300`.
+     * Defaults to `0`.
      */
     maxInstanceNumber?: pulumi.Input<number>;
     /**
-     * Specifies the minimum number of instances. The default value is 0.
+     * Specifies the minimum number of instances. Defaults to `0`.
      */
     minInstanceNumber?: pulumi.Input<number>;
     /**
      * Specifies the priority policy used to select target AZs when adjusting
-     * the number of instances in an AS group. The value can be `EQUILIBRIUM_DISTRIBUTE` and `PICK_FIRST`.
+     * the number of instances in an AS group. The value can be **EQUILIBRIUM_DISTRIBUTE** or **PICK_FIRST**.
      */
     multiAzScalingPolicy?: pulumi.Input<string>;
     /**
      * Specifies an array of one or more network IDs. The system supports up to five networks.
-     * The object structure is documented below.
+     * The networks structure is documented below.
      */
     networks?: pulumi.Input<pulumi.Input<inputs.As.GroupNetwork>[]>;
     /**
@@ -536,7 +540,7 @@ export interface GroupState {
     scalingGroupName?: pulumi.Input<string>;
     /**
      * Specifies an array of one or more security group IDs to associate with the group.
-     * The object structure is documented below.
+     * The securityGroups structure is documented below.
      */
     securityGroups?: pulumi.Input<pulumi.Input<inputs.As.GroupSecurityGroup>[]>;
     /**
@@ -564,7 +568,7 @@ export interface GroupArgs {
     agencyName?: pulumi.Input<string>;
     /**
      * Specifies the availability zones in which to create the instances in the
-     * autoscaling group.
+     * autoscaling group. If this field is not specified, the system will automatically specify one.
      */
     availabilityZones?: pulumi.Input<pulumi.Input<string>[]>;
     /**
@@ -572,23 +576,28 @@ export interface GroupArgs {
      */
     availableZones?: pulumi.Input<pulumi.Input<string>[]>;
     /**
-     * Specifies the cooling duration (in seconds). The value ranges from 0 to 86400,
-     * and is 300 by default.
+     * Specifies the cooling duration (in seconds). The value ranges from `0` to `86,400`.
+     * Defaults to `300`.
      */
     coolDownTime?: pulumi.Input<number>;
     /**
      * Specifies whether to delete the instances in the AS group when deleting
-     * the AS group. The options are `yes` and `no`.
+     * the AS group. The options are **yes** and **no**.
      */
     deleteInstances?: pulumi.Input<string>;
     /**
-     * Specifies whether to delete the elastic IP address bound to the instances of
-     * AS group when deleting the instances. The options are `true` and `false`.
+     * Specifies whether to release the EIPs bound to ECSs when the ECSs are removed
+     * from the AS group. Defaults to **false**.
      */
     deletePublicip?: pulumi.Input<boolean>;
     /**
+     * Specifies whether to delete the data disks attached to ECSs when the ECSs are removed.
+     * Defaults to **false**.
+     */
+    deleteVolume?: pulumi.Input<boolean>;
+    /**
      * Specifies the description of the AS group.
-     * The value can contain 0 to 256 characters.
+     * The value can contain `0` to `256` characters.
      */
     description?: pulumi.Input<string>;
     /**
@@ -597,38 +606,38 @@ export interface GroupArgs {
      */
     desireInstanceNumber?: pulumi.Input<number>;
     /**
-     * Specifies whether to enable the AS Group. The options are `true` and `false`.
-     * The default value is `true`.
+     * Specifies whether to enable the AS Group. Defaults to **true**.
      */
     enable?: pulumi.Input<boolean>;
     /**
-     * Specifies the enterprise project id of the AS group.
+     * Specifies the enterprise project ID of the AS group.
      */
     enterpriseProjectId?: pulumi.Input<string>;
     /**
      * Specifies whether to forcibly delete the AS group, remove the ECS instances and
-     * release them. The default value is `false`.
+     * release them. Defaults to **false**.
      */
     forceDelete?: pulumi.Input<boolean>;
     /**
      * Specifies the health check grace period for instances.
-     * The unit is second and the value ranges from 0 to 86400. The default value is 600.
+     * The unit is second and the value ranges from `0` to `86,400`. Defaults to `600`.
      */
     healthPeriodicAuditGracePeriod?: pulumi.Input<number>;
     /**
      * Specifies the health check method for instances in the AS group.
-     * The health check methods include `ELB_AUDIT` and `NOVA_AUDIT`. If load balancing is configured, the default value of
-     * this parameter is `ELB_AUDIT`. Otherwise, the default value is `NOVA_AUDIT`.
+     * The health check methods include **ELB_AUDIT** and **NOVA_AUDIT**. If load balancing is configured, the default value of
+     * this parameter is **ELB_AUDIT**. Otherwise, the default value is **NOVA_AUDIT**.
      */
     healthPeriodicAuditMethod?: pulumi.Input<string>;
     /**
      * Specifies the health check period for instances. The unit is minute
-     * and value includes 0, 1, 5 (default), 15, 60, and 180. If the value is set to 0, health check is performed every 10 seconds.
+     * and value includes **0**, **1**, **5** (default), **15**, **60**, and **180**.
+     * If the value is set to **0**, health check is performed every 10 seconds.
      */
     healthPeriodicAuditTime?: pulumi.Input<number>;
     /**
      * Specifies the instance removal policy. The policy has four
-     * options: `OLD_CONFIG_OLD_INSTANCE` (default), `OLD_CONFIG_NEW_INSTANCE`, `OLD_INSTANCE`, and `NEW_INSTANCE`.
+     * options: **OLD_CONFIG_OLD_INSTANCE** (default), **OLD_CONFIG_NEW_INSTANCE**, **OLD_INSTANCE**, and **NEW_INSTANCE**.
      */
     instanceTerminatePolicy?: pulumi.Input<string>;
     /**
@@ -639,25 +648,26 @@ export interface GroupArgs {
     lbListenerId?: pulumi.Input<string>;
     /**
      * Specifies an array of one or more enhanced load balancer. The system supports
-     * the binding of up to six load balancers. The object structure is documented below.
+     * the binding of up to six load balancers. The lbaasListeners structure is documented below.
      */
     lbaasListeners?: pulumi.Input<pulumi.Input<inputs.As.GroupLbaasListener>[]>;
     /**
-     * Specifies the maximum number of instances. The default value is 0.
+     * Specifies the maximum number of instances. The value ranges from `0` to `300`.
+     * Defaults to `0`.
      */
     maxInstanceNumber?: pulumi.Input<number>;
     /**
-     * Specifies the minimum number of instances. The default value is 0.
+     * Specifies the minimum number of instances. Defaults to `0`.
      */
     minInstanceNumber?: pulumi.Input<number>;
     /**
      * Specifies the priority policy used to select target AZs when adjusting
-     * the number of instances in an AS group. The value can be `EQUILIBRIUM_DISTRIBUTE` and `PICK_FIRST`.
+     * the number of instances in an AS group. The value can be **EQUILIBRIUM_DISTRIBUTE** or **PICK_FIRST**.
      */
     multiAzScalingPolicy?: pulumi.Input<string>;
     /**
      * Specifies an array of one or more network IDs. The system supports up to five networks.
-     * The object structure is documented below.
+     * The networks structure is documented below.
      */
     networks: pulumi.Input<pulumi.Input<inputs.As.GroupNetwork>[]>;
     /**
@@ -681,7 +691,7 @@ export interface GroupArgs {
     scalingGroupName: pulumi.Input<string>;
     /**
      * Specifies an array of one or more security group IDs to associate with the group.
-     * The object structure is documented below.
+     * The securityGroups structure is documented below.
      */
     securityGroups?: pulumi.Input<pulumi.Input<inputs.As.GroupSecurityGroup>[]>;
     /**

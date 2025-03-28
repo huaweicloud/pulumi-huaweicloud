@@ -135,12 +135,12 @@ func (o CertificateAuthentificationArrayOutput) Index(i pulumi.IntInput) Certifi
 }
 
 type CertificateTarget struct {
-	// The project where the service you want to push a certificate to. The same certificate
+	// Specifies the project where the service you want to push a certificate to. The same certificate
 	// can be pushed repeatedly to the same WAF or ELB service in the same `project`, but the CDN service can only be pushed
 	// once.
 	Projects []string `pulumi:"projects"`
-	// Service to which the certificate is pushed. The options include `CDN`,`WAF`
-	// and `Enhance_ELB`.
+	// Specifies the service to which the certificate is pushed. The options include `CDN`,`WAF`
+	// and `ELB`.
 	Service string `pulumi:"service"`
 }
 
@@ -156,12 +156,12 @@ type CertificateTargetInput interface {
 }
 
 type CertificateTargetArgs struct {
-	// The project where the service you want to push a certificate to. The same certificate
+	// Specifies the project where the service you want to push a certificate to. The same certificate
 	// can be pushed repeatedly to the same WAF or ELB service in the same `project`, but the CDN service can only be pushed
 	// once.
 	Projects pulumi.StringArrayInput `pulumi:"projects"`
-	// Service to which the certificate is pushed. The options include `CDN`,`WAF`
-	// and `Enhance_ELB`.
+	// Specifies the service to which the certificate is pushed. The options include `CDN`,`WAF`
+	// and `ELB`.
 	Service pulumi.StringInput `pulumi:"service"`
 }
 
@@ -216,15 +216,15 @@ func (o CertificateTargetOutput) ToCertificateTargetOutputWithContext(ctx contex
 	return o
 }
 
-// The project where the service you want to push a certificate to. The same certificate
+// Specifies the project where the service you want to push a certificate to. The same certificate
 // can be pushed repeatedly to the same WAF or ELB service in the same `project`, but the CDN service can only be pushed
 // once.
 func (o CertificateTargetOutput) Projects() pulumi.StringArrayOutput {
 	return o.ApplyT(func(v CertificateTarget) []string { return v.Projects }).(pulumi.StringArrayOutput)
 }
 
-// Service to which the certificate is pushed. The options include `CDN`,`WAF`
-// and `Enhance_ELB`.
+// Specifies the service to which the certificate is pushed. The options include `CDN`,`WAF`
+// and `ELB`.
 func (o CertificateTargetOutput) Service() pulumi.StringOutput {
 	return o.ApplyT(func(v CertificateTarget) string { return v.Service }).(pulumi.StringOutput)
 }

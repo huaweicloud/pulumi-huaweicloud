@@ -11,46 +11,13 @@ import (
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
-// Provides a CCE add-on resource within HuaweiCloud.
-//
-// ## Example Usage
-//
-// ```go
-// package main
-//
-// import (
-//
-//	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud/Cce"
-//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
-//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi/config"
-//
-// )
-//
-//	func main() {
-//		pulumi.Run(func(ctx *pulumi.Context) error {
-//			cfg := config.New(ctx, "")
-//			clusterId := cfg.RequireObject("clusterId")
-//			_, err := Cce.NewAddon(ctx, "addonTest", &Cce.AddonArgs{
-//				ClusterId:    pulumi.Any(clusterId),
-//				TemplateName: pulumi.String("metrics-server"),
-//				Version:      pulumi.String("1.0.0"),
-//			})
-//			if err != nil {
-//				return err
-//			}
-//			return nil
-//		})
-//	}
-//
-// ```
-//
 // ## Import
 //
-// CCE add-on can be imported using the cluster ID and add-on ID separated by a slash, e.g.
+// # CCE add-on can be imported using the cluster ID and add-on ID separated by a slash, e.g.bash
 //
 // ```sh
 //
-//	$ pulumi import huaweicloud:Cce/addon:Addon my_addon bb6923e4-b16e-11eb-b0cd-0255ac101da1/c7ecb230-b16f-11eb-b3b6-0255ac1015a3
+//	$ pulumi import huaweicloud:Cce/addon:Addon my_addon <cluster_id>/<id>
 //
 // ```
 type Addon struct {
@@ -70,7 +37,7 @@ type Addon struct {
 	// Changing this parameter will create a new resource.
 	TemplateName pulumi.StringOutput `pulumi:"templateName"`
 	// Specifies the add-on template installation parameters.
-	// These parameters vary depending on the add-on. Structure is documented below.
+	// These parameters vary depending on the add-on. The structure is documented below.
 	Values AddonValuesPtrOutput `pulumi:"values"`
 	// Specifies the version of the add-on.
 	Version pulumi.StringOutput `pulumi:"version"`
@@ -126,7 +93,7 @@ type addonState struct {
 	// Changing this parameter will create a new resource.
 	TemplateName *string `pulumi:"templateName"`
 	// Specifies the add-on template installation parameters.
-	// These parameters vary depending on the add-on. Structure is documented below.
+	// These parameters vary depending on the add-on. The structure is documented below.
 	Values *AddonValues `pulumi:"values"`
 	// Specifies the version of the add-on.
 	Version *string `pulumi:"version"`
@@ -147,7 +114,7 @@ type AddonState struct {
 	// Changing this parameter will create a new resource.
 	TemplateName pulumi.StringPtrInput
 	// Specifies the add-on template installation parameters.
-	// These parameters vary depending on the add-on. Structure is documented below.
+	// These parameters vary depending on the add-on. The structure is documented below.
 	Values AddonValuesPtrInput
 	// Specifies the version of the add-on.
 	Version pulumi.StringPtrInput
@@ -168,7 +135,7 @@ type addonArgs struct {
 	// Changing this parameter will create a new resource.
 	TemplateName string `pulumi:"templateName"`
 	// Specifies the add-on template installation parameters.
-	// These parameters vary depending on the add-on. Structure is documented below.
+	// These parameters vary depending on the add-on. The structure is documented below.
 	Values *AddonValues `pulumi:"values"`
 	// Specifies the version of the add-on.
 	Version *string `pulumi:"version"`
@@ -186,7 +153,7 @@ type AddonArgs struct {
 	// Changing this parameter will create a new resource.
 	TemplateName pulumi.StringInput
 	// Specifies the add-on template installation parameters.
-	// These parameters vary depending on the add-on. Structure is documented below.
+	// These parameters vary depending on the add-on. The structure is documented below.
 	Values AddonValuesPtrInput
 	// Specifies the version of the add-on.
 	Version pulumi.StringPtrInput
@@ -308,7 +275,7 @@ func (o AddonOutput) TemplateName() pulumi.StringOutput {
 }
 
 // Specifies the add-on template installation parameters.
-// These parameters vary depending on the add-on. Structure is documented below.
+// These parameters vary depending on the add-on. The structure is documented below.
 func (o AddonOutput) Values() AddonValuesPtrOutput {
 	return o.ApplyT(func(v *Addon) AddonValuesPtrOutput { return v.Values }).(AddonValuesPtrOutput)
 }

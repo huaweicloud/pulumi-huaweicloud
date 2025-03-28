@@ -49,7 +49,7 @@ import (
 //
 // The mount storage can be imported by `id`, It is composed of the ID of notebook and mount ID, separated by a slash.
 //
-// For example,
+// # For example, bash
 //
 // ```sh
 //

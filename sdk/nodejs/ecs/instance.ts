@@ -6,7 +6,7 @@ import { input as inputs, output as outputs } from "../types";
 import * as utilities from "../utilities";
 
 /**
- * Manages a ECS VM instance resource within HuaweiCloud.
+ * Manages an ECS VM instance resource within HuaweiCloud.
  *
  * ## Example Usage
  * ### Basic Instance
@@ -194,7 +194,7 @@ import * as utilities from "../utilities";
  *  $ pulumi import huaweicloud:Ecs/instance:Instance my_instance b11b407c-e604-4e8d-8bc4-92398320b847
  * ```
  *
- *  Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`admin_pass`, `user_data`, `data_disks`, `scheduler_hints`, `stop_before_destroy`, `delete_disks_on_termination`, `delete_eip_on_termination`, `network/access_network`, `bandwidth`, `eip_type`, `power_action` and arguments for pre-paid and spot price. It is generally recommended running `terraform plan` after importing an instance. You can then decide if changes should be applied to the instance, or the resource definition should be updated to align with the instance. Also you can ignore changes as below. resource "huaweicloud_compute_instance" "myinstance" {
+ *  Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`admin_pass`, `user_data`, `metadata`, `data_disks`, `scheduler_hints`, `stop_before_destroy`, `delete_disks_on_termination`, `delete_eip_on_termination`, `network/access_network`, `bandwidth`, `eip_type`, `power_action` and arguments for pre-paid and spot price. It is generally recommended running `terraform plan` after importing an instance. You can then decide if changes should be applied to the instance, or the resource definition should be updated to align with the instance. Also you can ignore changes as below. hcl resource "huaweicloud_compute_instance" "myinstance" {
  *
  *  ...
  *
@@ -256,8 +256,8 @@ export class Instance extends pulumi.CustomResource {
     /**
      * Specifies the agent list in comma-separated string.
      * Available agents are:
-     * + `ces`: enable cloud eye monitoring(free).
-     * + `hss`: enable host security basic(free).
+     * + `ces`: enable cloud eye monitoring.
+     * + `hss`: enable host security basic.
      * + `hss,hss-ent`: enable host security enterprise edition.
      */
     public readonly agentList!: pulumi.Output<string>;
@@ -270,6 +270,15 @@ export class Instance extends pulumi.CustomResource {
      * Valid values are *true* and *false*. Defaults to *false*.
      */
     public readonly autoRenew!: pulumi.Output<string | undefined>;
+    /**
+     * Specifies the auto terminate time.
+     * The value is in the format of "yyyy-MM-ddTHH:mm:ssZ" in UTC+0 and complies with ISO8601.
+     * If the value of second (ss) is not "00", the system automatically sets to the current value of minute (mm).
+     * The auto terminate time must be at least half an hour later than the current time.
+     * The auto terminate time cannot be three years later than the current time.
+     * For example, set the value to "2024-09-25T12:05:00Z".
+     */
+    public readonly autoTerminateTime!: pulumi.Output<string | undefined>;
     /**
      * Specifies the availability zone in which to create the instance.
      * Please following [reference](https://developer.huaweicloud.com/intl/en-us/endpoint/?ECS)
@@ -326,6 +335,10 @@ export class Instance extends pulumi.CustomResource {
      */
     public readonly enterpriseProjectId!: pulumi.Output<string>;
     /**
+     * The expired time of prePaid instance, in UTC format.
+     */
+    public /*out*/ readonly expiredTime!: pulumi.Output<string>;
+    /**
      * Specifies the flavor ID of the instance to be created.
      */
     public readonly flavorId!: pulumi.Output<string>;
@@ -333,6 +346,10 @@ export class Instance extends pulumi.CustomResource {
      * The flavor name of the instance.
      */
     public readonly flavorName!: pulumi.Output<string>;
+    /**
+     * The hostname of the instance.
+     */
+    public readonly hostname!: pulumi.Output<string>;
     /**
      * Required if `imageName` is empty. Specifies the image ID of the desired
      * image for the instance. Changing this creates a new instance.
@@ -347,6 +364,10 @@ export class Instance extends pulumi.CustomResource {
      * Specifies the SSH keypair name used for logging in to the instance.
      */
     public readonly keyPair!: pulumi.Output<string | undefined>;
+    /**
+     * Specifies the user-defined metadata key-value pair.
+     */
+    public readonly metadata!: pulumi.Output<{[key: string]: string} | undefined>;
     /**
      * Specifies a unique name for the instance. The name consists of 1 to 64 characters,
      * including letters, digits, underscores (_), hyphens (-), and periods (.).
@@ -381,7 +402,7 @@ export class Instance extends pulumi.CustomResource {
      */
     public readonly privateKey!: pulumi.Output<string | undefined>;
     /**
-     * The EIP address that is associted to the instance.
+     * The EIP address that is associated to the instance.
      */
     public /*out*/ readonly publicIp!: pulumi.Output<string>;
     /**
@@ -404,7 +425,8 @@ export class Instance extends pulumi.CustomResource {
      */
     public readonly securityGroups!: pulumi.Output<string[]>;
     /**
-     * Specifies the service duration of the spot ECS in hours.
+     * Specifies the service duration of the spot ECS in hours.  
+     * The valid value is range from `1` to `6`.
      * This parameter takes effect only when `chargingMode` is set to *spot*.
      * Changing this creates a new instance.
      */
@@ -431,9 +453,19 @@ export class Instance extends pulumi.CustomResource {
      */
     public readonly stopBeforeDestroy!: pulumi.Output<boolean | undefined>;
     /**
-     * The system disk voume ID.
+     * Specifies the system disk DSS pool ID. This field is used
+     * only for dedicated storage. Changing this parameter will create a new resource.
+     */
+    public readonly systemDiskDssPoolId!: pulumi.Output<string | undefined>;
+    /**
+     * The system disk volume ID.
      */
     public /*out*/ readonly systemDiskId!: pulumi.Output<string>;
+    /**
+     * Specifies the IOPS(Input/Output Operations Per Second) for the disk.
+     * The field is valid and required when `systemDiskType` is set to **GPSSD2** or **ESSD2**.
+     */
+    public readonly systemDiskIops!: pulumi.Output<number>;
     /**
      * Specifies the ID of a KMS key used to encrypt the system disk.
      * Changing this creates a new instance.
@@ -444,6 +476,11 @@ export class Instance extends pulumi.CustomResource {
      * Shrinking the disk is not supported.
      */
     public readonly systemDiskSize!: pulumi.Output<number>;
+    /**
+     * Specifies the throughput for the disk. The Unit is MiB/s.
+     * The field is valid and required when `systemDiskType` is set to **GPSSD2**.
+     */
+    public readonly systemDiskThroughput!: pulumi.Output<number>;
     /**
      * Specifies the system disk type of the instance. Defaults to `GPSSD`.
      * Changing this creates a new instance.
@@ -458,8 +495,8 @@ export class Instance extends pulumi.CustomResource {
      */
     public /*out*/ readonly updatedAt!: pulumi.Output<string>;
     /**
-     * Specifies the user data to be injected during the instance creation. Text
-     * and text files can be injected. Changing this creates a new instance.
+     * Specifies the user data to be injected to the instance during the creation. Text
+     * and text files can be injected. The content of `userData` can be plaint text or encoded with base64.
      */
     public readonly userData!: pulumi.Output<string | undefined>;
     /**
@@ -493,6 +530,7 @@ export class Instance extends pulumi.CustomResource {
             resourceInputs["agentList"] = state ? state.agentList : undefined;
             resourceInputs["autoPay"] = state ? state.autoPay : undefined;
             resourceInputs["autoRenew"] = state ? state.autoRenew : undefined;
+            resourceInputs["autoTerminateTime"] = state ? state.autoTerminateTime : undefined;
             resourceInputs["availabilityZone"] = state ? state.availabilityZone : undefined;
             resourceInputs["bandwidth"] = state ? state.bandwidth : undefined;
             resourceInputs["chargingMode"] = state ? state.chargingMode : undefined;
@@ -504,11 +542,14 @@ export class Instance extends pulumi.CustomResource {
             resourceInputs["eipId"] = state ? state.eipId : undefined;
             resourceInputs["eipType"] = state ? state.eipType : undefined;
             resourceInputs["enterpriseProjectId"] = state ? state.enterpriseProjectId : undefined;
+            resourceInputs["expiredTime"] = state ? state.expiredTime : undefined;
             resourceInputs["flavorId"] = state ? state.flavorId : undefined;
             resourceInputs["flavorName"] = state ? state.flavorName : undefined;
+            resourceInputs["hostname"] = state ? state.hostname : undefined;
             resourceInputs["imageId"] = state ? state.imageId : undefined;
             resourceInputs["imageName"] = state ? state.imageName : undefined;
             resourceInputs["keyPair"] = state ? state.keyPair : undefined;
+            resourceInputs["metadata"] = state ? state.metadata : undefined;
             resourceInputs["name"] = state ? state.name : undefined;
             resourceInputs["networks"] = state ? state.networks : undefined;
             resourceInputs["period"] = state ? state.period : undefined;
@@ -525,9 +566,12 @@ export class Instance extends pulumi.CustomResource {
             resourceInputs["spotMaximumPrice"] = state ? state.spotMaximumPrice : undefined;
             resourceInputs["status"] = state ? state.status : undefined;
             resourceInputs["stopBeforeDestroy"] = state ? state.stopBeforeDestroy : undefined;
+            resourceInputs["systemDiskDssPoolId"] = state ? state.systemDiskDssPoolId : undefined;
             resourceInputs["systemDiskId"] = state ? state.systemDiskId : undefined;
+            resourceInputs["systemDiskIops"] = state ? state.systemDiskIops : undefined;
             resourceInputs["systemDiskKmsKeyId"] = state ? state.systemDiskKmsKeyId : undefined;
             resourceInputs["systemDiskSize"] = state ? state.systemDiskSize : undefined;
+            resourceInputs["systemDiskThroughput"] = state ? state.systemDiskThroughput : undefined;
             resourceInputs["systemDiskType"] = state ? state.systemDiskType : undefined;
             resourceInputs["tags"] = state ? state.tags : undefined;
             resourceInputs["updatedAt"] = state ? state.updatedAt : undefined;
@@ -544,6 +588,7 @@ export class Instance extends pulumi.CustomResource {
             resourceInputs["agentList"] = args ? args.agentList : undefined;
             resourceInputs["autoPay"] = args ? args.autoPay : undefined;
             resourceInputs["autoRenew"] = args ? args.autoRenew : undefined;
+            resourceInputs["autoTerminateTime"] = args ? args.autoTerminateTime : undefined;
             resourceInputs["availabilityZone"] = args ? args.availabilityZone : undefined;
             resourceInputs["bandwidth"] = args ? args.bandwidth : undefined;
             resourceInputs["chargingMode"] = args ? args.chargingMode : undefined;
@@ -556,9 +601,11 @@ export class Instance extends pulumi.CustomResource {
             resourceInputs["enterpriseProjectId"] = args ? args.enterpriseProjectId : undefined;
             resourceInputs["flavorId"] = args ? args.flavorId : undefined;
             resourceInputs["flavorName"] = args ? args.flavorName : undefined;
+            resourceInputs["hostname"] = args ? args.hostname : undefined;
             resourceInputs["imageId"] = args ? args.imageId : undefined;
             resourceInputs["imageName"] = args ? args.imageName : undefined;
             resourceInputs["keyPair"] = args ? args.keyPair : undefined;
+            resourceInputs["metadata"] = args ? args.metadata : undefined;
             resourceInputs["name"] = args ? args.name : undefined;
             resourceInputs["networks"] = args ? args.networks : undefined;
             resourceInputs["period"] = args ? args.period : undefined;
@@ -573,8 +620,11 @@ export class Instance extends pulumi.CustomResource {
             resourceInputs["spotDurationCount"] = args ? args.spotDurationCount : undefined;
             resourceInputs["spotMaximumPrice"] = args ? args.spotMaximumPrice : undefined;
             resourceInputs["stopBeforeDestroy"] = args ? args.stopBeforeDestroy : undefined;
+            resourceInputs["systemDiskDssPoolId"] = args ? args.systemDiskDssPoolId : undefined;
+            resourceInputs["systemDiskIops"] = args ? args.systemDiskIops : undefined;
             resourceInputs["systemDiskKmsKeyId"] = args ? args.systemDiskKmsKeyId : undefined;
             resourceInputs["systemDiskSize"] = args ? args.systemDiskSize : undefined;
+            resourceInputs["systemDiskThroughput"] = args ? args.systemDiskThroughput : undefined;
             resourceInputs["systemDiskType"] = args ? args.systemDiskType : undefined;
             resourceInputs["tags"] = args ? args.tags : undefined;
             resourceInputs["userData"] = args ? args.userData : undefined;
@@ -582,6 +632,7 @@ export class Instance extends pulumi.CustomResource {
             resourceInputs["accessIpV4"] = undefined /*out*/;
             resourceInputs["accessIpV6"] = undefined /*out*/;
             resourceInputs["createdAt"] = undefined /*out*/;
+            resourceInputs["expiredTime"] = undefined /*out*/;
             resourceInputs["publicIp"] = undefined /*out*/;
             resourceInputs["status"] = undefined /*out*/;
             resourceInputs["systemDiskId"] = undefined /*out*/;
@@ -617,8 +668,8 @@ export interface InstanceState {
     /**
      * Specifies the agent list in comma-separated string.
      * Available agents are:
-     * + `ces`: enable cloud eye monitoring(free).
-     * + `hss`: enable host security basic(free).
+     * + `ces`: enable cloud eye monitoring.
+     * + `hss`: enable host security basic.
      * + `hss,hss-ent`: enable host security enterprise edition.
      */
     agentList?: pulumi.Input<string>;
@@ -631,6 +682,15 @@ export interface InstanceState {
      * Valid values are *true* and *false*. Defaults to *false*.
      */
     autoRenew?: pulumi.Input<string>;
+    /**
+     * Specifies the auto terminate time.
+     * The value is in the format of "yyyy-MM-ddTHH:mm:ssZ" in UTC+0 and complies with ISO8601.
+     * If the value of second (ss) is not "00", the system automatically sets to the current value of minute (mm).
+     * The auto terminate time must be at least half an hour later than the current time.
+     * The auto terminate time cannot be three years later than the current time.
+     * For example, set the value to "2024-09-25T12:05:00Z".
+     */
+    autoTerminateTime?: pulumi.Input<string>;
     /**
      * Specifies the availability zone in which to create the instance.
      * Please following [reference](https://developer.huaweicloud.com/intl/en-us/endpoint/?ECS)
@@ -687,6 +747,10 @@ export interface InstanceState {
      */
     enterpriseProjectId?: pulumi.Input<string>;
     /**
+     * The expired time of prePaid instance, in UTC format.
+     */
+    expiredTime?: pulumi.Input<string>;
+    /**
      * Specifies the flavor ID of the instance to be created.
      */
     flavorId?: pulumi.Input<string>;
@@ -694,6 +758,10 @@ export interface InstanceState {
      * The flavor name of the instance.
      */
     flavorName?: pulumi.Input<string>;
+    /**
+     * The hostname of the instance.
+     */
+    hostname?: pulumi.Input<string>;
     /**
      * Required if `imageName` is empty. Specifies the image ID of the desired
      * image for the instance. Changing this creates a new instance.
@@ -708,6 +776,10 @@ export interface InstanceState {
      * Specifies the SSH keypair name used for logging in to the instance.
      */
     keyPair?: pulumi.Input<string>;
+    /**
+     * Specifies the user-defined metadata key-value pair.
+     */
+    metadata?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
     /**
      * Specifies a unique name for the instance. The name consists of 1 to 64 characters,
      * including letters, digits, underscores (_), hyphens (-), and periods (.).
@@ -742,7 +814,7 @@ export interface InstanceState {
      */
     privateKey?: pulumi.Input<string>;
     /**
-     * The EIP address that is associted to the instance.
+     * The EIP address that is associated to the instance.
      */
     publicIp?: pulumi.Input<string>;
     /**
@@ -765,7 +837,8 @@ export interface InstanceState {
      */
     securityGroups?: pulumi.Input<pulumi.Input<string>[]>;
     /**
-     * Specifies the service duration of the spot ECS in hours.
+     * Specifies the service duration of the spot ECS in hours.  
+     * The valid value is range from `1` to `6`.
      * This parameter takes effect only when `chargingMode` is set to *spot*.
      * Changing this creates a new instance.
      */
@@ -792,9 +865,19 @@ export interface InstanceState {
      */
     stopBeforeDestroy?: pulumi.Input<boolean>;
     /**
-     * The system disk voume ID.
+     * Specifies the system disk DSS pool ID. This field is used
+     * only for dedicated storage. Changing this parameter will create a new resource.
+     */
+    systemDiskDssPoolId?: pulumi.Input<string>;
+    /**
+     * The system disk volume ID.
      */
     systemDiskId?: pulumi.Input<string>;
+    /**
+     * Specifies the IOPS(Input/Output Operations Per Second) for the disk.
+     * The field is valid and required when `systemDiskType` is set to **GPSSD2** or **ESSD2**.
+     */
+    systemDiskIops?: pulumi.Input<number>;
     /**
      * Specifies the ID of a KMS key used to encrypt the system disk.
      * Changing this creates a new instance.
@@ -805,6 +888,11 @@ export interface InstanceState {
      * Shrinking the disk is not supported.
      */
     systemDiskSize?: pulumi.Input<number>;
+    /**
+     * Specifies the throughput for the disk. The Unit is MiB/s.
+     * The field is valid and required when `systemDiskType` is set to **GPSSD2**.
+     */
+    systemDiskThroughput?: pulumi.Input<number>;
     /**
      * Specifies the system disk type of the instance. Defaults to `GPSSD`.
      * Changing this creates a new instance.
@@ -819,8 +907,8 @@ export interface InstanceState {
      */
     updatedAt?: pulumi.Input<string>;
     /**
-     * Specifies the user data to be injected during the instance creation. Text
-     * and text files can be injected. Changing this creates a new instance.
+     * Specifies the user data to be injected to the instance during the creation. Text
+     * and text files can be injected. The content of `userData` can be plaint text or encoded with base64.
      */
     userData?: pulumi.Input<string>;
     /**
@@ -851,8 +939,8 @@ export interface InstanceArgs {
     /**
      * Specifies the agent list in comma-separated string.
      * Available agents are:
-     * + `ces`: enable cloud eye monitoring(free).
-     * + `hss`: enable host security basic(free).
+     * + `ces`: enable cloud eye monitoring.
+     * + `hss`: enable host security basic.
      * + `hss,hss-ent`: enable host security enterprise edition.
      */
     agentList?: pulumi.Input<string>;
@@ -865,6 +953,15 @@ export interface InstanceArgs {
      * Valid values are *true* and *false*. Defaults to *false*.
      */
     autoRenew?: pulumi.Input<string>;
+    /**
+     * Specifies the auto terminate time.
+     * The value is in the format of "yyyy-MM-ddTHH:mm:ssZ" in UTC+0 and complies with ISO8601.
+     * If the value of second (ss) is not "00", the system automatically sets to the current value of minute (mm).
+     * The auto terminate time must be at least half an hour later than the current time.
+     * The auto terminate time cannot be three years later than the current time.
+     * For example, set the value to "2024-09-25T12:05:00Z".
+     */
+    autoTerminateTime?: pulumi.Input<string>;
     /**
      * Specifies the availability zone in which to create the instance.
      * Please following [reference](https://developer.huaweicloud.com/intl/en-us/endpoint/?ECS)
@@ -925,6 +1022,10 @@ export interface InstanceArgs {
      */
     flavorName?: pulumi.Input<string>;
     /**
+     * The hostname of the instance.
+     */
+    hostname?: pulumi.Input<string>;
+    /**
      * Required if `imageName` is empty. Specifies the image ID of the desired
      * image for the instance. Changing this creates a new instance.
      */
@@ -938,6 +1039,10 @@ export interface InstanceArgs {
      * Specifies the SSH keypair name used for logging in to the instance.
      */
     keyPair?: pulumi.Input<string>;
+    /**
+     * Specifies the user-defined metadata key-value pair.
+     */
+    metadata?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
     /**
      * Specifies a unique name for the instance. The name consists of 1 to 64 characters,
      * including letters, digits, underscores (_), hyphens (-), and periods (.).
@@ -991,7 +1096,8 @@ export interface InstanceArgs {
      */
     securityGroups?: pulumi.Input<pulumi.Input<string>[]>;
     /**
-     * Specifies the service duration of the spot ECS in hours.
+     * Specifies the service duration of the spot ECS in hours.  
+     * The valid value is range from `1` to `6`.
      * This parameter takes effect only when `chargingMode` is set to *spot*.
      * Changing this creates a new instance.
      */
@@ -1014,6 +1120,16 @@ export interface InstanceArgs {
      */
     stopBeforeDestroy?: pulumi.Input<boolean>;
     /**
+     * Specifies the system disk DSS pool ID. This field is used
+     * only for dedicated storage. Changing this parameter will create a new resource.
+     */
+    systemDiskDssPoolId?: pulumi.Input<string>;
+    /**
+     * Specifies the IOPS(Input/Output Operations Per Second) for the disk.
+     * The field is valid and required when `systemDiskType` is set to **GPSSD2** or **ESSD2**.
+     */
+    systemDiskIops?: pulumi.Input<number>;
+    /**
      * Specifies the ID of a KMS key used to encrypt the system disk.
      * Changing this creates a new instance.
      */
@@ -1024,6 +1140,11 @@ export interface InstanceArgs {
      */
     systemDiskSize?: pulumi.Input<number>;
     /**
+     * Specifies the throughput for the disk. The Unit is MiB/s.
+     * The field is valid and required when `systemDiskType` is set to **GPSSD2**.
+     */
+    systemDiskThroughput?: pulumi.Input<number>;
+    /**
      * Specifies the system disk type of the instance. Defaults to `GPSSD`.
      * Changing this creates a new instance.
      */
@@ -1033,8 +1154,8 @@ export interface InstanceArgs {
      */
     tags?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
     /**
-     * Specifies the user data to be injected during the instance creation. Text
-     * and text files can be injected. Changing this creates a new instance.
+     * Specifies the user data to be injected to the instance during the creation. Text
+     * and text files can be injected. The content of `userData` can be plaint text or encoded with base64.
      */
     userData?: pulumi.Input<string>;
     /**

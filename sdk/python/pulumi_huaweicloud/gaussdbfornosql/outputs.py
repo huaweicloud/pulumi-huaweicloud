@@ -20,6 +20,7 @@ __all__ = [
     'MongoInstanceBackupStrategy',
     'MongoInstanceDatastore',
     'MongoInstanceNode',
+    'RedisInstanceAvailabilityZoneDetail',
     'RedisInstanceBackupStrategy',
     'RedisInstanceDatastore',
     'RedisInstanceNode',
@@ -189,7 +190,7 @@ class CassandraInstanceNode(dict):
         """
         :param str id: Indicates the node ID.
         :param str name: Specifies the instance name, which can be the same as an existing instance name. The value
-               must be 4 to 64 characters in length and start with a letter. It is case-sensitive and can contain only letters,
+               must be `4` to `64` characters in length and start with a letter. It is case-sensitive and can contain only letters,
                digits, hyphens (-), and underscores (_).
         :param str private_ip: Indicates the private IP address of a node.
         :param str status: Indicates the node status.
@@ -219,7 +220,7 @@ class CassandraInstanceNode(dict):
     def name(self) -> Optional[str]:
         """
         Specifies the instance name, which can be the same as an existing instance name. The value
-        must be 4 to 64 characters in length and start with a letter. It is case-sensitive and can contain only letters,
+        must be `4` to `64` characters in length and start with a letter. It is case-sensitive and can contain only letters,
         digits, hyphens (-), and underscores (_).
         """
         return pulumi.get(self, "name")
@@ -279,7 +280,7 @@ class InfluxInstanceBackupStrategy(dict):
                HH value must be 1 greater than the hh value. The values of mm and MM must be the same and must be set to 00. Example
                value: 08:00-09:00, 03:00-04:00.
         :param int keep_days: Specifies the number of days to retain the generated backup files. The value ranges from
-               **0** to **35**. If this parameter is set to **0**, the automated backup policy is not set. If this parameter is not
+               `0` to `35`. If this parameter is set to `0`, the automated backup policy is not set. If this parameter is not
                transferred, the automated backup policy is enabled by default. Backup files are stored for seven days by default.
         """
         pulumi.set(__self__, "start_time", start_time)
@@ -302,7 +303,7 @@ class InfluxInstanceBackupStrategy(dict):
     def keep_days(self) -> Optional[int]:
         """
         Specifies the number of days to retain the generated backup files. The value ranges from
-        **0** to **35**. If this parameter is set to **0**, the automated backup policy is not set. If this parameter is not
+        `0` to `35`. If this parameter is set to `0`, the automated backup policy is not set. If this parameter is not
         transferred, the automated backup policy is enabled by default. Backup files are stored for seven days by default.
         """
         return pulumi.get(self, "keep_days")
@@ -401,7 +402,7 @@ class InfluxInstanceNode(dict):
         """
         :param str id: Indicates the node ID.
         :param str name: Specifies the instance name, which can be the same as an existing instance name. The
-               value must be **4** to **64** characters in length and start with a letter. It is case-sensitive and can contain only
+               value must be `4` to `64` characters in length and start with a letter. It is case-sensitive and can contain only
                letters, digits, hyphens (-), and underscores (_).
         :param str private_ip: Indicates the private IP address of a node.
         :param str status: Indicates the node status.
@@ -431,7 +432,7 @@ class InfluxInstanceNode(dict):
     def name(self) -> Optional[str]:
         """
         Specifies the instance name, which can be the same as an existing instance name. The
-        value must be **4** to **64** characters in length and start with a letter. It is case-sensitive and can contain only
+        value must be `4` to `64` characters in length and start with a letter. It is case-sensitive and can contain only
         letters, digits, hyphens (-), and underscores (_).
         """
         return pulumi.get(self, "name")
@@ -491,7 +492,7 @@ class MongoInstanceBackupStrategy(dict):
                HH value must be 1 greater than the hh value. The values of mm and MM must be the same and must be set to 00. Example
                value: 08:00-09:00, 03:00-04:00.
         :param int keep_days: Specifies the number of days to retain the generated backup files. The value ranges from
-               **0** to **35**. If this parameter is set to **0**, the automated backup policy is not set. If this parameter is not
+               `0` to `35`. If this parameter is set to `0`, the automated backup policy is not set. If this parameter is not
                transferred, the automated backup policy is enabled by default. Backup files are stored for seven days by default.
         """
         pulumi.set(__self__, "start_time", start_time)
@@ -514,7 +515,7 @@ class MongoInstanceBackupStrategy(dict):
     def keep_days(self) -> Optional[int]:
         """
         Specifies the number of days to retain the generated backup files. The value ranges from
-        **0** to **35**. If this parameter is set to **0**, the automated backup policy is not set. If this parameter is not
+        `0` to `35`. If this parameter is set to `0`, the automated backup policy is not set. If this parameter is not
         transferred, the automated backup policy is enabled by default. Backup files are stored for seven days by default.
         """
         return pulumi.get(self, "keep_days")
@@ -607,7 +608,7 @@ class MongoInstanceNode(dict):
         """
         :param str id: Indicates the node ID.
         :param str name: Specifies the instance name, which can be the same as an existing instance name. The
-               value must be **4** to **64** characters in length and start with a letter. It is case-sensitive and can contain only
+               value must be `4` to `64` characters in length and start with a letter. It is case-sensitive and can contain only
                letters, digits, hyphens (-), and underscores (_).
         :param str private_ip: Indicates the private IP address of a node.
         :param str status: Indicates the node status.
@@ -637,7 +638,7 @@ class MongoInstanceNode(dict):
     def name(self) -> Optional[str]:
         """
         Specifies the instance name, which can be the same as an existing instance name. The
-        value must be **4** to **64** characters in length and start with a letter. It is case-sensitive and can contain only
+        value must be `4` to `64` characters in length and start with a letter. It is case-sensitive and can contain only
         letters, digits, hyphens (-), and underscores (_).
         """
         return pulumi.get(self, "name")
@@ -668,6 +669,58 @@ class MongoInstanceNode(dict):
 
 
 @pulumi.output_type
+class RedisInstanceAvailabilityZoneDetail(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "primaryAvailabilityZone":
+            suggest = "primary_availability_zone"
+        elif key == "secondaryAvailabilityZone":
+            suggest = "secondary_availability_zone"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in RedisInstanceAvailabilityZoneDetail. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        RedisInstanceAvailabilityZoneDetail.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        RedisInstanceAvailabilityZoneDetail.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 primary_availability_zone: str,
+                 secondary_availability_zone: str):
+        """
+        :param str primary_availability_zone: Specifies the primary AZ, it must be a single AZ and be
+               different from the standby AZ. Changing this parameter will create a new resource.
+        :param str secondary_availability_zone: Specifies the standby AZ, it must be a single AZ and be
+               different from the primary AZ. Changing this parameter will create a new resource.
+        """
+        pulumi.set(__self__, "primary_availability_zone", primary_availability_zone)
+        pulumi.set(__self__, "secondary_availability_zone", secondary_availability_zone)
+
+    @property
+    @pulumi.getter(name="primaryAvailabilityZone")
+    def primary_availability_zone(self) -> str:
+        """
+        Specifies the primary AZ, it must be a single AZ and be
+        different from the standby AZ. Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "primary_availability_zone")
+
+    @property
+    @pulumi.getter(name="secondaryAvailabilityZone")
+    def secondary_availability_zone(self) -> str:
+        """
+        Specifies the standby AZ, it must be a single AZ and be
+        different from the primary AZ. Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "secondary_availability_zone")
+
+
+@pulumi.output_type
 class RedisInstanceBackupStrategy(dict):
     @staticmethod
     def __key_warning(key: str):
@@ -694,10 +747,10 @@ class RedisInstanceBackupStrategy(dict):
         """
         :param str start_time: Specifies the backup time window. Automated backups will be triggered during the
                backup time window. It must be a valid value in the "hh:mm-HH:MM" format. The current time is in the UTC format. The
-               HH value must be 1 greater than the hh value. The values of mm and MM must be the same and must be set to 00. Example
-               value: 08:00-09:00, 03:00-04:00.
+               HH value must be `1` greater than the hh value. The values of mm and MM must be the same and must be set to 00. Example
+               value: **08:00-09:00**, **03:00-04:00**.
         :param int keep_days: Specifies the number of days to retain the generated backup files. The value ranges from
-               0 to 35. If this parameter is set to 0, the automated backup policy is not set. If this parameter is not transferred,
+               0 to 35. If this parameter is set to `0`, the automated backup policy is not set. If this parameter is not transferred,
                the automated backup policy is enabled by default. Backup files are stored for seven days by default.
         """
         pulumi.set(__self__, "start_time", start_time)
@@ -710,8 +763,8 @@ class RedisInstanceBackupStrategy(dict):
         """
         Specifies the backup time window. Automated backups will be triggered during the
         backup time window. It must be a valid value in the "hh:mm-HH:MM" format. The current time is in the UTC format. The
-        HH value must be 1 greater than the hh value. The values of mm and MM must be the same and must be set to 00. Example
-        value: 08:00-09:00, 03:00-04:00.
+        HH value must be `1` greater than the hh value. The values of mm and MM must be the same and must be set to 00. Example
+        value: **08:00-09:00**, **03:00-04:00**.
         """
         return pulumi.get(self, "start_time")
 
@@ -720,7 +773,7 @@ class RedisInstanceBackupStrategy(dict):
     def keep_days(self) -> Optional[int]:
         """
         Specifies the number of days to retain the generated backup files. The value ranges from
-        0 to 35. If this parameter is set to 0, the automated backup policy is not set. If this parameter is not transferred,
+        0 to 35. If this parameter is set to `0`, the automated backup policy is not set. If this parameter is not transferred,
         the automated backup policy is enabled by default. Backup files are stored for seven days by default.
         """
         return pulumi.get(self, "keep_days")
@@ -822,7 +875,7 @@ class RedisInstanceNode(dict):
         """
         :param str id: Indicates the node ID.
         :param str name: Specifies the instance name, which can be the same as an existing instance name. The value
-               must be 4 to 64 characters in length and start with a letter. It is case-sensitive and can contain only letters,
+               must be `4` to `64` characters in length and start with a letter. It is case-sensitive and can contain only letters,
                digits, hyphens (-), and underscores (_). Chinese characters must be in UTF-8 or Unicode format.
         :param str private_ip: Indicates the private IP address of a node.
         :param str public_ip: Indicates the public IP address of a node.
@@ -855,7 +908,7 @@ class RedisInstanceNode(dict):
     def name(self) -> Optional[str]:
         """
         Specifies the instance name, which can be the same as an existing instance name. The value
-        must be 4 to 64 characters in length and start with a letter. It is case-sensitive and can contain only letters,
+        must be `4` to `64` characters in length and start with a letter. It is case-sensitive and can contain only letters,
         digits, hyphens (-), and underscores (_). Chinese characters must be in UTF-8 or Unicode format.
         """
         return pulumi.get(self, "name")

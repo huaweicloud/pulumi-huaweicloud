@@ -6,7 +6,7 @@ import { input as inputs, output as outputs } from "../types";
 import * as utilities from "../utilities";
 
 /**
- * Manages a database user resource within HuaweiCloud.
+ * Manages a DDS database user resource within HuaweiCloud.
  *
  * ## Example Usage
  *
@@ -33,13 +33,13 @@ import * as utilities from "../utilities";
  *
  * ## Import
  *
- * Database users can be imported using their `id` (combination of `instance_id`, `db_name` and `name`), separated by a slash (/), e.g.
+ * DDS database user can be imported using the `instance_id`, `db_name` and `name` separated by slashes (/), e.g. bash
  *
  * ```sh
- *  $ pulumi import huaweicloud:Dds/databaseUser:DatabaseUser test &ltinstance_id&gt/&ltdb_name&gt/&ltname&gt
+ *  $ pulumi import huaweicloud:Dds/databaseUser:DatabaseUser test <instance_id>/<db_name>/<name>
  * ```
  *
- *  Due to security reason, the imported state may not be identical to your resource definition (`password` parameter). It is generally recommended running `terraform plan` after importing a user resource. You can then decide if changes should be applied to the user, or the resource definition should be updated to align with the user. Also you can ignore changes as below. resource "huaweicloud_dds_database_user" "test" {
+ *  Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response. The missing attributes include`password`. It is generally recommended running `terraform plan` after importing a DDS database user. You can then decide if changes should be applied to the DDS database user, or the resource definition should be updated to align with the DDS database user. Also you can ignore changes as below. hcl resource "huaweicloud_dds_database_user" "test" {
  *
  *  ...
  *
@@ -88,7 +88,7 @@ export class DatabaseUser extends pulumi.CustomResource {
     public readonly dbName!: pulumi.Output<string>;
     /**
      * The list of database privileges owned by the current user, includes all privileges
-     * inherited by owned roles. The object structure is documented below.
+     * inherited by owned roles. The inheritedPrivileges structure is documented below.
      */
     public /*out*/ readonly inheritedPrivileges!: pulumi.Output<outputs.Dds.DatabaseUserInheritedPrivilege[]>;
     /**
@@ -104,12 +104,12 @@ export class DatabaseUser extends pulumi.CustomResource {
     public readonly name!: pulumi.Output<string>;
     /**
      * Specifies the user password.
-     * The assword content must meet the following conditions:
+     * The password content must meet the following conditions:
      */
     public readonly password!: pulumi.Output<string>;
     /**
      * The list of database privileges owned by the current user.
-     * The object structure is documented below.
+     * The privileges structure is documented below.
      */
     public /*out*/ readonly privileges!: pulumi.Output<outputs.Dds.DatabaseUserPrivilege[]>;
     /**
@@ -119,7 +119,7 @@ export class DatabaseUser extends pulumi.CustomResource {
     public readonly region!: pulumi.Output<string>;
     /**
      * Specifies the list of roles owned by the current user.
-     * The object structure is documented below. Changing this parameter will create a new user.
+     * The roles structure is documented below. Changing this parameter will create a new user.
      */
     public readonly roles!: pulumi.Output<outputs.Dds.DatabaseUserRole[]>;
 
@@ -183,7 +183,7 @@ export interface DatabaseUserState {
     dbName?: pulumi.Input<string>;
     /**
      * The list of database privileges owned by the current user, includes all privileges
-     * inherited by owned roles. The object structure is documented below.
+     * inherited by owned roles. The inheritedPrivileges structure is documented below.
      */
     inheritedPrivileges?: pulumi.Input<pulumi.Input<inputs.Dds.DatabaseUserInheritedPrivilege>[]>;
     /**
@@ -199,12 +199,12 @@ export interface DatabaseUserState {
     name?: pulumi.Input<string>;
     /**
      * Specifies the user password.
-     * The assword content must meet the following conditions:
+     * The password content must meet the following conditions:
      */
     password?: pulumi.Input<string>;
     /**
      * The list of database privileges owned by the current user.
-     * The object structure is documented below.
+     * The privileges structure is documented below.
      */
     privileges?: pulumi.Input<pulumi.Input<inputs.Dds.DatabaseUserPrivilege>[]>;
     /**
@@ -214,7 +214,7 @@ export interface DatabaseUserState {
     region?: pulumi.Input<string>;
     /**
      * Specifies the list of roles owned by the current user.
-     * The object structure is documented below. Changing this parameter will create a new user.
+     * The roles structure is documented below. Changing this parameter will create a new user.
      */
     roles?: pulumi.Input<pulumi.Input<inputs.Dds.DatabaseUserRole>[]>;
 }
@@ -241,7 +241,7 @@ export interface DatabaseUserArgs {
     name?: pulumi.Input<string>;
     /**
      * Specifies the user password.
-     * The assword content must meet the following conditions:
+     * The password content must meet the following conditions:
      */
     password: pulumi.Input<string>;
     /**
@@ -251,7 +251,7 @@ export interface DatabaseUserArgs {
     region?: pulumi.Input<string>;
     /**
      * Specifies the list of roles owned by the current user.
-     * The object structure is documented below. Changing this parameter will create a new user.
+     * The roles structure is documented below. Changing this parameter will create a new user.
      */
     roles: pulumi.Input<pulumi.Input<inputs.Dds.DatabaseUserRole>[]>;
 }

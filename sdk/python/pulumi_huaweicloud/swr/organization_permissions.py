@@ -88,7 +88,7 @@ class _OrganizationPermissionsState:
                Changing this creates a new resource.
         :param pulumi.Input[str] region: Specifies the region in which to create the resource. If omitted, the
                provider-level region will be used. Changing this creates a new resource.
-        :param pulumi.Input[Sequence[pulumi.Input['OrganizationPermissionsSelfPermissionArgs']]] self_permissions: The permission informations of current user.
+        :param pulumi.Input[Sequence[pulumi.Input['OrganizationPermissionsSelfPermissionArgs']]] self_permissions: The permission information of current user.
         :param pulumi.Input[Sequence[pulumi.Input['OrganizationPermissionsUserArgs']]] users: Specifies the users to access to the organization (namespace).
                Structure is documented below.
         """
@@ -145,7 +145,7 @@ class _OrganizationPermissionsState:
     @pulumi.getter(name="selfPermissions")
     def self_permissions(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['OrganizationPermissionsSelfPermissionArgs']]]]:
         """
-        The permission informations of current user.
+        The permission information of current user.
         """
         return pulumi.get(self, "self_permissions")
 
@@ -207,7 +207,7 @@ class OrganizationPermissions(pulumi.CustomResource):
 
         ## Import
 
-        Organization Permissions can be imported using the `id` (organization name), e.g.
+        Organization Permissions can be imported using the `id` (organization name), e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:Swr/organizationPermissions:OrganizationPermissions test terraform-test
@@ -259,7 +259,7 @@ class OrganizationPermissions(pulumi.CustomResource):
 
         ## Import
 
-        Organization Permissions can be imported using the `id` (organization name), e.g.
+        Organization Permissions can be imported using the `id` (organization name), e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:Swr/organizationPermissions:OrganizationPermissions test terraform-test
@@ -328,7 +328,7 @@ class OrganizationPermissions(pulumi.CustomResource):
                Changing this creates a new resource.
         :param pulumi.Input[str] region: Specifies the region in which to create the resource. If omitted, the
                provider-level region will be used. Changing this creates a new resource.
-        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['OrganizationPermissionsSelfPermissionArgs']]]] self_permissions: The permission informations of current user.
+        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['OrganizationPermissionsSelfPermissionArgs']]]] self_permissions: The permission information of current user.
         :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['OrganizationPermissionsUserArgs']]]] users: Specifies the users to access to the organization (namespace).
                Structure is documented below.
         """
@@ -373,7 +373,7 @@ class OrganizationPermissions(pulumi.CustomResource):
     @pulumi.getter(name="selfPermissions")
     def self_permissions(self) -> pulumi.Output[Sequence['outputs.OrganizationPermissionsSelfPermission']]:
         """
-        The permission informations of current user.
+        The permission information of current user.
         """
         return pulumi.get(self, "self_permissions")
 

@@ -20,35 +20,43 @@ class InstanceArgs:
                  datastore: pulumi.Input['InstanceDatastoreArgs'],
                  flavors: pulumi.Input[Sequence[pulumi.Input['InstanceFlavorArgs']]],
                  mode: pulumi.Input[str],
-                 password: pulumi.Input[str],
                  security_group_id: pulumi.Input[str],
                  subnet_id: pulumi.Input[str],
                  vpc_id: pulumi.Input[str],
                  auto_pay: Optional[pulumi.Input[str]] = None,
                  auto_renew: Optional[pulumi.Input[str]] = None,
                  backup_strategy: Optional[pulumi.Input['InstanceBackupStrategyArgs']] = None,
+                 balancer_active_begin: Optional[pulumi.Input[str]] = None,
+                 balancer_active_end: Optional[pulumi.Input[str]] = None,
+                 balancer_status: Optional[pulumi.Input[str]] = None,
                  charging_mode: Optional[pulumi.Input[str]] = None,
+                 client_network_ranges: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  configurations: Optional[pulumi.Input[Sequence[pulumi.Input['InstanceConfigurationArgs']]]] = None,
+                 description: Optional[pulumi.Input[str]] = None,
                  disk_encryption_id: Optional[pulumi.Input[str]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
+                 maintain_begin: Optional[pulumi.Input[str]] = None,
+                 maintain_end: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
+                 password: Optional[pulumi.Input[str]] = None,
                  period: Optional[pulumi.Input[int]] = None,
                  period_unit: Optional[pulumi.Input[str]] = None,
                  port: Optional[pulumi.Input[int]] = None,
                  region: Optional[pulumi.Input[str]] = None,
+                 replica_set_name: Optional[pulumi.Input[str]] = None,
+                 second_level_monitoring_enabled: Optional[pulumi.Input[bool]] = None,
+                 slow_log_desensitization: Optional[pulumi.Input[str]] = None,
                  ssl: Optional[pulumi.Input[bool]] = None,
                  tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None):
         """
         The set of arguments for constructing a Instance resource.
-        :param pulumi.Input[str] availability_zone: Specifies the ID of the availability zone. Changing this creates a
-               new instance.
+        :param pulumi.Input[str] availability_zone: Specifies the availability zone names separated by commas.
         :param pulumi.Input['InstanceDatastoreArgs'] datastore: Specifies database information. The structure is described below. Changing
                this creates a new instance.
         :param pulumi.Input[Sequence[pulumi.Input['InstanceFlavorArgs']]] flavors: Specifies the flavors information. The structure is described below. Changing
                this creates a new instance.
-        :param pulumi.Input[str] mode: Specifies the mode of the database instance. **Sharding**, **ReplicaSet**,
-               **Single** are supported. Changing this creates a new instance.
-        :param pulumi.Input[str] password: Specifies the Administrator password of the database instance.
+        :param pulumi.Input[str] mode: Specifies the mode of the database instance. **Sharding**, **ReplicaSet**
+               are supported. Changing this creates a new instance.
         :param pulumi.Input[str] security_group_id: Specifies the security group ID of the DDS instance.
         :param pulumi.Input[str] subnet_id: Specifies the subnet Network ID. Changing this creates a new instance.
         :param pulumi.Input[str] vpc_id: Specifies the VPC ID. Changing this creates a new instance.
@@ -56,23 +64,43 @@ class InstanceArgs:
                Valid values are `true` and `false`, defaults to `false`.
                Changing this creates a new instance.
         :param pulumi.Input['InstanceBackupStrategyArgs'] backup_strategy: Specifies the advanced backup policy. The structure is described below.
+        :param pulumi.Input[str] balancer_active_begin: Specifies the start time of the balancing activity time window.
+               The format is **HH:MM**. It's required with `balancer_active_end`.
+        :param pulumi.Input[str] balancer_active_end: Specifies the end time of the balancing activity time window.
+               The format is **HH:MM**. It's required with `balancer_active_begin`.
+        :param pulumi.Input[str] balancer_status: Specifies the status of the balancer.
+               The value can be **start** or **stop**. Defaults to **start**.
         :param pulumi.Input[str] charging_mode: Specifies the charging mode of the instance.
                The valid values are as follows:
                + `prePaid`: indicates the yearly/monthly billing mode.
                + `postPaid`: indicates the pay-per-use billing mode.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] client_network_ranges: Specifies the CIDR block where the client is located. Cross-CIDR access is
+               required only when the CIDR blocks of the client and the replica set instance are different. For example, if the client
+               CIDR block is 192.168.0.0/16 and the replica set instance's CIDR block is 172.16.0.0/24, add the CIDR block
+               192.168.0.0/16 so that the client can access the replica set instance.
+               It's only for replica set instance.
         :param pulumi.Input[Sequence[pulumi.Input['InstanceConfigurationArgs']]] configurations: Specifies the configuration information.
                The structure is described below. Changing this creates a new instance.
+        :param pulumi.Input[str] description: Specifies the description of the DDS instance.
         :param pulumi.Input[str] disk_encryption_id: Specifies the disk encryption ID of the instance. Changing this
                creates a new instance.
-        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project id of the dds instance.
-               Changing this creates a new instance.
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project id of the DDS instance.
+        :param pulumi.Input[str] maintain_begin: Specifies begin time of the time range within which you are allowed to start a
+               task that affects the running of database instances. It must be a valid value in the format of **hh:mm** in UTC+0,
+               such as **02:00**, meanwhile, this time in console displays in the format of **hh:mm** in UTC+08:00, e.g. **10:00**.
+        :param pulumi.Input[str] maintain_end: Specifies end time of the time range within which you are allowed to start a
+               task that affects the running of database instances. It must be a valid value in the format of **hh:mm** in UTC+0,
+               such as **04:00**, meanwhile, this time in console displays in the format of **hh:mm** in UTC+08:00, e.g. **12:00**.
         :param pulumi.Input[str] name: Specifies the DB instance name. The DB instance name of the same type is unique in the
                same tenant.
-        :param pulumi.Input[int] period: Specifies the charging period of the instance.
-               If `period_unit` is set to *month*, the value ranges from 1 to 9.
-               If `period_unit` is set to *year*, the value ranges from 1 to 3.
-               This parameter is mandatory if `charging_mode` is set to *prePaid*.
-               Changing this creates a new instance.
+        :param pulumi.Input[str] password: Specifies the Administrator password of the database instance.
+        :param pulumi.Input[int] period: Specifies the backup cycle. Data will be automatically backed up on the
+               selected days every week.
+               + If you set the `keep_days` to 0, this parameter is no need to set.
+               + If you set the `keep_days` within 6 days, set the parameter value to **1,2,3,4,5,6,7**, data is automatically
+               backed up on each day every week.
+               + If you set the `keep_days` between 7 and 732 days, set the parameter value to at least one day of every week.
+               For example: **1**, **3,5**.
         :param pulumi.Input[str] period_unit: Specifies the charging period unit of the instance.
                Valid values are *month* and *year*. This parameter is mandatory if `charging_mode` is set to *prePaid*.
                Changing this creates a new instance.
@@ -80,6 +108,12 @@ class InstanceArgs:
                `27017`, `27018`, `27019`. Defaults to `8635`.
         :param pulumi.Input[str] region: Specifies the region of the DDS instance. Changing this creates a new
                instance.
+        :param pulumi.Input[str] replica_set_name: Specifies the name of the replica set in the connection address.
+               It must be `3` to `128` characters long and start with a letter. It is case-sensitive and can contain only letters,
+               digits, and underscores (_). Default is **replica**.
+        :param pulumi.Input[bool] second_level_monitoring_enabled: Specifies whether to enable second level monitoring.
+        :param pulumi.Input[str] slow_log_desensitization: Specifies whether to enable slow original log.
+               The value can be **on** or **off**.
         :param pulumi.Input[bool] ssl: Specifies whether to enable or disable SSL. Defaults to true.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: The key/value pairs to associate with the DDS instance.
         """
@@ -87,7 +121,6 @@ class InstanceArgs:
         pulumi.set(__self__, "datastore", datastore)
         pulumi.set(__self__, "flavors", flavors)
         pulumi.set(__self__, "mode", mode)
-        pulumi.set(__self__, "password", password)
         pulumi.set(__self__, "security_group_id", security_group_id)
         pulumi.set(__self__, "subnet_id", subnet_id)
         pulumi.set(__self__, "vpc_id", vpc_id)
@@ -100,16 +133,32 @@ class InstanceArgs:
             pulumi.set(__self__, "auto_renew", auto_renew)
         if backup_strategy is not None:
             pulumi.set(__self__, "backup_strategy", backup_strategy)
+        if balancer_active_begin is not None:
+            pulumi.set(__self__, "balancer_active_begin", balancer_active_begin)
+        if balancer_active_end is not None:
+            pulumi.set(__self__, "balancer_active_end", balancer_active_end)
+        if balancer_status is not None:
+            pulumi.set(__self__, "balancer_status", balancer_status)
         if charging_mode is not None:
             pulumi.set(__self__, "charging_mode", charging_mode)
+        if client_network_ranges is not None:
+            pulumi.set(__self__, "client_network_ranges", client_network_ranges)
         if configurations is not None:
             pulumi.set(__self__, "configurations", configurations)
+        if description is not None:
+            pulumi.set(__self__, "description", description)
         if disk_encryption_id is not None:
             pulumi.set(__self__, "disk_encryption_id", disk_encryption_id)
         if enterprise_project_id is not None:
             pulumi.set(__self__, "enterprise_project_id", enterprise_project_id)
+        if maintain_begin is not None:
+            pulumi.set(__self__, "maintain_begin", maintain_begin)
+        if maintain_end is not None:
+            pulumi.set(__self__, "maintain_end", maintain_end)
         if name is not None:
             pulumi.set(__self__, "name", name)
+        if password is not None:
+            pulumi.set(__self__, "password", password)
         if period is not None:
             pulumi.set(__self__, "period", period)
         if period_unit is not None:
@@ -118,6 +167,12 @@ class InstanceArgs:
             pulumi.set(__self__, "port", port)
         if region is not None:
             pulumi.set(__self__, "region", region)
+        if replica_set_name is not None:
+            pulumi.set(__self__, "replica_set_name", replica_set_name)
+        if second_level_monitoring_enabled is not None:
+            pulumi.set(__self__, "second_level_monitoring_enabled", second_level_monitoring_enabled)
+        if slow_log_desensitization is not None:
+            pulumi.set(__self__, "slow_log_desensitization", slow_log_desensitization)
         if ssl is not None:
             pulumi.set(__self__, "ssl", ssl)
         if tags is not None:
@@ -127,8 +182,7 @@ class InstanceArgs:
     @pulumi.getter(name="availabilityZone")
     def availability_zone(self) -> pulumi.Input[str]:
         """
-        Specifies the ID of the availability zone. Changing this creates a
-        new instance.
+        Specifies the availability zone names separated by commas.
         """
         return pulumi.get(self, "availability_zone")
 
@@ -166,26 +220,14 @@ class InstanceArgs:
     @pulumi.getter
     def mode(self) -> pulumi.Input[str]:
         """
-        Specifies the mode of the database instance. **Sharding**, **ReplicaSet**,
-        **Single** are supported. Changing this creates a new instance.
+        Specifies the mode of the database instance. **Sharding**, **ReplicaSet**
+        are supported. Changing this creates a new instance.
         """
         return pulumi.get(self, "mode")
 
     @mode.setter
     def mode(self, value: pulumi.Input[str]):
         pulumi.set(self, "mode", value)
-
-    @property
-    @pulumi.getter
-    def password(self) -> pulumi.Input[str]:
-        """
-        Specifies the Administrator password of the database instance.
-        """
-        return pulumi.get(self, "password")
-
-    @password.setter
-    def password(self, value: pulumi.Input[str]):
-        pulumi.set(self, "password", value)
 
     @property
     @pulumi.getter(name="securityGroupId")
@@ -259,6 +301,45 @@ class InstanceArgs:
         pulumi.set(self, "backup_strategy", value)
 
     @property
+    @pulumi.getter(name="balancerActiveBegin")
+    def balancer_active_begin(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the start time of the balancing activity time window.
+        The format is **HH:MM**. It's required with `balancer_active_end`.
+        """
+        return pulumi.get(self, "balancer_active_begin")
+
+    @balancer_active_begin.setter
+    def balancer_active_begin(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "balancer_active_begin", value)
+
+    @property
+    @pulumi.getter(name="balancerActiveEnd")
+    def balancer_active_end(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the end time of the balancing activity time window.
+        The format is **HH:MM**. It's required with `balancer_active_begin`.
+        """
+        return pulumi.get(self, "balancer_active_end")
+
+    @balancer_active_end.setter
+    def balancer_active_end(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "balancer_active_end", value)
+
+    @property
+    @pulumi.getter(name="balancerStatus")
+    def balancer_status(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the status of the balancer.
+        The value can be **start** or **stop**. Defaults to **start**.
+        """
+        return pulumi.get(self, "balancer_status")
+
+    @balancer_status.setter
+    def balancer_status(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "balancer_status", value)
+
+    @property
     @pulumi.getter(name="chargingMode")
     def charging_mode(self) -> Optional[pulumi.Input[str]]:
         """
@@ -274,6 +355,22 @@ class InstanceArgs:
         pulumi.set(self, "charging_mode", value)
 
     @property
+    @pulumi.getter(name="clientNetworkRanges")
+    def client_network_ranges(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]:
+        """
+        Specifies the CIDR block where the client is located. Cross-CIDR access is
+        required only when the CIDR blocks of the client and the replica set instance are different. For example, if the client
+        CIDR block is 192.168.0.0/16 and the replica set instance's CIDR block is 172.16.0.0/24, add the CIDR block
+        192.168.0.0/16 so that the client can access the replica set instance.
+        It's only for replica set instance.
+        """
+        return pulumi.get(self, "client_network_ranges")
+
+    @client_network_ranges.setter
+    def client_network_ranges(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]):
+        pulumi.set(self, "client_network_ranges", value)
+
+    @property
     @pulumi.getter
     def configurations(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['InstanceConfigurationArgs']]]]:
         """
@@ -285,6 +382,18 @@ class InstanceArgs:
     @configurations.setter
     def configurations(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['InstanceConfigurationArgs']]]]):
         pulumi.set(self, "configurations", value)
+
+    @property
+    @pulumi.getter
+    def description(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the description of the DDS instance.
+        """
+        return pulumi.get(self, "description")
+
+    @description.setter
+    def description(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "description", value)
 
     @property
     @pulumi.getter(name="diskEncryptionId")
@@ -303,14 +412,41 @@ class InstanceArgs:
     @pulumi.getter(name="enterpriseProjectId")
     def enterprise_project_id(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the enterprise project id of the dds instance.
-        Changing this creates a new instance.
+        Specifies the enterprise project id of the DDS instance.
         """
         return pulumi.get(self, "enterprise_project_id")
 
     @enterprise_project_id.setter
     def enterprise_project_id(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "enterprise_project_id", value)
+
+    @property
+    @pulumi.getter(name="maintainBegin")
+    def maintain_begin(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies begin time of the time range within which you are allowed to start a
+        task that affects the running of database instances. It must be a valid value in the format of **hh:mm** in UTC+0,
+        such as **02:00**, meanwhile, this time in console displays in the format of **hh:mm** in UTC+08:00, e.g. **10:00**.
+        """
+        return pulumi.get(self, "maintain_begin")
+
+    @maintain_begin.setter
+    def maintain_begin(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "maintain_begin", value)
+
+    @property
+    @pulumi.getter(name="maintainEnd")
+    def maintain_end(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies end time of the time range within which you are allowed to start a
+        task that affects the running of database instances. It must be a valid value in the format of **hh:mm** in UTC+0,
+        such as **04:00**, meanwhile, this time in console displays in the format of **hh:mm** in UTC+08:00, e.g. **12:00**.
+        """
+        return pulumi.get(self, "maintain_end")
+
+    @maintain_end.setter
+    def maintain_end(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "maintain_end", value)
 
     @property
     @pulumi.getter
@@ -327,13 +463,27 @@ class InstanceArgs:
 
     @property
     @pulumi.getter
+    def password(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the Administrator password of the database instance.
+        """
+        return pulumi.get(self, "password")
+
+    @password.setter
+    def password(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "password", value)
+
+    @property
+    @pulumi.getter
     def period(self) -> Optional[pulumi.Input[int]]:
         """
-        Specifies the charging period of the instance.
-        If `period_unit` is set to *month*, the value ranges from 1 to 9.
-        If `period_unit` is set to *year*, the value ranges from 1 to 3.
-        This parameter is mandatory if `charging_mode` is set to *prePaid*.
-        Changing this creates a new instance.
+        Specifies the backup cycle. Data will be automatically backed up on the
+        selected days every week.
+        + If you set the `keep_days` to 0, this parameter is no need to set.
+        + If you set the `keep_days` within 6 days, set the parameter value to **1,2,3,4,5,6,7**, data is automatically
+        backed up on each day every week.
+        + If you set the `keep_days` between 7 and 732 days, set the parameter value to at least one day of every week.
+        For example: **1**, **3,5**.
         """
         return pulumi.get(self, "period")
 
@@ -380,6 +530,45 @@ class InstanceArgs:
     @region.setter
     def region(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "region", value)
+
+    @property
+    @pulumi.getter(name="replicaSetName")
+    def replica_set_name(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the name of the replica set in the connection address.
+        It must be `3` to `128` characters long and start with a letter. It is case-sensitive and can contain only letters,
+        digits, and underscores (_). Default is **replica**.
+        """
+        return pulumi.get(self, "replica_set_name")
+
+    @replica_set_name.setter
+    def replica_set_name(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "replica_set_name", value)
+
+    @property
+    @pulumi.getter(name="secondLevelMonitoringEnabled")
+    def second_level_monitoring_enabled(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies whether to enable second level monitoring.
+        """
+        return pulumi.get(self, "second_level_monitoring_enabled")
+
+    @second_level_monitoring_enabled.setter
+    def second_level_monitoring_enabled(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "second_level_monitoring_enabled", value)
+
+    @property
+    @pulumi.getter(name="slowLogDesensitization")
+    def slow_log_desensitization(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies whether to enable slow original log.
+        The value can be **on** or **off**.
+        """
+        return pulumi.get(self, "slow_log_desensitization")
+
+    @slow_log_desensitization.setter
+    def slow_log_desensitization(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "slow_log_desensitization", value)
 
     @property
     @pulumi.getter
@@ -413,13 +602,22 @@ class _InstanceState:
                  auto_renew: Optional[pulumi.Input[str]] = None,
                  availability_zone: Optional[pulumi.Input[str]] = None,
                  backup_strategy: Optional[pulumi.Input['InstanceBackupStrategyArgs']] = None,
+                 balancer_active_begin: Optional[pulumi.Input[str]] = None,
+                 balancer_active_end: Optional[pulumi.Input[str]] = None,
+                 balancer_status: Optional[pulumi.Input[str]] = None,
                  charging_mode: Optional[pulumi.Input[str]] = None,
+                 client_network_ranges: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  configurations: Optional[pulumi.Input[Sequence[pulumi.Input['InstanceConfigurationArgs']]]] = None,
+                 created_at: Optional[pulumi.Input[str]] = None,
                  datastore: Optional[pulumi.Input['InstanceDatastoreArgs']] = None,
                  db_username: Optional[pulumi.Input[str]] = None,
+                 description: Optional[pulumi.Input[str]] = None,
                  disk_encryption_id: Optional[pulumi.Input[str]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  flavors: Optional[pulumi.Input[Sequence[pulumi.Input['InstanceFlavorArgs']]]] = None,
+                 groups: Optional[pulumi.Input[Sequence[pulumi.Input['InstanceGroupArgs']]]] = None,
+                 maintain_begin: Optional[pulumi.Input[str]] = None,
+                 maintain_end: Optional[pulumi.Input[str]] = None,
                  mode: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  nodes: Optional[pulumi.Input[Sequence[pulumi.Input['InstanceNodeArgs']]]] = None,
@@ -428,46 +626,73 @@ class _InstanceState:
                  period_unit: Optional[pulumi.Input[str]] = None,
                  port: Optional[pulumi.Input[int]] = None,
                  region: Optional[pulumi.Input[str]] = None,
+                 replica_set_name: Optional[pulumi.Input[str]] = None,
+                 second_level_monitoring_enabled: Optional[pulumi.Input[bool]] = None,
                  security_group_id: Optional[pulumi.Input[str]] = None,
+                 slow_log_desensitization: Optional[pulumi.Input[str]] = None,
                  ssl: Optional[pulumi.Input[bool]] = None,
                  status: Optional[pulumi.Input[str]] = None,
                  subnet_id: Optional[pulumi.Input[str]] = None,
                  tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
+                 time_zone: Optional[pulumi.Input[str]] = None,
+                 updated_at: Optional[pulumi.Input[str]] = None,
                  vpc_id: Optional[pulumi.Input[str]] = None):
         """
         Input properties used for looking up and filtering Instance resources.
         :param pulumi.Input[str] auto_renew: Specifies whether auto-renew is enabled.
                Valid values are `true` and `false`, defaults to `false`.
                Changing this creates a new instance.
-        :param pulumi.Input[str] availability_zone: Specifies the ID of the availability zone. Changing this creates a
-               new instance.
+        :param pulumi.Input[str] availability_zone: Specifies the availability zone names separated by commas.
         :param pulumi.Input['InstanceBackupStrategyArgs'] backup_strategy: Specifies the advanced backup policy. The structure is described below.
+        :param pulumi.Input[str] balancer_active_begin: Specifies the start time of the balancing activity time window.
+               The format is **HH:MM**. It's required with `balancer_active_end`.
+        :param pulumi.Input[str] balancer_active_end: Specifies the end time of the balancing activity time window.
+               The format is **HH:MM**. It's required with `balancer_active_begin`.
+        :param pulumi.Input[str] balancer_status: Specifies the status of the balancer.
+               The value can be **start** or **stop**. Defaults to **start**.
         :param pulumi.Input[str] charging_mode: Specifies the charging mode of the instance.
                The valid values are as follows:
                + `prePaid`: indicates the yearly/monthly billing mode.
                + `postPaid`: indicates the pay-per-use billing mode.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] client_network_ranges: Specifies the CIDR block where the client is located. Cross-CIDR access is
+               required only when the CIDR blocks of the client and the replica set instance are different. For example, if the client
+               CIDR block is 192.168.0.0/16 and the replica set instance's CIDR block is 172.16.0.0/24, add the CIDR block
+               192.168.0.0/16 so that the client can access the replica set instance.
+               It's only for replica set instance.
         :param pulumi.Input[Sequence[pulumi.Input['InstanceConfigurationArgs']]] configurations: Specifies the configuration information.
                The structure is described below. Changing this creates a new instance.
+        :param pulumi.Input[str] created_at: Indicates the create time.
         :param pulumi.Input['InstanceDatastoreArgs'] datastore: Specifies database information. The structure is described below. Changing
                this creates a new instance.
-        :param pulumi.Input[str] db_username: Indicates the DB Administator name.
+        :param pulumi.Input[str] db_username: Indicates the DB Administrator name.
+        :param pulumi.Input[str] description: Specifies the description of the DDS instance.
         :param pulumi.Input[str] disk_encryption_id: Specifies the disk encryption ID of the instance. Changing this
                creates a new instance.
-        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project id of the dds instance.
-               Changing this creates a new instance.
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project id of the DDS instance.
         :param pulumi.Input[Sequence[pulumi.Input['InstanceFlavorArgs']]] flavors: Specifies the flavors information. The structure is described below. Changing
                this creates a new instance.
-        :param pulumi.Input[str] mode: Specifies the mode of the database instance. **Sharding**, **ReplicaSet**,
-               **Single** are supported. Changing this creates a new instance.
+        :param pulumi.Input[Sequence[pulumi.Input['InstanceGroupArgs']]] groups: Indicates the instance groups information.
+               The groups structure is documented below.
+        :param pulumi.Input[str] maintain_begin: Specifies begin time of the time range within which you are allowed to start a
+               task that affects the running of database instances. It must be a valid value in the format of **hh:mm** in UTC+0,
+               such as **02:00**, meanwhile, this time in console displays in the format of **hh:mm** in UTC+08:00, e.g. **10:00**.
+        :param pulumi.Input[str] maintain_end: Specifies end time of the time range within which you are allowed to start a
+               task that affects the running of database instances. It must be a valid value in the format of **hh:mm** in UTC+0,
+               such as **04:00**, meanwhile, this time in console displays in the format of **hh:mm** in UTC+08:00, e.g. **12:00**.
+        :param pulumi.Input[str] mode: Specifies the mode of the database instance. **Sharding**, **ReplicaSet**
+               are supported. Changing this creates a new instance.
         :param pulumi.Input[str] name: Specifies the DB instance name. The DB instance name of the same type is unique in the
                same tenant.
-        :param pulumi.Input[Sequence[pulumi.Input['InstanceNodeArgs']]] nodes: Indicates the instance nodes information. Structure is documented below.
+        :param pulumi.Input[Sequence[pulumi.Input['InstanceNodeArgs']]] nodes: Indicates the nodes info.
+               The nodes structure is documented below.
         :param pulumi.Input[str] password: Specifies the Administrator password of the database instance.
-        :param pulumi.Input[int] period: Specifies the charging period of the instance.
-               If `period_unit` is set to *month*, the value ranges from 1 to 9.
-               If `period_unit` is set to *year*, the value ranges from 1 to 3.
-               This parameter is mandatory if `charging_mode` is set to *prePaid*.
-               Changing this creates a new instance.
+        :param pulumi.Input[int] period: Specifies the backup cycle. Data will be automatically backed up on the
+               selected days every week.
+               + If you set the `keep_days` to 0, this parameter is no need to set.
+               + If you set the `keep_days` within 6 days, set the parameter value to **1,2,3,4,5,6,7**, data is automatically
+               backed up on each day every week.
+               + If you set the `keep_days` between 7 and 732 days, set the parameter value to at least one day of every week.
+               For example: **1**, **3,5**.
         :param pulumi.Input[str] period_unit: Specifies the charging period unit of the instance.
                Valid values are *month* and *year*. This parameter is mandatory if `charging_mode` is set to *prePaid*.
                Changing this creates a new instance.
@@ -475,11 +700,19 @@ class _InstanceState:
                `27017`, `27018`, `27019`. Defaults to `8635`.
         :param pulumi.Input[str] region: Specifies the region of the DDS instance. Changing this creates a new
                instance.
+        :param pulumi.Input[str] replica_set_name: Specifies the name of the replica set in the connection address.
+               It must be `3` to `128` characters long and start with a letter. It is case-sensitive and can contain only letters,
+               digits, and underscores (_). Default is **replica**.
+        :param pulumi.Input[bool] second_level_monitoring_enabled: Specifies whether to enable second level monitoring.
         :param pulumi.Input[str] security_group_id: Specifies the security group ID of the DDS instance.
+        :param pulumi.Input[str] slow_log_desensitization: Specifies whether to enable slow original log.
+               The value can be **on** or **off**.
         :param pulumi.Input[bool] ssl: Specifies whether to enable or disable SSL. Defaults to true.
         :param pulumi.Input[str] status: Indicates the node status.
         :param pulumi.Input[str] subnet_id: Specifies the subnet Network ID. Changing this creates a new instance.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: The key/value pairs to associate with the DDS instance.
+        :param pulumi.Input[str] time_zone: Indicates the time zone.
+        :param pulumi.Input[str] updated_at: Indicates the update time.
         :param pulumi.Input[str] vpc_id: Specifies the VPC ID. Changing this creates a new instance.
         """
         if auto_pay is not None:
@@ -493,20 +726,38 @@ class _InstanceState:
             pulumi.set(__self__, "availability_zone", availability_zone)
         if backup_strategy is not None:
             pulumi.set(__self__, "backup_strategy", backup_strategy)
+        if balancer_active_begin is not None:
+            pulumi.set(__self__, "balancer_active_begin", balancer_active_begin)
+        if balancer_active_end is not None:
+            pulumi.set(__self__, "balancer_active_end", balancer_active_end)
+        if balancer_status is not None:
+            pulumi.set(__self__, "balancer_status", balancer_status)
         if charging_mode is not None:
             pulumi.set(__self__, "charging_mode", charging_mode)
+        if client_network_ranges is not None:
+            pulumi.set(__self__, "client_network_ranges", client_network_ranges)
         if configurations is not None:
             pulumi.set(__self__, "configurations", configurations)
+        if created_at is not None:
+            pulumi.set(__self__, "created_at", created_at)
         if datastore is not None:
             pulumi.set(__self__, "datastore", datastore)
         if db_username is not None:
             pulumi.set(__self__, "db_username", db_username)
+        if description is not None:
+            pulumi.set(__self__, "description", description)
         if disk_encryption_id is not None:
             pulumi.set(__self__, "disk_encryption_id", disk_encryption_id)
         if enterprise_project_id is not None:
             pulumi.set(__self__, "enterprise_project_id", enterprise_project_id)
         if flavors is not None:
             pulumi.set(__self__, "flavors", flavors)
+        if groups is not None:
+            pulumi.set(__self__, "groups", groups)
+        if maintain_begin is not None:
+            pulumi.set(__self__, "maintain_begin", maintain_begin)
+        if maintain_end is not None:
+            pulumi.set(__self__, "maintain_end", maintain_end)
         if mode is not None:
             pulumi.set(__self__, "mode", mode)
         if name is not None:
@@ -523,8 +774,14 @@ class _InstanceState:
             pulumi.set(__self__, "port", port)
         if region is not None:
             pulumi.set(__self__, "region", region)
+        if replica_set_name is not None:
+            pulumi.set(__self__, "replica_set_name", replica_set_name)
+        if second_level_monitoring_enabled is not None:
+            pulumi.set(__self__, "second_level_monitoring_enabled", second_level_monitoring_enabled)
         if security_group_id is not None:
             pulumi.set(__self__, "security_group_id", security_group_id)
+        if slow_log_desensitization is not None:
+            pulumi.set(__self__, "slow_log_desensitization", slow_log_desensitization)
         if ssl is not None:
             pulumi.set(__self__, "ssl", ssl)
         if status is not None:
@@ -533,6 +790,10 @@ class _InstanceState:
             pulumi.set(__self__, "subnet_id", subnet_id)
         if tags is not None:
             pulumi.set(__self__, "tags", tags)
+        if time_zone is not None:
+            pulumi.set(__self__, "time_zone", time_zone)
+        if updated_at is not None:
+            pulumi.set(__self__, "updated_at", updated_at)
         if vpc_id is not None:
             pulumi.set(__self__, "vpc_id", vpc_id)
 
@@ -563,8 +824,7 @@ class _InstanceState:
     @pulumi.getter(name="availabilityZone")
     def availability_zone(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the ID of the availability zone. Changing this creates a
-        new instance.
+        Specifies the availability zone names separated by commas.
         """
         return pulumi.get(self, "availability_zone")
 
@@ -585,6 +845,45 @@ class _InstanceState:
         pulumi.set(self, "backup_strategy", value)
 
     @property
+    @pulumi.getter(name="balancerActiveBegin")
+    def balancer_active_begin(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the start time of the balancing activity time window.
+        The format is **HH:MM**. It's required with `balancer_active_end`.
+        """
+        return pulumi.get(self, "balancer_active_begin")
+
+    @balancer_active_begin.setter
+    def balancer_active_begin(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "balancer_active_begin", value)
+
+    @property
+    @pulumi.getter(name="balancerActiveEnd")
+    def balancer_active_end(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the end time of the balancing activity time window.
+        The format is **HH:MM**. It's required with `balancer_active_begin`.
+        """
+        return pulumi.get(self, "balancer_active_end")
+
+    @balancer_active_end.setter
+    def balancer_active_end(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "balancer_active_end", value)
+
+    @property
+    @pulumi.getter(name="balancerStatus")
+    def balancer_status(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the status of the balancer.
+        The value can be **start** or **stop**. Defaults to **start**.
+        """
+        return pulumi.get(self, "balancer_status")
+
+    @balancer_status.setter
+    def balancer_status(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "balancer_status", value)
+
+    @property
     @pulumi.getter(name="chargingMode")
     def charging_mode(self) -> Optional[pulumi.Input[str]]:
         """
@@ -600,6 +899,22 @@ class _InstanceState:
         pulumi.set(self, "charging_mode", value)
 
     @property
+    @pulumi.getter(name="clientNetworkRanges")
+    def client_network_ranges(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]:
+        """
+        Specifies the CIDR block where the client is located. Cross-CIDR access is
+        required only when the CIDR blocks of the client and the replica set instance are different. For example, if the client
+        CIDR block is 192.168.0.0/16 and the replica set instance's CIDR block is 172.16.0.0/24, add the CIDR block
+        192.168.0.0/16 so that the client can access the replica set instance.
+        It's only for replica set instance.
+        """
+        return pulumi.get(self, "client_network_ranges")
+
+    @client_network_ranges.setter
+    def client_network_ranges(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]):
+        pulumi.set(self, "client_network_ranges", value)
+
+    @property
     @pulumi.getter
     def configurations(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['InstanceConfigurationArgs']]]]:
         """
@@ -611,6 +926,18 @@ class _InstanceState:
     @configurations.setter
     def configurations(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['InstanceConfigurationArgs']]]]):
         pulumi.set(self, "configurations", value)
+
+    @property
+    @pulumi.getter(name="createdAt")
+    def created_at(self) -> Optional[pulumi.Input[str]]:
+        """
+        Indicates the create time.
+        """
+        return pulumi.get(self, "created_at")
+
+    @created_at.setter
+    def created_at(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "created_at", value)
 
     @property
     @pulumi.getter
@@ -629,13 +956,25 @@ class _InstanceState:
     @pulumi.getter(name="dbUsername")
     def db_username(self) -> Optional[pulumi.Input[str]]:
         """
-        Indicates the DB Administator name.
+        Indicates the DB Administrator name.
         """
         return pulumi.get(self, "db_username")
 
     @db_username.setter
     def db_username(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "db_username", value)
+
+    @property
+    @pulumi.getter
+    def description(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the description of the DDS instance.
+        """
+        return pulumi.get(self, "description")
+
+    @description.setter
+    def description(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "description", value)
 
     @property
     @pulumi.getter(name="diskEncryptionId")
@@ -654,8 +993,7 @@ class _InstanceState:
     @pulumi.getter(name="enterpriseProjectId")
     def enterprise_project_id(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the enterprise project id of the dds instance.
-        Changing this creates a new instance.
+        Specifies the enterprise project id of the DDS instance.
         """
         return pulumi.get(self, "enterprise_project_id")
 
@@ -678,10 +1016,51 @@ class _InstanceState:
 
     @property
     @pulumi.getter
+    def groups(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['InstanceGroupArgs']]]]:
+        """
+        Indicates the instance groups information.
+        The groups structure is documented below.
+        """
+        return pulumi.get(self, "groups")
+
+    @groups.setter
+    def groups(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['InstanceGroupArgs']]]]):
+        pulumi.set(self, "groups", value)
+
+    @property
+    @pulumi.getter(name="maintainBegin")
+    def maintain_begin(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies begin time of the time range within which you are allowed to start a
+        task that affects the running of database instances. It must be a valid value in the format of **hh:mm** in UTC+0,
+        such as **02:00**, meanwhile, this time in console displays in the format of **hh:mm** in UTC+08:00, e.g. **10:00**.
+        """
+        return pulumi.get(self, "maintain_begin")
+
+    @maintain_begin.setter
+    def maintain_begin(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "maintain_begin", value)
+
+    @property
+    @pulumi.getter(name="maintainEnd")
+    def maintain_end(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies end time of the time range within which you are allowed to start a
+        task that affects the running of database instances. It must be a valid value in the format of **hh:mm** in UTC+0,
+        such as **04:00**, meanwhile, this time in console displays in the format of **hh:mm** in UTC+08:00, e.g. **12:00**.
+        """
+        return pulumi.get(self, "maintain_end")
+
+    @maintain_end.setter
+    def maintain_end(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "maintain_end", value)
+
+    @property
+    @pulumi.getter
     def mode(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the mode of the database instance. **Sharding**, **ReplicaSet**,
-        **Single** are supported. Changing this creates a new instance.
+        Specifies the mode of the database instance. **Sharding**, **ReplicaSet**
+        are supported. Changing this creates a new instance.
         """
         return pulumi.get(self, "mode")
 
@@ -706,7 +1085,8 @@ class _InstanceState:
     @pulumi.getter
     def nodes(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['InstanceNodeArgs']]]]:
         """
-        Indicates the instance nodes information. Structure is documented below.
+        Indicates the nodes info.
+        The nodes structure is documented below.
         """
         return pulumi.get(self, "nodes")
 
@@ -730,11 +1110,13 @@ class _InstanceState:
     @pulumi.getter
     def period(self) -> Optional[pulumi.Input[int]]:
         """
-        Specifies the charging period of the instance.
-        If `period_unit` is set to *month*, the value ranges from 1 to 9.
-        If `period_unit` is set to *year*, the value ranges from 1 to 3.
-        This parameter is mandatory if `charging_mode` is set to *prePaid*.
-        Changing this creates a new instance.
+        Specifies the backup cycle. Data will be automatically backed up on the
+        selected days every week.
+        + If you set the `keep_days` to 0, this parameter is no need to set.
+        + If you set the `keep_days` within 6 days, set the parameter value to **1,2,3,4,5,6,7**, data is automatically
+        backed up on each day every week.
+        + If you set the `keep_days` between 7 and 732 days, set the parameter value to at least one day of every week.
+        For example: **1**, **3,5**.
         """
         return pulumi.get(self, "period")
 
@@ -783,6 +1165,32 @@ class _InstanceState:
         pulumi.set(self, "region", value)
 
     @property
+    @pulumi.getter(name="replicaSetName")
+    def replica_set_name(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the name of the replica set in the connection address.
+        It must be `3` to `128` characters long and start with a letter. It is case-sensitive and can contain only letters,
+        digits, and underscores (_). Default is **replica**.
+        """
+        return pulumi.get(self, "replica_set_name")
+
+    @replica_set_name.setter
+    def replica_set_name(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "replica_set_name", value)
+
+    @property
+    @pulumi.getter(name="secondLevelMonitoringEnabled")
+    def second_level_monitoring_enabled(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies whether to enable second level monitoring.
+        """
+        return pulumi.get(self, "second_level_monitoring_enabled")
+
+    @second_level_monitoring_enabled.setter
+    def second_level_monitoring_enabled(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "second_level_monitoring_enabled", value)
+
+    @property
     @pulumi.getter(name="securityGroupId")
     def security_group_id(self) -> Optional[pulumi.Input[str]]:
         """
@@ -793,6 +1201,19 @@ class _InstanceState:
     @security_group_id.setter
     def security_group_id(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "security_group_id", value)
+
+    @property
+    @pulumi.getter(name="slowLogDesensitization")
+    def slow_log_desensitization(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies whether to enable slow original log.
+        The value can be **on** or **off**.
+        """
+        return pulumi.get(self, "slow_log_desensitization")
+
+    @slow_log_desensitization.setter
+    def slow_log_desensitization(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "slow_log_desensitization", value)
 
     @property
     @pulumi.getter
@@ -843,6 +1264,30 @@ class _InstanceState:
         pulumi.set(self, "tags", value)
 
     @property
+    @pulumi.getter(name="timeZone")
+    def time_zone(self) -> Optional[pulumi.Input[str]]:
+        """
+        Indicates the time zone.
+        """
+        return pulumi.get(self, "time_zone")
+
+    @time_zone.setter
+    def time_zone(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "time_zone", value)
+
+    @property
+    @pulumi.getter(name="updatedAt")
+    def updated_at(self) -> Optional[pulumi.Input[str]]:
+        """
+        Indicates the update time.
+        """
+        return pulumi.get(self, "updated_at")
+
+    @updated_at.setter
+    def updated_at(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "updated_at", value)
+
+    @property
     @pulumi.getter(name="vpcId")
     def vpc_id(self) -> Optional[pulumi.Input[str]]:
         """
@@ -864,12 +1309,19 @@ class Instance(pulumi.CustomResource):
                  auto_renew: Optional[pulumi.Input[str]] = None,
                  availability_zone: Optional[pulumi.Input[str]] = None,
                  backup_strategy: Optional[pulumi.Input[pulumi.InputType['InstanceBackupStrategyArgs']]] = None,
+                 balancer_active_begin: Optional[pulumi.Input[str]] = None,
+                 balancer_active_end: Optional[pulumi.Input[str]] = None,
+                 balancer_status: Optional[pulumi.Input[str]] = None,
                  charging_mode: Optional[pulumi.Input[str]] = None,
+                 client_network_ranges: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  configurations: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['InstanceConfigurationArgs']]]]] = None,
                  datastore: Optional[pulumi.Input[pulumi.InputType['InstanceDatastoreArgs']]] = None,
+                 description: Optional[pulumi.Input[str]] = None,
                  disk_encryption_id: Optional[pulumi.Input[str]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  flavors: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['InstanceFlavorArgs']]]]] = None,
+                 maintain_begin: Optional[pulumi.Input[str]] = None,
+                 maintain_end: Optional[pulumi.Input[str]] = None,
                  mode: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  password: Optional[pulumi.Input[str]] = None,
@@ -877,7 +1329,10 @@ class Instance(pulumi.CustomResource):
                  period_unit: Optional[pulumi.Input[str]] = None,
                  port: Optional[pulumi.Input[int]] = None,
                  region: Optional[pulumi.Input[str]] = None,
+                 replica_set_name: Optional[pulumi.Input[str]] = None,
+                 second_level_monitoring_enabled: Optional[pulumi.Input[bool]] = None,
                  security_group_id: Optional[pulumi.Input[str]] = None,
+                 slow_log_desensitization: Optional[pulumi.Input[str]] = None,
                  ssl: Optional[pulumi.Input[bool]] = None,
                  subnet_id: Optional[pulumi.Input[str]] = None,
                  tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
@@ -893,43 +1348,47 @@ class Instance(pulumi.CustomResource):
         import pulumi
         import pulumi_huaweicloud as huaweicloud
 
+        config = pulumi.Config()
+        dds_password = config.require_object("ddsPassword")
         instance = huaweicloud.dds.Instance("instance",
-            availability_zone="{{ availability_zone }}",
-            backup_strategy=huaweicloud.dds.InstanceBackupStrategyArgs(
-                keep_days=8,
-                start_time="08:00-09:00",
-            ),
             datastore=huaweicloud.dds.InstanceDatastoreArgs(
-                storage_engine="wiredTiger",
                 type="DDS-Community",
-                version="3.4",
+                version="4.0",
+                storage_engine="wiredTiger",
             ),
+            availability_zone="{{ availability_zone }}",
+            vpc_id="{{ vpc_id }}",
+            subnet_id="{{ subnet_network_id }}}",
+            security_group_id="{{ security_group_id }}",
+            password=dds_password,
+            mode="Sharding",
+            maintain_begin="02:00",
+            maintain_end="03:00",
             flavors=[
                 huaweicloud.dds.InstanceFlavorArgs(
+                    type="mongos",
                     num=2,
                     spec_code="dds.mongodb.c3.medium.4.mongos",
-                    type="mongos",
                 ),
                 huaweicloud.dds.InstanceFlavorArgs(
+                    type="shard",
                     num=2,
+                    storage="ULTRAHIGH",
                     size=20,
                     spec_code="dds.mongodb.c3.medium.4.shard",
-                    storage="ULTRAHIGH",
-                    type="shard",
                 ),
                 huaweicloud.dds.InstanceFlavorArgs(
+                    type="config",
                     num=1,
+                    storage="ULTRAHIGH",
                     size=20,
                     spec_code="dds.mongodb.c3.large.2.config",
-                    storage="ULTRAHIGH",
-                    type="config",
                 ),
             ],
-            mode="Sharding",
-            password="Test@123",
-            security_group_id="{{ security_group_id }}",
-            subnet_id="{{ subnet_network_id }}}",
-            vpc_id="{{ vpc_id }}")
+            backup_strategy=huaweicloud.dds.InstanceBackupStrategyArgs(
+                start_time="08:00-09:00",
+                keep_days=8,
+            ))
         ```
         ### Creating A Replica Set Community Edition
 
@@ -937,51 +1396,27 @@ class Instance(pulumi.CustomResource):
         import pulumi
         import pulumi_huaweicloud as huaweicloud
 
+        config = pulumi.Config()
+        dds_password = config.require_object("ddsPassword")
         instance = huaweicloud.dds.Instance("instance",
-            availability_zone="{{ availability_zone }}",
             datastore=huaweicloud.dds.InstanceDatastoreArgs(
-                storage_engine="wiredTiger",
                 type="DDS-Community",
-                version="3.4",
+                version="4.0",
+                storage_engine="wiredTiger",
             ),
+            availability_zone="{{ availability_zone }}",
+            vpc_id="{{ vpc_id }}",
+            subnet_id="{{ subnet_network_id }}}",
+            security_group_id="{{ security_group_id }}",
+            password=dds_password,
+            mode="ReplicaSet",
             flavors=[huaweicloud.dds.InstanceFlavorArgs(
-                num=1,
+                type="replica",
+                num=3,
+                storage="ULTRAHIGH",
                 size=30,
                 spec_code="dds.mongodb.c3.medium.4.repset",
-                storage="ULTRAHIGH",
-                type="replica",
-            )],
-            mode="ReplicaSet",
-            password="Test@123",
-            security_group_id="{{ security_group_id }}",
-            subnet_id="{{ subnet_network_id }}}",
-            vpc_id="{{ vpc_id }}")
-        ```
-        ### Creating A Single Community Edition
-
-        ```python
-        import pulumi
-        import pulumi_huaweicloud as huaweicloud
-
-        instance = huaweicloud.dds.Instance("instance",
-            availability_zone="{{ availability_zone }}",
-            datastore=huaweicloud.dds.InstanceDatastoreArgs(
-                storage_engine="wiredTiger",
-                type="DDS-Community",
-                version="3.4",
-            ),
-            flavors=[huaweicloud.dds.InstanceFlavorArgs(
-                num=1,
-                size=30,
-                spec_code="dds.mongodb.s6.large.2.single",
-                storage="ULTRAHIGH",
-                type="single",
-            )],
-            mode="Single",
-            password="Test@123",
-            security_group_id="{{ security_group_id }}",
-            subnet_id="{{ subnet_network_id }}}",
-            vpc_id="{{ vpc_id }}")
+            )])
         ```
 
         ## Import
@@ -992,7 +1427,7 @@ class Instance(pulumi.CustomResource):
          $ pulumi import huaweicloud:Dds/instance:Instance instance 9c6d6ff2cba3434293fd479571517e16in02
         ```
 
-         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`password`, `availability_zone`, `flavor`, configuration. It is generally recommended running `terraform plan` after importing an instance. You can then decide if changes should be applied to the instance, or the resource definition should be updated to align with the instance. Also you can ignore changes as below. resource "huaweicloud_dds_instance" "instance" {
+         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`password`, `availability_zone`, `flavor`, configuration. It is generally recommended running `terraform plan` after importing an instance. You can then decide if changes should be applied to the instance, or the resource definition should be updated to align with the instance. Also you can ignore changes as below. hcl resource "huaweicloud_dds_instance" "instance" {
 
          ...
 
@@ -1011,33 +1446,51 @@ class Instance(pulumi.CustomResource):
         :param pulumi.Input[str] auto_renew: Specifies whether auto-renew is enabled.
                Valid values are `true` and `false`, defaults to `false`.
                Changing this creates a new instance.
-        :param pulumi.Input[str] availability_zone: Specifies the ID of the availability zone. Changing this creates a
-               new instance.
+        :param pulumi.Input[str] availability_zone: Specifies the availability zone names separated by commas.
         :param pulumi.Input[pulumi.InputType['InstanceBackupStrategyArgs']] backup_strategy: Specifies the advanced backup policy. The structure is described below.
+        :param pulumi.Input[str] balancer_active_begin: Specifies the start time of the balancing activity time window.
+               The format is **HH:MM**. It's required with `balancer_active_end`.
+        :param pulumi.Input[str] balancer_active_end: Specifies the end time of the balancing activity time window.
+               The format is **HH:MM**. It's required with `balancer_active_begin`.
+        :param pulumi.Input[str] balancer_status: Specifies the status of the balancer.
+               The value can be **start** or **stop**. Defaults to **start**.
         :param pulumi.Input[str] charging_mode: Specifies the charging mode of the instance.
                The valid values are as follows:
                + `prePaid`: indicates the yearly/monthly billing mode.
                + `postPaid`: indicates the pay-per-use billing mode.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] client_network_ranges: Specifies the CIDR block where the client is located. Cross-CIDR access is
+               required only when the CIDR blocks of the client and the replica set instance are different. For example, if the client
+               CIDR block is 192.168.0.0/16 and the replica set instance's CIDR block is 172.16.0.0/24, add the CIDR block
+               192.168.0.0/16 so that the client can access the replica set instance.
+               It's only for replica set instance.
         :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['InstanceConfigurationArgs']]]] configurations: Specifies the configuration information.
                The structure is described below. Changing this creates a new instance.
         :param pulumi.Input[pulumi.InputType['InstanceDatastoreArgs']] datastore: Specifies database information. The structure is described below. Changing
                this creates a new instance.
+        :param pulumi.Input[str] description: Specifies the description of the DDS instance.
         :param pulumi.Input[str] disk_encryption_id: Specifies the disk encryption ID of the instance. Changing this
                creates a new instance.
-        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project id of the dds instance.
-               Changing this creates a new instance.
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project id of the DDS instance.
         :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['InstanceFlavorArgs']]]] flavors: Specifies the flavors information. The structure is described below. Changing
                this creates a new instance.
-        :param pulumi.Input[str] mode: Specifies the mode of the database instance. **Sharding**, **ReplicaSet**,
-               **Single** are supported. Changing this creates a new instance.
+        :param pulumi.Input[str] maintain_begin: Specifies begin time of the time range within which you are allowed to start a
+               task that affects the running of database instances. It must be a valid value in the format of **hh:mm** in UTC+0,
+               such as **02:00**, meanwhile, this time in console displays in the format of **hh:mm** in UTC+08:00, e.g. **10:00**.
+        :param pulumi.Input[str] maintain_end: Specifies end time of the time range within which you are allowed to start a
+               task that affects the running of database instances. It must be a valid value in the format of **hh:mm** in UTC+0,
+               such as **04:00**, meanwhile, this time in console displays in the format of **hh:mm** in UTC+08:00, e.g. **12:00**.
+        :param pulumi.Input[str] mode: Specifies the mode of the database instance. **Sharding**, **ReplicaSet**
+               are supported. Changing this creates a new instance.
         :param pulumi.Input[str] name: Specifies the DB instance name. The DB instance name of the same type is unique in the
                same tenant.
         :param pulumi.Input[str] password: Specifies the Administrator password of the database instance.
-        :param pulumi.Input[int] period: Specifies the charging period of the instance.
-               If `period_unit` is set to *month*, the value ranges from 1 to 9.
-               If `period_unit` is set to *year*, the value ranges from 1 to 3.
-               This parameter is mandatory if `charging_mode` is set to *prePaid*.
-               Changing this creates a new instance.
+        :param pulumi.Input[int] period: Specifies the backup cycle. Data will be automatically backed up on the
+               selected days every week.
+               + If you set the `keep_days` to 0, this parameter is no need to set.
+               + If you set the `keep_days` within 6 days, set the parameter value to **1,2,3,4,5,6,7**, data is automatically
+               backed up on each day every week.
+               + If you set the `keep_days` between 7 and 732 days, set the parameter value to at least one day of every week.
+               For example: **1**, **3,5**.
         :param pulumi.Input[str] period_unit: Specifies the charging period unit of the instance.
                Valid values are *month* and *year*. This parameter is mandatory if `charging_mode` is set to *prePaid*.
                Changing this creates a new instance.
@@ -1045,7 +1498,13 @@ class Instance(pulumi.CustomResource):
                `27017`, `27018`, `27019`. Defaults to `8635`.
         :param pulumi.Input[str] region: Specifies the region of the DDS instance. Changing this creates a new
                instance.
+        :param pulumi.Input[str] replica_set_name: Specifies the name of the replica set in the connection address.
+               It must be `3` to `128` characters long and start with a letter. It is case-sensitive and can contain only letters,
+               digits, and underscores (_). Default is **replica**.
+        :param pulumi.Input[bool] second_level_monitoring_enabled: Specifies whether to enable second level monitoring.
         :param pulumi.Input[str] security_group_id: Specifies the security group ID of the DDS instance.
+        :param pulumi.Input[str] slow_log_desensitization: Specifies whether to enable slow original log.
+               The value can be **on** or **off**.
         :param pulumi.Input[bool] ssl: Specifies whether to enable or disable SSL. Defaults to true.
         :param pulumi.Input[str] subnet_id: Specifies the subnet Network ID. Changing this creates a new instance.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: The key/value pairs to associate with the DDS instance.
@@ -1067,43 +1526,47 @@ class Instance(pulumi.CustomResource):
         import pulumi
         import pulumi_huaweicloud as huaweicloud
 
+        config = pulumi.Config()
+        dds_password = config.require_object("ddsPassword")
         instance = huaweicloud.dds.Instance("instance",
-            availability_zone="{{ availability_zone }}",
-            backup_strategy=huaweicloud.dds.InstanceBackupStrategyArgs(
-                keep_days=8,
-                start_time="08:00-09:00",
-            ),
             datastore=huaweicloud.dds.InstanceDatastoreArgs(
-                storage_engine="wiredTiger",
                 type="DDS-Community",
-                version="3.4",
+                version="4.0",
+                storage_engine="wiredTiger",
             ),
+            availability_zone="{{ availability_zone }}",
+            vpc_id="{{ vpc_id }}",
+            subnet_id="{{ subnet_network_id }}}",
+            security_group_id="{{ security_group_id }}",
+            password=dds_password,
+            mode="Sharding",
+            maintain_begin="02:00",
+            maintain_end="03:00",
             flavors=[
                 huaweicloud.dds.InstanceFlavorArgs(
+                    type="mongos",
                     num=2,
                     spec_code="dds.mongodb.c3.medium.4.mongos",
-                    type="mongos",
                 ),
                 huaweicloud.dds.InstanceFlavorArgs(
+                    type="shard",
                     num=2,
+                    storage="ULTRAHIGH",
                     size=20,
                     spec_code="dds.mongodb.c3.medium.4.shard",
-                    storage="ULTRAHIGH",
-                    type="shard",
                 ),
                 huaweicloud.dds.InstanceFlavorArgs(
+                    type="config",
                     num=1,
+                    storage="ULTRAHIGH",
                     size=20,
                     spec_code="dds.mongodb.c3.large.2.config",
-                    storage="ULTRAHIGH",
-                    type="config",
                 ),
             ],
-            mode="Sharding",
-            password="Test@123",
-            security_group_id="{{ security_group_id }}",
-            subnet_id="{{ subnet_network_id }}}",
-            vpc_id="{{ vpc_id }}")
+            backup_strategy=huaweicloud.dds.InstanceBackupStrategyArgs(
+                start_time="08:00-09:00",
+                keep_days=8,
+            ))
         ```
         ### Creating A Replica Set Community Edition
 
@@ -1111,51 +1574,27 @@ class Instance(pulumi.CustomResource):
         import pulumi
         import pulumi_huaweicloud as huaweicloud
 
+        config = pulumi.Config()
+        dds_password = config.require_object("ddsPassword")
         instance = huaweicloud.dds.Instance("instance",
-            availability_zone="{{ availability_zone }}",
             datastore=huaweicloud.dds.InstanceDatastoreArgs(
-                storage_engine="wiredTiger",
                 type="DDS-Community",
-                version="3.4",
+                version="4.0",
+                storage_engine="wiredTiger",
             ),
+            availability_zone="{{ availability_zone }}",
+            vpc_id="{{ vpc_id }}",
+            subnet_id="{{ subnet_network_id }}}",
+            security_group_id="{{ security_group_id }}",
+            password=dds_password,
+            mode="ReplicaSet",
             flavors=[huaweicloud.dds.InstanceFlavorArgs(
-                num=1,
+                type="replica",
+                num=3,
+                storage="ULTRAHIGH",
                 size=30,
                 spec_code="dds.mongodb.c3.medium.4.repset",
-                storage="ULTRAHIGH",
-                type="replica",
-            )],
-            mode="ReplicaSet",
-            password="Test@123",
-            security_group_id="{{ security_group_id }}",
-            subnet_id="{{ subnet_network_id }}}",
-            vpc_id="{{ vpc_id }}")
-        ```
-        ### Creating A Single Community Edition
-
-        ```python
-        import pulumi
-        import pulumi_huaweicloud as huaweicloud
-
-        instance = huaweicloud.dds.Instance("instance",
-            availability_zone="{{ availability_zone }}",
-            datastore=huaweicloud.dds.InstanceDatastoreArgs(
-                storage_engine="wiredTiger",
-                type="DDS-Community",
-                version="3.4",
-            ),
-            flavors=[huaweicloud.dds.InstanceFlavorArgs(
-                num=1,
-                size=30,
-                spec_code="dds.mongodb.s6.large.2.single",
-                storage="ULTRAHIGH",
-                type="single",
-            )],
-            mode="Single",
-            password="Test@123",
-            security_group_id="{{ security_group_id }}",
-            subnet_id="{{ subnet_network_id }}}",
-            vpc_id="{{ vpc_id }}")
+            )])
         ```
 
         ## Import
@@ -1166,7 +1605,7 @@ class Instance(pulumi.CustomResource):
          $ pulumi import huaweicloud:Dds/instance:Instance instance 9c6d6ff2cba3434293fd479571517e16in02
         ```
 
-         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`password`, `availability_zone`, `flavor`, configuration. It is generally recommended running `terraform plan` after importing an instance. You can then decide if changes should be applied to the instance, or the resource definition should be updated to align with the instance. Also you can ignore changes as below. resource "huaweicloud_dds_instance" "instance" {
+         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`password`, `availability_zone`, `flavor`, configuration. It is generally recommended running `terraform plan` after importing an instance. You can then decide if changes should be applied to the instance, or the resource definition should be updated to align with the instance. Also you can ignore changes as below. hcl resource "huaweicloud_dds_instance" "instance" {
 
          ...
 
@@ -1199,12 +1638,19 @@ class Instance(pulumi.CustomResource):
                  auto_renew: Optional[pulumi.Input[str]] = None,
                  availability_zone: Optional[pulumi.Input[str]] = None,
                  backup_strategy: Optional[pulumi.Input[pulumi.InputType['InstanceBackupStrategyArgs']]] = None,
+                 balancer_active_begin: Optional[pulumi.Input[str]] = None,
+                 balancer_active_end: Optional[pulumi.Input[str]] = None,
+                 balancer_status: Optional[pulumi.Input[str]] = None,
                  charging_mode: Optional[pulumi.Input[str]] = None,
+                 client_network_ranges: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  configurations: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['InstanceConfigurationArgs']]]]] = None,
                  datastore: Optional[pulumi.Input[pulumi.InputType['InstanceDatastoreArgs']]] = None,
+                 description: Optional[pulumi.Input[str]] = None,
                  disk_encryption_id: Optional[pulumi.Input[str]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  flavors: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['InstanceFlavorArgs']]]]] = None,
+                 maintain_begin: Optional[pulumi.Input[str]] = None,
+                 maintain_end: Optional[pulumi.Input[str]] = None,
                  mode: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  password: Optional[pulumi.Input[str]] = None,
@@ -1212,7 +1658,10 @@ class Instance(pulumi.CustomResource):
                  period_unit: Optional[pulumi.Input[str]] = None,
                  port: Optional[pulumi.Input[int]] = None,
                  region: Optional[pulumi.Input[str]] = None,
+                 replica_set_name: Optional[pulumi.Input[str]] = None,
+                 second_level_monitoring_enabled: Optional[pulumi.Input[bool]] = None,
                  security_group_id: Optional[pulumi.Input[str]] = None,
+                 slow_log_desensitization: Optional[pulumi.Input[str]] = None,
                  ssl: Optional[pulumi.Input[bool]] = None,
                  subnet_id: Optional[pulumi.Input[str]] = None,
                  tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
@@ -1235,30 +1684,38 @@ class Instance(pulumi.CustomResource):
                 raise TypeError("Missing required property 'availability_zone'")
             __props__.__dict__["availability_zone"] = availability_zone
             __props__.__dict__["backup_strategy"] = backup_strategy
+            __props__.__dict__["balancer_active_begin"] = balancer_active_begin
+            __props__.__dict__["balancer_active_end"] = balancer_active_end
+            __props__.__dict__["balancer_status"] = balancer_status
             __props__.__dict__["charging_mode"] = charging_mode
+            __props__.__dict__["client_network_ranges"] = client_network_ranges
             __props__.__dict__["configurations"] = configurations
             if datastore is None and not opts.urn:
                 raise TypeError("Missing required property 'datastore'")
             __props__.__dict__["datastore"] = datastore
+            __props__.__dict__["description"] = description
             __props__.__dict__["disk_encryption_id"] = disk_encryption_id
             __props__.__dict__["enterprise_project_id"] = enterprise_project_id
             if flavors is None and not opts.urn:
                 raise TypeError("Missing required property 'flavors'")
             __props__.__dict__["flavors"] = flavors
+            __props__.__dict__["maintain_begin"] = maintain_begin
+            __props__.__dict__["maintain_end"] = maintain_end
             if mode is None and not opts.urn:
                 raise TypeError("Missing required property 'mode'")
             __props__.__dict__["mode"] = mode
             __props__.__dict__["name"] = name
-            if password is None and not opts.urn:
-                raise TypeError("Missing required property 'password'")
             __props__.__dict__["password"] = password
             __props__.__dict__["period"] = period
             __props__.__dict__["period_unit"] = period_unit
             __props__.__dict__["port"] = port
             __props__.__dict__["region"] = region
+            __props__.__dict__["replica_set_name"] = replica_set_name
+            __props__.__dict__["second_level_monitoring_enabled"] = second_level_monitoring_enabled
             if security_group_id is None and not opts.urn:
                 raise TypeError("Missing required property 'security_group_id'")
             __props__.__dict__["security_group_id"] = security_group_id
+            __props__.__dict__["slow_log_desensitization"] = slow_log_desensitization
             __props__.__dict__["ssl"] = ssl
             if subnet_id is None and not opts.urn:
                 raise TypeError("Missing required property 'subnet_id'")
@@ -1267,9 +1724,13 @@ class Instance(pulumi.CustomResource):
             if vpc_id is None and not opts.urn:
                 raise TypeError("Missing required property 'vpc_id'")
             __props__.__dict__["vpc_id"] = vpc_id
+            __props__.__dict__["created_at"] = None
             __props__.__dict__["db_username"] = None
+            __props__.__dict__["groups"] = None
             __props__.__dict__["nodes"] = None
             __props__.__dict__["status"] = None
+            __props__.__dict__["time_zone"] = None
+            __props__.__dict__["updated_at"] = None
         super(Instance, __self__).__init__(
             'huaweicloud:Dds/instance:Instance',
             resource_name,
@@ -1284,13 +1745,22 @@ class Instance(pulumi.CustomResource):
             auto_renew: Optional[pulumi.Input[str]] = None,
             availability_zone: Optional[pulumi.Input[str]] = None,
             backup_strategy: Optional[pulumi.Input[pulumi.InputType['InstanceBackupStrategyArgs']]] = None,
+            balancer_active_begin: Optional[pulumi.Input[str]] = None,
+            balancer_active_end: Optional[pulumi.Input[str]] = None,
+            balancer_status: Optional[pulumi.Input[str]] = None,
             charging_mode: Optional[pulumi.Input[str]] = None,
+            client_network_ranges: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
             configurations: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['InstanceConfigurationArgs']]]]] = None,
+            created_at: Optional[pulumi.Input[str]] = None,
             datastore: Optional[pulumi.Input[pulumi.InputType['InstanceDatastoreArgs']]] = None,
             db_username: Optional[pulumi.Input[str]] = None,
+            description: Optional[pulumi.Input[str]] = None,
             disk_encryption_id: Optional[pulumi.Input[str]] = None,
             enterprise_project_id: Optional[pulumi.Input[str]] = None,
             flavors: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['InstanceFlavorArgs']]]]] = None,
+            groups: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['InstanceGroupArgs']]]]] = None,
+            maintain_begin: Optional[pulumi.Input[str]] = None,
+            maintain_end: Optional[pulumi.Input[str]] = None,
             mode: Optional[pulumi.Input[str]] = None,
             name: Optional[pulumi.Input[str]] = None,
             nodes: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['InstanceNodeArgs']]]]] = None,
@@ -1299,11 +1769,16 @@ class Instance(pulumi.CustomResource):
             period_unit: Optional[pulumi.Input[str]] = None,
             port: Optional[pulumi.Input[int]] = None,
             region: Optional[pulumi.Input[str]] = None,
+            replica_set_name: Optional[pulumi.Input[str]] = None,
+            second_level_monitoring_enabled: Optional[pulumi.Input[bool]] = None,
             security_group_id: Optional[pulumi.Input[str]] = None,
+            slow_log_desensitization: Optional[pulumi.Input[str]] = None,
             ssl: Optional[pulumi.Input[bool]] = None,
             status: Optional[pulumi.Input[str]] = None,
             subnet_id: Optional[pulumi.Input[str]] = None,
             tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
+            time_zone: Optional[pulumi.Input[str]] = None,
+            updated_at: Optional[pulumi.Input[str]] = None,
             vpc_id: Optional[pulumi.Input[str]] = None) -> 'Instance':
         """
         Get an existing Instance resource's state with the given name, id, and optional extra
@@ -1315,35 +1790,57 @@ class Instance(pulumi.CustomResource):
         :param pulumi.Input[str] auto_renew: Specifies whether auto-renew is enabled.
                Valid values are `true` and `false`, defaults to `false`.
                Changing this creates a new instance.
-        :param pulumi.Input[str] availability_zone: Specifies the ID of the availability zone. Changing this creates a
-               new instance.
+        :param pulumi.Input[str] availability_zone: Specifies the availability zone names separated by commas.
         :param pulumi.Input[pulumi.InputType['InstanceBackupStrategyArgs']] backup_strategy: Specifies the advanced backup policy. The structure is described below.
+        :param pulumi.Input[str] balancer_active_begin: Specifies the start time of the balancing activity time window.
+               The format is **HH:MM**. It's required with `balancer_active_end`.
+        :param pulumi.Input[str] balancer_active_end: Specifies the end time of the balancing activity time window.
+               The format is **HH:MM**. It's required with `balancer_active_begin`.
+        :param pulumi.Input[str] balancer_status: Specifies the status of the balancer.
+               The value can be **start** or **stop**. Defaults to **start**.
         :param pulumi.Input[str] charging_mode: Specifies the charging mode of the instance.
                The valid values are as follows:
                + `prePaid`: indicates the yearly/monthly billing mode.
                + `postPaid`: indicates the pay-per-use billing mode.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] client_network_ranges: Specifies the CIDR block where the client is located. Cross-CIDR access is
+               required only when the CIDR blocks of the client and the replica set instance are different. For example, if the client
+               CIDR block is 192.168.0.0/16 and the replica set instance's CIDR block is 172.16.0.0/24, add the CIDR block
+               192.168.0.0/16 so that the client can access the replica set instance.
+               It's only for replica set instance.
         :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['InstanceConfigurationArgs']]]] configurations: Specifies the configuration information.
                The structure is described below. Changing this creates a new instance.
+        :param pulumi.Input[str] created_at: Indicates the create time.
         :param pulumi.Input[pulumi.InputType['InstanceDatastoreArgs']] datastore: Specifies database information. The structure is described below. Changing
                this creates a new instance.
-        :param pulumi.Input[str] db_username: Indicates the DB Administator name.
+        :param pulumi.Input[str] db_username: Indicates the DB Administrator name.
+        :param pulumi.Input[str] description: Specifies the description of the DDS instance.
         :param pulumi.Input[str] disk_encryption_id: Specifies the disk encryption ID of the instance. Changing this
                creates a new instance.
-        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project id of the dds instance.
-               Changing this creates a new instance.
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project id of the DDS instance.
         :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['InstanceFlavorArgs']]]] flavors: Specifies the flavors information. The structure is described below. Changing
                this creates a new instance.
-        :param pulumi.Input[str] mode: Specifies the mode of the database instance. **Sharding**, **ReplicaSet**,
-               **Single** are supported. Changing this creates a new instance.
+        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['InstanceGroupArgs']]]] groups: Indicates the instance groups information.
+               The groups structure is documented below.
+        :param pulumi.Input[str] maintain_begin: Specifies begin time of the time range within which you are allowed to start a
+               task that affects the running of database instances. It must be a valid value in the format of **hh:mm** in UTC+0,
+               such as **02:00**, meanwhile, this time in console displays in the format of **hh:mm** in UTC+08:00, e.g. **10:00**.
+        :param pulumi.Input[str] maintain_end: Specifies end time of the time range within which you are allowed to start a
+               task that affects the running of database instances. It must be a valid value in the format of **hh:mm** in UTC+0,
+               such as **04:00**, meanwhile, this time in console displays in the format of **hh:mm** in UTC+08:00, e.g. **12:00**.
+        :param pulumi.Input[str] mode: Specifies the mode of the database instance. **Sharding**, **ReplicaSet**
+               are supported. Changing this creates a new instance.
         :param pulumi.Input[str] name: Specifies the DB instance name. The DB instance name of the same type is unique in the
                same tenant.
-        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['InstanceNodeArgs']]]] nodes: Indicates the instance nodes information. Structure is documented below.
+        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['InstanceNodeArgs']]]] nodes: Indicates the nodes info.
+               The nodes structure is documented below.
         :param pulumi.Input[str] password: Specifies the Administrator password of the database instance.
-        :param pulumi.Input[int] period: Specifies the charging period of the instance.
-               If `period_unit` is set to *month*, the value ranges from 1 to 9.
-               If `period_unit` is set to *year*, the value ranges from 1 to 3.
-               This parameter is mandatory if `charging_mode` is set to *prePaid*.
-               Changing this creates a new instance.
+        :param pulumi.Input[int] period: Specifies the backup cycle. Data will be automatically backed up on the
+               selected days every week.
+               + If you set the `keep_days` to 0, this parameter is no need to set.
+               + If you set the `keep_days` within 6 days, set the parameter value to **1,2,3,4,5,6,7**, data is automatically
+               backed up on each day every week.
+               + If you set the `keep_days` between 7 and 732 days, set the parameter value to at least one day of every week.
+               For example: **1**, **3,5**.
         :param pulumi.Input[str] period_unit: Specifies the charging period unit of the instance.
                Valid values are *month* and *year*. This parameter is mandatory if `charging_mode` is set to *prePaid*.
                Changing this creates a new instance.
@@ -1351,11 +1848,19 @@ class Instance(pulumi.CustomResource):
                `27017`, `27018`, `27019`. Defaults to `8635`.
         :param pulumi.Input[str] region: Specifies the region of the DDS instance. Changing this creates a new
                instance.
+        :param pulumi.Input[str] replica_set_name: Specifies the name of the replica set in the connection address.
+               It must be `3` to `128` characters long and start with a letter. It is case-sensitive and can contain only letters,
+               digits, and underscores (_). Default is **replica**.
+        :param pulumi.Input[bool] second_level_monitoring_enabled: Specifies whether to enable second level monitoring.
         :param pulumi.Input[str] security_group_id: Specifies the security group ID of the DDS instance.
+        :param pulumi.Input[str] slow_log_desensitization: Specifies whether to enable slow original log.
+               The value can be **on** or **off**.
         :param pulumi.Input[bool] ssl: Specifies whether to enable or disable SSL. Defaults to true.
         :param pulumi.Input[str] status: Indicates the node status.
         :param pulumi.Input[str] subnet_id: Specifies the subnet Network ID. Changing this creates a new instance.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: The key/value pairs to associate with the DDS instance.
+        :param pulumi.Input[str] time_zone: Indicates the time zone.
+        :param pulumi.Input[str] updated_at: Indicates the update time.
         :param pulumi.Input[str] vpc_id: Specifies the VPC ID. Changing this creates a new instance.
         """
         opts = pulumi.ResourceOptions.merge(opts, pulumi.ResourceOptions(id=id))
@@ -1366,13 +1871,22 @@ class Instance(pulumi.CustomResource):
         __props__.__dict__["auto_renew"] = auto_renew
         __props__.__dict__["availability_zone"] = availability_zone
         __props__.__dict__["backup_strategy"] = backup_strategy
+        __props__.__dict__["balancer_active_begin"] = balancer_active_begin
+        __props__.__dict__["balancer_active_end"] = balancer_active_end
+        __props__.__dict__["balancer_status"] = balancer_status
         __props__.__dict__["charging_mode"] = charging_mode
+        __props__.__dict__["client_network_ranges"] = client_network_ranges
         __props__.__dict__["configurations"] = configurations
+        __props__.__dict__["created_at"] = created_at
         __props__.__dict__["datastore"] = datastore
         __props__.__dict__["db_username"] = db_username
+        __props__.__dict__["description"] = description
         __props__.__dict__["disk_encryption_id"] = disk_encryption_id
         __props__.__dict__["enterprise_project_id"] = enterprise_project_id
         __props__.__dict__["flavors"] = flavors
+        __props__.__dict__["groups"] = groups
+        __props__.__dict__["maintain_begin"] = maintain_begin
+        __props__.__dict__["maintain_end"] = maintain_end
         __props__.__dict__["mode"] = mode
         __props__.__dict__["name"] = name
         __props__.__dict__["nodes"] = nodes
@@ -1381,11 +1895,16 @@ class Instance(pulumi.CustomResource):
         __props__.__dict__["period_unit"] = period_unit
         __props__.__dict__["port"] = port
         __props__.__dict__["region"] = region
+        __props__.__dict__["replica_set_name"] = replica_set_name
+        __props__.__dict__["second_level_monitoring_enabled"] = second_level_monitoring_enabled
         __props__.__dict__["security_group_id"] = security_group_id
+        __props__.__dict__["slow_log_desensitization"] = slow_log_desensitization
         __props__.__dict__["ssl"] = ssl
         __props__.__dict__["status"] = status
         __props__.__dict__["subnet_id"] = subnet_id
         __props__.__dict__["tags"] = tags
+        __props__.__dict__["time_zone"] = time_zone
+        __props__.__dict__["updated_at"] = updated_at
         __props__.__dict__["vpc_id"] = vpc_id
         return Instance(resource_name, opts=opts, __props__=__props__)
 
@@ -1408,8 +1927,7 @@ class Instance(pulumi.CustomResource):
     @pulumi.getter(name="availabilityZone")
     def availability_zone(self) -> pulumi.Output[str]:
         """
-        Specifies the ID of the availability zone. Changing this creates a
-        new instance.
+        Specifies the availability zone names separated by commas.
         """
         return pulumi.get(self, "availability_zone")
 
@@ -1420,6 +1938,33 @@ class Instance(pulumi.CustomResource):
         Specifies the advanced backup policy. The structure is described below.
         """
         return pulumi.get(self, "backup_strategy")
+
+    @property
+    @pulumi.getter(name="balancerActiveBegin")
+    def balancer_active_begin(self) -> pulumi.Output[Optional[str]]:
+        """
+        Specifies the start time of the balancing activity time window.
+        The format is **HH:MM**. It's required with `balancer_active_end`.
+        """
+        return pulumi.get(self, "balancer_active_begin")
+
+    @property
+    @pulumi.getter(name="balancerActiveEnd")
+    def balancer_active_end(self) -> pulumi.Output[Optional[str]]:
+        """
+        Specifies the end time of the balancing activity time window.
+        The format is **HH:MM**. It's required with `balancer_active_begin`.
+        """
+        return pulumi.get(self, "balancer_active_end")
+
+    @property
+    @pulumi.getter(name="balancerStatus")
+    def balancer_status(self) -> pulumi.Output[str]:
+        """
+        Specifies the status of the balancer.
+        The value can be **start** or **stop**. Defaults to **start**.
+        """
+        return pulumi.get(self, "balancer_status")
 
     @property
     @pulumi.getter(name="chargingMode")
@@ -1433,6 +1978,18 @@ class Instance(pulumi.CustomResource):
         return pulumi.get(self, "charging_mode")
 
     @property
+    @pulumi.getter(name="clientNetworkRanges")
+    def client_network_ranges(self) -> pulumi.Output[Optional[Sequence[str]]]:
+        """
+        Specifies the CIDR block where the client is located. Cross-CIDR access is
+        required only when the CIDR blocks of the client and the replica set instance are different. For example, if the client
+        CIDR block is 192.168.0.0/16 and the replica set instance's CIDR block is 172.16.0.0/24, add the CIDR block
+        192.168.0.0/16 so that the client can access the replica set instance.
+        It's only for replica set instance.
+        """
+        return pulumi.get(self, "client_network_ranges")
+
+    @property
     @pulumi.getter
     def configurations(self) -> pulumi.Output[Optional[Sequence['outputs.InstanceConfiguration']]]:
         """
@@ -1440,6 +1997,14 @@ class Instance(pulumi.CustomResource):
         The structure is described below. Changing this creates a new instance.
         """
         return pulumi.get(self, "configurations")
+
+    @property
+    @pulumi.getter(name="createdAt")
+    def created_at(self) -> pulumi.Output[str]:
+        """
+        Indicates the create time.
+        """
+        return pulumi.get(self, "created_at")
 
     @property
     @pulumi.getter
@@ -1454,9 +2019,17 @@ class Instance(pulumi.CustomResource):
     @pulumi.getter(name="dbUsername")
     def db_username(self) -> pulumi.Output[str]:
         """
-        Indicates the DB Administator name.
+        Indicates the DB Administrator name.
         """
         return pulumi.get(self, "db_username")
+
+    @property
+    @pulumi.getter
+    def description(self) -> pulumi.Output[Optional[str]]:
+        """
+        Specifies the description of the DDS instance.
+        """
+        return pulumi.get(self, "description")
 
     @property
     @pulumi.getter(name="diskEncryptionId")
@@ -1471,8 +2044,7 @@ class Instance(pulumi.CustomResource):
     @pulumi.getter(name="enterpriseProjectId")
     def enterprise_project_id(self) -> pulumi.Output[str]:
         """
-        Specifies the enterprise project id of the dds instance.
-        Changing this creates a new instance.
+        Specifies the enterprise project id of the DDS instance.
         """
         return pulumi.get(self, "enterprise_project_id")
 
@@ -1487,10 +2059,39 @@ class Instance(pulumi.CustomResource):
 
     @property
     @pulumi.getter
+    def groups(self) -> pulumi.Output[Sequence['outputs.InstanceGroup']]:
+        """
+        Indicates the instance groups information.
+        The groups structure is documented below.
+        """
+        return pulumi.get(self, "groups")
+
+    @property
+    @pulumi.getter(name="maintainBegin")
+    def maintain_begin(self) -> pulumi.Output[str]:
+        """
+        Specifies begin time of the time range within which you are allowed to start a
+        task that affects the running of database instances. It must be a valid value in the format of **hh:mm** in UTC+0,
+        such as **02:00**, meanwhile, this time in console displays in the format of **hh:mm** in UTC+08:00, e.g. **10:00**.
+        """
+        return pulumi.get(self, "maintain_begin")
+
+    @property
+    @pulumi.getter(name="maintainEnd")
+    def maintain_end(self) -> pulumi.Output[str]:
+        """
+        Specifies end time of the time range within which you are allowed to start a
+        task that affects the running of database instances. It must be a valid value in the format of **hh:mm** in UTC+0,
+        such as **04:00**, meanwhile, this time in console displays in the format of **hh:mm** in UTC+08:00, e.g. **12:00**.
+        """
+        return pulumi.get(self, "maintain_end")
+
+    @property
+    @pulumi.getter
     def mode(self) -> pulumi.Output[str]:
         """
-        Specifies the mode of the database instance. **Sharding**, **ReplicaSet**,
-        **Single** are supported. Changing this creates a new instance.
+        Specifies the mode of the database instance. **Sharding**, **ReplicaSet**
+        are supported. Changing this creates a new instance.
         """
         return pulumi.get(self, "mode")
 
@@ -1507,13 +2108,14 @@ class Instance(pulumi.CustomResource):
     @pulumi.getter
     def nodes(self) -> pulumi.Output[Sequence['outputs.InstanceNode']]:
         """
-        Indicates the instance nodes information. Structure is documented below.
+        Indicates the nodes info.
+        The nodes structure is documented below.
         """
         return pulumi.get(self, "nodes")
 
     @property
     @pulumi.getter
-    def password(self) -> pulumi.Output[str]:
+    def password(self) -> pulumi.Output[Optional[str]]:
         """
         Specifies the Administrator password of the database instance.
         """
@@ -1523,11 +2125,13 @@ class Instance(pulumi.CustomResource):
     @pulumi.getter
     def period(self) -> pulumi.Output[Optional[int]]:
         """
-        Specifies the charging period of the instance.
-        If `period_unit` is set to *month*, the value ranges from 1 to 9.
-        If `period_unit` is set to *year*, the value ranges from 1 to 3.
-        This parameter is mandatory if `charging_mode` is set to *prePaid*.
-        Changing this creates a new instance.
+        Specifies the backup cycle. Data will be automatically backed up on the
+        selected days every week.
+        + If you set the `keep_days` to 0, this parameter is no need to set.
+        + If you set the `keep_days` within 6 days, set the parameter value to **1,2,3,4,5,6,7**, data is automatically
+        backed up on each day every week.
+        + If you set the `keep_days` between 7 and 732 days, set the parameter value to at least one day of every week.
+        For example: **1**, **3,5**.
         """
         return pulumi.get(self, "period")
 
@@ -1560,12 +2164,39 @@ class Instance(pulumi.CustomResource):
         return pulumi.get(self, "region")
 
     @property
+    @pulumi.getter(name="replicaSetName")
+    def replica_set_name(self) -> pulumi.Output[str]:
+        """
+        Specifies the name of the replica set in the connection address.
+        It must be `3` to `128` characters long and start with a letter. It is case-sensitive and can contain only letters,
+        digits, and underscores (_). Default is **replica**.
+        """
+        return pulumi.get(self, "replica_set_name")
+
+    @property
+    @pulumi.getter(name="secondLevelMonitoringEnabled")
+    def second_level_monitoring_enabled(self) -> pulumi.Output[bool]:
+        """
+        Specifies whether to enable second level monitoring.
+        """
+        return pulumi.get(self, "second_level_monitoring_enabled")
+
+    @property
     @pulumi.getter(name="securityGroupId")
     def security_group_id(self) -> pulumi.Output[str]:
         """
         Specifies the security group ID of the DDS instance.
         """
         return pulumi.get(self, "security_group_id")
+
+    @property
+    @pulumi.getter(name="slowLogDesensitization")
+    def slow_log_desensitization(self) -> pulumi.Output[str]:
+        """
+        Specifies whether to enable slow original log.
+        The value can be **on** or **off**.
+        """
+        return pulumi.get(self, "slow_log_desensitization")
 
     @property
     @pulumi.getter
@@ -1598,6 +2229,22 @@ class Instance(pulumi.CustomResource):
         The key/value pairs to associate with the DDS instance.
         """
         return pulumi.get(self, "tags")
+
+    @property
+    @pulumi.getter(name="timeZone")
+    def time_zone(self) -> pulumi.Output[str]:
+        """
+        Indicates the time zone.
+        """
+        return pulumi.get(self, "time_zone")
+
+    @property
+    @pulumi.getter(name="updatedAt")
+    def updated_at(self) -> pulumi.Output[str]:
+        """
+        Indicates the update time.
+        """
+        return pulumi.get(self, "updated_at")
 
     @property
     @pulumi.getter(name="vpcId")

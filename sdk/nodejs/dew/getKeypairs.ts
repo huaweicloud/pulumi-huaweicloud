@@ -46,7 +46,7 @@ export interface GetKeypairsArgs {
      */
     fingerprint?: string;
     /**
-     * Specifies whether the private key is managed by HuaweiCloud.
+     * Indicates whether the private key is managed by HuaweiCloud.
      */
     isManaged?: boolean;
     /**
@@ -58,8 +58,8 @@ export interface GetKeypairsArgs {
      */
     publicKey?: string;
     /**
-     * The region in which to obtain the keypairs. If omitted, the provider-level region will
-     * be used.
+     * Specifies the region in which to obtain the keypairs. If omitted, the provider-level
+     * region will be used.
      */
     region?: string;
 }
@@ -69,7 +69,7 @@ export interface GetKeypairsArgs {
  */
 export interface GetKeypairsResult {
     /**
-     * Indicates the fingerprint information about an key pair.
+     * Indicates the fingerprint information about a keypair.
      */
     readonly fingerprint?: string;
     /**
@@ -81,7 +81,7 @@ export interface GetKeypairsResult {
      */
     readonly isManaged?: boolean;
     /**
-     * Indicates a list of all keypairs found. Structure is documented below.
+     * The KPS keypairs list.
      */
     readonly keypairs: outputs.Dew.GetKeypairsKeypair[];
     /**
@@ -108,7 +108,7 @@ export interface GetKeypairsOutputArgs {
      */
     fingerprint?: pulumi.Input<string>;
     /**
-     * Specifies whether the private key is managed by HuaweiCloud.
+     * Indicates whether the private key is managed by HuaweiCloud.
      */
     isManaged?: pulumi.Input<boolean>;
     /**
@@ -120,8 +120,8 @@ export interface GetKeypairsOutputArgs {
      */
     publicKey?: pulumi.Input<string>;
     /**
-     * The region in which to obtain the keypairs. If omitted, the provider-level region will
-     * be used.
+     * Specifies the region in which to obtain the keypairs. If omitted, the provider-level
+     * region will be used.
      */
     region?: pulumi.Input<string>;
 }

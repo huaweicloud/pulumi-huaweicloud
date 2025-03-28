@@ -41,7 +41,7 @@ import (
 //
 // ## Import
 //
-// IEC Security Groups can be imported using the `id`, e.g.
+// IEC Security Groups can be imported using the `id`, e.g. bash
 //
 // ```sh
 //

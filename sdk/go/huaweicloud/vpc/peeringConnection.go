@@ -24,7 +24,7 @@ import (
 //
 // ## Import
 //
-// VPC Peering resources can be imported using the `vpc peering id`, e.g.
+// VPC Peering resources can be imported using the `vpc peering id`, e.g. bash
 //
 // ```sh
 //

@@ -10,6 +10,103 @@ import (
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
+type BackupDatabase struct {
+	// Database to be backed up for Microsoft SQL Server.
+	Name string `pulumi:"name"`
+}
+
+// BackupDatabaseInput is an input type that accepts BackupDatabaseArgs and BackupDatabaseOutput values.
+// You can construct a concrete instance of `BackupDatabaseInput` via:
+//
+//	BackupDatabaseArgs{...}
+type BackupDatabaseInput interface {
+	pulumi.Input
+
+	ToBackupDatabaseOutput() BackupDatabaseOutput
+	ToBackupDatabaseOutputWithContext(context.Context) BackupDatabaseOutput
+}
+
+type BackupDatabaseArgs struct {
+	// Database to be backed up for Microsoft SQL Server.
+	Name pulumi.StringInput `pulumi:"name"`
+}
+
+func (BackupDatabaseArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*BackupDatabase)(nil)).Elem()
+}
+
+func (i BackupDatabaseArgs) ToBackupDatabaseOutput() BackupDatabaseOutput {
+	return i.ToBackupDatabaseOutputWithContext(context.Background())
+}
+
+func (i BackupDatabaseArgs) ToBackupDatabaseOutputWithContext(ctx context.Context) BackupDatabaseOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(BackupDatabaseOutput)
+}
+
+// BackupDatabaseArrayInput is an input type that accepts BackupDatabaseArray and BackupDatabaseArrayOutput values.
+// You can construct a concrete instance of `BackupDatabaseArrayInput` via:
+//
+//	BackupDatabaseArray{ BackupDatabaseArgs{...} }
+type BackupDatabaseArrayInput interface {
+	pulumi.Input
+
+	ToBackupDatabaseArrayOutput() BackupDatabaseArrayOutput
+	ToBackupDatabaseArrayOutputWithContext(context.Context) BackupDatabaseArrayOutput
+}
+
+type BackupDatabaseArray []BackupDatabaseInput
+
+func (BackupDatabaseArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]BackupDatabase)(nil)).Elem()
+}
+
+func (i BackupDatabaseArray) ToBackupDatabaseArrayOutput() BackupDatabaseArrayOutput {
+	return i.ToBackupDatabaseArrayOutputWithContext(context.Background())
+}
+
+func (i BackupDatabaseArray) ToBackupDatabaseArrayOutputWithContext(ctx context.Context) BackupDatabaseArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(BackupDatabaseArrayOutput)
+}
+
+type BackupDatabaseOutput struct{ *pulumi.OutputState }
+
+func (BackupDatabaseOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*BackupDatabase)(nil)).Elem()
+}
+
+func (o BackupDatabaseOutput) ToBackupDatabaseOutput() BackupDatabaseOutput {
+	return o
+}
+
+func (o BackupDatabaseOutput) ToBackupDatabaseOutputWithContext(ctx context.Context) BackupDatabaseOutput {
+	return o
+}
+
+// Database to be backed up for Microsoft SQL Server.
+func (o BackupDatabaseOutput) Name() pulumi.StringOutput {
+	return o.ApplyT(func(v BackupDatabase) string { return v.Name }).(pulumi.StringOutput)
+}
+
+type BackupDatabaseArrayOutput struct{ *pulumi.OutputState }
+
+func (BackupDatabaseArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]BackupDatabase)(nil)).Elem()
+}
+
+func (o BackupDatabaseArrayOutput) ToBackupDatabaseArrayOutput() BackupDatabaseArrayOutput {
+	return o
+}
+
+func (o BackupDatabaseArrayOutput) ToBackupDatabaseArrayOutputWithContext(ctx context.Context) BackupDatabaseArrayOutput {
+	return o
+}
+
+func (o BackupDatabaseArrayOutput) Index(i pulumi.IntInput) BackupDatabaseOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) BackupDatabase {
+		return vs[0].([]BackupDatabase)[vs[1].(int)]
+	}).(BackupDatabaseOutput)
+}
+
 type Database_privilegeUser struct {
 	Name     string `pulumi:"name"`
 	Readonly *bool  `pulumi:"readonly"`
@@ -314,25 +411,26 @@ func (o InstanceBackupStrategyPtrOutput) StartTime() pulumi.StringPtrOutput {
 }
 
 type InstanceDb struct {
-	// Specifies the database password. The value cannot be empty and should
-	// contain 8 to 32 characters, including uppercase and lowercase letters, digits, and the following special
-	// characters: ~!@#%^*-_=+? You are advised to enter a strong password to improve security, preventing security risks
-	// such as brute force cracking.
-	Password string `pulumi:"password"`
+	// Specifies the database password. The value should contain 8 to 32 characters,
+	// including uppercase and lowercase letters, digits, and the following special characters: ~!@#%^*-_=+? You are advised
+	// to enter a strong password to improve security, preventing security risks such as brute force cracking.
+	Password *string `pulumi:"password"`
 	// Specifies the database port.
 	// + The MySQL database port ranges from 1024 to 65535 (excluding 12017 and 33071, which are occupied by the RDS system
 	//   and cannot be used). The default value is 3306.
 	// + The PostgreSQL database port ranges from 2100 to 9500. The default value is 5432.
 	// + The Microsoft SQL Server database port can be 1433 or ranges from 2100 to 9500, excluding 5355 and 5985. The
 	//   default value is 1433.
+	// + The MariaDB database port ranges from 1024 to 65535 (excluding 12017 and 33071, which are occupied by the RDS system
+	//   and cannot be used). The default value is 3306.
 	Port *int `pulumi:"port"`
 	// Specifies the volume type. Its value can be any of the following and is
 	// case-sensitive:
-	// + *ULTRAHIGH*: SSD storage.
-	// + *LOCALSSD*: local SSD storage.
-	// + *CLOUDSSD*: cloud SSD storage. This storage type is supported only with general-purpose and dedicated DB
+	// + **ULTRAHIGH**: SSD storage.
+	// + **LOCALSSD**: local SSD storage.
+	// + **CLOUDSSD**: cloud SSD storage. This storage type is supported only with general-purpose and dedicated DB
 	//   instances.
-	// + *ESSD*: extreme SSD storage.
+	// + **ESSD**: extreme SSD storage.
 	Type     string  `pulumi:"type"`
 	UserName *string `pulumi:"userName"`
 	// Specifies the database version. Changing this parameter will create a new
@@ -353,25 +451,26 @@ type InstanceDbInput interface {
 }
 
 type InstanceDbArgs struct {
-	// Specifies the database password. The value cannot be empty and should
-	// contain 8 to 32 characters, including uppercase and lowercase letters, digits, and the following special
-	// characters: ~!@#%^*-_=+? You are advised to enter a strong password to improve security, preventing security risks
-	// such as brute force cracking.
-	Password pulumi.StringInput `pulumi:"password"`
+	// Specifies the database password. The value should contain 8 to 32 characters,
+	// including uppercase and lowercase letters, digits, and the following special characters: ~!@#%^*-_=+? You are advised
+	// to enter a strong password to improve security, preventing security risks such as brute force cracking.
+	Password pulumi.StringPtrInput `pulumi:"password"`
 	// Specifies the database port.
 	// + The MySQL database port ranges from 1024 to 65535 (excluding 12017 and 33071, which are occupied by the RDS system
 	//   and cannot be used). The default value is 3306.
 	// + The PostgreSQL database port ranges from 2100 to 9500. The default value is 5432.
 	// + The Microsoft SQL Server database port can be 1433 or ranges from 2100 to 9500, excluding 5355 and 5985. The
 	//   default value is 1433.
+	// + The MariaDB database port ranges from 1024 to 65535 (excluding 12017 and 33071, which are occupied by the RDS system
+	//   and cannot be used). The default value is 3306.
 	Port pulumi.IntPtrInput `pulumi:"port"`
 	// Specifies the volume type. Its value can be any of the following and is
 	// case-sensitive:
-	// + *ULTRAHIGH*: SSD storage.
-	// + *LOCALSSD*: local SSD storage.
-	// + *CLOUDSSD*: cloud SSD storage. This storage type is supported only with general-purpose and dedicated DB
+	// + **ULTRAHIGH**: SSD storage.
+	// + **LOCALSSD**: local SSD storage.
+	// + **CLOUDSSD**: cloud SSD storage. This storage type is supported only with general-purpose and dedicated DB
 	//   instances.
-	// + *ESSD*: extreme SSD storage.
+	// + **ESSD**: extreme SSD storage.
 	Type     pulumi.StringInput    `pulumi:"type"`
 	UserName pulumi.StringPtrInput `pulumi:"userName"`
 	// Specifies the database version. Changing this parameter will create a new
@@ -457,12 +556,11 @@ func (o InstanceDbOutput) ToInstanceDbPtrOutputWithContext(ctx context.Context) 
 	}).(InstanceDbPtrOutput)
 }
 
-// Specifies the database password. The value cannot be empty and should
-// contain 8 to 32 characters, including uppercase and lowercase letters, digits, and the following special
-// characters: ~!@#%^*-_=+? You are advised to enter a strong password to improve security, preventing security risks
-// such as brute force cracking.
-func (o InstanceDbOutput) Password() pulumi.StringOutput {
-	return o.ApplyT(func(v InstanceDb) string { return v.Password }).(pulumi.StringOutput)
+// Specifies the database password. The value should contain 8 to 32 characters,
+// including uppercase and lowercase letters, digits, and the following special characters: ~!@#%^*-_=+? You are advised
+// to enter a strong password to improve security, preventing security risks such as brute force cracking.
+func (o InstanceDbOutput) Password() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v InstanceDb) *string { return v.Password }).(pulumi.StringPtrOutput)
 }
 
 // Specifies the database port.
@@ -471,17 +569,19 @@ func (o InstanceDbOutput) Password() pulumi.StringOutput {
 //   - The PostgreSQL database port ranges from 2100 to 9500. The default value is 5432.
 //   - The Microsoft SQL Server database port can be 1433 or ranges from 2100 to 9500, excluding 5355 and 5985. The
 //     default value is 1433.
+//   - The MariaDB database port ranges from 1024 to 65535 (excluding 12017 and 33071, which are occupied by the RDS system
+//     and cannot be used). The default value is 3306.
 func (o InstanceDbOutput) Port() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v InstanceDb) *int { return v.Port }).(pulumi.IntPtrOutput)
 }
 
 // Specifies the volume type. Its value can be any of the following and is
 // case-sensitive:
-//   - *ULTRAHIGH*: SSD storage.
-//   - *LOCALSSD*: local SSD storage.
-//   - *CLOUDSSD*: cloud SSD storage. This storage type is supported only with general-purpose and dedicated DB
+//   - **ULTRAHIGH**: SSD storage.
+//   - **LOCALSSD**: local SSD storage.
+//   - **CLOUDSSD**: cloud SSD storage. This storage type is supported only with general-purpose and dedicated DB
 //     instances.
-//   - *ESSD*: extreme SSD storage.
+//   - **ESSD**: extreme SSD storage.
 func (o InstanceDbOutput) Type() pulumi.StringOutput {
 	return o.ApplyT(func(v InstanceDb) string { return v.Type }).(pulumi.StringOutput)
 }
@@ -521,16 +621,15 @@ func (o InstanceDbPtrOutput) Elem() InstanceDbOutput {
 	}).(InstanceDbOutput)
 }
 
-// Specifies the database password. The value cannot be empty and should
-// contain 8 to 32 characters, including uppercase and lowercase letters, digits, and the following special
-// characters: ~!@#%^*-_=+? You are advised to enter a strong password to improve security, preventing security risks
-// such as brute force cracking.
+// Specifies the database password. The value should contain 8 to 32 characters,
+// including uppercase and lowercase letters, digits, and the following special characters: ~!@#%^*-_=+? You are advised
+// to enter a strong password to improve security, preventing security risks such as brute force cracking.
 func (o InstanceDbPtrOutput) Password() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *InstanceDb) *string {
 		if v == nil {
 			return nil
 		}
-		return &v.Password
+		return v.Password
 	}).(pulumi.StringPtrOutput)
 }
 
@@ -540,6 +639,8 @@ func (o InstanceDbPtrOutput) Password() pulumi.StringPtrOutput {
 //   - The PostgreSQL database port ranges from 2100 to 9500. The default value is 5432.
 //   - The Microsoft SQL Server database port can be 1433 or ranges from 2100 to 9500, excluding 5355 and 5985. The
 //     default value is 1433.
+//   - The MariaDB database port ranges from 1024 to 65535 (excluding 12017 and 33071, which are occupied by the RDS system
+//     and cannot be used). The default value is 3306.
 func (o InstanceDbPtrOutput) Port() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v *InstanceDb) *int {
 		if v == nil {
@@ -551,11 +652,11 @@ func (o InstanceDbPtrOutput) Port() pulumi.IntPtrOutput {
 
 // Specifies the volume type. Its value can be any of the following and is
 // case-sensitive:
-//   - *ULTRAHIGH*: SSD storage.
-//   - *LOCALSSD*: local SSD storage.
-//   - *CLOUDSSD*: cloud SSD storage. This storage type is supported only with general-purpose and dedicated DB
+//   - **ULTRAHIGH**: SSD storage.
+//   - **LOCALSSD**: local SSD storage.
+//   - **CLOUDSSD**: cloud SSD storage. This storage type is supported only with general-purpose and dedicated DB
 //     instances.
-//   - *ESSD*: extreme SSD storage.
+//   - **ESSD**: extreme SSD storage.
 func (o InstanceDbPtrOutput) Type() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *InstanceDb) *string {
 		if v == nil {
@@ -586,11 +687,126 @@ func (o InstanceDbPtrOutput) Version() pulumi.StringPtrOutput {
 	}).(pulumi.StringPtrOutput)
 }
 
+type InstanceMsdtcHost struct {
+	// Specifies the host name.
+	HostName string `pulumi:"hostName"`
+	// Indicates the host ID.
+	Id *string `pulumi:"id"`
+	// Specifies the host IP address.
+	Ip string `pulumi:"ip"`
+}
+
+// InstanceMsdtcHostInput is an input type that accepts InstanceMsdtcHostArgs and InstanceMsdtcHostOutput values.
+// You can construct a concrete instance of `InstanceMsdtcHostInput` via:
+//
+//	InstanceMsdtcHostArgs{...}
+type InstanceMsdtcHostInput interface {
+	pulumi.Input
+
+	ToInstanceMsdtcHostOutput() InstanceMsdtcHostOutput
+	ToInstanceMsdtcHostOutputWithContext(context.Context) InstanceMsdtcHostOutput
+}
+
+type InstanceMsdtcHostArgs struct {
+	// Specifies the host name.
+	HostName pulumi.StringInput `pulumi:"hostName"`
+	// Indicates the host ID.
+	Id pulumi.StringPtrInput `pulumi:"id"`
+	// Specifies the host IP address.
+	Ip pulumi.StringInput `pulumi:"ip"`
+}
+
+func (InstanceMsdtcHostArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*InstanceMsdtcHost)(nil)).Elem()
+}
+
+func (i InstanceMsdtcHostArgs) ToInstanceMsdtcHostOutput() InstanceMsdtcHostOutput {
+	return i.ToInstanceMsdtcHostOutputWithContext(context.Background())
+}
+
+func (i InstanceMsdtcHostArgs) ToInstanceMsdtcHostOutputWithContext(ctx context.Context) InstanceMsdtcHostOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(InstanceMsdtcHostOutput)
+}
+
+// InstanceMsdtcHostArrayInput is an input type that accepts InstanceMsdtcHostArray and InstanceMsdtcHostArrayOutput values.
+// You can construct a concrete instance of `InstanceMsdtcHostArrayInput` via:
+//
+//	InstanceMsdtcHostArray{ InstanceMsdtcHostArgs{...} }
+type InstanceMsdtcHostArrayInput interface {
+	pulumi.Input
+
+	ToInstanceMsdtcHostArrayOutput() InstanceMsdtcHostArrayOutput
+	ToInstanceMsdtcHostArrayOutputWithContext(context.Context) InstanceMsdtcHostArrayOutput
+}
+
+type InstanceMsdtcHostArray []InstanceMsdtcHostInput
+
+func (InstanceMsdtcHostArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]InstanceMsdtcHost)(nil)).Elem()
+}
+
+func (i InstanceMsdtcHostArray) ToInstanceMsdtcHostArrayOutput() InstanceMsdtcHostArrayOutput {
+	return i.ToInstanceMsdtcHostArrayOutputWithContext(context.Background())
+}
+
+func (i InstanceMsdtcHostArray) ToInstanceMsdtcHostArrayOutputWithContext(ctx context.Context) InstanceMsdtcHostArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(InstanceMsdtcHostArrayOutput)
+}
+
+type InstanceMsdtcHostOutput struct{ *pulumi.OutputState }
+
+func (InstanceMsdtcHostOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*InstanceMsdtcHost)(nil)).Elem()
+}
+
+func (o InstanceMsdtcHostOutput) ToInstanceMsdtcHostOutput() InstanceMsdtcHostOutput {
+	return o
+}
+
+func (o InstanceMsdtcHostOutput) ToInstanceMsdtcHostOutputWithContext(ctx context.Context) InstanceMsdtcHostOutput {
+	return o
+}
+
+// Specifies the host name.
+func (o InstanceMsdtcHostOutput) HostName() pulumi.StringOutput {
+	return o.ApplyT(func(v InstanceMsdtcHost) string { return v.HostName }).(pulumi.StringOutput)
+}
+
+// Indicates the host ID.
+func (o InstanceMsdtcHostOutput) Id() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v InstanceMsdtcHost) *string { return v.Id }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the host IP address.
+func (o InstanceMsdtcHostOutput) Ip() pulumi.StringOutput {
+	return o.ApplyT(func(v InstanceMsdtcHost) string { return v.Ip }).(pulumi.StringOutput)
+}
+
+type InstanceMsdtcHostArrayOutput struct{ *pulumi.OutputState }
+
+func (InstanceMsdtcHostArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]InstanceMsdtcHost)(nil)).Elem()
+}
+
+func (o InstanceMsdtcHostArrayOutput) ToInstanceMsdtcHostArrayOutput() InstanceMsdtcHostArrayOutput {
+	return o
+}
+
+func (o InstanceMsdtcHostArrayOutput) ToInstanceMsdtcHostArrayOutputWithContext(ctx context.Context) InstanceMsdtcHostArrayOutput {
+	return o
+}
+
+func (o InstanceMsdtcHostArrayOutput) Index(i pulumi.IntInput) InstanceMsdtcHostOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) InstanceMsdtcHost {
+		return vs[0].([]InstanceMsdtcHost)[vs[1].(int)]
+	}).(InstanceMsdtcHostOutput)
+}
+
 type InstanceNode struct {
 	// Specifies the list of AZ name. Changing this parameter will create a
 	// new resource.
 	AvailabilityZone *string `pulumi:"availabilityZone"`
-	// Indicates the node ID.
+	// Indicates the host ID.
 	Id *string `pulumi:"id"`
 	// Specifies the parameter name. Some of them needs the instance to be restarted
 	// to take effect.
@@ -617,7 +833,7 @@ type InstanceNodeArgs struct {
 	// Specifies the list of AZ name. Changing this parameter will create a
 	// new resource.
 	AvailabilityZone pulumi.StringPtrInput `pulumi:"availabilityZone"`
-	// Indicates the node ID.
+	// Indicates the host ID.
 	Id pulumi.StringPtrInput `pulumi:"id"`
 	// Specifies the parameter name. Some of them needs the instance to be restarted
 	// to take effect.
@@ -686,7 +902,7 @@ func (o InstanceNodeOutput) AvailabilityZone() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v InstanceNode) *string { return v.AvailabilityZone }).(pulumi.StringPtrOutput)
 }
 
-// Indicates the node ID.
+// Indicates the host ID.
 func (o InstanceNodeOutput) Id() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v InstanceNode) *string { return v.Id }).(pulumi.StringPtrOutput)
 }
@@ -837,6 +1053,193 @@ func (o InstanceParameterArrayOutput) Index(i pulumi.IntInput) InstanceParameter
 	}).(InstanceParameterOutput)
 }
 
+type InstanceRestore struct {
+	// Specifies the ID of the backup used to restore data. Changing this
+	// parameter will create a new resource.
+	BackupId string `pulumi:"backupId"`
+	// Specifies the database to be restored. This parameter applies only to
+	// Microsoft SQL Server databases. Changing this parameter will create a new resource.
+	DatabaseName map[string]string `pulumi:"databaseName"`
+	// Specifies the source DB instance ID. Changing this parameter will create
+	// a new resource.
+	InstanceId string `pulumi:"instanceId"`
+}
+
+// InstanceRestoreInput is an input type that accepts InstanceRestoreArgs and InstanceRestoreOutput values.
+// You can construct a concrete instance of `InstanceRestoreInput` via:
+//
+//	InstanceRestoreArgs{...}
+type InstanceRestoreInput interface {
+	pulumi.Input
+
+	ToInstanceRestoreOutput() InstanceRestoreOutput
+	ToInstanceRestoreOutputWithContext(context.Context) InstanceRestoreOutput
+}
+
+type InstanceRestoreArgs struct {
+	// Specifies the ID of the backup used to restore data. Changing this
+	// parameter will create a new resource.
+	BackupId pulumi.StringInput `pulumi:"backupId"`
+	// Specifies the database to be restored. This parameter applies only to
+	// Microsoft SQL Server databases. Changing this parameter will create a new resource.
+	DatabaseName pulumi.StringMapInput `pulumi:"databaseName"`
+	// Specifies the source DB instance ID. Changing this parameter will create
+	// a new resource.
+	InstanceId pulumi.StringInput `pulumi:"instanceId"`
+}
+
+func (InstanceRestoreArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*InstanceRestore)(nil)).Elem()
+}
+
+func (i InstanceRestoreArgs) ToInstanceRestoreOutput() InstanceRestoreOutput {
+	return i.ToInstanceRestoreOutputWithContext(context.Background())
+}
+
+func (i InstanceRestoreArgs) ToInstanceRestoreOutputWithContext(ctx context.Context) InstanceRestoreOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(InstanceRestoreOutput)
+}
+
+func (i InstanceRestoreArgs) ToInstanceRestorePtrOutput() InstanceRestorePtrOutput {
+	return i.ToInstanceRestorePtrOutputWithContext(context.Background())
+}
+
+func (i InstanceRestoreArgs) ToInstanceRestorePtrOutputWithContext(ctx context.Context) InstanceRestorePtrOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(InstanceRestoreOutput).ToInstanceRestorePtrOutputWithContext(ctx)
+}
+
+// InstanceRestorePtrInput is an input type that accepts InstanceRestoreArgs, InstanceRestorePtr and InstanceRestorePtrOutput values.
+// You can construct a concrete instance of `InstanceRestorePtrInput` via:
+//
+//	        InstanceRestoreArgs{...}
+//
+//	or:
+//
+//	        nil
+type InstanceRestorePtrInput interface {
+	pulumi.Input
+
+	ToInstanceRestorePtrOutput() InstanceRestorePtrOutput
+	ToInstanceRestorePtrOutputWithContext(context.Context) InstanceRestorePtrOutput
+}
+
+type instanceRestorePtrType InstanceRestoreArgs
+
+func InstanceRestorePtr(v *InstanceRestoreArgs) InstanceRestorePtrInput {
+	return (*instanceRestorePtrType)(v)
+}
+
+func (*instanceRestorePtrType) ElementType() reflect.Type {
+	return reflect.TypeOf((**InstanceRestore)(nil)).Elem()
+}
+
+func (i *instanceRestorePtrType) ToInstanceRestorePtrOutput() InstanceRestorePtrOutput {
+	return i.ToInstanceRestorePtrOutputWithContext(context.Background())
+}
+
+func (i *instanceRestorePtrType) ToInstanceRestorePtrOutputWithContext(ctx context.Context) InstanceRestorePtrOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(InstanceRestorePtrOutput)
+}
+
+type InstanceRestoreOutput struct{ *pulumi.OutputState }
+
+func (InstanceRestoreOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*InstanceRestore)(nil)).Elem()
+}
+
+func (o InstanceRestoreOutput) ToInstanceRestoreOutput() InstanceRestoreOutput {
+	return o
+}
+
+func (o InstanceRestoreOutput) ToInstanceRestoreOutputWithContext(ctx context.Context) InstanceRestoreOutput {
+	return o
+}
+
+func (o InstanceRestoreOutput) ToInstanceRestorePtrOutput() InstanceRestorePtrOutput {
+	return o.ToInstanceRestorePtrOutputWithContext(context.Background())
+}
+
+func (o InstanceRestoreOutput) ToInstanceRestorePtrOutputWithContext(ctx context.Context) InstanceRestorePtrOutput {
+	return o.ApplyTWithContext(ctx, func(_ context.Context, v InstanceRestore) *InstanceRestore {
+		return &v
+	}).(InstanceRestorePtrOutput)
+}
+
+// Specifies the ID of the backup used to restore data. Changing this
+// parameter will create a new resource.
+func (o InstanceRestoreOutput) BackupId() pulumi.StringOutput {
+	return o.ApplyT(func(v InstanceRestore) string { return v.BackupId }).(pulumi.StringOutput)
+}
+
+// Specifies the database to be restored. This parameter applies only to
+// Microsoft SQL Server databases. Changing this parameter will create a new resource.
+func (o InstanceRestoreOutput) DatabaseName() pulumi.StringMapOutput {
+	return o.ApplyT(func(v InstanceRestore) map[string]string { return v.DatabaseName }).(pulumi.StringMapOutput)
+}
+
+// Specifies the source DB instance ID. Changing this parameter will create
+// a new resource.
+func (o InstanceRestoreOutput) InstanceId() pulumi.StringOutput {
+	return o.ApplyT(func(v InstanceRestore) string { return v.InstanceId }).(pulumi.StringOutput)
+}
+
+type InstanceRestorePtrOutput struct{ *pulumi.OutputState }
+
+func (InstanceRestorePtrOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((**InstanceRestore)(nil)).Elem()
+}
+
+func (o InstanceRestorePtrOutput) ToInstanceRestorePtrOutput() InstanceRestorePtrOutput {
+	return o
+}
+
+func (o InstanceRestorePtrOutput) ToInstanceRestorePtrOutputWithContext(ctx context.Context) InstanceRestorePtrOutput {
+	return o
+}
+
+func (o InstanceRestorePtrOutput) Elem() InstanceRestoreOutput {
+	return o.ApplyT(func(v *InstanceRestore) InstanceRestore {
+		if v != nil {
+			return *v
+		}
+		var ret InstanceRestore
+		return ret
+	}).(InstanceRestoreOutput)
+}
+
+// Specifies the ID of the backup used to restore data. Changing this
+// parameter will create a new resource.
+func (o InstanceRestorePtrOutput) BackupId() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *InstanceRestore) *string {
+		if v == nil {
+			return nil
+		}
+		return &v.BackupId
+	}).(pulumi.StringPtrOutput)
+}
+
+// Specifies the database to be restored. This parameter applies only to
+// Microsoft SQL Server databases. Changing this parameter will create a new resource.
+func (o InstanceRestorePtrOutput) DatabaseName() pulumi.StringMapOutput {
+	return o.ApplyT(func(v *InstanceRestore) map[string]string {
+		if v == nil {
+			return nil
+		}
+		return v.DatabaseName
+	}).(pulumi.StringMapOutput)
+}
+
+// Specifies the source DB instance ID. Changing this parameter will create
+// a new resource.
+func (o InstanceRestorePtrOutput) InstanceId() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *InstanceRestore) *string {
+		if v == nil {
+			return nil
+		}
+		return &v.InstanceId
+	}).(pulumi.StringPtrOutput)
+}
+
 type InstanceVolume struct {
 	// Specifies the key ID for disk encryption.
 	// Changing this parameter will create a new resource.
@@ -855,11 +1258,11 @@ type InstanceVolume struct {
 	TriggerThreshold *int `pulumi:"triggerThreshold"`
 	// Specifies the volume type. Its value can be any of the following and is
 	// case-sensitive:
-	// + *ULTRAHIGH*: SSD storage.
-	// + *LOCALSSD*: local SSD storage.
-	// + *CLOUDSSD*: cloud SSD storage. This storage type is supported only with general-purpose and dedicated DB
+	// + **ULTRAHIGH**: SSD storage.
+	// + **LOCALSSD**: local SSD storage.
+	// + **CLOUDSSD**: cloud SSD storage. This storage type is supported only with general-purpose and dedicated DB
 	//   instances.
-	// + *ESSD*: extreme SSD storage.
+	// + **ESSD**: extreme SSD storage.
 	Type string `pulumi:"type"`
 }
 
@@ -892,11 +1295,11 @@ type InstanceVolumeArgs struct {
 	TriggerThreshold pulumi.IntPtrInput `pulumi:"triggerThreshold"`
 	// Specifies the volume type. Its value can be any of the following and is
 	// case-sensitive:
-	// + *ULTRAHIGH*: SSD storage.
-	// + *LOCALSSD*: local SSD storage.
-	// + *CLOUDSSD*: cloud SSD storage. This storage type is supported only with general-purpose and dedicated DB
+	// + **ULTRAHIGH**: SSD storage.
+	// + **LOCALSSD**: local SSD storage.
+	// + **CLOUDSSD**: cloud SSD storage. This storage type is supported only with general-purpose and dedicated DB
 	//   instances.
-	// + *ESSD*: extreme SSD storage.
+	// + **ESSD**: extreme SSD storage.
 	Type pulumi.StringInput `pulumi:"type"`
 }
 
@@ -1006,11 +1409,11 @@ func (o InstanceVolumeOutput) TriggerThreshold() pulumi.IntPtrOutput {
 
 // Specifies the volume type. Its value can be any of the following and is
 // case-sensitive:
-//   - *ULTRAHIGH*: SSD storage.
-//   - *LOCALSSD*: local SSD storage.
-//   - *CLOUDSSD*: cloud SSD storage. This storage type is supported only with general-purpose and dedicated DB
+//   - **ULTRAHIGH**: SSD storage.
+//   - **LOCALSSD**: local SSD storage.
+//   - **CLOUDSSD**: cloud SSD storage. This storage type is supported only with general-purpose and dedicated DB
 //     instances.
-//   - *ESSD*: extreme SSD storage.
+//   - **ESSD**: extreme SSD storage.
 func (o InstanceVolumeOutput) Type() pulumi.StringOutput {
 	return o.ApplyT(func(v InstanceVolume) string { return v.Type }).(pulumi.StringOutput)
 }
@@ -1088,11 +1491,11 @@ func (o InstanceVolumePtrOutput) TriggerThreshold() pulumi.IntPtrOutput {
 
 // Specifies the volume type. Its value can be any of the following and is
 // case-sensitive:
-//   - *ULTRAHIGH*: SSD storage.
-//   - *LOCALSSD*: local SSD storage.
-//   - *CLOUDSSD*: cloud SSD storage. This storage type is supported only with general-purpose and dedicated DB
+//   - **ULTRAHIGH**: SSD storage.
+//   - **LOCALSSD**: local SSD storage.
+//   - **CLOUDSSD**: cloud SSD storage. This storage type is supported only with general-purpose and dedicated DB
 //     instances.
-//   - *ESSD*: extreme SSD storage.
+//   - **ESSD**: extreme SSD storage.
 func (o InstanceVolumePtrOutput) Type() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *InstanceVolume) *string {
 		if v == nil {
@@ -1100,6 +1503,881 @@ func (o InstanceVolumePtrOutput) Type() pulumi.StringPtrOutput {
 		}
 		return &v.Type
 	}).(pulumi.StringPtrOutput)
+}
+
+type MysqlDatabasePrivilegeUser struct {
+	// Specifies the username of the database account.
+	Name string `pulumi:"name"`
+	// Specifies the read-only permission. The value can be:
+	// + **true**: indicates the read-only permission.
+	// + **false**: indicates the read and write permission.
+	Readonly *bool `pulumi:"readonly"`
+}
+
+// MysqlDatabasePrivilegeUserInput is an input type that accepts MysqlDatabasePrivilegeUserArgs and MysqlDatabasePrivilegeUserOutput values.
+// You can construct a concrete instance of `MysqlDatabasePrivilegeUserInput` via:
+//
+//	MysqlDatabasePrivilegeUserArgs{...}
+type MysqlDatabasePrivilegeUserInput interface {
+	pulumi.Input
+
+	ToMysqlDatabasePrivilegeUserOutput() MysqlDatabasePrivilegeUserOutput
+	ToMysqlDatabasePrivilegeUserOutputWithContext(context.Context) MysqlDatabasePrivilegeUserOutput
+}
+
+type MysqlDatabasePrivilegeUserArgs struct {
+	// Specifies the username of the database account.
+	Name pulumi.StringInput `pulumi:"name"`
+	// Specifies the read-only permission. The value can be:
+	// + **true**: indicates the read-only permission.
+	// + **false**: indicates the read and write permission.
+	Readonly pulumi.BoolPtrInput `pulumi:"readonly"`
+}
+
+func (MysqlDatabasePrivilegeUserArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*MysqlDatabasePrivilegeUser)(nil)).Elem()
+}
+
+func (i MysqlDatabasePrivilegeUserArgs) ToMysqlDatabasePrivilegeUserOutput() MysqlDatabasePrivilegeUserOutput {
+	return i.ToMysqlDatabasePrivilegeUserOutputWithContext(context.Background())
+}
+
+func (i MysqlDatabasePrivilegeUserArgs) ToMysqlDatabasePrivilegeUserOutputWithContext(ctx context.Context) MysqlDatabasePrivilegeUserOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(MysqlDatabasePrivilegeUserOutput)
+}
+
+// MysqlDatabasePrivilegeUserArrayInput is an input type that accepts MysqlDatabasePrivilegeUserArray and MysqlDatabasePrivilegeUserArrayOutput values.
+// You can construct a concrete instance of `MysqlDatabasePrivilegeUserArrayInput` via:
+//
+//	MysqlDatabasePrivilegeUserArray{ MysqlDatabasePrivilegeUserArgs{...} }
+type MysqlDatabasePrivilegeUserArrayInput interface {
+	pulumi.Input
+
+	ToMysqlDatabasePrivilegeUserArrayOutput() MysqlDatabasePrivilegeUserArrayOutput
+	ToMysqlDatabasePrivilegeUserArrayOutputWithContext(context.Context) MysqlDatabasePrivilegeUserArrayOutput
+}
+
+type MysqlDatabasePrivilegeUserArray []MysqlDatabasePrivilegeUserInput
+
+func (MysqlDatabasePrivilegeUserArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]MysqlDatabasePrivilegeUser)(nil)).Elem()
+}
+
+func (i MysqlDatabasePrivilegeUserArray) ToMysqlDatabasePrivilegeUserArrayOutput() MysqlDatabasePrivilegeUserArrayOutput {
+	return i.ToMysqlDatabasePrivilegeUserArrayOutputWithContext(context.Background())
+}
+
+func (i MysqlDatabasePrivilegeUserArray) ToMysqlDatabasePrivilegeUserArrayOutputWithContext(ctx context.Context) MysqlDatabasePrivilegeUserArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(MysqlDatabasePrivilegeUserArrayOutput)
+}
+
+type MysqlDatabasePrivilegeUserOutput struct{ *pulumi.OutputState }
+
+func (MysqlDatabasePrivilegeUserOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*MysqlDatabasePrivilegeUser)(nil)).Elem()
+}
+
+func (o MysqlDatabasePrivilegeUserOutput) ToMysqlDatabasePrivilegeUserOutput() MysqlDatabasePrivilegeUserOutput {
+	return o
+}
+
+func (o MysqlDatabasePrivilegeUserOutput) ToMysqlDatabasePrivilegeUserOutputWithContext(ctx context.Context) MysqlDatabasePrivilegeUserOutput {
+	return o
+}
+
+// Specifies the username of the database account.
+func (o MysqlDatabasePrivilegeUserOutput) Name() pulumi.StringOutput {
+	return o.ApplyT(func(v MysqlDatabasePrivilegeUser) string { return v.Name }).(pulumi.StringOutput)
+}
+
+// Specifies the read-only permission. The value can be:
+// + **true**: indicates the read-only permission.
+// + **false**: indicates the read and write permission.
+func (o MysqlDatabasePrivilegeUserOutput) Readonly() pulumi.BoolPtrOutput {
+	return o.ApplyT(func(v MysqlDatabasePrivilegeUser) *bool { return v.Readonly }).(pulumi.BoolPtrOutput)
+}
+
+type MysqlDatabasePrivilegeUserArrayOutput struct{ *pulumi.OutputState }
+
+func (MysqlDatabasePrivilegeUserArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]MysqlDatabasePrivilegeUser)(nil)).Elem()
+}
+
+func (o MysqlDatabasePrivilegeUserArrayOutput) ToMysqlDatabasePrivilegeUserArrayOutput() MysqlDatabasePrivilegeUserArrayOutput {
+	return o
+}
+
+func (o MysqlDatabasePrivilegeUserArrayOutput) ToMysqlDatabasePrivilegeUserArrayOutputWithContext(ctx context.Context) MysqlDatabasePrivilegeUserArrayOutput {
+	return o
+}
+
+func (o MysqlDatabasePrivilegeUserArrayOutput) Index(i pulumi.IntInput) MysqlDatabasePrivilegeUserOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) MysqlDatabasePrivilegeUser {
+		return vs[0].([]MysqlDatabasePrivilegeUser)[vs[1].(int)]
+	}).(MysqlDatabasePrivilegeUserOutput)
+}
+
+type MysqlDatabaseTableRestoreDatabase struct {
+	// Specifies the name of the table after restoration.
+	NewName string `pulumi:"newName"`
+	// Specifies the name of the table before restoration.
+	OldName string `pulumi:"oldName"`
+}
+
+// MysqlDatabaseTableRestoreDatabaseInput is an input type that accepts MysqlDatabaseTableRestoreDatabaseArgs and MysqlDatabaseTableRestoreDatabaseOutput values.
+// You can construct a concrete instance of `MysqlDatabaseTableRestoreDatabaseInput` via:
+//
+//	MysqlDatabaseTableRestoreDatabaseArgs{...}
+type MysqlDatabaseTableRestoreDatabaseInput interface {
+	pulumi.Input
+
+	ToMysqlDatabaseTableRestoreDatabaseOutput() MysqlDatabaseTableRestoreDatabaseOutput
+	ToMysqlDatabaseTableRestoreDatabaseOutputWithContext(context.Context) MysqlDatabaseTableRestoreDatabaseOutput
+}
+
+type MysqlDatabaseTableRestoreDatabaseArgs struct {
+	// Specifies the name of the table after restoration.
+	NewName pulumi.StringInput `pulumi:"newName"`
+	// Specifies the name of the table before restoration.
+	OldName pulumi.StringInput `pulumi:"oldName"`
+}
+
+func (MysqlDatabaseTableRestoreDatabaseArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*MysqlDatabaseTableRestoreDatabase)(nil)).Elem()
+}
+
+func (i MysqlDatabaseTableRestoreDatabaseArgs) ToMysqlDatabaseTableRestoreDatabaseOutput() MysqlDatabaseTableRestoreDatabaseOutput {
+	return i.ToMysqlDatabaseTableRestoreDatabaseOutputWithContext(context.Background())
+}
+
+func (i MysqlDatabaseTableRestoreDatabaseArgs) ToMysqlDatabaseTableRestoreDatabaseOutputWithContext(ctx context.Context) MysqlDatabaseTableRestoreDatabaseOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(MysqlDatabaseTableRestoreDatabaseOutput)
+}
+
+// MysqlDatabaseTableRestoreDatabaseArrayInput is an input type that accepts MysqlDatabaseTableRestoreDatabaseArray and MysqlDatabaseTableRestoreDatabaseArrayOutput values.
+// You can construct a concrete instance of `MysqlDatabaseTableRestoreDatabaseArrayInput` via:
+//
+//	MysqlDatabaseTableRestoreDatabaseArray{ MysqlDatabaseTableRestoreDatabaseArgs{...} }
+type MysqlDatabaseTableRestoreDatabaseArrayInput interface {
+	pulumi.Input
+
+	ToMysqlDatabaseTableRestoreDatabaseArrayOutput() MysqlDatabaseTableRestoreDatabaseArrayOutput
+	ToMysqlDatabaseTableRestoreDatabaseArrayOutputWithContext(context.Context) MysqlDatabaseTableRestoreDatabaseArrayOutput
+}
+
+type MysqlDatabaseTableRestoreDatabaseArray []MysqlDatabaseTableRestoreDatabaseInput
+
+func (MysqlDatabaseTableRestoreDatabaseArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]MysqlDatabaseTableRestoreDatabase)(nil)).Elem()
+}
+
+func (i MysqlDatabaseTableRestoreDatabaseArray) ToMysqlDatabaseTableRestoreDatabaseArrayOutput() MysqlDatabaseTableRestoreDatabaseArrayOutput {
+	return i.ToMysqlDatabaseTableRestoreDatabaseArrayOutputWithContext(context.Background())
+}
+
+func (i MysqlDatabaseTableRestoreDatabaseArray) ToMysqlDatabaseTableRestoreDatabaseArrayOutputWithContext(ctx context.Context) MysqlDatabaseTableRestoreDatabaseArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(MysqlDatabaseTableRestoreDatabaseArrayOutput)
+}
+
+type MysqlDatabaseTableRestoreDatabaseOutput struct{ *pulumi.OutputState }
+
+func (MysqlDatabaseTableRestoreDatabaseOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*MysqlDatabaseTableRestoreDatabase)(nil)).Elem()
+}
+
+func (o MysqlDatabaseTableRestoreDatabaseOutput) ToMysqlDatabaseTableRestoreDatabaseOutput() MysqlDatabaseTableRestoreDatabaseOutput {
+	return o
+}
+
+func (o MysqlDatabaseTableRestoreDatabaseOutput) ToMysqlDatabaseTableRestoreDatabaseOutputWithContext(ctx context.Context) MysqlDatabaseTableRestoreDatabaseOutput {
+	return o
+}
+
+// Specifies the name of the table after restoration.
+func (o MysqlDatabaseTableRestoreDatabaseOutput) NewName() pulumi.StringOutput {
+	return o.ApplyT(func(v MysqlDatabaseTableRestoreDatabase) string { return v.NewName }).(pulumi.StringOutput)
+}
+
+// Specifies the name of the table before restoration.
+func (o MysqlDatabaseTableRestoreDatabaseOutput) OldName() pulumi.StringOutput {
+	return o.ApplyT(func(v MysqlDatabaseTableRestoreDatabase) string { return v.OldName }).(pulumi.StringOutput)
+}
+
+type MysqlDatabaseTableRestoreDatabaseArrayOutput struct{ *pulumi.OutputState }
+
+func (MysqlDatabaseTableRestoreDatabaseArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]MysqlDatabaseTableRestoreDatabase)(nil)).Elem()
+}
+
+func (o MysqlDatabaseTableRestoreDatabaseArrayOutput) ToMysqlDatabaseTableRestoreDatabaseArrayOutput() MysqlDatabaseTableRestoreDatabaseArrayOutput {
+	return o
+}
+
+func (o MysqlDatabaseTableRestoreDatabaseArrayOutput) ToMysqlDatabaseTableRestoreDatabaseArrayOutputWithContext(ctx context.Context) MysqlDatabaseTableRestoreDatabaseArrayOutput {
+	return o
+}
+
+func (o MysqlDatabaseTableRestoreDatabaseArrayOutput) Index(i pulumi.IntInput) MysqlDatabaseTableRestoreDatabaseOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) MysqlDatabaseTableRestoreDatabase {
+		return vs[0].([]MysqlDatabaseTableRestoreDatabase)[vs[1].(int)]
+	}).(MysqlDatabaseTableRestoreDatabaseOutput)
+}
+
+type MysqlDatabaseTableRestoreRestoreTable struct {
+	// Specifies the database name.
+	Database string `pulumi:"database"`
+	// Specifies the tables.
+	// The tables structure is documented below.
+	Tables []MysqlDatabaseTableRestoreRestoreTableTable `pulumi:"tables"`
+}
+
+// MysqlDatabaseTableRestoreRestoreTableInput is an input type that accepts MysqlDatabaseTableRestoreRestoreTableArgs and MysqlDatabaseTableRestoreRestoreTableOutput values.
+// You can construct a concrete instance of `MysqlDatabaseTableRestoreRestoreTableInput` via:
+//
+//	MysqlDatabaseTableRestoreRestoreTableArgs{...}
+type MysqlDatabaseTableRestoreRestoreTableInput interface {
+	pulumi.Input
+
+	ToMysqlDatabaseTableRestoreRestoreTableOutput() MysqlDatabaseTableRestoreRestoreTableOutput
+	ToMysqlDatabaseTableRestoreRestoreTableOutputWithContext(context.Context) MysqlDatabaseTableRestoreRestoreTableOutput
+}
+
+type MysqlDatabaseTableRestoreRestoreTableArgs struct {
+	// Specifies the database name.
+	Database pulumi.StringInput `pulumi:"database"`
+	// Specifies the tables.
+	// The tables structure is documented below.
+	Tables MysqlDatabaseTableRestoreRestoreTableTableArrayInput `pulumi:"tables"`
+}
+
+func (MysqlDatabaseTableRestoreRestoreTableArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*MysqlDatabaseTableRestoreRestoreTable)(nil)).Elem()
+}
+
+func (i MysqlDatabaseTableRestoreRestoreTableArgs) ToMysqlDatabaseTableRestoreRestoreTableOutput() MysqlDatabaseTableRestoreRestoreTableOutput {
+	return i.ToMysqlDatabaseTableRestoreRestoreTableOutputWithContext(context.Background())
+}
+
+func (i MysqlDatabaseTableRestoreRestoreTableArgs) ToMysqlDatabaseTableRestoreRestoreTableOutputWithContext(ctx context.Context) MysqlDatabaseTableRestoreRestoreTableOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(MysqlDatabaseTableRestoreRestoreTableOutput)
+}
+
+// MysqlDatabaseTableRestoreRestoreTableArrayInput is an input type that accepts MysqlDatabaseTableRestoreRestoreTableArray and MysqlDatabaseTableRestoreRestoreTableArrayOutput values.
+// You can construct a concrete instance of `MysqlDatabaseTableRestoreRestoreTableArrayInput` via:
+//
+//	MysqlDatabaseTableRestoreRestoreTableArray{ MysqlDatabaseTableRestoreRestoreTableArgs{...} }
+type MysqlDatabaseTableRestoreRestoreTableArrayInput interface {
+	pulumi.Input
+
+	ToMysqlDatabaseTableRestoreRestoreTableArrayOutput() MysqlDatabaseTableRestoreRestoreTableArrayOutput
+	ToMysqlDatabaseTableRestoreRestoreTableArrayOutputWithContext(context.Context) MysqlDatabaseTableRestoreRestoreTableArrayOutput
+}
+
+type MysqlDatabaseTableRestoreRestoreTableArray []MysqlDatabaseTableRestoreRestoreTableInput
+
+func (MysqlDatabaseTableRestoreRestoreTableArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]MysqlDatabaseTableRestoreRestoreTable)(nil)).Elem()
+}
+
+func (i MysqlDatabaseTableRestoreRestoreTableArray) ToMysqlDatabaseTableRestoreRestoreTableArrayOutput() MysqlDatabaseTableRestoreRestoreTableArrayOutput {
+	return i.ToMysqlDatabaseTableRestoreRestoreTableArrayOutputWithContext(context.Background())
+}
+
+func (i MysqlDatabaseTableRestoreRestoreTableArray) ToMysqlDatabaseTableRestoreRestoreTableArrayOutputWithContext(ctx context.Context) MysqlDatabaseTableRestoreRestoreTableArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(MysqlDatabaseTableRestoreRestoreTableArrayOutput)
+}
+
+type MysqlDatabaseTableRestoreRestoreTableOutput struct{ *pulumi.OutputState }
+
+func (MysqlDatabaseTableRestoreRestoreTableOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*MysqlDatabaseTableRestoreRestoreTable)(nil)).Elem()
+}
+
+func (o MysqlDatabaseTableRestoreRestoreTableOutput) ToMysqlDatabaseTableRestoreRestoreTableOutput() MysqlDatabaseTableRestoreRestoreTableOutput {
+	return o
+}
+
+func (o MysqlDatabaseTableRestoreRestoreTableOutput) ToMysqlDatabaseTableRestoreRestoreTableOutputWithContext(ctx context.Context) MysqlDatabaseTableRestoreRestoreTableOutput {
+	return o
+}
+
+// Specifies the database name.
+func (o MysqlDatabaseTableRestoreRestoreTableOutput) Database() pulumi.StringOutput {
+	return o.ApplyT(func(v MysqlDatabaseTableRestoreRestoreTable) string { return v.Database }).(pulumi.StringOutput)
+}
+
+// Specifies the tables.
+// The tables structure is documented below.
+func (o MysqlDatabaseTableRestoreRestoreTableOutput) Tables() MysqlDatabaseTableRestoreRestoreTableTableArrayOutput {
+	return o.ApplyT(func(v MysqlDatabaseTableRestoreRestoreTable) []MysqlDatabaseTableRestoreRestoreTableTable {
+		return v.Tables
+	}).(MysqlDatabaseTableRestoreRestoreTableTableArrayOutput)
+}
+
+type MysqlDatabaseTableRestoreRestoreTableArrayOutput struct{ *pulumi.OutputState }
+
+func (MysqlDatabaseTableRestoreRestoreTableArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]MysqlDatabaseTableRestoreRestoreTable)(nil)).Elem()
+}
+
+func (o MysqlDatabaseTableRestoreRestoreTableArrayOutput) ToMysqlDatabaseTableRestoreRestoreTableArrayOutput() MysqlDatabaseTableRestoreRestoreTableArrayOutput {
+	return o
+}
+
+func (o MysqlDatabaseTableRestoreRestoreTableArrayOutput) ToMysqlDatabaseTableRestoreRestoreTableArrayOutputWithContext(ctx context.Context) MysqlDatabaseTableRestoreRestoreTableArrayOutput {
+	return o
+}
+
+func (o MysqlDatabaseTableRestoreRestoreTableArrayOutput) Index(i pulumi.IntInput) MysqlDatabaseTableRestoreRestoreTableOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) MysqlDatabaseTableRestoreRestoreTable {
+		return vs[0].([]MysqlDatabaseTableRestoreRestoreTable)[vs[1].(int)]
+	}).(MysqlDatabaseTableRestoreRestoreTableOutput)
+}
+
+type MysqlDatabaseTableRestoreRestoreTableTable struct {
+	// Specifies the name of the table after restoration.
+	NewName string `pulumi:"newName"`
+	// Specifies the name of the table before restoration.
+	OldName string `pulumi:"oldName"`
+}
+
+// MysqlDatabaseTableRestoreRestoreTableTableInput is an input type that accepts MysqlDatabaseTableRestoreRestoreTableTableArgs and MysqlDatabaseTableRestoreRestoreTableTableOutput values.
+// You can construct a concrete instance of `MysqlDatabaseTableRestoreRestoreTableTableInput` via:
+//
+//	MysqlDatabaseTableRestoreRestoreTableTableArgs{...}
+type MysqlDatabaseTableRestoreRestoreTableTableInput interface {
+	pulumi.Input
+
+	ToMysqlDatabaseTableRestoreRestoreTableTableOutput() MysqlDatabaseTableRestoreRestoreTableTableOutput
+	ToMysqlDatabaseTableRestoreRestoreTableTableOutputWithContext(context.Context) MysqlDatabaseTableRestoreRestoreTableTableOutput
+}
+
+type MysqlDatabaseTableRestoreRestoreTableTableArgs struct {
+	// Specifies the name of the table after restoration.
+	NewName pulumi.StringInput `pulumi:"newName"`
+	// Specifies the name of the table before restoration.
+	OldName pulumi.StringInput `pulumi:"oldName"`
+}
+
+func (MysqlDatabaseTableRestoreRestoreTableTableArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*MysqlDatabaseTableRestoreRestoreTableTable)(nil)).Elem()
+}
+
+func (i MysqlDatabaseTableRestoreRestoreTableTableArgs) ToMysqlDatabaseTableRestoreRestoreTableTableOutput() MysqlDatabaseTableRestoreRestoreTableTableOutput {
+	return i.ToMysqlDatabaseTableRestoreRestoreTableTableOutputWithContext(context.Background())
+}
+
+func (i MysqlDatabaseTableRestoreRestoreTableTableArgs) ToMysqlDatabaseTableRestoreRestoreTableTableOutputWithContext(ctx context.Context) MysqlDatabaseTableRestoreRestoreTableTableOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(MysqlDatabaseTableRestoreRestoreTableTableOutput)
+}
+
+// MysqlDatabaseTableRestoreRestoreTableTableArrayInput is an input type that accepts MysqlDatabaseTableRestoreRestoreTableTableArray and MysqlDatabaseTableRestoreRestoreTableTableArrayOutput values.
+// You can construct a concrete instance of `MysqlDatabaseTableRestoreRestoreTableTableArrayInput` via:
+//
+//	MysqlDatabaseTableRestoreRestoreTableTableArray{ MysqlDatabaseTableRestoreRestoreTableTableArgs{...} }
+type MysqlDatabaseTableRestoreRestoreTableTableArrayInput interface {
+	pulumi.Input
+
+	ToMysqlDatabaseTableRestoreRestoreTableTableArrayOutput() MysqlDatabaseTableRestoreRestoreTableTableArrayOutput
+	ToMysqlDatabaseTableRestoreRestoreTableTableArrayOutputWithContext(context.Context) MysqlDatabaseTableRestoreRestoreTableTableArrayOutput
+}
+
+type MysqlDatabaseTableRestoreRestoreTableTableArray []MysqlDatabaseTableRestoreRestoreTableTableInput
+
+func (MysqlDatabaseTableRestoreRestoreTableTableArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]MysqlDatabaseTableRestoreRestoreTableTable)(nil)).Elem()
+}
+
+func (i MysqlDatabaseTableRestoreRestoreTableTableArray) ToMysqlDatabaseTableRestoreRestoreTableTableArrayOutput() MysqlDatabaseTableRestoreRestoreTableTableArrayOutput {
+	return i.ToMysqlDatabaseTableRestoreRestoreTableTableArrayOutputWithContext(context.Background())
+}
+
+func (i MysqlDatabaseTableRestoreRestoreTableTableArray) ToMysqlDatabaseTableRestoreRestoreTableTableArrayOutputWithContext(ctx context.Context) MysqlDatabaseTableRestoreRestoreTableTableArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(MysqlDatabaseTableRestoreRestoreTableTableArrayOutput)
+}
+
+type MysqlDatabaseTableRestoreRestoreTableTableOutput struct{ *pulumi.OutputState }
+
+func (MysqlDatabaseTableRestoreRestoreTableTableOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*MysqlDatabaseTableRestoreRestoreTableTable)(nil)).Elem()
+}
+
+func (o MysqlDatabaseTableRestoreRestoreTableTableOutput) ToMysqlDatabaseTableRestoreRestoreTableTableOutput() MysqlDatabaseTableRestoreRestoreTableTableOutput {
+	return o
+}
+
+func (o MysqlDatabaseTableRestoreRestoreTableTableOutput) ToMysqlDatabaseTableRestoreRestoreTableTableOutputWithContext(ctx context.Context) MysqlDatabaseTableRestoreRestoreTableTableOutput {
+	return o
+}
+
+// Specifies the name of the table after restoration.
+func (o MysqlDatabaseTableRestoreRestoreTableTableOutput) NewName() pulumi.StringOutput {
+	return o.ApplyT(func(v MysqlDatabaseTableRestoreRestoreTableTable) string { return v.NewName }).(pulumi.StringOutput)
+}
+
+// Specifies the name of the table before restoration.
+func (o MysqlDatabaseTableRestoreRestoreTableTableOutput) OldName() pulumi.StringOutput {
+	return o.ApplyT(func(v MysqlDatabaseTableRestoreRestoreTableTable) string { return v.OldName }).(pulumi.StringOutput)
+}
+
+type MysqlDatabaseTableRestoreRestoreTableTableArrayOutput struct{ *pulumi.OutputState }
+
+func (MysqlDatabaseTableRestoreRestoreTableTableArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]MysqlDatabaseTableRestoreRestoreTableTable)(nil)).Elem()
+}
+
+func (o MysqlDatabaseTableRestoreRestoreTableTableArrayOutput) ToMysqlDatabaseTableRestoreRestoreTableTableArrayOutput() MysqlDatabaseTableRestoreRestoreTableTableArrayOutput {
+	return o
+}
+
+func (o MysqlDatabaseTableRestoreRestoreTableTableArrayOutput) ToMysqlDatabaseTableRestoreRestoreTableTableArrayOutputWithContext(ctx context.Context) MysqlDatabaseTableRestoreRestoreTableTableArrayOutput {
+	return o
+}
+
+func (o MysqlDatabaseTableRestoreRestoreTableTableArrayOutput) Index(i pulumi.IntInput) MysqlDatabaseTableRestoreRestoreTableTableOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) MysqlDatabaseTableRestoreRestoreTableTable {
+		return vs[0].([]MysqlDatabaseTableRestoreRestoreTableTable)[vs[1].(int)]
+	}).(MysqlDatabaseTableRestoreRestoreTableTableOutput)
+}
+
+type MysqlProxyMasterNodeWeight struct {
+	// Specifies the ID of the node.
+	Id string `pulumi:"id"`
+	// Specifies the weight assigned to the node.
+	// + If `routeMode` is `0`, the value is `0` to `1,000`.
+	// + If `routeMode` is `1`, the value for the primary node is `0` and the value for read replicas is `0` or `1`.
+	// + If `routeMode` is `2`, the value for the primary node is `1` and the value for read replicas is `0` or `1`.
+	Weight int `pulumi:"weight"`
+}
+
+// MysqlProxyMasterNodeWeightInput is an input type that accepts MysqlProxyMasterNodeWeightArgs and MysqlProxyMasterNodeWeightOutput values.
+// You can construct a concrete instance of `MysqlProxyMasterNodeWeightInput` via:
+//
+//	MysqlProxyMasterNodeWeightArgs{...}
+type MysqlProxyMasterNodeWeightInput interface {
+	pulumi.Input
+
+	ToMysqlProxyMasterNodeWeightOutput() MysqlProxyMasterNodeWeightOutput
+	ToMysqlProxyMasterNodeWeightOutputWithContext(context.Context) MysqlProxyMasterNodeWeightOutput
+}
+
+type MysqlProxyMasterNodeWeightArgs struct {
+	// Specifies the ID of the node.
+	Id pulumi.StringInput `pulumi:"id"`
+	// Specifies the weight assigned to the node.
+	// + If `routeMode` is `0`, the value is `0` to `1,000`.
+	// + If `routeMode` is `1`, the value for the primary node is `0` and the value for read replicas is `0` or `1`.
+	// + If `routeMode` is `2`, the value for the primary node is `1` and the value for read replicas is `0` or `1`.
+	Weight pulumi.IntInput `pulumi:"weight"`
+}
+
+func (MysqlProxyMasterNodeWeightArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*MysqlProxyMasterNodeWeight)(nil)).Elem()
+}
+
+func (i MysqlProxyMasterNodeWeightArgs) ToMysqlProxyMasterNodeWeightOutput() MysqlProxyMasterNodeWeightOutput {
+	return i.ToMysqlProxyMasterNodeWeightOutputWithContext(context.Background())
+}
+
+func (i MysqlProxyMasterNodeWeightArgs) ToMysqlProxyMasterNodeWeightOutputWithContext(ctx context.Context) MysqlProxyMasterNodeWeightOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(MysqlProxyMasterNodeWeightOutput)
+}
+
+func (i MysqlProxyMasterNodeWeightArgs) ToMysqlProxyMasterNodeWeightPtrOutput() MysqlProxyMasterNodeWeightPtrOutput {
+	return i.ToMysqlProxyMasterNodeWeightPtrOutputWithContext(context.Background())
+}
+
+func (i MysqlProxyMasterNodeWeightArgs) ToMysqlProxyMasterNodeWeightPtrOutputWithContext(ctx context.Context) MysqlProxyMasterNodeWeightPtrOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(MysqlProxyMasterNodeWeightOutput).ToMysqlProxyMasterNodeWeightPtrOutputWithContext(ctx)
+}
+
+// MysqlProxyMasterNodeWeightPtrInput is an input type that accepts MysqlProxyMasterNodeWeightArgs, MysqlProxyMasterNodeWeightPtr and MysqlProxyMasterNodeWeightPtrOutput values.
+// You can construct a concrete instance of `MysqlProxyMasterNodeWeightPtrInput` via:
+//
+//	        MysqlProxyMasterNodeWeightArgs{...}
+//
+//	or:
+//
+//	        nil
+type MysqlProxyMasterNodeWeightPtrInput interface {
+	pulumi.Input
+
+	ToMysqlProxyMasterNodeWeightPtrOutput() MysqlProxyMasterNodeWeightPtrOutput
+	ToMysqlProxyMasterNodeWeightPtrOutputWithContext(context.Context) MysqlProxyMasterNodeWeightPtrOutput
+}
+
+type mysqlProxyMasterNodeWeightPtrType MysqlProxyMasterNodeWeightArgs
+
+func MysqlProxyMasterNodeWeightPtr(v *MysqlProxyMasterNodeWeightArgs) MysqlProxyMasterNodeWeightPtrInput {
+	return (*mysqlProxyMasterNodeWeightPtrType)(v)
+}
+
+func (*mysqlProxyMasterNodeWeightPtrType) ElementType() reflect.Type {
+	return reflect.TypeOf((**MysqlProxyMasterNodeWeight)(nil)).Elem()
+}
+
+func (i *mysqlProxyMasterNodeWeightPtrType) ToMysqlProxyMasterNodeWeightPtrOutput() MysqlProxyMasterNodeWeightPtrOutput {
+	return i.ToMysqlProxyMasterNodeWeightPtrOutputWithContext(context.Background())
+}
+
+func (i *mysqlProxyMasterNodeWeightPtrType) ToMysqlProxyMasterNodeWeightPtrOutputWithContext(ctx context.Context) MysqlProxyMasterNodeWeightPtrOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(MysqlProxyMasterNodeWeightPtrOutput)
+}
+
+type MysqlProxyMasterNodeWeightOutput struct{ *pulumi.OutputState }
+
+func (MysqlProxyMasterNodeWeightOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*MysqlProxyMasterNodeWeight)(nil)).Elem()
+}
+
+func (o MysqlProxyMasterNodeWeightOutput) ToMysqlProxyMasterNodeWeightOutput() MysqlProxyMasterNodeWeightOutput {
+	return o
+}
+
+func (o MysqlProxyMasterNodeWeightOutput) ToMysqlProxyMasterNodeWeightOutputWithContext(ctx context.Context) MysqlProxyMasterNodeWeightOutput {
+	return o
+}
+
+func (o MysqlProxyMasterNodeWeightOutput) ToMysqlProxyMasterNodeWeightPtrOutput() MysqlProxyMasterNodeWeightPtrOutput {
+	return o.ToMysqlProxyMasterNodeWeightPtrOutputWithContext(context.Background())
+}
+
+func (o MysqlProxyMasterNodeWeightOutput) ToMysqlProxyMasterNodeWeightPtrOutputWithContext(ctx context.Context) MysqlProxyMasterNodeWeightPtrOutput {
+	return o.ApplyTWithContext(ctx, func(_ context.Context, v MysqlProxyMasterNodeWeight) *MysqlProxyMasterNodeWeight {
+		return &v
+	}).(MysqlProxyMasterNodeWeightPtrOutput)
+}
+
+// Specifies the ID of the node.
+func (o MysqlProxyMasterNodeWeightOutput) Id() pulumi.StringOutput {
+	return o.ApplyT(func(v MysqlProxyMasterNodeWeight) string { return v.Id }).(pulumi.StringOutput)
+}
+
+// Specifies the weight assigned to the node.
+// + If `routeMode` is `0`, the value is `0` to `1,000`.
+// + If `routeMode` is `1`, the value for the primary node is `0` and the value for read replicas is `0` or `1`.
+// + If `routeMode` is `2`, the value for the primary node is `1` and the value for read replicas is `0` or `1`.
+func (o MysqlProxyMasterNodeWeightOutput) Weight() pulumi.IntOutput {
+	return o.ApplyT(func(v MysqlProxyMasterNodeWeight) int { return v.Weight }).(pulumi.IntOutput)
+}
+
+type MysqlProxyMasterNodeWeightPtrOutput struct{ *pulumi.OutputState }
+
+func (MysqlProxyMasterNodeWeightPtrOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((**MysqlProxyMasterNodeWeight)(nil)).Elem()
+}
+
+func (o MysqlProxyMasterNodeWeightPtrOutput) ToMysqlProxyMasterNodeWeightPtrOutput() MysqlProxyMasterNodeWeightPtrOutput {
+	return o
+}
+
+func (o MysqlProxyMasterNodeWeightPtrOutput) ToMysqlProxyMasterNodeWeightPtrOutputWithContext(ctx context.Context) MysqlProxyMasterNodeWeightPtrOutput {
+	return o
+}
+
+func (o MysqlProxyMasterNodeWeightPtrOutput) Elem() MysqlProxyMasterNodeWeightOutput {
+	return o.ApplyT(func(v *MysqlProxyMasterNodeWeight) MysqlProxyMasterNodeWeight {
+		if v != nil {
+			return *v
+		}
+		var ret MysqlProxyMasterNodeWeight
+		return ret
+	}).(MysqlProxyMasterNodeWeightOutput)
+}
+
+// Specifies the ID of the node.
+func (o MysqlProxyMasterNodeWeightPtrOutput) Id() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *MysqlProxyMasterNodeWeight) *string {
+		if v == nil {
+			return nil
+		}
+		return &v.Id
+	}).(pulumi.StringPtrOutput)
+}
+
+// Specifies the weight assigned to the node.
+// + If `routeMode` is `0`, the value is `0` to `1,000`.
+// + If `routeMode` is `1`, the value for the primary node is `0` and the value for read replicas is `0` or `1`.
+// + If `routeMode` is `2`, the value for the primary node is `1` and the value for read replicas is `0` or `1`.
+func (o MysqlProxyMasterNodeWeightPtrOutput) Weight() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v *MysqlProxyMasterNodeWeight) *int {
+		if v == nil {
+			return nil
+		}
+		return &v.Weight
+	}).(pulumi.IntPtrOutput)
+}
+
+type MysqlProxyNode struct {
+	// Indicates the AZ where the proxy node is located.
+	AzCode *string `pulumi:"azCode"`
+	// Indicates whether the proxy node is frozen. The values can be:
+	// + **0**: unfrozen.
+	// + **1**: frozen.
+	FrozenFlag *int `pulumi:"frozenFlag"`
+	// Specifies the ID of the node.
+	Id *string `pulumi:"id"`
+	// Indicates the role of the proxy node. The values can be:
+	// + **master**: primary node.
+	// + **slave**: standby node.
+	Role *string `pulumi:"role"`
+	// Indicates the proxy node status. The values can be:
+	// + **NORMAL**: The node is normal.
+	// + **ABNORMAL**: The node is abnormal.
+	// + **CREATING**: The node is being created.
+	// + **CREATEFAIL**: The node failed to be created.
+	Status *string `pulumi:"status"`
+}
+
+// MysqlProxyNodeInput is an input type that accepts MysqlProxyNodeArgs and MysqlProxyNodeOutput values.
+// You can construct a concrete instance of `MysqlProxyNodeInput` via:
+//
+//	MysqlProxyNodeArgs{...}
+type MysqlProxyNodeInput interface {
+	pulumi.Input
+
+	ToMysqlProxyNodeOutput() MysqlProxyNodeOutput
+	ToMysqlProxyNodeOutputWithContext(context.Context) MysqlProxyNodeOutput
+}
+
+type MysqlProxyNodeArgs struct {
+	// Indicates the AZ where the proxy node is located.
+	AzCode pulumi.StringPtrInput `pulumi:"azCode"`
+	// Indicates whether the proxy node is frozen. The values can be:
+	// + **0**: unfrozen.
+	// + **1**: frozen.
+	FrozenFlag pulumi.IntPtrInput `pulumi:"frozenFlag"`
+	// Specifies the ID of the node.
+	Id pulumi.StringPtrInput `pulumi:"id"`
+	// Indicates the role of the proxy node. The values can be:
+	// + **master**: primary node.
+	// + **slave**: standby node.
+	Role pulumi.StringPtrInput `pulumi:"role"`
+	// Indicates the proxy node status. The values can be:
+	// + **NORMAL**: The node is normal.
+	// + **ABNORMAL**: The node is abnormal.
+	// + **CREATING**: The node is being created.
+	// + **CREATEFAIL**: The node failed to be created.
+	Status pulumi.StringPtrInput `pulumi:"status"`
+}
+
+func (MysqlProxyNodeArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*MysqlProxyNode)(nil)).Elem()
+}
+
+func (i MysqlProxyNodeArgs) ToMysqlProxyNodeOutput() MysqlProxyNodeOutput {
+	return i.ToMysqlProxyNodeOutputWithContext(context.Background())
+}
+
+func (i MysqlProxyNodeArgs) ToMysqlProxyNodeOutputWithContext(ctx context.Context) MysqlProxyNodeOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(MysqlProxyNodeOutput)
+}
+
+// MysqlProxyNodeArrayInput is an input type that accepts MysqlProxyNodeArray and MysqlProxyNodeArrayOutput values.
+// You can construct a concrete instance of `MysqlProxyNodeArrayInput` via:
+//
+//	MysqlProxyNodeArray{ MysqlProxyNodeArgs{...} }
+type MysqlProxyNodeArrayInput interface {
+	pulumi.Input
+
+	ToMysqlProxyNodeArrayOutput() MysqlProxyNodeArrayOutput
+	ToMysqlProxyNodeArrayOutputWithContext(context.Context) MysqlProxyNodeArrayOutput
+}
+
+type MysqlProxyNodeArray []MysqlProxyNodeInput
+
+func (MysqlProxyNodeArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]MysqlProxyNode)(nil)).Elem()
+}
+
+func (i MysqlProxyNodeArray) ToMysqlProxyNodeArrayOutput() MysqlProxyNodeArrayOutput {
+	return i.ToMysqlProxyNodeArrayOutputWithContext(context.Background())
+}
+
+func (i MysqlProxyNodeArray) ToMysqlProxyNodeArrayOutputWithContext(ctx context.Context) MysqlProxyNodeArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(MysqlProxyNodeArrayOutput)
+}
+
+type MysqlProxyNodeOutput struct{ *pulumi.OutputState }
+
+func (MysqlProxyNodeOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*MysqlProxyNode)(nil)).Elem()
+}
+
+func (o MysqlProxyNodeOutput) ToMysqlProxyNodeOutput() MysqlProxyNodeOutput {
+	return o
+}
+
+func (o MysqlProxyNodeOutput) ToMysqlProxyNodeOutputWithContext(ctx context.Context) MysqlProxyNodeOutput {
+	return o
+}
+
+// Indicates the AZ where the proxy node is located.
+func (o MysqlProxyNodeOutput) AzCode() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v MysqlProxyNode) *string { return v.AzCode }).(pulumi.StringPtrOutput)
+}
+
+// Indicates whether the proxy node is frozen. The values can be:
+// + **0**: unfrozen.
+// + **1**: frozen.
+func (o MysqlProxyNodeOutput) FrozenFlag() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v MysqlProxyNode) *int { return v.FrozenFlag }).(pulumi.IntPtrOutput)
+}
+
+// Specifies the ID of the node.
+func (o MysqlProxyNodeOutput) Id() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v MysqlProxyNode) *string { return v.Id }).(pulumi.StringPtrOutput)
+}
+
+// Indicates the role of the proxy node. The values can be:
+// + **master**: primary node.
+// + **slave**: standby node.
+func (o MysqlProxyNodeOutput) Role() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v MysqlProxyNode) *string { return v.Role }).(pulumi.StringPtrOutput)
+}
+
+// Indicates the proxy node status. The values can be:
+// + **NORMAL**: The node is normal.
+// + **ABNORMAL**: The node is abnormal.
+// + **CREATING**: The node is being created.
+// + **CREATEFAIL**: The node failed to be created.
+func (o MysqlProxyNodeOutput) Status() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v MysqlProxyNode) *string { return v.Status }).(pulumi.StringPtrOutput)
+}
+
+type MysqlProxyNodeArrayOutput struct{ *pulumi.OutputState }
+
+func (MysqlProxyNodeArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]MysqlProxyNode)(nil)).Elem()
+}
+
+func (o MysqlProxyNodeArrayOutput) ToMysqlProxyNodeArrayOutput() MysqlProxyNodeArrayOutput {
+	return o
+}
+
+func (o MysqlProxyNodeArrayOutput) ToMysqlProxyNodeArrayOutputWithContext(ctx context.Context) MysqlProxyNodeArrayOutput {
+	return o
+}
+
+func (o MysqlProxyNodeArrayOutput) Index(i pulumi.IntInput) MysqlProxyNodeOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) MysqlProxyNode {
+		return vs[0].([]MysqlProxyNode)[vs[1].(int)]
+	}).(MysqlProxyNodeOutput)
+}
+
+type MysqlProxyReadonlyNodesWeight struct {
+	// Specifies the ID of the node.
+	Id string `pulumi:"id"`
+	// Specifies the weight assigned to the node.
+	// + If `routeMode` is `0`, the value is `0` to `1,000`.
+	// + If `routeMode` is `1`, the value for the primary node is `0` and the value for read replicas is `0` or `1`.
+	// + If `routeMode` is `2`, the value for the primary node is `1` and the value for read replicas is `0` or `1`.
+	Weight int `pulumi:"weight"`
+}
+
+// MysqlProxyReadonlyNodesWeightInput is an input type that accepts MysqlProxyReadonlyNodesWeightArgs and MysqlProxyReadonlyNodesWeightOutput values.
+// You can construct a concrete instance of `MysqlProxyReadonlyNodesWeightInput` via:
+//
+//	MysqlProxyReadonlyNodesWeightArgs{...}
+type MysqlProxyReadonlyNodesWeightInput interface {
+	pulumi.Input
+
+	ToMysqlProxyReadonlyNodesWeightOutput() MysqlProxyReadonlyNodesWeightOutput
+	ToMysqlProxyReadonlyNodesWeightOutputWithContext(context.Context) MysqlProxyReadonlyNodesWeightOutput
+}
+
+type MysqlProxyReadonlyNodesWeightArgs struct {
+	// Specifies the ID of the node.
+	Id pulumi.StringInput `pulumi:"id"`
+	// Specifies the weight assigned to the node.
+	// + If `routeMode` is `0`, the value is `0` to `1,000`.
+	// + If `routeMode` is `1`, the value for the primary node is `0` and the value for read replicas is `0` or `1`.
+	// + If `routeMode` is `2`, the value for the primary node is `1` and the value for read replicas is `0` or `1`.
+	Weight pulumi.IntInput `pulumi:"weight"`
+}
+
+func (MysqlProxyReadonlyNodesWeightArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*MysqlProxyReadonlyNodesWeight)(nil)).Elem()
+}
+
+func (i MysqlProxyReadonlyNodesWeightArgs) ToMysqlProxyReadonlyNodesWeightOutput() MysqlProxyReadonlyNodesWeightOutput {
+	return i.ToMysqlProxyReadonlyNodesWeightOutputWithContext(context.Background())
+}
+
+func (i MysqlProxyReadonlyNodesWeightArgs) ToMysqlProxyReadonlyNodesWeightOutputWithContext(ctx context.Context) MysqlProxyReadonlyNodesWeightOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(MysqlProxyReadonlyNodesWeightOutput)
+}
+
+// MysqlProxyReadonlyNodesWeightArrayInput is an input type that accepts MysqlProxyReadonlyNodesWeightArray and MysqlProxyReadonlyNodesWeightArrayOutput values.
+// You can construct a concrete instance of `MysqlProxyReadonlyNodesWeightArrayInput` via:
+//
+//	MysqlProxyReadonlyNodesWeightArray{ MysqlProxyReadonlyNodesWeightArgs{...} }
+type MysqlProxyReadonlyNodesWeightArrayInput interface {
+	pulumi.Input
+
+	ToMysqlProxyReadonlyNodesWeightArrayOutput() MysqlProxyReadonlyNodesWeightArrayOutput
+	ToMysqlProxyReadonlyNodesWeightArrayOutputWithContext(context.Context) MysqlProxyReadonlyNodesWeightArrayOutput
+}
+
+type MysqlProxyReadonlyNodesWeightArray []MysqlProxyReadonlyNodesWeightInput
+
+func (MysqlProxyReadonlyNodesWeightArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]MysqlProxyReadonlyNodesWeight)(nil)).Elem()
+}
+
+func (i MysqlProxyReadonlyNodesWeightArray) ToMysqlProxyReadonlyNodesWeightArrayOutput() MysqlProxyReadonlyNodesWeightArrayOutput {
+	return i.ToMysqlProxyReadonlyNodesWeightArrayOutputWithContext(context.Background())
+}
+
+func (i MysqlProxyReadonlyNodesWeightArray) ToMysqlProxyReadonlyNodesWeightArrayOutputWithContext(ctx context.Context) MysqlProxyReadonlyNodesWeightArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(MysqlProxyReadonlyNodesWeightArrayOutput)
+}
+
+type MysqlProxyReadonlyNodesWeightOutput struct{ *pulumi.OutputState }
+
+func (MysqlProxyReadonlyNodesWeightOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*MysqlProxyReadonlyNodesWeight)(nil)).Elem()
+}
+
+func (o MysqlProxyReadonlyNodesWeightOutput) ToMysqlProxyReadonlyNodesWeightOutput() MysqlProxyReadonlyNodesWeightOutput {
+	return o
+}
+
+func (o MysqlProxyReadonlyNodesWeightOutput) ToMysqlProxyReadonlyNodesWeightOutputWithContext(ctx context.Context) MysqlProxyReadonlyNodesWeightOutput {
+	return o
+}
+
+// Specifies the ID of the node.
+func (o MysqlProxyReadonlyNodesWeightOutput) Id() pulumi.StringOutput {
+	return o.ApplyT(func(v MysqlProxyReadonlyNodesWeight) string { return v.Id }).(pulumi.StringOutput)
+}
+
+// Specifies the weight assigned to the node.
+// + If `routeMode` is `0`, the value is `0` to `1,000`.
+// + If `routeMode` is `1`, the value for the primary node is `0` and the value for read replicas is `0` or `1`.
+// + If `routeMode` is `2`, the value for the primary node is `1` and the value for read replicas is `0` or `1`.
+func (o MysqlProxyReadonlyNodesWeightOutput) Weight() pulumi.IntOutput {
+	return o.ApplyT(func(v MysqlProxyReadonlyNodesWeight) int { return v.Weight }).(pulumi.IntOutput)
+}
+
+type MysqlProxyReadonlyNodesWeightArrayOutput struct{ *pulumi.OutputState }
+
+func (MysqlProxyReadonlyNodesWeightArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]MysqlProxyReadonlyNodesWeight)(nil)).Elem()
+}
+
+func (o MysqlProxyReadonlyNodesWeightArrayOutput) ToMysqlProxyReadonlyNodesWeightArrayOutput() MysqlProxyReadonlyNodesWeightArrayOutput {
+	return o
+}
+
+func (o MysqlProxyReadonlyNodesWeightArrayOutput) ToMysqlProxyReadonlyNodesWeightArrayOutputWithContext(ctx context.Context) MysqlProxyReadonlyNodesWeightArrayOutput {
+	return o
+}
+
+func (o MysqlProxyReadonlyNodesWeightArrayOutput) Index(i pulumi.IntInput) MysqlProxyReadonlyNodesWeightOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) MysqlProxyReadonlyNodesWeight {
+		return vs[0].([]MysqlProxyReadonlyNodesWeight)[vs[1].(int)]
+	}).(MysqlProxyReadonlyNodesWeightOutput)
 }
 
 type ParametergroupConfigurationParameter struct {
@@ -1112,8 +2390,8 @@ type ParametergroupConfigurationParameter struct {
 	Readonly *bool `pulumi:"readonly"`
 	// Indicates whether a restart is required.
 	RestartRequired *bool `pulumi:"restartRequired"`
-	// The DB engine. Currently, MySQL, PostgreSQL, and Microsoft SQL Server are supported. The
-	// value is case-insensitive and can be mysql, postgresql, or sqlserver.
+	// The DB engine. Currently, MySQL, PostgreSQL, Microsoft SQL Server and MariaDB are supported.
+	// The value is case-insensitive and can be **mysql**, **postgresql**, **sqlserver**, or **mariadb**.
 	Type *string `pulumi:"type"`
 	// Indicates the parameter value.
 	Value *string `pulumi:"value"`
@@ -1142,8 +2420,8 @@ type ParametergroupConfigurationParameterArgs struct {
 	Readonly pulumi.BoolPtrInput `pulumi:"readonly"`
 	// Indicates whether a restart is required.
 	RestartRequired pulumi.BoolPtrInput `pulumi:"restartRequired"`
-	// The DB engine. Currently, MySQL, PostgreSQL, and Microsoft SQL Server are supported. The
-	// value is case-insensitive and can be mysql, postgresql, or sqlserver.
+	// The DB engine. Currently, MySQL, PostgreSQL, Microsoft SQL Server and MariaDB are supported.
+	// The value is case-insensitive and can be **mysql**, **postgresql**, **sqlserver**, or **mariadb**.
 	Type pulumi.StringPtrInput `pulumi:"type"`
 	// Indicates the parameter value.
 	Value pulumi.StringPtrInput `pulumi:"value"`
@@ -1223,8 +2501,8 @@ func (o ParametergroupConfigurationParameterOutput) RestartRequired() pulumi.Boo
 	return o.ApplyT(func(v ParametergroupConfigurationParameter) *bool { return v.RestartRequired }).(pulumi.BoolPtrOutput)
 }
 
-// The DB engine. Currently, MySQL, PostgreSQL, and Microsoft SQL Server are supported. The
-// value is case-insensitive and can be mysql, postgresql, or sqlserver.
+// The DB engine. Currently, MySQL, PostgreSQL, Microsoft SQL Server and MariaDB are supported.
+// The value is case-insensitive and can be **mysql**, **postgresql**, **sqlserver**, or **mariadb**.
 func (o ParametergroupConfigurationParameterOutput) Type() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v ParametergroupConfigurationParameter) *string { return v.Type }).(pulumi.StringPtrOutput)
 }
@@ -1260,8 +2538,8 @@ func (o ParametergroupConfigurationParameterArrayOutput) Index(i pulumi.IntInput
 }
 
 type ParametergroupDatastore struct {
-	// The DB engine. Currently, MySQL, PostgreSQL, and Microsoft SQL Server are supported. The
-	// value is case-insensitive and can be mysql, postgresql, or sqlserver.
+	// The DB engine. Currently, MySQL, PostgreSQL, Microsoft SQL Server and MariaDB are supported.
+	// The value is case-insensitive and can be **mysql**, **postgresql**, **sqlserver**, or **mariadb**.
 	Type string `pulumi:"type"`
 	// Specifies the database version.
 	Version string `pulumi:"version"`
@@ -1279,8 +2557,8 @@ type ParametergroupDatastoreInput interface {
 }
 
 type ParametergroupDatastoreArgs struct {
-	// The DB engine. Currently, MySQL, PostgreSQL, and Microsoft SQL Server are supported. The
-	// value is case-insensitive and can be mysql, postgresql, or sqlserver.
+	// The DB engine. Currently, MySQL, PostgreSQL, Microsoft SQL Server and MariaDB are supported.
+	// The value is case-insensitive and can be **mysql**, **postgresql**, **sqlserver**, or **mariadb**.
 	Type pulumi.StringInput `pulumi:"type"`
 	// Specifies the database version.
 	Version pulumi.StringInput `pulumi:"version"`
@@ -1363,8 +2641,8 @@ func (o ParametergroupDatastoreOutput) ToParametergroupDatastorePtrOutputWithCon
 	}).(ParametergroupDatastorePtrOutput)
 }
 
-// The DB engine. Currently, MySQL, PostgreSQL, and Microsoft SQL Server are supported. The
-// value is case-insensitive and can be mysql, postgresql, or sqlserver.
+// The DB engine. Currently, MySQL, PostgreSQL, Microsoft SQL Server and MariaDB are supported.
+// The value is case-insensitive and can be **mysql**, **postgresql**, **sqlserver**, or **mariadb**.
 func (o ParametergroupDatastoreOutput) Type() pulumi.StringOutput {
 	return o.ApplyT(func(v ParametergroupDatastore) string { return v.Type }).(pulumi.StringOutput)
 }
@@ -1398,8 +2676,8 @@ func (o ParametergroupDatastorePtrOutput) Elem() ParametergroupDatastoreOutput {
 	}).(ParametergroupDatastoreOutput)
 }
 
-// The DB engine. Currently, MySQL, PostgreSQL, and Microsoft SQL Server are supported. The
-// value is case-insensitive and can be mysql, postgresql, or sqlserver.
+// The DB engine. Currently, MySQL, PostgreSQL, Microsoft SQL Server and MariaDB are supported.
+// The value is case-insensitive and can be **mysql**, **postgresql**, **sqlserver**, or **mariadb**.
 func (o ParametergroupDatastorePtrOutput) Type() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *ParametergroupDatastore) *string {
 		if v == nil {
@@ -1419,21 +2697,468 @@ func (o ParametergroupDatastorePtrOutput) Version() pulumi.StringPtrOutput {
 	}).(pulumi.StringPtrOutput)
 }
 
+type PgAccountAttribute struct {
+	// Indicates whether a user bypasses each row-level security policy.
+	RolBypassRls *bool `pulumi:"rolBypassRls"`
+	// Indicates whether a user can log in to the database.
+	RolCanLogin *bool `pulumi:"rolCanLogin"`
+	// Indicates the maximum number of concurrent connections to a DB instance.
+	RolConnLimit *int `pulumi:"rolConnLimit"`
+	// Indicates whether a user can create a database.
+	RolCreateDb *bool `pulumi:"rolCreateDb"`
+	// Indicates whether a user can create other sub-users.
+	RolCreateRole *bool `pulumi:"rolCreateRole"`
+	// Indicates whether a user automatically inherits the permissions of the role to which the user belongs.
+	RolInherit *bool `pulumi:"rolInherit"`
+	// Indicates whether the user is a replication role.
+	RolReplication *bool `pulumi:"rolReplication"`
+	// Indicates whether a user has the super-user permission.
+	RolSuper *bool `pulumi:"rolSuper"`
+}
+
+// PgAccountAttributeInput is an input type that accepts PgAccountAttributeArgs and PgAccountAttributeOutput values.
+// You can construct a concrete instance of `PgAccountAttributeInput` via:
+//
+//	PgAccountAttributeArgs{...}
+type PgAccountAttributeInput interface {
+	pulumi.Input
+
+	ToPgAccountAttributeOutput() PgAccountAttributeOutput
+	ToPgAccountAttributeOutputWithContext(context.Context) PgAccountAttributeOutput
+}
+
+type PgAccountAttributeArgs struct {
+	// Indicates whether a user bypasses each row-level security policy.
+	RolBypassRls pulumi.BoolPtrInput `pulumi:"rolBypassRls"`
+	// Indicates whether a user can log in to the database.
+	RolCanLogin pulumi.BoolPtrInput `pulumi:"rolCanLogin"`
+	// Indicates the maximum number of concurrent connections to a DB instance.
+	RolConnLimit pulumi.IntPtrInput `pulumi:"rolConnLimit"`
+	// Indicates whether a user can create a database.
+	RolCreateDb pulumi.BoolPtrInput `pulumi:"rolCreateDb"`
+	// Indicates whether a user can create other sub-users.
+	RolCreateRole pulumi.BoolPtrInput `pulumi:"rolCreateRole"`
+	// Indicates whether a user automatically inherits the permissions of the role to which the user belongs.
+	RolInherit pulumi.BoolPtrInput `pulumi:"rolInherit"`
+	// Indicates whether the user is a replication role.
+	RolReplication pulumi.BoolPtrInput `pulumi:"rolReplication"`
+	// Indicates whether a user has the super-user permission.
+	RolSuper pulumi.BoolPtrInput `pulumi:"rolSuper"`
+}
+
+func (PgAccountAttributeArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*PgAccountAttribute)(nil)).Elem()
+}
+
+func (i PgAccountAttributeArgs) ToPgAccountAttributeOutput() PgAccountAttributeOutput {
+	return i.ToPgAccountAttributeOutputWithContext(context.Background())
+}
+
+func (i PgAccountAttributeArgs) ToPgAccountAttributeOutputWithContext(ctx context.Context) PgAccountAttributeOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(PgAccountAttributeOutput)
+}
+
+// PgAccountAttributeArrayInput is an input type that accepts PgAccountAttributeArray and PgAccountAttributeArrayOutput values.
+// You can construct a concrete instance of `PgAccountAttributeArrayInput` via:
+//
+//	PgAccountAttributeArray{ PgAccountAttributeArgs{...} }
+type PgAccountAttributeArrayInput interface {
+	pulumi.Input
+
+	ToPgAccountAttributeArrayOutput() PgAccountAttributeArrayOutput
+	ToPgAccountAttributeArrayOutputWithContext(context.Context) PgAccountAttributeArrayOutput
+}
+
+type PgAccountAttributeArray []PgAccountAttributeInput
+
+func (PgAccountAttributeArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]PgAccountAttribute)(nil)).Elem()
+}
+
+func (i PgAccountAttributeArray) ToPgAccountAttributeArrayOutput() PgAccountAttributeArrayOutput {
+	return i.ToPgAccountAttributeArrayOutputWithContext(context.Background())
+}
+
+func (i PgAccountAttributeArray) ToPgAccountAttributeArrayOutputWithContext(ctx context.Context) PgAccountAttributeArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(PgAccountAttributeArrayOutput)
+}
+
+type PgAccountAttributeOutput struct{ *pulumi.OutputState }
+
+func (PgAccountAttributeOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*PgAccountAttribute)(nil)).Elem()
+}
+
+func (o PgAccountAttributeOutput) ToPgAccountAttributeOutput() PgAccountAttributeOutput {
+	return o
+}
+
+func (o PgAccountAttributeOutput) ToPgAccountAttributeOutputWithContext(ctx context.Context) PgAccountAttributeOutput {
+	return o
+}
+
+// Indicates whether a user bypasses each row-level security policy.
+func (o PgAccountAttributeOutput) RolBypassRls() pulumi.BoolPtrOutput {
+	return o.ApplyT(func(v PgAccountAttribute) *bool { return v.RolBypassRls }).(pulumi.BoolPtrOutput)
+}
+
+// Indicates whether a user can log in to the database.
+func (o PgAccountAttributeOutput) RolCanLogin() pulumi.BoolPtrOutput {
+	return o.ApplyT(func(v PgAccountAttribute) *bool { return v.RolCanLogin }).(pulumi.BoolPtrOutput)
+}
+
+// Indicates the maximum number of concurrent connections to a DB instance.
+func (o PgAccountAttributeOutput) RolConnLimit() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v PgAccountAttribute) *int { return v.RolConnLimit }).(pulumi.IntPtrOutput)
+}
+
+// Indicates whether a user can create a database.
+func (o PgAccountAttributeOutput) RolCreateDb() pulumi.BoolPtrOutput {
+	return o.ApplyT(func(v PgAccountAttribute) *bool { return v.RolCreateDb }).(pulumi.BoolPtrOutput)
+}
+
+// Indicates whether a user can create other sub-users.
+func (o PgAccountAttributeOutput) RolCreateRole() pulumi.BoolPtrOutput {
+	return o.ApplyT(func(v PgAccountAttribute) *bool { return v.RolCreateRole }).(pulumi.BoolPtrOutput)
+}
+
+// Indicates whether a user automatically inherits the permissions of the role to which the user belongs.
+func (o PgAccountAttributeOutput) RolInherit() pulumi.BoolPtrOutput {
+	return o.ApplyT(func(v PgAccountAttribute) *bool { return v.RolInherit }).(pulumi.BoolPtrOutput)
+}
+
+// Indicates whether the user is a replication role.
+func (o PgAccountAttributeOutput) RolReplication() pulumi.BoolPtrOutput {
+	return o.ApplyT(func(v PgAccountAttribute) *bool { return v.RolReplication }).(pulumi.BoolPtrOutput)
+}
+
+// Indicates whether a user has the super-user permission.
+func (o PgAccountAttributeOutput) RolSuper() pulumi.BoolPtrOutput {
+	return o.ApplyT(func(v PgAccountAttribute) *bool { return v.RolSuper }).(pulumi.BoolPtrOutput)
+}
+
+type PgAccountAttributeArrayOutput struct{ *pulumi.OutputState }
+
+func (PgAccountAttributeArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]PgAccountAttribute)(nil)).Elem()
+}
+
+func (o PgAccountAttributeArrayOutput) ToPgAccountAttributeArrayOutput() PgAccountAttributeArrayOutput {
+	return o
+}
+
+func (o PgAccountAttributeArrayOutput) ToPgAccountAttributeArrayOutputWithContext(ctx context.Context) PgAccountAttributeArrayOutput {
+	return o
+}
+
+func (o PgAccountAttributeArrayOutput) Index(i pulumi.IntInput) PgAccountAttributeOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) PgAccountAttribute {
+		return vs[0].([]PgAccountAttribute)[vs[1].(int)]
+	}).(PgAccountAttributeOutput)
+}
+
+type PgDatabasePrivilegeUser struct {
+	// Specifies the username of the database account.
+	Name string `pulumi:"name"`
+	// Specifies the read-only permission. The value can be:
+	// + **true**: indicates the read-only permission.
+	// + **false**: indicates the read and write permission.
+	Readonly bool `pulumi:"readonly"`
+	// Specifies the name of the schema.
+	SchemaName string `pulumi:"schemaName"`
+}
+
+// PgDatabasePrivilegeUserInput is an input type that accepts PgDatabasePrivilegeUserArgs and PgDatabasePrivilegeUserOutput values.
+// You can construct a concrete instance of `PgDatabasePrivilegeUserInput` via:
+//
+//	PgDatabasePrivilegeUserArgs{...}
+type PgDatabasePrivilegeUserInput interface {
+	pulumi.Input
+
+	ToPgDatabasePrivilegeUserOutput() PgDatabasePrivilegeUserOutput
+	ToPgDatabasePrivilegeUserOutputWithContext(context.Context) PgDatabasePrivilegeUserOutput
+}
+
+type PgDatabasePrivilegeUserArgs struct {
+	// Specifies the username of the database account.
+	Name pulumi.StringInput `pulumi:"name"`
+	// Specifies the read-only permission. The value can be:
+	// + **true**: indicates the read-only permission.
+	// + **false**: indicates the read and write permission.
+	Readonly pulumi.BoolInput `pulumi:"readonly"`
+	// Specifies the name of the schema.
+	SchemaName pulumi.StringInput `pulumi:"schemaName"`
+}
+
+func (PgDatabasePrivilegeUserArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*PgDatabasePrivilegeUser)(nil)).Elem()
+}
+
+func (i PgDatabasePrivilegeUserArgs) ToPgDatabasePrivilegeUserOutput() PgDatabasePrivilegeUserOutput {
+	return i.ToPgDatabasePrivilegeUserOutputWithContext(context.Background())
+}
+
+func (i PgDatabasePrivilegeUserArgs) ToPgDatabasePrivilegeUserOutputWithContext(ctx context.Context) PgDatabasePrivilegeUserOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(PgDatabasePrivilegeUserOutput)
+}
+
+// PgDatabasePrivilegeUserArrayInput is an input type that accepts PgDatabasePrivilegeUserArray and PgDatabasePrivilegeUserArrayOutput values.
+// You can construct a concrete instance of `PgDatabasePrivilegeUserArrayInput` via:
+//
+//	PgDatabasePrivilegeUserArray{ PgDatabasePrivilegeUserArgs{...} }
+type PgDatabasePrivilegeUserArrayInput interface {
+	pulumi.Input
+
+	ToPgDatabasePrivilegeUserArrayOutput() PgDatabasePrivilegeUserArrayOutput
+	ToPgDatabasePrivilegeUserArrayOutputWithContext(context.Context) PgDatabasePrivilegeUserArrayOutput
+}
+
+type PgDatabasePrivilegeUserArray []PgDatabasePrivilegeUserInput
+
+func (PgDatabasePrivilegeUserArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]PgDatabasePrivilegeUser)(nil)).Elem()
+}
+
+func (i PgDatabasePrivilegeUserArray) ToPgDatabasePrivilegeUserArrayOutput() PgDatabasePrivilegeUserArrayOutput {
+	return i.ToPgDatabasePrivilegeUserArrayOutputWithContext(context.Background())
+}
+
+func (i PgDatabasePrivilegeUserArray) ToPgDatabasePrivilegeUserArrayOutputWithContext(ctx context.Context) PgDatabasePrivilegeUserArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(PgDatabasePrivilegeUserArrayOutput)
+}
+
+type PgDatabasePrivilegeUserOutput struct{ *pulumi.OutputState }
+
+func (PgDatabasePrivilegeUserOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*PgDatabasePrivilegeUser)(nil)).Elem()
+}
+
+func (o PgDatabasePrivilegeUserOutput) ToPgDatabasePrivilegeUserOutput() PgDatabasePrivilegeUserOutput {
+	return o
+}
+
+func (o PgDatabasePrivilegeUserOutput) ToPgDatabasePrivilegeUserOutputWithContext(ctx context.Context) PgDatabasePrivilegeUserOutput {
+	return o
+}
+
+// Specifies the username of the database account.
+func (o PgDatabasePrivilegeUserOutput) Name() pulumi.StringOutput {
+	return o.ApplyT(func(v PgDatabasePrivilegeUser) string { return v.Name }).(pulumi.StringOutput)
+}
+
+// Specifies the read-only permission. The value can be:
+// + **true**: indicates the read-only permission.
+// + **false**: indicates the read and write permission.
+func (o PgDatabasePrivilegeUserOutput) Readonly() pulumi.BoolOutput {
+	return o.ApplyT(func(v PgDatabasePrivilegeUser) bool { return v.Readonly }).(pulumi.BoolOutput)
+}
+
+// Specifies the name of the schema.
+func (o PgDatabasePrivilegeUserOutput) SchemaName() pulumi.StringOutput {
+	return o.ApplyT(func(v PgDatabasePrivilegeUser) string { return v.SchemaName }).(pulumi.StringOutput)
+}
+
+type PgDatabasePrivilegeUserArrayOutput struct{ *pulumi.OutputState }
+
+func (PgDatabasePrivilegeUserArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]PgDatabasePrivilegeUser)(nil)).Elem()
+}
+
+func (o PgDatabasePrivilegeUserArrayOutput) ToPgDatabasePrivilegeUserArrayOutput() PgDatabasePrivilegeUserArrayOutput {
+	return o
+}
+
+func (o PgDatabasePrivilegeUserArrayOutput) ToPgDatabasePrivilegeUserArrayOutputWithContext(ctx context.Context) PgDatabasePrivilegeUserArrayOutput {
+	return o
+}
+
+func (o PgDatabasePrivilegeUserArrayOutput) Index(i pulumi.IntInput) PgDatabasePrivilegeUserOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) PgDatabasePrivilegeUser {
+		return vs[0].([]PgDatabasePrivilegeUser)[vs[1].(int)]
+	}).(PgDatabasePrivilegeUserOutput)
+}
+
+type PgHbaHostBasedAuthentication struct {
+	// Specifies the client IP address.
+	// + **0.0.0.0/0** indicates that the user can access the database from any IP address.
+	Address string `pulumi:"address"`
+	// Specifies the database name other than **template0** and **template1**.
+	// + **all** indicates all databases of the DB instance.
+	// + Use commas (,) to separate multiple databases.
+	Database string `pulumi:"database"`
+	// Specifies the subnet mask. It is mandatory when `address` does not contain mask.
+	Mask *string `pulumi:"mask"`
+	// Specifies the authentication mode. Value options: **reject**, **md5** and
+	// **scram-sha-256**.
+	Method string `pulumi:"method"`
+	// Specifies the connection type. Value options: **host**, **hostssl** and **hostnossl**.
+	Type string `pulumi:"type"`
+	// Specifies the name of a user other than **rdsAdmin**, **rdsMetric**, **rdsBackup**,
+	// **rdsRepl** and **rdsProxy**.
+	// + **all** indicates all database users of the DB instance.
+	// + Use commas (,) to separate multiple user names.
+	User string `pulumi:"user"`
+}
+
+// PgHbaHostBasedAuthenticationInput is an input type that accepts PgHbaHostBasedAuthenticationArgs and PgHbaHostBasedAuthenticationOutput values.
+// You can construct a concrete instance of `PgHbaHostBasedAuthenticationInput` via:
+//
+//	PgHbaHostBasedAuthenticationArgs{...}
+type PgHbaHostBasedAuthenticationInput interface {
+	pulumi.Input
+
+	ToPgHbaHostBasedAuthenticationOutput() PgHbaHostBasedAuthenticationOutput
+	ToPgHbaHostBasedAuthenticationOutputWithContext(context.Context) PgHbaHostBasedAuthenticationOutput
+}
+
+type PgHbaHostBasedAuthenticationArgs struct {
+	// Specifies the client IP address.
+	// + **0.0.0.0/0** indicates that the user can access the database from any IP address.
+	Address pulumi.StringInput `pulumi:"address"`
+	// Specifies the database name other than **template0** and **template1**.
+	// + **all** indicates all databases of the DB instance.
+	// + Use commas (,) to separate multiple databases.
+	Database pulumi.StringInput `pulumi:"database"`
+	// Specifies the subnet mask. It is mandatory when `address` does not contain mask.
+	Mask pulumi.StringPtrInput `pulumi:"mask"`
+	// Specifies the authentication mode. Value options: **reject**, **md5** and
+	// **scram-sha-256**.
+	Method pulumi.StringInput `pulumi:"method"`
+	// Specifies the connection type. Value options: **host**, **hostssl** and **hostnossl**.
+	Type pulumi.StringInput `pulumi:"type"`
+	// Specifies the name of a user other than **rdsAdmin**, **rdsMetric**, **rdsBackup**,
+	// **rdsRepl** and **rdsProxy**.
+	// + **all** indicates all database users of the DB instance.
+	// + Use commas (,) to separate multiple user names.
+	User pulumi.StringInput `pulumi:"user"`
+}
+
+func (PgHbaHostBasedAuthenticationArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*PgHbaHostBasedAuthentication)(nil)).Elem()
+}
+
+func (i PgHbaHostBasedAuthenticationArgs) ToPgHbaHostBasedAuthenticationOutput() PgHbaHostBasedAuthenticationOutput {
+	return i.ToPgHbaHostBasedAuthenticationOutputWithContext(context.Background())
+}
+
+func (i PgHbaHostBasedAuthenticationArgs) ToPgHbaHostBasedAuthenticationOutputWithContext(ctx context.Context) PgHbaHostBasedAuthenticationOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(PgHbaHostBasedAuthenticationOutput)
+}
+
+// PgHbaHostBasedAuthenticationArrayInput is an input type that accepts PgHbaHostBasedAuthenticationArray and PgHbaHostBasedAuthenticationArrayOutput values.
+// You can construct a concrete instance of `PgHbaHostBasedAuthenticationArrayInput` via:
+//
+//	PgHbaHostBasedAuthenticationArray{ PgHbaHostBasedAuthenticationArgs{...} }
+type PgHbaHostBasedAuthenticationArrayInput interface {
+	pulumi.Input
+
+	ToPgHbaHostBasedAuthenticationArrayOutput() PgHbaHostBasedAuthenticationArrayOutput
+	ToPgHbaHostBasedAuthenticationArrayOutputWithContext(context.Context) PgHbaHostBasedAuthenticationArrayOutput
+}
+
+type PgHbaHostBasedAuthenticationArray []PgHbaHostBasedAuthenticationInput
+
+func (PgHbaHostBasedAuthenticationArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]PgHbaHostBasedAuthentication)(nil)).Elem()
+}
+
+func (i PgHbaHostBasedAuthenticationArray) ToPgHbaHostBasedAuthenticationArrayOutput() PgHbaHostBasedAuthenticationArrayOutput {
+	return i.ToPgHbaHostBasedAuthenticationArrayOutputWithContext(context.Background())
+}
+
+func (i PgHbaHostBasedAuthenticationArray) ToPgHbaHostBasedAuthenticationArrayOutputWithContext(ctx context.Context) PgHbaHostBasedAuthenticationArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(PgHbaHostBasedAuthenticationArrayOutput)
+}
+
+type PgHbaHostBasedAuthenticationOutput struct{ *pulumi.OutputState }
+
+func (PgHbaHostBasedAuthenticationOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*PgHbaHostBasedAuthentication)(nil)).Elem()
+}
+
+func (o PgHbaHostBasedAuthenticationOutput) ToPgHbaHostBasedAuthenticationOutput() PgHbaHostBasedAuthenticationOutput {
+	return o
+}
+
+func (o PgHbaHostBasedAuthenticationOutput) ToPgHbaHostBasedAuthenticationOutputWithContext(ctx context.Context) PgHbaHostBasedAuthenticationOutput {
+	return o
+}
+
+// Specifies the client IP address.
+// + **0.0.0.0/0** indicates that the user can access the database from any IP address.
+func (o PgHbaHostBasedAuthenticationOutput) Address() pulumi.StringOutput {
+	return o.ApplyT(func(v PgHbaHostBasedAuthentication) string { return v.Address }).(pulumi.StringOutput)
+}
+
+// Specifies the database name other than **template0** and **template1**.
+// + **all** indicates all databases of the DB instance.
+// + Use commas (,) to separate multiple databases.
+func (o PgHbaHostBasedAuthenticationOutput) Database() pulumi.StringOutput {
+	return o.ApplyT(func(v PgHbaHostBasedAuthentication) string { return v.Database }).(pulumi.StringOutput)
+}
+
+// Specifies the subnet mask. It is mandatory when `address` does not contain mask.
+func (o PgHbaHostBasedAuthenticationOutput) Mask() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v PgHbaHostBasedAuthentication) *string { return v.Mask }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the authentication mode. Value options: **reject**, **md5** and
+// **scram-sha-256**.
+func (o PgHbaHostBasedAuthenticationOutput) Method() pulumi.StringOutput {
+	return o.ApplyT(func(v PgHbaHostBasedAuthentication) string { return v.Method }).(pulumi.StringOutput)
+}
+
+// Specifies the connection type. Value options: **host**, **hostssl** and **hostnossl**.
+func (o PgHbaHostBasedAuthenticationOutput) Type() pulumi.StringOutput {
+	return o.ApplyT(func(v PgHbaHostBasedAuthentication) string { return v.Type }).(pulumi.StringOutput)
+}
+
+// Specifies the name of a user other than **rdsAdmin**, **rdsMetric**, **rdsBackup**,
+// **rdsRepl** and **rdsProxy**.
+// + **all** indicates all database users of the DB instance.
+// + Use commas (,) to separate multiple user names.
+func (o PgHbaHostBasedAuthenticationOutput) User() pulumi.StringOutput {
+	return o.ApplyT(func(v PgHbaHostBasedAuthentication) string { return v.User }).(pulumi.StringOutput)
+}
+
+type PgHbaHostBasedAuthenticationArrayOutput struct{ *pulumi.OutputState }
+
+func (PgHbaHostBasedAuthenticationArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]PgHbaHostBasedAuthentication)(nil)).Elem()
+}
+
+func (o PgHbaHostBasedAuthenticationArrayOutput) ToPgHbaHostBasedAuthenticationArrayOutput() PgHbaHostBasedAuthenticationArrayOutput {
+	return o
+}
+
+func (o PgHbaHostBasedAuthenticationArrayOutput) ToPgHbaHostBasedAuthenticationArrayOutputWithContext(ctx context.Context) PgHbaHostBasedAuthenticationArrayOutput {
+	return o
+}
+
+func (o PgHbaHostBasedAuthenticationArrayOutput) Index(i pulumi.IntInput) PgHbaHostBasedAuthenticationOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) PgHbaHostBasedAuthentication {
+		return vs[0].([]PgHbaHostBasedAuthentication)[vs[1].(int)]
+	}).(PgHbaHostBasedAuthenticationOutput)
+}
+
 type ReadReplicaInstanceDb struct {
-	// Indicates the database port information.
+	// Specifies the database port.
+	// + The MySQL database port ranges from `1,024` to `65,535` (excluding `12,017` and `33,071`, which are occupied by
+	//   the RDS system and cannot be used). The default value is `3,306`.
+	// + The PostgreSQL database port ranges from `2,100` to `9,500`. The default value is `5,432`.
+	// + The Microsoft SQL Server database port can be `1,433` or ranges from `2,100` to `9,500`, excluding `5,355` and
+	//   `5,985`. The default value is `1,433`.
 	Port *int `pulumi:"port"`
-	// Specifies the volume type. Its value can be any of the following and is
-	// case-sensitive:
-	// + *ULTRAHIGH*: SSD storage.
-	// + *LOCALSSD*: local SSD storage.
-	// + *CLOUDSSD*: cloud SSD storage. This storage type is supported only with general-purpose and dedicated DB
+	// Specifies the volume type. It must same with the type of the primary instance.
+	// Its value can be any of the following and is case-sensitive:
+	// + **ULTRAHIGH**: SSD storage.
+	// + **LOCALSSD**: local SSD storage.
+	// + **CLOUDSSD**: cloud SSD storage. This storage type is supported only with general-purpose and dedicated DB
 	//   instances.
-	// + *ESSD*: extreme SSD storage.
-	Type *string `pulumi:"type"`
-	// Indicates the default user name of database.
+	// + **ESSD**: extreme SSD storage.
+	Type     *string `pulumi:"type"`
 	UserName *string `pulumi:"userName"`
-	// Indicates the database version.
-	Version *string `pulumi:"version"`
+	Version  *string `pulumi:"version"`
 }
 
 // ReadReplicaInstanceDbInput is an input type that accepts ReadReplicaInstanceDbArgs and ReadReplicaInstanceDbOutput values.
@@ -1448,20 +3173,23 @@ type ReadReplicaInstanceDbInput interface {
 }
 
 type ReadReplicaInstanceDbArgs struct {
-	// Indicates the database port information.
+	// Specifies the database port.
+	// + The MySQL database port ranges from `1,024` to `65,535` (excluding `12,017` and `33,071`, which are occupied by
+	//   the RDS system and cannot be used). The default value is `3,306`.
+	// + The PostgreSQL database port ranges from `2,100` to `9,500`. The default value is `5,432`.
+	// + The Microsoft SQL Server database port can be `1,433` or ranges from `2,100` to `9,500`, excluding `5,355` and
+	//   `5,985`. The default value is `1,433`.
 	Port pulumi.IntPtrInput `pulumi:"port"`
-	// Specifies the volume type. Its value can be any of the following and is
-	// case-sensitive:
-	// + *ULTRAHIGH*: SSD storage.
-	// + *LOCALSSD*: local SSD storage.
-	// + *CLOUDSSD*: cloud SSD storage. This storage type is supported only with general-purpose and dedicated DB
+	// Specifies the volume type. It must same with the type of the primary instance.
+	// Its value can be any of the following and is case-sensitive:
+	// + **ULTRAHIGH**: SSD storage.
+	// + **LOCALSSD**: local SSD storage.
+	// + **CLOUDSSD**: cloud SSD storage. This storage type is supported only with general-purpose and dedicated DB
 	//   instances.
-	// + *ESSD*: extreme SSD storage.
-	Type pulumi.StringPtrInput `pulumi:"type"`
-	// Indicates the default user name of database.
+	// + **ESSD**: extreme SSD storage.
+	Type     pulumi.StringPtrInput `pulumi:"type"`
 	UserName pulumi.StringPtrInput `pulumi:"userName"`
-	// Indicates the database version.
-	Version pulumi.StringPtrInput `pulumi:"version"`
+	Version  pulumi.StringPtrInput `pulumi:"version"`
 }
 
 func (ReadReplicaInstanceDbArgs) ElementType() reflect.Type {
@@ -1476,29 +3204,45 @@ func (i ReadReplicaInstanceDbArgs) ToReadReplicaInstanceDbOutputWithContext(ctx 
 	return pulumi.ToOutputWithContext(ctx, i).(ReadReplicaInstanceDbOutput)
 }
 
-// ReadReplicaInstanceDbArrayInput is an input type that accepts ReadReplicaInstanceDbArray and ReadReplicaInstanceDbArrayOutput values.
-// You can construct a concrete instance of `ReadReplicaInstanceDbArrayInput` via:
+func (i ReadReplicaInstanceDbArgs) ToReadReplicaInstanceDbPtrOutput() ReadReplicaInstanceDbPtrOutput {
+	return i.ToReadReplicaInstanceDbPtrOutputWithContext(context.Background())
+}
+
+func (i ReadReplicaInstanceDbArgs) ToReadReplicaInstanceDbPtrOutputWithContext(ctx context.Context) ReadReplicaInstanceDbPtrOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(ReadReplicaInstanceDbOutput).ToReadReplicaInstanceDbPtrOutputWithContext(ctx)
+}
+
+// ReadReplicaInstanceDbPtrInput is an input type that accepts ReadReplicaInstanceDbArgs, ReadReplicaInstanceDbPtr and ReadReplicaInstanceDbPtrOutput values.
+// You can construct a concrete instance of `ReadReplicaInstanceDbPtrInput` via:
 //
-//	ReadReplicaInstanceDbArray{ ReadReplicaInstanceDbArgs{...} }
-type ReadReplicaInstanceDbArrayInput interface {
+//	        ReadReplicaInstanceDbArgs{...}
+//
+//	or:
+//
+//	        nil
+type ReadReplicaInstanceDbPtrInput interface {
 	pulumi.Input
 
-	ToReadReplicaInstanceDbArrayOutput() ReadReplicaInstanceDbArrayOutput
-	ToReadReplicaInstanceDbArrayOutputWithContext(context.Context) ReadReplicaInstanceDbArrayOutput
+	ToReadReplicaInstanceDbPtrOutput() ReadReplicaInstanceDbPtrOutput
+	ToReadReplicaInstanceDbPtrOutputWithContext(context.Context) ReadReplicaInstanceDbPtrOutput
 }
 
-type ReadReplicaInstanceDbArray []ReadReplicaInstanceDbInput
+type readReplicaInstanceDbPtrType ReadReplicaInstanceDbArgs
 
-func (ReadReplicaInstanceDbArray) ElementType() reflect.Type {
-	return reflect.TypeOf((*[]ReadReplicaInstanceDb)(nil)).Elem()
+func ReadReplicaInstanceDbPtr(v *ReadReplicaInstanceDbArgs) ReadReplicaInstanceDbPtrInput {
+	return (*readReplicaInstanceDbPtrType)(v)
 }
 
-func (i ReadReplicaInstanceDbArray) ToReadReplicaInstanceDbArrayOutput() ReadReplicaInstanceDbArrayOutput {
-	return i.ToReadReplicaInstanceDbArrayOutputWithContext(context.Background())
+func (*readReplicaInstanceDbPtrType) ElementType() reflect.Type {
+	return reflect.TypeOf((**ReadReplicaInstanceDb)(nil)).Elem()
 }
 
-func (i ReadReplicaInstanceDbArray) ToReadReplicaInstanceDbArrayOutputWithContext(ctx context.Context) ReadReplicaInstanceDbArrayOutput {
-	return pulumi.ToOutputWithContext(ctx, i).(ReadReplicaInstanceDbArrayOutput)
+func (i *readReplicaInstanceDbPtrType) ToReadReplicaInstanceDbPtrOutput() ReadReplicaInstanceDbPtrOutput {
+	return i.ToReadReplicaInstanceDbPtrOutputWithContext(context.Background())
+}
+
+func (i *readReplicaInstanceDbPtrType) ToReadReplicaInstanceDbPtrOutputWithContext(ctx context.Context) ReadReplicaInstanceDbPtrOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(ReadReplicaInstanceDbPtrOutput)
 }
 
 type ReadReplicaInstanceDbOutput struct{ *pulumi.OutputState }
@@ -1515,64 +3259,248 @@ func (o ReadReplicaInstanceDbOutput) ToReadReplicaInstanceDbOutputWithContext(ct
 	return o
 }
 
-// Indicates the database port information.
+func (o ReadReplicaInstanceDbOutput) ToReadReplicaInstanceDbPtrOutput() ReadReplicaInstanceDbPtrOutput {
+	return o.ToReadReplicaInstanceDbPtrOutputWithContext(context.Background())
+}
+
+func (o ReadReplicaInstanceDbOutput) ToReadReplicaInstanceDbPtrOutputWithContext(ctx context.Context) ReadReplicaInstanceDbPtrOutput {
+	return o.ApplyTWithContext(ctx, func(_ context.Context, v ReadReplicaInstanceDb) *ReadReplicaInstanceDb {
+		return &v
+	}).(ReadReplicaInstanceDbPtrOutput)
+}
+
+// Specifies the database port.
+//   - The MySQL database port ranges from `1,024` to `65,535` (excluding `12,017` and `33,071`, which are occupied by
+//     the RDS system and cannot be used). The default value is `3,306`.
+//   - The PostgreSQL database port ranges from `2,100` to `9,500`. The default value is `5,432`.
+//   - The Microsoft SQL Server database port can be `1,433` or ranges from `2,100` to `9,500`, excluding `5,355` and
+//     `5,985`. The default value is `1,433`.
 func (o ReadReplicaInstanceDbOutput) Port() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v ReadReplicaInstanceDb) *int { return v.Port }).(pulumi.IntPtrOutput)
 }
 
-// Specifies the volume type. Its value can be any of the following and is
-// case-sensitive:
-//   - *ULTRAHIGH*: SSD storage.
-//   - *LOCALSSD*: local SSD storage.
-//   - *CLOUDSSD*: cloud SSD storage. This storage type is supported only with general-purpose and dedicated DB
+// Specifies the volume type. It must same with the type of the primary instance.
+// Its value can be any of the following and is case-sensitive:
+//   - **ULTRAHIGH**: SSD storage.
+//   - **LOCALSSD**: local SSD storage.
+//   - **CLOUDSSD**: cloud SSD storage. This storage type is supported only with general-purpose and dedicated DB
 //     instances.
-//   - *ESSD*: extreme SSD storage.
+//   - **ESSD**: extreme SSD storage.
 func (o ReadReplicaInstanceDbOutput) Type() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v ReadReplicaInstanceDb) *string { return v.Type }).(pulumi.StringPtrOutput)
 }
 
-// Indicates the default user name of database.
 func (o ReadReplicaInstanceDbOutput) UserName() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v ReadReplicaInstanceDb) *string { return v.UserName }).(pulumi.StringPtrOutput)
 }
 
-// Indicates the database version.
 func (o ReadReplicaInstanceDbOutput) Version() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v ReadReplicaInstanceDb) *string { return v.Version }).(pulumi.StringPtrOutput)
 }
 
-type ReadReplicaInstanceDbArrayOutput struct{ *pulumi.OutputState }
+type ReadReplicaInstanceDbPtrOutput struct{ *pulumi.OutputState }
 
-func (ReadReplicaInstanceDbArrayOutput) ElementType() reflect.Type {
-	return reflect.TypeOf((*[]ReadReplicaInstanceDb)(nil)).Elem()
+func (ReadReplicaInstanceDbPtrOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((**ReadReplicaInstanceDb)(nil)).Elem()
 }
 
-func (o ReadReplicaInstanceDbArrayOutput) ToReadReplicaInstanceDbArrayOutput() ReadReplicaInstanceDbArrayOutput {
+func (o ReadReplicaInstanceDbPtrOutput) ToReadReplicaInstanceDbPtrOutput() ReadReplicaInstanceDbPtrOutput {
 	return o
 }
 
-func (o ReadReplicaInstanceDbArrayOutput) ToReadReplicaInstanceDbArrayOutputWithContext(ctx context.Context) ReadReplicaInstanceDbArrayOutput {
+func (o ReadReplicaInstanceDbPtrOutput) ToReadReplicaInstanceDbPtrOutputWithContext(ctx context.Context) ReadReplicaInstanceDbPtrOutput {
 	return o
 }
 
-func (o ReadReplicaInstanceDbArrayOutput) Index(i pulumi.IntInput) ReadReplicaInstanceDbOutput {
-	return pulumi.All(o, i).ApplyT(func(vs []interface{}) ReadReplicaInstanceDb {
-		return vs[0].([]ReadReplicaInstanceDb)[vs[1].(int)]
+func (o ReadReplicaInstanceDbPtrOutput) Elem() ReadReplicaInstanceDbOutput {
+	return o.ApplyT(func(v *ReadReplicaInstanceDb) ReadReplicaInstanceDb {
+		if v != nil {
+			return *v
+		}
+		var ret ReadReplicaInstanceDb
+		return ret
 	}).(ReadReplicaInstanceDbOutput)
 }
 
+// Specifies the database port.
+//   - The MySQL database port ranges from `1,024` to `65,535` (excluding `12,017` and `33,071`, which are occupied by
+//     the RDS system and cannot be used). The default value is `3,306`.
+//   - The PostgreSQL database port ranges from `2,100` to `9,500`. The default value is `5,432`.
+//   - The Microsoft SQL Server database port can be `1,433` or ranges from `2,100` to `9,500`, excluding `5,355` and
+//     `5,985`. The default value is `1,433`.
+func (o ReadReplicaInstanceDbPtrOutput) Port() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v *ReadReplicaInstanceDb) *int {
+		if v == nil {
+			return nil
+		}
+		return v.Port
+	}).(pulumi.IntPtrOutput)
+}
+
+// Specifies the volume type. It must same with the type of the primary instance.
+// Its value can be any of the following and is case-sensitive:
+//   - **ULTRAHIGH**: SSD storage.
+//   - **LOCALSSD**: local SSD storage.
+//   - **CLOUDSSD**: cloud SSD storage. This storage type is supported only with general-purpose and dedicated DB
+//     instances.
+//   - **ESSD**: extreme SSD storage.
+func (o ReadReplicaInstanceDbPtrOutput) Type() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *ReadReplicaInstanceDb) *string {
+		if v == nil {
+			return nil
+		}
+		return v.Type
+	}).(pulumi.StringPtrOutput)
+}
+
+func (o ReadReplicaInstanceDbPtrOutput) UserName() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *ReadReplicaInstanceDb) *string {
+		if v == nil {
+			return nil
+		}
+		return v.UserName
+	}).(pulumi.StringPtrOutput)
+}
+
+func (o ReadReplicaInstanceDbPtrOutput) Version() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *ReadReplicaInstanceDb) *string {
+		if v == nil {
+			return nil
+		}
+		return v.Version
+	}).(pulumi.StringPtrOutput)
+}
+
+type ReadReplicaInstanceParameter struct {
+	// Specifies the parameter name. Some of them needs the instance to be restarted
+	// to take effect.
+	Name string `pulumi:"name"`
+	// Specifies the parameter value.
+	Value string `pulumi:"value"`
+}
+
+// ReadReplicaInstanceParameterInput is an input type that accepts ReadReplicaInstanceParameterArgs and ReadReplicaInstanceParameterOutput values.
+// You can construct a concrete instance of `ReadReplicaInstanceParameterInput` via:
+//
+//	ReadReplicaInstanceParameterArgs{...}
+type ReadReplicaInstanceParameterInput interface {
+	pulumi.Input
+
+	ToReadReplicaInstanceParameterOutput() ReadReplicaInstanceParameterOutput
+	ToReadReplicaInstanceParameterOutputWithContext(context.Context) ReadReplicaInstanceParameterOutput
+}
+
+type ReadReplicaInstanceParameterArgs struct {
+	// Specifies the parameter name. Some of them needs the instance to be restarted
+	// to take effect.
+	Name pulumi.StringInput `pulumi:"name"`
+	// Specifies the parameter value.
+	Value pulumi.StringInput `pulumi:"value"`
+}
+
+func (ReadReplicaInstanceParameterArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*ReadReplicaInstanceParameter)(nil)).Elem()
+}
+
+func (i ReadReplicaInstanceParameterArgs) ToReadReplicaInstanceParameterOutput() ReadReplicaInstanceParameterOutput {
+	return i.ToReadReplicaInstanceParameterOutputWithContext(context.Background())
+}
+
+func (i ReadReplicaInstanceParameterArgs) ToReadReplicaInstanceParameterOutputWithContext(ctx context.Context) ReadReplicaInstanceParameterOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(ReadReplicaInstanceParameterOutput)
+}
+
+// ReadReplicaInstanceParameterArrayInput is an input type that accepts ReadReplicaInstanceParameterArray and ReadReplicaInstanceParameterArrayOutput values.
+// You can construct a concrete instance of `ReadReplicaInstanceParameterArrayInput` via:
+//
+//	ReadReplicaInstanceParameterArray{ ReadReplicaInstanceParameterArgs{...} }
+type ReadReplicaInstanceParameterArrayInput interface {
+	pulumi.Input
+
+	ToReadReplicaInstanceParameterArrayOutput() ReadReplicaInstanceParameterArrayOutput
+	ToReadReplicaInstanceParameterArrayOutputWithContext(context.Context) ReadReplicaInstanceParameterArrayOutput
+}
+
+type ReadReplicaInstanceParameterArray []ReadReplicaInstanceParameterInput
+
+func (ReadReplicaInstanceParameterArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]ReadReplicaInstanceParameter)(nil)).Elem()
+}
+
+func (i ReadReplicaInstanceParameterArray) ToReadReplicaInstanceParameterArrayOutput() ReadReplicaInstanceParameterArrayOutput {
+	return i.ToReadReplicaInstanceParameterArrayOutputWithContext(context.Background())
+}
+
+func (i ReadReplicaInstanceParameterArray) ToReadReplicaInstanceParameterArrayOutputWithContext(ctx context.Context) ReadReplicaInstanceParameterArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(ReadReplicaInstanceParameterArrayOutput)
+}
+
+type ReadReplicaInstanceParameterOutput struct{ *pulumi.OutputState }
+
+func (ReadReplicaInstanceParameterOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*ReadReplicaInstanceParameter)(nil)).Elem()
+}
+
+func (o ReadReplicaInstanceParameterOutput) ToReadReplicaInstanceParameterOutput() ReadReplicaInstanceParameterOutput {
+	return o
+}
+
+func (o ReadReplicaInstanceParameterOutput) ToReadReplicaInstanceParameterOutputWithContext(ctx context.Context) ReadReplicaInstanceParameterOutput {
+	return o
+}
+
+// Specifies the parameter name. Some of them needs the instance to be restarted
+// to take effect.
+func (o ReadReplicaInstanceParameterOutput) Name() pulumi.StringOutput {
+	return o.ApplyT(func(v ReadReplicaInstanceParameter) string { return v.Name }).(pulumi.StringOutput)
+}
+
+// Specifies the parameter value.
+func (o ReadReplicaInstanceParameterOutput) Value() pulumi.StringOutput {
+	return o.ApplyT(func(v ReadReplicaInstanceParameter) string { return v.Value }).(pulumi.StringOutput)
+}
+
+type ReadReplicaInstanceParameterArrayOutput struct{ *pulumi.OutputState }
+
+func (ReadReplicaInstanceParameterArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]ReadReplicaInstanceParameter)(nil)).Elem()
+}
+
+func (o ReadReplicaInstanceParameterArrayOutput) ToReadReplicaInstanceParameterArrayOutput() ReadReplicaInstanceParameterArrayOutput {
+	return o
+}
+
+func (o ReadReplicaInstanceParameterArrayOutput) ToReadReplicaInstanceParameterArrayOutputWithContext(ctx context.Context) ReadReplicaInstanceParameterArrayOutput {
+	return o
+}
+
+func (o ReadReplicaInstanceParameterArrayOutput) Index(i pulumi.IntInput) ReadReplicaInstanceParameterOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) ReadReplicaInstanceParameter {
+		return vs[0].([]ReadReplicaInstanceParameter)[vs[1].(int)]
+	}).(ReadReplicaInstanceParameterOutput)
+}
+
 type ReadReplicaInstanceVolume struct {
-	// Specifies the key ID for disk encryption. Changing this parameter
-	// will create a new resource.
 	DiskEncryptionId *string `pulumi:"diskEncryptionId"`
-	Size             *int    `pulumi:"size"`
-	// Specifies the volume type. Its value can be any of the following and is
-	// case-sensitive:
-	// + *ULTRAHIGH*: SSD storage.
-	// + *LOCALSSD*: local SSD storage.
-	// + *CLOUDSSD*: cloud SSD storage. This storage type is supported only with general-purpose and dedicated DB
+	// Specifies the upper limit of automatic expansion of storage, in GB.
+	LimitSize *int `pulumi:"limitSize"`
+	// Specifies the volume size. Its value range is from `40` GB to `4,000` GB. The value must
+	// be a multiple of 10 and greater than the original size.
+	Size *int `pulumi:"size"`
+	// Specifies the threshold to trigger automatic expansion.\
+	// If the available storage drops to this threshold or `10` GB, the automatic expansion is triggered.
+	// The valid values are as follows:
+	// + **10**
+	// + **15**
+	// + **20**
+	TriggerThreshold *int `pulumi:"triggerThreshold"`
+	// Specifies the volume type. It must same with the type of the primary instance.
+	// Its value can be any of the following and is case-sensitive:
+	// + **ULTRAHIGH**: SSD storage.
+	// + **LOCALSSD**: local SSD storage.
+	// + **CLOUDSSD**: cloud SSD storage. This storage type is supported only with general-purpose and dedicated DB
 	//   instances.
-	// + *ESSD*: extreme SSD storage.
+	// + **ESSD**: extreme SSD storage.
 	Type string `pulumi:"type"`
 }
 
@@ -1588,17 +3516,26 @@ type ReadReplicaInstanceVolumeInput interface {
 }
 
 type ReadReplicaInstanceVolumeArgs struct {
-	// Specifies the key ID for disk encryption. Changing this parameter
-	// will create a new resource.
 	DiskEncryptionId pulumi.StringPtrInput `pulumi:"diskEncryptionId"`
-	Size             pulumi.IntPtrInput    `pulumi:"size"`
-	// Specifies the volume type. Its value can be any of the following and is
-	// case-sensitive:
-	// + *ULTRAHIGH*: SSD storage.
-	// + *LOCALSSD*: local SSD storage.
-	// + *CLOUDSSD*: cloud SSD storage. This storage type is supported only with general-purpose and dedicated DB
+	// Specifies the upper limit of automatic expansion of storage, in GB.
+	LimitSize pulumi.IntPtrInput `pulumi:"limitSize"`
+	// Specifies the volume size. Its value range is from `40` GB to `4,000` GB. The value must
+	// be a multiple of 10 and greater than the original size.
+	Size pulumi.IntPtrInput `pulumi:"size"`
+	// Specifies the threshold to trigger automatic expansion.\
+	// If the available storage drops to this threshold or `10` GB, the automatic expansion is triggered.
+	// The valid values are as follows:
+	// + **10**
+	// + **15**
+	// + **20**
+	TriggerThreshold pulumi.IntPtrInput `pulumi:"triggerThreshold"`
+	// Specifies the volume type. It must same with the type of the primary instance.
+	// Its value can be any of the following and is case-sensitive:
+	// + **ULTRAHIGH**: SSD storage.
+	// + **LOCALSSD**: local SSD storage.
+	// + **CLOUDSSD**: cloud SSD storage. This storage type is supported only with general-purpose and dedicated DB
 	//   instances.
-	// + *ESSD*: extreme SSD storage.
+	// + **ESSD**: extreme SSD storage.
 	Type pulumi.StringInput `pulumi:"type"`
 }
 
@@ -1679,23 +3616,38 @@ func (o ReadReplicaInstanceVolumeOutput) ToReadReplicaInstanceVolumePtrOutputWit
 	}).(ReadReplicaInstanceVolumePtrOutput)
 }
 
-// Specifies the key ID for disk encryption. Changing this parameter
-// will create a new resource.
 func (o ReadReplicaInstanceVolumeOutput) DiskEncryptionId() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v ReadReplicaInstanceVolume) *string { return v.DiskEncryptionId }).(pulumi.StringPtrOutput)
 }
 
+// Specifies the upper limit of automatic expansion of storage, in GB.
+func (o ReadReplicaInstanceVolumeOutput) LimitSize() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v ReadReplicaInstanceVolume) *int { return v.LimitSize }).(pulumi.IntPtrOutput)
+}
+
+// Specifies the volume size. Its value range is from `40` GB to `4,000` GB. The value must
+// be a multiple of 10 and greater than the original size.
 func (o ReadReplicaInstanceVolumeOutput) Size() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v ReadReplicaInstanceVolume) *int { return v.Size }).(pulumi.IntPtrOutput)
 }
 
-// Specifies the volume type. Its value can be any of the following and is
-// case-sensitive:
-//   - *ULTRAHIGH*: SSD storage.
-//   - *LOCALSSD*: local SSD storage.
-//   - *CLOUDSSD*: cloud SSD storage. This storage type is supported only with general-purpose and dedicated DB
+// Specifies the threshold to trigger automatic expansion.\
+// If the available storage drops to this threshold or `10` GB, the automatic expansion is triggered.
+// The valid values are as follows:
+// + **10**
+// + **15**
+// + **20**
+func (o ReadReplicaInstanceVolumeOutput) TriggerThreshold() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v ReadReplicaInstanceVolume) *int { return v.TriggerThreshold }).(pulumi.IntPtrOutput)
+}
+
+// Specifies the volume type. It must same with the type of the primary instance.
+// Its value can be any of the following and is case-sensitive:
+//   - **ULTRAHIGH**: SSD storage.
+//   - **LOCALSSD**: local SSD storage.
+//   - **CLOUDSSD**: cloud SSD storage. This storage type is supported only with general-purpose and dedicated DB
 //     instances.
-//   - *ESSD*: extreme SSD storage.
+//   - **ESSD**: extreme SSD storage.
 func (o ReadReplicaInstanceVolumeOutput) Type() pulumi.StringOutput {
 	return o.ApplyT(func(v ReadReplicaInstanceVolume) string { return v.Type }).(pulumi.StringOutput)
 }
@@ -1724,8 +3676,6 @@ func (o ReadReplicaInstanceVolumePtrOutput) Elem() ReadReplicaInstanceVolumeOutp
 	}).(ReadReplicaInstanceVolumeOutput)
 }
 
-// Specifies the key ID for disk encryption. Changing this parameter
-// will create a new resource.
 func (o ReadReplicaInstanceVolumePtrOutput) DiskEncryptionId() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *ReadReplicaInstanceVolume) *string {
 		if v == nil {
@@ -1735,6 +3685,18 @@ func (o ReadReplicaInstanceVolumePtrOutput) DiskEncryptionId() pulumi.StringPtrO
 	}).(pulumi.StringPtrOutput)
 }
 
+// Specifies the upper limit of automatic expansion of storage, in GB.
+func (o ReadReplicaInstanceVolumePtrOutput) LimitSize() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v *ReadReplicaInstanceVolume) *int {
+		if v == nil {
+			return nil
+		}
+		return v.LimitSize
+	}).(pulumi.IntPtrOutput)
+}
+
+// Specifies the volume size. Its value range is from `40` GB to `4,000` GB. The value must
+// be a multiple of 10 and greater than the original size.
 func (o ReadReplicaInstanceVolumePtrOutput) Size() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v *ReadReplicaInstanceVolume) *int {
 		if v == nil {
@@ -1744,13 +3706,28 @@ func (o ReadReplicaInstanceVolumePtrOutput) Size() pulumi.IntPtrOutput {
 	}).(pulumi.IntPtrOutput)
 }
 
-// Specifies the volume type. Its value can be any of the following and is
-// case-sensitive:
-//   - *ULTRAHIGH*: SSD storage.
-//   - *LOCALSSD*: local SSD storage.
-//   - *CLOUDSSD*: cloud SSD storage. This storage type is supported only with general-purpose and dedicated DB
+// Specifies the threshold to trigger automatic expansion.\
+// If the available storage drops to this threshold or `10` GB, the automatic expansion is triggered.
+// The valid values are as follows:
+// + **10**
+// + **15**
+// + **20**
+func (o ReadReplicaInstanceVolumePtrOutput) TriggerThreshold() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v *ReadReplicaInstanceVolume) *int {
+		if v == nil {
+			return nil
+		}
+		return v.TriggerThreshold
+	}).(pulumi.IntPtrOutput)
+}
+
+// Specifies the volume type. It must same with the type of the primary instance.
+// Its value can be any of the following and is case-sensitive:
+//   - **ULTRAHIGH**: SSD storage.
+//   - **LOCALSSD**: local SSD storage.
+//   - **CLOUDSSD**: cloud SSD storage. This storage type is supported only with general-purpose and dedicated DB
 //     instances.
-//   - *ESSD*: extreme SSD storage.
+//   - **ESSD**: extreme SSD storage.
 func (o ReadReplicaInstanceVolumePtrOutput) Type() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *ReadReplicaInstanceVolume) *string {
 		if v == nil {
@@ -1758,6 +3735,1588 @@ func (o ReadReplicaInstanceVolumePtrOutput) Type() pulumi.StringPtrOutput {
 		}
 		return &v.Type
 	}).(pulumi.StringPtrOutput)
+}
+
+type SqlserverDatabasePrivilegeUser struct {
+	// Specifies the username of the database account.
+	Name string `pulumi:"name"`
+	// Specifies the read-only permission. Value options:
+	// + **true**: indicates the read-only permission.
+	// + **false**: indicates the read and write permission.
+	Readonly *bool `pulumi:"readonly"`
+}
+
+// SqlserverDatabasePrivilegeUserInput is an input type that accepts SqlserverDatabasePrivilegeUserArgs and SqlserverDatabasePrivilegeUserOutput values.
+// You can construct a concrete instance of `SqlserverDatabasePrivilegeUserInput` via:
+//
+//	SqlserverDatabasePrivilegeUserArgs{...}
+type SqlserverDatabasePrivilegeUserInput interface {
+	pulumi.Input
+
+	ToSqlserverDatabasePrivilegeUserOutput() SqlserverDatabasePrivilegeUserOutput
+	ToSqlserverDatabasePrivilegeUserOutputWithContext(context.Context) SqlserverDatabasePrivilegeUserOutput
+}
+
+type SqlserverDatabasePrivilegeUserArgs struct {
+	// Specifies the username of the database account.
+	Name pulumi.StringInput `pulumi:"name"`
+	// Specifies the read-only permission. Value options:
+	// + **true**: indicates the read-only permission.
+	// + **false**: indicates the read and write permission.
+	Readonly pulumi.BoolPtrInput `pulumi:"readonly"`
+}
+
+func (SqlserverDatabasePrivilegeUserArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*SqlserverDatabasePrivilegeUser)(nil)).Elem()
+}
+
+func (i SqlserverDatabasePrivilegeUserArgs) ToSqlserverDatabasePrivilegeUserOutput() SqlserverDatabasePrivilegeUserOutput {
+	return i.ToSqlserverDatabasePrivilegeUserOutputWithContext(context.Background())
+}
+
+func (i SqlserverDatabasePrivilegeUserArgs) ToSqlserverDatabasePrivilegeUserOutputWithContext(ctx context.Context) SqlserverDatabasePrivilegeUserOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(SqlserverDatabasePrivilegeUserOutput)
+}
+
+// SqlserverDatabasePrivilegeUserArrayInput is an input type that accepts SqlserverDatabasePrivilegeUserArray and SqlserverDatabasePrivilegeUserArrayOutput values.
+// You can construct a concrete instance of `SqlserverDatabasePrivilegeUserArrayInput` via:
+//
+//	SqlserverDatabasePrivilegeUserArray{ SqlserverDatabasePrivilegeUserArgs{...} }
+type SqlserverDatabasePrivilegeUserArrayInput interface {
+	pulumi.Input
+
+	ToSqlserverDatabasePrivilegeUserArrayOutput() SqlserverDatabasePrivilegeUserArrayOutput
+	ToSqlserverDatabasePrivilegeUserArrayOutputWithContext(context.Context) SqlserverDatabasePrivilegeUserArrayOutput
+}
+
+type SqlserverDatabasePrivilegeUserArray []SqlserverDatabasePrivilegeUserInput
+
+func (SqlserverDatabasePrivilegeUserArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]SqlserverDatabasePrivilegeUser)(nil)).Elem()
+}
+
+func (i SqlserverDatabasePrivilegeUserArray) ToSqlserverDatabasePrivilegeUserArrayOutput() SqlserverDatabasePrivilegeUserArrayOutput {
+	return i.ToSqlserverDatabasePrivilegeUserArrayOutputWithContext(context.Background())
+}
+
+func (i SqlserverDatabasePrivilegeUserArray) ToSqlserverDatabasePrivilegeUserArrayOutputWithContext(ctx context.Context) SqlserverDatabasePrivilegeUserArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(SqlserverDatabasePrivilegeUserArrayOutput)
+}
+
+type SqlserverDatabasePrivilegeUserOutput struct{ *pulumi.OutputState }
+
+func (SqlserverDatabasePrivilegeUserOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*SqlserverDatabasePrivilegeUser)(nil)).Elem()
+}
+
+func (o SqlserverDatabasePrivilegeUserOutput) ToSqlserverDatabasePrivilegeUserOutput() SqlserverDatabasePrivilegeUserOutput {
+	return o
+}
+
+func (o SqlserverDatabasePrivilegeUserOutput) ToSqlserverDatabasePrivilegeUserOutputWithContext(ctx context.Context) SqlserverDatabasePrivilegeUserOutput {
+	return o
+}
+
+// Specifies the username of the database account.
+func (o SqlserverDatabasePrivilegeUserOutput) Name() pulumi.StringOutput {
+	return o.ApplyT(func(v SqlserverDatabasePrivilegeUser) string { return v.Name }).(pulumi.StringOutput)
+}
+
+// Specifies the read-only permission. Value options:
+// + **true**: indicates the read-only permission.
+// + **false**: indicates the read and write permission.
+func (o SqlserverDatabasePrivilegeUserOutput) Readonly() pulumi.BoolPtrOutput {
+	return o.ApplyT(func(v SqlserverDatabasePrivilegeUser) *bool { return v.Readonly }).(pulumi.BoolPtrOutput)
+}
+
+type SqlserverDatabasePrivilegeUserArrayOutput struct{ *pulumi.OutputState }
+
+func (SqlserverDatabasePrivilegeUserArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]SqlserverDatabasePrivilegeUser)(nil)).Elem()
+}
+
+func (o SqlserverDatabasePrivilegeUserArrayOutput) ToSqlserverDatabasePrivilegeUserArrayOutput() SqlserverDatabasePrivilegeUserArrayOutput {
+	return o
+}
+
+func (o SqlserverDatabasePrivilegeUserArrayOutput) ToSqlserverDatabasePrivilegeUserArrayOutputWithContext(ctx context.Context) SqlserverDatabasePrivilegeUserArrayOutput {
+	return o
+}
+
+func (o SqlserverDatabasePrivilegeUserArrayOutput) Index(i pulumi.IntInput) SqlserverDatabasePrivilegeUserOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) SqlserverDatabasePrivilegeUser {
+		return vs[0].([]SqlserverDatabasePrivilegeUser)[vs[1].(int)]
+	}).(SqlserverDatabasePrivilegeUserOutput)
+}
+
+type GetAvailableFlavorsOptionalFlavor struct {
+	// Indicates the az status.
+	AzStatus map[string]string `pulumi:"azStatus"`
+	// Indicates the performance specifications. Its value can be any of the following:
+	// + **normal**: general-enhanced
+	// + **normal2**: general-enhanced II
+	// + **armFlavors**: Kunpeng general-enhanced
+	// + **dedicicatenormal**: exclusive x86
+	// + **armlocalssd**: standard Kunpeng
+	// + **normallocalssd**: standard x86
+	// + **general**: general-purpose
+	// + **dedicated**: dedicated, which is only supported for cloud SSDs
+	// + **rapid**: dedicated, which is only supported for extreme SSDs
+	// + **bigmen**: Large-memory
+	GroupType string `pulumi:"groupType"`
+	// Indicates whether supported ipv6.
+	IsIpv6Supported bool `pulumi:"isIpv6Supported"`
+	// Indicates the max connection.
+	MaxConnection string `pulumi:"maxConnection"`
+	// Indicates the maximum disk capacity in GB.
+	MaxVolumeSize string `pulumi:"maxVolumeSize"`
+	// Indicates the minimum disk capacity in GB.
+	MinVolumeSize string `pulumi:"minVolumeSize"`
+	// Indicates the number of SQL statements executed by the database per second, including **insert**, **select**,
+	// **update**, **delete** and so on.
+	Qps string `pulumi:"qps"`
+	// Indicates the memory size, in GB.
+	Ram string `pulumi:"ram"`
+	// Indicates the resource specification code.
+	SpecCode string `pulumi:"specCode"`
+	// Indicates the number of transactions executed by the database per second, each containing 18 SQL statements.
+	Tps string `pulumi:"tps"`
+	// Indicates the resource type.
+	TypeCode string `pulumi:"typeCode"`
+	// Indicates the CPU size.
+	Vcpus string `pulumi:"vcpus"`
+}
+
+// GetAvailableFlavorsOptionalFlavorInput is an input type that accepts GetAvailableFlavorsOptionalFlavorArgs and GetAvailableFlavorsOptionalFlavorOutput values.
+// You can construct a concrete instance of `GetAvailableFlavorsOptionalFlavorInput` via:
+//
+//	GetAvailableFlavorsOptionalFlavorArgs{...}
+type GetAvailableFlavorsOptionalFlavorInput interface {
+	pulumi.Input
+
+	ToGetAvailableFlavorsOptionalFlavorOutput() GetAvailableFlavorsOptionalFlavorOutput
+	ToGetAvailableFlavorsOptionalFlavorOutputWithContext(context.Context) GetAvailableFlavorsOptionalFlavorOutput
+}
+
+type GetAvailableFlavorsOptionalFlavorArgs struct {
+	// Indicates the az status.
+	AzStatus pulumi.StringMapInput `pulumi:"azStatus"`
+	// Indicates the performance specifications. Its value can be any of the following:
+	// + **normal**: general-enhanced
+	// + **normal2**: general-enhanced II
+	// + **armFlavors**: Kunpeng general-enhanced
+	// + **dedicicatenormal**: exclusive x86
+	// + **armlocalssd**: standard Kunpeng
+	// + **normallocalssd**: standard x86
+	// + **general**: general-purpose
+	// + **dedicated**: dedicated, which is only supported for cloud SSDs
+	// + **rapid**: dedicated, which is only supported for extreme SSDs
+	// + **bigmen**: Large-memory
+	GroupType pulumi.StringInput `pulumi:"groupType"`
+	// Indicates whether supported ipv6.
+	IsIpv6Supported pulumi.BoolInput `pulumi:"isIpv6Supported"`
+	// Indicates the max connection.
+	MaxConnection pulumi.StringInput `pulumi:"maxConnection"`
+	// Indicates the maximum disk capacity in GB.
+	MaxVolumeSize pulumi.StringInput `pulumi:"maxVolumeSize"`
+	// Indicates the minimum disk capacity in GB.
+	MinVolumeSize pulumi.StringInput `pulumi:"minVolumeSize"`
+	// Indicates the number of SQL statements executed by the database per second, including **insert**, **select**,
+	// **update**, **delete** and so on.
+	Qps pulumi.StringInput `pulumi:"qps"`
+	// Indicates the memory size, in GB.
+	Ram pulumi.StringInput `pulumi:"ram"`
+	// Indicates the resource specification code.
+	SpecCode pulumi.StringInput `pulumi:"specCode"`
+	// Indicates the number of transactions executed by the database per second, each containing 18 SQL statements.
+	Tps pulumi.StringInput `pulumi:"tps"`
+	// Indicates the resource type.
+	TypeCode pulumi.StringInput `pulumi:"typeCode"`
+	// Indicates the CPU size.
+	Vcpus pulumi.StringInput `pulumi:"vcpus"`
+}
+
+func (GetAvailableFlavorsOptionalFlavorArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetAvailableFlavorsOptionalFlavor)(nil)).Elem()
+}
+
+func (i GetAvailableFlavorsOptionalFlavorArgs) ToGetAvailableFlavorsOptionalFlavorOutput() GetAvailableFlavorsOptionalFlavorOutput {
+	return i.ToGetAvailableFlavorsOptionalFlavorOutputWithContext(context.Background())
+}
+
+func (i GetAvailableFlavorsOptionalFlavorArgs) ToGetAvailableFlavorsOptionalFlavorOutputWithContext(ctx context.Context) GetAvailableFlavorsOptionalFlavorOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetAvailableFlavorsOptionalFlavorOutput)
+}
+
+// GetAvailableFlavorsOptionalFlavorArrayInput is an input type that accepts GetAvailableFlavorsOptionalFlavorArray and GetAvailableFlavorsOptionalFlavorArrayOutput values.
+// You can construct a concrete instance of `GetAvailableFlavorsOptionalFlavorArrayInput` via:
+//
+//	GetAvailableFlavorsOptionalFlavorArray{ GetAvailableFlavorsOptionalFlavorArgs{...} }
+type GetAvailableFlavorsOptionalFlavorArrayInput interface {
+	pulumi.Input
+
+	ToGetAvailableFlavorsOptionalFlavorArrayOutput() GetAvailableFlavorsOptionalFlavorArrayOutput
+	ToGetAvailableFlavorsOptionalFlavorArrayOutputWithContext(context.Context) GetAvailableFlavorsOptionalFlavorArrayOutput
+}
+
+type GetAvailableFlavorsOptionalFlavorArray []GetAvailableFlavorsOptionalFlavorInput
+
+func (GetAvailableFlavorsOptionalFlavorArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetAvailableFlavorsOptionalFlavor)(nil)).Elem()
+}
+
+func (i GetAvailableFlavorsOptionalFlavorArray) ToGetAvailableFlavorsOptionalFlavorArrayOutput() GetAvailableFlavorsOptionalFlavorArrayOutput {
+	return i.ToGetAvailableFlavorsOptionalFlavorArrayOutputWithContext(context.Background())
+}
+
+func (i GetAvailableFlavorsOptionalFlavorArray) ToGetAvailableFlavorsOptionalFlavorArrayOutputWithContext(ctx context.Context) GetAvailableFlavorsOptionalFlavorArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetAvailableFlavorsOptionalFlavorArrayOutput)
+}
+
+type GetAvailableFlavorsOptionalFlavorOutput struct{ *pulumi.OutputState }
+
+func (GetAvailableFlavorsOptionalFlavorOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetAvailableFlavorsOptionalFlavor)(nil)).Elem()
+}
+
+func (o GetAvailableFlavorsOptionalFlavorOutput) ToGetAvailableFlavorsOptionalFlavorOutput() GetAvailableFlavorsOptionalFlavorOutput {
+	return o
+}
+
+func (o GetAvailableFlavorsOptionalFlavorOutput) ToGetAvailableFlavorsOptionalFlavorOutputWithContext(ctx context.Context) GetAvailableFlavorsOptionalFlavorOutput {
+	return o
+}
+
+// Indicates the az status.
+func (o GetAvailableFlavorsOptionalFlavorOutput) AzStatus() pulumi.StringMapOutput {
+	return o.ApplyT(func(v GetAvailableFlavorsOptionalFlavor) map[string]string { return v.AzStatus }).(pulumi.StringMapOutput)
+}
+
+// Indicates the performance specifications. Its value can be any of the following:
+// + **normal**: general-enhanced
+// + **normal2**: general-enhanced II
+// + **armFlavors**: Kunpeng general-enhanced
+// + **dedicicatenormal**: exclusive x86
+// + **armlocalssd**: standard Kunpeng
+// + **normallocalssd**: standard x86
+// + **general**: general-purpose
+// + **dedicated**: dedicated, which is only supported for cloud SSDs
+// + **rapid**: dedicated, which is only supported for extreme SSDs
+// + **bigmen**: Large-memory
+func (o GetAvailableFlavorsOptionalFlavorOutput) GroupType() pulumi.StringOutput {
+	return o.ApplyT(func(v GetAvailableFlavorsOptionalFlavor) string { return v.GroupType }).(pulumi.StringOutput)
+}
+
+// Indicates whether supported ipv6.
+func (o GetAvailableFlavorsOptionalFlavorOutput) IsIpv6Supported() pulumi.BoolOutput {
+	return o.ApplyT(func(v GetAvailableFlavorsOptionalFlavor) bool { return v.IsIpv6Supported }).(pulumi.BoolOutput)
+}
+
+// Indicates the max connection.
+func (o GetAvailableFlavorsOptionalFlavorOutput) MaxConnection() pulumi.StringOutput {
+	return o.ApplyT(func(v GetAvailableFlavorsOptionalFlavor) string { return v.MaxConnection }).(pulumi.StringOutput)
+}
+
+// Indicates the maximum disk capacity in GB.
+func (o GetAvailableFlavorsOptionalFlavorOutput) MaxVolumeSize() pulumi.StringOutput {
+	return o.ApplyT(func(v GetAvailableFlavorsOptionalFlavor) string { return v.MaxVolumeSize }).(pulumi.StringOutput)
+}
+
+// Indicates the minimum disk capacity in GB.
+func (o GetAvailableFlavorsOptionalFlavorOutput) MinVolumeSize() pulumi.StringOutput {
+	return o.ApplyT(func(v GetAvailableFlavorsOptionalFlavor) string { return v.MinVolumeSize }).(pulumi.StringOutput)
+}
+
+// Indicates the number of SQL statements executed by the database per second, including **insert**, **select**,
+// **update**, **delete** and so on.
+func (o GetAvailableFlavorsOptionalFlavorOutput) Qps() pulumi.StringOutput {
+	return o.ApplyT(func(v GetAvailableFlavorsOptionalFlavor) string { return v.Qps }).(pulumi.StringOutput)
+}
+
+// Indicates the memory size, in GB.
+func (o GetAvailableFlavorsOptionalFlavorOutput) Ram() pulumi.StringOutput {
+	return o.ApplyT(func(v GetAvailableFlavorsOptionalFlavor) string { return v.Ram }).(pulumi.StringOutput)
+}
+
+// Indicates the resource specification code.
+func (o GetAvailableFlavorsOptionalFlavorOutput) SpecCode() pulumi.StringOutput {
+	return o.ApplyT(func(v GetAvailableFlavorsOptionalFlavor) string { return v.SpecCode }).(pulumi.StringOutput)
+}
+
+// Indicates the number of transactions executed by the database per second, each containing 18 SQL statements.
+func (o GetAvailableFlavorsOptionalFlavorOutput) Tps() pulumi.StringOutput {
+	return o.ApplyT(func(v GetAvailableFlavorsOptionalFlavor) string { return v.Tps }).(pulumi.StringOutput)
+}
+
+// Indicates the resource type.
+func (o GetAvailableFlavorsOptionalFlavorOutput) TypeCode() pulumi.StringOutput {
+	return o.ApplyT(func(v GetAvailableFlavorsOptionalFlavor) string { return v.TypeCode }).(pulumi.StringOutput)
+}
+
+// Indicates the CPU size.
+func (o GetAvailableFlavorsOptionalFlavorOutput) Vcpus() pulumi.StringOutput {
+	return o.ApplyT(func(v GetAvailableFlavorsOptionalFlavor) string { return v.Vcpus }).(pulumi.StringOutput)
+}
+
+type GetAvailableFlavorsOptionalFlavorArrayOutput struct{ *pulumi.OutputState }
+
+func (GetAvailableFlavorsOptionalFlavorArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetAvailableFlavorsOptionalFlavor)(nil)).Elem()
+}
+
+func (o GetAvailableFlavorsOptionalFlavorArrayOutput) ToGetAvailableFlavorsOptionalFlavorArrayOutput() GetAvailableFlavorsOptionalFlavorArrayOutput {
+	return o
+}
+
+func (o GetAvailableFlavorsOptionalFlavorArrayOutput) ToGetAvailableFlavorsOptionalFlavorArrayOutputWithContext(ctx context.Context) GetAvailableFlavorsOptionalFlavorArrayOutput {
+	return o
+}
+
+func (o GetAvailableFlavorsOptionalFlavorArrayOutput) Index(i pulumi.IntInput) GetAvailableFlavorsOptionalFlavorOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) GetAvailableFlavorsOptionalFlavor {
+		return vs[0].([]GetAvailableFlavorsOptionalFlavor)[vs[1].(int)]
+	}).(GetAvailableFlavorsOptionalFlavorOutput)
+}
+
+type GetBackupFilesFile struct {
+	// Indicates the name of the database.
+	DatabaseName string `pulumi:"databaseName"`
+	// Indicates the link for downloading the backup file.
+	DownloadLink string `pulumi:"downloadLink"`
+	// Indicates the link expiration time.
+	LinkExpiredTime string `pulumi:"linkExpiredTime"`
+	// Indicates the file name.
+	Name string `pulumi:"name"`
+	// Indicates the file size in KB.
+	Size int `pulumi:"size"`
+}
+
+// GetBackupFilesFileInput is an input type that accepts GetBackupFilesFileArgs and GetBackupFilesFileOutput values.
+// You can construct a concrete instance of `GetBackupFilesFileInput` via:
+//
+//	GetBackupFilesFileArgs{...}
+type GetBackupFilesFileInput interface {
+	pulumi.Input
+
+	ToGetBackupFilesFileOutput() GetBackupFilesFileOutput
+	ToGetBackupFilesFileOutputWithContext(context.Context) GetBackupFilesFileOutput
+}
+
+type GetBackupFilesFileArgs struct {
+	// Indicates the name of the database.
+	DatabaseName pulumi.StringInput `pulumi:"databaseName"`
+	// Indicates the link for downloading the backup file.
+	DownloadLink pulumi.StringInput `pulumi:"downloadLink"`
+	// Indicates the link expiration time.
+	LinkExpiredTime pulumi.StringInput `pulumi:"linkExpiredTime"`
+	// Indicates the file name.
+	Name pulumi.StringInput `pulumi:"name"`
+	// Indicates the file size in KB.
+	Size pulumi.IntInput `pulumi:"size"`
+}
+
+func (GetBackupFilesFileArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetBackupFilesFile)(nil)).Elem()
+}
+
+func (i GetBackupFilesFileArgs) ToGetBackupFilesFileOutput() GetBackupFilesFileOutput {
+	return i.ToGetBackupFilesFileOutputWithContext(context.Background())
+}
+
+func (i GetBackupFilesFileArgs) ToGetBackupFilesFileOutputWithContext(ctx context.Context) GetBackupFilesFileOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetBackupFilesFileOutput)
+}
+
+// GetBackupFilesFileArrayInput is an input type that accepts GetBackupFilesFileArray and GetBackupFilesFileArrayOutput values.
+// You can construct a concrete instance of `GetBackupFilesFileArrayInput` via:
+//
+//	GetBackupFilesFileArray{ GetBackupFilesFileArgs{...} }
+type GetBackupFilesFileArrayInput interface {
+	pulumi.Input
+
+	ToGetBackupFilesFileArrayOutput() GetBackupFilesFileArrayOutput
+	ToGetBackupFilesFileArrayOutputWithContext(context.Context) GetBackupFilesFileArrayOutput
+}
+
+type GetBackupFilesFileArray []GetBackupFilesFileInput
+
+func (GetBackupFilesFileArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetBackupFilesFile)(nil)).Elem()
+}
+
+func (i GetBackupFilesFileArray) ToGetBackupFilesFileArrayOutput() GetBackupFilesFileArrayOutput {
+	return i.ToGetBackupFilesFileArrayOutputWithContext(context.Background())
+}
+
+func (i GetBackupFilesFileArray) ToGetBackupFilesFileArrayOutputWithContext(ctx context.Context) GetBackupFilesFileArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetBackupFilesFileArrayOutput)
+}
+
+type GetBackupFilesFileOutput struct{ *pulumi.OutputState }
+
+func (GetBackupFilesFileOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetBackupFilesFile)(nil)).Elem()
+}
+
+func (o GetBackupFilesFileOutput) ToGetBackupFilesFileOutput() GetBackupFilesFileOutput {
+	return o
+}
+
+func (o GetBackupFilesFileOutput) ToGetBackupFilesFileOutputWithContext(ctx context.Context) GetBackupFilesFileOutput {
+	return o
+}
+
+// Indicates the name of the database.
+func (o GetBackupFilesFileOutput) DatabaseName() pulumi.StringOutput {
+	return o.ApplyT(func(v GetBackupFilesFile) string { return v.DatabaseName }).(pulumi.StringOutput)
+}
+
+// Indicates the link for downloading the backup file.
+func (o GetBackupFilesFileOutput) DownloadLink() pulumi.StringOutput {
+	return o.ApplyT(func(v GetBackupFilesFile) string { return v.DownloadLink }).(pulumi.StringOutput)
+}
+
+// Indicates the link expiration time.
+func (o GetBackupFilesFileOutput) LinkExpiredTime() pulumi.StringOutput {
+	return o.ApplyT(func(v GetBackupFilesFile) string { return v.LinkExpiredTime }).(pulumi.StringOutput)
+}
+
+// Indicates the file name.
+func (o GetBackupFilesFileOutput) Name() pulumi.StringOutput {
+	return o.ApplyT(func(v GetBackupFilesFile) string { return v.Name }).(pulumi.StringOutput)
+}
+
+// Indicates the file size in KB.
+func (o GetBackupFilesFileOutput) Size() pulumi.IntOutput {
+	return o.ApplyT(func(v GetBackupFilesFile) int { return v.Size }).(pulumi.IntOutput)
+}
+
+type GetBackupFilesFileArrayOutput struct{ *pulumi.OutputState }
+
+func (GetBackupFilesFileArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetBackupFilesFile)(nil)).Elem()
+}
+
+func (o GetBackupFilesFileArrayOutput) ToGetBackupFilesFileArrayOutput() GetBackupFilesFileArrayOutput {
+	return o
+}
+
+func (o GetBackupFilesFileArrayOutput) ToGetBackupFilesFileArrayOutputWithContext(ctx context.Context) GetBackupFilesFileArrayOutput {
+	return o
+}
+
+func (o GetBackupFilesFileArrayOutput) Index(i pulumi.IntInput) GetBackupFilesFileOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) GetBackupFilesFile {
+		return vs[0].([]GetBackupFilesFile)[vs[1].(int)]
+	}).(GetBackupFilesFileOutput)
+}
+
+type GetBackupsBackup struct {
+	// Whether a DDM instance has been associated.
+	AssociatedWithDdm bool `pulumi:"associatedWithDdm"`
+	// Start time in the "yyyy-mm-ddThh:mm:ssZ" format.
+	BeginTime string `pulumi:"beginTime"`
+	// Database been backed up.
+	// The databases structure is documented below.
+	Databases []GetBackupsBackupDatabase `pulumi:"databases"`
+	// The database information.
+	// The datastore structure is documented below.
+	Datastores []GetBackupsBackupDatastore `pulumi:"datastores"`
+	// End time in the "yyyy-mm-ddThh:mm:ssZ" format.
+	EndTime string `pulumi:"endTime"`
+	// Backup ID.
+	Id string `pulumi:"id"`
+	// Instance ID.
+	InstanceId string `pulumi:"instanceId"`
+	// Backup name.
+	Name string `pulumi:"name"`
+	// Backup size in KB.
+	Size int `pulumi:"size"`
+	// Backup status.\
+	// The options are as follows:
+	// + **BUILDING**: Backup in progress.
+	// + **COMPLETED**: Backup completed.
+	// + **FAILED**: Backup failed.
+	// + **DELETING**: Backup being deleted.
+	Status string `pulumi:"status"`
+	// DB engine.\
+	// The value can be **MySQL**, **PostgreSQL**, **SQLServer**, **MariaDB**.
+	Type string `pulumi:"type"`
+}
+
+// GetBackupsBackupInput is an input type that accepts GetBackupsBackupArgs and GetBackupsBackupOutput values.
+// You can construct a concrete instance of `GetBackupsBackupInput` via:
+//
+//	GetBackupsBackupArgs{...}
+type GetBackupsBackupInput interface {
+	pulumi.Input
+
+	ToGetBackupsBackupOutput() GetBackupsBackupOutput
+	ToGetBackupsBackupOutputWithContext(context.Context) GetBackupsBackupOutput
+}
+
+type GetBackupsBackupArgs struct {
+	// Whether a DDM instance has been associated.
+	AssociatedWithDdm pulumi.BoolInput `pulumi:"associatedWithDdm"`
+	// Start time in the "yyyy-mm-ddThh:mm:ssZ" format.
+	BeginTime pulumi.StringInput `pulumi:"beginTime"`
+	// Database been backed up.
+	// The databases structure is documented below.
+	Databases GetBackupsBackupDatabaseArrayInput `pulumi:"databases"`
+	// The database information.
+	// The datastore structure is documented below.
+	Datastores GetBackupsBackupDatastoreArrayInput `pulumi:"datastores"`
+	// End time in the "yyyy-mm-ddThh:mm:ssZ" format.
+	EndTime pulumi.StringInput `pulumi:"endTime"`
+	// Backup ID.
+	Id pulumi.StringInput `pulumi:"id"`
+	// Instance ID.
+	InstanceId pulumi.StringInput `pulumi:"instanceId"`
+	// Backup name.
+	Name pulumi.StringInput `pulumi:"name"`
+	// Backup size in KB.
+	Size pulumi.IntInput `pulumi:"size"`
+	// Backup status.\
+	// The options are as follows:
+	// + **BUILDING**: Backup in progress.
+	// + **COMPLETED**: Backup completed.
+	// + **FAILED**: Backup failed.
+	// + **DELETING**: Backup being deleted.
+	Status pulumi.StringInput `pulumi:"status"`
+	// DB engine.\
+	// The value can be **MySQL**, **PostgreSQL**, **SQLServer**, **MariaDB**.
+	Type pulumi.StringInput `pulumi:"type"`
+}
+
+func (GetBackupsBackupArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetBackupsBackup)(nil)).Elem()
+}
+
+func (i GetBackupsBackupArgs) ToGetBackupsBackupOutput() GetBackupsBackupOutput {
+	return i.ToGetBackupsBackupOutputWithContext(context.Background())
+}
+
+func (i GetBackupsBackupArgs) ToGetBackupsBackupOutputWithContext(ctx context.Context) GetBackupsBackupOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetBackupsBackupOutput)
+}
+
+// GetBackupsBackupArrayInput is an input type that accepts GetBackupsBackupArray and GetBackupsBackupArrayOutput values.
+// You can construct a concrete instance of `GetBackupsBackupArrayInput` via:
+//
+//	GetBackupsBackupArray{ GetBackupsBackupArgs{...} }
+type GetBackupsBackupArrayInput interface {
+	pulumi.Input
+
+	ToGetBackupsBackupArrayOutput() GetBackupsBackupArrayOutput
+	ToGetBackupsBackupArrayOutputWithContext(context.Context) GetBackupsBackupArrayOutput
+}
+
+type GetBackupsBackupArray []GetBackupsBackupInput
+
+func (GetBackupsBackupArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetBackupsBackup)(nil)).Elem()
+}
+
+func (i GetBackupsBackupArray) ToGetBackupsBackupArrayOutput() GetBackupsBackupArrayOutput {
+	return i.ToGetBackupsBackupArrayOutputWithContext(context.Background())
+}
+
+func (i GetBackupsBackupArray) ToGetBackupsBackupArrayOutputWithContext(ctx context.Context) GetBackupsBackupArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetBackupsBackupArrayOutput)
+}
+
+type GetBackupsBackupOutput struct{ *pulumi.OutputState }
+
+func (GetBackupsBackupOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetBackupsBackup)(nil)).Elem()
+}
+
+func (o GetBackupsBackupOutput) ToGetBackupsBackupOutput() GetBackupsBackupOutput {
+	return o
+}
+
+func (o GetBackupsBackupOutput) ToGetBackupsBackupOutputWithContext(ctx context.Context) GetBackupsBackupOutput {
+	return o
+}
+
+// Whether a DDM instance has been associated.
+func (o GetBackupsBackupOutput) AssociatedWithDdm() pulumi.BoolOutput {
+	return o.ApplyT(func(v GetBackupsBackup) bool { return v.AssociatedWithDdm }).(pulumi.BoolOutput)
+}
+
+// Start time in the "yyyy-mm-ddThh:mm:ssZ" format.
+func (o GetBackupsBackupOutput) BeginTime() pulumi.StringOutput {
+	return o.ApplyT(func(v GetBackupsBackup) string { return v.BeginTime }).(pulumi.StringOutput)
+}
+
+// Database been backed up.
+// The databases structure is documented below.
+func (o GetBackupsBackupOutput) Databases() GetBackupsBackupDatabaseArrayOutput {
+	return o.ApplyT(func(v GetBackupsBackup) []GetBackupsBackupDatabase { return v.Databases }).(GetBackupsBackupDatabaseArrayOutput)
+}
+
+// The database information.
+// The datastore structure is documented below.
+func (o GetBackupsBackupOutput) Datastores() GetBackupsBackupDatastoreArrayOutput {
+	return o.ApplyT(func(v GetBackupsBackup) []GetBackupsBackupDatastore { return v.Datastores }).(GetBackupsBackupDatastoreArrayOutput)
+}
+
+// End time in the "yyyy-mm-ddThh:mm:ssZ" format.
+func (o GetBackupsBackupOutput) EndTime() pulumi.StringOutput {
+	return o.ApplyT(func(v GetBackupsBackup) string { return v.EndTime }).(pulumi.StringOutput)
+}
+
+// Backup ID.
+func (o GetBackupsBackupOutput) Id() pulumi.StringOutput {
+	return o.ApplyT(func(v GetBackupsBackup) string { return v.Id }).(pulumi.StringOutput)
+}
+
+// Instance ID.
+func (o GetBackupsBackupOutput) InstanceId() pulumi.StringOutput {
+	return o.ApplyT(func(v GetBackupsBackup) string { return v.InstanceId }).(pulumi.StringOutput)
+}
+
+// Backup name.
+func (o GetBackupsBackupOutput) Name() pulumi.StringOutput {
+	return o.ApplyT(func(v GetBackupsBackup) string { return v.Name }).(pulumi.StringOutput)
+}
+
+// Backup size in KB.
+func (o GetBackupsBackupOutput) Size() pulumi.IntOutput {
+	return o.ApplyT(func(v GetBackupsBackup) int { return v.Size }).(pulumi.IntOutput)
+}
+
+// Backup status.\
+// The options are as follows:
+// + **BUILDING**: Backup in progress.
+// + **COMPLETED**: Backup completed.
+// + **FAILED**: Backup failed.
+// + **DELETING**: Backup being deleted.
+func (o GetBackupsBackupOutput) Status() pulumi.StringOutput {
+	return o.ApplyT(func(v GetBackupsBackup) string { return v.Status }).(pulumi.StringOutput)
+}
+
+// DB engine.\
+// The value can be **MySQL**, **PostgreSQL**, **SQLServer**, **MariaDB**.
+func (o GetBackupsBackupOutput) Type() pulumi.StringOutput {
+	return o.ApplyT(func(v GetBackupsBackup) string { return v.Type }).(pulumi.StringOutput)
+}
+
+type GetBackupsBackupArrayOutput struct{ *pulumi.OutputState }
+
+func (GetBackupsBackupArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetBackupsBackup)(nil)).Elem()
+}
+
+func (o GetBackupsBackupArrayOutput) ToGetBackupsBackupArrayOutput() GetBackupsBackupArrayOutput {
+	return o
+}
+
+func (o GetBackupsBackupArrayOutput) ToGetBackupsBackupArrayOutputWithContext(ctx context.Context) GetBackupsBackupArrayOutput {
+	return o
+}
+
+func (o GetBackupsBackupArrayOutput) Index(i pulumi.IntInput) GetBackupsBackupOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) GetBackupsBackup {
+		return vs[0].([]GetBackupsBackup)[vs[1].(int)]
+	}).(GetBackupsBackupOutput)
+}
+
+type GetBackupsBackupDatabase struct {
+	// Backup name.
+	Name string `pulumi:"name"`
+}
+
+// GetBackupsBackupDatabaseInput is an input type that accepts GetBackupsBackupDatabaseArgs and GetBackupsBackupDatabaseOutput values.
+// You can construct a concrete instance of `GetBackupsBackupDatabaseInput` via:
+//
+//	GetBackupsBackupDatabaseArgs{...}
+type GetBackupsBackupDatabaseInput interface {
+	pulumi.Input
+
+	ToGetBackupsBackupDatabaseOutput() GetBackupsBackupDatabaseOutput
+	ToGetBackupsBackupDatabaseOutputWithContext(context.Context) GetBackupsBackupDatabaseOutput
+}
+
+type GetBackupsBackupDatabaseArgs struct {
+	// Backup name.
+	Name pulumi.StringInput `pulumi:"name"`
+}
+
+func (GetBackupsBackupDatabaseArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetBackupsBackupDatabase)(nil)).Elem()
+}
+
+func (i GetBackupsBackupDatabaseArgs) ToGetBackupsBackupDatabaseOutput() GetBackupsBackupDatabaseOutput {
+	return i.ToGetBackupsBackupDatabaseOutputWithContext(context.Background())
+}
+
+func (i GetBackupsBackupDatabaseArgs) ToGetBackupsBackupDatabaseOutputWithContext(ctx context.Context) GetBackupsBackupDatabaseOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetBackupsBackupDatabaseOutput)
+}
+
+// GetBackupsBackupDatabaseArrayInput is an input type that accepts GetBackupsBackupDatabaseArray and GetBackupsBackupDatabaseArrayOutput values.
+// You can construct a concrete instance of `GetBackupsBackupDatabaseArrayInput` via:
+//
+//	GetBackupsBackupDatabaseArray{ GetBackupsBackupDatabaseArgs{...} }
+type GetBackupsBackupDatabaseArrayInput interface {
+	pulumi.Input
+
+	ToGetBackupsBackupDatabaseArrayOutput() GetBackupsBackupDatabaseArrayOutput
+	ToGetBackupsBackupDatabaseArrayOutputWithContext(context.Context) GetBackupsBackupDatabaseArrayOutput
+}
+
+type GetBackupsBackupDatabaseArray []GetBackupsBackupDatabaseInput
+
+func (GetBackupsBackupDatabaseArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetBackupsBackupDatabase)(nil)).Elem()
+}
+
+func (i GetBackupsBackupDatabaseArray) ToGetBackupsBackupDatabaseArrayOutput() GetBackupsBackupDatabaseArrayOutput {
+	return i.ToGetBackupsBackupDatabaseArrayOutputWithContext(context.Background())
+}
+
+func (i GetBackupsBackupDatabaseArray) ToGetBackupsBackupDatabaseArrayOutputWithContext(ctx context.Context) GetBackupsBackupDatabaseArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetBackupsBackupDatabaseArrayOutput)
+}
+
+type GetBackupsBackupDatabaseOutput struct{ *pulumi.OutputState }
+
+func (GetBackupsBackupDatabaseOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetBackupsBackupDatabase)(nil)).Elem()
+}
+
+func (o GetBackupsBackupDatabaseOutput) ToGetBackupsBackupDatabaseOutput() GetBackupsBackupDatabaseOutput {
+	return o
+}
+
+func (o GetBackupsBackupDatabaseOutput) ToGetBackupsBackupDatabaseOutputWithContext(ctx context.Context) GetBackupsBackupDatabaseOutput {
+	return o
+}
+
+// Backup name.
+func (o GetBackupsBackupDatabaseOutput) Name() pulumi.StringOutput {
+	return o.ApplyT(func(v GetBackupsBackupDatabase) string { return v.Name }).(pulumi.StringOutput)
+}
+
+type GetBackupsBackupDatabaseArrayOutput struct{ *pulumi.OutputState }
+
+func (GetBackupsBackupDatabaseArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetBackupsBackupDatabase)(nil)).Elem()
+}
+
+func (o GetBackupsBackupDatabaseArrayOutput) ToGetBackupsBackupDatabaseArrayOutput() GetBackupsBackupDatabaseArrayOutput {
+	return o
+}
+
+func (o GetBackupsBackupDatabaseArrayOutput) ToGetBackupsBackupDatabaseArrayOutputWithContext(ctx context.Context) GetBackupsBackupDatabaseArrayOutput {
+	return o
+}
+
+func (o GetBackupsBackupDatabaseArrayOutput) Index(i pulumi.IntInput) GetBackupsBackupDatabaseOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) GetBackupsBackupDatabase {
+		return vs[0].([]GetBackupsBackupDatabase)[vs[1].(int)]
+	}).(GetBackupsBackupDatabaseOutput)
+}
+
+type GetBackupsBackupDatastore struct {
+	// DB engine.\
+	// The value can be **MySQL**, **PostgreSQL**, **SQLServer**, **MariaDB**.
+	Type string `pulumi:"type"`
+	// DB engine version.
+	Version string `pulumi:"version"`
+}
+
+// GetBackupsBackupDatastoreInput is an input type that accepts GetBackupsBackupDatastoreArgs and GetBackupsBackupDatastoreOutput values.
+// You can construct a concrete instance of `GetBackupsBackupDatastoreInput` via:
+//
+//	GetBackupsBackupDatastoreArgs{...}
+type GetBackupsBackupDatastoreInput interface {
+	pulumi.Input
+
+	ToGetBackupsBackupDatastoreOutput() GetBackupsBackupDatastoreOutput
+	ToGetBackupsBackupDatastoreOutputWithContext(context.Context) GetBackupsBackupDatastoreOutput
+}
+
+type GetBackupsBackupDatastoreArgs struct {
+	// DB engine.\
+	// The value can be **MySQL**, **PostgreSQL**, **SQLServer**, **MariaDB**.
+	Type pulumi.StringInput `pulumi:"type"`
+	// DB engine version.
+	Version pulumi.StringInput `pulumi:"version"`
+}
+
+func (GetBackupsBackupDatastoreArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetBackupsBackupDatastore)(nil)).Elem()
+}
+
+func (i GetBackupsBackupDatastoreArgs) ToGetBackupsBackupDatastoreOutput() GetBackupsBackupDatastoreOutput {
+	return i.ToGetBackupsBackupDatastoreOutputWithContext(context.Background())
+}
+
+func (i GetBackupsBackupDatastoreArgs) ToGetBackupsBackupDatastoreOutputWithContext(ctx context.Context) GetBackupsBackupDatastoreOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetBackupsBackupDatastoreOutput)
+}
+
+// GetBackupsBackupDatastoreArrayInput is an input type that accepts GetBackupsBackupDatastoreArray and GetBackupsBackupDatastoreArrayOutput values.
+// You can construct a concrete instance of `GetBackupsBackupDatastoreArrayInput` via:
+//
+//	GetBackupsBackupDatastoreArray{ GetBackupsBackupDatastoreArgs{...} }
+type GetBackupsBackupDatastoreArrayInput interface {
+	pulumi.Input
+
+	ToGetBackupsBackupDatastoreArrayOutput() GetBackupsBackupDatastoreArrayOutput
+	ToGetBackupsBackupDatastoreArrayOutputWithContext(context.Context) GetBackupsBackupDatastoreArrayOutput
+}
+
+type GetBackupsBackupDatastoreArray []GetBackupsBackupDatastoreInput
+
+func (GetBackupsBackupDatastoreArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetBackupsBackupDatastore)(nil)).Elem()
+}
+
+func (i GetBackupsBackupDatastoreArray) ToGetBackupsBackupDatastoreArrayOutput() GetBackupsBackupDatastoreArrayOutput {
+	return i.ToGetBackupsBackupDatastoreArrayOutputWithContext(context.Background())
+}
+
+func (i GetBackupsBackupDatastoreArray) ToGetBackupsBackupDatastoreArrayOutputWithContext(ctx context.Context) GetBackupsBackupDatastoreArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetBackupsBackupDatastoreArrayOutput)
+}
+
+type GetBackupsBackupDatastoreOutput struct{ *pulumi.OutputState }
+
+func (GetBackupsBackupDatastoreOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetBackupsBackupDatastore)(nil)).Elem()
+}
+
+func (o GetBackupsBackupDatastoreOutput) ToGetBackupsBackupDatastoreOutput() GetBackupsBackupDatastoreOutput {
+	return o
+}
+
+func (o GetBackupsBackupDatastoreOutput) ToGetBackupsBackupDatastoreOutputWithContext(ctx context.Context) GetBackupsBackupDatastoreOutput {
+	return o
+}
+
+// DB engine.\
+// The value can be **MySQL**, **PostgreSQL**, **SQLServer**, **MariaDB**.
+func (o GetBackupsBackupDatastoreOutput) Type() pulumi.StringOutput {
+	return o.ApplyT(func(v GetBackupsBackupDatastore) string { return v.Type }).(pulumi.StringOutput)
+}
+
+// DB engine version.
+func (o GetBackupsBackupDatastoreOutput) Version() pulumi.StringOutput {
+	return o.ApplyT(func(v GetBackupsBackupDatastore) string { return v.Version }).(pulumi.StringOutput)
+}
+
+type GetBackupsBackupDatastoreArrayOutput struct{ *pulumi.OutputState }
+
+func (GetBackupsBackupDatastoreArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetBackupsBackupDatastore)(nil)).Elem()
+}
+
+func (o GetBackupsBackupDatastoreArrayOutput) ToGetBackupsBackupDatastoreArrayOutput() GetBackupsBackupDatastoreArrayOutput {
+	return o
+}
+
+func (o GetBackupsBackupDatastoreArrayOutput) ToGetBackupsBackupDatastoreArrayOutputWithContext(ctx context.Context) GetBackupsBackupDatastoreArrayOutput {
+	return o
+}
+
+func (o GetBackupsBackupDatastoreArrayOutput) Index(i pulumi.IntInput) GetBackupsBackupDatastoreOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) GetBackupsBackupDatastore {
+		return vs[0].([]GetBackupsBackupDatastore)[vs[1].(int)]
+	}).(GetBackupsBackupDatastoreOutput)
+}
+
+type GetCrossRegionBackupInstancesBackupInstance struct {
+	// Indicates the database information.
+	Datastores []GetCrossRegionBackupInstancesBackupInstanceDatastore `pulumi:"datastores"`
+	// Specifies the project ID of the target backup region.
+	DestinationProjectId string `pulumi:"destinationProjectId"`
+	// Specifies the region where the cross-region backup is located.
+	DestinationRegion string `pulumi:"destinationRegion"`
+	// Indicates the ID of the instance.
+	Id string `pulumi:"id"`
+	// Specifies the number of days to retain cross-region backups.
+	KeepDays int `pulumi:"keepDays"`
+	// Specifies the name of the instance.
+	Name string `pulumi:"name"`
+	// Specifies the project ID of the source backup region.
+	SourceProjectId string `pulumi:"sourceProjectId"`
+	// Specifies the source backup region.
+	SourceRegion string `pulumi:"sourceRegion"`
+}
+
+// GetCrossRegionBackupInstancesBackupInstanceInput is an input type that accepts GetCrossRegionBackupInstancesBackupInstanceArgs and GetCrossRegionBackupInstancesBackupInstanceOutput values.
+// You can construct a concrete instance of `GetCrossRegionBackupInstancesBackupInstanceInput` via:
+//
+//	GetCrossRegionBackupInstancesBackupInstanceArgs{...}
+type GetCrossRegionBackupInstancesBackupInstanceInput interface {
+	pulumi.Input
+
+	ToGetCrossRegionBackupInstancesBackupInstanceOutput() GetCrossRegionBackupInstancesBackupInstanceOutput
+	ToGetCrossRegionBackupInstancesBackupInstanceOutputWithContext(context.Context) GetCrossRegionBackupInstancesBackupInstanceOutput
+}
+
+type GetCrossRegionBackupInstancesBackupInstanceArgs struct {
+	// Indicates the database information.
+	Datastores GetCrossRegionBackupInstancesBackupInstanceDatastoreArrayInput `pulumi:"datastores"`
+	// Specifies the project ID of the target backup region.
+	DestinationProjectId pulumi.StringInput `pulumi:"destinationProjectId"`
+	// Specifies the region where the cross-region backup is located.
+	DestinationRegion pulumi.StringInput `pulumi:"destinationRegion"`
+	// Indicates the ID of the instance.
+	Id pulumi.StringInput `pulumi:"id"`
+	// Specifies the number of days to retain cross-region backups.
+	KeepDays pulumi.IntInput `pulumi:"keepDays"`
+	// Specifies the name of the instance.
+	Name pulumi.StringInput `pulumi:"name"`
+	// Specifies the project ID of the source backup region.
+	SourceProjectId pulumi.StringInput `pulumi:"sourceProjectId"`
+	// Specifies the source backup region.
+	SourceRegion pulumi.StringInput `pulumi:"sourceRegion"`
+}
+
+func (GetCrossRegionBackupInstancesBackupInstanceArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetCrossRegionBackupInstancesBackupInstance)(nil)).Elem()
+}
+
+func (i GetCrossRegionBackupInstancesBackupInstanceArgs) ToGetCrossRegionBackupInstancesBackupInstanceOutput() GetCrossRegionBackupInstancesBackupInstanceOutput {
+	return i.ToGetCrossRegionBackupInstancesBackupInstanceOutputWithContext(context.Background())
+}
+
+func (i GetCrossRegionBackupInstancesBackupInstanceArgs) ToGetCrossRegionBackupInstancesBackupInstanceOutputWithContext(ctx context.Context) GetCrossRegionBackupInstancesBackupInstanceOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetCrossRegionBackupInstancesBackupInstanceOutput)
+}
+
+// GetCrossRegionBackupInstancesBackupInstanceArrayInput is an input type that accepts GetCrossRegionBackupInstancesBackupInstanceArray and GetCrossRegionBackupInstancesBackupInstanceArrayOutput values.
+// You can construct a concrete instance of `GetCrossRegionBackupInstancesBackupInstanceArrayInput` via:
+//
+//	GetCrossRegionBackupInstancesBackupInstanceArray{ GetCrossRegionBackupInstancesBackupInstanceArgs{...} }
+type GetCrossRegionBackupInstancesBackupInstanceArrayInput interface {
+	pulumi.Input
+
+	ToGetCrossRegionBackupInstancesBackupInstanceArrayOutput() GetCrossRegionBackupInstancesBackupInstanceArrayOutput
+	ToGetCrossRegionBackupInstancesBackupInstanceArrayOutputWithContext(context.Context) GetCrossRegionBackupInstancesBackupInstanceArrayOutput
+}
+
+type GetCrossRegionBackupInstancesBackupInstanceArray []GetCrossRegionBackupInstancesBackupInstanceInput
+
+func (GetCrossRegionBackupInstancesBackupInstanceArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetCrossRegionBackupInstancesBackupInstance)(nil)).Elem()
+}
+
+func (i GetCrossRegionBackupInstancesBackupInstanceArray) ToGetCrossRegionBackupInstancesBackupInstanceArrayOutput() GetCrossRegionBackupInstancesBackupInstanceArrayOutput {
+	return i.ToGetCrossRegionBackupInstancesBackupInstanceArrayOutputWithContext(context.Background())
+}
+
+func (i GetCrossRegionBackupInstancesBackupInstanceArray) ToGetCrossRegionBackupInstancesBackupInstanceArrayOutputWithContext(ctx context.Context) GetCrossRegionBackupInstancesBackupInstanceArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetCrossRegionBackupInstancesBackupInstanceArrayOutput)
+}
+
+type GetCrossRegionBackupInstancesBackupInstanceOutput struct{ *pulumi.OutputState }
+
+func (GetCrossRegionBackupInstancesBackupInstanceOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetCrossRegionBackupInstancesBackupInstance)(nil)).Elem()
+}
+
+func (o GetCrossRegionBackupInstancesBackupInstanceOutput) ToGetCrossRegionBackupInstancesBackupInstanceOutput() GetCrossRegionBackupInstancesBackupInstanceOutput {
+	return o
+}
+
+func (o GetCrossRegionBackupInstancesBackupInstanceOutput) ToGetCrossRegionBackupInstancesBackupInstanceOutputWithContext(ctx context.Context) GetCrossRegionBackupInstancesBackupInstanceOutput {
+	return o
+}
+
+// Indicates the database information.
+func (o GetCrossRegionBackupInstancesBackupInstanceOutput) Datastores() GetCrossRegionBackupInstancesBackupInstanceDatastoreArrayOutput {
+	return o.ApplyT(func(v GetCrossRegionBackupInstancesBackupInstance) []GetCrossRegionBackupInstancesBackupInstanceDatastore {
+		return v.Datastores
+	}).(GetCrossRegionBackupInstancesBackupInstanceDatastoreArrayOutput)
+}
+
+// Specifies the project ID of the target backup region.
+func (o GetCrossRegionBackupInstancesBackupInstanceOutput) DestinationProjectId() pulumi.StringOutput {
+	return o.ApplyT(func(v GetCrossRegionBackupInstancesBackupInstance) string { return v.DestinationProjectId }).(pulumi.StringOutput)
+}
+
+// Specifies the region where the cross-region backup is located.
+func (o GetCrossRegionBackupInstancesBackupInstanceOutput) DestinationRegion() pulumi.StringOutput {
+	return o.ApplyT(func(v GetCrossRegionBackupInstancesBackupInstance) string { return v.DestinationRegion }).(pulumi.StringOutput)
+}
+
+// Indicates the ID of the instance.
+func (o GetCrossRegionBackupInstancesBackupInstanceOutput) Id() pulumi.StringOutput {
+	return o.ApplyT(func(v GetCrossRegionBackupInstancesBackupInstance) string { return v.Id }).(pulumi.StringOutput)
+}
+
+// Specifies the number of days to retain cross-region backups.
+func (o GetCrossRegionBackupInstancesBackupInstanceOutput) KeepDays() pulumi.IntOutput {
+	return o.ApplyT(func(v GetCrossRegionBackupInstancesBackupInstance) int { return v.KeepDays }).(pulumi.IntOutput)
+}
+
+// Specifies the name of the instance.
+func (o GetCrossRegionBackupInstancesBackupInstanceOutput) Name() pulumi.StringOutput {
+	return o.ApplyT(func(v GetCrossRegionBackupInstancesBackupInstance) string { return v.Name }).(pulumi.StringOutput)
+}
+
+// Specifies the project ID of the source backup region.
+func (o GetCrossRegionBackupInstancesBackupInstanceOutput) SourceProjectId() pulumi.StringOutput {
+	return o.ApplyT(func(v GetCrossRegionBackupInstancesBackupInstance) string { return v.SourceProjectId }).(pulumi.StringOutput)
+}
+
+// Specifies the source backup region.
+func (o GetCrossRegionBackupInstancesBackupInstanceOutput) SourceRegion() pulumi.StringOutput {
+	return o.ApplyT(func(v GetCrossRegionBackupInstancesBackupInstance) string { return v.SourceRegion }).(pulumi.StringOutput)
+}
+
+type GetCrossRegionBackupInstancesBackupInstanceArrayOutput struct{ *pulumi.OutputState }
+
+func (GetCrossRegionBackupInstancesBackupInstanceArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetCrossRegionBackupInstancesBackupInstance)(nil)).Elem()
+}
+
+func (o GetCrossRegionBackupInstancesBackupInstanceArrayOutput) ToGetCrossRegionBackupInstancesBackupInstanceArrayOutput() GetCrossRegionBackupInstancesBackupInstanceArrayOutput {
+	return o
+}
+
+func (o GetCrossRegionBackupInstancesBackupInstanceArrayOutput) ToGetCrossRegionBackupInstancesBackupInstanceArrayOutputWithContext(ctx context.Context) GetCrossRegionBackupInstancesBackupInstanceArrayOutput {
+	return o
+}
+
+func (o GetCrossRegionBackupInstancesBackupInstanceArrayOutput) Index(i pulumi.IntInput) GetCrossRegionBackupInstancesBackupInstanceOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) GetCrossRegionBackupInstancesBackupInstance {
+		return vs[0].([]GetCrossRegionBackupInstancesBackupInstance)[vs[1].(int)]
+	}).(GetCrossRegionBackupInstancesBackupInstanceOutput)
+}
+
+type GetCrossRegionBackupInstancesBackupInstanceDatastore struct {
+	// Indicates the database engine.
+	// Its value can be any of the following and is case-insensitive: **MySQL**, **PostgreSQL**, **SQLServer**, **MariaDB**.
+	Type string `pulumi:"type"`
+	// Indicates the database engine version.
+	Version string `pulumi:"version"`
+}
+
+// GetCrossRegionBackupInstancesBackupInstanceDatastoreInput is an input type that accepts GetCrossRegionBackupInstancesBackupInstanceDatastoreArgs and GetCrossRegionBackupInstancesBackupInstanceDatastoreOutput values.
+// You can construct a concrete instance of `GetCrossRegionBackupInstancesBackupInstanceDatastoreInput` via:
+//
+//	GetCrossRegionBackupInstancesBackupInstanceDatastoreArgs{...}
+type GetCrossRegionBackupInstancesBackupInstanceDatastoreInput interface {
+	pulumi.Input
+
+	ToGetCrossRegionBackupInstancesBackupInstanceDatastoreOutput() GetCrossRegionBackupInstancesBackupInstanceDatastoreOutput
+	ToGetCrossRegionBackupInstancesBackupInstanceDatastoreOutputWithContext(context.Context) GetCrossRegionBackupInstancesBackupInstanceDatastoreOutput
+}
+
+type GetCrossRegionBackupInstancesBackupInstanceDatastoreArgs struct {
+	// Indicates the database engine.
+	// Its value can be any of the following and is case-insensitive: **MySQL**, **PostgreSQL**, **SQLServer**, **MariaDB**.
+	Type pulumi.StringInput `pulumi:"type"`
+	// Indicates the database engine version.
+	Version pulumi.StringInput `pulumi:"version"`
+}
+
+func (GetCrossRegionBackupInstancesBackupInstanceDatastoreArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetCrossRegionBackupInstancesBackupInstanceDatastore)(nil)).Elem()
+}
+
+func (i GetCrossRegionBackupInstancesBackupInstanceDatastoreArgs) ToGetCrossRegionBackupInstancesBackupInstanceDatastoreOutput() GetCrossRegionBackupInstancesBackupInstanceDatastoreOutput {
+	return i.ToGetCrossRegionBackupInstancesBackupInstanceDatastoreOutputWithContext(context.Background())
+}
+
+func (i GetCrossRegionBackupInstancesBackupInstanceDatastoreArgs) ToGetCrossRegionBackupInstancesBackupInstanceDatastoreOutputWithContext(ctx context.Context) GetCrossRegionBackupInstancesBackupInstanceDatastoreOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetCrossRegionBackupInstancesBackupInstanceDatastoreOutput)
+}
+
+// GetCrossRegionBackupInstancesBackupInstanceDatastoreArrayInput is an input type that accepts GetCrossRegionBackupInstancesBackupInstanceDatastoreArray and GetCrossRegionBackupInstancesBackupInstanceDatastoreArrayOutput values.
+// You can construct a concrete instance of `GetCrossRegionBackupInstancesBackupInstanceDatastoreArrayInput` via:
+//
+//	GetCrossRegionBackupInstancesBackupInstanceDatastoreArray{ GetCrossRegionBackupInstancesBackupInstanceDatastoreArgs{...} }
+type GetCrossRegionBackupInstancesBackupInstanceDatastoreArrayInput interface {
+	pulumi.Input
+
+	ToGetCrossRegionBackupInstancesBackupInstanceDatastoreArrayOutput() GetCrossRegionBackupInstancesBackupInstanceDatastoreArrayOutput
+	ToGetCrossRegionBackupInstancesBackupInstanceDatastoreArrayOutputWithContext(context.Context) GetCrossRegionBackupInstancesBackupInstanceDatastoreArrayOutput
+}
+
+type GetCrossRegionBackupInstancesBackupInstanceDatastoreArray []GetCrossRegionBackupInstancesBackupInstanceDatastoreInput
+
+func (GetCrossRegionBackupInstancesBackupInstanceDatastoreArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetCrossRegionBackupInstancesBackupInstanceDatastore)(nil)).Elem()
+}
+
+func (i GetCrossRegionBackupInstancesBackupInstanceDatastoreArray) ToGetCrossRegionBackupInstancesBackupInstanceDatastoreArrayOutput() GetCrossRegionBackupInstancesBackupInstanceDatastoreArrayOutput {
+	return i.ToGetCrossRegionBackupInstancesBackupInstanceDatastoreArrayOutputWithContext(context.Background())
+}
+
+func (i GetCrossRegionBackupInstancesBackupInstanceDatastoreArray) ToGetCrossRegionBackupInstancesBackupInstanceDatastoreArrayOutputWithContext(ctx context.Context) GetCrossRegionBackupInstancesBackupInstanceDatastoreArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetCrossRegionBackupInstancesBackupInstanceDatastoreArrayOutput)
+}
+
+type GetCrossRegionBackupInstancesBackupInstanceDatastoreOutput struct{ *pulumi.OutputState }
+
+func (GetCrossRegionBackupInstancesBackupInstanceDatastoreOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetCrossRegionBackupInstancesBackupInstanceDatastore)(nil)).Elem()
+}
+
+func (o GetCrossRegionBackupInstancesBackupInstanceDatastoreOutput) ToGetCrossRegionBackupInstancesBackupInstanceDatastoreOutput() GetCrossRegionBackupInstancesBackupInstanceDatastoreOutput {
+	return o
+}
+
+func (o GetCrossRegionBackupInstancesBackupInstanceDatastoreOutput) ToGetCrossRegionBackupInstancesBackupInstanceDatastoreOutputWithContext(ctx context.Context) GetCrossRegionBackupInstancesBackupInstanceDatastoreOutput {
+	return o
+}
+
+// Indicates the database engine.
+// Its value can be any of the following and is case-insensitive: **MySQL**, **PostgreSQL**, **SQLServer**, **MariaDB**.
+func (o GetCrossRegionBackupInstancesBackupInstanceDatastoreOutput) Type() pulumi.StringOutput {
+	return o.ApplyT(func(v GetCrossRegionBackupInstancesBackupInstanceDatastore) string { return v.Type }).(pulumi.StringOutput)
+}
+
+// Indicates the database engine version.
+func (o GetCrossRegionBackupInstancesBackupInstanceDatastoreOutput) Version() pulumi.StringOutput {
+	return o.ApplyT(func(v GetCrossRegionBackupInstancesBackupInstanceDatastore) string { return v.Version }).(pulumi.StringOutput)
+}
+
+type GetCrossRegionBackupInstancesBackupInstanceDatastoreArrayOutput struct{ *pulumi.OutputState }
+
+func (GetCrossRegionBackupInstancesBackupInstanceDatastoreArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetCrossRegionBackupInstancesBackupInstanceDatastore)(nil)).Elem()
+}
+
+func (o GetCrossRegionBackupInstancesBackupInstanceDatastoreArrayOutput) ToGetCrossRegionBackupInstancesBackupInstanceDatastoreArrayOutput() GetCrossRegionBackupInstancesBackupInstanceDatastoreArrayOutput {
+	return o
+}
+
+func (o GetCrossRegionBackupInstancesBackupInstanceDatastoreArrayOutput) ToGetCrossRegionBackupInstancesBackupInstanceDatastoreArrayOutputWithContext(ctx context.Context) GetCrossRegionBackupInstancesBackupInstanceDatastoreArrayOutput {
+	return o
+}
+
+func (o GetCrossRegionBackupInstancesBackupInstanceDatastoreArrayOutput) Index(i pulumi.IntInput) GetCrossRegionBackupInstancesBackupInstanceDatastoreOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) GetCrossRegionBackupInstancesBackupInstanceDatastore {
+		return vs[0].([]GetCrossRegionBackupInstancesBackupInstanceDatastore)[vs[1].(int)]
+	}).(GetCrossRegionBackupInstancesBackupInstanceDatastoreOutput)
+}
+
+type GetCrossRegionBackupsBackup struct {
+	// Indicates whether a DDM instance has been associated.
+	AssociatedWithDdm bool `pulumi:"associatedWithDdm"`
+	// Specifies the start time for obtaining the cross-region backup list.
+	// The format is **yyyy-mm-ddThh:mm:ssZ**. This parameter must be used together with `endTime`.
+	BeginTime string `pulumi:"beginTime"`
+	// Indicates the database to be backed up.
+	Databases []GetCrossRegionBackupsBackupDatabase `pulumi:"databases"`
+	// Indicates the database information
+	Datastores []GetCrossRegionBackupsBackupDatastore `pulumi:"datastores"`
+	// Specifies the end time for obtaining the cross-region backup list.
+	// The format is **yyyy-mm-ddThh:mm:ssZ**. The end time must be later than the start time.
+	// This parameter must be used together with `beginTime`.
+	EndTime string `pulumi:"endTime"`
+	// Indicates the ID of the cross-region backup.
+	Id string `pulumi:"id"`
+	// Specifies the ID of the RDS instance.
+	InstanceId string `pulumi:"instanceId"`
+	// Specifies the name of the cross-region backup.
+	Name string `pulumi:"name"`
+	// Indicates the backup size in KB.
+	Size int `pulumi:"size"`
+	// Specifies the status of the cross-region backup.
+	// Value options:
+	// + **BUILDING**: Backup in progress
+	// + **COMPLETED**: Backup completed
+	// + **FAILED**: Backup failed
+	// + **DELETING**: Backup being deleted
+	Status string `pulumi:"status"`
+	// Indicates the database engine.
+	// Its value can be any of the following and is case-insensitive: **MySQL**, **PostgreSQL**, **SQLServer** and **MariaDB**.
+	Type string `pulumi:"type"`
+}
+
+// GetCrossRegionBackupsBackupInput is an input type that accepts GetCrossRegionBackupsBackupArgs and GetCrossRegionBackupsBackupOutput values.
+// You can construct a concrete instance of `GetCrossRegionBackupsBackupInput` via:
+//
+//	GetCrossRegionBackupsBackupArgs{...}
+type GetCrossRegionBackupsBackupInput interface {
+	pulumi.Input
+
+	ToGetCrossRegionBackupsBackupOutput() GetCrossRegionBackupsBackupOutput
+	ToGetCrossRegionBackupsBackupOutputWithContext(context.Context) GetCrossRegionBackupsBackupOutput
+}
+
+type GetCrossRegionBackupsBackupArgs struct {
+	// Indicates whether a DDM instance has been associated.
+	AssociatedWithDdm pulumi.BoolInput `pulumi:"associatedWithDdm"`
+	// Specifies the start time for obtaining the cross-region backup list.
+	// The format is **yyyy-mm-ddThh:mm:ssZ**. This parameter must be used together with `endTime`.
+	BeginTime pulumi.StringInput `pulumi:"beginTime"`
+	// Indicates the database to be backed up.
+	Databases GetCrossRegionBackupsBackupDatabaseArrayInput `pulumi:"databases"`
+	// Indicates the database information
+	Datastores GetCrossRegionBackupsBackupDatastoreArrayInput `pulumi:"datastores"`
+	// Specifies the end time for obtaining the cross-region backup list.
+	// The format is **yyyy-mm-ddThh:mm:ssZ**. The end time must be later than the start time.
+	// This parameter must be used together with `beginTime`.
+	EndTime pulumi.StringInput `pulumi:"endTime"`
+	// Indicates the ID of the cross-region backup.
+	Id pulumi.StringInput `pulumi:"id"`
+	// Specifies the ID of the RDS instance.
+	InstanceId pulumi.StringInput `pulumi:"instanceId"`
+	// Specifies the name of the cross-region backup.
+	Name pulumi.StringInput `pulumi:"name"`
+	// Indicates the backup size in KB.
+	Size pulumi.IntInput `pulumi:"size"`
+	// Specifies the status of the cross-region backup.
+	// Value options:
+	// + **BUILDING**: Backup in progress
+	// + **COMPLETED**: Backup completed
+	// + **FAILED**: Backup failed
+	// + **DELETING**: Backup being deleted
+	Status pulumi.StringInput `pulumi:"status"`
+	// Indicates the database engine.
+	// Its value can be any of the following and is case-insensitive: **MySQL**, **PostgreSQL**, **SQLServer** and **MariaDB**.
+	Type pulumi.StringInput `pulumi:"type"`
+}
+
+func (GetCrossRegionBackupsBackupArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetCrossRegionBackupsBackup)(nil)).Elem()
+}
+
+func (i GetCrossRegionBackupsBackupArgs) ToGetCrossRegionBackupsBackupOutput() GetCrossRegionBackupsBackupOutput {
+	return i.ToGetCrossRegionBackupsBackupOutputWithContext(context.Background())
+}
+
+func (i GetCrossRegionBackupsBackupArgs) ToGetCrossRegionBackupsBackupOutputWithContext(ctx context.Context) GetCrossRegionBackupsBackupOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetCrossRegionBackupsBackupOutput)
+}
+
+// GetCrossRegionBackupsBackupArrayInput is an input type that accepts GetCrossRegionBackupsBackupArray and GetCrossRegionBackupsBackupArrayOutput values.
+// You can construct a concrete instance of `GetCrossRegionBackupsBackupArrayInput` via:
+//
+//	GetCrossRegionBackupsBackupArray{ GetCrossRegionBackupsBackupArgs{...} }
+type GetCrossRegionBackupsBackupArrayInput interface {
+	pulumi.Input
+
+	ToGetCrossRegionBackupsBackupArrayOutput() GetCrossRegionBackupsBackupArrayOutput
+	ToGetCrossRegionBackupsBackupArrayOutputWithContext(context.Context) GetCrossRegionBackupsBackupArrayOutput
+}
+
+type GetCrossRegionBackupsBackupArray []GetCrossRegionBackupsBackupInput
+
+func (GetCrossRegionBackupsBackupArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetCrossRegionBackupsBackup)(nil)).Elem()
+}
+
+func (i GetCrossRegionBackupsBackupArray) ToGetCrossRegionBackupsBackupArrayOutput() GetCrossRegionBackupsBackupArrayOutput {
+	return i.ToGetCrossRegionBackupsBackupArrayOutputWithContext(context.Background())
+}
+
+func (i GetCrossRegionBackupsBackupArray) ToGetCrossRegionBackupsBackupArrayOutputWithContext(ctx context.Context) GetCrossRegionBackupsBackupArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetCrossRegionBackupsBackupArrayOutput)
+}
+
+type GetCrossRegionBackupsBackupOutput struct{ *pulumi.OutputState }
+
+func (GetCrossRegionBackupsBackupOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetCrossRegionBackupsBackup)(nil)).Elem()
+}
+
+func (o GetCrossRegionBackupsBackupOutput) ToGetCrossRegionBackupsBackupOutput() GetCrossRegionBackupsBackupOutput {
+	return o
+}
+
+func (o GetCrossRegionBackupsBackupOutput) ToGetCrossRegionBackupsBackupOutputWithContext(ctx context.Context) GetCrossRegionBackupsBackupOutput {
+	return o
+}
+
+// Indicates whether a DDM instance has been associated.
+func (o GetCrossRegionBackupsBackupOutput) AssociatedWithDdm() pulumi.BoolOutput {
+	return o.ApplyT(func(v GetCrossRegionBackupsBackup) bool { return v.AssociatedWithDdm }).(pulumi.BoolOutput)
+}
+
+// Specifies the start time for obtaining the cross-region backup list.
+// The format is **yyyy-mm-ddThh:mm:ssZ**. This parameter must be used together with `endTime`.
+func (o GetCrossRegionBackupsBackupOutput) BeginTime() pulumi.StringOutput {
+	return o.ApplyT(func(v GetCrossRegionBackupsBackup) string { return v.BeginTime }).(pulumi.StringOutput)
+}
+
+// Indicates the database to be backed up.
+func (o GetCrossRegionBackupsBackupOutput) Databases() GetCrossRegionBackupsBackupDatabaseArrayOutput {
+	return o.ApplyT(func(v GetCrossRegionBackupsBackup) []GetCrossRegionBackupsBackupDatabase { return v.Databases }).(GetCrossRegionBackupsBackupDatabaseArrayOutput)
+}
+
+// Indicates the database information
+func (o GetCrossRegionBackupsBackupOutput) Datastores() GetCrossRegionBackupsBackupDatastoreArrayOutput {
+	return o.ApplyT(func(v GetCrossRegionBackupsBackup) []GetCrossRegionBackupsBackupDatastore { return v.Datastores }).(GetCrossRegionBackupsBackupDatastoreArrayOutput)
+}
+
+// Specifies the end time for obtaining the cross-region backup list.
+// The format is **yyyy-mm-ddThh:mm:ssZ**. The end time must be later than the start time.
+// This parameter must be used together with `beginTime`.
+func (o GetCrossRegionBackupsBackupOutput) EndTime() pulumi.StringOutput {
+	return o.ApplyT(func(v GetCrossRegionBackupsBackup) string { return v.EndTime }).(pulumi.StringOutput)
+}
+
+// Indicates the ID of the cross-region backup.
+func (o GetCrossRegionBackupsBackupOutput) Id() pulumi.StringOutput {
+	return o.ApplyT(func(v GetCrossRegionBackupsBackup) string { return v.Id }).(pulumi.StringOutput)
+}
+
+// Specifies the ID of the RDS instance.
+func (o GetCrossRegionBackupsBackupOutput) InstanceId() pulumi.StringOutput {
+	return o.ApplyT(func(v GetCrossRegionBackupsBackup) string { return v.InstanceId }).(pulumi.StringOutput)
+}
+
+// Specifies the name of the cross-region backup.
+func (o GetCrossRegionBackupsBackupOutput) Name() pulumi.StringOutput {
+	return o.ApplyT(func(v GetCrossRegionBackupsBackup) string { return v.Name }).(pulumi.StringOutput)
+}
+
+// Indicates the backup size in KB.
+func (o GetCrossRegionBackupsBackupOutput) Size() pulumi.IntOutput {
+	return o.ApplyT(func(v GetCrossRegionBackupsBackup) int { return v.Size }).(pulumi.IntOutput)
+}
+
+// Specifies the status of the cross-region backup.
+// Value options:
+// + **BUILDING**: Backup in progress
+// + **COMPLETED**: Backup completed
+// + **FAILED**: Backup failed
+// + **DELETING**: Backup being deleted
+func (o GetCrossRegionBackupsBackupOutput) Status() pulumi.StringOutput {
+	return o.ApplyT(func(v GetCrossRegionBackupsBackup) string { return v.Status }).(pulumi.StringOutput)
+}
+
+// Indicates the database engine.
+// Its value can be any of the following and is case-insensitive: **MySQL**, **PostgreSQL**, **SQLServer** and **MariaDB**.
+func (o GetCrossRegionBackupsBackupOutput) Type() pulumi.StringOutput {
+	return o.ApplyT(func(v GetCrossRegionBackupsBackup) string { return v.Type }).(pulumi.StringOutput)
+}
+
+type GetCrossRegionBackupsBackupArrayOutput struct{ *pulumi.OutputState }
+
+func (GetCrossRegionBackupsBackupArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetCrossRegionBackupsBackup)(nil)).Elem()
+}
+
+func (o GetCrossRegionBackupsBackupArrayOutput) ToGetCrossRegionBackupsBackupArrayOutput() GetCrossRegionBackupsBackupArrayOutput {
+	return o
+}
+
+func (o GetCrossRegionBackupsBackupArrayOutput) ToGetCrossRegionBackupsBackupArrayOutputWithContext(ctx context.Context) GetCrossRegionBackupsBackupArrayOutput {
+	return o
+}
+
+func (o GetCrossRegionBackupsBackupArrayOutput) Index(i pulumi.IntInput) GetCrossRegionBackupsBackupOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) GetCrossRegionBackupsBackup {
+		return vs[0].([]GetCrossRegionBackupsBackup)[vs[1].(int)]
+	}).(GetCrossRegionBackupsBackupOutput)
+}
+
+type GetCrossRegionBackupsBackupDatabase struct {
+	// Specifies the name of the cross-region backup.
+	Name string `pulumi:"name"`
+}
+
+// GetCrossRegionBackupsBackupDatabaseInput is an input type that accepts GetCrossRegionBackupsBackupDatabaseArgs and GetCrossRegionBackupsBackupDatabaseOutput values.
+// You can construct a concrete instance of `GetCrossRegionBackupsBackupDatabaseInput` via:
+//
+//	GetCrossRegionBackupsBackupDatabaseArgs{...}
+type GetCrossRegionBackupsBackupDatabaseInput interface {
+	pulumi.Input
+
+	ToGetCrossRegionBackupsBackupDatabaseOutput() GetCrossRegionBackupsBackupDatabaseOutput
+	ToGetCrossRegionBackupsBackupDatabaseOutputWithContext(context.Context) GetCrossRegionBackupsBackupDatabaseOutput
+}
+
+type GetCrossRegionBackupsBackupDatabaseArgs struct {
+	// Specifies the name of the cross-region backup.
+	Name pulumi.StringInput `pulumi:"name"`
+}
+
+func (GetCrossRegionBackupsBackupDatabaseArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetCrossRegionBackupsBackupDatabase)(nil)).Elem()
+}
+
+func (i GetCrossRegionBackupsBackupDatabaseArgs) ToGetCrossRegionBackupsBackupDatabaseOutput() GetCrossRegionBackupsBackupDatabaseOutput {
+	return i.ToGetCrossRegionBackupsBackupDatabaseOutputWithContext(context.Background())
+}
+
+func (i GetCrossRegionBackupsBackupDatabaseArgs) ToGetCrossRegionBackupsBackupDatabaseOutputWithContext(ctx context.Context) GetCrossRegionBackupsBackupDatabaseOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetCrossRegionBackupsBackupDatabaseOutput)
+}
+
+// GetCrossRegionBackupsBackupDatabaseArrayInput is an input type that accepts GetCrossRegionBackupsBackupDatabaseArray and GetCrossRegionBackupsBackupDatabaseArrayOutput values.
+// You can construct a concrete instance of `GetCrossRegionBackupsBackupDatabaseArrayInput` via:
+//
+//	GetCrossRegionBackupsBackupDatabaseArray{ GetCrossRegionBackupsBackupDatabaseArgs{...} }
+type GetCrossRegionBackupsBackupDatabaseArrayInput interface {
+	pulumi.Input
+
+	ToGetCrossRegionBackupsBackupDatabaseArrayOutput() GetCrossRegionBackupsBackupDatabaseArrayOutput
+	ToGetCrossRegionBackupsBackupDatabaseArrayOutputWithContext(context.Context) GetCrossRegionBackupsBackupDatabaseArrayOutput
+}
+
+type GetCrossRegionBackupsBackupDatabaseArray []GetCrossRegionBackupsBackupDatabaseInput
+
+func (GetCrossRegionBackupsBackupDatabaseArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetCrossRegionBackupsBackupDatabase)(nil)).Elem()
+}
+
+func (i GetCrossRegionBackupsBackupDatabaseArray) ToGetCrossRegionBackupsBackupDatabaseArrayOutput() GetCrossRegionBackupsBackupDatabaseArrayOutput {
+	return i.ToGetCrossRegionBackupsBackupDatabaseArrayOutputWithContext(context.Background())
+}
+
+func (i GetCrossRegionBackupsBackupDatabaseArray) ToGetCrossRegionBackupsBackupDatabaseArrayOutputWithContext(ctx context.Context) GetCrossRegionBackupsBackupDatabaseArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetCrossRegionBackupsBackupDatabaseArrayOutput)
+}
+
+type GetCrossRegionBackupsBackupDatabaseOutput struct{ *pulumi.OutputState }
+
+func (GetCrossRegionBackupsBackupDatabaseOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetCrossRegionBackupsBackupDatabase)(nil)).Elem()
+}
+
+func (o GetCrossRegionBackupsBackupDatabaseOutput) ToGetCrossRegionBackupsBackupDatabaseOutput() GetCrossRegionBackupsBackupDatabaseOutput {
+	return o
+}
+
+func (o GetCrossRegionBackupsBackupDatabaseOutput) ToGetCrossRegionBackupsBackupDatabaseOutputWithContext(ctx context.Context) GetCrossRegionBackupsBackupDatabaseOutput {
+	return o
+}
+
+// Specifies the name of the cross-region backup.
+func (o GetCrossRegionBackupsBackupDatabaseOutput) Name() pulumi.StringOutput {
+	return o.ApplyT(func(v GetCrossRegionBackupsBackupDatabase) string { return v.Name }).(pulumi.StringOutput)
+}
+
+type GetCrossRegionBackupsBackupDatabaseArrayOutput struct{ *pulumi.OutputState }
+
+func (GetCrossRegionBackupsBackupDatabaseArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetCrossRegionBackupsBackupDatabase)(nil)).Elem()
+}
+
+func (o GetCrossRegionBackupsBackupDatabaseArrayOutput) ToGetCrossRegionBackupsBackupDatabaseArrayOutput() GetCrossRegionBackupsBackupDatabaseArrayOutput {
+	return o
+}
+
+func (o GetCrossRegionBackupsBackupDatabaseArrayOutput) ToGetCrossRegionBackupsBackupDatabaseArrayOutputWithContext(ctx context.Context) GetCrossRegionBackupsBackupDatabaseArrayOutput {
+	return o
+}
+
+func (o GetCrossRegionBackupsBackupDatabaseArrayOutput) Index(i pulumi.IntInput) GetCrossRegionBackupsBackupDatabaseOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) GetCrossRegionBackupsBackupDatabase {
+		return vs[0].([]GetCrossRegionBackupsBackupDatabase)[vs[1].(int)]
+	}).(GetCrossRegionBackupsBackupDatabaseOutput)
+}
+
+type GetCrossRegionBackupsBackupDatastore struct {
+	// Indicates the database engine.
+	// Its value can be any of the following and is case-insensitive: **MySQL**, **PostgreSQL**, **SQLServer** and **MariaDB**.
+	Type string `pulumi:"type"`
+	// Indicates the database engine version.
+	Version string `pulumi:"version"`
+}
+
+// GetCrossRegionBackupsBackupDatastoreInput is an input type that accepts GetCrossRegionBackupsBackupDatastoreArgs and GetCrossRegionBackupsBackupDatastoreOutput values.
+// You can construct a concrete instance of `GetCrossRegionBackupsBackupDatastoreInput` via:
+//
+//	GetCrossRegionBackupsBackupDatastoreArgs{...}
+type GetCrossRegionBackupsBackupDatastoreInput interface {
+	pulumi.Input
+
+	ToGetCrossRegionBackupsBackupDatastoreOutput() GetCrossRegionBackupsBackupDatastoreOutput
+	ToGetCrossRegionBackupsBackupDatastoreOutputWithContext(context.Context) GetCrossRegionBackupsBackupDatastoreOutput
+}
+
+type GetCrossRegionBackupsBackupDatastoreArgs struct {
+	// Indicates the database engine.
+	// Its value can be any of the following and is case-insensitive: **MySQL**, **PostgreSQL**, **SQLServer** and **MariaDB**.
+	Type pulumi.StringInput `pulumi:"type"`
+	// Indicates the database engine version.
+	Version pulumi.StringInput `pulumi:"version"`
+}
+
+func (GetCrossRegionBackupsBackupDatastoreArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetCrossRegionBackupsBackupDatastore)(nil)).Elem()
+}
+
+func (i GetCrossRegionBackupsBackupDatastoreArgs) ToGetCrossRegionBackupsBackupDatastoreOutput() GetCrossRegionBackupsBackupDatastoreOutput {
+	return i.ToGetCrossRegionBackupsBackupDatastoreOutputWithContext(context.Background())
+}
+
+func (i GetCrossRegionBackupsBackupDatastoreArgs) ToGetCrossRegionBackupsBackupDatastoreOutputWithContext(ctx context.Context) GetCrossRegionBackupsBackupDatastoreOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetCrossRegionBackupsBackupDatastoreOutput)
+}
+
+// GetCrossRegionBackupsBackupDatastoreArrayInput is an input type that accepts GetCrossRegionBackupsBackupDatastoreArray and GetCrossRegionBackupsBackupDatastoreArrayOutput values.
+// You can construct a concrete instance of `GetCrossRegionBackupsBackupDatastoreArrayInput` via:
+//
+//	GetCrossRegionBackupsBackupDatastoreArray{ GetCrossRegionBackupsBackupDatastoreArgs{...} }
+type GetCrossRegionBackupsBackupDatastoreArrayInput interface {
+	pulumi.Input
+
+	ToGetCrossRegionBackupsBackupDatastoreArrayOutput() GetCrossRegionBackupsBackupDatastoreArrayOutput
+	ToGetCrossRegionBackupsBackupDatastoreArrayOutputWithContext(context.Context) GetCrossRegionBackupsBackupDatastoreArrayOutput
+}
+
+type GetCrossRegionBackupsBackupDatastoreArray []GetCrossRegionBackupsBackupDatastoreInput
+
+func (GetCrossRegionBackupsBackupDatastoreArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetCrossRegionBackupsBackupDatastore)(nil)).Elem()
+}
+
+func (i GetCrossRegionBackupsBackupDatastoreArray) ToGetCrossRegionBackupsBackupDatastoreArrayOutput() GetCrossRegionBackupsBackupDatastoreArrayOutput {
+	return i.ToGetCrossRegionBackupsBackupDatastoreArrayOutputWithContext(context.Background())
+}
+
+func (i GetCrossRegionBackupsBackupDatastoreArray) ToGetCrossRegionBackupsBackupDatastoreArrayOutputWithContext(ctx context.Context) GetCrossRegionBackupsBackupDatastoreArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetCrossRegionBackupsBackupDatastoreArrayOutput)
+}
+
+type GetCrossRegionBackupsBackupDatastoreOutput struct{ *pulumi.OutputState }
+
+func (GetCrossRegionBackupsBackupDatastoreOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetCrossRegionBackupsBackupDatastore)(nil)).Elem()
+}
+
+func (o GetCrossRegionBackupsBackupDatastoreOutput) ToGetCrossRegionBackupsBackupDatastoreOutput() GetCrossRegionBackupsBackupDatastoreOutput {
+	return o
+}
+
+func (o GetCrossRegionBackupsBackupDatastoreOutput) ToGetCrossRegionBackupsBackupDatastoreOutputWithContext(ctx context.Context) GetCrossRegionBackupsBackupDatastoreOutput {
+	return o
+}
+
+// Indicates the database engine.
+// Its value can be any of the following and is case-insensitive: **MySQL**, **PostgreSQL**, **SQLServer** and **MariaDB**.
+func (o GetCrossRegionBackupsBackupDatastoreOutput) Type() pulumi.StringOutput {
+	return o.ApplyT(func(v GetCrossRegionBackupsBackupDatastore) string { return v.Type }).(pulumi.StringOutput)
+}
+
+// Indicates the database engine version.
+func (o GetCrossRegionBackupsBackupDatastoreOutput) Version() pulumi.StringOutput {
+	return o.ApplyT(func(v GetCrossRegionBackupsBackupDatastore) string { return v.Version }).(pulumi.StringOutput)
+}
+
+type GetCrossRegionBackupsBackupDatastoreArrayOutput struct{ *pulumi.OutputState }
+
+func (GetCrossRegionBackupsBackupDatastoreArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetCrossRegionBackupsBackupDatastore)(nil)).Elem()
+}
+
+func (o GetCrossRegionBackupsBackupDatastoreArrayOutput) ToGetCrossRegionBackupsBackupDatastoreArrayOutput() GetCrossRegionBackupsBackupDatastoreArrayOutput {
+	return o
+}
+
+func (o GetCrossRegionBackupsBackupDatastoreArrayOutput) ToGetCrossRegionBackupsBackupDatastoreArrayOutputWithContext(ctx context.Context) GetCrossRegionBackupsBackupDatastoreArrayOutput {
+	return o
+}
+
+func (o GetCrossRegionBackupsBackupDatastoreArrayOutput) Index(i pulumi.IntInput) GetCrossRegionBackupsBackupDatastoreOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) GetCrossRegionBackupsBackupDatastore {
+		return vs[0].([]GetCrossRegionBackupsBackupDatastore)[vs[1].(int)]
+	}).(GetCrossRegionBackupsBackupDatastoreOutput)
 }
 
 type GetEngineVersionsVersion struct {
@@ -1866,6 +5425,381 @@ func (o GetEngineVersionsVersionArrayOutput) Index(i pulumi.IntInput) GetEngineV
 	}).(GetEngineVersionsVersionOutput)
 }
 
+type GetErrorLogsErrorLog struct {
+	// Indicates the error log content.
+	Content string `pulumi:"content"`
+	// Specifies the log level. Value options: **ALL**, **INFO**, **LOG**, **WARNING**,
+	// **ERROR**, **FATAL**, **PANIC**, **NOTE**. Defaults to **ALL**.
+	Level string `pulumi:"level"`
+	// Indicates the date and time of the error log in the **yyyy-mm-ddThh:mm:ssZ** format.
+	Time string `pulumi:"time"`
+}
+
+// GetErrorLogsErrorLogInput is an input type that accepts GetErrorLogsErrorLogArgs and GetErrorLogsErrorLogOutput values.
+// You can construct a concrete instance of `GetErrorLogsErrorLogInput` via:
+//
+//	GetErrorLogsErrorLogArgs{...}
+type GetErrorLogsErrorLogInput interface {
+	pulumi.Input
+
+	ToGetErrorLogsErrorLogOutput() GetErrorLogsErrorLogOutput
+	ToGetErrorLogsErrorLogOutputWithContext(context.Context) GetErrorLogsErrorLogOutput
+}
+
+type GetErrorLogsErrorLogArgs struct {
+	// Indicates the error log content.
+	Content pulumi.StringInput `pulumi:"content"`
+	// Specifies the log level. Value options: **ALL**, **INFO**, **LOG**, **WARNING**,
+	// **ERROR**, **FATAL**, **PANIC**, **NOTE**. Defaults to **ALL**.
+	Level pulumi.StringInput `pulumi:"level"`
+	// Indicates the date and time of the error log in the **yyyy-mm-ddThh:mm:ssZ** format.
+	Time pulumi.StringInput `pulumi:"time"`
+}
+
+func (GetErrorLogsErrorLogArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetErrorLogsErrorLog)(nil)).Elem()
+}
+
+func (i GetErrorLogsErrorLogArgs) ToGetErrorLogsErrorLogOutput() GetErrorLogsErrorLogOutput {
+	return i.ToGetErrorLogsErrorLogOutputWithContext(context.Background())
+}
+
+func (i GetErrorLogsErrorLogArgs) ToGetErrorLogsErrorLogOutputWithContext(ctx context.Context) GetErrorLogsErrorLogOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetErrorLogsErrorLogOutput)
+}
+
+// GetErrorLogsErrorLogArrayInput is an input type that accepts GetErrorLogsErrorLogArray and GetErrorLogsErrorLogArrayOutput values.
+// You can construct a concrete instance of `GetErrorLogsErrorLogArrayInput` via:
+//
+//	GetErrorLogsErrorLogArray{ GetErrorLogsErrorLogArgs{...} }
+type GetErrorLogsErrorLogArrayInput interface {
+	pulumi.Input
+
+	ToGetErrorLogsErrorLogArrayOutput() GetErrorLogsErrorLogArrayOutput
+	ToGetErrorLogsErrorLogArrayOutputWithContext(context.Context) GetErrorLogsErrorLogArrayOutput
+}
+
+type GetErrorLogsErrorLogArray []GetErrorLogsErrorLogInput
+
+func (GetErrorLogsErrorLogArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetErrorLogsErrorLog)(nil)).Elem()
+}
+
+func (i GetErrorLogsErrorLogArray) ToGetErrorLogsErrorLogArrayOutput() GetErrorLogsErrorLogArrayOutput {
+	return i.ToGetErrorLogsErrorLogArrayOutputWithContext(context.Background())
+}
+
+func (i GetErrorLogsErrorLogArray) ToGetErrorLogsErrorLogArrayOutputWithContext(ctx context.Context) GetErrorLogsErrorLogArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetErrorLogsErrorLogArrayOutput)
+}
+
+type GetErrorLogsErrorLogOutput struct{ *pulumi.OutputState }
+
+func (GetErrorLogsErrorLogOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetErrorLogsErrorLog)(nil)).Elem()
+}
+
+func (o GetErrorLogsErrorLogOutput) ToGetErrorLogsErrorLogOutput() GetErrorLogsErrorLogOutput {
+	return o
+}
+
+func (o GetErrorLogsErrorLogOutput) ToGetErrorLogsErrorLogOutputWithContext(ctx context.Context) GetErrorLogsErrorLogOutput {
+	return o
+}
+
+// Indicates the error log content.
+func (o GetErrorLogsErrorLogOutput) Content() pulumi.StringOutput {
+	return o.ApplyT(func(v GetErrorLogsErrorLog) string { return v.Content }).(pulumi.StringOutput)
+}
+
+// Specifies the log level. Value options: **ALL**, **INFO**, **LOG**, **WARNING**,
+// **ERROR**, **FATAL**, **PANIC**, **NOTE**. Defaults to **ALL**.
+func (o GetErrorLogsErrorLogOutput) Level() pulumi.StringOutput {
+	return o.ApplyT(func(v GetErrorLogsErrorLog) string { return v.Level }).(pulumi.StringOutput)
+}
+
+// Indicates the date and time of the error log in the **yyyy-mm-ddThh:mm:ssZ** format.
+func (o GetErrorLogsErrorLogOutput) Time() pulumi.StringOutput {
+	return o.ApplyT(func(v GetErrorLogsErrorLog) string { return v.Time }).(pulumi.StringOutput)
+}
+
+type GetErrorLogsErrorLogArrayOutput struct{ *pulumi.OutputState }
+
+func (GetErrorLogsErrorLogArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetErrorLogsErrorLog)(nil)).Elem()
+}
+
+func (o GetErrorLogsErrorLogArrayOutput) ToGetErrorLogsErrorLogArrayOutput() GetErrorLogsErrorLogArrayOutput {
+	return o
+}
+
+func (o GetErrorLogsErrorLogArrayOutput) ToGetErrorLogsErrorLogArrayOutputWithContext(ctx context.Context) GetErrorLogsErrorLogArrayOutput {
+	return o
+}
+
+func (o GetErrorLogsErrorLogArrayOutput) Index(i pulumi.IntInput) GetErrorLogsErrorLogOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) GetErrorLogsErrorLog {
+		return vs[0].([]GetErrorLogsErrorLog)[vs[1].(int)]
+	}).(GetErrorLogsErrorLogOutput)
+}
+
+type GetExtendLogFilesFile struct {
+	// Indicates the file Name.
+	FileName string `pulumi:"fileName"`
+	// Indicates the file size. Unit: KB.
+	FileSize string `pulumi:"fileSize"`
+}
+
+// GetExtendLogFilesFileInput is an input type that accepts GetExtendLogFilesFileArgs and GetExtendLogFilesFileOutput values.
+// You can construct a concrete instance of `GetExtendLogFilesFileInput` via:
+//
+//	GetExtendLogFilesFileArgs{...}
+type GetExtendLogFilesFileInput interface {
+	pulumi.Input
+
+	ToGetExtendLogFilesFileOutput() GetExtendLogFilesFileOutput
+	ToGetExtendLogFilesFileOutputWithContext(context.Context) GetExtendLogFilesFileOutput
+}
+
+type GetExtendLogFilesFileArgs struct {
+	// Indicates the file Name.
+	FileName pulumi.StringInput `pulumi:"fileName"`
+	// Indicates the file size. Unit: KB.
+	FileSize pulumi.StringInput `pulumi:"fileSize"`
+}
+
+func (GetExtendLogFilesFileArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetExtendLogFilesFile)(nil)).Elem()
+}
+
+func (i GetExtendLogFilesFileArgs) ToGetExtendLogFilesFileOutput() GetExtendLogFilesFileOutput {
+	return i.ToGetExtendLogFilesFileOutputWithContext(context.Background())
+}
+
+func (i GetExtendLogFilesFileArgs) ToGetExtendLogFilesFileOutputWithContext(ctx context.Context) GetExtendLogFilesFileOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetExtendLogFilesFileOutput)
+}
+
+// GetExtendLogFilesFileArrayInput is an input type that accepts GetExtendLogFilesFileArray and GetExtendLogFilesFileArrayOutput values.
+// You can construct a concrete instance of `GetExtendLogFilesFileArrayInput` via:
+//
+//	GetExtendLogFilesFileArray{ GetExtendLogFilesFileArgs{...} }
+type GetExtendLogFilesFileArrayInput interface {
+	pulumi.Input
+
+	ToGetExtendLogFilesFileArrayOutput() GetExtendLogFilesFileArrayOutput
+	ToGetExtendLogFilesFileArrayOutputWithContext(context.Context) GetExtendLogFilesFileArrayOutput
+}
+
+type GetExtendLogFilesFileArray []GetExtendLogFilesFileInput
+
+func (GetExtendLogFilesFileArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetExtendLogFilesFile)(nil)).Elem()
+}
+
+func (i GetExtendLogFilesFileArray) ToGetExtendLogFilesFileArrayOutput() GetExtendLogFilesFileArrayOutput {
+	return i.ToGetExtendLogFilesFileArrayOutputWithContext(context.Background())
+}
+
+func (i GetExtendLogFilesFileArray) ToGetExtendLogFilesFileArrayOutputWithContext(ctx context.Context) GetExtendLogFilesFileArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetExtendLogFilesFileArrayOutput)
+}
+
+type GetExtendLogFilesFileOutput struct{ *pulumi.OutputState }
+
+func (GetExtendLogFilesFileOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetExtendLogFilesFile)(nil)).Elem()
+}
+
+func (o GetExtendLogFilesFileOutput) ToGetExtendLogFilesFileOutput() GetExtendLogFilesFileOutput {
+	return o
+}
+
+func (o GetExtendLogFilesFileOutput) ToGetExtendLogFilesFileOutputWithContext(ctx context.Context) GetExtendLogFilesFileOutput {
+	return o
+}
+
+// Indicates the file Name.
+func (o GetExtendLogFilesFileOutput) FileName() pulumi.StringOutput {
+	return o.ApplyT(func(v GetExtendLogFilesFile) string { return v.FileName }).(pulumi.StringOutput)
+}
+
+// Indicates the file size. Unit: KB.
+func (o GetExtendLogFilesFileOutput) FileSize() pulumi.StringOutput {
+	return o.ApplyT(func(v GetExtendLogFilesFile) string { return v.FileSize }).(pulumi.StringOutput)
+}
+
+type GetExtendLogFilesFileArrayOutput struct{ *pulumi.OutputState }
+
+func (GetExtendLogFilesFileArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetExtendLogFilesFile)(nil)).Elem()
+}
+
+func (o GetExtendLogFilesFileArrayOutput) ToGetExtendLogFilesFileArrayOutput() GetExtendLogFilesFileArrayOutput {
+	return o
+}
+
+func (o GetExtendLogFilesFileArrayOutput) ToGetExtendLogFilesFileArrayOutputWithContext(ctx context.Context) GetExtendLogFilesFileArrayOutput {
+	return o
+}
+
+func (o GetExtendLogFilesFileArrayOutput) Index(i pulumi.IntInput) GetExtendLogFilesFileOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) GetExtendLogFilesFile {
+		return vs[0].([]GetExtendLogFilesFile)[vs[1].(int)]
+	}).(GetExtendLogFilesFileOutput)
+}
+
+type GetExtendLogLinksLink struct {
+	// Indicates the creation time.
+	CreatedAt string `pulumi:"createdAt"`
+	// Indicates the download link.
+	FileLink string `pulumi:"fileLink"`
+	// Specifies the name of the file to be downloaded.
+	FileName string `pulumi:"fileName"`
+	// Indicates the file size in KB.
+	FileSize string `pulumi:"fileSize"`
+	// Indicates the status of the link. The value can be one of the following:
+	// + **SUCCESS**: The download link has been generated.
+	// + **EXPORTING**: The file is being generated.
+	// + **FAILED**: The log file fails to be prepared.
+	Status string `pulumi:"status"`
+	// Indicates the last update time.
+	UpdatedAt string `pulumi:"updatedAt"`
+}
+
+// GetExtendLogLinksLinkInput is an input type that accepts GetExtendLogLinksLinkArgs and GetExtendLogLinksLinkOutput values.
+// You can construct a concrete instance of `GetExtendLogLinksLinkInput` via:
+//
+//	GetExtendLogLinksLinkArgs{...}
+type GetExtendLogLinksLinkInput interface {
+	pulumi.Input
+
+	ToGetExtendLogLinksLinkOutput() GetExtendLogLinksLinkOutput
+	ToGetExtendLogLinksLinkOutputWithContext(context.Context) GetExtendLogLinksLinkOutput
+}
+
+type GetExtendLogLinksLinkArgs struct {
+	// Indicates the creation time.
+	CreatedAt pulumi.StringInput `pulumi:"createdAt"`
+	// Indicates the download link.
+	FileLink pulumi.StringInput `pulumi:"fileLink"`
+	// Specifies the name of the file to be downloaded.
+	FileName pulumi.StringInput `pulumi:"fileName"`
+	// Indicates the file size in KB.
+	FileSize pulumi.StringInput `pulumi:"fileSize"`
+	// Indicates the status of the link. The value can be one of the following:
+	// + **SUCCESS**: The download link has been generated.
+	// + **EXPORTING**: The file is being generated.
+	// + **FAILED**: The log file fails to be prepared.
+	Status pulumi.StringInput `pulumi:"status"`
+	// Indicates the last update time.
+	UpdatedAt pulumi.StringInput `pulumi:"updatedAt"`
+}
+
+func (GetExtendLogLinksLinkArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetExtendLogLinksLink)(nil)).Elem()
+}
+
+func (i GetExtendLogLinksLinkArgs) ToGetExtendLogLinksLinkOutput() GetExtendLogLinksLinkOutput {
+	return i.ToGetExtendLogLinksLinkOutputWithContext(context.Background())
+}
+
+func (i GetExtendLogLinksLinkArgs) ToGetExtendLogLinksLinkOutputWithContext(ctx context.Context) GetExtendLogLinksLinkOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetExtendLogLinksLinkOutput)
+}
+
+// GetExtendLogLinksLinkArrayInput is an input type that accepts GetExtendLogLinksLinkArray and GetExtendLogLinksLinkArrayOutput values.
+// You can construct a concrete instance of `GetExtendLogLinksLinkArrayInput` via:
+//
+//	GetExtendLogLinksLinkArray{ GetExtendLogLinksLinkArgs{...} }
+type GetExtendLogLinksLinkArrayInput interface {
+	pulumi.Input
+
+	ToGetExtendLogLinksLinkArrayOutput() GetExtendLogLinksLinkArrayOutput
+	ToGetExtendLogLinksLinkArrayOutputWithContext(context.Context) GetExtendLogLinksLinkArrayOutput
+}
+
+type GetExtendLogLinksLinkArray []GetExtendLogLinksLinkInput
+
+func (GetExtendLogLinksLinkArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetExtendLogLinksLink)(nil)).Elem()
+}
+
+func (i GetExtendLogLinksLinkArray) ToGetExtendLogLinksLinkArrayOutput() GetExtendLogLinksLinkArrayOutput {
+	return i.ToGetExtendLogLinksLinkArrayOutputWithContext(context.Background())
+}
+
+func (i GetExtendLogLinksLinkArray) ToGetExtendLogLinksLinkArrayOutputWithContext(ctx context.Context) GetExtendLogLinksLinkArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetExtendLogLinksLinkArrayOutput)
+}
+
+type GetExtendLogLinksLinkOutput struct{ *pulumi.OutputState }
+
+func (GetExtendLogLinksLinkOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetExtendLogLinksLink)(nil)).Elem()
+}
+
+func (o GetExtendLogLinksLinkOutput) ToGetExtendLogLinksLinkOutput() GetExtendLogLinksLinkOutput {
+	return o
+}
+
+func (o GetExtendLogLinksLinkOutput) ToGetExtendLogLinksLinkOutputWithContext(ctx context.Context) GetExtendLogLinksLinkOutput {
+	return o
+}
+
+// Indicates the creation time.
+func (o GetExtendLogLinksLinkOutput) CreatedAt() pulumi.StringOutput {
+	return o.ApplyT(func(v GetExtendLogLinksLink) string { return v.CreatedAt }).(pulumi.StringOutput)
+}
+
+// Indicates the download link.
+func (o GetExtendLogLinksLinkOutput) FileLink() pulumi.StringOutput {
+	return o.ApplyT(func(v GetExtendLogLinksLink) string { return v.FileLink }).(pulumi.StringOutput)
+}
+
+// Specifies the name of the file to be downloaded.
+func (o GetExtendLogLinksLinkOutput) FileName() pulumi.StringOutput {
+	return o.ApplyT(func(v GetExtendLogLinksLink) string { return v.FileName }).(pulumi.StringOutput)
+}
+
+// Indicates the file size in KB.
+func (o GetExtendLogLinksLinkOutput) FileSize() pulumi.StringOutput {
+	return o.ApplyT(func(v GetExtendLogLinksLink) string { return v.FileSize }).(pulumi.StringOutput)
+}
+
+// Indicates the status of the link. The value can be one of the following:
+// + **SUCCESS**: The download link has been generated.
+// + **EXPORTING**: The file is being generated.
+// + **FAILED**: The log file fails to be prepared.
+func (o GetExtendLogLinksLinkOutput) Status() pulumi.StringOutput {
+	return o.ApplyT(func(v GetExtendLogLinksLink) string { return v.Status }).(pulumi.StringOutput)
+}
+
+// Indicates the last update time.
+func (o GetExtendLogLinksLinkOutput) UpdatedAt() pulumi.StringOutput {
+	return o.ApplyT(func(v GetExtendLogLinksLink) string { return v.UpdatedAt }).(pulumi.StringOutput)
+}
+
+type GetExtendLogLinksLinkArrayOutput struct{ *pulumi.OutputState }
+
+func (GetExtendLogLinksLinkArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetExtendLogLinksLink)(nil)).Elem()
+}
+
+func (o GetExtendLogLinksLinkArrayOutput) ToGetExtendLogLinksLinkArrayOutput() GetExtendLogLinksLinkArrayOutput {
+	return o
+}
+
+func (o GetExtendLogLinksLinkArrayOutput) ToGetExtendLogLinksLinkArrayOutputWithContext(ctx context.Context) GetExtendLogLinksLinkArrayOutput {
+	return o
+}
+
+func (o GetExtendLogLinksLinkArrayOutput) Index(i pulumi.IntInput) GetExtendLogLinksLinkOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) GetExtendLogLinksLink {
+		return vs[0].([]GetExtendLogLinksLink)[vs[1].(int)]
+	}).(GetExtendLogLinksLinkOutput)
+}
+
 type GetFlavorsFlavor struct {
 	// The availability zones which the RDS flavor belongs to.
 	AvailabilityZones []string `pulumi:"availabilityZones"`
@@ -1889,8 +5823,8 @@ type GetFlavorsFlavor struct {
 	GroupType string `pulumi:"groupType"`
 	// The ID of the rds flavor.
 	Id string `pulumi:"id"`
-	// The mode of instance. Value: *ha*(indicates primary/standby instance),
-	// *single*(indicates single instance) and *replica*(indicates read replicas).
+	// The mode of instance. The value can be **ha**(indicates primary/standby
+	// instance), **single**(indicates single instance) and **replica**(indicates read replicas).
 	InstanceMode string `pulumi:"instanceMode"`
 	// Specifies the memory size(GB) in the RDS flavor.
 	Memory int `pulumi:"memory"`
@@ -1936,8 +5870,8 @@ type GetFlavorsFlavorArgs struct {
 	GroupType pulumi.StringInput `pulumi:"groupType"`
 	// The ID of the rds flavor.
 	Id pulumi.StringInput `pulumi:"id"`
-	// The mode of instance. Value: *ha*(indicates primary/standby instance),
-	// *single*(indicates single instance) and *replica*(indicates read replicas).
+	// The mode of instance. The value can be **ha**(indicates primary/standby
+	// instance), **single**(indicates single instance) and **replica**(indicates read replicas).
 	InstanceMode pulumi.StringInput `pulumi:"instanceMode"`
 	// Specifies the memory size(GB) in the RDS flavor.
 	Memory pulumi.IntInput `pulumi:"memory"`
@@ -2034,8 +5968,8 @@ func (o GetFlavorsFlavorOutput) Id() pulumi.StringOutput {
 	return o.ApplyT(func(v GetFlavorsFlavor) string { return v.Id }).(pulumi.StringOutput)
 }
 
-// The mode of instance. Value: *ha*(indicates primary/standby instance),
-// *single*(indicates single instance) and *replica*(indicates read replicas).
+// The mode of instance. The value can be **ha**(indicates primary/standby
+// instance), **single**(indicates single instance) and **replica**(indicates read replicas).
 func (o GetFlavorsFlavorOutput) InstanceMode() pulumi.StringOutput {
 	return o.ApplyT(func(v GetFlavorsFlavor) string { return v.InstanceMode }).(pulumi.StringOutput)
 }
@@ -2487,7 +6421,8 @@ func (o GetInstancesInstanceBackupStrategyArrayOutput) Index(i pulumi.IntInput) 
 type GetInstancesInstanceDb struct {
 	// Indicates the database port.
 	Port int `pulumi:"port"`
-	// Specifies the type of the instance. Valid values are: Single, Ha, Replica, and Enterprise.
+	// Specifies the type of the instance. Valid values are **Single**, **Ha**, **Replica**,
+	// and **Enterprise**.
 	Type string `pulumi:"type"`
 	// Indicates the database user name.
 	UserName string `pulumi:"userName"`
@@ -2509,7 +6444,8 @@ type GetInstancesInstanceDbInput interface {
 type GetInstancesInstanceDbArgs struct {
 	// Indicates the database port.
 	Port pulumi.IntInput `pulumi:"port"`
-	// Specifies the type of the instance. Valid values are: Single, Ha, Replica, and Enterprise.
+	// Specifies the type of the instance. Valid values are **Single**, **Ha**, **Replica**,
+	// and **Enterprise**.
 	Type pulumi.StringInput `pulumi:"type"`
 	// Indicates the database user name.
 	UserName pulumi.StringInput `pulumi:"userName"`
@@ -2573,7 +6509,8 @@ func (o GetInstancesInstanceDbOutput) Port() pulumi.IntOutput {
 	return o.ApplyT(func(v GetInstancesInstanceDb) int { return v.Port }).(pulumi.IntOutput)
 }
 
-// Specifies the type of the instance. Valid values are: Single, Ha, Replica, and Enterprise.
+// Specifies the type of the instance. Valid values are **Single**, **Ha**, **Replica**,
+// and **Enterprise**.
 func (o GetInstancesInstanceDbOutput) Type() pulumi.StringOutput {
 	return o.ApplyT(func(v GetInstancesInstanceDb) string { return v.Type }).(pulumi.StringOutput)
 }
@@ -2746,7 +6683,8 @@ type GetInstancesInstanceVolume struct {
 	DiskEncryptionId string `pulumi:"diskEncryptionId"`
 	// Indicates the volume size.
 	Size int `pulumi:"size"`
-	// Specifies the type of the instance. Valid values are: Single, Ha, Replica, and Enterprise.
+	// Specifies the type of the instance. Valid values are **Single**, **Ha**, **Replica**,
+	// and **Enterprise**.
 	Type string `pulumi:"type"`
 }
 
@@ -2766,7 +6704,8 @@ type GetInstancesInstanceVolumeArgs struct {
 	DiskEncryptionId pulumi.StringInput `pulumi:"diskEncryptionId"`
 	// Indicates the volume size.
 	Size pulumi.IntInput `pulumi:"size"`
-	// Specifies the type of the instance. Valid values are: Single, Ha, Replica, and Enterprise.
+	// Specifies the type of the instance. Valid values are **Single**, **Ha**, **Replica**,
+	// and **Enterprise**.
 	Type pulumi.StringInput `pulumi:"type"`
 }
 
@@ -2831,7 +6770,8 @@ func (o GetInstancesInstanceVolumeOutput) Size() pulumi.IntOutput {
 	return o.ApplyT(func(v GetInstancesInstanceVolume) int { return v.Size }).(pulumi.IntOutput)
 }
 
-// Specifies the type of the instance. Valid values are: Single, Ha, Replica, and Enterprise.
+// Specifies the type of the instance. Valid values are **Single**, **Ha**, **Replica**,
+// and **Enterprise**.
 func (o GetInstancesInstanceVolumeOutput) Type() pulumi.StringOutput {
 	return o.ApplyT(func(v GetInstancesInstanceVolume) string { return v.Type }).(pulumi.StringOutput)
 }
@@ -2856,29 +6796,5139 @@ func (o GetInstancesInstanceVolumeArrayOutput) Index(i pulumi.IntInput) GetInsta
 	}).(GetInstancesInstanceVolumeOutput)
 }
 
+type GetMysqlAccountsUser struct {
+	// Indicates remarks of the database account.
+	Description string `pulumi:"description"`
+	// Indicates the IP addresses that are allowed to access your DB instance.
+	Hosts []string `pulumi:"hosts"`
+	// Specifies the username of the DB account.
+	Name string `pulumi:"name"`
+}
+
+// GetMysqlAccountsUserInput is an input type that accepts GetMysqlAccountsUserArgs and GetMysqlAccountsUserOutput values.
+// You can construct a concrete instance of `GetMysqlAccountsUserInput` via:
+//
+//	GetMysqlAccountsUserArgs{...}
+type GetMysqlAccountsUserInput interface {
+	pulumi.Input
+
+	ToGetMysqlAccountsUserOutput() GetMysqlAccountsUserOutput
+	ToGetMysqlAccountsUserOutputWithContext(context.Context) GetMysqlAccountsUserOutput
+}
+
+type GetMysqlAccountsUserArgs struct {
+	// Indicates remarks of the database account.
+	Description pulumi.StringInput `pulumi:"description"`
+	// Indicates the IP addresses that are allowed to access your DB instance.
+	Hosts pulumi.StringArrayInput `pulumi:"hosts"`
+	// Specifies the username of the DB account.
+	Name pulumi.StringInput `pulumi:"name"`
+}
+
+func (GetMysqlAccountsUserArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetMysqlAccountsUser)(nil)).Elem()
+}
+
+func (i GetMysqlAccountsUserArgs) ToGetMysqlAccountsUserOutput() GetMysqlAccountsUserOutput {
+	return i.ToGetMysqlAccountsUserOutputWithContext(context.Background())
+}
+
+func (i GetMysqlAccountsUserArgs) ToGetMysqlAccountsUserOutputWithContext(ctx context.Context) GetMysqlAccountsUserOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetMysqlAccountsUserOutput)
+}
+
+// GetMysqlAccountsUserArrayInput is an input type that accepts GetMysqlAccountsUserArray and GetMysqlAccountsUserArrayOutput values.
+// You can construct a concrete instance of `GetMysqlAccountsUserArrayInput` via:
+//
+//	GetMysqlAccountsUserArray{ GetMysqlAccountsUserArgs{...} }
+type GetMysqlAccountsUserArrayInput interface {
+	pulumi.Input
+
+	ToGetMysqlAccountsUserArrayOutput() GetMysqlAccountsUserArrayOutput
+	ToGetMysqlAccountsUserArrayOutputWithContext(context.Context) GetMysqlAccountsUserArrayOutput
+}
+
+type GetMysqlAccountsUserArray []GetMysqlAccountsUserInput
+
+func (GetMysqlAccountsUserArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetMysqlAccountsUser)(nil)).Elem()
+}
+
+func (i GetMysqlAccountsUserArray) ToGetMysqlAccountsUserArrayOutput() GetMysqlAccountsUserArrayOutput {
+	return i.ToGetMysqlAccountsUserArrayOutputWithContext(context.Background())
+}
+
+func (i GetMysqlAccountsUserArray) ToGetMysqlAccountsUserArrayOutputWithContext(ctx context.Context) GetMysqlAccountsUserArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetMysqlAccountsUserArrayOutput)
+}
+
+type GetMysqlAccountsUserOutput struct{ *pulumi.OutputState }
+
+func (GetMysqlAccountsUserOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetMysqlAccountsUser)(nil)).Elem()
+}
+
+func (o GetMysqlAccountsUserOutput) ToGetMysqlAccountsUserOutput() GetMysqlAccountsUserOutput {
+	return o
+}
+
+func (o GetMysqlAccountsUserOutput) ToGetMysqlAccountsUserOutputWithContext(ctx context.Context) GetMysqlAccountsUserOutput {
+	return o
+}
+
+// Indicates remarks of the database account.
+func (o GetMysqlAccountsUserOutput) Description() pulumi.StringOutput {
+	return o.ApplyT(func(v GetMysqlAccountsUser) string { return v.Description }).(pulumi.StringOutput)
+}
+
+// Indicates the IP addresses that are allowed to access your DB instance.
+func (o GetMysqlAccountsUserOutput) Hosts() pulumi.StringArrayOutput {
+	return o.ApplyT(func(v GetMysqlAccountsUser) []string { return v.Hosts }).(pulumi.StringArrayOutput)
+}
+
+// Specifies the username of the DB account.
+func (o GetMysqlAccountsUserOutput) Name() pulumi.StringOutput {
+	return o.ApplyT(func(v GetMysqlAccountsUser) string { return v.Name }).(pulumi.StringOutput)
+}
+
+type GetMysqlAccountsUserArrayOutput struct{ *pulumi.OutputState }
+
+func (GetMysqlAccountsUserArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetMysqlAccountsUser)(nil)).Elem()
+}
+
+func (o GetMysqlAccountsUserArrayOutput) ToGetMysqlAccountsUserArrayOutput() GetMysqlAccountsUserArrayOutput {
+	return o
+}
+
+func (o GetMysqlAccountsUserArrayOutput) ToGetMysqlAccountsUserArrayOutputWithContext(ctx context.Context) GetMysqlAccountsUserArrayOutput {
+	return o
+}
+
+func (o GetMysqlAccountsUserArrayOutput) Index(i pulumi.IntInput) GetMysqlAccountsUserOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) GetMysqlAccountsUser {
+		return vs[0].([]GetMysqlAccountsUser)[vs[1].(int)]
+	}).(GetMysqlAccountsUserOutput)
+}
+
+type GetMysqlDatabasePrivilegesUser struct {
+	// The username of the database account.
+	Name string `pulumi:"name"`
+	// Specifies whether the database permission is **read-only**. Values option:
+	// + **true**: indicates the database is read-only.
+	// + **false**: indicates the database is readable and writable.
+	Readonly bool `pulumi:"readonly"`
+}
+
+// GetMysqlDatabasePrivilegesUserInput is an input type that accepts GetMysqlDatabasePrivilegesUserArgs and GetMysqlDatabasePrivilegesUserOutput values.
+// You can construct a concrete instance of `GetMysqlDatabasePrivilegesUserInput` via:
+//
+//	GetMysqlDatabasePrivilegesUserArgs{...}
+type GetMysqlDatabasePrivilegesUserInput interface {
+	pulumi.Input
+
+	ToGetMysqlDatabasePrivilegesUserOutput() GetMysqlDatabasePrivilegesUserOutput
+	ToGetMysqlDatabasePrivilegesUserOutputWithContext(context.Context) GetMysqlDatabasePrivilegesUserOutput
+}
+
+type GetMysqlDatabasePrivilegesUserArgs struct {
+	// The username of the database account.
+	Name pulumi.StringInput `pulumi:"name"`
+	// Specifies whether the database permission is **read-only**. Values option:
+	// + **true**: indicates the database is read-only.
+	// + **false**: indicates the database is readable and writable.
+	Readonly pulumi.BoolInput `pulumi:"readonly"`
+}
+
+func (GetMysqlDatabasePrivilegesUserArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetMysqlDatabasePrivilegesUser)(nil)).Elem()
+}
+
+func (i GetMysqlDatabasePrivilegesUserArgs) ToGetMysqlDatabasePrivilegesUserOutput() GetMysqlDatabasePrivilegesUserOutput {
+	return i.ToGetMysqlDatabasePrivilegesUserOutputWithContext(context.Background())
+}
+
+func (i GetMysqlDatabasePrivilegesUserArgs) ToGetMysqlDatabasePrivilegesUserOutputWithContext(ctx context.Context) GetMysqlDatabasePrivilegesUserOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetMysqlDatabasePrivilegesUserOutput)
+}
+
+// GetMysqlDatabasePrivilegesUserArrayInput is an input type that accepts GetMysqlDatabasePrivilegesUserArray and GetMysqlDatabasePrivilegesUserArrayOutput values.
+// You can construct a concrete instance of `GetMysqlDatabasePrivilegesUserArrayInput` via:
+//
+//	GetMysqlDatabasePrivilegesUserArray{ GetMysqlDatabasePrivilegesUserArgs{...} }
+type GetMysqlDatabasePrivilegesUserArrayInput interface {
+	pulumi.Input
+
+	ToGetMysqlDatabasePrivilegesUserArrayOutput() GetMysqlDatabasePrivilegesUserArrayOutput
+	ToGetMysqlDatabasePrivilegesUserArrayOutputWithContext(context.Context) GetMysqlDatabasePrivilegesUserArrayOutput
+}
+
+type GetMysqlDatabasePrivilegesUserArray []GetMysqlDatabasePrivilegesUserInput
+
+func (GetMysqlDatabasePrivilegesUserArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetMysqlDatabasePrivilegesUser)(nil)).Elem()
+}
+
+func (i GetMysqlDatabasePrivilegesUserArray) ToGetMysqlDatabasePrivilegesUserArrayOutput() GetMysqlDatabasePrivilegesUserArrayOutput {
+	return i.ToGetMysqlDatabasePrivilegesUserArrayOutputWithContext(context.Background())
+}
+
+func (i GetMysqlDatabasePrivilegesUserArray) ToGetMysqlDatabasePrivilegesUserArrayOutputWithContext(ctx context.Context) GetMysqlDatabasePrivilegesUserArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetMysqlDatabasePrivilegesUserArrayOutput)
+}
+
+type GetMysqlDatabasePrivilegesUserOutput struct{ *pulumi.OutputState }
+
+func (GetMysqlDatabasePrivilegesUserOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetMysqlDatabasePrivilegesUser)(nil)).Elem()
+}
+
+func (o GetMysqlDatabasePrivilegesUserOutput) ToGetMysqlDatabasePrivilegesUserOutput() GetMysqlDatabasePrivilegesUserOutput {
+	return o
+}
+
+func (o GetMysqlDatabasePrivilegesUserOutput) ToGetMysqlDatabasePrivilegesUserOutputWithContext(ctx context.Context) GetMysqlDatabasePrivilegesUserOutput {
+	return o
+}
+
+// The username of the database account.
+func (o GetMysqlDatabasePrivilegesUserOutput) Name() pulumi.StringOutput {
+	return o.ApplyT(func(v GetMysqlDatabasePrivilegesUser) string { return v.Name }).(pulumi.StringOutput)
+}
+
+// Specifies whether the database permission is **read-only**. Values option:
+// + **true**: indicates the database is read-only.
+// + **false**: indicates the database is readable and writable.
+func (o GetMysqlDatabasePrivilegesUserOutput) Readonly() pulumi.BoolOutput {
+	return o.ApplyT(func(v GetMysqlDatabasePrivilegesUser) bool { return v.Readonly }).(pulumi.BoolOutput)
+}
+
+type GetMysqlDatabasePrivilegesUserArrayOutput struct{ *pulumi.OutputState }
+
+func (GetMysqlDatabasePrivilegesUserArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetMysqlDatabasePrivilegesUser)(nil)).Elem()
+}
+
+func (o GetMysqlDatabasePrivilegesUserArrayOutput) ToGetMysqlDatabasePrivilegesUserArrayOutput() GetMysqlDatabasePrivilegesUserArrayOutput {
+	return o
+}
+
+func (o GetMysqlDatabasePrivilegesUserArrayOutput) ToGetMysqlDatabasePrivilegesUserArrayOutputWithContext(ctx context.Context) GetMysqlDatabasePrivilegesUserArrayOutput {
+	return o
+}
+
+func (o GetMysqlDatabasePrivilegesUserArrayOutput) Index(i pulumi.IntInput) GetMysqlDatabasePrivilegesUserOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) GetMysqlDatabasePrivilegesUser {
+		return vs[0].([]GetMysqlDatabasePrivilegesUser)[vs[1].(int)]
+	}).(GetMysqlDatabasePrivilegesUserOutput)
+}
+
+type GetMysqlDatabasesDatabase struct {
+	// Specifies the character set used by the database.
+	CharacterSet string `pulumi:"characterSet"`
+	// Indicates the database description.
+	Description string `pulumi:"description"`
+	// Specifies the database name.
+	Name string `pulumi:"name"`
+}
+
+// GetMysqlDatabasesDatabaseInput is an input type that accepts GetMysqlDatabasesDatabaseArgs and GetMysqlDatabasesDatabaseOutput values.
+// You can construct a concrete instance of `GetMysqlDatabasesDatabaseInput` via:
+//
+//	GetMysqlDatabasesDatabaseArgs{...}
+type GetMysqlDatabasesDatabaseInput interface {
+	pulumi.Input
+
+	ToGetMysqlDatabasesDatabaseOutput() GetMysqlDatabasesDatabaseOutput
+	ToGetMysqlDatabasesDatabaseOutputWithContext(context.Context) GetMysqlDatabasesDatabaseOutput
+}
+
+type GetMysqlDatabasesDatabaseArgs struct {
+	// Specifies the character set used by the database.
+	CharacterSet pulumi.StringInput `pulumi:"characterSet"`
+	// Indicates the database description.
+	Description pulumi.StringInput `pulumi:"description"`
+	// Specifies the database name.
+	Name pulumi.StringInput `pulumi:"name"`
+}
+
+func (GetMysqlDatabasesDatabaseArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetMysqlDatabasesDatabase)(nil)).Elem()
+}
+
+func (i GetMysqlDatabasesDatabaseArgs) ToGetMysqlDatabasesDatabaseOutput() GetMysqlDatabasesDatabaseOutput {
+	return i.ToGetMysqlDatabasesDatabaseOutputWithContext(context.Background())
+}
+
+func (i GetMysqlDatabasesDatabaseArgs) ToGetMysqlDatabasesDatabaseOutputWithContext(ctx context.Context) GetMysqlDatabasesDatabaseOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetMysqlDatabasesDatabaseOutput)
+}
+
+// GetMysqlDatabasesDatabaseArrayInput is an input type that accepts GetMysqlDatabasesDatabaseArray and GetMysqlDatabasesDatabaseArrayOutput values.
+// You can construct a concrete instance of `GetMysqlDatabasesDatabaseArrayInput` via:
+//
+//	GetMysqlDatabasesDatabaseArray{ GetMysqlDatabasesDatabaseArgs{...} }
+type GetMysqlDatabasesDatabaseArrayInput interface {
+	pulumi.Input
+
+	ToGetMysqlDatabasesDatabaseArrayOutput() GetMysqlDatabasesDatabaseArrayOutput
+	ToGetMysqlDatabasesDatabaseArrayOutputWithContext(context.Context) GetMysqlDatabasesDatabaseArrayOutput
+}
+
+type GetMysqlDatabasesDatabaseArray []GetMysqlDatabasesDatabaseInput
+
+func (GetMysqlDatabasesDatabaseArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetMysqlDatabasesDatabase)(nil)).Elem()
+}
+
+func (i GetMysqlDatabasesDatabaseArray) ToGetMysqlDatabasesDatabaseArrayOutput() GetMysqlDatabasesDatabaseArrayOutput {
+	return i.ToGetMysqlDatabasesDatabaseArrayOutputWithContext(context.Background())
+}
+
+func (i GetMysqlDatabasesDatabaseArray) ToGetMysqlDatabasesDatabaseArrayOutputWithContext(ctx context.Context) GetMysqlDatabasesDatabaseArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetMysqlDatabasesDatabaseArrayOutput)
+}
+
+type GetMysqlDatabasesDatabaseOutput struct{ *pulumi.OutputState }
+
+func (GetMysqlDatabasesDatabaseOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetMysqlDatabasesDatabase)(nil)).Elem()
+}
+
+func (o GetMysqlDatabasesDatabaseOutput) ToGetMysqlDatabasesDatabaseOutput() GetMysqlDatabasesDatabaseOutput {
+	return o
+}
+
+func (o GetMysqlDatabasesDatabaseOutput) ToGetMysqlDatabasesDatabaseOutputWithContext(ctx context.Context) GetMysqlDatabasesDatabaseOutput {
+	return o
+}
+
+// Specifies the character set used by the database.
+func (o GetMysqlDatabasesDatabaseOutput) CharacterSet() pulumi.StringOutput {
+	return o.ApplyT(func(v GetMysqlDatabasesDatabase) string { return v.CharacterSet }).(pulumi.StringOutput)
+}
+
+// Indicates the database description.
+func (o GetMysqlDatabasesDatabaseOutput) Description() pulumi.StringOutput {
+	return o.ApplyT(func(v GetMysqlDatabasesDatabase) string { return v.Description }).(pulumi.StringOutput)
+}
+
+// Specifies the database name.
+func (o GetMysqlDatabasesDatabaseOutput) Name() pulumi.StringOutput {
+	return o.ApplyT(func(v GetMysqlDatabasesDatabase) string { return v.Name }).(pulumi.StringOutput)
+}
+
+type GetMysqlDatabasesDatabaseArrayOutput struct{ *pulumi.OutputState }
+
+func (GetMysqlDatabasesDatabaseArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetMysqlDatabasesDatabase)(nil)).Elem()
+}
+
+func (o GetMysqlDatabasesDatabaseArrayOutput) ToGetMysqlDatabasesDatabaseArrayOutput() GetMysqlDatabasesDatabaseArrayOutput {
+	return o
+}
+
+func (o GetMysqlDatabasesDatabaseArrayOutput) ToGetMysqlDatabasesDatabaseArrayOutputWithContext(ctx context.Context) GetMysqlDatabasesDatabaseArrayOutput {
+	return o
+}
+
+func (o GetMysqlDatabasesDatabaseArrayOutput) Index(i pulumi.IntInput) GetMysqlDatabasesDatabaseOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) GetMysqlDatabasesDatabase {
+		return vs[0].([]GetMysqlDatabasesDatabase)[vs[1].(int)]
+	}).(GetMysqlDatabasesDatabaseOutput)
+}
+
+type GetMysqlProxiesProxyList struct {
+	// Indicates the master instance information.
+	MasterInstances []GetMysqlProxiesProxyListMasterInstance `pulumi:"masterInstances"`
+	// Indicates the proxy information.
+	Proxies []GetMysqlProxiesProxyListProxy `pulumi:"proxies"`
+	// Indicates whether the security group allows access from the database proxy
+	// to the database.
+	ProxySecurityGroupCheckResult bool `pulumi:"proxySecurityGroupCheckResult"`
+	// Indicates the read-only instance information.
+	ReadonlyInstances []GetMysqlProxiesProxyListReadonlyInstance `pulumi:"readonlyInstances"`
+}
+
+// GetMysqlProxiesProxyListInput is an input type that accepts GetMysqlProxiesProxyListArgs and GetMysqlProxiesProxyListOutput values.
+// You can construct a concrete instance of `GetMysqlProxiesProxyListInput` via:
+//
+//	GetMysqlProxiesProxyListArgs{...}
+type GetMysqlProxiesProxyListInput interface {
+	pulumi.Input
+
+	ToGetMysqlProxiesProxyListOutput() GetMysqlProxiesProxyListOutput
+	ToGetMysqlProxiesProxyListOutputWithContext(context.Context) GetMysqlProxiesProxyListOutput
+}
+
+type GetMysqlProxiesProxyListArgs struct {
+	// Indicates the master instance information.
+	MasterInstances GetMysqlProxiesProxyListMasterInstanceArrayInput `pulumi:"masterInstances"`
+	// Indicates the proxy information.
+	Proxies GetMysqlProxiesProxyListProxyArrayInput `pulumi:"proxies"`
+	// Indicates whether the security group allows access from the database proxy
+	// to the database.
+	ProxySecurityGroupCheckResult pulumi.BoolInput `pulumi:"proxySecurityGroupCheckResult"`
+	// Indicates the read-only instance information.
+	ReadonlyInstances GetMysqlProxiesProxyListReadonlyInstanceArrayInput `pulumi:"readonlyInstances"`
+}
+
+func (GetMysqlProxiesProxyListArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetMysqlProxiesProxyList)(nil)).Elem()
+}
+
+func (i GetMysqlProxiesProxyListArgs) ToGetMysqlProxiesProxyListOutput() GetMysqlProxiesProxyListOutput {
+	return i.ToGetMysqlProxiesProxyListOutputWithContext(context.Background())
+}
+
+func (i GetMysqlProxiesProxyListArgs) ToGetMysqlProxiesProxyListOutputWithContext(ctx context.Context) GetMysqlProxiesProxyListOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetMysqlProxiesProxyListOutput)
+}
+
+// GetMysqlProxiesProxyListArrayInput is an input type that accepts GetMysqlProxiesProxyListArray and GetMysqlProxiesProxyListArrayOutput values.
+// You can construct a concrete instance of `GetMysqlProxiesProxyListArrayInput` via:
+//
+//	GetMysqlProxiesProxyListArray{ GetMysqlProxiesProxyListArgs{...} }
+type GetMysqlProxiesProxyListArrayInput interface {
+	pulumi.Input
+
+	ToGetMysqlProxiesProxyListArrayOutput() GetMysqlProxiesProxyListArrayOutput
+	ToGetMysqlProxiesProxyListArrayOutputWithContext(context.Context) GetMysqlProxiesProxyListArrayOutput
+}
+
+type GetMysqlProxiesProxyListArray []GetMysqlProxiesProxyListInput
+
+func (GetMysqlProxiesProxyListArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetMysqlProxiesProxyList)(nil)).Elem()
+}
+
+func (i GetMysqlProxiesProxyListArray) ToGetMysqlProxiesProxyListArrayOutput() GetMysqlProxiesProxyListArrayOutput {
+	return i.ToGetMysqlProxiesProxyListArrayOutputWithContext(context.Background())
+}
+
+func (i GetMysqlProxiesProxyListArray) ToGetMysqlProxiesProxyListArrayOutputWithContext(ctx context.Context) GetMysqlProxiesProxyListArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetMysqlProxiesProxyListArrayOutput)
+}
+
+type GetMysqlProxiesProxyListOutput struct{ *pulumi.OutputState }
+
+func (GetMysqlProxiesProxyListOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetMysqlProxiesProxyList)(nil)).Elem()
+}
+
+func (o GetMysqlProxiesProxyListOutput) ToGetMysqlProxiesProxyListOutput() GetMysqlProxiesProxyListOutput {
+	return o
+}
+
+func (o GetMysqlProxiesProxyListOutput) ToGetMysqlProxiesProxyListOutputWithContext(ctx context.Context) GetMysqlProxiesProxyListOutput {
+	return o
+}
+
+// Indicates the master instance information.
+func (o GetMysqlProxiesProxyListOutput) MasterInstances() GetMysqlProxiesProxyListMasterInstanceArrayOutput {
+	return o.ApplyT(func(v GetMysqlProxiesProxyList) []GetMysqlProxiesProxyListMasterInstance { return v.MasterInstances }).(GetMysqlProxiesProxyListMasterInstanceArrayOutput)
+}
+
+// Indicates the proxy information.
+func (o GetMysqlProxiesProxyListOutput) Proxies() GetMysqlProxiesProxyListProxyArrayOutput {
+	return o.ApplyT(func(v GetMysqlProxiesProxyList) []GetMysqlProxiesProxyListProxy { return v.Proxies }).(GetMysqlProxiesProxyListProxyArrayOutput)
+}
+
+// Indicates whether the security group allows access from the database proxy
+// to the database.
+func (o GetMysqlProxiesProxyListOutput) ProxySecurityGroupCheckResult() pulumi.BoolOutput {
+	return o.ApplyT(func(v GetMysqlProxiesProxyList) bool { return v.ProxySecurityGroupCheckResult }).(pulumi.BoolOutput)
+}
+
+// Indicates the read-only instance information.
+func (o GetMysqlProxiesProxyListOutput) ReadonlyInstances() GetMysqlProxiesProxyListReadonlyInstanceArrayOutput {
+	return o.ApplyT(func(v GetMysqlProxiesProxyList) []GetMysqlProxiesProxyListReadonlyInstance {
+		return v.ReadonlyInstances
+	}).(GetMysqlProxiesProxyListReadonlyInstanceArrayOutput)
+}
+
+type GetMysqlProxiesProxyListArrayOutput struct{ *pulumi.OutputState }
+
+func (GetMysqlProxiesProxyListArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetMysqlProxiesProxyList)(nil)).Elem()
+}
+
+func (o GetMysqlProxiesProxyListArrayOutput) ToGetMysqlProxiesProxyListArrayOutput() GetMysqlProxiesProxyListArrayOutput {
+	return o
+}
+
+func (o GetMysqlProxiesProxyListArrayOutput) ToGetMysqlProxiesProxyListArrayOutputWithContext(ctx context.Context) GetMysqlProxiesProxyListArrayOutput {
+	return o
+}
+
+func (o GetMysqlProxiesProxyListArrayOutput) Index(i pulumi.IntInput) GetMysqlProxiesProxyListOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) GetMysqlProxiesProxyList {
+		return vs[0].([]GetMysqlProxiesProxyList)[vs[1].(int)]
+	}).(GetMysqlProxiesProxyListOutput)
+}
+
+type GetMysqlProxiesProxyListMasterInstance struct {
+	// Indicates the instance ID.
+	Id string `pulumi:"id"`
+	// Indicates the read weight of the instance.
+	Weight int `pulumi:"weight"`
+}
+
+// GetMysqlProxiesProxyListMasterInstanceInput is an input type that accepts GetMysqlProxiesProxyListMasterInstanceArgs and GetMysqlProxiesProxyListMasterInstanceOutput values.
+// You can construct a concrete instance of `GetMysqlProxiesProxyListMasterInstanceInput` via:
+//
+//	GetMysqlProxiesProxyListMasterInstanceArgs{...}
+type GetMysqlProxiesProxyListMasterInstanceInput interface {
+	pulumi.Input
+
+	ToGetMysqlProxiesProxyListMasterInstanceOutput() GetMysqlProxiesProxyListMasterInstanceOutput
+	ToGetMysqlProxiesProxyListMasterInstanceOutputWithContext(context.Context) GetMysqlProxiesProxyListMasterInstanceOutput
+}
+
+type GetMysqlProxiesProxyListMasterInstanceArgs struct {
+	// Indicates the instance ID.
+	Id pulumi.StringInput `pulumi:"id"`
+	// Indicates the read weight of the instance.
+	Weight pulumi.IntInput `pulumi:"weight"`
+}
+
+func (GetMysqlProxiesProxyListMasterInstanceArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetMysqlProxiesProxyListMasterInstance)(nil)).Elem()
+}
+
+func (i GetMysqlProxiesProxyListMasterInstanceArgs) ToGetMysqlProxiesProxyListMasterInstanceOutput() GetMysqlProxiesProxyListMasterInstanceOutput {
+	return i.ToGetMysqlProxiesProxyListMasterInstanceOutputWithContext(context.Background())
+}
+
+func (i GetMysqlProxiesProxyListMasterInstanceArgs) ToGetMysqlProxiesProxyListMasterInstanceOutputWithContext(ctx context.Context) GetMysqlProxiesProxyListMasterInstanceOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetMysqlProxiesProxyListMasterInstanceOutput)
+}
+
+// GetMysqlProxiesProxyListMasterInstanceArrayInput is an input type that accepts GetMysqlProxiesProxyListMasterInstanceArray and GetMysqlProxiesProxyListMasterInstanceArrayOutput values.
+// You can construct a concrete instance of `GetMysqlProxiesProxyListMasterInstanceArrayInput` via:
+//
+//	GetMysqlProxiesProxyListMasterInstanceArray{ GetMysqlProxiesProxyListMasterInstanceArgs{...} }
+type GetMysqlProxiesProxyListMasterInstanceArrayInput interface {
+	pulumi.Input
+
+	ToGetMysqlProxiesProxyListMasterInstanceArrayOutput() GetMysqlProxiesProxyListMasterInstanceArrayOutput
+	ToGetMysqlProxiesProxyListMasterInstanceArrayOutputWithContext(context.Context) GetMysqlProxiesProxyListMasterInstanceArrayOutput
+}
+
+type GetMysqlProxiesProxyListMasterInstanceArray []GetMysqlProxiesProxyListMasterInstanceInput
+
+func (GetMysqlProxiesProxyListMasterInstanceArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetMysqlProxiesProxyListMasterInstance)(nil)).Elem()
+}
+
+func (i GetMysqlProxiesProxyListMasterInstanceArray) ToGetMysqlProxiesProxyListMasterInstanceArrayOutput() GetMysqlProxiesProxyListMasterInstanceArrayOutput {
+	return i.ToGetMysqlProxiesProxyListMasterInstanceArrayOutputWithContext(context.Background())
+}
+
+func (i GetMysqlProxiesProxyListMasterInstanceArray) ToGetMysqlProxiesProxyListMasterInstanceArrayOutputWithContext(ctx context.Context) GetMysqlProxiesProxyListMasterInstanceArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetMysqlProxiesProxyListMasterInstanceArrayOutput)
+}
+
+type GetMysqlProxiesProxyListMasterInstanceOutput struct{ *pulumi.OutputState }
+
+func (GetMysqlProxiesProxyListMasterInstanceOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetMysqlProxiesProxyListMasterInstance)(nil)).Elem()
+}
+
+func (o GetMysqlProxiesProxyListMasterInstanceOutput) ToGetMysqlProxiesProxyListMasterInstanceOutput() GetMysqlProxiesProxyListMasterInstanceOutput {
+	return o
+}
+
+func (o GetMysqlProxiesProxyListMasterInstanceOutput) ToGetMysqlProxiesProxyListMasterInstanceOutputWithContext(ctx context.Context) GetMysqlProxiesProxyListMasterInstanceOutput {
+	return o
+}
+
+// Indicates the instance ID.
+func (o GetMysqlProxiesProxyListMasterInstanceOutput) Id() pulumi.StringOutput {
+	return o.ApplyT(func(v GetMysqlProxiesProxyListMasterInstance) string { return v.Id }).(pulumi.StringOutput)
+}
+
+// Indicates the read weight of the instance.
+func (o GetMysqlProxiesProxyListMasterInstanceOutput) Weight() pulumi.IntOutput {
+	return o.ApplyT(func(v GetMysqlProxiesProxyListMasterInstance) int { return v.Weight }).(pulumi.IntOutput)
+}
+
+type GetMysqlProxiesProxyListMasterInstanceArrayOutput struct{ *pulumi.OutputState }
+
+func (GetMysqlProxiesProxyListMasterInstanceArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetMysqlProxiesProxyListMasterInstance)(nil)).Elem()
+}
+
+func (o GetMysqlProxiesProxyListMasterInstanceArrayOutput) ToGetMysqlProxiesProxyListMasterInstanceArrayOutput() GetMysqlProxiesProxyListMasterInstanceArrayOutput {
+	return o
+}
+
+func (o GetMysqlProxiesProxyListMasterInstanceArrayOutput) ToGetMysqlProxiesProxyListMasterInstanceArrayOutputWithContext(ctx context.Context) GetMysqlProxiesProxyListMasterInstanceArrayOutput {
+	return o
+}
+
+func (o GetMysqlProxiesProxyListMasterInstanceArrayOutput) Index(i pulumi.IntInput) GetMysqlProxiesProxyListMasterInstanceOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) GetMysqlProxiesProxyListMasterInstance {
+		return vs[0].([]GetMysqlProxiesProxyListMasterInstance)[vs[1].(int)]
+	}).(GetMysqlProxiesProxyListMasterInstanceOutput)
+}
+
+type GetMysqlProxiesProxyListProxy struct {
+	// Indicates the proxy address.
+	Address string `pulumi:"address"`
+	// Indicates the ALT switch status.
+	AltFlag bool `pulumi:"altFlag"`
+	// Indicates the connection pool type.
+	// The value can be:
+	// + **CLOSED**: The connection pool is closed.
+	// + **SESSION**: The session-level connection pool is enabled.
+	ConnectionPoolType string `pulumi:"connectionPoolType"`
+	// Indicates the delay threshold, in seconds.
+	DelayThresholdInSeconds int `pulumi:"delayThresholdInSeconds"`
+	// Indicates the private domain name for the read/write splitting address of the proxy.
+	DnsName string `pulumi:"dnsName"`
+	// Indicates the proxy specifications.
+	FlavorInfos []GetMysqlProxiesProxyListProxyFlavorInfo `pulumi:"flavorInfos"`
+	// Indicates whether to forcibly read the route to the read-only mode.
+	ForceReadOnly bool `pulumi:"forceReadOnly"`
+	// Indicates the instance ID.
+	Id string `pulumi:"id"`
+	// Indicates the memory size of the proxy.
+	Memory string `pulumi:"memory"`
+	// Indicates the cluster mode of the proxy.
+	// The value can be: **Cluster**, **Ha**.
+	Mode string `pulumi:"mode"`
+	// Indicates the proxy name.
+	Name string `pulumi:"name"`
+	// Indicates the number of proxy nodes.
+	NodeNum int `pulumi:"nodeNum"`
+	// Indicates the list of proxy nodes.
+	Nodes []GetMysqlProxiesProxyListProxyNode `pulumi:"nodes"`
+	// Indicates the charging mode of the proxy.
+	// The value can be:
+	// + **0**: pay-per-use billing.
+	// + **1**: yearly/monthly billing.
+	PayMode string `pulumi:"payMode"`
+	// Indicates the port number.
+	Port int `pulumi:"port"`
+	// Indicates the Proxy read/write Mode.
+	// The value can be:
+	// + **readwrite(default value)**: read and write.
+	// + **readonly**: read-only.
+	ProxyMode string `pulumi:"proxyMode"`
+	// Indicates the routing policy of the proxy.
+	// The values can be:
+	// + **0**: weighted load balancing.
+	// + **1**: load balancing (The primary node does not process read requests).
+	// + **2**: load balancing (The primary node processes read requests).
+	RouteMode int `pulumi:"routeMode"`
+	// Indicates the second-level monitoring status of the proxy.
+	SecondsLevelMonitorFunStatus string `pulumi:"secondsLevelMonitorFunStatus"`
+	// Indicates the SSL switch status.
+	SslOption bool `pulumi:"sslOption"`
+	// Indicates the status of the proxy node.
+	// The values can be:
+	// + **NORMAL**: The node is normal.
+	// + **ABNORMAL**: The node is abnormal.
+	// + **CREATING**: The node is being created.
+	// + **CREATEFAIL**: The node failed to be created.
+	Status string `pulumi:"status"`
+	// Indicates the ID of the subnet to which the database proxy belongs.
+	SubnetId string `pulumi:"subnetId"`
+	// Indicates whether the proxy supports the load balancing routing mode.
+	SupportBalanceRouteMode bool `pulumi:"supportBalanceRouteMode"`
+	// Indicates whether the database proxy supports the SSL function.
+	SupportProxySsl bool `pulumi:"supportProxySsl"`
+	// Indicates whether the proxy supports the switchover of the session
+	// connection pool type.
+	SupportSwitchConnectionPoolType bool `pulumi:"supportSwitchConnectionPoolType"`
+	// Indicates whether the proxy supports transaction splitting.
+	SupportTransactionSplit bool `pulumi:"supportTransactionSplit"`
+	// Indicates the status of the proxy transaction splitting switch.
+	TransactionSplit string `pulumi:"transactionSplit"`
+	// Indicates the CPU size of the proxy.
+	Vcpus string `pulumi:"vcpus"`
+}
+
+// GetMysqlProxiesProxyListProxyInput is an input type that accepts GetMysqlProxiesProxyListProxyArgs and GetMysqlProxiesProxyListProxyOutput values.
+// You can construct a concrete instance of `GetMysqlProxiesProxyListProxyInput` via:
+//
+//	GetMysqlProxiesProxyListProxyArgs{...}
+type GetMysqlProxiesProxyListProxyInput interface {
+	pulumi.Input
+
+	ToGetMysqlProxiesProxyListProxyOutput() GetMysqlProxiesProxyListProxyOutput
+	ToGetMysqlProxiesProxyListProxyOutputWithContext(context.Context) GetMysqlProxiesProxyListProxyOutput
+}
+
+type GetMysqlProxiesProxyListProxyArgs struct {
+	// Indicates the proxy address.
+	Address pulumi.StringInput `pulumi:"address"`
+	// Indicates the ALT switch status.
+	AltFlag pulumi.BoolInput `pulumi:"altFlag"`
+	// Indicates the connection pool type.
+	// The value can be:
+	// + **CLOSED**: The connection pool is closed.
+	// + **SESSION**: The session-level connection pool is enabled.
+	ConnectionPoolType pulumi.StringInput `pulumi:"connectionPoolType"`
+	// Indicates the delay threshold, in seconds.
+	DelayThresholdInSeconds pulumi.IntInput `pulumi:"delayThresholdInSeconds"`
+	// Indicates the private domain name for the read/write splitting address of the proxy.
+	DnsName pulumi.StringInput `pulumi:"dnsName"`
+	// Indicates the proxy specifications.
+	FlavorInfos GetMysqlProxiesProxyListProxyFlavorInfoArrayInput `pulumi:"flavorInfos"`
+	// Indicates whether to forcibly read the route to the read-only mode.
+	ForceReadOnly pulumi.BoolInput `pulumi:"forceReadOnly"`
+	// Indicates the instance ID.
+	Id pulumi.StringInput `pulumi:"id"`
+	// Indicates the memory size of the proxy.
+	Memory pulumi.StringInput `pulumi:"memory"`
+	// Indicates the cluster mode of the proxy.
+	// The value can be: **Cluster**, **Ha**.
+	Mode pulumi.StringInput `pulumi:"mode"`
+	// Indicates the proxy name.
+	Name pulumi.StringInput `pulumi:"name"`
+	// Indicates the number of proxy nodes.
+	NodeNum pulumi.IntInput `pulumi:"nodeNum"`
+	// Indicates the list of proxy nodes.
+	Nodes GetMysqlProxiesProxyListProxyNodeArrayInput `pulumi:"nodes"`
+	// Indicates the charging mode of the proxy.
+	// The value can be:
+	// + **0**: pay-per-use billing.
+	// + **1**: yearly/monthly billing.
+	PayMode pulumi.StringInput `pulumi:"payMode"`
+	// Indicates the port number.
+	Port pulumi.IntInput `pulumi:"port"`
+	// Indicates the Proxy read/write Mode.
+	// The value can be:
+	// + **readwrite(default value)**: read and write.
+	// + **readonly**: read-only.
+	ProxyMode pulumi.StringInput `pulumi:"proxyMode"`
+	// Indicates the routing policy of the proxy.
+	// The values can be:
+	// + **0**: weighted load balancing.
+	// + **1**: load balancing (The primary node does not process read requests).
+	// + **2**: load balancing (The primary node processes read requests).
+	RouteMode pulumi.IntInput `pulumi:"routeMode"`
+	// Indicates the second-level monitoring status of the proxy.
+	SecondsLevelMonitorFunStatus pulumi.StringInput `pulumi:"secondsLevelMonitorFunStatus"`
+	// Indicates the SSL switch status.
+	SslOption pulumi.BoolInput `pulumi:"sslOption"`
+	// Indicates the status of the proxy node.
+	// The values can be:
+	// + **NORMAL**: The node is normal.
+	// + **ABNORMAL**: The node is abnormal.
+	// + **CREATING**: The node is being created.
+	// + **CREATEFAIL**: The node failed to be created.
+	Status pulumi.StringInput `pulumi:"status"`
+	// Indicates the ID of the subnet to which the database proxy belongs.
+	SubnetId pulumi.StringInput `pulumi:"subnetId"`
+	// Indicates whether the proxy supports the load balancing routing mode.
+	SupportBalanceRouteMode pulumi.BoolInput `pulumi:"supportBalanceRouteMode"`
+	// Indicates whether the database proxy supports the SSL function.
+	SupportProxySsl pulumi.BoolInput `pulumi:"supportProxySsl"`
+	// Indicates whether the proxy supports the switchover of the session
+	// connection pool type.
+	SupportSwitchConnectionPoolType pulumi.BoolInput `pulumi:"supportSwitchConnectionPoolType"`
+	// Indicates whether the proxy supports transaction splitting.
+	SupportTransactionSplit pulumi.BoolInput `pulumi:"supportTransactionSplit"`
+	// Indicates the status of the proxy transaction splitting switch.
+	TransactionSplit pulumi.StringInput `pulumi:"transactionSplit"`
+	// Indicates the CPU size of the proxy.
+	Vcpus pulumi.StringInput `pulumi:"vcpus"`
+}
+
+func (GetMysqlProxiesProxyListProxyArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetMysqlProxiesProxyListProxy)(nil)).Elem()
+}
+
+func (i GetMysqlProxiesProxyListProxyArgs) ToGetMysqlProxiesProxyListProxyOutput() GetMysqlProxiesProxyListProxyOutput {
+	return i.ToGetMysqlProxiesProxyListProxyOutputWithContext(context.Background())
+}
+
+func (i GetMysqlProxiesProxyListProxyArgs) ToGetMysqlProxiesProxyListProxyOutputWithContext(ctx context.Context) GetMysqlProxiesProxyListProxyOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetMysqlProxiesProxyListProxyOutput)
+}
+
+// GetMysqlProxiesProxyListProxyArrayInput is an input type that accepts GetMysqlProxiesProxyListProxyArray and GetMysqlProxiesProxyListProxyArrayOutput values.
+// You can construct a concrete instance of `GetMysqlProxiesProxyListProxyArrayInput` via:
+//
+//	GetMysqlProxiesProxyListProxyArray{ GetMysqlProxiesProxyListProxyArgs{...} }
+type GetMysqlProxiesProxyListProxyArrayInput interface {
+	pulumi.Input
+
+	ToGetMysqlProxiesProxyListProxyArrayOutput() GetMysqlProxiesProxyListProxyArrayOutput
+	ToGetMysqlProxiesProxyListProxyArrayOutputWithContext(context.Context) GetMysqlProxiesProxyListProxyArrayOutput
+}
+
+type GetMysqlProxiesProxyListProxyArray []GetMysqlProxiesProxyListProxyInput
+
+func (GetMysqlProxiesProxyListProxyArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetMysqlProxiesProxyListProxy)(nil)).Elem()
+}
+
+func (i GetMysqlProxiesProxyListProxyArray) ToGetMysqlProxiesProxyListProxyArrayOutput() GetMysqlProxiesProxyListProxyArrayOutput {
+	return i.ToGetMysqlProxiesProxyListProxyArrayOutputWithContext(context.Background())
+}
+
+func (i GetMysqlProxiesProxyListProxyArray) ToGetMysqlProxiesProxyListProxyArrayOutputWithContext(ctx context.Context) GetMysqlProxiesProxyListProxyArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetMysqlProxiesProxyListProxyArrayOutput)
+}
+
+type GetMysqlProxiesProxyListProxyOutput struct{ *pulumi.OutputState }
+
+func (GetMysqlProxiesProxyListProxyOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetMysqlProxiesProxyListProxy)(nil)).Elem()
+}
+
+func (o GetMysqlProxiesProxyListProxyOutput) ToGetMysqlProxiesProxyListProxyOutput() GetMysqlProxiesProxyListProxyOutput {
+	return o
+}
+
+func (o GetMysqlProxiesProxyListProxyOutput) ToGetMysqlProxiesProxyListProxyOutputWithContext(ctx context.Context) GetMysqlProxiesProxyListProxyOutput {
+	return o
+}
+
+// Indicates the proxy address.
+func (o GetMysqlProxiesProxyListProxyOutput) Address() pulumi.StringOutput {
+	return o.ApplyT(func(v GetMysqlProxiesProxyListProxy) string { return v.Address }).(pulumi.StringOutput)
+}
+
+// Indicates the ALT switch status.
+func (o GetMysqlProxiesProxyListProxyOutput) AltFlag() pulumi.BoolOutput {
+	return o.ApplyT(func(v GetMysqlProxiesProxyListProxy) bool { return v.AltFlag }).(pulumi.BoolOutput)
+}
+
+// Indicates the connection pool type.
+// The value can be:
+// + **CLOSED**: The connection pool is closed.
+// + **SESSION**: The session-level connection pool is enabled.
+func (o GetMysqlProxiesProxyListProxyOutput) ConnectionPoolType() pulumi.StringOutput {
+	return o.ApplyT(func(v GetMysqlProxiesProxyListProxy) string { return v.ConnectionPoolType }).(pulumi.StringOutput)
+}
+
+// Indicates the delay threshold, in seconds.
+func (o GetMysqlProxiesProxyListProxyOutput) DelayThresholdInSeconds() pulumi.IntOutput {
+	return o.ApplyT(func(v GetMysqlProxiesProxyListProxy) int { return v.DelayThresholdInSeconds }).(pulumi.IntOutput)
+}
+
+// Indicates the private domain name for the read/write splitting address of the proxy.
+func (o GetMysqlProxiesProxyListProxyOutput) DnsName() pulumi.StringOutput {
+	return o.ApplyT(func(v GetMysqlProxiesProxyListProxy) string { return v.DnsName }).(pulumi.StringOutput)
+}
+
+// Indicates the proxy specifications.
+func (o GetMysqlProxiesProxyListProxyOutput) FlavorInfos() GetMysqlProxiesProxyListProxyFlavorInfoArrayOutput {
+	return o.ApplyT(func(v GetMysqlProxiesProxyListProxy) []GetMysqlProxiesProxyListProxyFlavorInfo { return v.FlavorInfos }).(GetMysqlProxiesProxyListProxyFlavorInfoArrayOutput)
+}
+
+// Indicates whether to forcibly read the route to the read-only mode.
+func (o GetMysqlProxiesProxyListProxyOutput) ForceReadOnly() pulumi.BoolOutput {
+	return o.ApplyT(func(v GetMysqlProxiesProxyListProxy) bool { return v.ForceReadOnly }).(pulumi.BoolOutput)
+}
+
+// Indicates the instance ID.
+func (o GetMysqlProxiesProxyListProxyOutput) Id() pulumi.StringOutput {
+	return o.ApplyT(func(v GetMysqlProxiesProxyListProxy) string { return v.Id }).(pulumi.StringOutput)
+}
+
+// Indicates the memory size of the proxy.
+func (o GetMysqlProxiesProxyListProxyOutput) Memory() pulumi.StringOutput {
+	return o.ApplyT(func(v GetMysqlProxiesProxyListProxy) string { return v.Memory }).(pulumi.StringOutput)
+}
+
+// Indicates the cluster mode of the proxy.
+// The value can be: **Cluster**, **Ha**.
+func (o GetMysqlProxiesProxyListProxyOutput) Mode() pulumi.StringOutput {
+	return o.ApplyT(func(v GetMysqlProxiesProxyListProxy) string { return v.Mode }).(pulumi.StringOutput)
+}
+
+// Indicates the proxy name.
+func (o GetMysqlProxiesProxyListProxyOutput) Name() pulumi.StringOutput {
+	return o.ApplyT(func(v GetMysqlProxiesProxyListProxy) string { return v.Name }).(pulumi.StringOutput)
+}
+
+// Indicates the number of proxy nodes.
+func (o GetMysqlProxiesProxyListProxyOutput) NodeNum() pulumi.IntOutput {
+	return o.ApplyT(func(v GetMysqlProxiesProxyListProxy) int { return v.NodeNum }).(pulumi.IntOutput)
+}
+
+// Indicates the list of proxy nodes.
+func (o GetMysqlProxiesProxyListProxyOutput) Nodes() GetMysqlProxiesProxyListProxyNodeArrayOutput {
+	return o.ApplyT(func(v GetMysqlProxiesProxyListProxy) []GetMysqlProxiesProxyListProxyNode { return v.Nodes }).(GetMysqlProxiesProxyListProxyNodeArrayOutput)
+}
+
+// Indicates the charging mode of the proxy.
+// The value can be:
+// + **0**: pay-per-use billing.
+// + **1**: yearly/monthly billing.
+func (o GetMysqlProxiesProxyListProxyOutput) PayMode() pulumi.StringOutput {
+	return o.ApplyT(func(v GetMysqlProxiesProxyListProxy) string { return v.PayMode }).(pulumi.StringOutput)
+}
+
+// Indicates the port number.
+func (o GetMysqlProxiesProxyListProxyOutput) Port() pulumi.IntOutput {
+	return o.ApplyT(func(v GetMysqlProxiesProxyListProxy) int { return v.Port }).(pulumi.IntOutput)
+}
+
+// Indicates the Proxy read/write Mode.
+// The value can be:
+// + **readwrite(default value)**: read and write.
+// + **readonly**: read-only.
+func (o GetMysqlProxiesProxyListProxyOutput) ProxyMode() pulumi.StringOutput {
+	return o.ApplyT(func(v GetMysqlProxiesProxyListProxy) string { return v.ProxyMode }).(pulumi.StringOutput)
+}
+
+// Indicates the routing policy of the proxy.
+// The values can be:
+// + **0**: weighted load balancing.
+// + **1**: load balancing (The primary node does not process read requests).
+// + **2**: load balancing (The primary node processes read requests).
+func (o GetMysqlProxiesProxyListProxyOutput) RouteMode() pulumi.IntOutput {
+	return o.ApplyT(func(v GetMysqlProxiesProxyListProxy) int { return v.RouteMode }).(pulumi.IntOutput)
+}
+
+// Indicates the second-level monitoring status of the proxy.
+func (o GetMysqlProxiesProxyListProxyOutput) SecondsLevelMonitorFunStatus() pulumi.StringOutput {
+	return o.ApplyT(func(v GetMysqlProxiesProxyListProxy) string { return v.SecondsLevelMonitorFunStatus }).(pulumi.StringOutput)
+}
+
+// Indicates the SSL switch status.
+func (o GetMysqlProxiesProxyListProxyOutput) SslOption() pulumi.BoolOutput {
+	return o.ApplyT(func(v GetMysqlProxiesProxyListProxy) bool { return v.SslOption }).(pulumi.BoolOutput)
+}
+
+// Indicates the status of the proxy node.
+// The values can be:
+// + **NORMAL**: The node is normal.
+// + **ABNORMAL**: The node is abnormal.
+// + **CREATING**: The node is being created.
+// + **CREATEFAIL**: The node failed to be created.
+func (o GetMysqlProxiesProxyListProxyOutput) Status() pulumi.StringOutput {
+	return o.ApplyT(func(v GetMysqlProxiesProxyListProxy) string { return v.Status }).(pulumi.StringOutput)
+}
+
+// Indicates the ID of the subnet to which the database proxy belongs.
+func (o GetMysqlProxiesProxyListProxyOutput) SubnetId() pulumi.StringOutput {
+	return o.ApplyT(func(v GetMysqlProxiesProxyListProxy) string { return v.SubnetId }).(pulumi.StringOutput)
+}
+
+// Indicates whether the proxy supports the load balancing routing mode.
+func (o GetMysqlProxiesProxyListProxyOutput) SupportBalanceRouteMode() pulumi.BoolOutput {
+	return o.ApplyT(func(v GetMysqlProxiesProxyListProxy) bool { return v.SupportBalanceRouteMode }).(pulumi.BoolOutput)
+}
+
+// Indicates whether the database proxy supports the SSL function.
+func (o GetMysqlProxiesProxyListProxyOutput) SupportProxySsl() pulumi.BoolOutput {
+	return o.ApplyT(func(v GetMysqlProxiesProxyListProxy) bool { return v.SupportProxySsl }).(pulumi.BoolOutput)
+}
+
+// Indicates whether the proxy supports the switchover of the session
+// connection pool type.
+func (o GetMysqlProxiesProxyListProxyOutput) SupportSwitchConnectionPoolType() pulumi.BoolOutput {
+	return o.ApplyT(func(v GetMysqlProxiesProxyListProxy) bool { return v.SupportSwitchConnectionPoolType }).(pulumi.BoolOutput)
+}
+
+// Indicates whether the proxy supports transaction splitting.
+func (o GetMysqlProxiesProxyListProxyOutput) SupportTransactionSplit() pulumi.BoolOutput {
+	return o.ApplyT(func(v GetMysqlProxiesProxyListProxy) bool { return v.SupportTransactionSplit }).(pulumi.BoolOutput)
+}
+
+// Indicates the status of the proxy transaction splitting switch.
+func (o GetMysqlProxiesProxyListProxyOutput) TransactionSplit() pulumi.StringOutput {
+	return o.ApplyT(func(v GetMysqlProxiesProxyListProxy) string { return v.TransactionSplit }).(pulumi.StringOutput)
+}
+
+// Indicates the CPU size of the proxy.
+func (o GetMysqlProxiesProxyListProxyOutput) Vcpus() pulumi.StringOutput {
+	return o.ApplyT(func(v GetMysqlProxiesProxyListProxy) string { return v.Vcpus }).(pulumi.StringOutput)
+}
+
+type GetMysqlProxiesProxyListProxyArrayOutput struct{ *pulumi.OutputState }
+
+func (GetMysqlProxiesProxyListProxyArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetMysqlProxiesProxyListProxy)(nil)).Elem()
+}
+
+func (o GetMysqlProxiesProxyListProxyArrayOutput) ToGetMysqlProxiesProxyListProxyArrayOutput() GetMysqlProxiesProxyListProxyArrayOutput {
+	return o
+}
+
+func (o GetMysqlProxiesProxyListProxyArrayOutput) ToGetMysqlProxiesProxyListProxyArrayOutputWithContext(ctx context.Context) GetMysqlProxiesProxyListProxyArrayOutput {
+	return o
+}
+
+func (o GetMysqlProxiesProxyListProxyArrayOutput) Index(i pulumi.IntInput) GetMysqlProxiesProxyListProxyOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) GetMysqlProxiesProxyListProxy {
+		return vs[0].([]GetMysqlProxiesProxyListProxy)[vs[1].(int)]
+	}).(GetMysqlProxiesProxyListProxyOutput)
+}
+
+type GetMysqlProxiesProxyListProxyFlavorInfo struct {
+	// Indicates the specification code.
+	Code string `pulumi:"code"`
+	// Indicates the flavor group type.
+	GroupType string `pulumi:"groupType"`
+}
+
+// GetMysqlProxiesProxyListProxyFlavorInfoInput is an input type that accepts GetMysqlProxiesProxyListProxyFlavorInfoArgs and GetMysqlProxiesProxyListProxyFlavorInfoOutput values.
+// You can construct a concrete instance of `GetMysqlProxiesProxyListProxyFlavorInfoInput` via:
+//
+//	GetMysqlProxiesProxyListProxyFlavorInfoArgs{...}
+type GetMysqlProxiesProxyListProxyFlavorInfoInput interface {
+	pulumi.Input
+
+	ToGetMysqlProxiesProxyListProxyFlavorInfoOutput() GetMysqlProxiesProxyListProxyFlavorInfoOutput
+	ToGetMysqlProxiesProxyListProxyFlavorInfoOutputWithContext(context.Context) GetMysqlProxiesProxyListProxyFlavorInfoOutput
+}
+
+type GetMysqlProxiesProxyListProxyFlavorInfoArgs struct {
+	// Indicates the specification code.
+	Code pulumi.StringInput `pulumi:"code"`
+	// Indicates the flavor group type.
+	GroupType pulumi.StringInput `pulumi:"groupType"`
+}
+
+func (GetMysqlProxiesProxyListProxyFlavorInfoArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetMysqlProxiesProxyListProxyFlavorInfo)(nil)).Elem()
+}
+
+func (i GetMysqlProxiesProxyListProxyFlavorInfoArgs) ToGetMysqlProxiesProxyListProxyFlavorInfoOutput() GetMysqlProxiesProxyListProxyFlavorInfoOutput {
+	return i.ToGetMysqlProxiesProxyListProxyFlavorInfoOutputWithContext(context.Background())
+}
+
+func (i GetMysqlProxiesProxyListProxyFlavorInfoArgs) ToGetMysqlProxiesProxyListProxyFlavorInfoOutputWithContext(ctx context.Context) GetMysqlProxiesProxyListProxyFlavorInfoOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetMysqlProxiesProxyListProxyFlavorInfoOutput)
+}
+
+// GetMysqlProxiesProxyListProxyFlavorInfoArrayInput is an input type that accepts GetMysqlProxiesProxyListProxyFlavorInfoArray and GetMysqlProxiesProxyListProxyFlavorInfoArrayOutput values.
+// You can construct a concrete instance of `GetMysqlProxiesProxyListProxyFlavorInfoArrayInput` via:
+//
+//	GetMysqlProxiesProxyListProxyFlavorInfoArray{ GetMysqlProxiesProxyListProxyFlavorInfoArgs{...} }
+type GetMysqlProxiesProxyListProxyFlavorInfoArrayInput interface {
+	pulumi.Input
+
+	ToGetMysqlProxiesProxyListProxyFlavorInfoArrayOutput() GetMysqlProxiesProxyListProxyFlavorInfoArrayOutput
+	ToGetMysqlProxiesProxyListProxyFlavorInfoArrayOutputWithContext(context.Context) GetMysqlProxiesProxyListProxyFlavorInfoArrayOutput
+}
+
+type GetMysqlProxiesProxyListProxyFlavorInfoArray []GetMysqlProxiesProxyListProxyFlavorInfoInput
+
+func (GetMysqlProxiesProxyListProxyFlavorInfoArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetMysqlProxiesProxyListProxyFlavorInfo)(nil)).Elem()
+}
+
+func (i GetMysqlProxiesProxyListProxyFlavorInfoArray) ToGetMysqlProxiesProxyListProxyFlavorInfoArrayOutput() GetMysqlProxiesProxyListProxyFlavorInfoArrayOutput {
+	return i.ToGetMysqlProxiesProxyListProxyFlavorInfoArrayOutputWithContext(context.Background())
+}
+
+func (i GetMysqlProxiesProxyListProxyFlavorInfoArray) ToGetMysqlProxiesProxyListProxyFlavorInfoArrayOutputWithContext(ctx context.Context) GetMysqlProxiesProxyListProxyFlavorInfoArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetMysqlProxiesProxyListProxyFlavorInfoArrayOutput)
+}
+
+type GetMysqlProxiesProxyListProxyFlavorInfoOutput struct{ *pulumi.OutputState }
+
+func (GetMysqlProxiesProxyListProxyFlavorInfoOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetMysqlProxiesProxyListProxyFlavorInfo)(nil)).Elem()
+}
+
+func (o GetMysqlProxiesProxyListProxyFlavorInfoOutput) ToGetMysqlProxiesProxyListProxyFlavorInfoOutput() GetMysqlProxiesProxyListProxyFlavorInfoOutput {
+	return o
+}
+
+func (o GetMysqlProxiesProxyListProxyFlavorInfoOutput) ToGetMysqlProxiesProxyListProxyFlavorInfoOutputWithContext(ctx context.Context) GetMysqlProxiesProxyListProxyFlavorInfoOutput {
+	return o
+}
+
+// Indicates the specification code.
+func (o GetMysqlProxiesProxyListProxyFlavorInfoOutput) Code() pulumi.StringOutput {
+	return o.ApplyT(func(v GetMysqlProxiesProxyListProxyFlavorInfo) string { return v.Code }).(pulumi.StringOutput)
+}
+
+// Indicates the flavor group type.
+func (o GetMysqlProxiesProxyListProxyFlavorInfoOutput) GroupType() pulumi.StringOutput {
+	return o.ApplyT(func(v GetMysqlProxiesProxyListProxyFlavorInfo) string { return v.GroupType }).(pulumi.StringOutput)
+}
+
+type GetMysqlProxiesProxyListProxyFlavorInfoArrayOutput struct{ *pulumi.OutputState }
+
+func (GetMysqlProxiesProxyListProxyFlavorInfoArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetMysqlProxiesProxyListProxyFlavorInfo)(nil)).Elem()
+}
+
+func (o GetMysqlProxiesProxyListProxyFlavorInfoArrayOutput) ToGetMysqlProxiesProxyListProxyFlavorInfoArrayOutput() GetMysqlProxiesProxyListProxyFlavorInfoArrayOutput {
+	return o
+}
+
+func (o GetMysqlProxiesProxyListProxyFlavorInfoArrayOutput) ToGetMysqlProxiesProxyListProxyFlavorInfoArrayOutputWithContext(ctx context.Context) GetMysqlProxiesProxyListProxyFlavorInfoArrayOutput {
+	return o
+}
+
+func (o GetMysqlProxiesProxyListProxyFlavorInfoArrayOutput) Index(i pulumi.IntInput) GetMysqlProxiesProxyListProxyFlavorInfoOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) GetMysqlProxiesProxyListProxyFlavorInfo {
+		return vs[0].([]GetMysqlProxiesProxyListProxyFlavorInfo)[vs[1].(int)]
+	}).(GetMysqlProxiesProxyListProxyFlavorInfoOutput)
+}
+
+type GetMysqlProxiesProxyListProxyNode struct {
+	// Indicates the AZ where the proxy node is located.
+	AzCode string `pulumi:"azCode"`
+	// Indicates whether the proxy node is frozen.
+	// The values can be:
+	// + **0**: unfrozen.
+	// + **1**: frozen.
+	FrozenFlag int `pulumi:"frozenFlag"`
+	// Indicates the instance ID.
+	Id string `pulumi:"id"`
+	// Indicates the role of the proxy node:
+	// The values can be:
+	// + **master**: primary node.
+	// + **slave**: standby node.
+	Role string `pulumi:"role"`
+	// Indicates the status of the proxy node.
+	// The values can be:
+	// + **NORMAL**: The node is normal.
+	// + **ABNORMAL**: The node is abnormal.
+	// + **CREATING**: The node is being created.
+	// + **CREATEFAIL**: The node failed to be created.
+	Status string `pulumi:"status"`
+}
+
+// GetMysqlProxiesProxyListProxyNodeInput is an input type that accepts GetMysqlProxiesProxyListProxyNodeArgs and GetMysqlProxiesProxyListProxyNodeOutput values.
+// You can construct a concrete instance of `GetMysqlProxiesProxyListProxyNodeInput` via:
+//
+//	GetMysqlProxiesProxyListProxyNodeArgs{...}
+type GetMysqlProxiesProxyListProxyNodeInput interface {
+	pulumi.Input
+
+	ToGetMysqlProxiesProxyListProxyNodeOutput() GetMysqlProxiesProxyListProxyNodeOutput
+	ToGetMysqlProxiesProxyListProxyNodeOutputWithContext(context.Context) GetMysqlProxiesProxyListProxyNodeOutput
+}
+
+type GetMysqlProxiesProxyListProxyNodeArgs struct {
+	// Indicates the AZ where the proxy node is located.
+	AzCode pulumi.StringInput `pulumi:"azCode"`
+	// Indicates whether the proxy node is frozen.
+	// The values can be:
+	// + **0**: unfrozen.
+	// + **1**: frozen.
+	FrozenFlag pulumi.IntInput `pulumi:"frozenFlag"`
+	// Indicates the instance ID.
+	Id pulumi.StringInput `pulumi:"id"`
+	// Indicates the role of the proxy node:
+	// The values can be:
+	// + **master**: primary node.
+	// + **slave**: standby node.
+	Role pulumi.StringInput `pulumi:"role"`
+	// Indicates the status of the proxy node.
+	// The values can be:
+	// + **NORMAL**: The node is normal.
+	// + **ABNORMAL**: The node is abnormal.
+	// + **CREATING**: The node is being created.
+	// + **CREATEFAIL**: The node failed to be created.
+	Status pulumi.StringInput `pulumi:"status"`
+}
+
+func (GetMysqlProxiesProxyListProxyNodeArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetMysqlProxiesProxyListProxyNode)(nil)).Elem()
+}
+
+func (i GetMysqlProxiesProxyListProxyNodeArgs) ToGetMysqlProxiesProxyListProxyNodeOutput() GetMysqlProxiesProxyListProxyNodeOutput {
+	return i.ToGetMysqlProxiesProxyListProxyNodeOutputWithContext(context.Background())
+}
+
+func (i GetMysqlProxiesProxyListProxyNodeArgs) ToGetMysqlProxiesProxyListProxyNodeOutputWithContext(ctx context.Context) GetMysqlProxiesProxyListProxyNodeOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetMysqlProxiesProxyListProxyNodeOutput)
+}
+
+// GetMysqlProxiesProxyListProxyNodeArrayInput is an input type that accepts GetMysqlProxiesProxyListProxyNodeArray and GetMysqlProxiesProxyListProxyNodeArrayOutput values.
+// You can construct a concrete instance of `GetMysqlProxiesProxyListProxyNodeArrayInput` via:
+//
+//	GetMysqlProxiesProxyListProxyNodeArray{ GetMysqlProxiesProxyListProxyNodeArgs{...} }
+type GetMysqlProxiesProxyListProxyNodeArrayInput interface {
+	pulumi.Input
+
+	ToGetMysqlProxiesProxyListProxyNodeArrayOutput() GetMysqlProxiesProxyListProxyNodeArrayOutput
+	ToGetMysqlProxiesProxyListProxyNodeArrayOutputWithContext(context.Context) GetMysqlProxiesProxyListProxyNodeArrayOutput
+}
+
+type GetMysqlProxiesProxyListProxyNodeArray []GetMysqlProxiesProxyListProxyNodeInput
+
+func (GetMysqlProxiesProxyListProxyNodeArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetMysqlProxiesProxyListProxyNode)(nil)).Elem()
+}
+
+func (i GetMysqlProxiesProxyListProxyNodeArray) ToGetMysqlProxiesProxyListProxyNodeArrayOutput() GetMysqlProxiesProxyListProxyNodeArrayOutput {
+	return i.ToGetMysqlProxiesProxyListProxyNodeArrayOutputWithContext(context.Background())
+}
+
+func (i GetMysqlProxiesProxyListProxyNodeArray) ToGetMysqlProxiesProxyListProxyNodeArrayOutputWithContext(ctx context.Context) GetMysqlProxiesProxyListProxyNodeArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetMysqlProxiesProxyListProxyNodeArrayOutput)
+}
+
+type GetMysqlProxiesProxyListProxyNodeOutput struct{ *pulumi.OutputState }
+
+func (GetMysqlProxiesProxyListProxyNodeOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetMysqlProxiesProxyListProxyNode)(nil)).Elem()
+}
+
+func (o GetMysqlProxiesProxyListProxyNodeOutput) ToGetMysqlProxiesProxyListProxyNodeOutput() GetMysqlProxiesProxyListProxyNodeOutput {
+	return o
+}
+
+func (o GetMysqlProxiesProxyListProxyNodeOutput) ToGetMysqlProxiesProxyListProxyNodeOutputWithContext(ctx context.Context) GetMysqlProxiesProxyListProxyNodeOutput {
+	return o
+}
+
+// Indicates the AZ where the proxy node is located.
+func (o GetMysqlProxiesProxyListProxyNodeOutput) AzCode() pulumi.StringOutput {
+	return o.ApplyT(func(v GetMysqlProxiesProxyListProxyNode) string { return v.AzCode }).(pulumi.StringOutput)
+}
+
+// Indicates whether the proxy node is frozen.
+// The values can be:
+// + **0**: unfrozen.
+// + **1**: frozen.
+func (o GetMysqlProxiesProxyListProxyNodeOutput) FrozenFlag() pulumi.IntOutput {
+	return o.ApplyT(func(v GetMysqlProxiesProxyListProxyNode) int { return v.FrozenFlag }).(pulumi.IntOutput)
+}
+
+// Indicates the instance ID.
+func (o GetMysqlProxiesProxyListProxyNodeOutput) Id() pulumi.StringOutput {
+	return o.ApplyT(func(v GetMysqlProxiesProxyListProxyNode) string { return v.Id }).(pulumi.StringOutput)
+}
+
+// Indicates the role of the proxy node:
+// The values can be:
+// + **master**: primary node.
+// + **slave**: standby node.
+func (o GetMysqlProxiesProxyListProxyNodeOutput) Role() pulumi.StringOutput {
+	return o.ApplyT(func(v GetMysqlProxiesProxyListProxyNode) string { return v.Role }).(pulumi.StringOutput)
+}
+
+// Indicates the status of the proxy node.
+// The values can be:
+// + **NORMAL**: The node is normal.
+// + **ABNORMAL**: The node is abnormal.
+// + **CREATING**: The node is being created.
+// + **CREATEFAIL**: The node failed to be created.
+func (o GetMysqlProxiesProxyListProxyNodeOutput) Status() pulumi.StringOutput {
+	return o.ApplyT(func(v GetMysqlProxiesProxyListProxyNode) string { return v.Status }).(pulumi.StringOutput)
+}
+
+type GetMysqlProxiesProxyListProxyNodeArrayOutput struct{ *pulumi.OutputState }
+
+func (GetMysqlProxiesProxyListProxyNodeArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetMysqlProxiesProxyListProxyNode)(nil)).Elem()
+}
+
+func (o GetMysqlProxiesProxyListProxyNodeArrayOutput) ToGetMysqlProxiesProxyListProxyNodeArrayOutput() GetMysqlProxiesProxyListProxyNodeArrayOutput {
+	return o
+}
+
+func (o GetMysqlProxiesProxyListProxyNodeArrayOutput) ToGetMysqlProxiesProxyListProxyNodeArrayOutputWithContext(ctx context.Context) GetMysqlProxiesProxyListProxyNodeArrayOutput {
+	return o
+}
+
+func (o GetMysqlProxiesProxyListProxyNodeArrayOutput) Index(i pulumi.IntInput) GetMysqlProxiesProxyListProxyNodeOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) GetMysqlProxiesProxyListProxyNode {
+		return vs[0].([]GetMysqlProxiesProxyListProxyNode)[vs[1].(int)]
+	}).(GetMysqlProxiesProxyListProxyNodeOutput)
+}
+
+type GetMysqlProxiesProxyListReadonlyInstance struct {
+	// Indicates the instance ID.
+	Id string `pulumi:"id"`
+	// Indicates the read weight of the instance.
+	Weight int `pulumi:"weight"`
+}
+
+// GetMysqlProxiesProxyListReadonlyInstanceInput is an input type that accepts GetMysqlProxiesProxyListReadonlyInstanceArgs and GetMysqlProxiesProxyListReadonlyInstanceOutput values.
+// You can construct a concrete instance of `GetMysqlProxiesProxyListReadonlyInstanceInput` via:
+//
+//	GetMysqlProxiesProxyListReadonlyInstanceArgs{...}
+type GetMysqlProxiesProxyListReadonlyInstanceInput interface {
+	pulumi.Input
+
+	ToGetMysqlProxiesProxyListReadonlyInstanceOutput() GetMysqlProxiesProxyListReadonlyInstanceOutput
+	ToGetMysqlProxiesProxyListReadonlyInstanceOutputWithContext(context.Context) GetMysqlProxiesProxyListReadonlyInstanceOutput
+}
+
+type GetMysqlProxiesProxyListReadonlyInstanceArgs struct {
+	// Indicates the instance ID.
+	Id pulumi.StringInput `pulumi:"id"`
+	// Indicates the read weight of the instance.
+	Weight pulumi.IntInput `pulumi:"weight"`
+}
+
+func (GetMysqlProxiesProxyListReadonlyInstanceArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetMysqlProxiesProxyListReadonlyInstance)(nil)).Elem()
+}
+
+func (i GetMysqlProxiesProxyListReadonlyInstanceArgs) ToGetMysqlProxiesProxyListReadonlyInstanceOutput() GetMysqlProxiesProxyListReadonlyInstanceOutput {
+	return i.ToGetMysqlProxiesProxyListReadonlyInstanceOutputWithContext(context.Background())
+}
+
+func (i GetMysqlProxiesProxyListReadonlyInstanceArgs) ToGetMysqlProxiesProxyListReadonlyInstanceOutputWithContext(ctx context.Context) GetMysqlProxiesProxyListReadonlyInstanceOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetMysqlProxiesProxyListReadonlyInstanceOutput)
+}
+
+// GetMysqlProxiesProxyListReadonlyInstanceArrayInput is an input type that accepts GetMysqlProxiesProxyListReadonlyInstanceArray and GetMysqlProxiesProxyListReadonlyInstanceArrayOutput values.
+// You can construct a concrete instance of `GetMysqlProxiesProxyListReadonlyInstanceArrayInput` via:
+//
+//	GetMysqlProxiesProxyListReadonlyInstanceArray{ GetMysqlProxiesProxyListReadonlyInstanceArgs{...} }
+type GetMysqlProxiesProxyListReadonlyInstanceArrayInput interface {
+	pulumi.Input
+
+	ToGetMysqlProxiesProxyListReadonlyInstanceArrayOutput() GetMysqlProxiesProxyListReadonlyInstanceArrayOutput
+	ToGetMysqlProxiesProxyListReadonlyInstanceArrayOutputWithContext(context.Context) GetMysqlProxiesProxyListReadonlyInstanceArrayOutput
+}
+
+type GetMysqlProxiesProxyListReadonlyInstanceArray []GetMysqlProxiesProxyListReadonlyInstanceInput
+
+func (GetMysqlProxiesProxyListReadonlyInstanceArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetMysqlProxiesProxyListReadonlyInstance)(nil)).Elem()
+}
+
+func (i GetMysqlProxiesProxyListReadonlyInstanceArray) ToGetMysqlProxiesProxyListReadonlyInstanceArrayOutput() GetMysqlProxiesProxyListReadonlyInstanceArrayOutput {
+	return i.ToGetMysqlProxiesProxyListReadonlyInstanceArrayOutputWithContext(context.Background())
+}
+
+func (i GetMysqlProxiesProxyListReadonlyInstanceArray) ToGetMysqlProxiesProxyListReadonlyInstanceArrayOutputWithContext(ctx context.Context) GetMysqlProxiesProxyListReadonlyInstanceArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetMysqlProxiesProxyListReadonlyInstanceArrayOutput)
+}
+
+type GetMysqlProxiesProxyListReadonlyInstanceOutput struct{ *pulumi.OutputState }
+
+func (GetMysqlProxiesProxyListReadonlyInstanceOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetMysqlProxiesProxyListReadonlyInstance)(nil)).Elem()
+}
+
+func (o GetMysqlProxiesProxyListReadonlyInstanceOutput) ToGetMysqlProxiesProxyListReadonlyInstanceOutput() GetMysqlProxiesProxyListReadonlyInstanceOutput {
+	return o
+}
+
+func (o GetMysqlProxiesProxyListReadonlyInstanceOutput) ToGetMysqlProxiesProxyListReadonlyInstanceOutputWithContext(ctx context.Context) GetMysqlProxiesProxyListReadonlyInstanceOutput {
+	return o
+}
+
+// Indicates the instance ID.
+func (o GetMysqlProxiesProxyListReadonlyInstanceOutput) Id() pulumi.StringOutput {
+	return o.ApplyT(func(v GetMysqlProxiesProxyListReadonlyInstance) string { return v.Id }).(pulumi.StringOutput)
+}
+
+// Indicates the read weight of the instance.
+func (o GetMysqlProxiesProxyListReadonlyInstanceOutput) Weight() pulumi.IntOutput {
+	return o.ApplyT(func(v GetMysqlProxiesProxyListReadonlyInstance) int { return v.Weight }).(pulumi.IntOutput)
+}
+
+type GetMysqlProxiesProxyListReadonlyInstanceArrayOutput struct{ *pulumi.OutputState }
+
+func (GetMysqlProxiesProxyListReadonlyInstanceArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetMysqlProxiesProxyListReadonlyInstance)(nil)).Elem()
+}
+
+func (o GetMysqlProxiesProxyListReadonlyInstanceArrayOutput) ToGetMysqlProxiesProxyListReadonlyInstanceArrayOutput() GetMysqlProxiesProxyListReadonlyInstanceArrayOutput {
+	return o
+}
+
+func (o GetMysqlProxiesProxyListReadonlyInstanceArrayOutput) ToGetMysqlProxiesProxyListReadonlyInstanceArrayOutputWithContext(ctx context.Context) GetMysqlProxiesProxyListReadonlyInstanceArrayOutput {
+	return o
+}
+
+func (o GetMysqlProxiesProxyListReadonlyInstanceArrayOutput) Index(i pulumi.IntInput) GetMysqlProxiesProxyListReadonlyInstanceOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) GetMysqlProxiesProxyListReadonlyInstance {
+		return vs[0].([]GetMysqlProxiesProxyListReadonlyInstance)[vs[1].(int)]
+	}).(GetMysqlProxiesProxyListReadonlyInstanceOutput)
+}
+
+type GetMysqlProxyFlavorsFlavorGroup struct {
+	// Indicates the list of flavors.
+	Flavors []GetMysqlProxyFlavorsFlavorGroupFlavor `pulumi:"flavors"`
+	// Indicates the specification group type. The value can be **ARM** or **X86**.
+	GroupType string `pulumi:"groupType"`
+}
+
+// GetMysqlProxyFlavorsFlavorGroupInput is an input type that accepts GetMysqlProxyFlavorsFlavorGroupArgs and GetMysqlProxyFlavorsFlavorGroupOutput values.
+// You can construct a concrete instance of `GetMysqlProxyFlavorsFlavorGroupInput` via:
+//
+//	GetMysqlProxyFlavorsFlavorGroupArgs{...}
+type GetMysqlProxyFlavorsFlavorGroupInput interface {
+	pulumi.Input
+
+	ToGetMysqlProxyFlavorsFlavorGroupOutput() GetMysqlProxyFlavorsFlavorGroupOutput
+	ToGetMysqlProxyFlavorsFlavorGroupOutputWithContext(context.Context) GetMysqlProxyFlavorsFlavorGroupOutput
+}
+
+type GetMysqlProxyFlavorsFlavorGroupArgs struct {
+	// Indicates the list of flavors.
+	Flavors GetMysqlProxyFlavorsFlavorGroupFlavorArrayInput `pulumi:"flavors"`
+	// Indicates the specification group type. The value can be **ARM** or **X86**.
+	GroupType pulumi.StringInput `pulumi:"groupType"`
+}
+
+func (GetMysqlProxyFlavorsFlavorGroupArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetMysqlProxyFlavorsFlavorGroup)(nil)).Elem()
+}
+
+func (i GetMysqlProxyFlavorsFlavorGroupArgs) ToGetMysqlProxyFlavorsFlavorGroupOutput() GetMysqlProxyFlavorsFlavorGroupOutput {
+	return i.ToGetMysqlProxyFlavorsFlavorGroupOutputWithContext(context.Background())
+}
+
+func (i GetMysqlProxyFlavorsFlavorGroupArgs) ToGetMysqlProxyFlavorsFlavorGroupOutputWithContext(ctx context.Context) GetMysqlProxyFlavorsFlavorGroupOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetMysqlProxyFlavorsFlavorGroupOutput)
+}
+
+// GetMysqlProxyFlavorsFlavorGroupArrayInput is an input type that accepts GetMysqlProxyFlavorsFlavorGroupArray and GetMysqlProxyFlavorsFlavorGroupArrayOutput values.
+// You can construct a concrete instance of `GetMysqlProxyFlavorsFlavorGroupArrayInput` via:
+//
+//	GetMysqlProxyFlavorsFlavorGroupArray{ GetMysqlProxyFlavorsFlavorGroupArgs{...} }
+type GetMysqlProxyFlavorsFlavorGroupArrayInput interface {
+	pulumi.Input
+
+	ToGetMysqlProxyFlavorsFlavorGroupArrayOutput() GetMysqlProxyFlavorsFlavorGroupArrayOutput
+	ToGetMysqlProxyFlavorsFlavorGroupArrayOutputWithContext(context.Context) GetMysqlProxyFlavorsFlavorGroupArrayOutput
+}
+
+type GetMysqlProxyFlavorsFlavorGroupArray []GetMysqlProxyFlavorsFlavorGroupInput
+
+func (GetMysqlProxyFlavorsFlavorGroupArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetMysqlProxyFlavorsFlavorGroup)(nil)).Elem()
+}
+
+func (i GetMysqlProxyFlavorsFlavorGroupArray) ToGetMysqlProxyFlavorsFlavorGroupArrayOutput() GetMysqlProxyFlavorsFlavorGroupArrayOutput {
+	return i.ToGetMysqlProxyFlavorsFlavorGroupArrayOutputWithContext(context.Background())
+}
+
+func (i GetMysqlProxyFlavorsFlavorGroupArray) ToGetMysqlProxyFlavorsFlavorGroupArrayOutputWithContext(ctx context.Context) GetMysqlProxyFlavorsFlavorGroupArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetMysqlProxyFlavorsFlavorGroupArrayOutput)
+}
+
+type GetMysqlProxyFlavorsFlavorGroupOutput struct{ *pulumi.OutputState }
+
+func (GetMysqlProxyFlavorsFlavorGroupOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetMysqlProxyFlavorsFlavorGroup)(nil)).Elem()
+}
+
+func (o GetMysqlProxyFlavorsFlavorGroupOutput) ToGetMysqlProxyFlavorsFlavorGroupOutput() GetMysqlProxyFlavorsFlavorGroupOutput {
+	return o
+}
+
+func (o GetMysqlProxyFlavorsFlavorGroupOutput) ToGetMysqlProxyFlavorsFlavorGroupOutputWithContext(ctx context.Context) GetMysqlProxyFlavorsFlavorGroupOutput {
+	return o
+}
+
+// Indicates the list of flavors.
+func (o GetMysqlProxyFlavorsFlavorGroupOutput) Flavors() GetMysqlProxyFlavorsFlavorGroupFlavorArrayOutput {
+	return o.ApplyT(func(v GetMysqlProxyFlavorsFlavorGroup) []GetMysqlProxyFlavorsFlavorGroupFlavor { return v.Flavors }).(GetMysqlProxyFlavorsFlavorGroupFlavorArrayOutput)
+}
+
+// Indicates the specification group type. The value can be **ARM** or **X86**.
+func (o GetMysqlProxyFlavorsFlavorGroupOutput) GroupType() pulumi.StringOutput {
+	return o.ApplyT(func(v GetMysqlProxyFlavorsFlavorGroup) string { return v.GroupType }).(pulumi.StringOutput)
+}
+
+type GetMysqlProxyFlavorsFlavorGroupArrayOutput struct{ *pulumi.OutputState }
+
+func (GetMysqlProxyFlavorsFlavorGroupArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetMysqlProxyFlavorsFlavorGroup)(nil)).Elem()
+}
+
+func (o GetMysqlProxyFlavorsFlavorGroupArrayOutput) ToGetMysqlProxyFlavorsFlavorGroupArrayOutput() GetMysqlProxyFlavorsFlavorGroupArrayOutput {
+	return o
+}
+
+func (o GetMysqlProxyFlavorsFlavorGroupArrayOutput) ToGetMysqlProxyFlavorsFlavorGroupArrayOutputWithContext(ctx context.Context) GetMysqlProxyFlavorsFlavorGroupArrayOutput {
+	return o
+}
+
+func (o GetMysqlProxyFlavorsFlavorGroupArrayOutput) Index(i pulumi.IntInput) GetMysqlProxyFlavorsFlavorGroupOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) GetMysqlProxyFlavorsFlavorGroup {
+		return vs[0].([]GetMysqlProxyFlavorsFlavorGroup)[vs[1].(int)]
+	}).(GetMysqlProxyFlavorsFlavorGroupOutput)
+}
+
+type GetMysqlProxyFlavorsFlavorGroupFlavor struct {
+	// Indicates the AZ information. **key** indicates the AZ associated with the specification, and **value**
+	// indicates the specification status in the AZ. Only the specification status in the AZ where the primary instance is
+	// located is displayed.
+	AzStatus map[string]string `pulumi:"azStatus"`
+	// Indicates the specification code of the database proxy.
+	Code string `pulumi:"code"`
+	// Indicates the database type.
+	DbType string `pulumi:"dbType"`
+	// Indicates the specification ID of the database proxy.
+	Id string `pulumi:"id"`
+	// Indicates the memory size in GB.
+	Memory string `pulumi:"memory"`
+	// Indicates the number of vCPUs.
+	Vcpus string `pulumi:"vcpus"`
+}
+
+// GetMysqlProxyFlavorsFlavorGroupFlavorInput is an input type that accepts GetMysqlProxyFlavorsFlavorGroupFlavorArgs and GetMysqlProxyFlavorsFlavorGroupFlavorOutput values.
+// You can construct a concrete instance of `GetMysqlProxyFlavorsFlavorGroupFlavorInput` via:
+//
+//	GetMysqlProxyFlavorsFlavorGroupFlavorArgs{...}
+type GetMysqlProxyFlavorsFlavorGroupFlavorInput interface {
+	pulumi.Input
+
+	ToGetMysqlProxyFlavorsFlavorGroupFlavorOutput() GetMysqlProxyFlavorsFlavorGroupFlavorOutput
+	ToGetMysqlProxyFlavorsFlavorGroupFlavorOutputWithContext(context.Context) GetMysqlProxyFlavorsFlavorGroupFlavorOutput
+}
+
+type GetMysqlProxyFlavorsFlavorGroupFlavorArgs struct {
+	// Indicates the AZ information. **key** indicates the AZ associated with the specification, and **value**
+	// indicates the specification status in the AZ. Only the specification status in the AZ where the primary instance is
+	// located is displayed.
+	AzStatus pulumi.StringMapInput `pulumi:"azStatus"`
+	// Indicates the specification code of the database proxy.
+	Code pulumi.StringInput `pulumi:"code"`
+	// Indicates the database type.
+	DbType pulumi.StringInput `pulumi:"dbType"`
+	// Indicates the specification ID of the database proxy.
+	Id pulumi.StringInput `pulumi:"id"`
+	// Indicates the memory size in GB.
+	Memory pulumi.StringInput `pulumi:"memory"`
+	// Indicates the number of vCPUs.
+	Vcpus pulumi.StringInput `pulumi:"vcpus"`
+}
+
+func (GetMysqlProxyFlavorsFlavorGroupFlavorArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetMysqlProxyFlavorsFlavorGroupFlavor)(nil)).Elem()
+}
+
+func (i GetMysqlProxyFlavorsFlavorGroupFlavorArgs) ToGetMysqlProxyFlavorsFlavorGroupFlavorOutput() GetMysqlProxyFlavorsFlavorGroupFlavorOutput {
+	return i.ToGetMysqlProxyFlavorsFlavorGroupFlavorOutputWithContext(context.Background())
+}
+
+func (i GetMysqlProxyFlavorsFlavorGroupFlavorArgs) ToGetMysqlProxyFlavorsFlavorGroupFlavorOutputWithContext(ctx context.Context) GetMysqlProxyFlavorsFlavorGroupFlavorOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetMysqlProxyFlavorsFlavorGroupFlavorOutput)
+}
+
+// GetMysqlProxyFlavorsFlavorGroupFlavorArrayInput is an input type that accepts GetMysqlProxyFlavorsFlavorGroupFlavorArray and GetMysqlProxyFlavorsFlavorGroupFlavorArrayOutput values.
+// You can construct a concrete instance of `GetMysqlProxyFlavorsFlavorGroupFlavorArrayInput` via:
+//
+//	GetMysqlProxyFlavorsFlavorGroupFlavorArray{ GetMysqlProxyFlavorsFlavorGroupFlavorArgs{...} }
+type GetMysqlProxyFlavorsFlavorGroupFlavorArrayInput interface {
+	pulumi.Input
+
+	ToGetMysqlProxyFlavorsFlavorGroupFlavorArrayOutput() GetMysqlProxyFlavorsFlavorGroupFlavorArrayOutput
+	ToGetMysqlProxyFlavorsFlavorGroupFlavorArrayOutputWithContext(context.Context) GetMysqlProxyFlavorsFlavorGroupFlavorArrayOutput
+}
+
+type GetMysqlProxyFlavorsFlavorGroupFlavorArray []GetMysqlProxyFlavorsFlavorGroupFlavorInput
+
+func (GetMysqlProxyFlavorsFlavorGroupFlavorArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetMysqlProxyFlavorsFlavorGroupFlavor)(nil)).Elem()
+}
+
+func (i GetMysqlProxyFlavorsFlavorGroupFlavorArray) ToGetMysqlProxyFlavorsFlavorGroupFlavorArrayOutput() GetMysqlProxyFlavorsFlavorGroupFlavorArrayOutput {
+	return i.ToGetMysqlProxyFlavorsFlavorGroupFlavorArrayOutputWithContext(context.Background())
+}
+
+func (i GetMysqlProxyFlavorsFlavorGroupFlavorArray) ToGetMysqlProxyFlavorsFlavorGroupFlavorArrayOutputWithContext(ctx context.Context) GetMysqlProxyFlavorsFlavorGroupFlavorArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetMysqlProxyFlavorsFlavorGroupFlavorArrayOutput)
+}
+
+type GetMysqlProxyFlavorsFlavorGroupFlavorOutput struct{ *pulumi.OutputState }
+
+func (GetMysqlProxyFlavorsFlavorGroupFlavorOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetMysqlProxyFlavorsFlavorGroupFlavor)(nil)).Elem()
+}
+
+func (o GetMysqlProxyFlavorsFlavorGroupFlavorOutput) ToGetMysqlProxyFlavorsFlavorGroupFlavorOutput() GetMysqlProxyFlavorsFlavorGroupFlavorOutput {
+	return o
+}
+
+func (o GetMysqlProxyFlavorsFlavorGroupFlavorOutput) ToGetMysqlProxyFlavorsFlavorGroupFlavorOutputWithContext(ctx context.Context) GetMysqlProxyFlavorsFlavorGroupFlavorOutput {
+	return o
+}
+
+// Indicates the AZ information. **key** indicates the AZ associated with the specification, and **value**
+// indicates the specification status in the AZ. Only the specification status in the AZ where the primary instance is
+// located is displayed.
+func (o GetMysqlProxyFlavorsFlavorGroupFlavorOutput) AzStatus() pulumi.StringMapOutput {
+	return o.ApplyT(func(v GetMysqlProxyFlavorsFlavorGroupFlavor) map[string]string { return v.AzStatus }).(pulumi.StringMapOutput)
+}
+
+// Indicates the specification code of the database proxy.
+func (o GetMysqlProxyFlavorsFlavorGroupFlavorOutput) Code() pulumi.StringOutput {
+	return o.ApplyT(func(v GetMysqlProxyFlavorsFlavorGroupFlavor) string { return v.Code }).(pulumi.StringOutput)
+}
+
+// Indicates the database type.
+func (o GetMysqlProxyFlavorsFlavorGroupFlavorOutput) DbType() pulumi.StringOutput {
+	return o.ApplyT(func(v GetMysqlProxyFlavorsFlavorGroupFlavor) string { return v.DbType }).(pulumi.StringOutput)
+}
+
+// Indicates the specification ID of the database proxy.
+func (o GetMysqlProxyFlavorsFlavorGroupFlavorOutput) Id() pulumi.StringOutput {
+	return o.ApplyT(func(v GetMysqlProxyFlavorsFlavorGroupFlavor) string { return v.Id }).(pulumi.StringOutput)
+}
+
+// Indicates the memory size in GB.
+func (o GetMysqlProxyFlavorsFlavorGroupFlavorOutput) Memory() pulumi.StringOutput {
+	return o.ApplyT(func(v GetMysqlProxyFlavorsFlavorGroupFlavor) string { return v.Memory }).(pulumi.StringOutput)
+}
+
+// Indicates the number of vCPUs.
+func (o GetMysqlProxyFlavorsFlavorGroupFlavorOutput) Vcpus() pulumi.StringOutput {
+	return o.ApplyT(func(v GetMysqlProxyFlavorsFlavorGroupFlavor) string { return v.Vcpus }).(pulumi.StringOutput)
+}
+
+type GetMysqlProxyFlavorsFlavorGroupFlavorArrayOutput struct{ *pulumi.OutputState }
+
+func (GetMysqlProxyFlavorsFlavorGroupFlavorArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetMysqlProxyFlavorsFlavorGroupFlavor)(nil)).Elem()
+}
+
+func (o GetMysqlProxyFlavorsFlavorGroupFlavorArrayOutput) ToGetMysqlProxyFlavorsFlavorGroupFlavorArrayOutput() GetMysqlProxyFlavorsFlavorGroupFlavorArrayOutput {
+	return o
+}
+
+func (o GetMysqlProxyFlavorsFlavorGroupFlavorArrayOutput) ToGetMysqlProxyFlavorsFlavorGroupFlavorArrayOutputWithContext(ctx context.Context) GetMysqlProxyFlavorsFlavorGroupFlavorArrayOutput {
+	return o
+}
+
+func (o GetMysqlProxyFlavorsFlavorGroupFlavorArrayOutput) Index(i pulumi.IntInput) GetMysqlProxyFlavorsFlavorGroupFlavorOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) GetMysqlProxyFlavorsFlavorGroupFlavor {
+		return vs[0].([]GetMysqlProxyFlavorsFlavorGroupFlavor)[vs[1].(int)]
+	}).(GetMysqlProxyFlavorsFlavorGroupFlavorOutput)
+}
+
+type GetParametergroupsConfiguration struct {
+	// The creation time of the configuration.
+	CreatedAt string `pulumi:"createdAt"`
+	// Specifies the database name.
+	DatastoreName string `pulumi:"datastoreName"`
+	// Specifies the database version name.
+	DatastoreVersionName string `pulumi:"datastoreVersionName"`
+	// The parameter template description.
+	Description string `pulumi:"description"`
+	// The parameter template ID.
+	Id string `pulumi:"id"`
+	// Specifies the parameter template name.
+	Name string `pulumi:"name"`
+	// The latest update time of the configuration.
+	UpdatedAt string `pulumi:"updatedAt"`
+	// Specifies whether the parameter template is created by users.
+	// The options are as follows:
+	// + **false**: The parameter template is a default parameter template.
+	// + **true**: The parameter template is a custom template.
+	UserDefined bool `pulumi:"userDefined"`
+}
+
+// GetParametergroupsConfigurationInput is an input type that accepts GetParametergroupsConfigurationArgs and GetParametergroupsConfigurationOutput values.
+// You can construct a concrete instance of `GetParametergroupsConfigurationInput` via:
+//
+//	GetParametergroupsConfigurationArgs{...}
+type GetParametergroupsConfigurationInput interface {
+	pulumi.Input
+
+	ToGetParametergroupsConfigurationOutput() GetParametergroupsConfigurationOutput
+	ToGetParametergroupsConfigurationOutputWithContext(context.Context) GetParametergroupsConfigurationOutput
+}
+
+type GetParametergroupsConfigurationArgs struct {
+	// The creation time of the configuration.
+	CreatedAt pulumi.StringInput `pulumi:"createdAt"`
+	// Specifies the database name.
+	DatastoreName pulumi.StringInput `pulumi:"datastoreName"`
+	// Specifies the database version name.
+	DatastoreVersionName pulumi.StringInput `pulumi:"datastoreVersionName"`
+	// The parameter template description.
+	Description pulumi.StringInput `pulumi:"description"`
+	// The parameter template ID.
+	Id pulumi.StringInput `pulumi:"id"`
+	// Specifies the parameter template name.
+	Name pulumi.StringInput `pulumi:"name"`
+	// The latest update time of the configuration.
+	UpdatedAt pulumi.StringInput `pulumi:"updatedAt"`
+	// Specifies whether the parameter template is created by users.
+	// The options are as follows:
+	// + **false**: The parameter template is a default parameter template.
+	// + **true**: The parameter template is a custom template.
+	UserDefined pulumi.BoolInput `pulumi:"userDefined"`
+}
+
+func (GetParametergroupsConfigurationArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetParametergroupsConfiguration)(nil)).Elem()
+}
+
+func (i GetParametergroupsConfigurationArgs) ToGetParametergroupsConfigurationOutput() GetParametergroupsConfigurationOutput {
+	return i.ToGetParametergroupsConfigurationOutputWithContext(context.Background())
+}
+
+func (i GetParametergroupsConfigurationArgs) ToGetParametergroupsConfigurationOutputWithContext(ctx context.Context) GetParametergroupsConfigurationOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetParametergroupsConfigurationOutput)
+}
+
+// GetParametergroupsConfigurationArrayInput is an input type that accepts GetParametergroupsConfigurationArray and GetParametergroupsConfigurationArrayOutput values.
+// You can construct a concrete instance of `GetParametergroupsConfigurationArrayInput` via:
+//
+//	GetParametergroupsConfigurationArray{ GetParametergroupsConfigurationArgs{...} }
+type GetParametergroupsConfigurationArrayInput interface {
+	pulumi.Input
+
+	ToGetParametergroupsConfigurationArrayOutput() GetParametergroupsConfigurationArrayOutput
+	ToGetParametergroupsConfigurationArrayOutputWithContext(context.Context) GetParametergroupsConfigurationArrayOutput
+}
+
+type GetParametergroupsConfigurationArray []GetParametergroupsConfigurationInput
+
+func (GetParametergroupsConfigurationArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetParametergroupsConfiguration)(nil)).Elem()
+}
+
+func (i GetParametergroupsConfigurationArray) ToGetParametergroupsConfigurationArrayOutput() GetParametergroupsConfigurationArrayOutput {
+	return i.ToGetParametergroupsConfigurationArrayOutputWithContext(context.Background())
+}
+
+func (i GetParametergroupsConfigurationArray) ToGetParametergroupsConfigurationArrayOutputWithContext(ctx context.Context) GetParametergroupsConfigurationArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetParametergroupsConfigurationArrayOutput)
+}
+
+type GetParametergroupsConfigurationOutput struct{ *pulumi.OutputState }
+
+func (GetParametergroupsConfigurationOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetParametergroupsConfiguration)(nil)).Elem()
+}
+
+func (o GetParametergroupsConfigurationOutput) ToGetParametergroupsConfigurationOutput() GetParametergroupsConfigurationOutput {
+	return o
+}
+
+func (o GetParametergroupsConfigurationOutput) ToGetParametergroupsConfigurationOutputWithContext(ctx context.Context) GetParametergroupsConfigurationOutput {
+	return o
+}
+
+// The creation time of the configuration.
+func (o GetParametergroupsConfigurationOutput) CreatedAt() pulumi.StringOutput {
+	return o.ApplyT(func(v GetParametergroupsConfiguration) string { return v.CreatedAt }).(pulumi.StringOutput)
+}
+
+// Specifies the database name.
+func (o GetParametergroupsConfigurationOutput) DatastoreName() pulumi.StringOutput {
+	return o.ApplyT(func(v GetParametergroupsConfiguration) string { return v.DatastoreName }).(pulumi.StringOutput)
+}
+
+// Specifies the database version name.
+func (o GetParametergroupsConfigurationOutput) DatastoreVersionName() pulumi.StringOutput {
+	return o.ApplyT(func(v GetParametergroupsConfiguration) string { return v.DatastoreVersionName }).(pulumi.StringOutput)
+}
+
+// The parameter template description.
+func (o GetParametergroupsConfigurationOutput) Description() pulumi.StringOutput {
+	return o.ApplyT(func(v GetParametergroupsConfiguration) string { return v.Description }).(pulumi.StringOutput)
+}
+
+// The parameter template ID.
+func (o GetParametergroupsConfigurationOutput) Id() pulumi.StringOutput {
+	return o.ApplyT(func(v GetParametergroupsConfiguration) string { return v.Id }).(pulumi.StringOutput)
+}
+
+// Specifies the parameter template name.
+func (o GetParametergroupsConfigurationOutput) Name() pulumi.StringOutput {
+	return o.ApplyT(func(v GetParametergroupsConfiguration) string { return v.Name }).(pulumi.StringOutput)
+}
+
+// The latest update time of the configuration.
+func (o GetParametergroupsConfigurationOutput) UpdatedAt() pulumi.StringOutput {
+	return o.ApplyT(func(v GetParametergroupsConfiguration) string { return v.UpdatedAt }).(pulumi.StringOutput)
+}
+
+// Specifies whether the parameter template is created by users.
+// The options are as follows:
+// + **false**: The parameter template is a default parameter template.
+// + **true**: The parameter template is a custom template.
+func (o GetParametergroupsConfigurationOutput) UserDefined() pulumi.BoolOutput {
+	return o.ApplyT(func(v GetParametergroupsConfiguration) bool { return v.UserDefined }).(pulumi.BoolOutput)
+}
+
+type GetParametergroupsConfigurationArrayOutput struct{ *pulumi.OutputState }
+
+func (GetParametergroupsConfigurationArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetParametergroupsConfiguration)(nil)).Elem()
+}
+
+func (o GetParametergroupsConfigurationArrayOutput) ToGetParametergroupsConfigurationArrayOutput() GetParametergroupsConfigurationArrayOutput {
+	return o
+}
+
+func (o GetParametergroupsConfigurationArrayOutput) ToGetParametergroupsConfigurationArrayOutputWithContext(ctx context.Context) GetParametergroupsConfigurationArrayOutput {
+	return o
+}
+
+func (o GetParametergroupsConfigurationArrayOutput) Index(i pulumi.IntInput) GetParametergroupsConfigurationOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) GetParametergroupsConfiguration {
+		return vs[0].([]GetParametergroupsConfiguration)[vs[1].(int)]
+	}).(GetParametergroupsConfigurationOutput)
+}
+
+type GetPgAccountsUser struct {
+	// Indicates the permission attributes of a user.
+	// The attributes structure is documented below.
+	Attributes []GetPgAccountsUserAttribute `pulumi:"attributes"`
+	// Indicates the remarks of the DB account.
+	Description string `pulumi:"description"`
+	// Indicates the default rights of a user.
+	Memberofs []string `pulumi:"memberofs"`
+	// Indicates the username of the DB account.
+	Name string `pulumi:"name"`
+}
+
+// GetPgAccountsUserInput is an input type that accepts GetPgAccountsUserArgs and GetPgAccountsUserOutput values.
+// You can construct a concrete instance of `GetPgAccountsUserInput` via:
+//
+//	GetPgAccountsUserArgs{...}
+type GetPgAccountsUserInput interface {
+	pulumi.Input
+
+	ToGetPgAccountsUserOutput() GetPgAccountsUserOutput
+	ToGetPgAccountsUserOutputWithContext(context.Context) GetPgAccountsUserOutput
+}
+
+type GetPgAccountsUserArgs struct {
+	// Indicates the permission attributes of a user.
+	// The attributes structure is documented below.
+	Attributes GetPgAccountsUserAttributeArrayInput `pulumi:"attributes"`
+	// Indicates the remarks of the DB account.
+	Description pulumi.StringInput `pulumi:"description"`
+	// Indicates the default rights of a user.
+	Memberofs pulumi.StringArrayInput `pulumi:"memberofs"`
+	// Indicates the username of the DB account.
+	Name pulumi.StringInput `pulumi:"name"`
+}
+
+func (GetPgAccountsUserArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetPgAccountsUser)(nil)).Elem()
+}
+
+func (i GetPgAccountsUserArgs) ToGetPgAccountsUserOutput() GetPgAccountsUserOutput {
+	return i.ToGetPgAccountsUserOutputWithContext(context.Background())
+}
+
+func (i GetPgAccountsUserArgs) ToGetPgAccountsUserOutputWithContext(ctx context.Context) GetPgAccountsUserOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetPgAccountsUserOutput)
+}
+
+// GetPgAccountsUserArrayInput is an input type that accepts GetPgAccountsUserArray and GetPgAccountsUserArrayOutput values.
+// You can construct a concrete instance of `GetPgAccountsUserArrayInput` via:
+//
+//	GetPgAccountsUserArray{ GetPgAccountsUserArgs{...} }
+type GetPgAccountsUserArrayInput interface {
+	pulumi.Input
+
+	ToGetPgAccountsUserArrayOutput() GetPgAccountsUserArrayOutput
+	ToGetPgAccountsUserArrayOutputWithContext(context.Context) GetPgAccountsUserArrayOutput
+}
+
+type GetPgAccountsUserArray []GetPgAccountsUserInput
+
+func (GetPgAccountsUserArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetPgAccountsUser)(nil)).Elem()
+}
+
+func (i GetPgAccountsUserArray) ToGetPgAccountsUserArrayOutput() GetPgAccountsUserArrayOutput {
+	return i.ToGetPgAccountsUserArrayOutputWithContext(context.Background())
+}
+
+func (i GetPgAccountsUserArray) ToGetPgAccountsUserArrayOutputWithContext(ctx context.Context) GetPgAccountsUserArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetPgAccountsUserArrayOutput)
+}
+
+type GetPgAccountsUserOutput struct{ *pulumi.OutputState }
+
+func (GetPgAccountsUserOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetPgAccountsUser)(nil)).Elem()
+}
+
+func (o GetPgAccountsUserOutput) ToGetPgAccountsUserOutput() GetPgAccountsUserOutput {
+	return o
+}
+
+func (o GetPgAccountsUserOutput) ToGetPgAccountsUserOutputWithContext(ctx context.Context) GetPgAccountsUserOutput {
+	return o
+}
+
+// Indicates the permission attributes of a user.
+// The attributes structure is documented below.
+func (o GetPgAccountsUserOutput) Attributes() GetPgAccountsUserAttributeArrayOutput {
+	return o.ApplyT(func(v GetPgAccountsUser) []GetPgAccountsUserAttribute { return v.Attributes }).(GetPgAccountsUserAttributeArrayOutput)
+}
+
+// Indicates the remarks of the DB account.
+func (o GetPgAccountsUserOutput) Description() pulumi.StringOutput {
+	return o.ApplyT(func(v GetPgAccountsUser) string { return v.Description }).(pulumi.StringOutput)
+}
+
+// Indicates the default rights of a user.
+func (o GetPgAccountsUserOutput) Memberofs() pulumi.StringArrayOutput {
+	return o.ApplyT(func(v GetPgAccountsUser) []string { return v.Memberofs }).(pulumi.StringArrayOutput)
+}
+
+// Indicates the username of the DB account.
+func (o GetPgAccountsUserOutput) Name() pulumi.StringOutput {
+	return o.ApplyT(func(v GetPgAccountsUser) string { return v.Name }).(pulumi.StringOutput)
+}
+
+type GetPgAccountsUserArrayOutput struct{ *pulumi.OutputState }
+
+func (GetPgAccountsUserArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetPgAccountsUser)(nil)).Elem()
+}
+
+func (o GetPgAccountsUserArrayOutput) ToGetPgAccountsUserArrayOutput() GetPgAccountsUserArrayOutput {
+	return o
+}
+
+func (o GetPgAccountsUserArrayOutput) ToGetPgAccountsUserArrayOutputWithContext(ctx context.Context) GetPgAccountsUserArrayOutput {
+	return o
+}
+
+func (o GetPgAccountsUserArrayOutput) Index(i pulumi.IntInput) GetPgAccountsUserOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) GetPgAccountsUser {
+		return vs[0].([]GetPgAccountsUser)[vs[1].(int)]
+	}).(GetPgAccountsUserOutput)
+}
+
+type GetPgAccountsUserAttribute struct {
+	// Indicates whether a user bypasses each row-level security policy. The value can be **true** or **false**.
+	Rolbypassrls bool `pulumi:"rolbypassrls"`
+	// Indicates whether a user can log in to the database. The value can be **true** or **false**.
+	Rolcanlogin bool `pulumi:"rolcanlogin"`
+	// Indicates the maximum number of concurrent connections to a DB instance. The value **-1** indicates
+	// that there are no limitations on the number of concurrent connections.
+	Rolconnlimit int `pulumi:"rolconnlimit"`
+	// Indicates whether a user can create a database. The value can be **true** or **false**.
+	Rolcreatedb bool `pulumi:"rolcreatedb"`
+	// Indicates whether a user can create other sub-users. The value can be **true** or **false**.
+	Rolcreaterole bool `pulumi:"rolcreaterole"`
+	// Indicates whether a user automatically inherits the permissions of the role to which the user belongs.
+	// The value can be **true** or **false**.
+	Rolinherit bool `pulumi:"rolinherit"`
+	// Indicates whether the user is a replication role. The value can be **true** or **false**.
+	Rolreplication bool `pulumi:"rolreplication"`
+	// Indicates whether a user has the super user permission. The value is **false**.
+	Rolsuper bool `pulumi:"rolsuper"`
+}
+
+// GetPgAccountsUserAttributeInput is an input type that accepts GetPgAccountsUserAttributeArgs and GetPgAccountsUserAttributeOutput values.
+// You can construct a concrete instance of `GetPgAccountsUserAttributeInput` via:
+//
+//	GetPgAccountsUserAttributeArgs{...}
+type GetPgAccountsUserAttributeInput interface {
+	pulumi.Input
+
+	ToGetPgAccountsUserAttributeOutput() GetPgAccountsUserAttributeOutput
+	ToGetPgAccountsUserAttributeOutputWithContext(context.Context) GetPgAccountsUserAttributeOutput
+}
+
+type GetPgAccountsUserAttributeArgs struct {
+	// Indicates whether a user bypasses each row-level security policy. The value can be **true** or **false**.
+	Rolbypassrls pulumi.BoolInput `pulumi:"rolbypassrls"`
+	// Indicates whether a user can log in to the database. The value can be **true** or **false**.
+	Rolcanlogin pulumi.BoolInput `pulumi:"rolcanlogin"`
+	// Indicates the maximum number of concurrent connections to a DB instance. The value **-1** indicates
+	// that there are no limitations on the number of concurrent connections.
+	Rolconnlimit pulumi.IntInput `pulumi:"rolconnlimit"`
+	// Indicates whether a user can create a database. The value can be **true** or **false**.
+	Rolcreatedb pulumi.BoolInput `pulumi:"rolcreatedb"`
+	// Indicates whether a user can create other sub-users. The value can be **true** or **false**.
+	Rolcreaterole pulumi.BoolInput `pulumi:"rolcreaterole"`
+	// Indicates whether a user automatically inherits the permissions of the role to which the user belongs.
+	// The value can be **true** or **false**.
+	Rolinherit pulumi.BoolInput `pulumi:"rolinherit"`
+	// Indicates whether the user is a replication role. The value can be **true** or **false**.
+	Rolreplication pulumi.BoolInput `pulumi:"rolreplication"`
+	// Indicates whether a user has the super user permission. The value is **false**.
+	Rolsuper pulumi.BoolInput `pulumi:"rolsuper"`
+}
+
+func (GetPgAccountsUserAttributeArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetPgAccountsUserAttribute)(nil)).Elem()
+}
+
+func (i GetPgAccountsUserAttributeArgs) ToGetPgAccountsUserAttributeOutput() GetPgAccountsUserAttributeOutput {
+	return i.ToGetPgAccountsUserAttributeOutputWithContext(context.Background())
+}
+
+func (i GetPgAccountsUserAttributeArgs) ToGetPgAccountsUserAttributeOutputWithContext(ctx context.Context) GetPgAccountsUserAttributeOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetPgAccountsUserAttributeOutput)
+}
+
+// GetPgAccountsUserAttributeArrayInput is an input type that accepts GetPgAccountsUserAttributeArray and GetPgAccountsUserAttributeArrayOutput values.
+// You can construct a concrete instance of `GetPgAccountsUserAttributeArrayInput` via:
+//
+//	GetPgAccountsUserAttributeArray{ GetPgAccountsUserAttributeArgs{...} }
+type GetPgAccountsUserAttributeArrayInput interface {
+	pulumi.Input
+
+	ToGetPgAccountsUserAttributeArrayOutput() GetPgAccountsUserAttributeArrayOutput
+	ToGetPgAccountsUserAttributeArrayOutputWithContext(context.Context) GetPgAccountsUserAttributeArrayOutput
+}
+
+type GetPgAccountsUserAttributeArray []GetPgAccountsUserAttributeInput
+
+func (GetPgAccountsUserAttributeArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetPgAccountsUserAttribute)(nil)).Elem()
+}
+
+func (i GetPgAccountsUserAttributeArray) ToGetPgAccountsUserAttributeArrayOutput() GetPgAccountsUserAttributeArrayOutput {
+	return i.ToGetPgAccountsUserAttributeArrayOutputWithContext(context.Background())
+}
+
+func (i GetPgAccountsUserAttributeArray) ToGetPgAccountsUserAttributeArrayOutputWithContext(ctx context.Context) GetPgAccountsUserAttributeArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetPgAccountsUserAttributeArrayOutput)
+}
+
+type GetPgAccountsUserAttributeOutput struct{ *pulumi.OutputState }
+
+func (GetPgAccountsUserAttributeOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetPgAccountsUserAttribute)(nil)).Elem()
+}
+
+func (o GetPgAccountsUserAttributeOutput) ToGetPgAccountsUserAttributeOutput() GetPgAccountsUserAttributeOutput {
+	return o
+}
+
+func (o GetPgAccountsUserAttributeOutput) ToGetPgAccountsUserAttributeOutputWithContext(ctx context.Context) GetPgAccountsUserAttributeOutput {
+	return o
+}
+
+// Indicates whether a user bypasses each row-level security policy. The value can be **true** or **false**.
+func (o GetPgAccountsUserAttributeOutput) Rolbypassrls() pulumi.BoolOutput {
+	return o.ApplyT(func(v GetPgAccountsUserAttribute) bool { return v.Rolbypassrls }).(pulumi.BoolOutput)
+}
+
+// Indicates whether a user can log in to the database. The value can be **true** or **false**.
+func (o GetPgAccountsUserAttributeOutput) Rolcanlogin() pulumi.BoolOutput {
+	return o.ApplyT(func(v GetPgAccountsUserAttribute) bool { return v.Rolcanlogin }).(pulumi.BoolOutput)
+}
+
+// Indicates the maximum number of concurrent connections to a DB instance. The value **-1** indicates
+// that there are no limitations on the number of concurrent connections.
+func (o GetPgAccountsUserAttributeOutput) Rolconnlimit() pulumi.IntOutput {
+	return o.ApplyT(func(v GetPgAccountsUserAttribute) int { return v.Rolconnlimit }).(pulumi.IntOutput)
+}
+
+// Indicates whether a user can create a database. The value can be **true** or **false**.
+func (o GetPgAccountsUserAttributeOutput) Rolcreatedb() pulumi.BoolOutput {
+	return o.ApplyT(func(v GetPgAccountsUserAttribute) bool { return v.Rolcreatedb }).(pulumi.BoolOutput)
+}
+
+// Indicates whether a user can create other sub-users. The value can be **true** or **false**.
+func (o GetPgAccountsUserAttributeOutput) Rolcreaterole() pulumi.BoolOutput {
+	return o.ApplyT(func(v GetPgAccountsUserAttribute) bool { return v.Rolcreaterole }).(pulumi.BoolOutput)
+}
+
+// Indicates whether a user automatically inherits the permissions of the role to which the user belongs.
+// The value can be **true** or **false**.
+func (o GetPgAccountsUserAttributeOutput) Rolinherit() pulumi.BoolOutput {
+	return o.ApplyT(func(v GetPgAccountsUserAttribute) bool { return v.Rolinherit }).(pulumi.BoolOutput)
+}
+
+// Indicates whether the user is a replication role. The value can be **true** or **false**.
+func (o GetPgAccountsUserAttributeOutput) Rolreplication() pulumi.BoolOutput {
+	return o.ApplyT(func(v GetPgAccountsUserAttribute) bool { return v.Rolreplication }).(pulumi.BoolOutput)
+}
+
+// Indicates whether a user has the super user permission. The value is **false**.
+func (o GetPgAccountsUserAttributeOutput) Rolsuper() pulumi.BoolOutput {
+	return o.ApplyT(func(v GetPgAccountsUserAttribute) bool { return v.Rolsuper }).(pulumi.BoolOutput)
+}
+
+type GetPgAccountsUserAttributeArrayOutput struct{ *pulumi.OutputState }
+
+func (GetPgAccountsUserAttributeArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetPgAccountsUserAttribute)(nil)).Elem()
+}
+
+func (o GetPgAccountsUserAttributeArrayOutput) ToGetPgAccountsUserAttributeArrayOutput() GetPgAccountsUserAttributeArrayOutput {
+	return o
+}
+
+func (o GetPgAccountsUserAttributeArrayOutput) ToGetPgAccountsUserAttributeArrayOutputWithContext(ctx context.Context) GetPgAccountsUserAttributeArrayOutput {
+	return o
+}
+
+func (o GetPgAccountsUserAttributeArrayOutput) Index(i pulumi.IntInput) GetPgAccountsUserAttributeOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) GetPgAccountsUserAttribute {
+		return vs[0].([]GetPgAccountsUserAttribute)[vs[1].(int)]
+	}).(GetPgAccountsUserAttributeOutput)
+}
+
+type GetPgDatabasesDatabase struct {
+	// Specifies the character set used by the database.
+	// For details, see [documentation](https://www.postgresql.org/docs/16/infoschema-character-sets.html).
+	CharacterSet string `pulumi:"characterSet"`
+	// Indicates the database description.
+	Description string `pulumi:"description"`
+	// Specifies the database collation.
+	// For details, see [documentation](https://support.huaweicloud.com/intl/en-us/bestpractice-rds/rds_pg_0017.html).
+	LcCollate string `pulumi:"lcCollate"`
+	// Specifies the database name.
+	Name string `pulumi:"name"`
+	// Specifies the database owner.
+	Owner string `pulumi:"owner"`
+	// Specifies the database size, in bytes.
+	Size int `pulumi:"size"`
+}
+
+// GetPgDatabasesDatabaseInput is an input type that accepts GetPgDatabasesDatabaseArgs and GetPgDatabasesDatabaseOutput values.
+// You can construct a concrete instance of `GetPgDatabasesDatabaseInput` via:
+//
+//	GetPgDatabasesDatabaseArgs{...}
+type GetPgDatabasesDatabaseInput interface {
+	pulumi.Input
+
+	ToGetPgDatabasesDatabaseOutput() GetPgDatabasesDatabaseOutput
+	ToGetPgDatabasesDatabaseOutputWithContext(context.Context) GetPgDatabasesDatabaseOutput
+}
+
+type GetPgDatabasesDatabaseArgs struct {
+	// Specifies the character set used by the database.
+	// For details, see [documentation](https://www.postgresql.org/docs/16/infoschema-character-sets.html).
+	CharacterSet pulumi.StringInput `pulumi:"characterSet"`
+	// Indicates the database description.
+	Description pulumi.StringInput `pulumi:"description"`
+	// Specifies the database collation.
+	// For details, see [documentation](https://support.huaweicloud.com/intl/en-us/bestpractice-rds/rds_pg_0017.html).
+	LcCollate pulumi.StringInput `pulumi:"lcCollate"`
+	// Specifies the database name.
+	Name pulumi.StringInput `pulumi:"name"`
+	// Specifies the database owner.
+	Owner pulumi.StringInput `pulumi:"owner"`
+	// Specifies the database size, in bytes.
+	Size pulumi.IntInput `pulumi:"size"`
+}
+
+func (GetPgDatabasesDatabaseArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetPgDatabasesDatabase)(nil)).Elem()
+}
+
+func (i GetPgDatabasesDatabaseArgs) ToGetPgDatabasesDatabaseOutput() GetPgDatabasesDatabaseOutput {
+	return i.ToGetPgDatabasesDatabaseOutputWithContext(context.Background())
+}
+
+func (i GetPgDatabasesDatabaseArgs) ToGetPgDatabasesDatabaseOutputWithContext(ctx context.Context) GetPgDatabasesDatabaseOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetPgDatabasesDatabaseOutput)
+}
+
+// GetPgDatabasesDatabaseArrayInput is an input type that accepts GetPgDatabasesDatabaseArray and GetPgDatabasesDatabaseArrayOutput values.
+// You can construct a concrete instance of `GetPgDatabasesDatabaseArrayInput` via:
+//
+//	GetPgDatabasesDatabaseArray{ GetPgDatabasesDatabaseArgs{...} }
+type GetPgDatabasesDatabaseArrayInput interface {
+	pulumi.Input
+
+	ToGetPgDatabasesDatabaseArrayOutput() GetPgDatabasesDatabaseArrayOutput
+	ToGetPgDatabasesDatabaseArrayOutputWithContext(context.Context) GetPgDatabasesDatabaseArrayOutput
+}
+
+type GetPgDatabasesDatabaseArray []GetPgDatabasesDatabaseInput
+
+func (GetPgDatabasesDatabaseArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetPgDatabasesDatabase)(nil)).Elem()
+}
+
+func (i GetPgDatabasesDatabaseArray) ToGetPgDatabasesDatabaseArrayOutput() GetPgDatabasesDatabaseArrayOutput {
+	return i.ToGetPgDatabasesDatabaseArrayOutputWithContext(context.Background())
+}
+
+func (i GetPgDatabasesDatabaseArray) ToGetPgDatabasesDatabaseArrayOutputWithContext(ctx context.Context) GetPgDatabasesDatabaseArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetPgDatabasesDatabaseArrayOutput)
+}
+
+type GetPgDatabasesDatabaseOutput struct{ *pulumi.OutputState }
+
+func (GetPgDatabasesDatabaseOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetPgDatabasesDatabase)(nil)).Elem()
+}
+
+func (o GetPgDatabasesDatabaseOutput) ToGetPgDatabasesDatabaseOutput() GetPgDatabasesDatabaseOutput {
+	return o
+}
+
+func (o GetPgDatabasesDatabaseOutput) ToGetPgDatabasesDatabaseOutputWithContext(ctx context.Context) GetPgDatabasesDatabaseOutput {
+	return o
+}
+
+// Specifies the character set used by the database.
+// For details, see [documentation](https://www.postgresql.org/docs/16/infoschema-character-sets.html).
+func (o GetPgDatabasesDatabaseOutput) CharacterSet() pulumi.StringOutput {
+	return o.ApplyT(func(v GetPgDatabasesDatabase) string { return v.CharacterSet }).(pulumi.StringOutput)
+}
+
+// Indicates the database description.
+func (o GetPgDatabasesDatabaseOutput) Description() pulumi.StringOutput {
+	return o.ApplyT(func(v GetPgDatabasesDatabase) string { return v.Description }).(pulumi.StringOutput)
+}
+
+// Specifies the database collation.
+// For details, see [documentation](https://support.huaweicloud.com/intl/en-us/bestpractice-rds/rds_pg_0017.html).
+func (o GetPgDatabasesDatabaseOutput) LcCollate() pulumi.StringOutput {
+	return o.ApplyT(func(v GetPgDatabasesDatabase) string { return v.LcCollate }).(pulumi.StringOutput)
+}
+
+// Specifies the database name.
+func (o GetPgDatabasesDatabaseOutput) Name() pulumi.StringOutput {
+	return o.ApplyT(func(v GetPgDatabasesDatabase) string { return v.Name }).(pulumi.StringOutput)
+}
+
+// Specifies the database owner.
+func (o GetPgDatabasesDatabaseOutput) Owner() pulumi.StringOutput {
+	return o.ApplyT(func(v GetPgDatabasesDatabase) string { return v.Owner }).(pulumi.StringOutput)
+}
+
+// Specifies the database size, in bytes.
+func (o GetPgDatabasesDatabaseOutput) Size() pulumi.IntOutput {
+	return o.ApplyT(func(v GetPgDatabasesDatabase) int { return v.Size }).(pulumi.IntOutput)
+}
+
+type GetPgDatabasesDatabaseArrayOutput struct{ *pulumi.OutputState }
+
+func (GetPgDatabasesDatabaseArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetPgDatabasesDatabase)(nil)).Elem()
+}
+
+func (o GetPgDatabasesDatabaseArrayOutput) ToGetPgDatabasesDatabaseArrayOutput() GetPgDatabasesDatabaseArrayOutput {
+	return o
+}
+
+func (o GetPgDatabasesDatabaseArrayOutput) ToGetPgDatabasesDatabaseArrayOutputWithContext(ctx context.Context) GetPgDatabasesDatabaseArrayOutput {
+	return o
+}
+
+func (o GetPgDatabasesDatabaseArrayOutput) Index(i pulumi.IntInput) GetPgDatabasesDatabaseOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) GetPgDatabasesDatabase {
+		return vs[0].([]GetPgDatabasesDatabase)[vs[1].(int)]
+	}).(GetPgDatabasesDatabaseOutput)
+}
+
+type GetPgPluginsPlugin struct {
+	// Specifies whether the plugin has been created. Defaults to: **false**.
+	Created bool `pulumi:"created"`
+	// Indicates the plugin description.
+	Description string `pulumi:"description"`
+	// Specifies the plugin name.
+	Name string `pulumi:"name"`
+	// Indicates the dependent preloaded library.
+	SharedPreloadLibraries string `pulumi:"sharedPreloadLibraries"`
+	// Specifies the plugin version.
+	Version string `pulumi:"version"`
+}
+
+// GetPgPluginsPluginInput is an input type that accepts GetPgPluginsPluginArgs and GetPgPluginsPluginOutput values.
+// You can construct a concrete instance of `GetPgPluginsPluginInput` via:
+//
+//	GetPgPluginsPluginArgs{...}
+type GetPgPluginsPluginInput interface {
+	pulumi.Input
+
+	ToGetPgPluginsPluginOutput() GetPgPluginsPluginOutput
+	ToGetPgPluginsPluginOutputWithContext(context.Context) GetPgPluginsPluginOutput
+}
+
+type GetPgPluginsPluginArgs struct {
+	// Specifies whether the plugin has been created. Defaults to: **false**.
+	Created pulumi.BoolInput `pulumi:"created"`
+	// Indicates the plugin description.
+	Description pulumi.StringInput `pulumi:"description"`
+	// Specifies the plugin name.
+	Name pulumi.StringInput `pulumi:"name"`
+	// Indicates the dependent preloaded library.
+	SharedPreloadLibraries pulumi.StringInput `pulumi:"sharedPreloadLibraries"`
+	// Specifies the plugin version.
+	Version pulumi.StringInput `pulumi:"version"`
+}
+
+func (GetPgPluginsPluginArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetPgPluginsPlugin)(nil)).Elem()
+}
+
+func (i GetPgPluginsPluginArgs) ToGetPgPluginsPluginOutput() GetPgPluginsPluginOutput {
+	return i.ToGetPgPluginsPluginOutputWithContext(context.Background())
+}
+
+func (i GetPgPluginsPluginArgs) ToGetPgPluginsPluginOutputWithContext(ctx context.Context) GetPgPluginsPluginOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetPgPluginsPluginOutput)
+}
+
+// GetPgPluginsPluginArrayInput is an input type that accepts GetPgPluginsPluginArray and GetPgPluginsPluginArrayOutput values.
+// You can construct a concrete instance of `GetPgPluginsPluginArrayInput` via:
+//
+//	GetPgPluginsPluginArray{ GetPgPluginsPluginArgs{...} }
+type GetPgPluginsPluginArrayInput interface {
+	pulumi.Input
+
+	ToGetPgPluginsPluginArrayOutput() GetPgPluginsPluginArrayOutput
+	ToGetPgPluginsPluginArrayOutputWithContext(context.Context) GetPgPluginsPluginArrayOutput
+}
+
+type GetPgPluginsPluginArray []GetPgPluginsPluginInput
+
+func (GetPgPluginsPluginArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetPgPluginsPlugin)(nil)).Elem()
+}
+
+func (i GetPgPluginsPluginArray) ToGetPgPluginsPluginArrayOutput() GetPgPluginsPluginArrayOutput {
+	return i.ToGetPgPluginsPluginArrayOutputWithContext(context.Background())
+}
+
+func (i GetPgPluginsPluginArray) ToGetPgPluginsPluginArrayOutputWithContext(ctx context.Context) GetPgPluginsPluginArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetPgPluginsPluginArrayOutput)
+}
+
+type GetPgPluginsPluginOutput struct{ *pulumi.OutputState }
+
+func (GetPgPluginsPluginOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetPgPluginsPlugin)(nil)).Elem()
+}
+
+func (o GetPgPluginsPluginOutput) ToGetPgPluginsPluginOutput() GetPgPluginsPluginOutput {
+	return o
+}
+
+func (o GetPgPluginsPluginOutput) ToGetPgPluginsPluginOutputWithContext(ctx context.Context) GetPgPluginsPluginOutput {
+	return o
+}
+
+// Specifies whether the plugin has been created. Defaults to: **false**.
+func (o GetPgPluginsPluginOutput) Created() pulumi.BoolOutput {
+	return o.ApplyT(func(v GetPgPluginsPlugin) bool { return v.Created }).(pulumi.BoolOutput)
+}
+
+// Indicates the plugin description.
+func (o GetPgPluginsPluginOutput) Description() pulumi.StringOutput {
+	return o.ApplyT(func(v GetPgPluginsPlugin) string { return v.Description }).(pulumi.StringOutput)
+}
+
+// Specifies the plugin name.
+func (o GetPgPluginsPluginOutput) Name() pulumi.StringOutput {
+	return o.ApplyT(func(v GetPgPluginsPlugin) string { return v.Name }).(pulumi.StringOutput)
+}
+
+// Indicates the dependent preloaded library.
+func (o GetPgPluginsPluginOutput) SharedPreloadLibraries() pulumi.StringOutput {
+	return o.ApplyT(func(v GetPgPluginsPlugin) string { return v.SharedPreloadLibraries }).(pulumi.StringOutput)
+}
+
+// Specifies the plugin version.
+func (o GetPgPluginsPluginOutput) Version() pulumi.StringOutput {
+	return o.ApplyT(func(v GetPgPluginsPlugin) string { return v.Version }).(pulumi.StringOutput)
+}
+
+type GetPgPluginsPluginArrayOutput struct{ *pulumi.OutputState }
+
+func (GetPgPluginsPluginArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetPgPluginsPlugin)(nil)).Elem()
+}
+
+func (o GetPgPluginsPluginArrayOutput) ToGetPgPluginsPluginArrayOutput() GetPgPluginsPluginArrayOutput {
+	return o
+}
+
+func (o GetPgPluginsPluginArrayOutput) ToGetPgPluginsPluginArrayOutputWithContext(ctx context.Context) GetPgPluginsPluginArrayOutput {
+	return o
+}
+
+func (o GetPgPluginsPluginArrayOutput) Index(i pulumi.IntInput) GetPgPluginsPluginOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) GetPgPluginsPlugin {
+		return vs[0].([]GetPgPluginsPlugin)[vs[1].(int)]
+	}).(GetPgPluginsPluginOutput)
+}
+
+type GetPgSqlLimitsSqlLimit struct {
+	// Indicates the ID of SQL limit.
+	Id string `pulumi:"id"`
+	// Specifies whether the SQL limit is effective.
+	IsEffective bool `pulumi:"isEffective"`
+	// Specifies the number of SQL statements executed simultaneously.
+	MaxConcurrency int `pulumi:"maxConcurrency"`
+	// Specifies the max waiting time in seconds.
+	MaxWaiting int `pulumi:"maxWaiting"`
+	// Specifies the query ID.
+	QueryId string `pulumi:"queryId"`
+	// Specifies the text form of SQL statement.
+	QueryString string `pulumi:"queryString"`
+	// Specifies the query order for names that are not schema qualified.
+	SearchPath string `pulumi:"searchPath"`
+}
+
+// GetPgSqlLimitsSqlLimitInput is an input type that accepts GetPgSqlLimitsSqlLimitArgs and GetPgSqlLimitsSqlLimitOutput values.
+// You can construct a concrete instance of `GetPgSqlLimitsSqlLimitInput` via:
+//
+//	GetPgSqlLimitsSqlLimitArgs{...}
+type GetPgSqlLimitsSqlLimitInput interface {
+	pulumi.Input
+
+	ToGetPgSqlLimitsSqlLimitOutput() GetPgSqlLimitsSqlLimitOutput
+	ToGetPgSqlLimitsSqlLimitOutputWithContext(context.Context) GetPgSqlLimitsSqlLimitOutput
+}
+
+type GetPgSqlLimitsSqlLimitArgs struct {
+	// Indicates the ID of SQL limit.
+	Id pulumi.StringInput `pulumi:"id"`
+	// Specifies whether the SQL limit is effective.
+	IsEffective pulumi.BoolInput `pulumi:"isEffective"`
+	// Specifies the number of SQL statements executed simultaneously.
+	MaxConcurrency pulumi.IntInput `pulumi:"maxConcurrency"`
+	// Specifies the max waiting time in seconds.
+	MaxWaiting pulumi.IntInput `pulumi:"maxWaiting"`
+	// Specifies the query ID.
+	QueryId pulumi.StringInput `pulumi:"queryId"`
+	// Specifies the text form of SQL statement.
+	QueryString pulumi.StringInput `pulumi:"queryString"`
+	// Specifies the query order for names that are not schema qualified.
+	SearchPath pulumi.StringInput `pulumi:"searchPath"`
+}
+
+func (GetPgSqlLimitsSqlLimitArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetPgSqlLimitsSqlLimit)(nil)).Elem()
+}
+
+func (i GetPgSqlLimitsSqlLimitArgs) ToGetPgSqlLimitsSqlLimitOutput() GetPgSqlLimitsSqlLimitOutput {
+	return i.ToGetPgSqlLimitsSqlLimitOutputWithContext(context.Background())
+}
+
+func (i GetPgSqlLimitsSqlLimitArgs) ToGetPgSqlLimitsSqlLimitOutputWithContext(ctx context.Context) GetPgSqlLimitsSqlLimitOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetPgSqlLimitsSqlLimitOutput)
+}
+
+// GetPgSqlLimitsSqlLimitArrayInput is an input type that accepts GetPgSqlLimitsSqlLimitArray and GetPgSqlLimitsSqlLimitArrayOutput values.
+// You can construct a concrete instance of `GetPgSqlLimitsSqlLimitArrayInput` via:
+//
+//	GetPgSqlLimitsSqlLimitArray{ GetPgSqlLimitsSqlLimitArgs{...} }
+type GetPgSqlLimitsSqlLimitArrayInput interface {
+	pulumi.Input
+
+	ToGetPgSqlLimitsSqlLimitArrayOutput() GetPgSqlLimitsSqlLimitArrayOutput
+	ToGetPgSqlLimitsSqlLimitArrayOutputWithContext(context.Context) GetPgSqlLimitsSqlLimitArrayOutput
+}
+
+type GetPgSqlLimitsSqlLimitArray []GetPgSqlLimitsSqlLimitInput
+
+func (GetPgSqlLimitsSqlLimitArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetPgSqlLimitsSqlLimit)(nil)).Elem()
+}
+
+func (i GetPgSqlLimitsSqlLimitArray) ToGetPgSqlLimitsSqlLimitArrayOutput() GetPgSqlLimitsSqlLimitArrayOutput {
+	return i.ToGetPgSqlLimitsSqlLimitArrayOutputWithContext(context.Background())
+}
+
+func (i GetPgSqlLimitsSqlLimitArray) ToGetPgSqlLimitsSqlLimitArrayOutputWithContext(ctx context.Context) GetPgSqlLimitsSqlLimitArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetPgSqlLimitsSqlLimitArrayOutput)
+}
+
+type GetPgSqlLimitsSqlLimitOutput struct{ *pulumi.OutputState }
+
+func (GetPgSqlLimitsSqlLimitOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetPgSqlLimitsSqlLimit)(nil)).Elem()
+}
+
+func (o GetPgSqlLimitsSqlLimitOutput) ToGetPgSqlLimitsSqlLimitOutput() GetPgSqlLimitsSqlLimitOutput {
+	return o
+}
+
+func (o GetPgSqlLimitsSqlLimitOutput) ToGetPgSqlLimitsSqlLimitOutputWithContext(ctx context.Context) GetPgSqlLimitsSqlLimitOutput {
+	return o
+}
+
+// Indicates the ID of SQL limit.
+func (o GetPgSqlLimitsSqlLimitOutput) Id() pulumi.StringOutput {
+	return o.ApplyT(func(v GetPgSqlLimitsSqlLimit) string { return v.Id }).(pulumi.StringOutput)
+}
+
+// Specifies whether the SQL limit is effective.
+func (o GetPgSqlLimitsSqlLimitOutput) IsEffective() pulumi.BoolOutput {
+	return o.ApplyT(func(v GetPgSqlLimitsSqlLimit) bool { return v.IsEffective }).(pulumi.BoolOutput)
+}
+
+// Specifies the number of SQL statements executed simultaneously.
+func (o GetPgSqlLimitsSqlLimitOutput) MaxConcurrency() pulumi.IntOutput {
+	return o.ApplyT(func(v GetPgSqlLimitsSqlLimit) int { return v.MaxConcurrency }).(pulumi.IntOutput)
+}
+
+// Specifies the max waiting time in seconds.
+func (o GetPgSqlLimitsSqlLimitOutput) MaxWaiting() pulumi.IntOutput {
+	return o.ApplyT(func(v GetPgSqlLimitsSqlLimit) int { return v.MaxWaiting }).(pulumi.IntOutput)
+}
+
+// Specifies the query ID.
+func (o GetPgSqlLimitsSqlLimitOutput) QueryId() pulumi.StringOutput {
+	return o.ApplyT(func(v GetPgSqlLimitsSqlLimit) string { return v.QueryId }).(pulumi.StringOutput)
+}
+
+// Specifies the text form of SQL statement.
+func (o GetPgSqlLimitsSqlLimitOutput) QueryString() pulumi.StringOutput {
+	return o.ApplyT(func(v GetPgSqlLimitsSqlLimit) string { return v.QueryString }).(pulumi.StringOutput)
+}
+
+// Specifies the query order for names that are not schema qualified.
+func (o GetPgSqlLimitsSqlLimitOutput) SearchPath() pulumi.StringOutput {
+	return o.ApplyT(func(v GetPgSqlLimitsSqlLimit) string { return v.SearchPath }).(pulumi.StringOutput)
+}
+
+type GetPgSqlLimitsSqlLimitArrayOutput struct{ *pulumi.OutputState }
+
+func (GetPgSqlLimitsSqlLimitArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetPgSqlLimitsSqlLimit)(nil)).Elem()
+}
+
+func (o GetPgSqlLimitsSqlLimitArrayOutput) ToGetPgSqlLimitsSqlLimitArrayOutput() GetPgSqlLimitsSqlLimitArrayOutput {
+	return o
+}
+
+func (o GetPgSqlLimitsSqlLimitArrayOutput) ToGetPgSqlLimitsSqlLimitArrayOutputWithContext(ctx context.Context) GetPgSqlLimitsSqlLimitArrayOutput {
+	return o
+}
+
+func (o GetPgSqlLimitsSqlLimitArrayOutput) Index(i pulumi.IntInput) GetPgSqlLimitsSqlLimitOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) GetPgSqlLimitsSqlLimit {
+		return vs[0].([]GetPgSqlLimitsSqlLimit)[vs[1].(int)]
+	}).(GetPgSqlLimitsSqlLimitOutput)
+}
+
+type GetPredefinedTagsTag struct {
+	// Indicates the key of a tag.
+	Key string `pulumi:"key"`
+	// Indicates the list the tag values.
+	Values []string `pulumi:"values"`
+}
+
+// GetPredefinedTagsTagInput is an input type that accepts GetPredefinedTagsTagArgs and GetPredefinedTagsTagOutput values.
+// You can construct a concrete instance of `GetPredefinedTagsTagInput` via:
+//
+//	GetPredefinedTagsTagArgs{...}
+type GetPredefinedTagsTagInput interface {
+	pulumi.Input
+
+	ToGetPredefinedTagsTagOutput() GetPredefinedTagsTagOutput
+	ToGetPredefinedTagsTagOutputWithContext(context.Context) GetPredefinedTagsTagOutput
+}
+
+type GetPredefinedTagsTagArgs struct {
+	// Indicates the key of a tag.
+	Key pulumi.StringInput `pulumi:"key"`
+	// Indicates the list the tag values.
+	Values pulumi.StringArrayInput `pulumi:"values"`
+}
+
+func (GetPredefinedTagsTagArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetPredefinedTagsTag)(nil)).Elem()
+}
+
+func (i GetPredefinedTagsTagArgs) ToGetPredefinedTagsTagOutput() GetPredefinedTagsTagOutput {
+	return i.ToGetPredefinedTagsTagOutputWithContext(context.Background())
+}
+
+func (i GetPredefinedTagsTagArgs) ToGetPredefinedTagsTagOutputWithContext(ctx context.Context) GetPredefinedTagsTagOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetPredefinedTagsTagOutput)
+}
+
+// GetPredefinedTagsTagArrayInput is an input type that accepts GetPredefinedTagsTagArray and GetPredefinedTagsTagArrayOutput values.
+// You can construct a concrete instance of `GetPredefinedTagsTagArrayInput` via:
+//
+//	GetPredefinedTagsTagArray{ GetPredefinedTagsTagArgs{...} }
+type GetPredefinedTagsTagArrayInput interface {
+	pulumi.Input
+
+	ToGetPredefinedTagsTagArrayOutput() GetPredefinedTagsTagArrayOutput
+	ToGetPredefinedTagsTagArrayOutputWithContext(context.Context) GetPredefinedTagsTagArrayOutput
+}
+
+type GetPredefinedTagsTagArray []GetPredefinedTagsTagInput
+
+func (GetPredefinedTagsTagArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetPredefinedTagsTag)(nil)).Elem()
+}
+
+func (i GetPredefinedTagsTagArray) ToGetPredefinedTagsTagArrayOutput() GetPredefinedTagsTagArrayOutput {
+	return i.ToGetPredefinedTagsTagArrayOutputWithContext(context.Background())
+}
+
+func (i GetPredefinedTagsTagArray) ToGetPredefinedTagsTagArrayOutputWithContext(ctx context.Context) GetPredefinedTagsTagArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetPredefinedTagsTagArrayOutput)
+}
+
+type GetPredefinedTagsTagOutput struct{ *pulumi.OutputState }
+
+func (GetPredefinedTagsTagOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetPredefinedTagsTag)(nil)).Elem()
+}
+
+func (o GetPredefinedTagsTagOutput) ToGetPredefinedTagsTagOutput() GetPredefinedTagsTagOutput {
+	return o
+}
+
+func (o GetPredefinedTagsTagOutput) ToGetPredefinedTagsTagOutputWithContext(ctx context.Context) GetPredefinedTagsTagOutput {
+	return o
+}
+
+// Indicates the key of a tag.
+func (o GetPredefinedTagsTagOutput) Key() pulumi.StringOutput {
+	return o.ApplyT(func(v GetPredefinedTagsTag) string { return v.Key }).(pulumi.StringOutput)
+}
+
+// Indicates the list the tag values.
+func (o GetPredefinedTagsTagOutput) Values() pulumi.StringArrayOutput {
+	return o.ApplyT(func(v GetPredefinedTagsTag) []string { return v.Values }).(pulumi.StringArrayOutput)
+}
+
+type GetPredefinedTagsTagArrayOutput struct{ *pulumi.OutputState }
+
+func (GetPredefinedTagsTagArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetPredefinedTagsTag)(nil)).Elem()
+}
+
+func (o GetPredefinedTagsTagArrayOutput) ToGetPredefinedTagsTagArrayOutput() GetPredefinedTagsTagArrayOutput {
+	return o
+}
+
+func (o GetPredefinedTagsTagArrayOutput) ToGetPredefinedTagsTagArrayOutputWithContext(ctx context.Context) GetPredefinedTagsTagArrayOutput {
+	return o
+}
+
+func (o GetPredefinedTagsTagArrayOutput) Index(i pulumi.IntInput) GetPredefinedTagsTagOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) GetPredefinedTagsTag {
+		return vs[0].([]GetPredefinedTagsTag)[vs[1].(int)]
+	}).(GetPredefinedTagsTagOutput)
+}
+
+type GetQuotasQuota struct {
+	// Indicates the resource list objects.
+	Resources []GetQuotasQuotaResource `pulumi:"resources"`
+}
+
+// GetQuotasQuotaInput is an input type that accepts GetQuotasQuotaArgs and GetQuotasQuotaOutput values.
+// You can construct a concrete instance of `GetQuotasQuotaInput` via:
+//
+//	GetQuotasQuotaArgs{...}
+type GetQuotasQuotaInput interface {
+	pulumi.Input
+
+	ToGetQuotasQuotaOutput() GetQuotasQuotaOutput
+	ToGetQuotasQuotaOutputWithContext(context.Context) GetQuotasQuotaOutput
+}
+
+type GetQuotasQuotaArgs struct {
+	// Indicates the resource list objects.
+	Resources GetQuotasQuotaResourceArrayInput `pulumi:"resources"`
+}
+
+func (GetQuotasQuotaArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetQuotasQuota)(nil)).Elem()
+}
+
+func (i GetQuotasQuotaArgs) ToGetQuotasQuotaOutput() GetQuotasQuotaOutput {
+	return i.ToGetQuotasQuotaOutputWithContext(context.Background())
+}
+
+func (i GetQuotasQuotaArgs) ToGetQuotasQuotaOutputWithContext(ctx context.Context) GetQuotasQuotaOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetQuotasQuotaOutput)
+}
+
+// GetQuotasQuotaArrayInput is an input type that accepts GetQuotasQuotaArray and GetQuotasQuotaArrayOutput values.
+// You can construct a concrete instance of `GetQuotasQuotaArrayInput` via:
+//
+//	GetQuotasQuotaArray{ GetQuotasQuotaArgs{...} }
+type GetQuotasQuotaArrayInput interface {
+	pulumi.Input
+
+	ToGetQuotasQuotaArrayOutput() GetQuotasQuotaArrayOutput
+	ToGetQuotasQuotaArrayOutputWithContext(context.Context) GetQuotasQuotaArrayOutput
+}
+
+type GetQuotasQuotaArray []GetQuotasQuotaInput
+
+func (GetQuotasQuotaArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetQuotasQuota)(nil)).Elem()
+}
+
+func (i GetQuotasQuotaArray) ToGetQuotasQuotaArrayOutput() GetQuotasQuotaArrayOutput {
+	return i.ToGetQuotasQuotaArrayOutputWithContext(context.Background())
+}
+
+func (i GetQuotasQuotaArray) ToGetQuotasQuotaArrayOutputWithContext(ctx context.Context) GetQuotasQuotaArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetQuotasQuotaArrayOutput)
+}
+
+type GetQuotasQuotaOutput struct{ *pulumi.OutputState }
+
+func (GetQuotasQuotaOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetQuotasQuota)(nil)).Elem()
+}
+
+func (o GetQuotasQuotaOutput) ToGetQuotasQuotaOutput() GetQuotasQuotaOutput {
+	return o
+}
+
+func (o GetQuotasQuotaOutput) ToGetQuotasQuotaOutputWithContext(ctx context.Context) GetQuotasQuotaOutput {
+	return o
+}
+
+// Indicates the resource list objects.
+func (o GetQuotasQuotaOutput) Resources() GetQuotasQuotaResourceArrayOutput {
+	return o.ApplyT(func(v GetQuotasQuota) []GetQuotasQuotaResource { return v.Resources }).(GetQuotasQuotaResourceArrayOutput)
+}
+
+type GetQuotasQuotaArrayOutput struct{ *pulumi.OutputState }
+
+func (GetQuotasQuotaArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetQuotasQuota)(nil)).Elem()
+}
+
+func (o GetQuotasQuotaArrayOutput) ToGetQuotasQuotaArrayOutput() GetQuotasQuotaArrayOutput {
+	return o
+}
+
+func (o GetQuotasQuotaArrayOutput) ToGetQuotasQuotaArrayOutputWithContext(ctx context.Context) GetQuotasQuotaArrayOutput {
+	return o
+}
+
+func (o GetQuotasQuotaArrayOutput) Index(i pulumi.IntInput) GetQuotasQuotaOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) GetQuotasQuota {
+		return vs[0].([]GetQuotasQuota)[vs[1].(int)]
+	}).(GetQuotasQuotaOutput)
+}
+
+type GetQuotasQuotaResource struct {
+	// Indicates the project resource quota.
+	Quota int `pulumi:"quota"`
+	// Indicates the project resource type. The value can be **instance**.
+	Type string `pulumi:"type"`
+	// Indicates the number of used resources.
+	Used int `pulumi:"used"`
+}
+
+// GetQuotasQuotaResourceInput is an input type that accepts GetQuotasQuotaResourceArgs and GetQuotasQuotaResourceOutput values.
+// You can construct a concrete instance of `GetQuotasQuotaResourceInput` via:
+//
+//	GetQuotasQuotaResourceArgs{...}
+type GetQuotasQuotaResourceInput interface {
+	pulumi.Input
+
+	ToGetQuotasQuotaResourceOutput() GetQuotasQuotaResourceOutput
+	ToGetQuotasQuotaResourceOutputWithContext(context.Context) GetQuotasQuotaResourceOutput
+}
+
+type GetQuotasQuotaResourceArgs struct {
+	// Indicates the project resource quota.
+	Quota pulumi.IntInput `pulumi:"quota"`
+	// Indicates the project resource type. The value can be **instance**.
+	Type pulumi.StringInput `pulumi:"type"`
+	// Indicates the number of used resources.
+	Used pulumi.IntInput `pulumi:"used"`
+}
+
+func (GetQuotasQuotaResourceArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetQuotasQuotaResource)(nil)).Elem()
+}
+
+func (i GetQuotasQuotaResourceArgs) ToGetQuotasQuotaResourceOutput() GetQuotasQuotaResourceOutput {
+	return i.ToGetQuotasQuotaResourceOutputWithContext(context.Background())
+}
+
+func (i GetQuotasQuotaResourceArgs) ToGetQuotasQuotaResourceOutputWithContext(ctx context.Context) GetQuotasQuotaResourceOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetQuotasQuotaResourceOutput)
+}
+
+// GetQuotasQuotaResourceArrayInput is an input type that accepts GetQuotasQuotaResourceArray and GetQuotasQuotaResourceArrayOutput values.
+// You can construct a concrete instance of `GetQuotasQuotaResourceArrayInput` via:
+//
+//	GetQuotasQuotaResourceArray{ GetQuotasQuotaResourceArgs{...} }
+type GetQuotasQuotaResourceArrayInput interface {
+	pulumi.Input
+
+	ToGetQuotasQuotaResourceArrayOutput() GetQuotasQuotaResourceArrayOutput
+	ToGetQuotasQuotaResourceArrayOutputWithContext(context.Context) GetQuotasQuotaResourceArrayOutput
+}
+
+type GetQuotasQuotaResourceArray []GetQuotasQuotaResourceInput
+
+func (GetQuotasQuotaResourceArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetQuotasQuotaResource)(nil)).Elem()
+}
+
+func (i GetQuotasQuotaResourceArray) ToGetQuotasQuotaResourceArrayOutput() GetQuotasQuotaResourceArrayOutput {
+	return i.ToGetQuotasQuotaResourceArrayOutputWithContext(context.Background())
+}
+
+func (i GetQuotasQuotaResourceArray) ToGetQuotasQuotaResourceArrayOutputWithContext(ctx context.Context) GetQuotasQuotaResourceArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetQuotasQuotaResourceArrayOutput)
+}
+
+type GetQuotasQuotaResourceOutput struct{ *pulumi.OutputState }
+
+func (GetQuotasQuotaResourceOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetQuotasQuotaResource)(nil)).Elem()
+}
+
+func (o GetQuotasQuotaResourceOutput) ToGetQuotasQuotaResourceOutput() GetQuotasQuotaResourceOutput {
+	return o
+}
+
+func (o GetQuotasQuotaResourceOutput) ToGetQuotasQuotaResourceOutputWithContext(ctx context.Context) GetQuotasQuotaResourceOutput {
+	return o
+}
+
+// Indicates the project resource quota.
+func (o GetQuotasQuotaResourceOutput) Quota() pulumi.IntOutput {
+	return o.ApplyT(func(v GetQuotasQuotaResource) int { return v.Quota }).(pulumi.IntOutput)
+}
+
+// Indicates the project resource type. The value can be **instance**.
+func (o GetQuotasQuotaResourceOutput) Type() pulumi.StringOutput {
+	return o.ApplyT(func(v GetQuotasQuotaResource) string { return v.Type }).(pulumi.StringOutput)
+}
+
+// Indicates the number of used resources.
+func (o GetQuotasQuotaResourceOutput) Used() pulumi.IntOutput {
+	return o.ApplyT(func(v GetQuotasQuotaResource) int { return v.Used }).(pulumi.IntOutput)
+}
+
+type GetQuotasQuotaResourceArrayOutput struct{ *pulumi.OutputState }
+
+func (GetQuotasQuotaResourceArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetQuotasQuotaResource)(nil)).Elem()
+}
+
+func (o GetQuotasQuotaResourceArrayOutput) ToGetQuotasQuotaResourceArrayOutput() GetQuotasQuotaResourceArrayOutput {
+	return o
+}
+
+func (o GetQuotasQuotaResourceArrayOutput) ToGetQuotasQuotaResourceArrayOutputWithContext(ctx context.Context) GetQuotasQuotaResourceArrayOutput {
+	return o
+}
+
+func (o GetQuotasQuotaResourceArrayOutput) Index(i pulumi.IntInput) GetQuotasQuotaResourceOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) GetQuotasQuotaResource {
+		return vs[0].([]GetQuotasQuotaResource)[vs[1].(int)]
+	}).(GetQuotasQuotaResourceOutput)
+}
+
+type GetRecyclingInstancesInstance struct {
+	// Indicates the creation time in the **yyyy-mm-ddThh:mm:ssZ** format.
+	CreatedAt string `pulumi:"createdAt"`
+	// Specifies the floating IP address.
+	DataVip string `pulumi:"dataVip"`
+	// Indicates the deletion time in the **yyyy-mm-ddThh:mm:ssZ** format.
+	DeletedAt string `pulumi:"deletedAt"`
+	// Specifies the DB engine name.
+	EngineName string `pulumi:"engineName"`
+	// Specifies the DB engine version.
+	EngineVersion string `pulumi:"engineVersion"`
+	// Specifies the enterprise project ID.
+	EnterpriseProjectId string `pulumi:"enterpriseProjectId"`
+	// Specifies the instance type.
+	// Value options: **Ha**, **Single**.
+	HaMode string `pulumi:"haMode"`
+	// Indicates the instance ID.
+	Id string `pulumi:"id"`
+	// Specifies whether the instance is a serverless instance.
+	// Value options: **true**, **false**.
+	IsServerless bool `pulumi:"isServerless"`
+	// Specifies the instance name.
+	Name string `pulumi:"name"`
+	// Specifies the billing mode.
+	// Value options: **0** (pay-per-use), **1** (yearly/monthly).
+	PayModel string `pulumi:"payModel"`
+	// Specifies the backup ID.
+	RecycleBackupId string `pulumi:"recycleBackupId"`
+	// Specifies the backup status.
+	// Value options:
+	// + **BUILDING**: The instance is being backed up and cannot be rebuilt.
+	// + **COMPLETED**: The backup is complete and the instance can be rebuilt.
+	RecycleStatus string `pulumi:"recycleStatus"`
+	// Indicates the retention time in the **yyyy-mm-ddThh:mm:ssZ** format.
+	RetainedUntil string `pulumi:"retainedUntil"`
+	// Specifies the storage space in **GB**.
+	// The value must be a multiple of **10** and the value range is from **40 GB** to **4,000 GB**.
+	VolumeSize int `pulumi:"volumeSize"`
+	// Specifies the storage type.
+	// Value options:
+	// + **ULTRAHIGH**: ultra-high I/O storage.
+	// + **ULTRAHIGHPRO**: ultra-high I/O (advanced) storage.
+	// + **CLOUDSSD**: cloud SSD storage.
+	// + **LOCALSSD**: local SSD storage.
+	VolumeType string `pulumi:"volumeType"`
+}
+
+// GetRecyclingInstancesInstanceInput is an input type that accepts GetRecyclingInstancesInstanceArgs and GetRecyclingInstancesInstanceOutput values.
+// You can construct a concrete instance of `GetRecyclingInstancesInstanceInput` via:
+//
+//	GetRecyclingInstancesInstanceArgs{...}
+type GetRecyclingInstancesInstanceInput interface {
+	pulumi.Input
+
+	ToGetRecyclingInstancesInstanceOutput() GetRecyclingInstancesInstanceOutput
+	ToGetRecyclingInstancesInstanceOutputWithContext(context.Context) GetRecyclingInstancesInstanceOutput
+}
+
+type GetRecyclingInstancesInstanceArgs struct {
+	// Indicates the creation time in the **yyyy-mm-ddThh:mm:ssZ** format.
+	CreatedAt pulumi.StringInput `pulumi:"createdAt"`
+	// Specifies the floating IP address.
+	DataVip pulumi.StringInput `pulumi:"dataVip"`
+	// Indicates the deletion time in the **yyyy-mm-ddThh:mm:ssZ** format.
+	DeletedAt pulumi.StringInput `pulumi:"deletedAt"`
+	// Specifies the DB engine name.
+	EngineName pulumi.StringInput `pulumi:"engineName"`
+	// Specifies the DB engine version.
+	EngineVersion pulumi.StringInput `pulumi:"engineVersion"`
+	// Specifies the enterprise project ID.
+	EnterpriseProjectId pulumi.StringInput `pulumi:"enterpriseProjectId"`
+	// Specifies the instance type.
+	// Value options: **Ha**, **Single**.
+	HaMode pulumi.StringInput `pulumi:"haMode"`
+	// Indicates the instance ID.
+	Id pulumi.StringInput `pulumi:"id"`
+	// Specifies whether the instance is a serverless instance.
+	// Value options: **true**, **false**.
+	IsServerless pulumi.BoolInput `pulumi:"isServerless"`
+	// Specifies the instance name.
+	Name pulumi.StringInput `pulumi:"name"`
+	// Specifies the billing mode.
+	// Value options: **0** (pay-per-use), **1** (yearly/monthly).
+	PayModel pulumi.StringInput `pulumi:"payModel"`
+	// Specifies the backup ID.
+	RecycleBackupId pulumi.StringInput `pulumi:"recycleBackupId"`
+	// Specifies the backup status.
+	// Value options:
+	// + **BUILDING**: The instance is being backed up and cannot be rebuilt.
+	// + **COMPLETED**: The backup is complete and the instance can be rebuilt.
+	RecycleStatus pulumi.StringInput `pulumi:"recycleStatus"`
+	// Indicates the retention time in the **yyyy-mm-ddThh:mm:ssZ** format.
+	RetainedUntil pulumi.StringInput `pulumi:"retainedUntil"`
+	// Specifies the storage space in **GB**.
+	// The value must be a multiple of **10** and the value range is from **40 GB** to **4,000 GB**.
+	VolumeSize pulumi.IntInput `pulumi:"volumeSize"`
+	// Specifies the storage type.
+	// Value options:
+	// + **ULTRAHIGH**: ultra-high I/O storage.
+	// + **ULTRAHIGHPRO**: ultra-high I/O (advanced) storage.
+	// + **CLOUDSSD**: cloud SSD storage.
+	// + **LOCALSSD**: local SSD storage.
+	VolumeType pulumi.StringInput `pulumi:"volumeType"`
+}
+
+func (GetRecyclingInstancesInstanceArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetRecyclingInstancesInstance)(nil)).Elem()
+}
+
+func (i GetRecyclingInstancesInstanceArgs) ToGetRecyclingInstancesInstanceOutput() GetRecyclingInstancesInstanceOutput {
+	return i.ToGetRecyclingInstancesInstanceOutputWithContext(context.Background())
+}
+
+func (i GetRecyclingInstancesInstanceArgs) ToGetRecyclingInstancesInstanceOutputWithContext(ctx context.Context) GetRecyclingInstancesInstanceOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetRecyclingInstancesInstanceOutput)
+}
+
+// GetRecyclingInstancesInstanceArrayInput is an input type that accepts GetRecyclingInstancesInstanceArray and GetRecyclingInstancesInstanceArrayOutput values.
+// You can construct a concrete instance of `GetRecyclingInstancesInstanceArrayInput` via:
+//
+//	GetRecyclingInstancesInstanceArray{ GetRecyclingInstancesInstanceArgs{...} }
+type GetRecyclingInstancesInstanceArrayInput interface {
+	pulumi.Input
+
+	ToGetRecyclingInstancesInstanceArrayOutput() GetRecyclingInstancesInstanceArrayOutput
+	ToGetRecyclingInstancesInstanceArrayOutputWithContext(context.Context) GetRecyclingInstancesInstanceArrayOutput
+}
+
+type GetRecyclingInstancesInstanceArray []GetRecyclingInstancesInstanceInput
+
+func (GetRecyclingInstancesInstanceArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetRecyclingInstancesInstance)(nil)).Elem()
+}
+
+func (i GetRecyclingInstancesInstanceArray) ToGetRecyclingInstancesInstanceArrayOutput() GetRecyclingInstancesInstanceArrayOutput {
+	return i.ToGetRecyclingInstancesInstanceArrayOutputWithContext(context.Background())
+}
+
+func (i GetRecyclingInstancesInstanceArray) ToGetRecyclingInstancesInstanceArrayOutputWithContext(ctx context.Context) GetRecyclingInstancesInstanceArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetRecyclingInstancesInstanceArrayOutput)
+}
+
+type GetRecyclingInstancesInstanceOutput struct{ *pulumi.OutputState }
+
+func (GetRecyclingInstancesInstanceOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetRecyclingInstancesInstance)(nil)).Elem()
+}
+
+func (o GetRecyclingInstancesInstanceOutput) ToGetRecyclingInstancesInstanceOutput() GetRecyclingInstancesInstanceOutput {
+	return o
+}
+
+func (o GetRecyclingInstancesInstanceOutput) ToGetRecyclingInstancesInstanceOutputWithContext(ctx context.Context) GetRecyclingInstancesInstanceOutput {
+	return o
+}
+
+// Indicates the creation time in the **yyyy-mm-ddThh:mm:ssZ** format.
+func (o GetRecyclingInstancesInstanceOutput) CreatedAt() pulumi.StringOutput {
+	return o.ApplyT(func(v GetRecyclingInstancesInstance) string { return v.CreatedAt }).(pulumi.StringOutput)
+}
+
+// Specifies the floating IP address.
+func (o GetRecyclingInstancesInstanceOutput) DataVip() pulumi.StringOutput {
+	return o.ApplyT(func(v GetRecyclingInstancesInstance) string { return v.DataVip }).(pulumi.StringOutput)
+}
+
+// Indicates the deletion time in the **yyyy-mm-ddThh:mm:ssZ** format.
+func (o GetRecyclingInstancesInstanceOutput) DeletedAt() pulumi.StringOutput {
+	return o.ApplyT(func(v GetRecyclingInstancesInstance) string { return v.DeletedAt }).(pulumi.StringOutput)
+}
+
+// Specifies the DB engine name.
+func (o GetRecyclingInstancesInstanceOutput) EngineName() pulumi.StringOutput {
+	return o.ApplyT(func(v GetRecyclingInstancesInstance) string { return v.EngineName }).(pulumi.StringOutput)
+}
+
+// Specifies the DB engine version.
+func (o GetRecyclingInstancesInstanceOutput) EngineVersion() pulumi.StringOutput {
+	return o.ApplyT(func(v GetRecyclingInstancesInstance) string { return v.EngineVersion }).(pulumi.StringOutput)
+}
+
+// Specifies the enterprise project ID.
+func (o GetRecyclingInstancesInstanceOutput) EnterpriseProjectId() pulumi.StringOutput {
+	return o.ApplyT(func(v GetRecyclingInstancesInstance) string { return v.EnterpriseProjectId }).(pulumi.StringOutput)
+}
+
+// Specifies the instance type.
+// Value options: **Ha**, **Single**.
+func (o GetRecyclingInstancesInstanceOutput) HaMode() pulumi.StringOutput {
+	return o.ApplyT(func(v GetRecyclingInstancesInstance) string { return v.HaMode }).(pulumi.StringOutput)
+}
+
+// Indicates the instance ID.
+func (o GetRecyclingInstancesInstanceOutput) Id() pulumi.StringOutput {
+	return o.ApplyT(func(v GetRecyclingInstancesInstance) string { return v.Id }).(pulumi.StringOutput)
+}
+
+// Specifies whether the instance is a serverless instance.
+// Value options: **true**, **false**.
+func (o GetRecyclingInstancesInstanceOutput) IsServerless() pulumi.BoolOutput {
+	return o.ApplyT(func(v GetRecyclingInstancesInstance) bool { return v.IsServerless }).(pulumi.BoolOutput)
+}
+
+// Specifies the instance name.
+func (o GetRecyclingInstancesInstanceOutput) Name() pulumi.StringOutput {
+	return o.ApplyT(func(v GetRecyclingInstancesInstance) string { return v.Name }).(pulumi.StringOutput)
+}
+
+// Specifies the billing mode.
+// Value options: **0** (pay-per-use), **1** (yearly/monthly).
+func (o GetRecyclingInstancesInstanceOutput) PayModel() pulumi.StringOutput {
+	return o.ApplyT(func(v GetRecyclingInstancesInstance) string { return v.PayModel }).(pulumi.StringOutput)
+}
+
+// Specifies the backup ID.
+func (o GetRecyclingInstancesInstanceOutput) RecycleBackupId() pulumi.StringOutput {
+	return o.ApplyT(func(v GetRecyclingInstancesInstance) string { return v.RecycleBackupId }).(pulumi.StringOutput)
+}
+
+// Specifies the backup status.
+// Value options:
+// + **BUILDING**: The instance is being backed up and cannot be rebuilt.
+// + **COMPLETED**: The backup is complete and the instance can be rebuilt.
+func (o GetRecyclingInstancesInstanceOutput) RecycleStatus() pulumi.StringOutput {
+	return o.ApplyT(func(v GetRecyclingInstancesInstance) string { return v.RecycleStatus }).(pulumi.StringOutput)
+}
+
+// Indicates the retention time in the **yyyy-mm-ddThh:mm:ssZ** format.
+func (o GetRecyclingInstancesInstanceOutput) RetainedUntil() pulumi.StringOutput {
+	return o.ApplyT(func(v GetRecyclingInstancesInstance) string { return v.RetainedUntil }).(pulumi.StringOutput)
+}
+
+// Specifies the storage space in **GB**.
+// The value must be a multiple of **10** and the value range is from **40 GB** to **4,000 GB**.
+func (o GetRecyclingInstancesInstanceOutput) VolumeSize() pulumi.IntOutput {
+	return o.ApplyT(func(v GetRecyclingInstancesInstance) int { return v.VolumeSize }).(pulumi.IntOutput)
+}
+
+// Specifies the storage type.
+// Value options:
+// + **ULTRAHIGH**: ultra-high I/O storage.
+// + **ULTRAHIGHPRO**: ultra-high I/O (advanced) storage.
+// + **CLOUDSSD**: cloud SSD storage.
+// + **LOCALSSD**: local SSD storage.
+func (o GetRecyclingInstancesInstanceOutput) VolumeType() pulumi.StringOutput {
+	return o.ApplyT(func(v GetRecyclingInstancesInstance) string { return v.VolumeType }).(pulumi.StringOutput)
+}
+
+type GetRecyclingInstancesInstanceArrayOutput struct{ *pulumi.OutputState }
+
+func (GetRecyclingInstancesInstanceArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetRecyclingInstancesInstance)(nil)).Elem()
+}
+
+func (o GetRecyclingInstancesInstanceArrayOutput) ToGetRecyclingInstancesInstanceArrayOutput() GetRecyclingInstancesInstanceArrayOutput {
+	return o
+}
+
+func (o GetRecyclingInstancesInstanceArrayOutput) ToGetRecyclingInstancesInstanceArrayOutputWithContext(ctx context.Context) GetRecyclingInstancesInstanceArrayOutput {
+	return o
+}
+
+func (o GetRecyclingInstancesInstanceArrayOutput) Index(i pulumi.IntInput) GetRecyclingInstancesInstanceOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) GetRecyclingInstancesInstance {
+		return vs[0].([]GetRecyclingInstancesInstance)[vs[1].(int)]
+	}).(GetRecyclingInstancesInstanceOutput)
+}
+
+type GetRestoreTimeRangesRestoreTime struct {
+	// Indicates the end time of the restoration time range in the UNIX timestamp format.
+	// The unit is millisecond and the time zone is UTC.
+	EndTime int `pulumi:"endTime"`
+	// Indicates the start time of the restoration time range in the UNIX timestamp format.
+	// The unit is millisecond and the time zone is UTC.
+	StartTime int `pulumi:"startTime"`
+}
+
+// GetRestoreTimeRangesRestoreTimeInput is an input type that accepts GetRestoreTimeRangesRestoreTimeArgs and GetRestoreTimeRangesRestoreTimeOutput values.
+// You can construct a concrete instance of `GetRestoreTimeRangesRestoreTimeInput` via:
+//
+//	GetRestoreTimeRangesRestoreTimeArgs{...}
+type GetRestoreTimeRangesRestoreTimeInput interface {
+	pulumi.Input
+
+	ToGetRestoreTimeRangesRestoreTimeOutput() GetRestoreTimeRangesRestoreTimeOutput
+	ToGetRestoreTimeRangesRestoreTimeOutputWithContext(context.Context) GetRestoreTimeRangesRestoreTimeOutput
+}
+
+type GetRestoreTimeRangesRestoreTimeArgs struct {
+	// Indicates the end time of the restoration time range in the UNIX timestamp format.
+	// The unit is millisecond and the time zone is UTC.
+	EndTime pulumi.IntInput `pulumi:"endTime"`
+	// Indicates the start time of the restoration time range in the UNIX timestamp format.
+	// The unit is millisecond and the time zone is UTC.
+	StartTime pulumi.IntInput `pulumi:"startTime"`
+}
+
+func (GetRestoreTimeRangesRestoreTimeArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetRestoreTimeRangesRestoreTime)(nil)).Elem()
+}
+
+func (i GetRestoreTimeRangesRestoreTimeArgs) ToGetRestoreTimeRangesRestoreTimeOutput() GetRestoreTimeRangesRestoreTimeOutput {
+	return i.ToGetRestoreTimeRangesRestoreTimeOutputWithContext(context.Background())
+}
+
+func (i GetRestoreTimeRangesRestoreTimeArgs) ToGetRestoreTimeRangesRestoreTimeOutputWithContext(ctx context.Context) GetRestoreTimeRangesRestoreTimeOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetRestoreTimeRangesRestoreTimeOutput)
+}
+
+// GetRestoreTimeRangesRestoreTimeArrayInput is an input type that accepts GetRestoreTimeRangesRestoreTimeArray and GetRestoreTimeRangesRestoreTimeArrayOutput values.
+// You can construct a concrete instance of `GetRestoreTimeRangesRestoreTimeArrayInput` via:
+//
+//	GetRestoreTimeRangesRestoreTimeArray{ GetRestoreTimeRangesRestoreTimeArgs{...} }
+type GetRestoreTimeRangesRestoreTimeArrayInput interface {
+	pulumi.Input
+
+	ToGetRestoreTimeRangesRestoreTimeArrayOutput() GetRestoreTimeRangesRestoreTimeArrayOutput
+	ToGetRestoreTimeRangesRestoreTimeArrayOutputWithContext(context.Context) GetRestoreTimeRangesRestoreTimeArrayOutput
+}
+
+type GetRestoreTimeRangesRestoreTimeArray []GetRestoreTimeRangesRestoreTimeInput
+
+func (GetRestoreTimeRangesRestoreTimeArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetRestoreTimeRangesRestoreTime)(nil)).Elem()
+}
+
+func (i GetRestoreTimeRangesRestoreTimeArray) ToGetRestoreTimeRangesRestoreTimeArrayOutput() GetRestoreTimeRangesRestoreTimeArrayOutput {
+	return i.ToGetRestoreTimeRangesRestoreTimeArrayOutputWithContext(context.Background())
+}
+
+func (i GetRestoreTimeRangesRestoreTimeArray) ToGetRestoreTimeRangesRestoreTimeArrayOutputWithContext(ctx context.Context) GetRestoreTimeRangesRestoreTimeArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetRestoreTimeRangesRestoreTimeArrayOutput)
+}
+
+type GetRestoreTimeRangesRestoreTimeOutput struct{ *pulumi.OutputState }
+
+func (GetRestoreTimeRangesRestoreTimeOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetRestoreTimeRangesRestoreTime)(nil)).Elem()
+}
+
+func (o GetRestoreTimeRangesRestoreTimeOutput) ToGetRestoreTimeRangesRestoreTimeOutput() GetRestoreTimeRangesRestoreTimeOutput {
+	return o
+}
+
+func (o GetRestoreTimeRangesRestoreTimeOutput) ToGetRestoreTimeRangesRestoreTimeOutputWithContext(ctx context.Context) GetRestoreTimeRangesRestoreTimeOutput {
+	return o
+}
+
+// Indicates the end time of the restoration time range in the UNIX timestamp format.
+// The unit is millisecond and the time zone is UTC.
+func (o GetRestoreTimeRangesRestoreTimeOutput) EndTime() pulumi.IntOutput {
+	return o.ApplyT(func(v GetRestoreTimeRangesRestoreTime) int { return v.EndTime }).(pulumi.IntOutput)
+}
+
+// Indicates the start time of the restoration time range in the UNIX timestamp format.
+// The unit is millisecond and the time zone is UTC.
+func (o GetRestoreTimeRangesRestoreTimeOutput) StartTime() pulumi.IntOutput {
+	return o.ApplyT(func(v GetRestoreTimeRangesRestoreTime) int { return v.StartTime }).(pulumi.IntOutput)
+}
+
+type GetRestoreTimeRangesRestoreTimeArrayOutput struct{ *pulumi.OutputState }
+
+func (GetRestoreTimeRangesRestoreTimeArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetRestoreTimeRangesRestoreTime)(nil)).Elem()
+}
+
+func (o GetRestoreTimeRangesRestoreTimeArrayOutput) ToGetRestoreTimeRangesRestoreTimeArrayOutput() GetRestoreTimeRangesRestoreTimeArrayOutput {
+	return o
+}
+
+func (o GetRestoreTimeRangesRestoreTimeArrayOutput) ToGetRestoreTimeRangesRestoreTimeArrayOutputWithContext(ctx context.Context) GetRestoreTimeRangesRestoreTimeArrayOutput {
+	return o
+}
+
+func (o GetRestoreTimeRangesRestoreTimeArrayOutput) Index(i pulumi.IntInput) GetRestoreTimeRangesRestoreTimeOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) GetRestoreTimeRangesRestoreTime {
+		return vs[0].([]GetRestoreTimeRangesRestoreTime)[vs[1].(int)]
+	}).(GetRestoreTimeRangesRestoreTimeOutput)
+}
+
+type GetRestoredDatabasesInstance struct {
+	// Indicates the database information.
+	Databases []GetRestoredDatabasesInstanceDatabase `pulumi:"databases"`
+	// Indicates the instance ID.
+	Id string `pulumi:"id"`
+	// Indicates the database name. Databases whose names contain Chinese characters will be filtered out and cannot
+	// be restored.
+	Name string `pulumi:"name"`
+	// Indicates the total number of tables in the database.
+	TotalTables int `pulumi:"totalTables"`
+}
+
+// GetRestoredDatabasesInstanceInput is an input type that accepts GetRestoredDatabasesInstanceArgs and GetRestoredDatabasesInstanceOutput values.
+// You can construct a concrete instance of `GetRestoredDatabasesInstanceInput` via:
+//
+//	GetRestoredDatabasesInstanceArgs{...}
+type GetRestoredDatabasesInstanceInput interface {
+	pulumi.Input
+
+	ToGetRestoredDatabasesInstanceOutput() GetRestoredDatabasesInstanceOutput
+	ToGetRestoredDatabasesInstanceOutputWithContext(context.Context) GetRestoredDatabasesInstanceOutput
+}
+
+type GetRestoredDatabasesInstanceArgs struct {
+	// Indicates the database information.
+	Databases GetRestoredDatabasesInstanceDatabaseArrayInput `pulumi:"databases"`
+	// Indicates the instance ID.
+	Id pulumi.StringInput `pulumi:"id"`
+	// Indicates the database name. Databases whose names contain Chinese characters will be filtered out and cannot
+	// be restored.
+	Name pulumi.StringInput `pulumi:"name"`
+	// Indicates the total number of tables in the database.
+	TotalTables pulumi.IntInput `pulumi:"totalTables"`
+}
+
+func (GetRestoredDatabasesInstanceArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetRestoredDatabasesInstance)(nil)).Elem()
+}
+
+func (i GetRestoredDatabasesInstanceArgs) ToGetRestoredDatabasesInstanceOutput() GetRestoredDatabasesInstanceOutput {
+	return i.ToGetRestoredDatabasesInstanceOutputWithContext(context.Background())
+}
+
+func (i GetRestoredDatabasesInstanceArgs) ToGetRestoredDatabasesInstanceOutputWithContext(ctx context.Context) GetRestoredDatabasesInstanceOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetRestoredDatabasesInstanceOutput)
+}
+
+// GetRestoredDatabasesInstanceArrayInput is an input type that accepts GetRestoredDatabasesInstanceArray and GetRestoredDatabasesInstanceArrayOutput values.
+// You can construct a concrete instance of `GetRestoredDatabasesInstanceArrayInput` via:
+//
+//	GetRestoredDatabasesInstanceArray{ GetRestoredDatabasesInstanceArgs{...} }
+type GetRestoredDatabasesInstanceArrayInput interface {
+	pulumi.Input
+
+	ToGetRestoredDatabasesInstanceArrayOutput() GetRestoredDatabasesInstanceArrayOutput
+	ToGetRestoredDatabasesInstanceArrayOutputWithContext(context.Context) GetRestoredDatabasesInstanceArrayOutput
+}
+
+type GetRestoredDatabasesInstanceArray []GetRestoredDatabasesInstanceInput
+
+func (GetRestoredDatabasesInstanceArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetRestoredDatabasesInstance)(nil)).Elem()
+}
+
+func (i GetRestoredDatabasesInstanceArray) ToGetRestoredDatabasesInstanceArrayOutput() GetRestoredDatabasesInstanceArrayOutput {
+	return i.ToGetRestoredDatabasesInstanceArrayOutputWithContext(context.Background())
+}
+
+func (i GetRestoredDatabasesInstanceArray) ToGetRestoredDatabasesInstanceArrayOutputWithContext(ctx context.Context) GetRestoredDatabasesInstanceArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetRestoredDatabasesInstanceArrayOutput)
+}
+
+type GetRestoredDatabasesInstanceOutput struct{ *pulumi.OutputState }
+
+func (GetRestoredDatabasesInstanceOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetRestoredDatabasesInstance)(nil)).Elem()
+}
+
+func (o GetRestoredDatabasesInstanceOutput) ToGetRestoredDatabasesInstanceOutput() GetRestoredDatabasesInstanceOutput {
+	return o
+}
+
+func (o GetRestoredDatabasesInstanceOutput) ToGetRestoredDatabasesInstanceOutputWithContext(ctx context.Context) GetRestoredDatabasesInstanceOutput {
+	return o
+}
+
+// Indicates the database information.
+func (o GetRestoredDatabasesInstanceOutput) Databases() GetRestoredDatabasesInstanceDatabaseArrayOutput {
+	return o.ApplyT(func(v GetRestoredDatabasesInstance) []GetRestoredDatabasesInstanceDatabase { return v.Databases }).(GetRestoredDatabasesInstanceDatabaseArrayOutput)
+}
+
+// Indicates the instance ID.
+func (o GetRestoredDatabasesInstanceOutput) Id() pulumi.StringOutput {
+	return o.ApplyT(func(v GetRestoredDatabasesInstance) string { return v.Id }).(pulumi.StringOutput)
+}
+
+// Indicates the database name. Databases whose names contain Chinese characters will be filtered out and cannot
+// be restored.
+func (o GetRestoredDatabasesInstanceOutput) Name() pulumi.StringOutput {
+	return o.ApplyT(func(v GetRestoredDatabasesInstance) string { return v.Name }).(pulumi.StringOutput)
+}
+
+// Indicates the total number of tables in the database.
+func (o GetRestoredDatabasesInstanceOutput) TotalTables() pulumi.IntOutput {
+	return o.ApplyT(func(v GetRestoredDatabasesInstance) int { return v.TotalTables }).(pulumi.IntOutput)
+}
+
+type GetRestoredDatabasesInstanceArrayOutput struct{ *pulumi.OutputState }
+
+func (GetRestoredDatabasesInstanceArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetRestoredDatabasesInstance)(nil)).Elem()
+}
+
+func (o GetRestoredDatabasesInstanceArrayOutput) ToGetRestoredDatabasesInstanceArrayOutput() GetRestoredDatabasesInstanceArrayOutput {
+	return o
+}
+
+func (o GetRestoredDatabasesInstanceArrayOutput) ToGetRestoredDatabasesInstanceArrayOutputWithContext(ctx context.Context) GetRestoredDatabasesInstanceArrayOutput {
+	return o
+}
+
+func (o GetRestoredDatabasesInstanceArrayOutput) Index(i pulumi.IntInput) GetRestoredDatabasesInstanceOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) GetRestoredDatabasesInstance {
+		return vs[0].([]GetRestoredDatabasesInstance)[vs[1].(int)]
+	}).(GetRestoredDatabasesInstanceOutput)
+}
+
+type GetRestoredDatabasesInstanceDatabase struct {
+	// Indicates the database name. Databases whose names contain Chinese characters will be filtered out and cannot
+	// be restored.
+	Name string `pulumi:"name"`
+	// Indicates the total number of tables in the database.
+	TotalTables int `pulumi:"totalTables"`
+}
+
+// GetRestoredDatabasesInstanceDatabaseInput is an input type that accepts GetRestoredDatabasesInstanceDatabaseArgs and GetRestoredDatabasesInstanceDatabaseOutput values.
+// You can construct a concrete instance of `GetRestoredDatabasesInstanceDatabaseInput` via:
+//
+//	GetRestoredDatabasesInstanceDatabaseArgs{...}
+type GetRestoredDatabasesInstanceDatabaseInput interface {
+	pulumi.Input
+
+	ToGetRestoredDatabasesInstanceDatabaseOutput() GetRestoredDatabasesInstanceDatabaseOutput
+	ToGetRestoredDatabasesInstanceDatabaseOutputWithContext(context.Context) GetRestoredDatabasesInstanceDatabaseOutput
+}
+
+type GetRestoredDatabasesInstanceDatabaseArgs struct {
+	// Indicates the database name. Databases whose names contain Chinese characters will be filtered out and cannot
+	// be restored.
+	Name pulumi.StringInput `pulumi:"name"`
+	// Indicates the total number of tables in the database.
+	TotalTables pulumi.IntInput `pulumi:"totalTables"`
+}
+
+func (GetRestoredDatabasesInstanceDatabaseArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetRestoredDatabasesInstanceDatabase)(nil)).Elem()
+}
+
+func (i GetRestoredDatabasesInstanceDatabaseArgs) ToGetRestoredDatabasesInstanceDatabaseOutput() GetRestoredDatabasesInstanceDatabaseOutput {
+	return i.ToGetRestoredDatabasesInstanceDatabaseOutputWithContext(context.Background())
+}
+
+func (i GetRestoredDatabasesInstanceDatabaseArgs) ToGetRestoredDatabasesInstanceDatabaseOutputWithContext(ctx context.Context) GetRestoredDatabasesInstanceDatabaseOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetRestoredDatabasesInstanceDatabaseOutput)
+}
+
+// GetRestoredDatabasesInstanceDatabaseArrayInput is an input type that accepts GetRestoredDatabasesInstanceDatabaseArray and GetRestoredDatabasesInstanceDatabaseArrayOutput values.
+// You can construct a concrete instance of `GetRestoredDatabasesInstanceDatabaseArrayInput` via:
+//
+//	GetRestoredDatabasesInstanceDatabaseArray{ GetRestoredDatabasesInstanceDatabaseArgs{...} }
+type GetRestoredDatabasesInstanceDatabaseArrayInput interface {
+	pulumi.Input
+
+	ToGetRestoredDatabasesInstanceDatabaseArrayOutput() GetRestoredDatabasesInstanceDatabaseArrayOutput
+	ToGetRestoredDatabasesInstanceDatabaseArrayOutputWithContext(context.Context) GetRestoredDatabasesInstanceDatabaseArrayOutput
+}
+
+type GetRestoredDatabasesInstanceDatabaseArray []GetRestoredDatabasesInstanceDatabaseInput
+
+func (GetRestoredDatabasesInstanceDatabaseArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetRestoredDatabasesInstanceDatabase)(nil)).Elem()
+}
+
+func (i GetRestoredDatabasesInstanceDatabaseArray) ToGetRestoredDatabasesInstanceDatabaseArrayOutput() GetRestoredDatabasesInstanceDatabaseArrayOutput {
+	return i.ToGetRestoredDatabasesInstanceDatabaseArrayOutputWithContext(context.Background())
+}
+
+func (i GetRestoredDatabasesInstanceDatabaseArray) ToGetRestoredDatabasesInstanceDatabaseArrayOutputWithContext(ctx context.Context) GetRestoredDatabasesInstanceDatabaseArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetRestoredDatabasesInstanceDatabaseArrayOutput)
+}
+
+type GetRestoredDatabasesInstanceDatabaseOutput struct{ *pulumi.OutputState }
+
+func (GetRestoredDatabasesInstanceDatabaseOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetRestoredDatabasesInstanceDatabase)(nil)).Elem()
+}
+
+func (o GetRestoredDatabasesInstanceDatabaseOutput) ToGetRestoredDatabasesInstanceDatabaseOutput() GetRestoredDatabasesInstanceDatabaseOutput {
+	return o
+}
+
+func (o GetRestoredDatabasesInstanceDatabaseOutput) ToGetRestoredDatabasesInstanceDatabaseOutputWithContext(ctx context.Context) GetRestoredDatabasesInstanceDatabaseOutput {
+	return o
+}
+
+// Indicates the database name. Databases whose names contain Chinese characters will be filtered out and cannot
+// be restored.
+func (o GetRestoredDatabasesInstanceDatabaseOutput) Name() pulumi.StringOutput {
+	return o.ApplyT(func(v GetRestoredDatabasesInstanceDatabase) string { return v.Name }).(pulumi.StringOutput)
+}
+
+// Indicates the total number of tables in the database.
+func (o GetRestoredDatabasesInstanceDatabaseOutput) TotalTables() pulumi.IntOutput {
+	return o.ApplyT(func(v GetRestoredDatabasesInstanceDatabase) int { return v.TotalTables }).(pulumi.IntOutput)
+}
+
+type GetRestoredDatabasesInstanceDatabaseArrayOutput struct{ *pulumi.OutputState }
+
+func (GetRestoredDatabasesInstanceDatabaseArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetRestoredDatabasesInstanceDatabase)(nil)).Elem()
+}
+
+func (o GetRestoredDatabasesInstanceDatabaseArrayOutput) ToGetRestoredDatabasesInstanceDatabaseArrayOutput() GetRestoredDatabasesInstanceDatabaseArrayOutput {
+	return o
+}
+
+func (o GetRestoredDatabasesInstanceDatabaseArrayOutput) ToGetRestoredDatabasesInstanceDatabaseArrayOutputWithContext(ctx context.Context) GetRestoredDatabasesInstanceDatabaseArrayOutput {
+	return o
+}
+
+func (o GetRestoredDatabasesInstanceDatabaseArrayOutput) Index(i pulumi.IntInput) GetRestoredDatabasesInstanceDatabaseOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) GetRestoredDatabasesInstanceDatabase {
+		return vs[0].([]GetRestoredDatabasesInstanceDatabase)[vs[1].(int)]
+	}).(GetRestoredDatabasesInstanceDatabaseOutput)
+}
+
+type GetRestoredTablesInstance struct {
+	// Indicates the database information.
+	Databases []GetRestoredTablesInstanceDatabase `pulumi:"databases"`
+	// Indicates the instance ID.
+	Id string `pulumi:"id"`
+	// Indicates the table name.
+	Name string `pulumi:"name"`
+	// Indicates the number of tables that can be restored.
+	TotalTables int `pulumi:"totalTables"`
+}
+
+// GetRestoredTablesInstanceInput is an input type that accepts GetRestoredTablesInstanceArgs and GetRestoredTablesInstanceOutput values.
+// You can construct a concrete instance of `GetRestoredTablesInstanceInput` via:
+//
+//	GetRestoredTablesInstanceArgs{...}
+type GetRestoredTablesInstanceInput interface {
+	pulumi.Input
+
+	ToGetRestoredTablesInstanceOutput() GetRestoredTablesInstanceOutput
+	ToGetRestoredTablesInstanceOutputWithContext(context.Context) GetRestoredTablesInstanceOutput
+}
+
+type GetRestoredTablesInstanceArgs struct {
+	// Indicates the database information.
+	Databases GetRestoredTablesInstanceDatabaseArrayInput `pulumi:"databases"`
+	// Indicates the instance ID.
+	Id pulumi.StringInput `pulumi:"id"`
+	// Indicates the table name.
+	Name pulumi.StringInput `pulumi:"name"`
+	// Indicates the number of tables that can be restored.
+	TotalTables pulumi.IntInput `pulumi:"totalTables"`
+}
+
+func (GetRestoredTablesInstanceArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetRestoredTablesInstance)(nil)).Elem()
+}
+
+func (i GetRestoredTablesInstanceArgs) ToGetRestoredTablesInstanceOutput() GetRestoredTablesInstanceOutput {
+	return i.ToGetRestoredTablesInstanceOutputWithContext(context.Background())
+}
+
+func (i GetRestoredTablesInstanceArgs) ToGetRestoredTablesInstanceOutputWithContext(ctx context.Context) GetRestoredTablesInstanceOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetRestoredTablesInstanceOutput)
+}
+
+// GetRestoredTablesInstanceArrayInput is an input type that accepts GetRestoredTablesInstanceArray and GetRestoredTablesInstanceArrayOutput values.
+// You can construct a concrete instance of `GetRestoredTablesInstanceArrayInput` via:
+//
+//	GetRestoredTablesInstanceArray{ GetRestoredTablesInstanceArgs{...} }
+type GetRestoredTablesInstanceArrayInput interface {
+	pulumi.Input
+
+	ToGetRestoredTablesInstanceArrayOutput() GetRestoredTablesInstanceArrayOutput
+	ToGetRestoredTablesInstanceArrayOutputWithContext(context.Context) GetRestoredTablesInstanceArrayOutput
+}
+
+type GetRestoredTablesInstanceArray []GetRestoredTablesInstanceInput
+
+func (GetRestoredTablesInstanceArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetRestoredTablesInstance)(nil)).Elem()
+}
+
+func (i GetRestoredTablesInstanceArray) ToGetRestoredTablesInstanceArrayOutput() GetRestoredTablesInstanceArrayOutput {
+	return i.ToGetRestoredTablesInstanceArrayOutputWithContext(context.Background())
+}
+
+func (i GetRestoredTablesInstanceArray) ToGetRestoredTablesInstanceArrayOutputWithContext(ctx context.Context) GetRestoredTablesInstanceArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetRestoredTablesInstanceArrayOutput)
+}
+
+type GetRestoredTablesInstanceOutput struct{ *pulumi.OutputState }
+
+func (GetRestoredTablesInstanceOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetRestoredTablesInstance)(nil)).Elem()
+}
+
+func (o GetRestoredTablesInstanceOutput) ToGetRestoredTablesInstanceOutput() GetRestoredTablesInstanceOutput {
+	return o
+}
+
+func (o GetRestoredTablesInstanceOutput) ToGetRestoredTablesInstanceOutputWithContext(ctx context.Context) GetRestoredTablesInstanceOutput {
+	return o
+}
+
+// Indicates the database information.
+func (o GetRestoredTablesInstanceOutput) Databases() GetRestoredTablesInstanceDatabaseArrayOutput {
+	return o.ApplyT(func(v GetRestoredTablesInstance) []GetRestoredTablesInstanceDatabase { return v.Databases }).(GetRestoredTablesInstanceDatabaseArrayOutput)
+}
+
+// Indicates the instance ID.
+func (o GetRestoredTablesInstanceOutput) Id() pulumi.StringOutput {
+	return o.ApplyT(func(v GetRestoredTablesInstance) string { return v.Id }).(pulumi.StringOutput)
+}
+
+// Indicates the table name.
+func (o GetRestoredTablesInstanceOutput) Name() pulumi.StringOutput {
+	return o.ApplyT(func(v GetRestoredTablesInstance) string { return v.Name }).(pulumi.StringOutput)
+}
+
+// Indicates the number of tables that can be restored.
+func (o GetRestoredTablesInstanceOutput) TotalTables() pulumi.IntOutput {
+	return o.ApplyT(func(v GetRestoredTablesInstance) int { return v.TotalTables }).(pulumi.IntOutput)
+}
+
+type GetRestoredTablesInstanceArrayOutput struct{ *pulumi.OutputState }
+
+func (GetRestoredTablesInstanceArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetRestoredTablesInstance)(nil)).Elem()
+}
+
+func (o GetRestoredTablesInstanceArrayOutput) ToGetRestoredTablesInstanceArrayOutput() GetRestoredTablesInstanceArrayOutput {
+	return o
+}
+
+func (o GetRestoredTablesInstanceArrayOutput) ToGetRestoredTablesInstanceArrayOutputWithContext(ctx context.Context) GetRestoredTablesInstanceArrayOutput {
+	return o
+}
+
+func (o GetRestoredTablesInstanceArrayOutput) Index(i pulumi.IntInput) GetRestoredTablesInstanceOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) GetRestoredTablesInstance {
+		return vs[0].([]GetRestoredTablesInstance)[vs[1].(int)]
+	}).(GetRestoredTablesInstanceOutput)
+}
+
+type GetRestoredTablesInstanceDatabase struct {
+	// Indicates the table name.
+	Name string `pulumi:"name"`
+	// Indicates the schema information.
+	// The schemas structure is documented below.
+	Schemas []GetRestoredTablesInstanceDatabaseSchema `pulumi:"schemas"`
+	// Indicates the number of tables that can be restored.
+	TotalTables int `pulumi:"totalTables"`
+}
+
+// GetRestoredTablesInstanceDatabaseInput is an input type that accepts GetRestoredTablesInstanceDatabaseArgs and GetRestoredTablesInstanceDatabaseOutput values.
+// You can construct a concrete instance of `GetRestoredTablesInstanceDatabaseInput` via:
+//
+//	GetRestoredTablesInstanceDatabaseArgs{...}
+type GetRestoredTablesInstanceDatabaseInput interface {
+	pulumi.Input
+
+	ToGetRestoredTablesInstanceDatabaseOutput() GetRestoredTablesInstanceDatabaseOutput
+	ToGetRestoredTablesInstanceDatabaseOutputWithContext(context.Context) GetRestoredTablesInstanceDatabaseOutput
+}
+
+type GetRestoredTablesInstanceDatabaseArgs struct {
+	// Indicates the table name.
+	Name pulumi.StringInput `pulumi:"name"`
+	// Indicates the schema information.
+	// The schemas structure is documented below.
+	Schemas GetRestoredTablesInstanceDatabaseSchemaArrayInput `pulumi:"schemas"`
+	// Indicates the number of tables that can be restored.
+	TotalTables pulumi.IntInput `pulumi:"totalTables"`
+}
+
+func (GetRestoredTablesInstanceDatabaseArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetRestoredTablesInstanceDatabase)(nil)).Elem()
+}
+
+func (i GetRestoredTablesInstanceDatabaseArgs) ToGetRestoredTablesInstanceDatabaseOutput() GetRestoredTablesInstanceDatabaseOutput {
+	return i.ToGetRestoredTablesInstanceDatabaseOutputWithContext(context.Background())
+}
+
+func (i GetRestoredTablesInstanceDatabaseArgs) ToGetRestoredTablesInstanceDatabaseOutputWithContext(ctx context.Context) GetRestoredTablesInstanceDatabaseOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetRestoredTablesInstanceDatabaseOutput)
+}
+
+// GetRestoredTablesInstanceDatabaseArrayInput is an input type that accepts GetRestoredTablesInstanceDatabaseArray and GetRestoredTablesInstanceDatabaseArrayOutput values.
+// You can construct a concrete instance of `GetRestoredTablesInstanceDatabaseArrayInput` via:
+//
+//	GetRestoredTablesInstanceDatabaseArray{ GetRestoredTablesInstanceDatabaseArgs{...} }
+type GetRestoredTablesInstanceDatabaseArrayInput interface {
+	pulumi.Input
+
+	ToGetRestoredTablesInstanceDatabaseArrayOutput() GetRestoredTablesInstanceDatabaseArrayOutput
+	ToGetRestoredTablesInstanceDatabaseArrayOutputWithContext(context.Context) GetRestoredTablesInstanceDatabaseArrayOutput
+}
+
+type GetRestoredTablesInstanceDatabaseArray []GetRestoredTablesInstanceDatabaseInput
+
+func (GetRestoredTablesInstanceDatabaseArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetRestoredTablesInstanceDatabase)(nil)).Elem()
+}
+
+func (i GetRestoredTablesInstanceDatabaseArray) ToGetRestoredTablesInstanceDatabaseArrayOutput() GetRestoredTablesInstanceDatabaseArrayOutput {
+	return i.ToGetRestoredTablesInstanceDatabaseArrayOutputWithContext(context.Background())
+}
+
+func (i GetRestoredTablesInstanceDatabaseArray) ToGetRestoredTablesInstanceDatabaseArrayOutputWithContext(ctx context.Context) GetRestoredTablesInstanceDatabaseArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetRestoredTablesInstanceDatabaseArrayOutput)
+}
+
+type GetRestoredTablesInstanceDatabaseOutput struct{ *pulumi.OutputState }
+
+func (GetRestoredTablesInstanceDatabaseOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetRestoredTablesInstanceDatabase)(nil)).Elem()
+}
+
+func (o GetRestoredTablesInstanceDatabaseOutput) ToGetRestoredTablesInstanceDatabaseOutput() GetRestoredTablesInstanceDatabaseOutput {
+	return o
+}
+
+func (o GetRestoredTablesInstanceDatabaseOutput) ToGetRestoredTablesInstanceDatabaseOutputWithContext(ctx context.Context) GetRestoredTablesInstanceDatabaseOutput {
+	return o
+}
+
+// Indicates the table name.
+func (o GetRestoredTablesInstanceDatabaseOutput) Name() pulumi.StringOutput {
+	return o.ApplyT(func(v GetRestoredTablesInstanceDatabase) string { return v.Name }).(pulumi.StringOutput)
+}
+
+// Indicates the schema information.
+// The schemas structure is documented below.
+func (o GetRestoredTablesInstanceDatabaseOutput) Schemas() GetRestoredTablesInstanceDatabaseSchemaArrayOutput {
+	return o.ApplyT(func(v GetRestoredTablesInstanceDatabase) []GetRestoredTablesInstanceDatabaseSchema { return v.Schemas }).(GetRestoredTablesInstanceDatabaseSchemaArrayOutput)
+}
+
+// Indicates the number of tables that can be restored.
+func (o GetRestoredTablesInstanceDatabaseOutput) TotalTables() pulumi.IntOutput {
+	return o.ApplyT(func(v GetRestoredTablesInstanceDatabase) int { return v.TotalTables }).(pulumi.IntOutput)
+}
+
+type GetRestoredTablesInstanceDatabaseArrayOutput struct{ *pulumi.OutputState }
+
+func (GetRestoredTablesInstanceDatabaseArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetRestoredTablesInstanceDatabase)(nil)).Elem()
+}
+
+func (o GetRestoredTablesInstanceDatabaseArrayOutput) ToGetRestoredTablesInstanceDatabaseArrayOutput() GetRestoredTablesInstanceDatabaseArrayOutput {
+	return o
+}
+
+func (o GetRestoredTablesInstanceDatabaseArrayOutput) ToGetRestoredTablesInstanceDatabaseArrayOutputWithContext(ctx context.Context) GetRestoredTablesInstanceDatabaseArrayOutput {
+	return o
+}
+
+func (o GetRestoredTablesInstanceDatabaseArrayOutput) Index(i pulumi.IntInput) GetRestoredTablesInstanceDatabaseOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) GetRestoredTablesInstanceDatabase {
+		return vs[0].([]GetRestoredTablesInstanceDatabase)[vs[1].(int)]
+	}).(GetRestoredTablesInstanceDatabaseOutput)
+}
+
+type GetRestoredTablesInstanceDatabaseSchema struct {
+	// Indicates the table name.
+	Name string `pulumi:"name"`
+	// Indicates the table information.
+	// The tables structure is documented below.
+	Tables []GetRestoredTablesInstanceDatabaseSchemaTable `pulumi:"tables"`
+	// Indicates the number of tables that can be restored.
+	TotalTables int `pulumi:"totalTables"`
+}
+
+// GetRestoredTablesInstanceDatabaseSchemaInput is an input type that accepts GetRestoredTablesInstanceDatabaseSchemaArgs and GetRestoredTablesInstanceDatabaseSchemaOutput values.
+// You can construct a concrete instance of `GetRestoredTablesInstanceDatabaseSchemaInput` via:
+//
+//	GetRestoredTablesInstanceDatabaseSchemaArgs{...}
+type GetRestoredTablesInstanceDatabaseSchemaInput interface {
+	pulumi.Input
+
+	ToGetRestoredTablesInstanceDatabaseSchemaOutput() GetRestoredTablesInstanceDatabaseSchemaOutput
+	ToGetRestoredTablesInstanceDatabaseSchemaOutputWithContext(context.Context) GetRestoredTablesInstanceDatabaseSchemaOutput
+}
+
+type GetRestoredTablesInstanceDatabaseSchemaArgs struct {
+	// Indicates the table name.
+	Name pulumi.StringInput `pulumi:"name"`
+	// Indicates the table information.
+	// The tables structure is documented below.
+	Tables GetRestoredTablesInstanceDatabaseSchemaTableArrayInput `pulumi:"tables"`
+	// Indicates the number of tables that can be restored.
+	TotalTables pulumi.IntInput `pulumi:"totalTables"`
+}
+
+func (GetRestoredTablesInstanceDatabaseSchemaArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetRestoredTablesInstanceDatabaseSchema)(nil)).Elem()
+}
+
+func (i GetRestoredTablesInstanceDatabaseSchemaArgs) ToGetRestoredTablesInstanceDatabaseSchemaOutput() GetRestoredTablesInstanceDatabaseSchemaOutput {
+	return i.ToGetRestoredTablesInstanceDatabaseSchemaOutputWithContext(context.Background())
+}
+
+func (i GetRestoredTablesInstanceDatabaseSchemaArgs) ToGetRestoredTablesInstanceDatabaseSchemaOutputWithContext(ctx context.Context) GetRestoredTablesInstanceDatabaseSchemaOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetRestoredTablesInstanceDatabaseSchemaOutput)
+}
+
+// GetRestoredTablesInstanceDatabaseSchemaArrayInput is an input type that accepts GetRestoredTablesInstanceDatabaseSchemaArray and GetRestoredTablesInstanceDatabaseSchemaArrayOutput values.
+// You can construct a concrete instance of `GetRestoredTablesInstanceDatabaseSchemaArrayInput` via:
+//
+//	GetRestoredTablesInstanceDatabaseSchemaArray{ GetRestoredTablesInstanceDatabaseSchemaArgs{...} }
+type GetRestoredTablesInstanceDatabaseSchemaArrayInput interface {
+	pulumi.Input
+
+	ToGetRestoredTablesInstanceDatabaseSchemaArrayOutput() GetRestoredTablesInstanceDatabaseSchemaArrayOutput
+	ToGetRestoredTablesInstanceDatabaseSchemaArrayOutputWithContext(context.Context) GetRestoredTablesInstanceDatabaseSchemaArrayOutput
+}
+
+type GetRestoredTablesInstanceDatabaseSchemaArray []GetRestoredTablesInstanceDatabaseSchemaInput
+
+func (GetRestoredTablesInstanceDatabaseSchemaArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetRestoredTablesInstanceDatabaseSchema)(nil)).Elem()
+}
+
+func (i GetRestoredTablesInstanceDatabaseSchemaArray) ToGetRestoredTablesInstanceDatabaseSchemaArrayOutput() GetRestoredTablesInstanceDatabaseSchemaArrayOutput {
+	return i.ToGetRestoredTablesInstanceDatabaseSchemaArrayOutputWithContext(context.Background())
+}
+
+func (i GetRestoredTablesInstanceDatabaseSchemaArray) ToGetRestoredTablesInstanceDatabaseSchemaArrayOutputWithContext(ctx context.Context) GetRestoredTablesInstanceDatabaseSchemaArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetRestoredTablesInstanceDatabaseSchemaArrayOutput)
+}
+
+type GetRestoredTablesInstanceDatabaseSchemaOutput struct{ *pulumi.OutputState }
+
+func (GetRestoredTablesInstanceDatabaseSchemaOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetRestoredTablesInstanceDatabaseSchema)(nil)).Elem()
+}
+
+func (o GetRestoredTablesInstanceDatabaseSchemaOutput) ToGetRestoredTablesInstanceDatabaseSchemaOutput() GetRestoredTablesInstanceDatabaseSchemaOutput {
+	return o
+}
+
+func (o GetRestoredTablesInstanceDatabaseSchemaOutput) ToGetRestoredTablesInstanceDatabaseSchemaOutputWithContext(ctx context.Context) GetRestoredTablesInstanceDatabaseSchemaOutput {
+	return o
+}
+
+// Indicates the table name.
+func (o GetRestoredTablesInstanceDatabaseSchemaOutput) Name() pulumi.StringOutput {
+	return o.ApplyT(func(v GetRestoredTablesInstanceDatabaseSchema) string { return v.Name }).(pulumi.StringOutput)
+}
+
+// Indicates the table information.
+// The tables structure is documented below.
+func (o GetRestoredTablesInstanceDatabaseSchemaOutput) Tables() GetRestoredTablesInstanceDatabaseSchemaTableArrayOutput {
+	return o.ApplyT(func(v GetRestoredTablesInstanceDatabaseSchema) []GetRestoredTablesInstanceDatabaseSchemaTable {
+		return v.Tables
+	}).(GetRestoredTablesInstanceDatabaseSchemaTableArrayOutput)
+}
+
+// Indicates the number of tables that can be restored.
+func (o GetRestoredTablesInstanceDatabaseSchemaOutput) TotalTables() pulumi.IntOutput {
+	return o.ApplyT(func(v GetRestoredTablesInstanceDatabaseSchema) int { return v.TotalTables }).(pulumi.IntOutput)
+}
+
+type GetRestoredTablesInstanceDatabaseSchemaArrayOutput struct{ *pulumi.OutputState }
+
+func (GetRestoredTablesInstanceDatabaseSchemaArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetRestoredTablesInstanceDatabaseSchema)(nil)).Elem()
+}
+
+func (o GetRestoredTablesInstanceDatabaseSchemaArrayOutput) ToGetRestoredTablesInstanceDatabaseSchemaArrayOutput() GetRestoredTablesInstanceDatabaseSchemaArrayOutput {
+	return o
+}
+
+func (o GetRestoredTablesInstanceDatabaseSchemaArrayOutput) ToGetRestoredTablesInstanceDatabaseSchemaArrayOutputWithContext(ctx context.Context) GetRestoredTablesInstanceDatabaseSchemaArrayOutput {
+	return o
+}
+
+func (o GetRestoredTablesInstanceDatabaseSchemaArrayOutput) Index(i pulumi.IntInput) GetRestoredTablesInstanceDatabaseSchemaOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) GetRestoredTablesInstanceDatabaseSchema {
+		return vs[0].([]GetRestoredTablesInstanceDatabaseSchema)[vs[1].(int)]
+	}).(GetRestoredTablesInstanceDatabaseSchemaOutput)
+}
+
+type GetRestoredTablesInstanceDatabaseSchemaTable struct {
+	// Indicates the table name.
+	Name string `pulumi:"name"`
+}
+
+// GetRestoredTablesInstanceDatabaseSchemaTableInput is an input type that accepts GetRestoredTablesInstanceDatabaseSchemaTableArgs and GetRestoredTablesInstanceDatabaseSchemaTableOutput values.
+// You can construct a concrete instance of `GetRestoredTablesInstanceDatabaseSchemaTableInput` via:
+//
+//	GetRestoredTablesInstanceDatabaseSchemaTableArgs{...}
+type GetRestoredTablesInstanceDatabaseSchemaTableInput interface {
+	pulumi.Input
+
+	ToGetRestoredTablesInstanceDatabaseSchemaTableOutput() GetRestoredTablesInstanceDatabaseSchemaTableOutput
+	ToGetRestoredTablesInstanceDatabaseSchemaTableOutputWithContext(context.Context) GetRestoredTablesInstanceDatabaseSchemaTableOutput
+}
+
+type GetRestoredTablesInstanceDatabaseSchemaTableArgs struct {
+	// Indicates the table name.
+	Name pulumi.StringInput `pulumi:"name"`
+}
+
+func (GetRestoredTablesInstanceDatabaseSchemaTableArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetRestoredTablesInstanceDatabaseSchemaTable)(nil)).Elem()
+}
+
+func (i GetRestoredTablesInstanceDatabaseSchemaTableArgs) ToGetRestoredTablesInstanceDatabaseSchemaTableOutput() GetRestoredTablesInstanceDatabaseSchemaTableOutput {
+	return i.ToGetRestoredTablesInstanceDatabaseSchemaTableOutputWithContext(context.Background())
+}
+
+func (i GetRestoredTablesInstanceDatabaseSchemaTableArgs) ToGetRestoredTablesInstanceDatabaseSchemaTableOutputWithContext(ctx context.Context) GetRestoredTablesInstanceDatabaseSchemaTableOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetRestoredTablesInstanceDatabaseSchemaTableOutput)
+}
+
+// GetRestoredTablesInstanceDatabaseSchemaTableArrayInput is an input type that accepts GetRestoredTablesInstanceDatabaseSchemaTableArray and GetRestoredTablesInstanceDatabaseSchemaTableArrayOutput values.
+// You can construct a concrete instance of `GetRestoredTablesInstanceDatabaseSchemaTableArrayInput` via:
+//
+//	GetRestoredTablesInstanceDatabaseSchemaTableArray{ GetRestoredTablesInstanceDatabaseSchemaTableArgs{...} }
+type GetRestoredTablesInstanceDatabaseSchemaTableArrayInput interface {
+	pulumi.Input
+
+	ToGetRestoredTablesInstanceDatabaseSchemaTableArrayOutput() GetRestoredTablesInstanceDatabaseSchemaTableArrayOutput
+	ToGetRestoredTablesInstanceDatabaseSchemaTableArrayOutputWithContext(context.Context) GetRestoredTablesInstanceDatabaseSchemaTableArrayOutput
+}
+
+type GetRestoredTablesInstanceDatabaseSchemaTableArray []GetRestoredTablesInstanceDatabaseSchemaTableInput
+
+func (GetRestoredTablesInstanceDatabaseSchemaTableArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetRestoredTablesInstanceDatabaseSchemaTable)(nil)).Elem()
+}
+
+func (i GetRestoredTablesInstanceDatabaseSchemaTableArray) ToGetRestoredTablesInstanceDatabaseSchemaTableArrayOutput() GetRestoredTablesInstanceDatabaseSchemaTableArrayOutput {
+	return i.ToGetRestoredTablesInstanceDatabaseSchemaTableArrayOutputWithContext(context.Background())
+}
+
+func (i GetRestoredTablesInstanceDatabaseSchemaTableArray) ToGetRestoredTablesInstanceDatabaseSchemaTableArrayOutputWithContext(ctx context.Context) GetRestoredTablesInstanceDatabaseSchemaTableArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetRestoredTablesInstanceDatabaseSchemaTableArrayOutput)
+}
+
+type GetRestoredTablesInstanceDatabaseSchemaTableOutput struct{ *pulumi.OutputState }
+
+func (GetRestoredTablesInstanceDatabaseSchemaTableOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetRestoredTablesInstanceDatabaseSchemaTable)(nil)).Elem()
+}
+
+func (o GetRestoredTablesInstanceDatabaseSchemaTableOutput) ToGetRestoredTablesInstanceDatabaseSchemaTableOutput() GetRestoredTablesInstanceDatabaseSchemaTableOutput {
+	return o
+}
+
+func (o GetRestoredTablesInstanceDatabaseSchemaTableOutput) ToGetRestoredTablesInstanceDatabaseSchemaTableOutputWithContext(ctx context.Context) GetRestoredTablesInstanceDatabaseSchemaTableOutput {
+	return o
+}
+
+// Indicates the table name.
+func (o GetRestoredTablesInstanceDatabaseSchemaTableOutput) Name() pulumi.StringOutput {
+	return o.ApplyT(func(v GetRestoredTablesInstanceDatabaseSchemaTable) string { return v.Name }).(pulumi.StringOutput)
+}
+
+type GetRestoredTablesInstanceDatabaseSchemaTableArrayOutput struct{ *pulumi.OutputState }
+
+func (GetRestoredTablesInstanceDatabaseSchemaTableArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetRestoredTablesInstanceDatabaseSchemaTable)(nil)).Elem()
+}
+
+func (o GetRestoredTablesInstanceDatabaseSchemaTableArrayOutput) ToGetRestoredTablesInstanceDatabaseSchemaTableArrayOutput() GetRestoredTablesInstanceDatabaseSchemaTableArrayOutput {
+	return o
+}
+
+func (o GetRestoredTablesInstanceDatabaseSchemaTableArrayOutput) ToGetRestoredTablesInstanceDatabaseSchemaTableArrayOutputWithContext(ctx context.Context) GetRestoredTablesInstanceDatabaseSchemaTableArrayOutput {
+	return o
+}
+
+func (o GetRestoredTablesInstanceDatabaseSchemaTableArrayOutput) Index(i pulumi.IntInput) GetRestoredTablesInstanceDatabaseSchemaTableOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) GetRestoredTablesInstanceDatabaseSchemaTable {
+		return vs[0].([]GetRestoredTablesInstanceDatabaseSchemaTable)[vs[1].(int)]
+	}).(GetRestoredTablesInstanceDatabaseSchemaTableOutput)
+}
+
+type GetSlowLogFilesFile struct {
+	// Indicates the file name.
+	FileName string `pulumi:"fileName"`
+	// Indicates the file size in bytes.
+	FileSize string `pulumi:"fileSize"`
+}
+
+// GetSlowLogFilesFileInput is an input type that accepts GetSlowLogFilesFileArgs and GetSlowLogFilesFileOutput values.
+// You can construct a concrete instance of `GetSlowLogFilesFileInput` via:
+//
+//	GetSlowLogFilesFileArgs{...}
+type GetSlowLogFilesFileInput interface {
+	pulumi.Input
+
+	ToGetSlowLogFilesFileOutput() GetSlowLogFilesFileOutput
+	ToGetSlowLogFilesFileOutputWithContext(context.Context) GetSlowLogFilesFileOutput
+}
+
+type GetSlowLogFilesFileArgs struct {
+	// Indicates the file name.
+	FileName pulumi.StringInput `pulumi:"fileName"`
+	// Indicates the file size in bytes.
+	FileSize pulumi.StringInput `pulumi:"fileSize"`
+}
+
+func (GetSlowLogFilesFileArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetSlowLogFilesFile)(nil)).Elem()
+}
+
+func (i GetSlowLogFilesFileArgs) ToGetSlowLogFilesFileOutput() GetSlowLogFilesFileOutput {
+	return i.ToGetSlowLogFilesFileOutputWithContext(context.Background())
+}
+
+func (i GetSlowLogFilesFileArgs) ToGetSlowLogFilesFileOutputWithContext(ctx context.Context) GetSlowLogFilesFileOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetSlowLogFilesFileOutput)
+}
+
+// GetSlowLogFilesFileArrayInput is an input type that accepts GetSlowLogFilesFileArray and GetSlowLogFilesFileArrayOutput values.
+// You can construct a concrete instance of `GetSlowLogFilesFileArrayInput` via:
+//
+//	GetSlowLogFilesFileArray{ GetSlowLogFilesFileArgs{...} }
+type GetSlowLogFilesFileArrayInput interface {
+	pulumi.Input
+
+	ToGetSlowLogFilesFileArrayOutput() GetSlowLogFilesFileArrayOutput
+	ToGetSlowLogFilesFileArrayOutputWithContext(context.Context) GetSlowLogFilesFileArrayOutput
+}
+
+type GetSlowLogFilesFileArray []GetSlowLogFilesFileInput
+
+func (GetSlowLogFilesFileArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetSlowLogFilesFile)(nil)).Elem()
+}
+
+func (i GetSlowLogFilesFileArray) ToGetSlowLogFilesFileArrayOutput() GetSlowLogFilesFileArrayOutput {
+	return i.ToGetSlowLogFilesFileArrayOutputWithContext(context.Background())
+}
+
+func (i GetSlowLogFilesFileArray) ToGetSlowLogFilesFileArrayOutputWithContext(ctx context.Context) GetSlowLogFilesFileArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetSlowLogFilesFileArrayOutput)
+}
+
+type GetSlowLogFilesFileOutput struct{ *pulumi.OutputState }
+
+func (GetSlowLogFilesFileOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetSlowLogFilesFile)(nil)).Elem()
+}
+
+func (o GetSlowLogFilesFileOutput) ToGetSlowLogFilesFileOutput() GetSlowLogFilesFileOutput {
+	return o
+}
+
+func (o GetSlowLogFilesFileOutput) ToGetSlowLogFilesFileOutputWithContext(ctx context.Context) GetSlowLogFilesFileOutput {
+	return o
+}
+
+// Indicates the file name.
+func (o GetSlowLogFilesFileOutput) FileName() pulumi.StringOutput {
+	return o.ApplyT(func(v GetSlowLogFilesFile) string { return v.FileName }).(pulumi.StringOutput)
+}
+
+// Indicates the file size in bytes.
+func (o GetSlowLogFilesFileOutput) FileSize() pulumi.StringOutput {
+	return o.ApplyT(func(v GetSlowLogFilesFile) string { return v.FileSize }).(pulumi.StringOutput)
+}
+
+type GetSlowLogFilesFileArrayOutput struct{ *pulumi.OutputState }
+
+func (GetSlowLogFilesFileArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetSlowLogFilesFile)(nil)).Elem()
+}
+
+func (o GetSlowLogFilesFileArrayOutput) ToGetSlowLogFilesFileArrayOutput() GetSlowLogFilesFileArrayOutput {
+	return o
+}
+
+func (o GetSlowLogFilesFileArrayOutput) ToGetSlowLogFilesFileArrayOutputWithContext(ctx context.Context) GetSlowLogFilesFileArrayOutput {
+	return o
+}
+
+func (o GetSlowLogFilesFileArrayOutput) Index(i pulumi.IntInput) GetSlowLogFilesFileOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) GetSlowLogFilesFile {
+		return vs[0].([]GetSlowLogFilesFile)[vs[1].(int)]
+	}).(GetSlowLogFilesFileOutput)
+}
+
+type GetSlowLogsSlowLog struct {
+	// Indicates the IP address of the client.
+	ClientIp string `pulumi:"clientIp"`
+	// Indicates the number of execution times.
+	Count string `pulumi:"count"`
+	// Specifies the name of the database.
+	Database string `pulumi:"database"`
+	// Indicates the wait lock time.
+	LockTime string `pulumi:"lockTime"`
+	// Indicates the execution syntax.
+	QuerySample string `pulumi:"querySample"`
+	// Indicates the number of rows scanned.
+	RowsExamined string `pulumi:"rowsExamined"`
+	// Indicates the number of result lines.
+	RowsSent string `pulumi:"rowsSent"`
+	// Specifies the start time in the **yyyy-mm-ddThh:mm:ssZ** format.
+	StartTime string `pulumi:"startTime"`
+	// Indicates the execution time.
+	Time string `pulumi:"time"`
+	// Specifies the statement type. Value options: **INSERT**, **UPDATE**, **SELECT**,
+	// **DELETE**, **CREATE**.
+	Type string `pulumi:"type"`
+	// Specifies the name of the account.
+	Users string `pulumi:"users"`
+}
+
+// GetSlowLogsSlowLogInput is an input type that accepts GetSlowLogsSlowLogArgs and GetSlowLogsSlowLogOutput values.
+// You can construct a concrete instance of `GetSlowLogsSlowLogInput` via:
+//
+//	GetSlowLogsSlowLogArgs{...}
+type GetSlowLogsSlowLogInput interface {
+	pulumi.Input
+
+	ToGetSlowLogsSlowLogOutput() GetSlowLogsSlowLogOutput
+	ToGetSlowLogsSlowLogOutputWithContext(context.Context) GetSlowLogsSlowLogOutput
+}
+
+type GetSlowLogsSlowLogArgs struct {
+	// Indicates the IP address of the client.
+	ClientIp pulumi.StringInput `pulumi:"clientIp"`
+	// Indicates the number of execution times.
+	Count pulumi.StringInput `pulumi:"count"`
+	// Specifies the name of the database.
+	Database pulumi.StringInput `pulumi:"database"`
+	// Indicates the wait lock time.
+	LockTime pulumi.StringInput `pulumi:"lockTime"`
+	// Indicates the execution syntax.
+	QuerySample pulumi.StringInput `pulumi:"querySample"`
+	// Indicates the number of rows scanned.
+	RowsExamined pulumi.StringInput `pulumi:"rowsExamined"`
+	// Indicates the number of result lines.
+	RowsSent pulumi.StringInput `pulumi:"rowsSent"`
+	// Specifies the start time in the **yyyy-mm-ddThh:mm:ssZ** format.
+	StartTime pulumi.StringInput `pulumi:"startTime"`
+	// Indicates the execution time.
+	Time pulumi.StringInput `pulumi:"time"`
+	// Specifies the statement type. Value options: **INSERT**, **UPDATE**, **SELECT**,
+	// **DELETE**, **CREATE**.
+	Type pulumi.StringInput `pulumi:"type"`
+	// Specifies the name of the account.
+	Users pulumi.StringInput `pulumi:"users"`
+}
+
+func (GetSlowLogsSlowLogArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetSlowLogsSlowLog)(nil)).Elem()
+}
+
+func (i GetSlowLogsSlowLogArgs) ToGetSlowLogsSlowLogOutput() GetSlowLogsSlowLogOutput {
+	return i.ToGetSlowLogsSlowLogOutputWithContext(context.Background())
+}
+
+func (i GetSlowLogsSlowLogArgs) ToGetSlowLogsSlowLogOutputWithContext(ctx context.Context) GetSlowLogsSlowLogOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetSlowLogsSlowLogOutput)
+}
+
+// GetSlowLogsSlowLogArrayInput is an input type that accepts GetSlowLogsSlowLogArray and GetSlowLogsSlowLogArrayOutput values.
+// You can construct a concrete instance of `GetSlowLogsSlowLogArrayInput` via:
+//
+//	GetSlowLogsSlowLogArray{ GetSlowLogsSlowLogArgs{...} }
+type GetSlowLogsSlowLogArrayInput interface {
+	pulumi.Input
+
+	ToGetSlowLogsSlowLogArrayOutput() GetSlowLogsSlowLogArrayOutput
+	ToGetSlowLogsSlowLogArrayOutputWithContext(context.Context) GetSlowLogsSlowLogArrayOutput
+}
+
+type GetSlowLogsSlowLogArray []GetSlowLogsSlowLogInput
+
+func (GetSlowLogsSlowLogArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetSlowLogsSlowLog)(nil)).Elem()
+}
+
+func (i GetSlowLogsSlowLogArray) ToGetSlowLogsSlowLogArrayOutput() GetSlowLogsSlowLogArrayOutput {
+	return i.ToGetSlowLogsSlowLogArrayOutputWithContext(context.Background())
+}
+
+func (i GetSlowLogsSlowLogArray) ToGetSlowLogsSlowLogArrayOutputWithContext(ctx context.Context) GetSlowLogsSlowLogArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetSlowLogsSlowLogArrayOutput)
+}
+
+type GetSlowLogsSlowLogOutput struct{ *pulumi.OutputState }
+
+func (GetSlowLogsSlowLogOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetSlowLogsSlowLog)(nil)).Elem()
+}
+
+func (o GetSlowLogsSlowLogOutput) ToGetSlowLogsSlowLogOutput() GetSlowLogsSlowLogOutput {
+	return o
+}
+
+func (o GetSlowLogsSlowLogOutput) ToGetSlowLogsSlowLogOutputWithContext(ctx context.Context) GetSlowLogsSlowLogOutput {
+	return o
+}
+
+// Indicates the IP address of the client.
+func (o GetSlowLogsSlowLogOutput) ClientIp() pulumi.StringOutput {
+	return o.ApplyT(func(v GetSlowLogsSlowLog) string { return v.ClientIp }).(pulumi.StringOutput)
+}
+
+// Indicates the number of execution times.
+func (o GetSlowLogsSlowLogOutput) Count() pulumi.StringOutput {
+	return o.ApplyT(func(v GetSlowLogsSlowLog) string { return v.Count }).(pulumi.StringOutput)
+}
+
+// Specifies the name of the database.
+func (o GetSlowLogsSlowLogOutput) Database() pulumi.StringOutput {
+	return o.ApplyT(func(v GetSlowLogsSlowLog) string { return v.Database }).(pulumi.StringOutput)
+}
+
+// Indicates the wait lock time.
+func (o GetSlowLogsSlowLogOutput) LockTime() pulumi.StringOutput {
+	return o.ApplyT(func(v GetSlowLogsSlowLog) string { return v.LockTime }).(pulumi.StringOutput)
+}
+
+// Indicates the execution syntax.
+func (o GetSlowLogsSlowLogOutput) QuerySample() pulumi.StringOutput {
+	return o.ApplyT(func(v GetSlowLogsSlowLog) string { return v.QuerySample }).(pulumi.StringOutput)
+}
+
+// Indicates the number of rows scanned.
+func (o GetSlowLogsSlowLogOutput) RowsExamined() pulumi.StringOutput {
+	return o.ApplyT(func(v GetSlowLogsSlowLog) string { return v.RowsExamined }).(pulumi.StringOutput)
+}
+
+// Indicates the number of result lines.
+func (o GetSlowLogsSlowLogOutput) RowsSent() pulumi.StringOutput {
+	return o.ApplyT(func(v GetSlowLogsSlowLog) string { return v.RowsSent }).(pulumi.StringOutput)
+}
+
+// Specifies the start time in the **yyyy-mm-ddThh:mm:ssZ** format.
+func (o GetSlowLogsSlowLogOutput) StartTime() pulumi.StringOutput {
+	return o.ApplyT(func(v GetSlowLogsSlowLog) string { return v.StartTime }).(pulumi.StringOutput)
+}
+
+// Indicates the execution time.
+func (o GetSlowLogsSlowLogOutput) Time() pulumi.StringOutput {
+	return o.ApplyT(func(v GetSlowLogsSlowLog) string { return v.Time }).(pulumi.StringOutput)
+}
+
+// Specifies the statement type. Value options: **INSERT**, **UPDATE**, **SELECT**,
+// **DELETE**, **CREATE**.
+func (o GetSlowLogsSlowLogOutput) Type() pulumi.StringOutput {
+	return o.ApplyT(func(v GetSlowLogsSlowLog) string { return v.Type }).(pulumi.StringOutput)
+}
+
+// Specifies the name of the account.
+func (o GetSlowLogsSlowLogOutput) Users() pulumi.StringOutput {
+	return o.ApplyT(func(v GetSlowLogsSlowLog) string { return v.Users }).(pulumi.StringOutput)
+}
+
+type GetSlowLogsSlowLogArrayOutput struct{ *pulumi.OutputState }
+
+func (GetSlowLogsSlowLogArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetSlowLogsSlowLog)(nil)).Elem()
+}
+
+func (o GetSlowLogsSlowLogArrayOutput) ToGetSlowLogsSlowLogArrayOutput() GetSlowLogsSlowLogArrayOutput {
+	return o
+}
+
+func (o GetSlowLogsSlowLogArrayOutput) ToGetSlowLogsSlowLogArrayOutputWithContext(ctx context.Context) GetSlowLogsSlowLogArrayOutput {
+	return o
+}
+
+func (o GetSlowLogsSlowLogArrayOutput) Index(i pulumi.IntInput) GetSlowLogsSlowLogOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) GetSlowLogsSlowLog {
+		return vs[0].([]GetSlowLogsSlowLog)[vs[1].(int)]
+	}).(GetSlowLogsSlowLogOutput)
+}
+
+type GetSqlAuditLogsAuditLog struct {
+	// Indicates the start time of the audit log.
+	BeginTime string `pulumi:"beginTime"`
+	// Specifies the end time in the **yyyy-mm-ddThh:mm:ssZ** format.
+	// It must be later than the start time. The time span cannot be longer than 30 days.
+	EndTime string `pulumi:"endTime"`
+	// Indicates the ID of the audit log.
+	Id string `pulumi:"id"`
+	// Indicates the audit log file name.
+	Name string `pulumi:"name"`
+	// Indicates the size in KB of the audit log.
+	Size int `pulumi:"size"`
+}
+
+// GetSqlAuditLogsAuditLogInput is an input type that accepts GetSqlAuditLogsAuditLogArgs and GetSqlAuditLogsAuditLogOutput values.
+// You can construct a concrete instance of `GetSqlAuditLogsAuditLogInput` via:
+//
+//	GetSqlAuditLogsAuditLogArgs{...}
+type GetSqlAuditLogsAuditLogInput interface {
+	pulumi.Input
+
+	ToGetSqlAuditLogsAuditLogOutput() GetSqlAuditLogsAuditLogOutput
+	ToGetSqlAuditLogsAuditLogOutputWithContext(context.Context) GetSqlAuditLogsAuditLogOutput
+}
+
+type GetSqlAuditLogsAuditLogArgs struct {
+	// Indicates the start time of the audit log.
+	BeginTime pulumi.StringInput `pulumi:"beginTime"`
+	// Specifies the end time in the **yyyy-mm-ddThh:mm:ssZ** format.
+	// It must be later than the start time. The time span cannot be longer than 30 days.
+	EndTime pulumi.StringInput `pulumi:"endTime"`
+	// Indicates the ID of the audit log.
+	Id pulumi.StringInput `pulumi:"id"`
+	// Indicates the audit log file name.
+	Name pulumi.StringInput `pulumi:"name"`
+	// Indicates the size in KB of the audit log.
+	Size pulumi.IntInput `pulumi:"size"`
+}
+
+func (GetSqlAuditLogsAuditLogArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetSqlAuditLogsAuditLog)(nil)).Elem()
+}
+
+func (i GetSqlAuditLogsAuditLogArgs) ToGetSqlAuditLogsAuditLogOutput() GetSqlAuditLogsAuditLogOutput {
+	return i.ToGetSqlAuditLogsAuditLogOutputWithContext(context.Background())
+}
+
+func (i GetSqlAuditLogsAuditLogArgs) ToGetSqlAuditLogsAuditLogOutputWithContext(ctx context.Context) GetSqlAuditLogsAuditLogOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetSqlAuditLogsAuditLogOutput)
+}
+
+// GetSqlAuditLogsAuditLogArrayInput is an input type that accepts GetSqlAuditLogsAuditLogArray and GetSqlAuditLogsAuditLogArrayOutput values.
+// You can construct a concrete instance of `GetSqlAuditLogsAuditLogArrayInput` via:
+//
+//	GetSqlAuditLogsAuditLogArray{ GetSqlAuditLogsAuditLogArgs{...} }
+type GetSqlAuditLogsAuditLogArrayInput interface {
+	pulumi.Input
+
+	ToGetSqlAuditLogsAuditLogArrayOutput() GetSqlAuditLogsAuditLogArrayOutput
+	ToGetSqlAuditLogsAuditLogArrayOutputWithContext(context.Context) GetSqlAuditLogsAuditLogArrayOutput
+}
+
+type GetSqlAuditLogsAuditLogArray []GetSqlAuditLogsAuditLogInput
+
+func (GetSqlAuditLogsAuditLogArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetSqlAuditLogsAuditLog)(nil)).Elem()
+}
+
+func (i GetSqlAuditLogsAuditLogArray) ToGetSqlAuditLogsAuditLogArrayOutput() GetSqlAuditLogsAuditLogArrayOutput {
+	return i.ToGetSqlAuditLogsAuditLogArrayOutputWithContext(context.Background())
+}
+
+func (i GetSqlAuditLogsAuditLogArray) ToGetSqlAuditLogsAuditLogArrayOutputWithContext(ctx context.Context) GetSqlAuditLogsAuditLogArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetSqlAuditLogsAuditLogArrayOutput)
+}
+
+type GetSqlAuditLogsAuditLogOutput struct{ *pulumi.OutputState }
+
+func (GetSqlAuditLogsAuditLogOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetSqlAuditLogsAuditLog)(nil)).Elem()
+}
+
+func (o GetSqlAuditLogsAuditLogOutput) ToGetSqlAuditLogsAuditLogOutput() GetSqlAuditLogsAuditLogOutput {
+	return o
+}
+
+func (o GetSqlAuditLogsAuditLogOutput) ToGetSqlAuditLogsAuditLogOutputWithContext(ctx context.Context) GetSqlAuditLogsAuditLogOutput {
+	return o
+}
+
+// Indicates the start time of the audit log.
+func (o GetSqlAuditLogsAuditLogOutput) BeginTime() pulumi.StringOutput {
+	return o.ApplyT(func(v GetSqlAuditLogsAuditLog) string { return v.BeginTime }).(pulumi.StringOutput)
+}
+
+// Specifies the end time in the **yyyy-mm-ddThh:mm:ssZ** format.
+// It must be later than the start time. The time span cannot be longer than 30 days.
+func (o GetSqlAuditLogsAuditLogOutput) EndTime() pulumi.StringOutput {
+	return o.ApplyT(func(v GetSqlAuditLogsAuditLog) string { return v.EndTime }).(pulumi.StringOutput)
+}
+
+// Indicates the ID of the audit log.
+func (o GetSqlAuditLogsAuditLogOutput) Id() pulumi.StringOutput {
+	return o.ApplyT(func(v GetSqlAuditLogsAuditLog) string { return v.Id }).(pulumi.StringOutput)
+}
+
+// Indicates the audit log file name.
+func (o GetSqlAuditLogsAuditLogOutput) Name() pulumi.StringOutput {
+	return o.ApplyT(func(v GetSqlAuditLogsAuditLog) string { return v.Name }).(pulumi.StringOutput)
+}
+
+// Indicates the size in KB of the audit log.
+func (o GetSqlAuditLogsAuditLogOutput) Size() pulumi.IntOutput {
+	return o.ApplyT(func(v GetSqlAuditLogsAuditLog) int { return v.Size }).(pulumi.IntOutput)
+}
+
+type GetSqlAuditLogsAuditLogArrayOutput struct{ *pulumi.OutputState }
+
+func (GetSqlAuditLogsAuditLogArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetSqlAuditLogsAuditLog)(nil)).Elem()
+}
+
+func (o GetSqlAuditLogsAuditLogArrayOutput) ToGetSqlAuditLogsAuditLogArrayOutput() GetSqlAuditLogsAuditLogArrayOutput {
+	return o
+}
+
+func (o GetSqlAuditLogsAuditLogArrayOutput) ToGetSqlAuditLogsAuditLogArrayOutputWithContext(ctx context.Context) GetSqlAuditLogsAuditLogArrayOutput {
+	return o
+}
+
+func (o GetSqlAuditLogsAuditLogArrayOutput) Index(i pulumi.IntInput) GetSqlAuditLogsAuditLogOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) GetSqlAuditLogsAuditLog {
+		return vs[0].([]GetSqlAuditLogsAuditLog)[vs[1].(int)]
+	}).(GetSqlAuditLogsAuditLogOutput)
+}
+
+type GetSqlAuditOperationsOperation struct {
+	// Indicates the list of the operation actions.
+	Actions []string `pulumi:"actions"`
+	// Indicates the type of the operation.
+	Type string `pulumi:"type"`
+}
+
+// GetSqlAuditOperationsOperationInput is an input type that accepts GetSqlAuditOperationsOperationArgs and GetSqlAuditOperationsOperationOutput values.
+// You can construct a concrete instance of `GetSqlAuditOperationsOperationInput` via:
+//
+//	GetSqlAuditOperationsOperationArgs{...}
+type GetSqlAuditOperationsOperationInput interface {
+	pulumi.Input
+
+	ToGetSqlAuditOperationsOperationOutput() GetSqlAuditOperationsOperationOutput
+	ToGetSqlAuditOperationsOperationOutputWithContext(context.Context) GetSqlAuditOperationsOperationOutput
+}
+
+type GetSqlAuditOperationsOperationArgs struct {
+	// Indicates the list of the operation actions.
+	Actions pulumi.StringArrayInput `pulumi:"actions"`
+	// Indicates the type of the operation.
+	Type pulumi.StringInput `pulumi:"type"`
+}
+
+func (GetSqlAuditOperationsOperationArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetSqlAuditOperationsOperation)(nil)).Elem()
+}
+
+func (i GetSqlAuditOperationsOperationArgs) ToGetSqlAuditOperationsOperationOutput() GetSqlAuditOperationsOperationOutput {
+	return i.ToGetSqlAuditOperationsOperationOutputWithContext(context.Background())
+}
+
+func (i GetSqlAuditOperationsOperationArgs) ToGetSqlAuditOperationsOperationOutputWithContext(ctx context.Context) GetSqlAuditOperationsOperationOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetSqlAuditOperationsOperationOutput)
+}
+
+// GetSqlAuditOperationsOperationArrayInput is an input type that accepts GetSqlAuditOperationsOperationArray and GetSqlAuditOperationsOperationArrayOutput values.
+// You can construct a concrete instance of `GetSqlAuditOperationsOperationArrayInput` via:
+//
+//	GetSqlAuditOperationsOperationArray{ GetSqlAuditOperationsOperationArgs{...} }
+type GetSqlAuditOperationsOperationArrayInput interface {
+	pulumi.Input
+
+	ToGetSqlAuditOperationsOperationArrayOutput() GetSqlAuditOperationsOperationArrayOutput
+	ToGetSqlAuditOperationsOperationArrayOutputWithContext(context.Context) GetSqlAuditOperationsOperationArrayOutput
+}
+
+type GetSqlAuditOperationsOperationArray []GetSqlAuditOperationsOperationInput
+
+func (GetSqlAuditOperationsOperationArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetSqlAuditOperationsOperation)(nil)).Elem()
+}
+
+func (i GetSqlAuditOperationsOperationArray) ToGetSqlAuditOperationsOperationArrayOutput() GetSqlAuditOperationsOperationArrayOutput {
+	return i.ToGetSqlAuditOperationsOperationArrayOutputWithContext(context.Background())
+}
+
+func (i GetSqlAuditOperationsOperationArray) ToGetSqlAuditOperationsOperationArrayOutputWithContext(ctx context.Context) GetSqlAuditOperationsOperationArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetSqlAuditOperationsOperationArrayOutput)
+}
+
+type GetSqlAuditOperationsOperationOutput struct{ *pulumi.OutputState }
+
+func (GetSqlAuditOperationsOperationOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetSqlAuditOperationsOperation)(nil)).Elem()
+}
+
+func (o GetSqlAuditOperationsOperationOutput) ToGetSqlAuditOperationsOperationOutput() GetSqlAuditOperationsOperationOutput {
+	return o
+}
+
+func (o GetSqlAuditOperationsOperationOutput) ToGetSqlAuditOperationsOperationOutputWithContext(ctx context.Context) GetSqlAuditOperationsOperationOutput {
+	return o
+}
+
+// Indicates the list of the operation actions.
+func (o GetSqlAuditOperationsOperationOutput) Actions() pulumi.StringArrayOutput {
+	return o.ApplyT(func(v GetSqlAuditOperationsOperation) []string { return v.Actions }).(pulumi.StringArrayOutput)
+}
+
+// Indicates the type of the operation.
+func (o GetSqlAuditOperationsOperationOutput) Type() pulumi.StringOutput {
+	return o.ApplyT(func(v GetSqlAuditOperationsOperation) string { return v.Type }).(pulumi.StringOutput)
+}
+
+type GetSqlAuditOperationsOperationArrayOutput struct{ *pulumi.OutputState }
+
+func (GetSqlAuditOperationsOperationArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetSqlAuditOperationsOperation)(nil)).Elem()
+}
+
+func (o GetSqlAuditOperationsOperationArrayOutput) ToGetSqlAuditOperationsOperationArrayOutput() GetSqlAuditOperationsOperationArrayOutput {
+	return o
+}
+
+func (o GetSqlAuditOperationsOperationArrayOutput) ToGetSqlAuditOperationsOperationArrayOutputWithContext(ctx context.Context) GetSqlAuditOperationsOperationArrayOutput {
+	return o
+}
+
+func (o GetSqlAuditOperationsOperationArrayOutput) Index(i pulumi.IntInput) GetSqlAuditOperationsOperationOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) GetSqlAuditOperationsOperation {
+		return vs[0].([]GetSqlAuditOperationsOperation)[vs[1].(int)]
+	}).(GetSqlAuditOperationsOperationOutput)
+}
+
+type GetSqlserverAccountsUser struct {
+	// Indicates the username of the database account.
+	Name string `pulumi:"name"`
+	// Specifies the database user status. Its value can be any of the following:
+	// + **unavailable**: The database user is unavailable.
+	// + **available**: The database user is available.
+	State string `pulumi:"state"`
+}
+
+// GetSqlserverAccountsUserInput is an input type that accepts GetSqlserverAccountsUserArgs and GetSqlserverAccountsUserOutput values.
+// You can construct a concrete instance of `GetSqlserverAccountsUserInput` via:
+//
+//	GetSqlserverAccountsUserArgs{...}
+type GetSqlserverAccountsUserInput interface {
+	pulumi.Input
+
+	ToGetSqlserverAccountsUserOutput() GetSqlserverAccountsUserOutput
+	ToGetSqlserverAccountsUserOutputWithContext(context.Context) GetSqlserverAccountsUserOutput
+}
+
+type GetSqlserverAccountsUserArgs struct {
+	// Indicates the username of the database account.
+	Name pulumi.StringInput `pulumi:"name"`
+	// Specifies the database user status. Its value can be any of the following:
+	// + **unavailable**: The database user is unavailable.
+	// + **available**: The database user is available.
+	State pulumi.StringInput `pulumi:"state"`
+}
+
+func (GetSqlserverAccountsUserArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetSqlserverAccountsUser)(nil)).Elem()
+}
+
+func (i GetSqlserverAccountsUserArgs) ToGetSqlserverAccountsUserOutput() GetSqlserverAccountsUserOutput {
+	return i.ToGetSqlserverAccountsUserOutputWithContext(context.Background())
+}
+
+func (i GetSqlserverAccountsUserArgs) ToGetSqlserverAccountsUserOutputWithContext(ctx context.Context) GetSqlserverAccountsUserOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetSqlserverAccountsUserOutput)
+}
+
+// GetSqlserverAccountsUserArrayInput is an input type that accepts GetSqlserverAccountsUserArray and GetSqlserverAccountsUserArrayOutput values.
+// You can construct a concrete instance of `GetSqlserverAccountsUserArrayInput` via:
+//
+//	GetSqlserverAccountsUserArray{ GetSqlserverAccountsUserArgs{...} }
+type GetSqlserverAccountsUserArrayInput interface {
+	pulumi.Input
+
+	ToGetSqlserverAccountsUserArrayOutput() GetSqlserverAccountsUserArrayOutput
+	ToGetSqlserverAccountsUserArrayOutputWithContext(context.Context) GetSqlserverAccountsUserArrayOutput
+}
+
+type GetSqlserverAccountsUserArray []GetSqlserverAccountsUserInput
+
+func (GetSqlserverAccountsUserArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetSqlserverAccountsUser)(nil)).Elem()
+}
+
+func (i GetSqlserverAccountsUserArray) ToGetSqlserverAccountsUserArrayOutput() GetSqlserverAccountsUserArrayOutput {
+	return i.ToGetSqlserverAccountsUserArrayOutputWithContext(context.Background())
+}
+
+func (i GetSqlserverAccountsUserArray) ToGetSqlserverAccountsUserArrayOutputWithContext(ctx context.Context) GetSqlserverAccountsUserArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetSqlserverAccountsUserArrayOutput)
+}
+
+type GetSqlserverAccountsUserOutput struct{ *pulumi.OutputState }
+
+func (GetSqlserverAccountsUserOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetSqlserverAccountsUser)(nil)).Elem()
+}
+
+func (o GetSqlserverAccountsUserOutput) ToGetSqlserverAccountsUserOutput() GetSqlserverAccountsUserOutput {
+	return o
+}
+
+func (o GetSqlserverAccountsUserOutput) ToGetSqlserverAccountsUserOutputWithContext(ctx context.Context) GetSqlserverAccountsUserOutput {
+	return o
+}
+
+// Indicates the username of the database account.
+func (o GetSqlserverAccountsUserOutput) Name() pulumi.StringOutput {
+	return o.ApplyT(func(v GetSqlserverAccountsUser) string { return v.Name }).(pulumi.StringOutput)
+}
+
+// Specifies the database user status. Its value can be any of the following:
+// + **unavailable**: The database user is unavailable.
+// + **available**: The database user is available.
+func (o GetSqlserverAccountsUserOutput) State() pulumi.StringOutput {
+	return o.ApplyT(func(v GetSqlserverAccountsUser) string { return v.State }).(pulumi.StringOutput)
+}
+
+type GetSqlserverAccountsUserArrayOutput struct{ *pulumi.OutputState }
+
+func (GetSqlserverAccountsUserArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetSqlserverAccountsUser)(nil)).Elem()
+}
+
+func (o GetSqlserverAccountsUserArrayOutput) ToGetSqlserverAccountsUserArrayOutput() GetSqlserverAccountsUserArrayOutput {
+	return o
+}
+
+func (o GetSqlserverAccountsUserArrayOutput) ToGetSqlserverAccountsUserArrayOutputWithContext(ctx context.Context) GetSqlserverAccountsUserArrayOutput {
+	return o
+}
+
+func (o GetSqlserverAccountsUserArrayOutput) Index(i pulumi.IntInput) GetSqlserverAccountsUserOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) GetSqlserverAccountsUser {
+		return vs[0].([]GetSqlserverAccountsUser)[vs[1].(int)]
+	}).(GetSqlserverAccountsUserOutput)
+}
+
+type GetSqlserverDatabasePrivilegesUser struct {
+	// The username of the database account.
+	Name string `pulumi:"name"`
+	// Specifies whether the database permission is **read-only**. Values option:
+	// + **true**: indicates the read-only permission.
+	// + **false**: indicates the read and write permission.
+	Readonly bool `pulumi:"readonly"`
+}
+
+// GetSqlserverDatabasePrivilegesUserInput is an input type that accepts GetSqlserverDatabasePrivilegesUserArgs and GetSqlserverDatabasePrivilegesUserOutput values.
+// You can construct a concrete instance of `GetSqlserverDatabasePrivilegesUserInput` via:
+//
+//	GetSqlserverDatabasePrivilegesUserArgs{...}
+type GetSqlserverDatabasePrivilegesUserInput interface {
+	pulumi.Input
+
+	ToGetSqlserverDatabasePrivilegesUserOutput() GetSqlserverDatabasePrivilegesUserOutput
+	ToGetSqlserverDatabasePrivilegesUserOutputWithContext(context.Context) GetSqlserverDatabasePrivilegesUserOutput
+}
+
+type GetSqlserverDatabasePrivilegesUserArgs struct {
+	// The username of the database account.
+	Name pulumi.StringInput `pulumi:"name"`
+	// Specifies whether the database permission is **read-only**. Values option:
+	// + **true**: indicates the read-only permission.
+	// + **false**: indicates the read and write permission.
+	Readonly pulumi.BoolInput `pulumi:"readonly"`
+}
+
+func (GetSqlserverDatabasePrivilegesUserArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetSqlserverDatabasePrivilegesUser)(nil)).Elem()
+}
+
+func (i GetSqlserverDatabasePrivilegesUserArgs) ToGetSqlserverDatabasePrivilegesUserOutput() GetSqlserverDatabasePrivilegesUserOutput {
+	return i.ToGetSqlserverDatabasePrivilegesUserOutputWithContext(context.Background())
+}
+
+func (i GetSqlserverDatabasePrivilegesUserArgs) ToGetSqlserverDatabasePrivilegesUserOutputWithContext(ctx context.Context) GetSqlserverDatabasePrivilegesUserOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetSqlserverDatabasePrivilegesUserOutput)
+}
+
+// GetSqlserverDatabasePrivilegesUserArrayInput is an input type that accepts GetSqlserverDatabasePrivilegesUserArray and GetSqlserverDatabasePrivilegesUserArrayOutput values.
+// You can construct a concrete instance of `GetSqlserverDatabasePrivilegesUserArrayInput` via:
+//
+//	GetSqlserverDatabasePrivilegesUserArray{ GetSqlserverDatabasePrivilegesUserArgs{...} }
+type GetSqlserverDatabasePrivilegesUserArrayInput interface {
+	pulumi.Input
+
+	ToGetSqlserverDatabasePrivilegesUserArrayOutput() GetSqlserverDatabasePrivilegesUserArrayOutput
+	ToGetSqlserverDatabasePrivilegesUserArrayOutputWithContext(context.Context) GetSqlserverDatabasePrivilegesUserArrayOutput
+}
+
+type GetSqlserverDatabasePrivilegesUserArray []GetSqlserverDatabasePrivilegesUserInput
+
+func (GetSqlserverDatabasePrivilegesUserArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetSqlserverDatabasePrivilegesUser)(nil)).Elem()
+}
+
+func (i GetSqlserverDatabasePrivilegesUserArray) ToGetSqlserverDatabasePrivilegesUserArrayOutput() GetSqlserverDatabasePrivilegesUserArrayOutput {
+	return i.ToGetSqlserverDatabasePrivilegesUserArrayOutputWithContext(context.Background())
+}
+
+func (i GetSqlserverDatabasePrivilegesUserArray) ToGetSqlserverDatabasePrivilegesUserArrayOutputWithContext(ctx context.Context) GetSqlserverDatabasePrivilegesUserArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetSqlserverDatabasePrivilegesUserArrayOutput)
+}
+
+type GetSqlserverDatabasePrivilegesUserOutput struct{ *pulumi.OutputState }
+
+func (GetSqlserverDatabasePrivilegesUserOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetSqlserverDatabasePrivilegesUser)(nil)).Elem()
+}
+
+func (o GetSqlserverDatabasePrivilegesUserOutput) ToGetSqlserverDatabasePrivilegesUserOutput() GetSqlserverDatabasePrivilegesUserOutput {
+	return o
+}
+
+func (o GetSqlserverDatabasePrivilegesUserOutput) ToGetSqlserverDatabasePrivilegesUserOutputWithContext(ctx context.Context) GetSqlserverDatabasePrivilegesUserOutput {
+	return o
+}
+
+// The username of the database account.
+func (o GetSqlserverDatabasePrivilegesUserOutput) Name() pulumi.StringOutput {
+	return o.ApplyT(func(v GetSqlserverDatabasePrivilegesUser) string { return v.Name }).(pulumi.StringOutput)
+}
+
+// Specifies whether the database permission is **read-only**. Values option:
+// + **true**: indicates the read-only permission.
+// + **false**: indicates the read and write permission.
+func (o GetSqlserverDatabasePrivilegesUserOutput) Readonly() pulumi.BoolOutput {
+	return o.ApplyT(func(v GetSqlserverDatabasePrivilegesUser) bool { return v.Readonly }).(pulumi.BoolOutput)
+}
+
+type GetSqlserverDatabasePrivilegesUserArrayOutput struct{ *pulumi.OutputState }
+
+func (GetSqlserverDatabasePrivilegesUserArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetSqlserverDatabasePrivilegesUser)(nil)).Elem()
+}
+
+func (o GetSqlserverDatabasePrivilegesUserArrayOutput) ToGetSqlserverDatabasePrivilegesUserArrayOutput() GetSqlserverDatabasePrivilegesUserArrayOutput {
+	return o
+}
+
+func (o GetSqlserverDatabasePrivilegesUserArrayOutput) ToGetSqlserverDatabasePrivilegesUserArrayOutputWithContext(ctx context.Context) GetSqlserverDatabasePrivilegesUserArrayOutput {
+	return o
+}
+
+func (o GetSqlserverDatabasePrivilegesUserArrayOutput) Index(i pulumi.IntInput) GetSqlserverDatabasePrivilegesUserOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) GetSqlserverDatabasePrivilegesUser {
+		return vs[0].([]GetSqlserverDatabasePrivilegesUser)[vs[1].(int)]
+	}).(GetSqlserverDatabasePrivilegesUserOutput)
+}
+
+type GetSqlserverDatabasesDatabase struct {
+	// Specifies the character set used by the database.
+	CharacterSet string `pulumi:"characterSet"`
+	// Specifies the database name.
+	Name string `pulumi:"name"`
+	// Specifies the database status.
+	State string `pulumi:"state"`
+}
+
+// GetSqlserverDatabasesDatabaseInput is an input type that accepts GetSqlserverDatabasesDatabaseArgs and GetSqlserverDatabasesDatabaseOutput values.
+// You can construct a concrete instance of `GetSqlserverDatabasesDatabaseInput` via:
+//
+//	GetSqlserverDatabasesDatabaseArgs{...}
+type GetSqlserverDatabasesDatabaseInput interface {
+	pulumi.Input
+
+	ToGetSqlserverDatabasesDatabaseOutput() GetSqlserverDatabasesDatabaseOutput
+	ToGetSqlserverDatabasesDatabaseOutputWithContext(context.Context) GetSqlserverDatabasesDatabaseOutput
+}
+
+type GetSqlserverDatabasesDatabaseArgs struct {
+	// Specifies the character set used by the database.
+	CharacterSet pulumi.StringInput `pulumi:"characterSet"`
+	// Specifies the database name.
+	Name pulumi.StringInput `pulumi:"name"`
+	// Specifies the database status.
+	State pulumi.StringInput `pulumi:"state"`
+}
+
+func (GetSqlserverDatabasesDatabaseArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetSqlserverDatabasesDatabase)(nil)).Elem()
+}
+
+func (i GetSqlserverDatabasesDatabaseArgs) ToGetSqlserverDatabasesDatabaseOutput() GetSqlserverDatabasesDatabaseOutput {
+	return i.ToGetSqlserverDatabasesDatabaseOutputWithContext(context.Background())
+}
+
+func (i GetSqlserverDatabasesDatabaseArgs) ToGetSqlserverDatabasesDatabaseOutputWithContext(ctx context.Context) GetSqlserverDatabasesDatabaseOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetSqlserverDatabasesDatabaseOutput)
+}
+
+// GetSqlserverDatabasesDatabaseArrayInput is an input type that accepts GetSqlserverDatabasesDatabaseArray and GetSqlserverDatabasesDatabaseArrayOutput values.
+// You can construct a concrete instance of `GetSqlserverDatabasesDatabaseArrayInput` via:
+//
+//	GetSqlserverDatabasesDatabaseArray{ GetSqlserverDatabasesDatabaseArgs{...} }
+type GetSqlserverDatabasesDatabaseArrayInput interface {
+	pulumi.Input
+
+	ToGetSqlserverDatabasesDatabaseArrayOutput() GetSqlserverDatabasesDatabaseArrayOutput
+	ToGetSqlserverDatabasesDatabaseArrayOutputWithContext(context.Context) GetSqlserverDatabasesDatabaseArrayOutput
+}
+
+type GetSqlserverDatabasesDatabaseArray []GetSqlserverDatabasesDatabaseInput
+
+func (GetSqlserverDatabasesDatabaseArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetSqlserverDatabasesDatabase)(nil)).Elem()
+}
+
+func (i GetSqlserverDatabasesDatabaseArray) ToGetSqlserverDatabasesDatabaseArrayOutput() GetSqlserverDatabasesDatabaseArrayOutput {
+	return i.ToGetSqlserverDatabasesDatabaseArrayOutputWithContext(context.Background())
+}
+
+func (i GetSqlserverDatabasesDatabaseArray) ToGetSqlserverDatabasesDatabaseArrayOutputWithContext(ctx context.Context) GetSqlserverDatabasesDatabaseArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetSqlserverDatabasesDatabaseArrayOutput)
+}
+
+type GetSqlserverDatabasesDatabaseOutput struct{ *pulumi.OutputState }
+
+func (GetSqlserverDatabasesDatabaseOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetSqlserverDatabasesDatabase)(nil)).Elem()
+}
+
+func (o GetSqlserverDatabasesDatabaseOutput) ToGetSqlserverDatabasesDatabaseOutput() GetSqlserverDatabasesDatabaseOutput {
+	return o
+}
+
+func (o GetSqlserverDatabasesDatabaseOutput) ToGetSqlserverDatabasesDatabaseOutputWithContext(ctx context.Context) GetSqlserverDatabasesDatabaseOutput {
+	return o
+}
+
+// Specifies the character set used by the database.
+func (o GetSqlserverDatabasesDatabaseOutput) CharacterSet() pulumi.StringOutput {
+	return o.ApplyT(func(v GetSqlserverDatabasesDatabase) string { return v.CharacterSet }).(pulumi.StringOutput)
+}
+
+// Specifies the database name.
+func (o GetSqlserverDatabasesDatabaseOutput) Name() pulumi.StringOutput {
+	return o.ApplyT(func(v GetSqlserverDatabasesDatabase) string { return v.Name }).(pulumi.StringOutput)
+}
+
+// Specifies the database status.
+func (o GetSqlserverDatabasesDatabaseOutput) State() pulumi.StringOutput {
+	return o.ApplyT(func(v GetSqlserverDatabasesDatabase) string { return v.State }).(pulumi.StringOutput)
+}
+
+type GetSqlserverDatabasesDatabaseArrayOutput struct{ *pulumi.OutputState }
+
+func (GetSqlserverDatabasesDatabaseArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetSqlserverDatabasesDatabase)(nil)).Elem()
+}
+
+func (o GetSqlserverDatabasesDatabaseArrayOutput) ToGetSqlserverDatabasesDatabaseArrayOutput() GetSqlserverDatabasesDatabaseArrayOutput {
+	return o
+}
+
+func (o GetSqlserverDatabasesDatabaseArrayOutput) ToGetSqlserverDatabasesDatabaseArrayOutputWithContext(ctx context.Context) GetSqlserverDatabasesDatabaseArrayOutput {
+	return o
+}
+
+func (o GetSqlserverDatabasesDatabaseArrayOutput) Index(i pulumi.IntInput) GetSqlserverDatabasesDatabaseOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) GetSqlserverDatabasesDatabase {
+		return vs[0].([]GetSqlserverDatabasesDatabase)[vs[1].(int)]
+	}).(GetSqlserverDatabasesDatabaseOutput)
+}
+
+type GetStorageTypesStorageType struct {
+	// The status details of the AZs to which the specification belongs.
+	// Key indicates the AZ ID, and value indicates the specification status in the AZ.
+	// The options of value are as follows:
+	// - **normal**: The specifications in the AZ are available.
+	// - **unsupported**: The specifications are not supported by the AZ.
+	// - **sellout**: The specifications in the AZ are sold out.
+	AzStatus map[string]string `pulumi:"azStatus"`
+	// Storage type.\
+	// The options are as follows:
+	// - **ULTRAHIGH**: SSD storage.
+	// - **LOCALSSD**: Local SSD storage.
+	// - **CLOUDSSD**: Cloud SSD storage.
+	//   This storage type is supported only with general-purpose and dedicated DB instances.
+	// - **ESSD**: extreme SSD storage.
+	//   This storage type is supported only with dedicated DB instances.
+	Name string `pulumi:"name"`
+	// Performance specifications.
+	// The options are as follows:
+	// - **normal**: General-enhanced.
+	// - **normal2**: General-enhanced II.
+	// - **armFlavors**: Kunpeng general-enhanced.
+	// - **dedicicatenormal**: Exclusive x86.
+	// - **armlocalssd**: Standard Kunpeng.
+	// - **normallocalssd**: Standard x86.
+	// - **general**: General-purpose.
+	// - **dedicated**: Dedicated, which is only supported for cloud SSDs.
+	// - **rapid**: Dedicated, which is only supported for extreme SSDs.
+	// - **bigmen**: Large-memory.
+	SupportComputeGroupTypes []string `pulumi:"supportComputeGroupTypes"`
+}
+
+// GetStorageTypesStorageTypeInput is an input type that accepts GetStorageTypesStorageTypeArgs and GetStorageTypesStorageTypeOutput values.
+// You can construct a concrete instance of `GetStorageTypesStorageTypeInput` via:
+//
+//	GetStorageTypesStorageTypeArgs{...}
+type GetStorageTypesStorageTypeInput interface {
+	pulumi.Input
+
+	ToGetStorageTypesStorageTypeOutput() GetStorageTypesStorageTypeOutput
+	ToGetStorageTypesStorageTypeOutputWithContext(context.Context) GetStorageTypesStorageTypeOutput
+}
+
+type GetStorageTypesStorageTypeArgs struct {
+	// The status details of the AZs to which the specification belongs.
+	// Key indicates the AZ ID, and value indicates the specification status in the AZ.
+	// The options of value are as follows:
+	// - **normal**: The specifications in the AZ are available.
+	// - **unsupported**: The specifications are not supported by the AZ.
+	// - **sellout**: The specifications in the AZ are sold out.
+	AzStatus pulumi.StringMapInput `pulumi:"azStatus"`
+	// Storage type.\
+	// The options are as follows:
+	// - **ULTRAHIGH**: SSD storage.
+	// - **LOCALSSD**: Local SSD storage.
+	// - **CLOUDSSD**: Cloud SSD storage.
+	//   This storage type is supported only with general-purpose and dedicated DB instances.
+	// - **ESSD**: extreme SSD storage.
+	//   This storage type is supported only with dedicated DB instances.
+	Name pulumi.StringInput `pulumi:"name"`
+	// Performance specifications.
+	// The options are as follows:
+	// - **normal**: General-enhanced.
+	// - **normal2**: General-enhanced II.
+	// - **armFlavors**: Kunpeng general-enhanced.
+	// - **dedicicatenormal**: Exclusive x86.
+	// - **armlocalssd**: Standard Kunpeng.
+	// - **normallocalssd**: Standard x86.
+	// - **general**: General-purpose.
+	// - **dedicated**: Dedicated, which is only supported for cloud SSDs.
+	// - **rapid**: Dedicated, which is only supported for extreme SSDs.
+	// - **bigmen**: Large-memory.
+	SupportComputeGroupTypes pulumi.StringArrayInput `pulumi:"supportComputeGroupTypes"`
+}
+
+func (GetStorageTypesStorageTypeArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetStorageTypesStorageType)(nil)).Elem()
+}
+
+func (i GetStorageTypesStorageTypeArgs) ToGetStorageTypesStorageTypeOutput() GetStorageTypesStorageTypeOutput {
+	return i.ToGetStorageTypesStorageTypeOutputWithContext(context.Background())
+}
+
+func (i GetStorageTypesStorageTypeArgs) ToGetStorageTypesStorageTypeOutputWithContext(ctx context.Context) GetStorageTypesStorageTypeOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetStorageTypesStorageTypeOutput)
+}
+
+// GetStorageTypesStorageTypeArrayInput is an input type that accepts GetStorageTypesStorageTypeArray and GetStorageTypesStorageTypeArrayOutput values.
+// You can construct a concrete instance of `GetStorageTypesStorageTypeArrayInput` via:
+//
+//	GetStorageTypesStorageTypeArray{ GetStorageTypesStorageTypeArgs{...} }
+type GetStorageTypesStorageTypeArrayInput interface {
+	pulumi.Input
+
+	ToGetStorageTypesStorageTypeArrayOutput() GetStorageTypesStorageTypeArrayOutput
+	ToGetStorageTypesStorageTypeArrayOutputWithContext(context.Context) GetStorageTypesStorageTypeArrayOutput
+}
+
+type GetStorageTypesStorageTypeArray []GetStorageTypesStorageTypeInput
+
+func (GetStorageTypesStorageTypeArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetStorageTypesStorageType)(nil)).Elem()
+}
+
+func (i GetStorageTypesStorageTypeArray) ToGetStorageTypesStorageTypeArrayOutput() GetStorageTypesStorageTypeArrayOutput {
+	return i.ToGetStorageTypesStorageTypeArrayOutputWithContext(context.Background())
+}
+
+func (i GetStorageTypesStorageTypeArray) ToGetStorageTypesStorageTypeArrayOutputWithContext(ctx context.Context) GetStorageTypesStorageTypeArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetStorageTypesStorageTypeArrayOutput)
+}
+
+type GetStorageTypesStorageTypeOutput struct{ *pulumi.OutputState }
+
+func (GetStorageTypesStorageTypeOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetStorageTypesStorageType)(nil)).Elem()
+}
+
+func (o GetStorageTypesStorageTypeOutput) ToGetStorageTypesStorageTypeOutput() GetStorageTypesStorageTypeOutput {
+	return o
+}
+
+func (o GetStorageTypesStorageTypeOutput) ToGetStorageTypesStorageTypeOutputWithContext(ctx context.Context) GetStorageTypesStorageTypeOutput {
+	return o
+}
+
+// The status details of the AZs to which the specification belongs.
+// Key indicates the AZ ID, and value indicates the specification status in the AZ.
+// The options of value are as follows:
+// - **normal**: The specifications in the AZ are available.
+// - **unsupported**: The specifications are not supported by the AZ.
+// - **sellout**: The specifications in the AZ are sold out.
+func (o GetStorageTypesStorageTypeOutput) AzStatus() pulumi.StringMapOutput {
+	return o.ApplyT(func(v GetStorageTypesStorageType) map[string]string { return v.AzStatus }).(pulumi.StringMapOutput)
+}
+
+// Storage type.\
+// The options are as follows:
+//   - **ULTRAHIGH**: SSD storage.
+//   - **LOCALSSD**: Local SSD storage.
+//   - **CLOUDSSD**: Cloud SSD storage.
+//     This storage type is supported only with general-purpose and dedicated DB instances.
+//   - **ESSD**: extreme SSD storage.
+//     This storage type is supported only with dedicated DB instances.
+func (o GetStorageTypesStorageTypeOutput) Name() pulumi.StringOutput {
+	return o.ApplyT(func(v GetStorageTypesStorageType) string { return v.Name }).(pulumi.StringOutput)
+}
+
+// Performance specifications.
+// The options are as follows:
+// - **normal**: General-enhanced.
+// - **normal2**: General-enhanced II.
+// - **armFlavors**: Kunpeng general-enhanced.
+// - **dedicicatenormal**: Exclusive x86.
+// - **armlocalssd**: Standard Kunpeng.
+// - **normallocalssd**: Standard x86.
+// - **general**: General-purpose.
+// - **dedicated**: Dedicated, which is only supported for cloud SSDs.
+// - **rapid**: Dedicated, which is only supported for extreme SSDs.
+// - **bigmen**: Large-memory.
+func (o GetStorageTypesStorageTypeOutput) SupportComputeGroupTypes() pulumi.StringArrayOutput {
+	return o.ApplyT(func(v GetStorageTypesStorageType) []string { return v.SupportComputeGroupTypes }).(pulumi.StringArrayOutput)
+}
+
+type GetStorageTypesStorageTypeArrayOutput struct{ *pulumi.OutputState }
+
+func (GetStorageTypesStorageTypeArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetStorageTypesStorageType)(nil)).Elem()
+}
+
+func (o GetStorageTypesStorageTypeArrayOutput) ToGetStorageTypesStorageTypeArrayOutput() GetStorageTypesStorageTypeArrayOutput {
+	return o
+}
+
+func (o GetStorageTypesStorageTypeArrayOutput) ToGetStorageTypesStorageTypeArrayOutputWithContext(ctx context.Context) GetStorageTypesStorageTypeArrayOutput {
+	return o
+}
+
+func (o GetStorageTypesStorageTypeArrayOutput) Index(i pulumi.IntInput) GetStorageTypesStorageTypeOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) GetStorageTypesStorageType {
+		return vs[0].([]GetStorageTypesStorageType)[vs[1].(int)]
+	}).(GetStorageTypesStorageTypeOutput)
+}
+
+type GetTagsTag struct {
+	// Indicates the tag key.
+	Key string `pulumi:"key"`
+	// Indicates the list the tag values.
+	Values []string `pulumi:"values"`
+}
+
+// GetTagsTagInput is an input type that accepts GetTagsTagArgs and GetTagsTagOutput values.
+// You can construct a concrete instance of `GetTagsTagInput` via:
+//
+//	GetTagsTagArgs{...}
+type GetTagsTagInput interface {
+	pulumi.Input
+
+	ToGetTagsTagOutput() GetTagsTagOutput
+	ToGetTagsTagOutputWithContext(context.Context) GetTagsTagOutput
+}
+
+type GetTagsTagArgs struct {
+	// Indicates the tag key.
+	Key pulumi.StringInput `pulumi:"key"`
+	// Indicates the list the tag values.
+	Values pulumi.StringArrayInput `pulumi:"values"`
+}
+
+func (GetTagsTagArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetTagsTag)(nil)).Elem()
+}
+
+func (i GetTagsTagArgs) ToGetTagsTagOutput() GetTagsTagOutput {
+	return i.ToGetTagsTagOutputWithContext(context.Background())
+}
+
+func (i GetTagsTagArgs) ToGetTagsTagOutputWithContext(ctx context.Context) GetTagsTagOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetTagsTagOutput)
+}
+
+// GetTagsTagArrayInput is an input type that accepts GetTagsTagArray and GetTagsTagArrayOutput values.
+// You can construct a concrete instance of `GetTagsTagArrayInput` via:
+//
+//	GetTagsTagArray{ GetTagsTagArgs{...} }
+type GetTagsTagArrayInput interface {
+	pulumi.Input
+
+	ToGetTagsTagArrayOutput() GetTagsTagArrayOutput
+	ToGetTagsTagArrayOutputWithContext(context.Context) GetTagsTagArrayOutput
+}
+
+type GetTagsTagArray []GetTagsTagInput
+
+func (GetTagsTagArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetTagsTag)(nil)).Elem()
+}
+
+func (i GetTagsTagArray) ToGetTagsTagArrayOutput() GetTagsTagArrayOutput {
+	return i.ToGetTagsTagArrayOutputWithContext(context.Background())
+}
+
+func (i GetTagsTagArray) ToGetTagsTagArrayOutputWithContext(ctx context.Context) GetTagsTagArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetTagsTagArrayOutput)
+}
+
+type GetTagsTagOutput struct{ *pulumi.OutputState }
+
+func (GetTagsTagOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetTagsTag)(nil)).Elem()
+}
+
+func (o GetTagsTagOutput) ToGetTagsTagOutput() GetTagsTagOutput {
+	return o
+}
+
+func (o GetTagsTagOutput) ToGetTagsTagOutputWithContext(ctx context.Context) GetTagsTagOutput {
+	return o
+}
+
+// Indicates the tag key.
+func (o GetTagsTagOutput) Key() pulumi.StringOutput {
+	return o.ApplyT(func(v GetTagsTag) string { return v.Key }).(pulumi.StringOutput)
+}
+
+// Indicates the list the tag values.
+func (o GetTagsTagOutput) Values() pulumi.StringArrayOutput {
+	return o.ApplyT(func(v GetTagsTag) []string { return v.Values }).(pulumi.StringArrayOutput)
+}
+
+type GetTagsTagArrayOutput struct{ *pulumi.OutputState }
+
+func (GetTagsTagArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetTagsTag)(nil)).Elem()
+}
+
+func (o GetTagsTagArrayOutput) ToGetTagsTagArrayOutput() GetTagsTagArrayOutput {
+	return o
+}
+
+func (o GetTagsTagArrayOutput) ToGetTagsTagArrayOutputWithContext(ctx context.Context) GetTagsTagArrayOutput {
+	return o
+}
+
+func (o GetTagsTagArrayOutput) Index(i pulumi.IntInput) GetTagsTagOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) GetTagsTag {
+		return vs[0].([]GetTagsTag)[vs[1].(int)]
+	}).(GetTagsTagOutput)
+}
+
 func init() {
+	pulumi.RegisterInputType(reflect.TypeOf((*BackupDatabaseInput)(nil)).Elem(), BackupDatabaseArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*BackupDatabaseArrayInput)(nil)).Elem(), BackupDatabaseArray{})
 	pulumi.RegisterInputType(reflect.TypeOf((*Database_privilegeUserInput)(nil)).Elem(), Database_privilegeUserArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*Database_privilegeUserArrayInput)(nil)).Elem(), Database_privilegeUserArray{})
 	pulumi.RegisterInputType(reflect.TypeOf((*InstanceBackupStrategyInput)(nil)).Elem(), InstanceBackupStrategyArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*InstanceBackupStrategyPtrInput)(nil)).Elem(), InstanceBackupStrategyArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*InstanceDbInput)(nil)).Elem(), InstanceDbArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*InstanceDbPtrInput)(nil)).Elem(), InstanceDbArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*InstanceMsdtcHostInput)(nil)).Elem(), InstanceMsdtcHostArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*InstanceMsdtcHostArrayInput)(nil)).Elem(), InstanceMsdtcHostArray{})
 	pulumi.RegisterInputType(reflect.TypeOf((*InstanceNodeInput)(nil)).Elem(), InstanceNodeArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*InstanceNodeArrayInput)(nil)).Elem(), InstanceNodeArray{})
 	pulumi.RegisterInputType(reflect.TypeOf((*InstanceParameterInput)(nil)).Elem(), InstanceParameterArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*InstanceParameterArrayInput)(nil)).Elem(), InstanceParameterArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*InstanceRestoreInput)(nil)).Elem(), InstanceRestoreArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*InstanceRestorePtrInput)(nil)).Elem(), InstanceRestoreArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*InstanceVolumeInput)(nil)).Elem(), InstanceVolumeArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*InstanceVolumePtrInput)(nil)).Elem(), InstanceVolumeArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*MysqlDatabasePrivilegeUserInput)(nil)).Elem(), MysqlDatabasePrivilegeUserArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*MysqlDatabasePrivilegeUserArrayInput)(nil)).Elem(), MysqlDatabasePrivilegeUserArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*MysqlDatabaseTableRestoreDatabaseInput)(nil)).Elem(), MysqlDatabaseTableRestoreDatabaseArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*MysqlDatabaseTableRestoreDatabaseArrayInput)(nil)).Elem(), MysqlDatabaseTableRestoreDatabaseArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*MysqlDatabaseTableRestoreRestoreTableInput)(nil)).Elem(), MysqlDatabaseTableRestoreRestoreTableArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*MysqlDatabaseTableRestoreRestoreTableArrayInput)(nil)).Elem(), MysqlDatabaseTableRestoreRestoreTableArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*MysqlDatabaseTableRestoreRestoreTableTableInput)(nil)).Elem(), MysqlDatabaseTableRestoreRestoreTableTableArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*MysqlDatabaseTableRestoreRestoreTableTableArrayInput)(nil)).Elem(), MysqlDatabaseTableRestoreRestoreTableTableArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*MysqlProxyMasterNodeWeightInput)(nil)).Elem(), MysqlProxyMasterNodeWeightArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*MysqlProxyMasterNodeWeightPtrInput)(nil)).Elem(), MysqlProxyMasterNodeWeightArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*MysqlProxyNodeInput)(nil)).Elem(), MysqlProxyNodeArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*MysqlProxyNodeArrayInput)(nil)).Elem(), MysqlProxyNodeArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*MysqlProxyReadonlyNodesWeightInput)(nil)).Elem(), MysqlProxyReadonlyNodesWeightArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*MysqlProxyReadonlyNodesWeightArrayInput)(nil)).Elem(), MysqlProxyReadonlyNodesWeightArray{})
 	pulumi.RegisterInputType(reflect.TypeOf((*ParametergroupConfigurationParameterInput)(nil)).Elem(), ParametergroupConfigurationParameterArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*ParametergroupConfigurationParameterArrayInput)(nil)).Elem(), ParametergroupConfigurationParameterArray{})
 	pulumi.RegisterInputType(reflect.TypeOf((*ParametergroupDatastoreInput)(nil)).Elem(), ParametergroupDatastoreArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*ParametergroupDatastorePtrInput)(nil)).Elem(), ParametergroupDatastoreArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*PgAccountAttributeInput)(nil)).Elem(), PgAccountAttributeArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*PgAccountAttributeArrayInput)(nil)).Elem(), PgAccountAttributeArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*PgDatabasePrivilegeUserInput)(nil)).Elem(), PgDatabasePrivilegeUserArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*PgDatabasePrivilegeUserArrayInput)(nil)).Elem(), PgDatabasePrivilegeUserArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*PgHbaHostBasedAuthenticationInput)(nil)).Elem(), PgHbaHostBasedAuthenticationArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*PgHbaHostBasedAuthenticationArrayInput)(nil)).Elem(), PgHbaHostBasedAuthenticationArray{})
 	pulumi.RegisterInputType(reflect.TypeOf((*ReadReplicaInstanceDbInput)(nil)).Elem(), ReadReplicaInstanceDbArgs{})
-	pulumi.RegisterInputType(reflect.TypeOf((*ReadReplicaInstanceDbArrayInput)(nil)).Elem(), ReadReplicaInstanceDbArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*ReadReplicaInstanceDbPtrInput)(nil)).Elem(), ReadReplicaInstanceDbArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*ReadReplicaInstanceParameterInput)(nil)).Elem(), ReadReplicaInstanceParameterArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*ReadReplicaInstanceParameterArrayInput)(nil)).Elem(), ReadReplicaInstanceParameterArray{})
 	pulumi.RegisterInputType(reflect.TypeOf((*ReadReplicaInstanceVolumeInput)(nil)).Elem(), ReadReplicaInstanceVolumeArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*ReadReplicaInstanceVolumePtrInput)(nil)).Elem(), ReadReplicaInstanceVolumeArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*SqlserverDatabasePrivilegeUserInput)(nil)).Elem(), SqlserverDatabasePrivilegeUserArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*SqlserverDatabasePrivilegeUserArrayInput)(nil)).Elem(), SqlserverDatabasePrivilegeUserArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetAvailableFlavorsOptionalFlavorInput)(nil)).Elem(), GetAvailableFlavorsOptionalFlavorArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetAvailableFlavorsOptionalFlavorArrayInput)(nil)).Elem(), GetAvailableFlavorsOptionalFlavorArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetBackupFilesFileInput)(nil)).Elem(), GetBackupFilesFileArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetBackupFilesFileArrayInput)(nil)).Elem(), GetBackupFilesFileArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetBackupsBackupInput)(nil)).Elem(), GetBackupsBackupArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetBackupsBackupArrayInput)(nil)).Elem(), GetBackupsBackupArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetBackupsBackupDatabaseInput)(nil)).Elem(), GetBackupsBackupDatabaseArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetBackupsBackupDatabaseArrayInput)(nil)).Elem(), GetBackupsBackupDatabaseArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetBackupsBackupDatastoreInput)(nil)).Elem(), GetBackupsBackupDatastoreArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetBackupsBackupDatastoreArrayInput)(nil)).Elem(), GetBackupsBackupDatastoreArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetCrossRegionBackupInstancesBackupInstanceInput)(nil)).Elem(), GetCrossRegionBackupInstancesBackupInstanceArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetCrossRegionBackupInstancesBackupInstanceArrayInput)(nil)).Elem(), GetCrossRegionBackupInstancesBackupInstanceArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetCrossRegionBackupInstancesBackupInstanceDatastoreInput)(nil)).Elem(), GetCrossRegionBackupInstancesBackupInstanceDatastoreArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetCrossRegionBackupInstancesBackupInstanceDatastoreArrayInput)(nil)).Elem(), GetCrossRegionBackupInstancesBackupInstanceDatastoreArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetCrossRegionBackupsBackupInput)(nil)).Elem(), GetCrossRegionBackupsBackupArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetCrossRegionBackupsBackupArrayInput)(nil)).Elem(), GetCrossRegionBackupsBackupArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetCrossRegionBackupsBackupDatabaseInput)(nil)).Elem(), GetCrossRegionBackupsBackupDatabaseArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetCrossRegionBackupsBackupDatabaseArrayInput)(nil)).Elem(), GetCrossRegionBackupsBackupDatabaseArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetCrossRegionBackupsBackupDatastoreInput)(nil)).Elem(), GetCrossRegionBackupsBackupDatastoreArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetCrossRegionBackupsBackupDatastoreArrayInput)(nil)).Elem(), GetCrossRegionBackupsBackupDatastoreArray{})
 	pulumi.RegisterInputType(reflect.TypeOf((*GetEngineVersionsVersionInput)(nil)).Elem(), GetEngineVersionsVersionArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*GetEngineVersionsVersionArrayInput)(nil)).Elem(), GetEngineVersionsVersionArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetErrorLogsErrorLogInput)(nil)).Elem(), GetErrorLogsErrorLogArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetErrorLogsErrorLogArrayInput)(nil)).Elem(), GetErrorLogsErrorLogArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetExtendLogFilesFileInput)(nil)).Elem(), GetExtendLogFilesFileArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetExtendLogFilesFileArrayInput)(nil)).Elem(), GetExtendLogFilesFileArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetExtendLogLinksLinkInput)(nil)).Elem(), GetExtendLogLinksLinkArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetExtendLogLinksLinkArrayInput)(nil)).Elem(), GetExtendLogLinksLinkArray{})
 	pulumi.RegisterInputType(reflect.TypeOf((*GetFlavorsFlavorInput)(nil)).Elem(), GetFlavorsFlavorArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*GetFlavorsFlavorArrayInput)(nil)).Elem(), GetFlavorsFlavorArray{})
 	pulumi.RegisterInputType(reflect.TypeOf((*GetInstancesInstanceInput)(nil)).Elem(), GetInstancesInstanceArgs{})
@@ -2891,28 +11941,158 @@ func init() {
 	pulumi.RegisterInputType(reflect.TypeOf((*GetInstancesInstanceNodeArrayInput)(nil)).Elem(), GetInstancesInstanceNodeArray{})
 	pulumi.RegisterInputType(reflect.TypeOf((*GetInstancesInstanceVolumeInput)(nil)).Elem(), GetInstancesInstanceVolumeArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*GetInstancesInstanceVolumeArrayInput)(nil)).Elem(), GetInstancesInstanceVolumeArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetMysqlAccountsUserInput)(nil)).Elem(), GetMysqlAccountsUserArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetMysqlAccountsUserArrayInput)(nil)).Elem(), GetMysqlAccountsUserArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetMysqlDatabasePrivilegesUserInput)(nil)).Elem(), GetMysqlDatabasePrivilegesUserArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetMysqlDatabasePrivilegesUserArrayInput)(nil)).Elem(), GetMysqlDatabasePrivilegesUserArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetMysqlDatabasesDatabaseInput)(nil)).Elem(), GetMysqlDatabasesDatabaseArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetMysqlDatabasesDatabaseArrayInput)(nil)).Elem(), GetMysqlDatabasesDatabaseArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetMysqlProxiesProxyListInput)(nil)).Elem(), GetMysqlProxiesProxyListArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetMysqlProxiesProxyListArrayInput)(nil)).Elem(), GetMysqlProxiesProxyListArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetMysqlProxiesProxyListMasterInstanceInput)(nil)).Elem(), GetMysqlProxiesProxyListMasterInstanceArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetMysqlProxiesProxyListMasterInstanceArrayInput)(nil)).Elem(), GetMysqlProxiesProxyListMasterInstanceArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetMysqlProxiesProxyListProxyInput)(nil)).Elem(), GetMysqlProxiesProxyListProxyArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetMysqlProxiesProxyListProxyArrayInput)(nil)).Elem(), GetMysqlProxiesProxyListProxyArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetMysqlProxiesProxyListProxyFlavorInfoInput)(nil)).Elem(), GetMysqlProxiesProxyListProxyFlavorInfoArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetMysqlProxiesProxyListProxyFlavorInfoArrayInput)(nil)).Elem(), GetMysqlProxiesProxyListProxyFlavorInfoArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetMysqlProxiesProxyListProxyNodeInput)(nil)).Elem(), GetMysqlProxiesProxyListProxyNodeArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetMysqlProxiesProxyListProxyNodeArrayInput)(nil)).Elem(), GetMysqlProxiesProxyListProxyNodeArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetMysqlProxiesProxyListReadonlyInstanceInput)(nil)).Elem(), GetMysqlProxiesProxyListReadonlyInstanceArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetMysqlProxiesProxyListReadonlyInstanceArrayInput)(nil)).Elem(), GetMysqlProxiesProxyListReadonlyInstanceArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetMysqlProxyFlavorsFlavorGroupInput)(nil)).Elem(), GetMysqlProxyFlavorsFlavorGroupArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetMysqlProxyFlavorsFlavorGroupArrayInput)(nil)).Elem(), GetMysqlProxyFlavorsFlavorGroupArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetMysqlProxyFlavorsFlavorGroupFlavorInput)(nil)).Elem(), GetMysqlProxyFlavorsFlavorGroupFlavorArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetMysqlProxyFlavorsFlavorGroupFlavorArrayInput)(nil)).Elem(), GetMysqlProxyFlavorsFlavorGroupFlavorArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetParametergroupsConfigurationInput)(nil)).Elem(), GetParametergroupsConfigurationArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetParametergroupsConfigurationArrayInput)(nil)).Elem(), GetParametergroupsConfigurationArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetPgAccountsUserInput)(nil)).Elem(), GetPgAccountsUserArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetPgAccountsUserArrayInput)(nil)).Elem(), GetPgAccountsUserArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetPgAccountsUserAttributeInput)(nil)).Elem(), GetPgAccountsUserAttributeArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetPgAccountsUserAttributeArrayInput)(nil)).Elem(), GetPgAccountsUserAttributeArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetPgDatabasesDatabaseInput)(nil)).Elem(), GetPgDatabasesDatabaseArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetPgDatabasesDatabaseArrayInput)(nil)).Elem(), GetPgDatabasesDatabaseArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetPgPluginsPluginInput)(nil)).Elem(), GetPgPluginsPluginArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetPgPluginsPluginArrayInput)(nil)).Elem(), GetPgPluginsPluginArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetPgSqlLimitsSqlLimitInput)(nil)).Elem(), GetPgSqlLimitsSqlLimitArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetPgSqlLimitsSqlLimitArrayInput)(nil)).Elem(), GetPgSqlLimitsSqlLimitArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetPredefinedTagsTagInput)(nil)).Elem(), GetPredefinedTagsTagArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetPredefinedTagsTagArrayInput)(nil)).Elem(), GetPredefinedTagsTagArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetQuotasQuotaInput)(nil)).Elem(), GetQuotasQuotaArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetQuotasQuotaArrayInput)(nil)).Elem(), GetQuotasQuotaArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetQuotasQuotaResourceInput)(nil)).Elem(), GetQuotasQuotaResourceArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetQuotasQuotaResourceArrayInput)(nil)).Elem(), GetQuotasQuotaResourceArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetRecyclingInstancesInstanceInput)(nil)).Elem(), GetRecyclingInstancesInstanceArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetRecyclingInstancesInstanceArrayInput)(nil)).Elem(), GetRecyclingInstancesInstanceArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetRestoreTimeRangesRestoreTimeInput)(nil)).Elem(), GetRestoreTimeRangesRestoreTimeArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetRestoreTimeRangesRestoreTimeArrayInput)(nil)).Elem(), GetRestoreTimeRangesRestoreTimeArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetRestoredDatabasesInstanceInput)(nil)).Elem(), GetRestoredDatabasesInstanceArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetRestoredDatabasesInstanceArrayInput)(nil)).Elem(), GetRestoredDatabasesInstanceArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetRestoredDatabasesInstanceDatabaseInput)(nil)).Elem(), GetRestoredDatabasesInstanceDatabaseArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetRestoredDatabasesInstanceDatabaseArrayInput)(nil)).Elem(), GetRestoredDatabasesInstanceDatabaseArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetRestoredTablesInstanceInput)(nil)).Elem(), GetRestoredTablesInstanceArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetRestoredTablesInstanceArrayInput)(nil)).Elem(), GetRestoredTablesInstanceArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetRestoredTablesInstanceDatabaseInput)(nil)).Elem(), GetRestoredTablesInstanceDatabaseArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetRestoredTablesInstanceDatabaseArrayInput)(nil)).Elem(), GetRestoredTablesInstanceDatabaseArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetRestoredTablesInstanceDatabaseSchemaInput)(nil)).Elem(), GetRestoredTablesInstanceDatabaseSchemaArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetRestoredTablesInstanceDatabaseSchemaArrayInput)(nil)).Elem(), GetRestoredTablesInstanceDatabaseSchemaArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetRestoredTablesInstanceDatabaseSchemaTableInput)(nil)).Elem(), GetRestoredTablesInstanceDatabaseSchemaTableArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetRestoredTablesInstanceDatabaseSchemaTableArrayInput)(nil)).Elem(), GetRestoredTablesInstanceDatabaseSchemaTableArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetSlowLogFilesFileInput)(nil)).Elem(), GetSlowLogFilesFileArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetSlowLogFilesFileArrayInput)(nil)).Elem(), GetSlowLogFilesFileArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetSlowLogsSlowLogInput)(nil)).Elem(), GetSlowLogsSlowLogArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetSlowLogsSlowLogArrayInput)(nil)).Elem(), GetSlowLogsSlowLogArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetSqlAuditLogsAuditLogInput)(nil)).Elem(), GetSqlAuditLogsAuditLogArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetSqlAuditLogsAuditLogArrayInput)(nil)).Elem(), GetSqlAuditLogsAuditLogArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetSqlAuditOperationsOperationInput)(nil)).Elem(), GetSqlAuditOperationsOperationArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetSqlAuditOperationsOperationArrayInput)(nil)).Elem(), GetSqlAuditOperationsOperationArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetSqlserverAccountsUserInput)(nil)).Elem(), GetSqlserverAccountsUserArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetSqlserverAccountsUserArrayInput)(nil)).Elem(), GetSqlserverAccountsUserArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetSqlserverDatabasePrivilegesUserInput)(nil)).Elem(), GetSqlserverDatabasePrivilegesUserArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetSqlserverDatabasePrivilegesUserArrayInput)(nil)).Elem(), GetSqlserverDatabasePrivilegesUserArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetSqlserverDatabasesDatabaseInput)(nil)).Elem(), GetSqlserverDatabasesDatabaseArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetSqlserverDatabasesDatabaseArrayInput)(nil)).Elem(), GetSqlserverDatabasesDatabaseArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetStorageTypesStorageTypeInput)(nil)).Elem(), GetStorageTypesStorageTypeArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetStorageTypesStorageTypeArrayInput)(nil)).Elem(), GetStorageTypesStorageTypeArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetTagsTagInput)(nil)).Elem(), GetTagsTagArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetTagsTagArrayInput)(nil)).Elem(), GetTagsTagArray{})
+	pulumi.RegisterOutputType(BackupDatabaseOutput{})
+	pulumi.RegisterOutputType(BackupDatabaseArrayOutput{})
 	pulumi.RegisterOutputType(Database_privilegeUserOutput{})
 	pulumi.RegisterOutputType(Database_privilegeUserArrayOutput{})
 	pulumi.RegisterOutputType(InstanceBackupStrategyOutput{})
 	pulumi.RegisterOutputType(InstanceBackupStrategyPtrOutput{})
 	pulumi.RegisterOutputType(InstanceDbOutput{})
 	pulumi.RegisterOutputType(InstanceDbPtrOutput{})
+	pulumi.RegisterOutputType(InstanceMsdtcHostOutput{})
+	pulumi.RegisterOutputType(InstanceMsdtcHostArrayOutput{})
 	pulumi.RegisterOutputType(InstanceNodeOutput{})
 	pulumi.RegisterOutputType(InstanceNodeArrayOutput{})
 	pulumi.RegisterOutputType(InstanceParameterOutput{})
 	pulumi.RegisterOutputType(InstanceParameterArrayOutput{})
+	pulumi.RegisterOutputType(InstanceRestoreOutput{})
+	pulumi.RegisterOutputType(InstanceRestorePtrOutput{})
 	pulumi.RegisterOutputType(InstanceVolumeOutput{})
 	pulumi.RegisterOutputType(InstanceVolumePtrOutput{})
+	pulumi.RegisterOutputType(MysqlDatabasePrivilegeUserOutput{})
+	pulumi.RegisterOutputType(MysqlDatabasePrivilegeUserArrayOutput{})
+	pulumi.RegisterOutputType(MysqlDatabaseTableRestoreDatabaseOutput{})
+	pulumi.RegisterOutputType(MysqlDatabaseTableRestoreDatabaseArrayOutput{})
+	pulumi.RegisterOutputType(MysqlDatabaseTableRestoreRestoreTableOutput{})
+	pulumi.RegisterOutputType(MysqlDatabaseTableRestoreRestoreTableArrayOutput{})
+	pulumi.RegisterOutputType(MysqlDatabaseTableRestoreRestoreTableTableOutput{})
+	pulumi.RegisterOutputType(MysqlDatabaseTableRestoreRestoreTableTableArrayOutput{})
+	pulumi.RegisterOutputType(MysqlProxyMasterNodeWeightOutput{})
+	pulumi.RegisterOutputType(MysqlProxyMasterNodeWeightPtrOutput{})
+	pulumi.RegisterOutputType(MysqlProxyNodeOutput{})
+	pulumi.RegisterOutputType(MysqlProxyNodeArrayOutput{})
+	pulumi.RegisterOutputType(MysqlProxyReadonlyNodesWeightOutput{})
+	pulumi.RegisterOutputType(MysqlProxyReadonlyNodesWeightArrayOutput{})
 	pulumi.RegisterOutputType(ParametergroupConfigurationParameterOutput{})
 	pulumi.RegisterOutputType(ParametergroupConfigurationParameterArrayOutput{})
 	pulumi.RegisterOutputType(ParametergroupDatastoreOutput{})
 	pulumi.RegisterOutputType(ParametergroupDatastorePtrOutput{})
+	pulumi.RegisterOutputType(PgAccountAttributeOutput{})
+	pulumi.RegisterOutputType(PgAccountAttributeArrayOutput{})
+	pulumi.RegisterOutputType(PgDatabasePrivilegeUserOutput{})
+	pulumi.RegisterOutputType(PgDatabasePrivilegeUserArrayOutput{})
+	pulumi.RegisterOutputType(PgHbaHostBasedAuthenticationOutput{})
+	pulumi.RegisterOutputType(PgHbaHostBasedAuthenticationArrayOutput{})
 	pulumi.RegisterOutputType(ReadReplicaInstanceDbOutput{})
-	pulumi.RegisterOutputType(ReadReplicaInstanceDbArrayOutput{})
+	pulumi.RegisterOutputType(ReadReplicaInstanceDbPtrOutput{})
+	pulumi.RegisterOutputType(ReadReplicaInstanceParameterOutput{})
+	pulumi.RegisterOutputType(ReadReplicaInstanceParameterArrayOutput{})
 	pulumi.RegisterOutputType(ReadReplicaInstanceVolumeOutput{})
 	pulumi.RegisterOutputType(ReadReplicaInstanceVolumePtrOutput{})
+	pulumi.RegisterOutputType(SqlserverDatabasePrivilegeUserOutput{})
+	pulumi.RegisterOutputType(SqlserverDatabasePrivilegeUserArrayOutput{})
+	pulumi.RegisterOutputType(GetAvailableFlavorsOptionalFlavorOutput{})
+	pulumi.RegisterOutputType(GetAvailableFlavorsOptionalFlavorArrayOutput{})
+	pulumi.RegisterOutputType(GetBackupFilesFileOutput{})
+	pulumi.RegisterOutputType(GetBackupFilesFileArrayOutput{})
+	pulumi.RegisterOutputType(GetBackupsBackupOutput{})
+	pulumi.RegisterOutputType(GetBackupsBackupArrayOutput{})
+	pulumi.RegisterOutputType(GetBackupsBackupDatabaseOutput{})
+	pulumi.RegisterOutputType(GetBackupsBackupDatabaseArrayOutput{})
+	pulumi.RegisterOutputType(GetBackupsBackupDatastoreOutput{})
+	pulumi.RegisterOutputType(GetBackupsBackupDatastoreArrayOutput{})
+	pulumi.RegisterOutputType(GetCrossRegionBackupInstancesBackupInstanceOutput{})
+	pulumi.RegisterOutputType(GetCrossRegionBackupInstancesBackupInstanceArrayOutput{})
+	pulumi.RegisterOutputType(GetCrossRegionBackupInstancesBackupInstanceDatastoreOutput{})
+	pulumi.RegisterOutputType(GetCrossRegionBackupInstancesBackupInstanceDatastoreArrayOutput{})
+	pulumi.RegisterOutputType(GetCrossRegionBackupsBackupOutput{})
+	pulumi.RegisterOutputType(GetCrossRegionBackupsBackupArrayOutput{})
+	pulumi.RegisterOutputType(GetCrossRegionBackupsBackupDatabaseOutput{})
+	pulumi.RegisterOutputType(GetCrossRegionBackupsBackupDatabaseArrayOutput{})
+	pulumi.RegisterOutputType(GetCrossRegionBackupsBackupDatastoreOutput{})
+	pulumi.RegisterOutputType(GetCrossRegionBackupsBackupDatastoreArrayOutput{})
 	pulumi.RegisterOutputType(GetEngineVersionsVersionOutput{})
 	pulumi.RegisterOutputType(GetEngineVersionsVersionArrayOutput{})
+	pulumi.RegisterOutputType(GetErrorLogsErrorLogOutput{})
+	pulumi.RegisterOutputType(GetErrorLogsErrorLogArrayOutput{})
+	pulumi.RegisterOutputType(GetExtendLogFilesFileOutput{})
+	pulumi.RegisterOutputType(GetExtendLogFilesFileArrayOutput{})
+	pulumi.RegisterOutputType(GetExtendLogLinksLinkOutput{})
+	pulumi.RegisterOutputType(GetExtendLogLinksLinkArrayOutput{})
 	pulumi.RegisterOutputType(GetFlavorsFlavorOutput{})
 	pulumi.RegisterOutputType(GetFlavorsFlavorArrayOutput{})
 	pulumi.RegisterOutputType(GetInstancesInstanceOutput{})
@@ -2925,4 +12105,78 @@ func init() {
 	pulumi.RegisterOutputType(GetInstancesInstanceNodeArrayOutput{})
 	pulumi.RegisterOutputType(GetInstancesInstanceVolumeOutput{})
 	pulumi.RegisterOutputType(GetInstancesInstanceVolumeArrayOutput{})
+	pulumi.RegisterOutputType(GetMysqlAccountsUserOutput{})
+	pulumi.RegisterOutputType(GetMysqlAccountsUserArrayOutput{})
+	pulumi.RegisterOutputType(GetMysqlDatabasePrivilegesUserOutput{})
+	pulumi.RegisterOutputType(GetMysqlDatabasePrivilegesUserArrayOutput{})
+	pulumi.RegisterOutputType(GetMysqlDatabasesDatabaseOutput{})
+	pulumi.RegisterOutputType(GetMysqlDatabasesDatabaseArrayOutput{})
+	pulumi.RegisterOutputType(GetMysqlProxiesProxyListOutput{})
+	pulumi.RegisterOutputType(GetMysqlProxiesProxyListArrayOutput{})
+	pulumi.RegisterOutputType(GetMysqlProxiesProxyListMasterInstanceOutput{})
+	pulumi.RegisterOutputType(GetMysqlProxiesProxyListMasterInstanceArrayOutput{})
+	pulumi.RegisterOutputType(GetMysqlProxiesProxyListProxyOutput{})
+	pulumi.RegisterOutputType(GetMysqlProxiesProxyListProxyArrayOutput{})
+	pulumi.RegisterOutputType(GetMysqlProxiesProxyListProxyFlavorInfoOutput{})
+	pulumi.RegisterOutputType(GetMysqlProxiesProxyListProxyFlavorInfoArrayOutput{})
+	pulumi.RegisterOutputType(GetMysqlProxiesProxyListProxyNodeOutput{})
+	pulumi.RegisterOutputType(GetMysqlProxiesProxyListProxyNodeArrayOutput{})
+	pulumi.RegisterOutputType(GetMysqlProxiesProxyListReadonlyInstanceOutput{})
+	pulumi.RegisterOutputType(GetMysqlProxiesProxyListReadonlyInstanceArrayOutput{})
+	pulumi.RegisterOutputType(GetMysqlProxyFlavorsFlavorGroupOutput{})
+	pulumi.RegisterOutputType(GetMysqlProxyFlavorsFlavorGroupArrayOutput{})
+	pulumi.RegisterOutputType(GetMysqlProxyFlavorsFlavorGroupFlavorOutput{})
+	pulumi.RegisterOutputType(GetMysqlProxyFlavorsFlavorGroupFlavorArrayOutput{})
+	pulumi.RegisterOutputType(GetParametergroupsConfigurationOutput{})
+	pulumi.RegisterOutputType(GetParametergroupsConfigurationArrayOutput{})
+	pulumi.RegisterOutputType(GetPgAccountsUserOutput{})
+	pulumi.RegisterOutputType(GetPgAccountsUserArrayOutput{})
+	pulumi.RegisterOutputType(GetPgAccountsUserAttributeOutput{})
+	pulumi.RegisterOutputType(GetPgAccountsUserAttributeArrayOutput{})
+	pulumi.RegisterOutputType(GetPgDatabasesDatabaseOutput{})
+	pulumi.RegisterOutputType(GetPgDatabasesDatabaseArrayOutput{})
+	pulumi.RegisterOutputType(GetPgPluginsPluginOutput{})
+	pulumi.RegisterOutputType(GetPgPluginsPluginArrayOutput{})
+	pulumi.RegisterOutputType(GetPgSqlLimitsSqlLimitOutput{})
+	pulumi.RegisterOutputType(GetPgSqlLimitsSqlLimitArrayOutput{})
+	pulumi.RegisterOutputType(GetPredefinedTagsTagOutput{})
+	pulumi.RegisterOutputType(GetPredefinedTagsTagArrayOutput{})
+	pulumi.RegisterOutputType(GetQuotasQuotaOutput{})
+	pulumi.RegisterOutputType(GetQuotasQuotaArrayOutput{})
+	pulumi.RegisterOutputType(GetQuotasQuotaResourceOutput{})
+	pulumi.RegisterOutputType(GetQuotasQuotaResourceArrayOutput{})
+	pulumi.RegisterOutputType(GetRecyclingInstancesInstanceOutput{})
+	pulumi.RegisterOutputType(GetRecyclingInstancesInstanceArrayOutput{})
+	pulumi.RegisterOutputType(GetRestoreTimeRangesRestoreTimeOutput{})
+	pulumi.RegisterOutputType(GetRestoreTimeRangesRestoreTimeArrayOutput{})
+	pulumi.RegisterOutputType(GetRestoredDatabasesInstanceOutput{})
+	pulumi.RegisterOutputType(GetRestoredDatabasesInstanceArrayOutput{})
+	pulumi.RegisterOutputType(GetRestoredDatabasesInstanceDatabaseOutput{})
+	pulumi.RegisterOutputType(GetRestoredDatabasesInstanceDatabaseArrayOutput{})
+	pulumi.RegisterOutputType(GetRestoredTablesInstanceOutput{})
+	pulumi.RegisterOutputType(GetRestoredTablesInstanceArrayOutput{})
+	pulumi.RegisterOutputType(GetRestoredTablesInstanceDatabaseOutput{})
+	pulumi.RegisterOutputType(GetRestoredTablesInstanceDatabaseArrayOutput{})
+	pulumi.RegisterOutputType(GetRestoredTablesInstanceDatabaseSchemaOutput{})
+	pulumi.RegisterOutputType(GetRestoredTablesInstanceDatabaseSchemaArrayOutput{})
+	pulumi.RegisterOutputType(GetRestoredTablesInstanceDatabaseSchemaTableOutput{})
+	pulumi.RegisterOutputType(GetRestoredTablesInstanceDatabaseSchemaTableArrayOutput{})
+	pulumi.RegisterOutputType(GetSlowLogFilesFileOutput{})
+	pulumi.RegisterOutputType(GetSlowLogFilesFileArrayOutput{})
+	pulumi.RegisterOutputType(GetSlowLogsSlowLogOutput{})
+	pulumi.RegisterOutputType(GetSlowLogsSlowLogArrayOutput{})
+	pulumi.RegisterOutputType(GetSqlAuditLogsAuditLogOutput{})
+	pulumi.RegisterOutputType(GetSqlAuditLogsAuditLogArrayOutput{})
+	pulumi.RegisterOutputType(GetSqlAuditOperationsOperationOutput{})
+	pulumi.RegisterOutputType(GetSqlAuditOperationsOperationArrayOutput{})
+	pulumi.RegisterOutputType(GetSqlserverAccountsUserOutput{})
+	pulumi.RegisterOutputType(GetSqlserverAccountsUserArrayOutput{})
+	pulumi.RegisterOutputType(GetSqlserverDatabasePrivilegesUserOutput{})
+	pulumi.RegisterOutputType(GetSqlserverDatabasePrivilegesUserArrayOutput{})
+	pulumi.RegisterOutputType(GetSqlserverDatabasesDatabaseOutput{})
+	pulumi.RegisterOutputType(GetSqlserverDatabasesDatabaseArrayOutput{})
+	pulumi.RegisterOutputType(GetStorageTypesStorageTypeOutput{})
+	pulumi.RegisterOutputType(GetStorageTypesStorageTypeArrayOutput{})
+	pulumi.RegisterOutputType(GetTagsTagOutput{})
+	pulumi.RegisterOutputType(GetTagsTagArrayOutput{})
 }

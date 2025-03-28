@@ -14,13 +14,22 @@ __all__ = [
     'AclIpCidr',
     'AclIpRange',
     'AgencyProjectRole',
+    'ProtectionPolicySelfManagement',
     'ProviderAccessConfig',
+    'ProviderConversionConversionRule',
+    'ProviderConversionConversionRuleLocal',
+    'ProviderConversionConversionRuleRemote',
     'ProviderConversionRule',
     'ProviderConversionRuleLocal',
     'ProviderConversionRuleRemote',
+    'GetAgenciesAgencyResult',
     'GetGroupUserResult',
+    'GetPermissionsPermissionResult',
     'GetProjectsProjectResult',
+    'GetProvidersIdentityProviderResult',
+    'GetProvidersIdentityProviderLinkResult',
     'GetUsersUserResult',
+    'GetVirtualMfaDevicesVirtualMfaDeviceResult',
 ]
 
 @pulumi.output_type
@@ -117,6 +126,78 @@ class AgencyProjectRole(dict):
 
 
 @pulumi.output_type
+class ProtectionPolicySelfManagement(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "accessKey":
+            suggest = "access_key"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in ProtectionPolicySelfManagement. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        ProtectionPolicySelfManagement.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        ProtectionPolicySelfManagement.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 access_key: Optional[bool] = None,
+                 email: Optional[bool] = None,
+                 mobile: Optional[bool] = None,
+                 password: Optional[bool] = None):
+        """
+        :param bool access_key: Specifies whether to allow IAM users to manage access keys by themselves.
+        :param bool email: Specifies whether to allow IAM users to change their email addresses.
+        :param bool mobile: Specifies whether to allow IAM users to change their mobile numbers.
+        :param bool password: Specifies whether to allow IAM users to change their passwords.
+        """
+        if access_key is not None:
+            pulumi.set(__self__, "access_key", access_key)
+        if email is not None:
+            pulumi.set(__self__, "email", email)
+        if mobile is not None:
+            pulumi.set(__self__, "mobile", mobile)
+        if password is not None:
+            pulumi.set(__self__, "password", password)
+
+    @property
+    @pulumi.getter(name="accessKey")
+    def access_key(self) -> Optional[bool]:
+        """
+        Specifies whether to allow IAM users to manage access keys by themselves.
+        """
+        return pulumi.get(self, "access_key")
+
+    @property
+    @pulumi.getter
+    def email(self) -> Optional[bool]:
+        """
+        Specifies whether to allow IAM users to change their email addresses.
+        """
+        return pulumi.get(self, "email")
+
+    @property
+    @pulumi.getter
+    def mobile(self) -> Optional[bool]:
+        """
+        Specifies whether to allow IAM users to change their mobile numbers.
+        """
+        return pulumi.get(self, "mobile")
+
+    @property
+    @pulumi.getter
+    def password(self) -> Optional[bool]:
+        """
+        Specifies whether to allow IAM users to change their passwords.
+        """
+        return pulumi.get(self, "password")
+
+
+@pulumi.output_type
 class ProviderAccessConfig(dict):
     @staticmethod
     def __key_warning(key: str):
@@ -159,8 +240,8 @@ class ProviderAccessConfig(dict):
         """
         :param str access_type: Specifies the access type of the identity provider.
                Available options are:
-               + `program`: programmatic access only.
-               + `program_console`: programmatic access and management console access.
+               + **program**: programmatic access only.
+               + **program_console**: programmatic access and management console access.
         :param str client_id: Specifies the ID of a client registered with the OpenID Connect identity provider.
         :param str provider_url: Specifies the URL of the identity provider.
                This field corresponds to the iss field in the ID token.
@@ -196,8 +277,8 @@ class ProviderAccessConfig(dict):
         """
         Specifies the access type of the identity provider.
         Available options are:
-        + `program`: programmatic access only.
-        + `program_console`: programmatic access and management console access.
+        + **program**: programmatic access only.
+        + **program_console**: programmatic access and management console access.
         """
         return pulumi.get(self, "access_type")
 
@@ -264,6 +345,114 @@ class ProviderAccessConfig(dict):
         This field is required only if the access type is set to `program_console`.
         """
         return pulumi.get(self, "scopes")
+
+
+@pulumi.output_type
+class ProviderConversionConversionRule(dict):
+    def __init__(__self__, *,
+                 locals: Sequence['outputs.ProviderConversionConversionRuleLocal'],
+                 remotes: Sequence['outputs.ProviderConversionConversionRuleRemote']):
+        """
+        :param Sequence['ProviderConversionConversionRuleLocalArgs'] locals: Specifies the federated user information on the cloud platform.
+        :param Sequence['ProviderConversionConversionRuleRemoteArgs'] remotes: Specifies Federated user information in the IDP system.
+        """
+        pulumi.set(__self__, "locals", locals)
+        pulumi.set(__self__, "remotes", remotes)
+
+    @property
+    @pulumi.getter
+    def locals(self) -> Sequence['outputs.ProviderConversionConversionRuleLocal']:
+        """
+        Specifies the federated user information on the cloud platform.
+        """
+        return pulumi.get(self, "locals")
+
+    @property
+    @pulumi.getter
+    def remotes(self) -> Sequence['outputs.ProviderConversionConversionRuleRemote']:
+        """
+        Specifies Federated user information in the IDP system.
+        """
+        return pulumi.get(self, "remotes")
+
+
+@pulumi.output_type
+class ProviderConversionConversionRuleLocal(dict):
+    def __init__(__self__, *,
+                 group: Optional[str] = None,
+                 username: Optional[str] = None):
+        """
+        :param str group: Specifies the user group to which the federated user belongs on the cloud platform.
+        :param str username: Specifies the name of a federated user on the cloud platform.
+        """
+        if group is not None:
+            pulumi.set(__self__, "group", group)
+        if username is not None:
+            pulumi.set(__self__, "username", username)
+
+    @property
+    @pulumi.getter
+    def group(self) -> Optional[str]:
+        """
+        Specifies the user group to which the federated user belongs on the cloud platform.
+        """
+        return pulumi.get(self, "group")
+
+    @property
+    @pulumi.getter
+    def username(self) -> Optional[str]:
+        """
+        Specifies the name of a federated user on the cloud platform.
+        """
+        return pulumi.get(self, "username")
+
+
+@pulumi.output_type
+class ProviderConversionConversionRuleRemote(dict):
+    def __init__(__self__, *,
+                 attribute: str,
+                 condition: Optional[str] = None,
+                 values: Optional[Sequence[str]] = None):
+        """
+        :param str attribute: Specifies the attribute in the IDP assertion.
+        :param str condition: Specifies the condition of conversion rule.
+               Available options are:
+               + `any_one_of`: The rule is matched only if the specified strings appear in the attribute type.
+               + `not_any_of`: The rule is matched only if the specified strings do not appear in the attribute type.
+        :param Sequence[str] values: Specifies the rule is matched only if the specified strings appear in the attribute type.
+        """
+        pulumi.set(__self__, "attribute", attribute)
+        if condition is not None:
+            pulumi.set(__self__, "condition", condition)
+        if values is not None:
+            pulumi.set(__self__, "values", values)
+
+    @property
+    @pulumi.getter
+    def attribute(self) -> str:
+        """
+        Specifies the attribute in the IDP assertion.
+        """
+        return pulumi.get(self, "attribute")
+
+    @property
+    @pulumi.getter
+    def condition(self) -> Optional[str]:
+        """
+        Specifies the condition of conversion rule.
+        Available options are:
+        + `any_one_of`: The rule is matched only if the specified strings appear in the attribute type.
+        + `not_any_of`: The rule is matched only if the specified strings do not appear in the attribute type.
+        """
+        return pulumi.get(self, "condition")
+
+    @property
+    @pulumi.getter
+    def values(self) -> Optional[Sequence[str]]:
+        """
+        Specifies the rule is matched only if the specified strings appear in the attribute type.
+        """
+        return pulumi.get(self, "values")
 
 
 @pulumi.output_type
@@ -372,6 +561,101 @@ class ProviderConversionRuleRemote(dict):
 
 
 @pulumi.output_type
+class GetAgenciesAgencyResult(dict):
+    def __init__(__self__, *,
+                 created_at: str,
+                 description: str,
+                 duration: str,
+                 expired_at: str,
+                 id: str,
+                 name: str,
+                 trust_domain_id: str,
+                 trust_domain_name: str):
+        """
+        :param str created_at: The time when the agency was created.
+        :param str description: The supplementary information about the agency.
+        :param str duration: The validity period of an agency.
+        :param str expired_at: The expiration time of agency.
+        :param str id: The agency ID.
+        :param str name: Specifies the name of agency. The name is a string of 1 to 64 characters.
+        :param str trust_domain_id: Specifies the ID of delegated user domain.
+        :param str trust_domain_name: The name of delegated user domain.
+        """
+        pulumi.set(__self__, "created_at", created_at)
+        pulumi.set(__self__, "description", description)
+        pulumi.set(__self__, "duration", duration)
+        pulumi.set(__self__, "expired_at", expired_at)
+        pulumi.set(__self__, "id", id)
+        pulumi.set(__self__, "name", name)
+        pulumi.set(__self__, "trust_domain_id", trust_domain_id)
+        pulumi.set(__self__, "trust_domain_name", trust_domain_name)
+
+    @property
+    @pulumi.getter(name="createdAt")
+    def created_at(self) -> str:
+        """
+        The time when the agency was created.
+        """
+        return pulumi.get(self, "created_at")
+
+    @property
+    @pulumi.getter
+    def description(self) -> str:
+        """
+        The supplementary information about the agency.
+        """
+        return pulumi.get(self, "description")
+
+    @property
+    @pulumi.getter
+    def duration(self) -> str:
+        """
+        The validity period of an agency.
+        """
+        return pulumi.get(self, "duration")
+
+    @property
+    @pulumi.getter(name="expiredAt")
+    def expired_at(self) -> str:
+        """
+        The expiration time of agency.
+        """
+        return pulumi.get(self, "expired_at")
+
+    @property
+    @pulumi.getter
+    def id(self) -> str:
+        """
+        The agency ID.
+        """
+        return pulumi.get(self, "id")
+
+    @property
+    @pulumi.getter
+    def name(self) -> str:
+        """
+        Specifies the name of agency. The name is a string of 1 to 64 characters.
+        """
+        return pulumi.get(self, "name")
+
+    @property
+    @pulumi.getter(name="trustDomainId")
+    def trust_domain_id(self) -> str:
+        """
+        Specifies the ID of delegated user domain.
+        """
+        return pulumi.get(self, "trust_domain_id")
+
+    @property
+    @pulumi.getter(name="trustDomainName")
+    def trust_domain_name(self) -> str:
+        """
+        The name of delegated user domain.
+        """
+        return pulumi.get(self, "trust_domain_name")
+
+
+@pulumi.output_type
 class GetGroupUserResult(dict):
     def __init__(__self__, *,
                  description: str,
@@ -387,7 +671,7 @@ class GetGroupUserResult(dict):
         :param str id: Specifies the ID of the identity group.
         :param str name: Specifies the name of the identity group.
         :param str password_expires_at: Indicates the time when the password will expire.
-               Null indicates that the password has unlimited validity.
+               If this value is not set, the password will not expire.
         :param bool password_status: Indicates the password status. True means that the password needs to be changed,
                and false means that the password is normal.
         :param str password_strength: Indicates the password strength. The value can be high, mid, or low.
@@ -437,7 +721,7 @@ class GetGroupUserResult(dict):
     def password_expires_at(self) -> str:
         """
         Indicates the time when the password will expire.
-        Null indicates that the password has unlimited validity.
+        If this value is not set, the password will not expire.
         """
         return pulumi.get(self, "password_expires_at")
 
@@ -460,15 +744,96 @@ class GetGroupUserResult(dict):
 
 
 @pulumi.output_type
+class GetPermissionsPermissionResult(dict):
+    def __init__(__self__, *,
+                 catalog: str,
+                 description: str,
+                 description_cn: str,
+                 id: str,
+                 name: str,
+                 policy: str):
+        """
+        :param str catalog: Specifies the service catalog of the permission.
+        :param str description: The description of the permission.
+        :param str description_cn: The description of the permission in Chinese.
+        :param str id: The permission ID.
+        :param str name: Specifies the permission name or filter condition.
+               + Permission name: For example, if you set this parameter to **ECS FullAccess**, information about the permission will
+               be returned.
+               + Filter condition: For example, if you set this parameter to **Administrator**, all administrator permissions that
+               meet the conditions will be returned.
+        :param str policy: The content of the permission.
+        """
+        pulumi.set(__self__, "catalog", catalog)
+        pulumi.set(__self__, "description", description)
+        pulumi.set(__self__, "description_cn", description_cn)
+        pulumi.set(__self__, "id", id)
+        pulumi.set(__self__, "name", name)
+        pulumi.set(__self__, "policy", policy)
+
+    @property
+    @pulumi.getter
+    def catalog(self) -> str:
+        """
+        Specifies the service catalog of the permission.
+        """
+        return pulumi.get(self, "catalog")
+
+    @property
+    @pulumi.getter
+    def description(self) -> str:
+        """
+        The description of the permission.
+        """
+        return pulumi.get(self, "description")
+
+    @property
+    @pulumi.getter(name="descriptionCn")
+    def description_cn(self) -> str:
+        """
+        The description of the permission in Chinese.
+        """
+        return pulumi.get(self, "description_cn")
+
+    @property
+    @pulumi.getter
+    def id(self) -> str:
+        """
+        The permission ID.
+        """
+        return pulumi.get(self, "id")
+
+    @property
+    @pulumi.getter
+    def name(self) -> str:
+        """
+        Specifies the permission name or filter condition.
+        + Permission name: For example, if you set this parameter to **ECS FullAccess**, information about the permission will
+        be returned.
+        + Filter condition: For example, if you set this parameter to **Administrator**, all administrator permissions that
+        meet the conditions will be returned.
+        """
+        return pulumi.get(self, "name")
+
+    @property
+    @pulumi.getter
+    def policy(self) -> str:
+        """
+        The content of the permission.
+        """
+        return pulumi.get(self, "policy")
+
+
+@pulumi.output_type
 class GetProjectsProjectResult(dict):
     def __init__(__self__, *,
                  enabled: bool,
                  id: str,
                  name: str):
         """
-        :param bool enabled: Whether project is enabled.
-        :param str id: The project ID.
-        :param str name: Specifies the project name to query.
+        :param bool enabled: Whether the IAM project is enabled.
+        :param str id: The IAM project ID.
+        :param str name: Specifies the IAM project name to query.
         """
         pulumi.set(__self__, "enabled", enabled)
         pulumi.set(__self__, "id", id)
@@ -478,7 +843,7 @@ class GetProjectsProjectResult(dict):
     @pulumi.getter
     def enabled(self) -> bool:
         """
-        Whether project is enabled.
+        Whether the IAM project is enabled.
         """
         return pulumi.get(self, "enabled")
 
@@ -486,7 +851,7 @@ class GetProjectsProjectResult(dict):
     @pulumi.getter
     def id(self) -> str:
         """
-        The project ID.
+        The IAM project ID.
         """
         return pulumi.get(self, "id")
 
@@ -494,9 +859,111 @@ class GetProjectsProjectResult(dict):
     @pulumi.getter
     def name(self) -> str:
         """
-        Specifies the project name to query.
+        Specifies the IAM project name to query.
         """
         return pulumi.get(self, "name")
+
+
+@pulumi.output_type
+class GetProvidersIdentityProviderResult(dict):
+    def __init__(__self__, *,
+                 description: str,
+                 id: str,
+                 links: Sequence['outputs.GetProvidersIdentityProviderLinkResult'],
+                 remote_ids: Sequence[str],
+                 sso_type: str,
+                 status: bool):
+        """
+        :param str description: The description of the identity provider.
+        :param str id: The identity provider ID which equals the identity provider name.
+        :param Sequence['GetProvidersIdentityProviderLinkArgs'] links: The links of identity provider.
+        :param Sequence[str] remote_ids: The list of federated user IDs configured for the identity provider.
+        :param str sso_type: Specifies the single sign-on type of the identity provider.
+        :param bool status: Specifies the status of the identity provider. The value can be **true** or **false**
+        """
+        pulumi.set(__self__, "description", description)
+        pulumi.set(__self__, "id", id)
+        pulumi.set(__self__, "links", links)
+        pulumi.set(__self__, "remote_ids", remote_ids)
+        pulumi.set(__self__, "sso_type", sso_type)
+        pulumi.set(__self__, "status", status)
+
+    @property
+    @pulumi.getter
+    def description(self) -> str:
+        """
+        The description of the identity provider.
+        """
+        return pulumi.get(self, "description")
+
+    @property
+    @pulumi.getter
+    def id(self) -> str:
+        """
+        The identity provider ID which equals the identity provider name.
+        """
+        return pulumi.get(self, "id")
+
+    @property
+    @pulumi.getter
+    def links(self) -> Sequence['outputs.GetProvidersIdentityProviderLinkResult']:
+        """
+        The links of identity provider.
+        """
+        return pulumi.get(self, "links")
+
+    @property
+    @pulumi.getter(name="remoteIds")
+    def remote_ids(self) -> Sequence[str]:
+        """
+        The list of federated user IDs configured for the identity provider.
+        """
+        return pulumi.get(self, "remote_ids")
+
+    @property
+    @pulumi.getter(name="ssoType")
+    def sso_type(self) -> str:
+        """
+        Specifies the single sign-on type of the identity provider.
+        """
+        return pulumi.get(self, "sso_type")
+
+    @property
+    @pulumi.getter
+    def status(self) -> bool:
+        """
+        Specifies the status of the identity provider. The value can be **true** or **false**
+        """
+        return pulumi.get(self, "status")
+
+
+@pulumi.output_type
+class GetProvidersIdentityProviderLinkResult(dict):
+    def __init__(__self__, *,
+                 protocols: str,
+                 self: str):
+        """
+        :param str protocols: The protocol resource link.
+        :param str self: The identity provider resource link.
+        """
+        pulumi.set(__self__, "protocols", protocols)
+        pulumi.set(__self__, "self", self)
+
+    @property
+    @pulumi.getter
+    def protocols(self) -> str:
+        """
+        The protocol resource link.
+        """
+        return pulumi.get(self, "protocols")
+
+    @property
+    @pulumi.getter
+    def self(self) -> str:
+        """
+        The identity provider resource link.
+        """
+        return pulumi.get(self, "self")
 
 
 @pulumi.output_type
@@ -516,7 +983,7 @@ class GetUsersUserResult(dict):
         :param str id: Indicates the ID of the User.
         :param str name: Specifies the IAM user name.
         :param str password_expires_at: Indicates the time when the password will expire.
-               Null indicates that the password has unlimited validity.
+               If this value is not set, the password will not expire.
         :param bool password_status: Indicates the password status. True means that the password needs to be changed,
                and false means that the password is normal.
         """
@@ -573,7 +1040,7 @@ class GetUsersUserResult(dict):
     def password_expires_at(self) -> str:
         """
         Indicates the time when the password will expire.
-        Null indicates that the password has unlimited validity.
+        If this value is not set, the password will not expire.
         """
         return pulumi.get(self, "password_expires_at")
 
@@ -585,5 +1052,34 @@ class GetUsersUserResult(dict):
         and false means that the password is normal.
         """
         return pulumi.get(self, "password_status")
+
+
+@pulumi.output_type
+class GetVirtualMfaDevicesVirtualMfaDeviceResult(dict):
+    def __init__(__self__, *,
+                 serial_number: str,
+                 user_id: str):
+        """
+        :param str serial_number: The virtual MFA device serial number.
+        :param str user_id: Specifies the user ID to which the virtual MFA device belongs.
+        """
+        pulumi.set(__self__, "serial_number", serial_number)
+        pulumi.set(__self__, "user_id", user_id)
+
+    @property
+    @pulumi.getter(name="serialNumber")
+    def serial_number(self) -> str:
+        """
+        The virtual MFA device serial number.
+        """
+        return pulumi.get(self, "serial_number")
+
+    @property
+    @pulumi.getter(name="userId")
+    def user_id(self) -> str:
+        """
+        Specifies the user ID to which the virtual MFA device belongs.
+        """
+        return pulumi.get(self, "user_id")
 
 

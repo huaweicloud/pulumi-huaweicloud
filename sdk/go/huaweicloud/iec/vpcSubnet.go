@@ -56,7 +56,7 @@ import (
 //
 // ## Import
 //
-// IEC vpc subnet can be imported using the `id`, e.g.
+// IEC vpc subnet can be imported using the `id`, e.g. bash
 //
 // ```sh
 //

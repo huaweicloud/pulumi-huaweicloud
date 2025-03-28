@@ -79,10 +79,8 @@ class InstanceNic(dict):
                  mac_address: Optional[str] = None,
                  port_id: Optional[str] = None):
         """
-        :param str subnet_id: Specifies the ID of subnet to attach to the instance. Changing this creates
-               a new instance.
-        :param str ip_address: Specifies a fixed IPv4 address to be used on this network. Changing this
-               creates a new instance.
+        :param str subnet_id: Specifies the ID of subnet to attach to the instance.
+        :param str ip_address: Specifies a fixed IPv4 address to be used on this network.
         :param str mac_address: The MAC address of the nic.
         :param str port_id: The port ID corresponding to the IP address.
         """
@@ -98,8 +96,7 @@ class InstanceNic(dict):
     @pulumi.getter(name="subnetId")
     def subnet_id(self) -> str:
         """
-        Specifies the ID of subnet to attach to the instance. Changing this creates
-        a new instance.
+        Specifies the ID of subnet to attach to the instance.
         """
         return pulumi.get(self, "subnet_id")
 
@@ -107,8 +104,7 @@ class InstanceNic(dict):
     @pulumi.getter(name="ipAddress")
     def ip_address(self) -> Optional[str]:
         """
-        Specifies a fixed IPv4 address to be used on this network. Changing this
-        creates a new instance.
+        Specifies a fixed IPv4 address to be used on this network.
         """
         return pulumi.get(self, "ip_address")
 

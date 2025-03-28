@@ -2,6 +2,7 @@
 // *** Do not edit by hand unless you're certain you know what you are doing! ***
 
 import * as pulumi from "@pulumi/pulumi";
+import { input as inputs, output as outputs } from "../types";
 import * as utilities from "../utilities";
 
 /**
@@ -30,7 +31,7 @@ import * as utilities from "../utilities";
  *
  * ## Import
  *
- * SMN subscription can be imported using the `id` (subscription urn), e.g.
+ * SMN subscription can be imported using the `id` (subscription urn), e.g. bash
  *
  * ```sh
  *  $ pulumi import huaweicloud:Smn/subscription:Subscription subscription_1 urn:smn:cn-north-4:0970dd7a1300f5672ff2c003c60ae115:topic_1:a2aa5a1f66df494184f4e108398de1a6
@@ -73,15 +74,33 @@ export class Subscription extends pulumi.CustomResource {
      * the format is \[+\]\[country code\]\[phone number\], e.g. +86185xxxx0000.
      * + **For a functionstage subscription**, the endpoint is a function urn.
      * + **For a functiongraph subscription**, the endpoint is a workflow ID.
+     * + **For a callnotify subscription**, the endpoint is a phone number,
+     * the format is \[+\]\[country code\]\[phone number\], e.g. +86185xxxx0000.
+     * + **For a dingding subscription**, the endpoint is an IP address of a DingTalk group chatbot.
+     * + **For a wechat subscription**, the endpoint is an IP address of a WeChat group chatbot.
+     * + **For a feishu subscription**, the endpoint is a an IP address of a Lark group chatbot.
+     * + **For a welink subscription**, the endpoint is a a WeLink group account.
      */
     public readonly endpoint!: pulumi.Output<string>;
+    /**
+     * Specifies the extension configurations.
+     * The extension structure is documented below.
+     * Changing this parameter will create a new resource.
+     */
+    public readonly extension!: pulumi.Output<outputs.Smn.SubscriptionExtension>;
+    /**
+     * The message filter policies of a subscriber.
+     * The filterPolicies structure is documented below.
+     */
+    public /*out*/ readonly filterPolicies!: pulumi.Output<outputs.Smn.SubscriptionFilterPolicy[]>;
     /**
      * Project ID of the topic creator.
      */
     public /*out*/ readonly owner!: pulumi.Output<string>;
     /**
-     * Specifies the protocol of the message endpoint. Currently, email, sms, http,
-     * https, functionstage and functiongraph are supported. Changing this parameter will create a new resource.
+     * Specifies the protocol of the message endpoint. Currently, **email**,
+     * **sms**, **http**, **https**, **functionstage**, **functiongraph**, **callnotify**, **wechat**, **dingding**,
+     * **feishu** and **welink** are supported. Changing this parameter will create a new resource.
      */
     public readonly protocol!: pulumi.Output<string>;
     /**
@@ -125,6 +144,8 @@ export class Subscription extends pulumi.CustomResource {
         if (opts.id) {
             const state = argsOrState as SubscriptionState | undefined;
             resourceInputs["endpoint"] = state ? state.endpoint : undefined;
+            resourceInputs["extension"] = state ? state.extension : undefined;
+            resourceInputs["filterPolicies"] = state ? state.filterPolicies : undefined;
             resourceInputs["owner"] = state ? state.owner : undefined;
             resourceInputs["protocol"] = state ? state.protocol : undefined;
             resourceInputs["region"] = state ? state.region : undefined;
@@ -144,10 +165,12 @@ export class Subscription extends pulumi.CustomResource {
                 throw new Error("Missing required property 'topicUrn'");
             }
             resourceInputs["endpoint"] = args ? args.endpoint : undefined;
+            resourceInputs["extension"] = args ? args.extension : undefined;
             resourceInputs["protocol"] = args ? args.protocol : undefined;
             resourceInputs["region"] = args ? args.region : undefined;
             resourceInputs["remark"] = args ? args.remark : undefined;
             resourceInputs["topicUrn"] = args ? args.topicUrn : undefined;
+            resourceInputs["filterPolicies"] = undefined /*out*/;
             resourceInputs["owner"] = undefined /*out*/;
             resourceInputs["status"] = undefined /*out*/;
             resourceInputs["subscriptionUrn"] = undefined /*out*/;
@@ -170,15 +193,33 @@ export interface SubscriptionState {
      * the format is \[+\]\[country code\]\[phone number\], e.g. +86185xxxx0000.
      * + **For a functionstage subscription**, the endpoint is a function urn.
      * + **For a functiongraph subscription**, the endpoint is a workflow ID.
+     * + **For a callnotify subscription**, the endpoint is a phone number,
+     * the format is \[+\]\[country code\]\[phone number\], e.g. +86185xxxx0000.
+     * + **For a dingding subscription**, the endpoint is an IP address of a DingTalk group chatbot.
+     * + **For a wechat subscription**, the endpoint is an IP address of a WeChat group chatbot.
+     * + **For a feishu subscription**, the endpoint is a an IP address of a Lark group chatbot.
+     * + **For a welink subscription**, the endpoint is a a WeLink group account.
      */
     endpoint?: pulumi.Input<string>;
+    /**
+     * Specifies the extension configurations.
+     * The extension structure is documented below.
+     * Changing this parameter will create a new resource.
+     */
+    extension?: pulumi.Input<inputs.Smn.SubscriptionExtension>;
+    /**
+     * The message filter policies of a subscriber.
+     * The filterPolicies structure is documented below.
+     */
+    filterPolicies?: pulumi.Input<pulumi.Input<inputs.Smn.SubscriptionFilterPolicy>[]>;
     /**
      * Project ID of the topic creator.
      */
     owner?: pulumi.Input<string>;
     /**
-     * Specifies the protocol of the message endpoint. Currently, email, sms, http,
-     * https, functionstage and functiongraph are supported. Changing this parameter will create a new resource.
+     * Specifies the protocol of the message endpoint. Currently, **email**,
+     * **sms**, **http**, **https**, **functionstage**, **functiongraph**, **callnotify**, **wechat**, **dingding**,
+     * **feishu** and **welink** are supported. Changing this parameter will create a new resource.
      */
     protocol?: pulumi.Input<string>;
     /**
@@ -222,11 +263,24 @@ export interface SubscriptionArgs {
      * the format is \[+\]\[country code\]\[phone number\], e.g. +86185xxxx0000.
      * + **For a functionstage subscription**, the endpoint is a function urn.
      * + **For a functiongraph subscription**, the endpoint is a workflow ID.
+     * + **For a callnotify subscription**, the endpoint is a phone number,
+     * the format is \[+\]\[country code\]\[phone number\], e.g. +86185xxxx0000.
+     * + **For a dingding subscription**, the endpoint is an IP address of a DingTalk group chatbot.
+     * + **For a wechat subscription**, the endpoint is an IP address of a WeChat group chatbot.
+     * + **For a feishu subscription**, the endpoint is a an IP address of a Lark group chatbot.
+     * + **For a welink subscription**, the endpoint is a a WeLink group account.
      */
     endpoint: pulumi.Input<string>;
     /**
-     * Specifies the protocol of the message endpoint. Currently, email, sms, http,
-     * https, functionstage and functiongraph are supported. Changing this parameter will create a new resource.
+     * Specifies the extension configurations.
+     * The extension structure is documented below.
+     * Changing this parameter will create a new resource.
+     */
+    extension?: pulumi.Input<inputs.Smn.SubscriptionExtension>;
+    /**
+     * Specifies the protocol of the message endpoint. Currently, **email**,
+     * **sms**, **http**, **https**, **functionstage**, **functiongraph**, **callnotify**, **wechat**, **dingding**,
+     * **feishu** and **welink** are supported. Changing this parameter will create a new resource.
      */
     protocol: pulumi.Input<string>;
     /**

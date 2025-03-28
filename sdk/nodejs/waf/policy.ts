@@ -9,22 +9,7 @@ import * as utilities from "../utilities";
  * Manages a WAF policy resource within HuaweiCloud.
  *
  * > **NOTE:** All WAF resources depend on WAF instances, and the WAF instances need to be purchased before they can be
- * used. The policy resource can be used in Cloud Mode, Dedicated Mode and ELB Mode.
- *
- * ## Example Usage
- *
- * ```typescript
- * import * as pulumi from "@pulumi/pulumi";
- * import * as pulumi from "@huaweicloudos/pulumi";
- *
- * const config = new pulumi.Config();
- * const enterpriseProjectId = config.requireObject("enterpriseProjectId");
- * const policy1 = new huaweicloud.waf.Policy("policy1", {
- *     protectionMode: "log",
- *     level: 2,
- *     enterpriseProjectId: enterpriseProjectId,
- * });
- * ```
+ * used. The policy resource can be used in Cloud Mode and Dedicated Mode.
  *
  * ## Import
  *
@@ -69,46 +54,75 @@ export class Policy extends pulumi.CustomResource {
     }
 
     /**
+     * The protection switches. The options object structure is documented below.
+     */
+    public /*out*/ readonly bindHosts!: pulumi.Output<outputs.Waf.PolicyBindHost[]>;
+    /**
+     * Specifies the deep inspection in basic web protection. Defaults to **false**.
+     */
+    public readonly deepInspection!: pulumi.Output<boolean>;
+    /**
      * Specifies the enterprise project ID of WAF policy.
+     * For enterprise users, if omitted, default enterprise project will be used.
      * Changing this parameter will create a new resource.
      */
     public readonly enterpriseProjectId!: pulumi.Output<string | undefined>;
     /**
-     * The detection mode in Precise Protection.
-     * + `true`: full detection, Full detection finishes all threat detections before blocking requests that meet Precise
-     * Protection specified conditions.
-     * + `false`: instant detection. Instant detection immediately ends threat detection after blocking a request that
-     * meets Precise Protection specified conditions.
+     * Specifies the detection mode in precise protection. Defaults to **false**.
+     * + **false**: Instant detection. When a request hits the blocking conditions in precise protection, WAF terminates
+     * checks and blocks the request immediately.
+     * + **true**: Full detection. If a request hits the blocking conditions in precise protection, WAF does not block the
+     * request immediately. Instead, it blocks the requests until other checks are finished.
      */
-    public /*out*/ readonly fullDetection!: pulumi.Output<boolean>;
+    public readonly fullDetection!: pulumi.Output<boolean | undefined>;
+    /**
+     * Specifies the header inspection in basic web protection. Defaults to **false**.
+     */
+    public readonly headerInspection!: pulumi.Output<boolean>;
     /**
      * Specifies the protection level. Defaults to `2`. Valid values are:
-     * + `1`: low
-     * + `2`: medium
-     * + `3`: high
+     * + `1`: Low. At this protection level, WAF blocks only requests with obvious attack features. If a large number of
+     * false alarms have been reported, this value is recommended.
+     * + `2`: Medium. This protection level meets web protection requirements in most scenarios.
+     * + `3`: High. At this protection level, WAF provides the finest granular protection and can intercept attacks with
+     * complex bypass features, such as Jolokia cyberattacks, common gateway interface (CGI) vulnerability detection,
+     * and Druid SQL injection attacks.
      */
     public readonly level!: pulumi.Output<number>;
     /**
-     * Specifies the policy name. The maximum length is 256 characters. Only digits, letters,
-     * underscores(_), and hyphens(-) are allowed.
+     * Specifies the policy name. The maximum length is `256` characters. Only digits, letters,
+     * underscores (_), and hyphens (-) are allowed.
      */
     public readonly name!: pulumi.Output<string>;
     /**
-     * The protection switches. The options object structure is documented below.
+     * Specifies the switch options of the protection item in the policy.
+     * The options structure is documented below.
      */
-    public /*out*/ readonly options!: pulumi.Output<outputs.Waf.PolicyOption[]>;
+    public readonly options!: pulumi.Output<outputs.Waf.PolicyOption[]>;
     /**
-     * Specifies the protective action after a rule is matched. Defaults to `log`.
+     * Specifies the protective action after a rule is matched. Defaults to **log**.
      * Valid values are:
-     * + `block`: WAF blocks and logs detected attacks.
-     * + `log`: WAF logs detected attacks only.
+     * + **block**: WAF blocks and logs detected attacks.
+     * + **log**: WAF logs detected attacks only.
      */
     public readonly protectionMode!: pulumi.Output<string>;
     /**
-     * The region in which to create the WAF policy resource. If omitted, the
+     * Specifies the region in which to create the WAF policy resource. If omitted, the
      * provider-level region will be used. Changing this setting will push a new certificate.
      */
     public readonly region!: pulumi.Output<string>;
+    /**
+     * Specifies the protective actions for each rule in anti-crawler protection.
+     * Defaults to **log**. Valid values are:
+     * + **block**: WAF blocks discovered attacks.
+     * + **log**: WAF only logs discovered attacks.
+     */
+    public readonly robotAction!: pulumi.Output<string>;
+    /**
+     * Specifies the shiro decryption check in basic web protection.
+     * Defaults to **false**.
+     */
+    public readonly shiroDecryptionCheck!: pulumi.Output<boolean>;
 
     /**
      * Create a Policy resource with the given unique name, arguments, and options.
@@ -123,22 +137,32 @@ export class Policy extends pulumi.CustomResource {
         opts = opts || {};
         if (opts.id) {
             const state = argsOrState as PolicyState | undefined;
+            resourceInputs["bindHosts"] = state ? state.bindHosts : undefined;
+            resourceInputs["deepInspection"] = state ? state.deepInspection : undefined;
             resourceInputs["enterpriseProjectId"] = state ? state.enterpriseProjectId : undefined;
             resourceInputs["fullDetection"] = state ? state.fullDetection : undefined;
+            resourceInputs["headerInspection"] = state ? state.headerInspection : undefined;
             resourceInputs["level"] = state ? state.level : undefined;
             resourceInputs["name"] = state ? state.name : undefined;
             resourceInputs["options"] = state ? state.options : undefined;
             resourceInputs["protectionMode"] = state ? state.protectionMode : undefined;
             resourceInputs["region"] = state ? state.region : undefined;
+            resourceInputs["robotAction"] = state ? state.robotAction : undefined;
+            resourceInputs["shiroDecryptionCheck"] = state ? state.shiroDecryptionCheck : undefined;
         } else {
             const args = argsOrState as PolicyArgs | undefined;
+            resourceInputs["deepInspection"] = args ? args.deepInspection : undefined;
             resourceInputs["enterpriseProjectId"] = args ? args.enterpriseProjectId : undefined;
+            resourceInputs["fullDetection"] = args ? args.fullDetection : undefined;
+            resourceInputs["headerInspection"] = args ? args.headerInspection : undefined;
             resourceInputs["level"] = args ? args.level : undefined;
             resourceInputs["name"] = args ? args.name : undefined;
+            resourceInputs["options"] = args ? args.options : undefined;
             resourceInputs["protectionMode"] = args ? args.protectionMode : undefined;
             resourceInputs["region"] = args ? args.region : undefined;
-            resourceInputs["fullDetection"] = undefined /*out*/;
-            resourceInputs["options"] = undefined /*out*/;
+            resourceInputs["robotAction"] = args ? args.robotAction : undefined;
+            resourceInputs["shiroDecryptionCheck"] = args ? args.shiroDecryptionCheck : undefined;
+            resourceInputs["bindHosts"] = undefined /*out*/;
         }
         opts = pulumi.mergeOptions(utilities.resourceOptsDefaults(), opts);
         super(Policy.__pulumiType, name, resourceInputs, opts);
@@ -150,46 +174,75 @@ export class Policy extends pulumi.CustomResource {
  */
 export interface PolicyState {
     /**
+     * The protection switches. The options object structure is documented below.
+     */
+    bindHosts?: pulumi.Input<pulumi.Input<inputs.Waf.PolicyBindHost>[]>;
+    /**
+     * Specifies the deep inspection in basic web protection. Defaults to **false**.
+     */
+    deepInspection?: pulumi.Input<boolean>;
+    /**
      * Specifies the enterprise project ID of WAF policy.
+     * For enterprise users, if omitted, default enterprise project will be used.
      * Changing this parameter will create a new resource.
      */
     enterpriseProjectId?: pulumi.Input<string>;
     /**
-     * The detection mode in Precise Protection.
-     * + `true`: full detection, Full detection finishes all threat detections before blocking requests that meet Precise
-     * Protection specified conditions.
-     * + `false`: instant detection. Instant detection immediately ends threat detection after blocking a request that
-     * meets Precise Protection specified conditions.
+     * Specifies the detection mode in precise protection. Defaults to **false**.
+     * + **false**: Instant detection. When a request hits the blocking conditions in precise protection, WAF terminates
+     * checks and blocks the request immediately.
+     * + **true**: Full detection. If a request hits the blocking conditions in precise protection, WAF does not block the
+     * request immediately. Instead, it blocks the requests until other checks are finished.
      */
     fullDetection?: pulumi.Input<boolean>;
     /**
+     * Specifies the header inspection in basic web protection. Defaults to **false**.
+     */
+    headerInspection?: pulumi.Input<boolean>;
+    /**
      * Specifies the protection level. Defaults to `2`. Valid values are:
-     * + `1`: low
-     * + `2`: medium
-     * + `3`: high
+     * + `1`: Low. At this protection level, WAF blocks only requests with obvious attack features. If a large number of
+     * false alarms have been reported, this value is recommended.
+     * + `2`: Medium. This protection level meets web protection requirements in most scenarios.
+     * + `3`: High. At this protection level, WAF provides the finest granular protection and can intercept attacks with
+     * complex bypass features, such as Jolokia cyberattacks, common gateway interface (CGI) vulnerability detection,
+     * and Druid SQL injection attacks.
      */
     level?: pulumi.Input<number>;
     /**
-     * Specifies the policy name. The maximum length is 256 characters. Only digits, letters,
-     * underscores(_), and hyphens(-) are allowed.
+     * Specifies the policy name. The maximum length is `256` characters. Only digits, letters,
+     * underscores (_), and hyphens (-) are allowed.
      */
     name?: pulumi.Input<string>;
     /**
-     * The protection switches. The options object structure is documented below.
+     * Specifies the switch options of the protection item in the policy.
+     * The options structure is documented below.
      */
     options?: pulumi.Input<pulumi.Input<inputs.Waf.PolicyOption>[]>;
     /**
-     * Specifies the protective action after a rule is matched. Defaults to `log`.
+     * Specifies the protective action after a rule is matched. Defaults to **log**.
      * Valid values are:
-     * + `block`: WAF blocks and logs detected attacks.
-     * + `log`: WAF logs detected attacks only.
+     * + **block**: WAF blocks and logs detected attacks.
+     * + **log**: WAF logs detected attacks only.
      */
     protectionMode?: pulumi.Input<string>;
     /**
-     * The region in which to create the WAF policy resource. If omitted, the
+     * Specifies the region in which to create the WAF policy resource. If omitted, the
      * provider-level region will be used. Changing this setting will push a new certificate.
      */
     region?: pulumi.Input<string>;
+    /**
+     * Specifies the protective actions for each rule in anti-crawler protection.
+     * Defaults to **log**. Valid values are:
+     * + **block**: WAF blocks discovered attacks.
+     * + **log**: WAF only logs discovered attacks.
+     */
+    robotAction?: pulumi.Input<string>;
+    /**
+     * Specifies the shiro decryption check in basic web protection.
+     * Defaults to **false**.
+     */
+    shiroDecryptionCheck?: pulumi.Input<boolean>;
 }
 
 /**
@@ -197,32 +250,69 @@ export interface PolicyState {
  */
 export interface PolicyArgs {
     /**
+     * Specifies the deep inspection in basic web protection. Defaults to **false**.
+     */
+    deepInspection?: pulumi.Input<boolean>;
+    /**
      * Specifies the enterprise project ID of WAF policy.
+     * For enterprise users, if omitted, default enterprise project will be used.
      * Changing this parameter will create a new resource.
      */
     enterpriseProjectId?: pulumi.Input<string>;
     /**
+     * Specifies the detection mode in precise protection. Defaults to **false**.
+     * + **false**: Instant detection. When a request hits the blocking conditions in precise protection, WAF terminates
+     * checks and blocks the request immediately.
+     * + **true**: Full detection. If a request hits the blocking conditions in precise protection, WAF does not block the
+     * request immediately. Instead, it blocks the requests until other checks are finished.
+     */
+    fullDetection?: pulumi.Input<boolean>;
+    /**
+     * Specifies the header inspection in basic web protection. Defaults to **false**.
+     */
+    headerInspection?: pulumi.Input<boolean>;
+    /**
      * Specifies the protection level. Defaults to `2`. Valid values are:
-     * + `1`: low
-     * + `2`: medium
-     * + `3`: high
+     * + `1`: Low. At this protection level, WAF blocks only requests with obvious attack features. If a large number of
+     * false alarms have been reported, this value is recommended.
+     * + `2`: Medium. This protection level meets web protection requirements in most scenarios.
+     * + `3`: High. At this protection level, WAF provides the finest granular protection and can intercept attacks with
+     * complex bypass features, such as Jolokia cyberattacks, common gateway interface (CGI) vulnerability detection,
+     * and Druid SQL injection attacks.
      */
     level?: pulumi.Input<number>;
     /**
-     * Specifies the policy name. The maximum length is 256 characters. Only digits, letters,
-     * underscores(_), and hyphens(-) are allowed.
+     * Specifies the policy name. The maximum length is `256` characters. Only digits, letters,
+     * underscores (_), and hyphens (-) are allowed.
      */
     name?: pulumi.Input<string>;
     /**
-     * Specifies the protective action after a rule is matched. Defaults to `log`.
+     * Specifies the switch options of the protection item in the policy.
+     * The options structure is documented below.
+     */
+    options?: pulumi.Input<pulumi.Input<inputs.Waf.PolicyOption>[]>;
+    /**
+     * Specifies the protective action after a rule is matched. Defaults to **log**.
      * Valid values are:
-     * + `block`: WAF blocks and logs detected attacks.
-     * + `log`: WAF logs detected attacks only.
+     * + **block**: WAF blocks and logs detected attacks.
+     * + **log**: WAF logs detected attacks only.
      */
     protectionMode?: pulumi.Input<string>;
     /**
-     * The region in which to create the WAF policy resource. If omitted, the
+     * Specifies the region in which to create the WAF policy resource. If omitted, the
      * provider-level region will be used. Changing this setting will push a new certificate.
      */
     region?: pulumi.Input<string>;
+    /**
+     * Specifies the protective actions for each rule in anti-crawler protection.
+     * Defaults to **log**. Valid values are:
+     * + **block**: WAF blocks discovered attacks.
+     * + **log**: WAF only logs discovered attacks.
+     */
+    robotAction?: pulumi.Input<string>;
+    /**
+     * Specifies the shiro decryption check in basic web protection.
+     * Defaults to **false**.
+     */
+    shiroDecryptionCheck?: pulumi.Input<boolean>;
 }

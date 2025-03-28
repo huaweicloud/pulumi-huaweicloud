@@ -6,6 +6,8 @@ import { input as inputs, output as outputs } from "../types";
 import * as utilities from "../utilities";
 
 /**
+ * !> **WARNING:** It has been deprecated, use `huaweicloudCcmCertificates` to get the CCM SSL certificates.
+ *
  * Use this data source to get the list of SCM certificates.
  *
  * ## Example Usage

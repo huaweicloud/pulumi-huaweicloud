@@ -52,7 +52,7 @@ class GetVpcsResult:
     @pulumi.getter
     def cidr(self) -> Optional[str]:
         """
-        Indicates the cidr block of the VPC.
+        The cidr block of the VPC.
         """
         return pulumi.get(self, "cidr")
 
@@ -60,7 +60,7 @@ class GetVpcsResult:
     @pulumi.getter(name="enterpriseProjectId")
     def enterprise_project_id(self) -> Optional[str]:
         """
-        Indicates the the enterprise project ID of the VPC.
+        The the enterprise project ID of the VPC.
         """
         return pulumi.get(self, "enterprise_project_id")
 
@@ -68,7 +68,7 @@ class GetVpcsResult:
     @pulumi.getter
     def id(self) -> str:
         """
-        Indicates the ID of the VPC.
+        The ID of the VPC.
         """
         return pulumi.get(self, "id")
 
@@ -76,7 +76,7 @@ class GetVpcsResult:
     @pulumi.getter
     def name(self) -> Optional[str]:
         """
-        Indicates the name of the VPC.
+        The name of the VPC.
         """
         return pulumi.get(self, "name")
 
@@ -89,7 +89,7 @@ class GetVpcsResult:
     @pulumi.getter
     def status(self) -> Optional[str]:
         """
-        Indicates the current status of the VPC.
+        The current status of the VPC.
         """
         return pulumi.get(self, "status")
 
@@ -97,7 +97,7 @@ class GetVpcsResult:
     @pulumi.getter
     def tags(self) -> Optional[Mapping[str, str]]:
         """
-        Indicates the key/value pairs which associated with the VPC.
+        The key/value pairs which associated with the VPC.
         """
         return pulumi.get(self, "tags")
 
@@ -105,7 +105,7 @@ class GetVpcsResult:
     @pulumi.getter
     def vpcs(self) -> Sequence['outputs.GetVpcsVpcResult']:
         """
-        Indicates a list of all VPCs found. Structure is documented below.
+        The list of all VPCs found. Structure is documented below.
         """
         return pulumi.get(self, "vpcs")
 

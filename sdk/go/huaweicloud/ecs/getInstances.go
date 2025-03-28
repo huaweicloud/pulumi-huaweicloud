@@ -58,6 +58,8 @@ type GetInstancesArgs struct {
 	AvailabilityZone *string `pulumi:"availabilityZone"`
 	// Specifies the enterprise project ID.
 	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
+	// Specifies the IPv4 addresses of the ECS.
+	FixedIpV4 *string `pulumi:"fixedIpV4"`
 	// Specifies the flavor ID.
 	FlavorId *string `pulumi:"flavorId"`
 	// Specifies the flavor name of the instance.
@@ -79,6 +81,8 @@ type GetInstancesArgs struct {
 	// + **SHUTOFF**: The instance has been properly stopped.
 	// + **ERROR**: An error has occurred on the instance.
 	Status *string `pulumi:"status"`
+	// Specifies the tags to qurey the instances.
+	Tags map[string]string `pulumi:"tags"`
 }
 
 // A collection of values returned by getInstances.
@@ -87,6 +91,8 @@ type GetInstancesResult struct {
 	AvailabilityZone *string `pulumi:"availabilityZone"`
 	// The enterprise project ID.
 	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
+	// The fixed IPv4 address of the instance on this network.
+	FixedIpV4 *string `pulumi:"fixedIpV4"`
 	// The flavor ID.
 	FlavorId *string `pulumi:"flavorId"`
 	// The flavor name of the instance.
@@ -105,6 +111,8 @@ type GetInstancesResult struct {
 	Region *string `pulumi:"region"`
 	// The instance status.
 	Status *string `pulumi:"status"`
+	// The key/value pairs to associate with the instance.
+	Tags map[string]string `pulumi:"tags"`
 }
 
 func GetInstancesOutput(ctx *pulumi.Context, args GetInstancesOutputArgs, opts ...pulumi.InvokeOption) GetInstancesResultOutput {
@@ -127,6 +135,8 @@ type GetInstancesOutputArgs struct {
 	AvailabilityZone pulumi.StringPtrInput `pulumi:"availabilityZone"`
 	// Specifies the enterprise project ID.
 	EnterpriseProjectId pulumi.StringPtrInput `pulumi:"enterpriseProjectId"`
+	// Specifies the IPv4 addresses of the ECS.
+	FixedIpV4 pulumi.StringPtrInput `pulumi:"fixedIpV4"`
 	// Specifies the flavor ID.
 	FlavorId pulumi.StringPtrInput `pulumi:"flavorId"`
 	// Specifies the flavor name of the instance.
@@ -148,6 +158,8 @@ type GetInstancesOutputArgs struct {
 	// + **SHUTOFF**: The instance has been properly stopped.
 	// + **ERROR**: An error has occurred on the instance.
 	Status pulumi.StringPtrInput `pulumi:"status"`
+	// Specifies the tags to qurey the instances.
+	Tags pulumi.StringMapInput `pulumi:"tags"`
 }
 
 func (GetInstancesOutputArgs) ElementType() reflect.Type {
@@ -177,6 +189,11 @@ func (o GetInstancesResultOutput) AvailabilityZone() pulumi.StringPtrOutput {
 // The enterprise project ID.
 func (o GetInstancesResultOutput) EnterpriseProjectId() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v GetInstancesResult) *string { return v.EnterpriseProjectId }).(pulumi.StringPtrOutput)
+}
+
+// The fixed IPv4 address of the instance on this network.
+func (o GetInstancesResultOutput) FixedIpV4() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v GetInstancesResult) *string { return v.FixedIpV4 }).(pulumi.StringPtrOutput)
 }
 
 // The flavor ID.
@@ -225,6 +242,11 @@ func (o GetInstancesResultOutput) Region() pulumi.StringPtrOutput {
 // The instance status.
 func (o GetInstancesResultOutput) Status() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v GetInstancesResult) *string { return v.Status }).(pulumi.StringPtrOutput)
+}
+
+// The key/value pairs to associate with the instance.
+func (o GetInstancesResultOutput) Tags() pulumi.StringMapOutput {
+	return o.ApplyT(func(v GetInstancesResult) map[string]string { return v.Tags }).(pulumi.StringMapOutput)
 }
 
 func init() {

@@ -8,45 +8,13 @@ import * as utilities from "../utilities";
  * Manages an SNAT rule resource of the **public** NAT within HuaweiCloud.
  *
  * ## Example Usage
- * ### SNAT rule in VPC scenario
- *
- * ```typescript
- * import * as pulumi from "@pulumi/pulumi";
- * import * as pulumi from "@huaweicloudos/pulumi";
- *
- * const config = new pulumi.Config();
- * const gatewayId = config.requireObject("gatewayId");
- * const publicipId = config.requireObject("publicipId");
- * const subentId = config.requireObject("subentId");
- * const test = new huaweicloud.nat.SnatRule("test", {
- *     natGatewayId: gatewayId,
- *     floatingIpId: publicipId,
- *     subnetId: subentId,
- * });
- * ```
- * ### SNAT rule in DC (Direct Connect) scenario
- *
- * ```typescript
- * import * as pulumi from "@pulumi/pulumi";
- * import * as pulumi from "@huaweicloudos/pulumi";
- *
- * const config = new pulumi.Config();
- * const gatewayId = config.requireObject("gatewayId");
- * const publicipId = config.requireObject("publicipId");
- * const test = new huaweicloud.nat.SnatRule("test", {
- *     natGatewayId: gatewayId,
- *     floatingIpId: publicipId,
- *     sourceType: 1,
- *     cidr: "192.168.10.0/24",
- * });
- * ```
  *
  * ## Import
  *
- * SNAT rules can be imported using their `id`, e.g. bash
+ * The SNAT rule can be imported using `id`, e.g. bash
  *
  * ```sh
- *  $ pulumi import huaweicloud:Nat/snatRule:SnatRule test 9e0713cb-0a2f-484e-8c7d-daecbb61dbe4
+ *  $ pulumi import huaweicloud:Nat/snatRule:SnatRule test <id>
  * ```
  */
 export class SnatRule extends pulumi.CustomResource {
@@ -83,6 +51,10 @@ export class SnatRule extends pulumi.CustomResource {
      */
     public readonly cidr!: pulumi.Output<string | undefined>;
     /**
+     * The creation time of the SNAT rule.
+     */
+    public /*out*/ readonly createdAt!: pulumi.Output<string>;
+    /**
      * Specifies the description of the SNAT rule.
      * The value is a string of no more than `255` characters, and angle brackets (<>) are not allowed.
      */
@@ -96,6 +68,19 @@ export class SnatRule extends pulumi.CustomResource {
      * Multiple floating IPs are separated using commas (,). The number of floating IP IDs cannot exceed `20`.
      */
     public readonly floatingIpId!: pulumi.Output<string>;
+    /**
+     * The frozen EIP associated with the SNAT rule.
+     */
+    public /*out*/ readonly freezedIpAddress!: pulumi.Output<string>;
+    /**
+     * The global EIP addresses (separated by commas) connected by SNAT rule.
+     */
+    public /*out*/ readonly globalEipAddress!: pulumi.Output<string>;
+    /**
+     * Specifies the IDs of global EIPs connected by SNAT rule.  
+     * Multiple global EIPs are separated using commas (,). The number of global EIP IDs cannot exceed `20`.
+     */
+    public readonly globalEipId!: pulumi.Output<string>;
     /**
      * Specifies the ID of the gateway to which the SNAT rule belongs.  
      * Changing this will create a new resource.
@@ -112,7 +97,7 @@ export class SnatRule extends pulumi.CustomResource {
     public readonly region!: pulumi.Output<string>;
     /**
      * Specifies the resource scenario.  
-     * The valid values are **0** (VPC scenario) and **1** (Direct Connect scenario), and the default value is `0`.
+     * The valid values are `0` (VPC scenario) and `1` (Direct Connect scenario), and the default value is `0`.
      * Only `cidr` can be specified over a Direct Connect connection. Changing this will create a new resource.
      */
     public readonly sourceType!: pulumi.Output<number | undefined>;
@@ -140,9 +125,13 @@ export class SnatRule extends pulumi.CustomResource {
         if (opts.id) {
             const state = argsOrState as SnatRuleState | undefined;
             resourceInputs["cidr"] = state ? state.cidr : undefined;
+            resourceInputs["createdAt"] = state ? state.createdAt : undefined;
             resourceInputs["description"] = state ? state.description : undefined;
             resourceInputs["floatingIpAddress"] = state ? state.floatingIpAddress : undefined;
             resourceInputs["floatingIpId"] = state ? state.floatingIpId : undefined;
+            resourceInputs["freezedIpAddress"] = state ? state.freezedIpAddress : undefined;
+            resourceInputs["globalEipAddress"] = state ? state.globalEipAddress : undefined;
+            resourceInputs["globalEipId"] = state ? state.globalEipId : undefined;
             resourceInputs["natGatewayId"] = state ? state.natGatewayId : undefined;
             resourceInputs["networkId"] = state ? state.networkId : undefined;
             resourceInputs["region"] = state ? state.region : undefined;
@@ -151,21 +140,22 @@ export class SnatRule extends pulumi.CustomResource {
             resourceInputs["subnetId"] = state ? state.subnetId : undefined;
         } else {
             const args = argsOrState as SnatRuleArgs | undefined;
-            if ((!args || args.floatingIpId === undefined) && !opts.urn) {
-                throw new Error("Missing required property 'floatingIpId'");
-            }
             if ((!args || args.natGatewayId === undefined) && !opts.urn) {
                 throw new Error("Missing required property 'natGatewayId'");
             }
             resourceInputs["cidr"] = args ? args.cidr : undefined;
             resourceInputs["description"] = args ? args.description : undefined;
             resourceInputs["floatingIpId"] = args ? args.floatingIpId : undefined;
+            resourceInputs["globalEipId"] = args ? args.globalEipId : undefined;
             resourceInputs["natGatewayId"] = args ? args.natGatewayId : undefined;
             resourceInputs["networkId"] = args ? args.networkId : undefined;
             resourceInputs["region"] = args ? args.region : undefined;
             resourceInputs["sourceType"] = args ? args.sourceType : undefined;
             resourceInputs["subnetId"] = args ? args.subnetId : undefined;
+            resourceInputs["createdAt"] = undefined /*out*/;
             resourceInputs["floatingIpAddress"] = undefined /*out*/;
+            resourceInputs["freezedIpAddress"] = undefined /*out*/;
+            resourceInputs["globalEipAddress"] = undefined /*out*/;
             resourceInputs["status"] = undefined /*out*/;
         }
         opts = pulumi.mergeOptions(utilities.resourceOptsDefaults(), opts);
@@ -183,6 +173,10 @@ export interface SnatRuleState {
      */
     cidr?: pulumi.Input<string>;
     /**
+     * The creation time of the SNAT rule.
+     */
+    createdAt?: pulumi.Input<string>;
+    /**
      * Specifies the description of the SNAT rule.
      * The value is a string of no more than `255` characters, and angle brackets (<>) are not allowed.
      */
@@ -196,6 +190,19 @@ export interface SnatRuleState {
      * Multiple floating IPs are separated using commas (,). The number of floating IP IDs cannot exceed `20`.
      */
     floatingIpId?: pulumi.Input<string>;
+    /**
+     * The frozen EIP associated with the SNAT rule.
+     */
+    freezedIpAddress?: pulumi.Input<string>;
+    /**
+     * The global EIP addresses (separated by commas) connected by SNAT rule.
+     */
+    globalEipAddress?: pulumi.Input<string>;
+    /**
+     * Specifies the IDs of global EIPs connected by SNAT rule.  
+     * Multiple global EIPs are separated using commas (,). The number of global EIP IDs cannot exceed `20`.
+     */
+    globalEipId?: pulumi.Input<string>;
     /**
      * Specifies the ID of the gateway to which the SNAT rule belongs.  
      * Changing this will create a new resource.
@@ -212,7 +219,7 @@ export interface SnatRuleState {
     region?: pulumi.Input<string>;
     /**
      * Specifies the resource scenario.  
-     * The valid values are **0** (VPC scenario) and **1** (Direct Connect scenario), and the default value is `0`.
+     * The valid values are `0` (VPC scenario) and `1` (Direct Connect scenario), and the default value is `0`.
      * Only `cidr` can be specified over a Direct Connect connection. Changing this will create a new resource.
      */
     sourceType?: pulumi.Input<number>;
@@ -245,7 +252,12 @@ export interface SnatRuleArgs {
      * Specifies the IDs of floating IPs connected by SNAT rule.  
      * Multiple floating IPs are separated using commas (,). The number of floating IP IDs cannot exceed `20`.
      */
-    floatingIpId: pulumi.Input<string>;
+    floatingIpId?: pulumi.Input<string>;
+    /**
+     * Specifies the IDs of global EIPs connected by SNAT rule.  
+     * Multiple global EIPs are separated using commas (,). The number of global EIP IDs cannot exceed `20`.
+     */
+    globalEipId?: pulumi.Input<string>;
     /**
      * Specifies the ID of the gateway to which the SNAT rule belongs.  
      * Changing this will create a new resource.
@@ -262,7 +274,7 @@ export interface SnatRuleArgs {
     region?: pulumi.Input<string>;
     /**
      * Specifies the resource scenario.  
-     * The valid values are **0** (VPC scenario) and **1** (Direct Connect scenario), and the default value is `0`.
+     * The valid values are `0` (VPC scenario) and `1` (Direct Connect scenario), and the default value is `0`.
      * Only `cidr` can be specified over a Direct Connect connection. Changing this will create a new resource.
      */
     sourceType?: pulumi.Input<number>;

@@ -114,7 +114,7 @@ class AlarmruleCondition(dict):
         :param str comparison_operator: Specifies the comparison condition of alarm thresholds. The value can be >,
                =, <, >=, or <=.
         :param int count: Specifies the number of consecutive occurrence times. The value ranges from 1 to 5.
-        :param str filter: Specifies the data rollup methods. The value can be max, min, average, sum, and vaiance.
+        :param str filter: Specifies the data rollup methods. The value can be max, min, average, sum, and variance.
         :param int period: Specifies the alarm checking period in seconds. The value can be 0, 1, 300, 1200, 3600, 14400,
                and 86400.
         :param float value: Specifies the alarm threshold. The value ranges from 0 to Number of
@@ -175,7 +175,7 @@ class AlarmruleCondition(dict):
     @pulumi.getter
     def filter(self) -> str:
         """
-        Specifies the data rollup methods. The value can be max, min, average, sum, and vaiance.
+        Specifies the data rollup methods. The value can be max, min, average, sum, and variance.
         """
         return pulumi.get(self, "filter")
 

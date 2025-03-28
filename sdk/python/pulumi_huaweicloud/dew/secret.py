@@ -14,57 +14,115 @@ __all__ = ['SecretArgs', 'Secret']
 @pulumi.input_type
 class SecretArgs:
     def __init__(__self__, *,
-                 secret_text: pulumi.Input[str],
                  description: Optional[pulumi.Input[str]] = None,
+                 enterprise_project_id: Optional[pulumi.Input[str]] = None,
+                 event_subscriptions: Optional[pulumi.Input[str]] = None,
+                 expire_time: Optional[pulumi.Input[int]] = None,
                  kms_key_id: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
+                 secret_binary: Optional[pulumi.Input[str]] = None,
+                 secret_text: Optional[pulumi.Input[str]] = None,
+                 secret_type: Optional[pulumi.Input[str]] = None,
                  tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None):
         """
         The set of arguments for constructing a Secret resource.
-        :param pulumi.Input[str] secret_text: The plaintext of a secret in text format. The maximum size is 32 KB.
-        :param pulumi.Input[str] description: The description of a secret.
-        :param pulumi.Input[str] name: The secret name. The maximum length is 64 characters.
+        :param pulumi.Input[str] description: Specifies the description of a secret.
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID to which the secret belongs.
+               If omitted, the default enterprise project will be used.
+               If the enterprise project function is not enabled, ignore this parameter.
+        :param pulumi.Input[str] event_subscriptions: Specifies the event list associated with the secret.
+               Currently, only one event can be associated.
+        :param pulumi.Input[int] expire_time: Specifies the expiration time of a secret, `expire_time` can only be edited
+               when `status` is **ENABLED**. The time is in the format of timestamp, that is, the offset milliseconds
+               from 1970-01-01 00:00:00 UTC to the specified time. The time must be greater than the current time.
+        :param pulumi.Input[str] name: Specifies the secret name. The maximum length is 64 characters.
                Only digits, letters, underscores(_), hyphens(-) and dots(.) are allowed.
-        :param pulumi.Input[str] region: The region in which to create the CSMS secrets.
+        :param pulumi.Input[str] region: Specifies the region in which to create the CSMS secrets.
                If omitted, the provider-level region will be used. Changing this setting will create a new resource.
-        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: The tags of a CSMS secrets, key/value pair format.
+        :param pulumi.Input[str] secret_binary: Specifies the plaintext of a binary secret encoded using Base64. CSMS encrypts
+               the plaintext and stores it in the initial version of the secret. The maximum size is 32 KB.
+        :param pulumi.Input[str] secret_text: Specifies the plaintext of a text secret. CSMS encrypts the plaintext and stores
+               it in the initial version of the secret. The maximum size is 32 KB.
+        :param pulumi.Input[str] secret_type: Specifies the type of the secret.
+               Currently, only supported **COMMON**. The default value is **COMMON**.
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the tags of a CSMS secrets, key/value pair format.
         """
-        pulumi.set(__self__, "secret_text", secret_text)
         if description is not None:
             pulumi.set(__self__, "description", description)
+        if enterprise_project_id is not None:
+            pulumi.set(__self__, "enterprise_project_id", enterprise_project_id)
+        if event_subscriptions is not None:
+            pulumi.set(__self__, "event_subscriptions", event_subscriptions)
+        if expire_time is not None:
+            pulumi.set(__self__, "expire_time", expire_time)
         if kms_key_id is not None:
             pulumi.set(__self__, "kms_key_id", kms_key_id)
         if name is not None:
             pulumi.set(__self__, "name", name)
         if region is not None:
             pulumi.set(__self__, "region", region)
+        if secret_binary is not None:
+            pulumi.set(__self__, "secret_binary", secret_binary)
+        if secret_text is not None:
+            pulumi.set(__self__, "secret_text", secret_text)
+        if secret_type is not None:
+            pulumi.set(__self__, "secret_type", secret_type)
         if tags is not None:
             pulumi.set(__self__, "tags", tags)
-
-    @property
-    @pulumi.getter(name="secretText")
-    def secret_text(self) -> pulumi.Input[str]:
-        """
-        The plaintext of a secret in text format. The maximum size is 32 KB.
-        """
-        return pulumi.get(self, "secret_text")
-
-    @secret_text.setter
-    def secret_text(self, value: pulumi.Input[str]):
-        pulumi.set(self, "secret_text", value)
 
     @property
     @pulumi.getter
     def description(self) -> Optional[pulumi.Input[str]]:
         """
-        The description of a secret.
+        Specifies the description of a secret.
         """
         return pulumi.get(self, "description")
 
     @description.setter
     def description(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "description", value)
+
+    @property
+    @pulumi.getter(name="enterpriseProjectId")
+    def enterprise_project_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the enterprise project ID to which the secret belongs.
+        If omitted, the default enterprise project will be used.
+        If the enterprise project function is not enabled, ignore this parameter.
+        """
+        return pulumi.get(self, "enterprise_project_id")
+
+    @enterprise_project_id.setter
+    def enterprise_project_id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "enterprise_project_id", value)
+
+    @property
+    @pulumi.getter(name="eventSubscriptions")
+    def event_subscriptions(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the event list associated with the secret.
+        Currently, only one event can be associated.
+        """
+        return pulumi.get(self, "event_subscriptions")
+
+    @event_subscriptions.setter
+    def event_subscriptions(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "event_subscriptions", value)
+
+    @property
+    @pulumi.getter(name="expireTime")
+    def expire_time(self) -> Optional[pulumi.Input[int]]:
+        """
+        Specifies the expiration time of a secret, `expire_time` can only be edited
+        when `status` is **ENABLED**. The time is in the format of timestamp, that is, the offset milliseconds
+        from 1970-01-01 00:00:00 UTC to the specified time. The time must be greater than the current time.
+        """
+        return pulumi.get(self, "expire_time")
+
+    @expire_time.setter
+    def expire_time(self, value: Optional[pulumi.Input[int]]):
+        pulumi.set(self, "expire_time", value)
 
     @property
     @pulumi.getter(name="kmsKeyId")
@@ -79,7 +137,7 @@ class SecretArgs:
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        The secret name. The maximum length is 64 characters.
+        Specifies the secret name. The maximum length is 64 characters.
         Only digits, letters, underscores(_), hyphens(-) and dots(.) are allowed.
         """
         return pulumi.get(self, "name")
@@ -92,7 +150,7 @@ class SecretArgs:
     @pulumi.getter
     def region(self) -> Optional[pulumi.Input[str]]:
         """
-        The region in which to create the CSMS secrets.
+        Specifies the region in which to create the CSMS secrets.
         If omitted, the provider-level region will be used. Changing this setting will create a new resource.
         """
         return pulumi.get(self, "region")
@@ -102,10 +160,49 @@ class SecretArgs:
         pulumi.set(self, "region", value)
 
     @property
+    @pulumi.getter(name="secretBinary")
+    def secret_binary(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the plaintext of a binary secret encoded using Base64. CSMS encrypts
+        the plaintext and stores it in the initial version of the secret. The maximum size is 32 KB.
+        """
+        return pulumi.get(self, "secret_binary")
+
+    @secret_binary.setter
+    def secret_binary(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "secret_binary", value)
+
+    @property
+    @pulumi.getter(name="secretText")
+    def secret_text(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the plaintext of a text secret. CSMS encrypts the plaintext and stores
+        it in the initial version of the secret. The maximum size is 32 KB.
+        """
+        return pulumi.get(self, "secret_text")
+
+    @secret_text.setter
+    def secret_text(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "secret_text", value)
+
+    @property
+    @pulumi.getter(name="secretType")
+    def secret_type(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the type of the secret.
+        Currently, only supported **COMMON**. The default value is **COMMON**.
+        """
+        return pulumi.get(self, "secret_type")
+
+    @secret_type.setter
+    def secret_type(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "secret_type", value)
+
+    @property
     @pulumi.getter
     def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]:
         """
-        The tags of a CSMS secrets, key/value pair format.
+        Specifies the tags of a CSMS secrets, key/value pair format.
         """
         return pulumi.get(self, "tags")
 
@@ -119,32 +216,58 @@ class _SecretState:
     def __init__(__self__, *,
                  create_time: Optional[pulumi.Input[str]] = None,
                  description: Optional[pulumi.Input[str]] = None,
+                 enterprise_project_id: Optional[pulumi.Input[str]] = None,
+                 event_subscriptions: Optional[pulumi.Input[str]] = None,
+                 expire_time: Optional[pulumi.Input[int]] = None,
                  kms_key_id: Optional[pulumi.Input[str]] = None,
                  latest_version: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
+                 secret_binary: Optional[pulumi.Input[str]] = None,
                  secret_id: Optional[pulumi.Input[str]] = None,
                  secret_text: Optional[pulumi.Input[str]] = None,
+                 secret_type: Optional[pulumi.Input[str]] = None,
                  status: Optional[pulumi.Input[str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None):
+                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
+                 version_stages: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None):
         """
         Input properties used for looking up and filtering Secret resources.
         :param pulumi.Input[str] create_time: Time when the CSMS secrets created, in UTC format.
-        :param pulumi.Input[str] description: The description of a secret.
+        :param pulumi.Input[str] description: Specifies the description of a secret.
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID to which the secret belongs.
+               If omitted, the default enterprise project will be used.
+               If the enterprise project function is not enabled, ignore this parameter.
+        :param pulumi.Input[str] event_subscriptions: Specifies the event list associated with the secret.
+               Currently, only one event can be associated.
+        :param pulumi.Input[int] expire_time: Specifies the expiration time of a secret, `expire_time` can only be edited
+               when `status` is **ENABLED**. The time is in the format of timestamp, that is, the offset milliseconds
+               from 1970-01-01 00:00:00 UTC to the specified time. The time must be greater than the current time.
         :param pulumi.Input[str] latest_version: The latest version id.
-        :param pulumi.Input[str] name: The secret name. The maximum length is 64 characters.
+        :param pulumi.Input[str] name: Specifies the secret name. The maximum length is 64 characters.
                Only digits, letters, underscores(_), hyphens(-) and dots(.) are allowed.
-        :param pulumi.Input[str] region: The region in which to create the CSMS secrets.
+        :param pulumi.Input[str] region: Specifies the region in which to create the CSMS secrets.
                If omitted, the provider-level region will be used. Changing this setting will create a new resource.
+        :param pulumi.Input[str] secret_binary: Specifies the plaintext of a binary secret encoded using Base64. CSMS encrypts
+               the plaintext and stores it in the initial version of the secret. The maximum size is 32 KB.
         :param pulumi.Input[str] secret_id: The secret ID in UUID format.
-        :param pulumi.Input[str] secret_text: The plaintext of a secret in text format. The maximum size is 32 KB.
-        :param pulumi.Input[str] status: The CSMS secret status. Values can be: ENABLED, DISABLED, PENDING_DELETE and FROZEN.
-        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: The tags of a CSMS secrets, key/value pair format.
+        :param pulumi.Input[str] secret_text: Specifies the plaintext of a text secret. CSMS encrypts the plaintext and stores
+               it in the initial version of the secret. The maximum size is 32 KB.
+        :param pulumi.Input[str] secret_type: Specifies the type of the secret.
+               Currently, only supported **COMMON**. The default value is **COMMON**.
+        :param pulumi.Input[str] status: The CSMS secret status. Values can be: **ENABLED**, **DISABLED**, **PENDING_DELETE** and **FROZEN**.
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the tags of a CSMS secrets, key/value pair format.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] version_stages: The secret version status list.
         """
         if create_time is not None:
             pulumi.set(__self__, "create_time", create_time)
         if description is not None:
             pulumi.set(__self__, "description", description)
+        if enterprise_project_id is not None:
+            pulumi.set(__self__, "enterprise_project_id", enterprise_project_id)
+        if event_subscriptions is not None:
+            pulumi.set(__self__, "event_subscriptions", event_subscriptions)
+        if expire_time is not None:
+            pulumi.set(__self__, "expire_time", expire_time)
         if kms_key_id is not None:
             pulumi.set(__self__, "kms_key_id", kms_key_id)
         if latest_version is not None:
@@ -153,14 +276,20 @@ class _SecretState:
             pulumi.set(__self__, "name", name)
         if region is not None:
             pulumi.set(__self__, "region", region)
+        if secret_binary is not None:
+            pulumi.set(__self__, "secret_binary", secret_binary)
         if secret_id is not None:
             pulumi.set(__self__, "secret_id", secret_id)
         if secret_text is not None:
             pulumi.set(__self__, "secret_text", secret_text)
+        if secret_type is not None:
+            pulumi.set(__self__, "secret_type", secret_type)
         if status is not None:
             pulumi.set(__self__, "status", status)
         if tags is not None:
             pulumi.set(__self__, "tags", tags)
+        if version_stages is not None:
+            pulumi.set(__self__, "version_stages", version_stages)
 
     @property
     @pulumi.getter(name="createTime")
@@ -178,13 +307,54 @@ class _SecretState:
     @pulumi.getter
     def description(self) -> Optional[pulumi.Input[str]]:
         """
-        The description of a secret.
+        Specifies the description of a secret.
         """
         return pulumi.get(self, "description")
 
     @description.setter
     def description(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "description", value)
+
+    @property
+    @pulumi.getter(name="enterpriseProjectId")
+    def enterprise_project_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the enterprise project ID to which the secret belongs.
+        If omitted, the default enterprise project will be used.
+        If the enterprise project function is not enabled, ignore this parameter.
+        """
+        return pulumi.get(self, "enterprise_project_id")
+
+    @enterprise_project_id.setter
+    def enterprise_project_id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "enterprise_project_id", value)
+
+    @property
+    @pulumi.getter(name="eventSubscriptions")
+    def event_subscriptions(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the event list associated with the secret.
+        Currently, only one event can be associated.
+        """
+        return pulumi.get(self, "event_subscriptions")
+
+    @event_subscriptions.setter
+    def event_subscriptions(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "event_subscriptions", value)
+
+    @property
+    @pulumi.getter(name="expireTime")
+    def expire_time(self) -> Optional[pulumi.Input[int]]:
+        """
+        Specifies the expiration time of a secret, `expire_time` can only be edited
+        when `status` is **ENABLED**. The time is in the format of timestamp, that is, the offset milliseconds
+        from 1970-01-01 00:00:00 UTC to the specified time. The time must be greater than the current time.
+        """
+        return pulumi.get(self, "expire_time")
+
+    @expire_time.setter
+    def expire_time(self, value: Optional[pulumi.Input[int]]):
+        pulumi.set(self, "expire_time", value)
 
     @property
     @pulumi.getter(name="kmsKeyId")
@@ -211,7 +381,7 @@ class _SecretState:
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        The secret name. The maximum length is 64 characters.
+        Specifies the secret name. The maximum length is 64 characters.
         Only digits, letters, underscores(_), hyphens(-) and dots(.) are allowed.
         """
         return pulumi.get(self, "name")
@@ -224,7 +394,7 @@ class _SecretState:
     @pulumi.getter
     def region(self) -> Optional[pulumi.Input[str]]:
         """
-        The region in which to create the CSMS secrets.
+        Specifies the region in which to create the CSMS secrets.
         If omitted, the provider-level region will be used. Changing this setting will create a new resource.
         """
         return pulumi.get(self, "region")
@@ -232,6 +402,19 @@ class _SecretState:
     @region.setter
     def region(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "region", value)
+
+    @property
+    @pulumi.getter(name="secretBinary")
+    def secret_binary(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the plaintext of a binary secret encoded using Base64. CSMS encrypts
+        the plaintext and stores it in the initial version of the secret. The maximum size is 32 KB.
+        """
+        return pulumi.get(self, "secret_binary")
+
+    @secret_binary.setter
+    def secret_binary(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "secret_binary", value)
 
     @property
     @pulumi.getter(name="secretId")
@@ -249,7 +432,8 @@ class _SecretState:
     @pulumi.getter(name="secretText")
     def secret_text(self) -> Optional[pulumi.Input[str]]:
         """
-        The plaintext of a secret in text format. The maximum size is 32 KB.
+        Specifies the plaintext of a text secret. CSMS encrypts the plaintext and stores
+        it in the initial version of the secret. The maximum size is 32 KB.
         """
         return pulumi.get(self, "secret_text")
 
@@ -258,10 +442,23 @@ class _SecretState:
         pulumi.set(self, "secret_text", value)
 
     @property
+    @pulumi.getter(name="secretType")
+    def secret_type(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the type of the secret.
+        Currently, only supported **COMMON**. The default value is **COMMON**.
+        """
+        return pulumi.get(self, "secret_type")
+
+    @secret_type.setter
+    def secret_type(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "secret_type", value)
+
+    @property
     @pulumi.getter
     def status(self) -> Optional[pulumi.Input[str]]:
         """
-        The CSMS secret status. Values can be: ENABLED, DISABLED, PENDING_DELETE and FROZEN.
+        The CSMS secret status. Values can be: **ENABLED**, **DISABLED**, **PENDING_DELETE** and **FROZEN**.
         """
         return pulumi.get(self, "status")
 
@@ -273,13 +470,25 @@ class _SecretState:
     @pulumi.getter
     def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]:
         """
-        The tags of a CSMS secrets, key/value pair format.
+        Specifies the tags of a CSMS secrets, key/value pair format.
         """
         return pulumi.get(self, "tags")
 
     @tags.setter
     def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]):
         pulumi.set(self, "tags", value)
+
+    @property
+    @pulumi.getter(name="versionStages")
+    def version_stages(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]:
+        """
+        The secret version status list.
+        """
+        return pulumi.get(self, "version_stages")
+
+    @version_stages.setter
+    def version_stages(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]):
+        pulumi.set(self, "version_stages", value)
 
 
 class Secret(pulumi.CustomResource):
@@ -288,10 +497,15 @@ class Secret(pulumi.CustomResource):
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
                  description: Optional[pulumi.Input[str]] = None,
+                 enterprise_project_id: Optional[pulumi.Input[str]] = None,
+                 event_subscriptions: Optional[pulumi.Input[str]] = None,
+                 expire_time: Optional[pulumi.Input[int]] = None,
                  kms_key_id: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
+                 secret_binary: Optional[pulumi.Input[str]] = None,
                  secret_text: Optional[pulumi.Input[str]] = None,
+                 secret_type: Optional[pulumi.Input[str]] = None,
                  tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  __props__=None):
         """
@@ -318,30 +532,53 @@ class Secret(pulumi.CustomResource):
             "password": "123456",
         }))
         ```
+        ### Encrypt String Binary
+
+        ```python
+        import pulumi
+        import pulumi_huaweicloud as huaweicloud
+
+        config = pulumi.Config()
+        secret_binary = config.require_object("secretBinary")
+        test3 = huaweicloud.dew.Secret("test3", secret_binary=secret_binary)
+        ```
 
         ## Import
 
-        CSMS secret can be imported using the ID and the name of secret, separated by a slash, e.g.
+        CSMS secret can be imported using the ID and the name of secret, separated by a slash, e.g. bash
 
         ```sh
-         $ pulumi import huaweicloud:Dew/secret:Secret test 93cba7f5-550b-45dc-912e-277b3296fb27/test_secret
+         $ pulumi import huaweicloud:Dew/secret:Secret test <id>/<name>
         ```
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[str] description: The description of a secret.
-        :param pulumi.Input[str] name: The secret name. The maximum length is 64 characters.
+        :param pulumi.Input[str] description: Specifies the description of a secret.
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID to which the secret belongs.
+               If omitted, the default enterprise project will be used.
+               If the enterprise project function is not enabled, ignore this parameter.
+        :param pulumi.Input[str] event_subscriptions: Specifies the event list associated with the secret.
+               Currently, only one event can be associated.
+        :param pulumi.Input[int] expire_time: Specifies the expiration time of a secret, `expire_time` can only be edited
+               when `status` is **ENABLED**. The time is in the format of timestamp, that is, the offset milliseconds
+               from 1970-01-01 00:00:00 UTC to the specified time. The time must be greater than the current time.
+        :param pulumi.Input[str] name: Specifies the secret name. The maximum length is 64 characters.
                Only digits, letters, underscores(_), hyphens(-) and dots(.) are allowed.
-        :param pulumi.Input[str] region: The region in which to create the CSMS secrets.
+        :param pulumi.Input[str] region: Specifies the region in which to create the CSMS secrets.
                If omitted, the provider-level region will be used. Changing this setting will create a new resource.
-        :param pulumi.Input[str] secret_text: The plaintext of a secret in text format. The maximum size is 32 KB.
-        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: The tags of a CSMS secrets, key/value pair format.
+        :param pulumi.Input[str] secret_binary: Specifies the plaintext of a binary secret encoded using Base64. CSMS encrypts
+               the plaintext and stores it in the initial version of the secret. The maximum size is 32 KB.
+        :param pulumi.Input[str] secret_text: Specifies the plaintext of a text secret. CSMS encrypts the plaintext and stores
+               it in the initial version of the secret. The maximum size is 32 KB.
+        :param pulumi.Input[str] secret_type: Specifies the type of the secret.
+               Currently, only supported **COMMON**. The default value is **COMMON**.
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the tags of a CSMS secrets, key/value pair format.
         """
         ...
     @overload
     def __init__(__self__,
                  resource_name: str,
-                 args: SecretArgs,
+                 args: Optional[SecretArgs] = None,
                  opts: Optional[pulumi.ResourceOptions] = None):
         """
         Manages CSMS(Cloud Secret Management Service) secrets within HuaweiCloud.
@@ -367,13 +604,23 @@ class Secret(pulumi.CustomResource):
             "password": "123456",
         }))
         ```
+        ### Encrypt String Binary
+
+        ```python
+        import pulumi
+        import pulumi_huaweicloud as huaweicloud
+
+        config = pulumi.Config()
+        secret_binary = config.require_object("secretBinary")
+        test3 = huaweicloud.dew.Secret("test3", secret_binary=secret_binary)
+        ```
 
         ## Import
 
-        CSMS secret can be imported using the ID and the name of secret, separated by a slash, e.g.
+        CSMS secret can be imported using the ID and the name of secret, separated by a slash, e.g. bash
 
         ```sh
-         $ pulumi import huaweicloud:Dew/secret:Secret test 93cba7f5-550b-45dc-912e-277b3296fb27/test_secret
+         $ pulumi import huaweicloud:Dew/secret:Secret test <id>/<name>
         ```
 
         :param str resource_name: The name of the resource.
@@ -392,10 +639,15 @@ class Secret(pulumi.CustomResource):
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
                  description: Optional[pulumi.Input[str]] = None,
+                 enterprise_project_id: Optional[pulumi.Input[str]] = None,
+                 event_subscriptions: Optional[pulumi.Input[str]] = None,
+                 expire_time: Optional[pulumi.Input[int]] = None,
                  kms_key_id: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
+                 secret_binary: Optional[pulumi.Input[str]] = None,
                  secret_text: Optional[pulumi.Input[str]] = None,
+                 secret_type: Optional[pulumi.Input[str]] = None,
                  tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
@@ -407,17 +659,21 @@ class Secret(pulumi.CustomResource):
             __props__ = SecretArgs.__new__(SecretArgs)
 
             __props__.__dict__["description"] = description
+            __props__.__dict__["enterprise_project_id"] = enterprise_project_id
+            __props__.__dict__["event_subscriptions"] = event_subscriptions
+            __props__.__dict__["expire_time"] = expire_time
             __props__.__dict__["kms_key_id"] = kms_key_id
             __props__.__dict__["name"] = name
             __props__.__dict__["region"] = region
-            if secret_text is None and not opts.urn:
-                raise TypeError("Missing required property 'secret_text'")
+            __props__.__dict__["secret_binary"] = secret_binary
             __props__.__dict__["secret_text"] = secret_text
+            __props__.__dict__["secret_type"] = secret_type
             __props__.__dict__["tags"] = tags
             __props__.__dict__["create_time"] = None
             __props__.__dict__["latest_version"] = None
             __props__.__dict__["secret_id"] = None
             __props__.__dict__["status"] = None
+            __props__.__dict__["version_stages"] = None
         super(Secret, __self__).__init__(
             'huaweicloud:Dew/secret:Secret',
             resource_name,
@@ -430,14 +686,20 @@ class Secret(pulumi.CustomResource):
             opts: Optional[pulumi.ResourceOptions] = None,
             create_time: Optional[pulumi.Input[str]] = None,
             description: Optional[pulumi.Input[str]] = None,
+            enterprise_project_id: Optional[pulumi.Input[str]] = None,
+            event_subscriptions: Optional[pulumi.Input[str]] = None,
+            expire_time: Optional[pulumi.Input[int]] = None,
             kms_key_id: Optional[pulumi.Input[str]] = None,
             latest_version: Optional[pulumi.Input[str]] = None,
             name: Optional[pulumi.Input[str]] = None,
             region: Optional[pulumi.Input[str]] = None,
+            secret_binary: Optional[pulumi.Input[str]] = None,
             secret_id: Optional[pulumi.Input[str]] = None,
             secret_text: Optional[pulumi.Input[str]] = None,
+            secret_type: Optional[pulumi.Input[str]] = None,
             status: Optional[pulumi.Input[str]] = None,
-            tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None) -> 'Secret':
+            tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
+            version_stages: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None) -> 'Secret':
         """
         Get an existing Secret resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.
@@ -446,16 +708,30 @@ class Secret(pulumi.CustomResource):
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[str] create_time: Time when the CSMS secrets created, in UTC format.
-        :param pulumi.Input[str] description: The description of a secret.
+        :param pulumi.Input[str] description: Specifies the description of a secret.
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID to which the secret belongs.
+               If omitted, the default enterprise project will be used.
+               If the enterprise project function is not enabled, ignore this parameter.
+        :param pulumi.Input[str] event_subscriptions: Specifies the event list associated with the secret.
+               Currently, only one event can be associated.
+        :param pulumi.Input[int] expire_time: Specifies the expiration time of a secret, `expire_time` can only be edited
+               when `status` is **ENABLED**. The time is in the format of timestamp, that is, the offset milliseconds
+               from 1970-01-01 00:00:00 UTC to the specified time. The time must be greater than the current time.
         :param pulumi.Input[str] latest_version: The latest version id.
-        :param pulumi.Input[str] name: The secret name. The maximum length is 64 characters.
+        :param pulumi.Input[str] name: Specifies the secret name. The maximum length is 64 characters.
                Only digits, letters, underscores(_), hyphens(-) and dots(.) are allowed.
-        :param pulumi.Input[str] region: The region in which to create the CSMS secrets.
+        :param pulumi.Input[str] region: Specifies the region in which to create the CSMS secrets.
                If omitted, the provider-level region will be used. Changing this setting will create a new resource.
+        :param pulumi.Input[str] secret_binary: Specifies the plaintext of a binary secret encoded using Base64. CSMS encrypts
+               the plaintext and stores it in the initial version of the secret. The maximum size is 32 KB.
         :param pulumi.Input[str] secret_id: The secret ID in UUID format.
-        :param pulumi.Input[str] secret_text: The plaintext of a secret in text format. The maximum size is 32 KB.
-        :param pulumi.Input[str] status: The CSMS secret status. Values can be: ENABLED, DISABLED, PENDING_DELETE and FROZEN.
-        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: The tags of a CSMS secrets, key/value pair format.
+        :param pulumi.Input[str] secret_text: Specifies the plaintext of a text secret. CSMS encrypts the plaintext and stores
+               it in the initial version of the secret. The maximum size is 32 KB.
+        :param pulumi.Input[str] secret_type: Specifies the type of the secret.
+               Currently, only supported **COMMON**. The default value is **COMMON**.
+        :param pulumi.Input[str] status: The CSMS secret status. Values can be: **ENABLED**, **DISABLED**, **PENDING_DELETE** and **FROZEN**.
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the tags of a CSMS secrets, key/value pair format.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] version_stages: The secret version status list.
         """
         opts = pulumi.ResourceOptions.merge(opts, pulumi.ResourceOptions(id=id))
 
@@ -463,14 +739,20 @@ class Secret(pulumi.CustomResource):
 
         __props__.__dict__["create_time"] = create_time
         __props__.__dict__["description"] = description
+        __props__.__dict__["enterprise_project_id"] = enterprise_project_id
+        __props__.__dict__["event_subscriptions"] = event_subscriptions
+        __props__.__dict__["expire_time"] = expire_time
         __props__.__dict__["kms_key_id"] = kms_key_id
         __props__.__dict__["latest_version"] = latest_version
         __props__.__dict__["name"] = name
         __props__.__dict__["region"] = region
+        __props__.__dict__["secret_binary"] = secret_binary
         __props__.__dict__["secret_id"] = secret_id
         __props__.__dict__["secret_text"] = secret_text
+        __props__.__dict__["secret_type"] = secret_type
         __props__.__dict__["status"] = status
         __props__.__dict__["tags"] = tags
+        __props__.__dict__["version_stages"] = version_stages
         return Secret(resource_name, opts=opts, __props__=__props__)
 
     @property
@@ -485,9 +767,38 @@ class Secret(pulumi.CustomResource):
     @pulumi.getter
     def description(self) -> pulumi.Output[Optional[str]]:
         """
-        The description of a secret.
+        Specifies the description of a secret.
         """
         return pulumi.get(self, "description")
+
+    @property
+    @pulumi.getter(name="enterpriseProjectId")
+    def enterprise_project_id(self) -> pulumi.Output[str]:
+        """
+        Specifies the enterprise project ID to which the secret belongs.
+        If omitted, the default enterprise project will be used.
+        If the enterprise project function is not enabled, ignore this parameter.
+        """
+        return pulumi.get(self, "enterprise_project_id")
+
+    @property
+    @pulumi.getter(name="eventSubscriptions")
+    def event_subscriptions(self) -> pulumi.Output[Optional[str]]:
+        """
+        Specifies the event list associated with the secret.
+        Currently, only one event can be associated.
+        """
+        return pulumi.get(self, "event_subscriptions")
+
+    @property
+    @pulumi.getter(name="expireTime")
+    def expire_time(self) -> pulumi.Output[int]:
+        """
+        Specifies the expiration time of a secret, `expire_time` can only be edited
+        when `status` is **ENABLED**. The time is in the format of timestamp, that is, the offset milliseconds
+        from 1970-01-01 00:00:00 UTC to the specified time. The time must be greater than the current time.
+        """
+        return pulumi.get(self, "expire_time")
 
     @property
     @pulumi.getter(name="kmsKeyId")
@@ -506,7 +817,7 @@ class Secret(pulumi.CustomResource):
     @pulumi.getter
     def name(self) -> pulumi.Output[str]:
         """
-        The secret name. The maximum length is 64 characters.
+        Specifies the secret name. The maximum length is 64 characters.
         Only digits, letters, underscores(_), hyphens(-) and dots(.) are allowed.
         """
         return pulumi.get(self, "name")
@@ -515,10 +826,19 @@ class Secret(pulumi.CustomResource):
     @pulumi.getter
     def region(self) -> pulumi.Output[str]:
         """
-        The region in which to create the CSMS secrets.
+        Specifies the region in which to create the CSMS secrets.
         If omitted, the provider-level region will be used. Changing this setting will create a new resource.
         """
         return pulumi.get(self, "region")
+
+    @property
+    @pulumi.getter(name="secretBinary")
+    def secret_binary(self) -> pulumi.Output[Optional[str]]:
+        """
+        Specifies the plaintext of a binary secret encoded using Base64. CSMS encrypts
+        the plaintext and stores it in the initial version of the secret. The maximum size is 32 KB.
+        """
+        return pulumi.get(self, "secret_binary")
 
     @property
     @pulumi.getter(name="secretId")
@@ -530,17 +850,27 @@ class Secret(pulumi.CustomResource):
 
     @property
     @pulumi.getter(name="secretText")
-    def secret_text(self) -> pulumi.Output[str]:
+    def secret_text(self) -> pulumi.Output[Optional[str]]:
         """
-        The plaintext of a secret in text format. The maximum size is 32 KB.
+        Specifies the plaintext of a text secret. CSMS encrypts the plaintext and stores
+        it in the initial version of the secret. The maximum size is 32 KB.
         """
         return pulumi.get(self, "secret_text")
+
+    @property
+    @pulumi.getter(name="secretType")
+    def secret_type(self) -> pulumi.Output[str]:
+        """
+        Specifies the type of the secret.
+        Currently, only supported **COMMON**. The default value is **COMMON**.
+        """
+        return pulumi.get(self, "secret_type")
 
     @property
     @pulumi.getter
     def status(self) -> pulumi.Output[str]:
         """
-        The CSMS secret status. Values can be: ENABLED, DISABLED, PENDING_DELETE and FROZEN.
+        The CSMS secret status. Values can be: **ENABLED**, **DISABLED**, **PENDING_DELETE** and **FROZEN**.
         """
         return pulumi.get(self, "status")
 
@@ -548,7 +878,15 @@ class Secret(pulumi.CustomResource):
     @pulumi.getter
     def tags(self) -> pulumi.Output[Optional[Mapping[str, str]]]:
         """
-        The tags of a CSMS secrets, key/value pair format.
+        Specifies the tags of a CSMS secrets, key/value pair format.
         """
         return pulumi.get(self, "tags")
+
+    @property
+    @pulumi.getter(name="versionStages")
+    def version_stages(self) -> pulumi.Output[Sequence[str]]:
+        """
+        The secret version status list.
+        """
+        return pulumi.get(self, "version_stages")
 

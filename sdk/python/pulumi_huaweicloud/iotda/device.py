@@ -8,6 +8,8 @@ import pulumi
 import pulumi.runtime
 from typing import Any, Mapping, Optional, Sequence, Union, overload
 from .. import _utilities
+from . import outputs
+from ._inputs import *
 
 __all__ = ['DeviceArgs', 'Device']
 
@@ -19,40 +21,66 @@ class DeviceArgs:
                  space_id: pulumi.Input[str],
                  description: Optional[pulumi.Input[str]] = None,
                  device_id: Optional[pulumi.Input[str]] = None,
+                 extension_info: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  fingerprint: Optional[pulumi.Input[str]] = None,
+                 force_disconnect: Optional[pulumi.Input[bool]] = None,
                  frozen: Optional[pulumi.Input[bool]] = None,
                  gateway_id: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
+                 secondary_fingerprint: Optional[pulumi.Input[str]] = None,
+                 secondary_secret: Optional[pulumi.Input[str]] = None,
                  secret: Optional[pulumi.Input[str]] = None,
+                 secure_access: Optional[pulumi.Input[bool]] = None,
+                 shadows: Optional[pulumi.Input[Sequence[pulumi.Input['DeviceShadowArgs']]]] = None,
                  tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None):
         """
         The set of arguments for constructing a Device resource.
-        :param pulumi.Input[str] node_id: Specifies the node ID, which contains 4 to 256 characters.
+        :param pulumi.Input[str] node_id: Specifies the node ID, which contains `4` to `256` characters.
                The node ID can be IMEI, MAC address, or serial number. Changing this parameter will create a new resource.
         :param pulumi.Input[str] product_id: Specifies the product ID which the device belongs to.
                Changing this parameter will create a new resource.
         :param pulumi.Input[str] space_id: Specifies the resource space ID which the device belongs to.
                Changing this parameter will create a new resource.
-        :param pulumi.Input[str] description: Specifies the description of device. The description contains a maximum of 2048
+        :param pulumi.Input[str] description: Specifies the description of device. The description contains a maximum of `2,048`
                characters. Only letters, Chinese characters, digits, hyphens (-), underscore (_) and the following special characters
                are allowed: `?'#().,&%@!`.
-        :param pulumi.Input[str] device_id: Specifies the device ID, which contains 4 to 256 characters.
+        :param pulumi.Input[str] device_id: Specifies the device ID, which contains `4` to `256` characters.
                Only letters, digits, hyphens (-) and underscore (_) are allowed. If omitted, the platform will automatically allocate
                a device ID. Changing this parameter will create a new resource.
-        :param pulumi.Input[str] fingerprint: Specifies a fingerprint of X.509 certificate for identity authentication,
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] extension_info: Specifies the extended information of the device.
+               The users can be customized the content. The maximum size of the value is `1` KB.
+        :param pulumi.Input[str] fingerprint: Specifies a primary fingerprint of X.509 certificate for identity authentication,
                which is a 40-digit or 64-digit hexadecimal string. For more detail, please see
                [Registering a Device Authenticated by an X.509 Certificate](https://support.huaweicloud.com/en-us/usermanual-iothub/iot_01_0055.html).
-        :param pulumi.Input[bool] frozen: Specifies whether to freeze the device. Defaults to `false`.
+        :param pulumi.Input[bool] force_disconnect: Specifies whether to force device disconnection when resetting secrets or
+               fingerprints, currently, only long connections are allowed. The default value is **false**.
+        :param pulumi.Input[bool] frozen: Specifies whether to freeze the device. Defaults to **false**.
         :param pulumi.Input[str] gateway_id: Specifies the gateway ID which is the device ID of the parent device.
                The child device is not directly connected to the platform. If omitted, it means to create a device directly connected
                to the platform, the `device_id` of the device is the same as the `gateway_id`.
-        :param pulumi.Input[str] name: Specifies the device name, which contains 4 to 256 characters. Only letters,
+        :param pulumi.Input[str] name: Specifies the device name, which contains `4` to `256` characters. Only letters,
                Chinese characters, digits, hyphens (-), underscore (_) and the following special characters are allowed: `?'#().,&%@!`.
         :param pulumi.Input[str] region: Specifies the region in which to create the IoTDA device resource.
                If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
-        :param pulumi.Input[str] secret: Specifies a secret for identity authentication, which contains 8 to 32 characters.
+        :param pulumi.Input[str] secondary_fingerprint: Specifies a secondary fingerprint of X.509 certificate for identity
+               authentication. When primary fingerprint verification fails, secondary fingerprint verification will be enabled, and
+               the secondary fingerprint has the same effectiveness as the primary fingerprint.
+               Which is a 40-digit or 64-digit hexadecimal string. For more detail, please see
+               [Registering a Device Authenticated by an X.509 Certificate](https://support.huaweicloud.com/en-us/usermanual-iothub/iot_01_0055.html).
+        :param pulumi.Input[str] secondary_secret: Specifies a secondary secret for identity authentication.
+               When the primary secret verification fails, the secondary secret verification will be enabled, and the secondary
+               secret has the same effect as the primary secret; The secondary secret is not effective for devices connected to the
+               COAP protocol. Which contains `8` to `32` characters.
                Only letters, digits, hyphens (-) and underscore (_) are allowed.
+        :param pulumi.Input[str] secret: Specifies a primary secret for identity authentication, which contains `8` to `32`
+               characters. Only letters, digits, hyphens (-) and underscore (_) are allowed.
+        :param pulumi.Input[bool] secure_access: Specifies whether the device is connected through a secure protocol.
+               This parameter is only valid when `secret` or `fingerprint` is specified, and suggest setting it to **true**.
+               If ignored, it means accessing through insecure protocols, and the device is susceptible to security risks such as
+               counterfeiting, please be cautious with this configuration.
+        :param pulumi.Input[Sequence[pulumi.Input['DeviceShadowArgs']]] shadows: Specifies the initial configuration of the device.
+               The shadow structure is documented below.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the device.
         """
         pulumi.set(__self__, "node_id", node_id)
@@ -62,8 +90,12 @@ class DeviceArgs:
             pulumi.set(__self__, "description", description)
         if device_id is not None:
             pulumi.set(__self__, "device_id", device_id)
+        if extension_info is not None:
+            pulumi.set(__self__, "extension_info", extension_info)
         if fingerprint is not None:
             pulumi.set(__self__, "fingerprint", fingerprint)
+        if force_disconnect is not None:
+            pulumi.set(__self__, "force_disconnect", force_disconnect)
         if frozen is not None:
             pulumi.set(__self__, "frozen", frozen)
         if gateway_id is not None:
@@ -72,8 +104,16 @@ class DeviceArgs:
             pulumi.set(__self__, "name", name)
         if region is not None:
             pulumi.set(__self__, "region", region)
+        if secondary_fingerprint is not None:
+            pulumi.set(__self__, "secondary_fingerprint", secondary_fingerprint)
+        if secondary_secret is not None:
+            pulumi.set(__self__, "secondary_secret", secondary_secret)
         if secret is not None:
             pulumi.set(__self__, "secret", secret)
+        if secure_access is not None:
+            pulumi.set(__self__, "secure_access", secure_access)
+        if shadows is not None:
+            pulumi.set(__self__, "shadows", shadows)
         if tags is not None:
             pulumi.set(__self__, "tags", tags)
 
@@ -81,7 +121,7 @@ class DeviceArgs:
     @pulumi.getter(name="nodeId")
     def node_id(self) -> pulumi.Input[str]:
         """
-        Specifies the node ID, which contains 4 to 256 characters.
+        Specifies the node ID, which contains `4` to `256` characters.
         The node ID can be IMEI, MAC address, or serial number. Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "node_id")
@@ -120,7 +160,7 @@ class DeviceArgs:
     @pulumi.getter
     def description(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the description of device. The description contains a maximum of 2048
+        Specifies the description of device. The description contains a maximum of `2,048`
         characters. Only letters, Chinese characters, digits, hyphens (-), underscore (_) and the following special characters
         are allowed: `?'#().,&%@!`.
         """
@@ -134,7 +174,7 @@ class DeviceArgs:
     @pulumi.getter(name="deviceId")
     def device_id(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the device ID, which contains 4 to 256 characters.
+        Specifies the device ID, which contains `4` to `256` characters.
         Only letters, digits, hyphens (-) and underscore (_) are allowed. If omitted, the platform will automatically allocate
         a device ID. Changing this parameter will create a new resource.
         """
@@ -145,10 +185,23 @@ class DeviceArgs:
         pulumi.set(self, "device_id", value)
 
     @property
+    @pulumi.getter(name="extensionInfo")
+    def extension_info(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]:
+        """
+        Specifies the extended information of the device.
+        The users can be customized the content. The maximum size of the value is `1` KB.
+        """
+        return pulumi.get(self, "extension_info")
+
+    @extension_info.setter
+    def extension_info(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]):
+        pulumi.set(self, "extension_info", value)
+
+    @property
     @pulumi.getter
     def fingerprint(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies a fingerprint of X.509 certificate for identity authentication,
+        Specifies a primary fingerprint of X.509 certificate for identity authentication,
         which is a 40-digit or 64-digit hexadecimal string. For more detail, please see
         [Registering a Device Authenticated by an X.509 Certificate](https://support.huaweicloud.com/en-us/usermanual-iothub/iot_01_0055.html).
         """
@@ -159,10 +212,23 @@ class DeviceArgs:
         pulumi.set(self, "fingerprint", value)
 
     @property
+    @pulumi.getter(name="forceDisconnect")
+    def force_disconnect(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies whether to force device disconnection when resetting secrets or
+        fingerprints, currently, only long connections are allowed. The default value is **false**.
+        """
+        return pulumi.get(self, "force_disconnect")
+
+    @force_disconnect.setter
+    def force_disconnect(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "force_disconnect", value)
+
+    @property
     @pulumi.getter
     def frozen(self) -> Optional[pulumi.Input[bool]]:
         """
-        Specifies whether to freeze the device. Defaults to `false`.
+        Specifies whether to freeze the device. Defaults to **false**.
         """
         return pulumi.get(self, "frozen")
 
@@ -188,7 +254,7 @@ class DeviceArgs:
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the device name, which contains 4 to 256 characters. Only letters,
+        Specifies the device name, which contains `4` to `256` characters. Only letters,
         Chinese characters, digits, hyphens (-), underscore (_) and the following special characters are allowed: `?'#().,&%@!`.
         """
         return pulumi.get(self, "name")
@@ -211,17 +277,77 @@ class DeviceArgs:
         pulumi.set(self, "region", value)
 
     @property
+    @pulumi.getter(name="secondaryFingerprint")
+    def secondary_fingerprint(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies a secondary fingerprint of X.509 certificate for identity
+        authentication. When primary fingerprint verification fails, secondary fingerprint verification will be enabled, and
+        the secondary fingerprint has the same effectiveness as the primary fingerprint.
+        Which is a 40-digit or 64-digit hexadecimal string. For more detail, please see
+        [Registering a Device Authenticated by an X.509 Certificate](https://support.huaweicloud.com/en-us/usermanual-iothub/iot_01_0055.html).
+        """
+        return pulumi.get(self, "secondary_fingerprint")
+
+    @secondary_fingerprint.setter
+    def secondary_fingerprint(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "secondary_fingerprint", value)
+
+    @property
+    @pulumi.getter(name="secondarySecret")
+    def secondary_secret(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies a secondary secret for identity authentication.
+        When the primary secret verification fails, the secondary secret verification will be enabled, and the secondary
+        secret has the same effect as the primary secret; The secondary secret is not effective for devices connected to the
+        COAP protocol. Which contains `8` to `32` characters.
+        Only letters, digits, hyphens (-) and underscore (_) are allowed.
+        """
+        return pulumi.get(self, "secondary_secret")
+
+    @secondary_secret.setter
+    def secondary_secret(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "secondary_secret", value)
+
+    @property
     @pulumi.getter
     def secret(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies a secret for identity authentication, which contains 8 to 32 characters.
-        Only letters, digits, hyphens (-) and underscore (_) are allowed.
+        Specifies a primary secret for identity authentication, which contains `8` to `32`
+        characters. Only letters, digits, hyphens (-) and underscore (_) are allowed.
         """
         return pulumi.get(self, "secret")
 
     @secret.setter
     def secret(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "secret", value)
+
+    @property
+    @pulumi.getter(name="secureAccess")
+    def secure_access(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies whether the device is connected through a secure protocol.
+        This parameter is only valid when `secret` or `fingerprint` is specified, and suggest setting it to **true**.
+        If ignored, it means accessing through insecure protocols, and the device is susceptible to security risks such as
+        counterfeiting, please be cautious with this configuration.
+        """
+        return pulumi.get(self, "secure_access")
+
+    @secure_access.setter
+    def secure_access(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "secure_access", value)
+
+    @property
+    @pulumi.getter
+    def shadows(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['DeviceShadowArgs']]]]:
+        """
+        Specifies the initial configuration of the device.
+        The shadow structure is documented below.
+        """
+        return pulumi.get(self, "shadows")
+
+    @shadows.setter
+    def shadows(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['DeviceShadowArgs']]]]):
+        pulumi.set(self, "shadows", value)
 
     @property
     @pulumi.getter
@@ -242,7 +368,9 @@ class _DeviceState:
                  auth_type: Optional[pulumi.Input[str]] = None,
                  description: Optional[pulumi.Input[str]] = None,
                  device_id: Optional[pulumi.Input[str]] = None,
+                 extension_info: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  fingerprint: Optional[pulumi.Input[str]] = None,
+                 force_disconnect: Optional[pulumi.Input[bool]] = None,
                  frozen: Optional[pulumi.Input[bool]] = None,
                  gateway_id: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
@@ -250,7 +378,11 @@ class _DeviceState:
                  node_type: Optional[pulumi.Input[str]] = None,
                  product_id: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
+                 secondary_fingerprint: Optional[pulumi.Input[str]] = None,
+                 secondary_secret: Optional[pulumi.Input[str]] = None,
                  secret: Optional[pulumi.Input[str]] = None,
+                 secure_access: Optional[pulumi.Input[bool]] = None,
+                 shadows: Optional[pulumi.Input[Sequence[pulumi.Input['DeviceShadowArgs']]]] = None,
                  space_id: Optional[pulumi.Input[str]] = None,
                  status: Optional[pulumi.Input[str]] = None,
                  tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None):
@@ -259,22 +391,26 @@ class _DeviceState:
         :param pulumi.Input[str] auth_type: The authentication type of device. The options are as follows:
                + **SECRET**: Use a secret for identity authentication.
                + **CERTIFICATES**: Use an x.509 certificate for identity authentication.
-        :param pulumi.Input[str] description: Specifies the description of device. The description contains a maximum of 2048
+        :param pulumi.Input[str] description: Specifies the description of device. The description contains a maximum of `2,048`
                characters. Only letters, Chinese characters, digits, hyphens (-), underscore (_) and the following special characters
                are allowed: `?'#().,&%@!`.
-        :param pulumi.Input[str] device_id: Specifies the device ID, which contains 4 to 256 characters.
+        :param pulumi.Input[str] device_id: Specifies the device ID, which contains `4` to `256` characters.
                Only letters, digits, hyphens (-) and underscore (_) are allowed. If omitted, the platform will automatically allocate
                a device ID. Changing this parameter will create a new resource.
-        :param pulumi.Input[str] fingerprint: Specifies a fingerprint of X.509 certificate for identity authentication,
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] extension_info: Specifies the extended information of the device.
+               The users can be customized the content. The maximum size of the value is `1` KB.
+        :param pulumi.Input[str] fingerprint: Specifies a primary fingerprint of X.509 certificate for identity authentication,
                which is a 40-digit or 64-digit hexadecimal string. For more detail, please see
                [Registering a Device Authenticated by an X.509 Certificate](https://support.huaweicloud.com/en-us/usermanual-iothub/iot_01_0055.html).
-        :param pulumi.Input[bool] frozen: Specifies whether to freeze the device. Defaults to `false`.
+        :param pulumi.Input[bool] force_disconnect: Specifies whether to force device disconnection when resetting secrets or
+               fingerprints, currently, only long connections are allowed. The default value is **false**.
+        :param pulumi.Input[bool] frozen: Specifies whether to freeze the device. Defaults to **false**.
         :param pulumi.Input[str] gateway_id: Specifies the gateway ID which is the device ID of the parent device.
                The child device is not directly connected to the platform. If omitted, it means to create a device directly connected
                to the platform, the `device_id` of the device is the same as the `gateway_id`.
-        :param pulumi.Input[str] name: Specifies the device name, which contains 4 to 256 characters. Only letters,
+        :param pulumi.Input[str] name: Specifies the device name, which contains `4` to `256` characters. Only letters,
                Chinese characters, digits, hyphens (-), underscore (_) and the following special characters are allowed: `?'#().,&%@!`.
-        :param pulumi.Input[str] node_id: Specifies the node ID, which contains 4 to 256 characters.
+        :param pulumi.Input[str] node_id: Specifies the node ID, which contains `4` to `256` characters.
                The node ID can be IMEI, MAC address, or serial number. Changing this parameter will create a new resource.
         :param pulumi.Input[str] node_type: The node type of device. The options are as follows:
                + **GATEWAY**: Directly connected device.
@@ -284,8 +420,24 @@ class _DeviceState:
                Changing this parameter will create a new resource.
         :param pulumi.Input[str] region: Specifies the region in which to create the IoTDA device resource.
                If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
-        :param pulumi.Input[str] secret: Specifies a secret for identity authentication, which contains 8 to 32 characters.
+        :param pulumi.Input[str] secondary_fingerprint: Specifies a secondary fingerprint of X.509 certificate for identity
+               authentication. When primary fingerprint verification fails, secondary fingerprint verification will be enabled, and
+               the secondary fingerprint has the same effectiveness as the primary fingerprint.
+               Which is a 40-digit or 64-digit hexadecimal string. For more detail, please see
+               [Registering a Device Authenticated by an X.509 Certificate](https://support.huaweicloud.com/en-us/usermanual-iothub/iot_01_0055.html).
+        :param pulumi.Input[str] secondary_secret: Specifies a secondary secret for identity authentication.
+               When the primary secret verification fails, the secondary secret verification will be enabled, and the secondary
+               secret has the same effect as the primary secret; The secondary secret is not effective for devices connected to the
+               COAP protocol. Which contains `8` to `32` characters.
                Only letters, digits, hyphens (-) and underscore (_) are allowed.
+        :param pulumi.Input[str] secret: Specifies a primary secret for identity authentication, which contains `8` to `32`
+               characters. Only letters, digits, hyphens (-) and underscore (_) are allowed.
+        :param pulumi.Input[bool] secure_access: Specifies whether the device is connected through a secure protocol.
+               This parameter is only valid when `secret` or `fingerprint` is specified, and suggest setting it to **true**.
+               If ignored, it means accessing through insecure protocols, and the device is susceptible to security risks such as
+               counterfeiting, please be cautious with this configuration.
+        :param pulumi.Input[Sequence[pulumi.Input['DeviceShadowArgs']]] shadows: Specifies the initial configuration of the device.
+               The shadow structure is documented below.
         :param pulumi.Input[str] space_id: Specifies the resource space ID which the device belongs to.
                Changing this parameter will create a new resource.
         :param pulumi.Input[str] status: The status of device. The valid values are **INACTIVE**, **ONLINE**, **OFFLINE**, **FROZEN**, **ABNORMAL**.
@@ -297,8 +449,12 @@ class _DeviceState:
             pulumi.set(__self__, "description", description)
         if device_id is not None:
             pulumi.set(__self__, "device_id", device_id)
+        if extension_info is not None:
+            pulumi.set(__self__, "extension_info", extension_info)
         if fingerprint is not None:
             pulumi.set(__self__, "fingerprint", fingerprint)
+        if force_disconnect is not None:
+            pulumi.set(__self__, "force_disconnect", force_disconnect)
         if frozen is not None:
             pulumi.set(__self__, "frozen", frozen)
         if gateway_id is not None:
@@ -313,8 +469,16 @@ class _DeviceState:
             pulumi.set(__self__, "product_id", product_id)
         if region is not None:
             pulumi.set(__self__, "region", region)
+        if secondary_fingerprint is not None:
+            pulumi.set(__self__, "secondary_fingerprint", secondary_fingerprint)
+        if secondary_secret is not None:
+            pulumi.set(__self__, "secondary_secret", secondary_secret)
         if secret is not None:
             pulumi.set(__self__, "secret", secret)
+        if secure_access is not None:
+            pulumi.set(__self__, "secure_access", secure_access)
+        if shadows is not None:
+            pulumi.set(__self__, "shadows", shadows)
         if space_id is not None:
             pulumi.set(__self__, "space_id", space_id)
         if status is not None:
@@ -340,7 +504,7 @@ class _DeviceState:
     @pulumi.getter
     def description(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the description of device. The description contains a maximum of 2048
+        Specifies the description of device. The description contains a maximum of `2,048`
         characters. Only letters, Chinese characters, digits, hyphens (-), underscore (_) and the following special characters
         are allowed: `?'#().,&%@!`.
         """
@@ -354,7 +518,7 @@ class _DeviceState:
     @pulumi.getter(name="deviceId")
     def device_id(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the device ID, which contains 4 to 256 characters.
+        Specifies the device ID, which contains `4` to `256` characters.
         Only letters, digits, hyphens (-) and underscore (_) are allowed. If omitted, the platform will automatically allocate
         a device ID. Changing this parameter will create a new resource.
         """
@@ -365,10 +529,23 @@ class _DeviceState:
         pulumi.set(self, "device_id", value)
 
     @property
+    @pulumi.getter(name="extensionInfo")
+    def extension_info(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]:
+        """
+        Specifies the extended information of the device.
+        The users can be customized the content. The maximum size of the value is `1` KB.
+        """
+        return pulumi.get(self, "extension_info")
+
+    @extension_info.setter
+    def extension_info(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]):
+        pulumi.set(self, "extension_info", value)
+
+    @property
     @pulumi.getter
     def fingerprint(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies a fingerprint of X.509 certificate for identity authentication,
+        Specifies a primary fingerprint of X.509 certificate for identity authentication,
         which is a 40-digit or 64-digit hexadecimal string. For more detail, please see
         [Registering a Device Authenticated by an X.509 Certificate](https://support.huaweicloud.com/en-us/usermanual-iothub/iot_01_0055.html).
         """
@@ -379,10 +556,23 @@ class _DeviceState:
         pulumi.set(self, "fingerprint", value)
 
     @property
+    @pulumi.getter(name="forceDisconnect")
+    def force_disconnect(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies whether to force device disconnection when resetting secrets or
+        fingerprints, currently, only long connections are allowed. The default value is **false**.
+        """
+        return pulumi.get(self, "force_disconnect")
+
+    @force_disconnect.setter
+    def force_disconnect(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "force_disconnect", value)
+
+    @property
     @pulumi.getter
     def frozen(self) -> Optional[pulumi.Input[bool]]:
         """
-        Specifies whether to freeze the device. Defaults to `false`.
+        Specifies whether to freeze the device. Defaults to **false**.
         """
         return pulumi.get(self, "frozen")
 
@@ -408,7 +598,7 @@ class _DeviceState:
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the device name, which contains 4 to 256 characters. Only letters,
+        Specifies the device name, which contains `4` to `256` characters. Only letters,
         Chinese characters, digits, hyphens (-), underscore (_) and the following special characters are allowed: `?'#().,&%@!`.
         """
         return pulumi.get(self, "name")
@@ -421,7 +611,7 @@ class _DeviceState:
     @pulumi.getter(name="nodeId")
     def node_id(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the node ID, which contains 4 to 256 characters.
+        Specifies the node ID, which contains `4` to `256` characters.
         The node ID can be IMEI, MAC address, or serial number. Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "node_id")
@@ -472,17 +662,77 @@ class _DeviceState:
         pulumi.set(self, "region", value)
 
     @property
+    @pulumi.getter(name="secondaryFingerprint")
+    def secondary_fingerprint(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies a secondary fingerprint of X.509 certificate for identity
+        authentication. When primary fingerprint verification fails, secondary fingerprint verification will be enabled, and
+        the secondary fingerprint has the same effectiveness as the primary fingerprint.
+        Which is a 40-digit or 64-digit hexadecimal string. For more detail, please see
+        [Registering a Device Authenticated by an X.509 Certificate](https://support.huaweicloud.com/en-us/usermanual-iothub/iot_01_0055.html).
+        """
+        return pulumi.get(self, "secondary_fingerprint")
+
+    @secondary_fingerprint.setter
+    def secondary_fingerprint(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "secondary_fingerprint", value)
+
+    @property
+    @pulumi.getter(name="secondarySecret")
+    def secondary_secret(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies a secondary secret for identity authentication.
+        When the primary secret verification fails, the secondary secret verification will be enabled, and the secondary
+        secret has the same effect as the primary secret; The secondary secret is not effective for devices connected to the
+        COAP protocol. Which contains `8` to `32` characters.
+        Only letters, digits, hyphens (-) and underscore (_) are allowed.
+        """
+        return pulumi.get(self, "secondary_secret")
+
+    @secondary_secret.setter
+    def secondary_secret(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "secondary_secret", value)
+
+    @property
     @pulumi.getter
     def secret(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies a secret for identity authentication, which contains 8 to 32 characters.
-        Only letters, digits, hyphens (-) and underscore (_) are allowed.
+        Specifies a primary secret for identity authentication, which contains `8` to `32`
+        characters. Only letters, digits, hyphens (-) and underscore (_) are allowed.
         """
         return pulumi.get(self, "secret")
 
     @secret.setter
     def secret(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "secret", value)
+
+    @property
+    @pulumi.getter(name="secureAccess")
+    def secure_access(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies whether the device is connected through a secure protocol.
+        This parameter is only valid when `secret` or `fingerprint` is specified, and suggest setting it to **true**.
+        If ignored, it means accessing through insecure protocols, and the device is susceptible to security risks such as
+        counterfeiting, please be cautious with this configuration.
+        """
+        return pulumi.get(self, "secure_access")
+
+    @secure_access.setter
+    def secure_access(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "secure_access", value)
+
+    @property
+    @pulumi.getter
+    def shadows(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['DeviceShadowArgs']]]]:
+        """
+        Specifies the initial configuration of the device.
+        The shadow structure is documented below.
+        """
+        return pulumi.get(self, "shadows")
+
+    @shadows.setter
+    def shadows(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['DeviceShadowArgs']]]]):
+        pulumi.set(self, "shadows", value)
 
     @property
     @pulumi.getter(name="spaceId")
@@ -529,19 +779,32 @@ class Device(pulumi.CustomResource):
                  opts: Optional[pulumi.ResourceOptions] = None,
                  description: Optional[pulumi.Input[str]] = None,
                  device_id: Optional[pulumi.Input[str]] = None,
+                 extension_info: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  fingerprint: Optional[pulumi.Input[str]] = None,
+                 force_disconnect: Optional[pulumi.Input[bool]] = None,
                  frozen: Optional[pulumi.Input[bool]] = None,
                  gateway_id: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  node_id: Optional[pulumi.Input[str]] = None,
                  product_id: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
+                 secondary_fingerprint: Optional[pulumi.Input[str]] = None,
+                 secondary_secret: Optional[pulumi.Input[str]] = None,
                  secret: Optional[pulumi.Input[str]] = None,
+                 secure_access: Optional[pulumi.Input[bool]] = None,
+                 shadows: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['DeviceShadowArgs']]]]] = None,
                  space_id: Optional[pulumi.Input[str]] = None,
                  tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  __props__=None):
         """
         Manages an IoTDA device within HuaweiCloud.
+
+        > When accessing an IoTDA **standard** or **enterprise** edition instance, you need to specify the IoTDA service
+        endpoint in `provider` block.
+        You can login to the IoTDA console, choose the instance **Overview** and click **Access Details**
+        to view the HTTPS application access address. An example of the access address might be
+        **9bc34xxxxx.st1.iotda-app.ap-southeast-1.myhuaweicloud.com**, then you need to configure the
+        `provider` block as follows:
 
         ## Example Usage
         ### Create a directly connected device and an indirectly connected device
@@ -572,37 +835,71 @@ class Device(pulumi.CustomResource):
 
         ## Import
 
-        Devices can be imported using the `id`, e.g.
+        Devices can be imported using the `id`, e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:IoTDA/device:Device test 10022532f4f94f26b01daa1e424853e1
         ```
 
+         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`force_disconnect`, `extension_info`, `shadow`. It is generally recommended running `terraform plan` after importing a resource. You can then decide if changes should be applied to the resource, or the resource definition should be updated to align with the resource. Also you can ignore changes as below. hcl resource "huaweicloud_iotda_device" "test" {
+
+        ...
+
+         lifecycle {
+
+         ignore_changes = [
+
+         force_disconnect, extension_info, shadow,
+
+         ]
+
+         } }
+
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[str] description: Specifies the description of device. The description contains a maximum of 2048
+        :param pulumi.Input[str] description: Specifies the description of device. The description contains a maximum of `2,048`
                characters. Only letters, Chinese characters, digits, hyphens (-), underscore (_) and the following special characters
                are allowed: `?'#().,&%@!`.
-        :param pulumi.Input[str] device_id: Specifies the device ID, which contains 4 to 256 characters.
+        :param pulumi.Input[str] device_id: Specifies the device ID, which contains `4` to `256` characters.
                Only letters, digits, hyphens (-) and underscore (_) are allowed. If omitted, the platform will automatically allocate
                a device ID. Changing this parameter will create a new resource.
-        :param pulumi.Input[str] fingerprint: Specifies a fingerprint of X.509 certificate for identity authentication,
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] extension_info: Specifies the extended information of the device.
+               The users can be customized the content. The maximum size of the value is `1` KB.
+        :param pulumi.Input[str] fingerprint: Specifies a primary fingerprint of X.509 certificate for identity authentication,
                which is a 40-digit or 64-digit hexadecimal string. For more detail, please see
                [Registering a Device Authenticated by an X.509 Certificate](https://support.huaweicloud.com/en-us/usermanual-iothub/iot_01_0055.html).
-        :param pulumi.Input[bool] frozen: Specifies whether to freeze the device. Defaults to `false`.
+        :param pulumi.Input[bool] force_disconnect: Specifies whether to force device disconnection when resetting secrets or
+               fingerprints, currently, only long connections are allowed. The default value is **false**.
+        :param pulumi.Input[bool] frozen: Specifies whether to freeze the device. Defaults to **false**.
         :param pulumi.Input[str] gateway_id: Specifies the gateway ID which is the device ID of the parent device.
                The child device is not directly connected to the platform. If omitted, it means to create a device directly connected
                to the platform, the `device_id` of the device is the same as the `gateway_id`.
-        :param pulumi.Input[str] name: Specifies the device name, which contains 4 to 256 characters. Only letters,
+        :param pulumi.Input[str] name: Specifies the device name, which contains `4` to `256` characters. Only letters,
                Chinese characters, digits, hyphens (-), underscore (_) and the following special characters are allowed: `?'#().,&%@!`.
-        :param pulumi.Input[str] node_id: Specifies the node ID, which contains 4 to 256 characters.
+        :param pulumi.Input[str] node_id: Specifies the node ID, which contains `4` to `256` characters.
                The node ID can be IMEI, MAC address, or serial number. Changing this parameter will create a new resource.
         :param pulumi.Input[str] product_id: Specifies the product ID which the device belongs to.
                Changing this parameter will create a new resource.
         :param pulumi.Input[str] region: Specifies the region in which to create the IoTDA device resource.
                If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
-        :param pulumi.Input[str] secret: Specifies a secret for identity authentication, which contains 8 to 32 characters.
+        :param pulumi.Input[str] secondary_fingerprint: Specifies a secondary fingerprint of X.509 certificate for identity
+               authentication. When primary fingerprint verification fails, secondary fingerprint verification will be enabled, and
+               the secondary fingerprint has the same effectiveness as the primary fingerprint.
+               Which is a 40-digit or 64-digit hexadecimal string. For more detail, please see
+               [Registering a Device Authenticated by an X.509 Certificate](https://support.huaweicloud.com/en-us/usermanual-iothub/iot_01_0055.html).
+        :param pulumi.Input[str] secondary_secret: Specifies a secondary secret for identity authentication.
+               When the primary secret verification fails, the secondary secret verification will be enabled, and the secondary
+               secret has the same effect as the primary secret; The secondary secret is not effective for devices connected to the
+               COAP protocol. Which contains `8` to `32` characters.
                Only letters, digits, hyphens (-) and underscore (_) are allowed.
+        :param pulumi.Input[str] secret: Specifies a primary secret for identity authentication, which contains `8` to `32`
+               characters. Only letters, digits, hyphens (-) and underscore (_) are allowed.
+        :param pulumi.Input[bool] secure_access: Specifies whether the device is connected through a secure protocol.
+               This parameter is only valid when `secret` or `fingerprint` is specified, and suggest setting it to **true**.
+               If ignored, it means accessing through insecure protocols, and the device is susceptible to security risks such as
+               counterfeiting, please be cautious with this configuration.
+        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['DeviceShadowArgs']]]] shadows: Specifies the initial configuration of the device.
+               The shadow structure is documented below.
         :param pulumi.Input[str] space_id: Specifies the resource space ID which the device belongs to.
                Changing this parameter will create a new resource.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the device.
@@ -616,6 +913,13 @@ class Device(pulumi.CustomResource):
         """
         Manages an IoTDA device within HuaweiCloud.
 
+        > When accessing an IoTDA **standard** or **enterprise** edition instance, you need to specify the IoTDA service
+        endpoint in `provider` block.
+        You can login to the IoTDA console, choose the instance **Overview** and click **Access Details**
+        to view the HTTPS application access address. An example of the access address might be
+        **9bc34xxxxx.st1.iotda-app.ap-southeast-1.myhuaweicloud.com**, then you need to configure the
+        `provider` block as follows:
+
         ## Example Usage
         ### Create a directly connected device and an indirectly connected device
 
@@ -645,11 +949,25 @@ class Device(pulumi.CustomResource):
 
         ## Import
 
-        Devices can be imported using the `id`, e.g.
+        Devices can be imported using the `id`, e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:IoTDA/device:Device test 10022532f4f94f26b01daa1e424853e1
         ```
+
+         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`force_disconnect`, `extension_info`, `shadow`. It is generally recommended running `terraform plan` after importing a resource. You can then decide if changes should be applied to the resource, or the resource definition should be updated to align with the resource. Also you can ignore changes as below. hcl resource "huaweicloud_iotda_device" "test" {
+
+        ...
+
+         lifecycle {
+
+         ignore_changes = [
+
+         force_disconnect, extension_info, shadow,
+
+         ]
+
+         } }
 
         :param str resource_name: The name of the resource.
         :param DeviceArgs args: The arguments to use to populate this resource's properties.
@@ -668,14 +986,20 @@ class Device(pulumi.CustomResource):
                  opts: Optional[pulumi.ResourceOptions] = None,
                  description: Optional[pulumi.Input[str]] = None,
                  device_id: Optional[pulumi.Input[str]] = None,
+                 extension_info: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  fingerprint: Optional[pulumi.Input[str]] = None,
+                 force_disconnect: Optional[pulumi.Input[bool]] = None,
                  frozen: Optional[pulumi.Input[bool]] = None,
                  gateway_id: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  node_id: Optional[pulumi.Input[str]] = None,
                  product_id: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
+                 secondary_fingerprint: Optional[pulumi.Input[str]] = None,
+                 secondary_secret: Optional[pulumi.Input[str]] = None,
                  secret: Optional[pulumi.Input[str]] = None,
+                 secure_access: Optional[pulumi.Input[bool]] = None,
+                 shadows: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['DeviceShadowArgs']]]]] = None,
                  space_id: Optional[pulumi.Input[str]] = None,
                  tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  __props__=None):
@@ -689,7 +1013,9 @@ class Device(pulumi.CustomResource):
 
             __props__.__dict__["description"] = description
             __props__.__dict__["device_id"] = device_id
+            __props__.__dict__["extension_info"] = extension_info
             __props__.__dict__["fingerprint"] = fingerprint
+            __props__.__dict__["force_disconnect"] = force_disconnect
             __props__.__dict__["frozen"] = frozen
             __props__.__dict__["gateway_id"] = gateway_id
             __props__.__dict__["name"] = name
@@ -700,7 +1026,11 @@ class Device(pulumi.CustomResource):
                 raise TypeError("Missing required property 'product_id'")
             __props__.__dict__["product_id"] = product_id
             __props__.__dict__["region"] = region
+            __props__.__dict__["secondary_fingerprint"] = secondary_fingerprint
+            __props__.__dict__["secondary_secret"] = secondary_secret
             __props__.__dict__["secret"] = secret
+            __props__.__dict__["secure_access"] = secure_access
+            __props__.__dict__["shadows"] = shadows
             if space_id is None and not opts.urn:
                 raise TypeError("Missing required property 'space_id'")
             __props__.__dict__["space_id"] = space_id
@@ -721,7 +1051,9 @@ class Device(pulumi.CustomResource):
             auth_type: Optional[pulumi.Input[str]] = None,
             description: Optional[pulumi.Input[str]] = None,
             device_id: Optional[pulumi.Input[str]] = None,
+            extension_info: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
             fingerprint: Optional[pulumi.Input[str]] = None,
+            force_disconnect: Optional[pulumi.Input[bool]] = None,
             frozen: Optional[pulumi.Input[bool]] = None,
             gateway_id: Optional[pulumi.Input[str]] = None,
             name: Optional[pulumi.Input[str]] = None,
@@ -729,7 +1061,11 @@ class Device(pulumi.CustomResource):
             node_type: Optional[pulumi.Input[str]] = None,
             product_id: Optional[pulumi.Input[str]] = None,
             region: Optional[pulumi.Input[str]] = None,
+            secondary_fingerprint: Optional[pulumi.Input[str]] = None,
+            secondary_secret: Optional[pulumi.Input[str]] = None,
             secret: Optional[pulumi.Input[str]] = None,
+            secure_access: Optional[pulumi.Input[bool]] = None,
+            shadows: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['DeviceShadowArgs']]]]] = None,
             space_id: Optional[pulumi.Input[str]] = None,
             status: Optional[pulumi.Input[str]] = None,
             tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None) -> 'Device':
@@ -743,22 +1079,26 @@ class Device(pulumi.CustomResource):
         :param pulumi.Input[str] auth_type: The authentication type of device. The options are as follows:
                + **SECRET**: Use a secret for identity authentication.
                + **CERTIFICATES**: Use an x.509 certificate for identity authentication.
-        :param pulumi.Input[str] description: Specifies the description of device. The description contains a maximum of 2048
+        :param pulumi.Input[str] description: Specifies the description of device. The description contains a maximum of `2,048`
                characters. Only letters, Chinese characters, digits, hyphens (-), underscore (_) and the following special characters
                are allowed: `?'#().,&%@!`.
-        :param pulumi.Input[str] device_id: Specifies the device ID, which contains 4 to 256 characters.
+        :param pulumi.Input[str] device_id: Specifies the device ID, which contains `4` to `256` characters.
                Only letters, digits, hyphens (-) and underscore (_) are allowed. If omitted, the platform will automatically allocate
                a device ID. Changing this parameter will create a new resource.
-        :param pulumi.Input[str] fingerprint: Specifies a fingerprint of X.509 certificate for identity authentication,
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] extension_info: Specifies the extended information of the device.
+               The users can be customized the content. The maximum size of the value is `1` KB.
+        :param pulumi.Input[str] fingerprint: Specifies a primary fingerprint of X.509 certificate for identity authentication,
                which is a 40-digit or 64-digit hexadecimal string. For more detail, please see
                [Registering a Device Authenticated by an X.509 Certificate](https://support.huaweicloud.com/en-us/usermanual-iothub/iot_01_0055.html).
-        :param pulumi.Input[bool] frozen: Specifies whether to freeze the device. Defaults to `false`.
+        :param pulumi.Input[bool] force_disconnect: Specifies whether to force device disconnection when resetting secrets or
+               fingerprints, currently, only long connections are allowed. The default value is **false**.
+        :param pulumi.Input[bool] frozen: Specifies whether to freeze the device. Defaults to **false**.
         :param pulumi.Input[str] gateway_id: Specifies the gateway ID which is the device ID of the parent device.
                The child device is not directly connected to the platform. If omitted, it means to create a device directly connected
                to the platform, the `device_id` of the device is the same as the `gateway_id`.
-        :param pulumi.Input[str] name: Specifies the device name, which contains 4 to 256 characters. Only letters,
+        :param pulumi.Input[str] name: Specifies the device name, which contains `4` to `256` characters. Only letters,
                Chinese characters, digits, hyphens (-), underscore (_) and the following special characters are allowed: `?'#().,&%@!`.
-        :param pulumi.Input[str] node_id: Specifies the node ID, which contains 4 to 256 characters.
+        :param pulumi.Input[str] node_id: Specifies the node ID, which contains `4` to `256` characters.
                The node ID can be IMEI, MAC address, or serial number. Changing this parameter will create a new resource.
         :param pulumi.Input[str] node_type: The node type of device. The options are as follows:
                + **GATEWAY**: Directly connected device.
@@ -768,8 +1108,24 @@ class Device(pulumi.CustomResource):
                Changing this parameter will create a new resource.
         :param pulumi.Input[str] region: Specifies the region in which to create the IoTDA device resource.
                If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
-        :param pulumi.Input[str] secret: Specifies a secret for identity authentication, which contains 8 to 32 characters.
+        :param pulumi.Input[str] secondary_fingerprint: Specifies a secondary fingerprint of X.509 certificate for identity
+               authentication. When primary fingerprint verification fails, secondary fingerprint verification will be enabled, and
+               the secondary fingerprint has the same effectiveness as the primary fingerprint.
+               Which is a 40-digit or 64-digit hexadecimal string. For more detail, please see
+               [Registering a Device Authenticated by an X.509 Certificate](https://support.huaweicloud.com/en-us/usermanual-iothub/iot_01_0055.html).
+        :param pulumi.Input[str] secondary_secret: Specifies a secondary secret for identity authentication.
+               When the primary secret verification fails, the secondary secret verification will be enabled, and the secondary
+               secret has the same effect as the primary secret; The secondary secret is not effective for devices connected to the
+               COAP protocol. Which contains `8` to `32` characters.
                Only letters, digits, hyphens (-) and underscore (_) are allowed.
+        :param pulumi.Input[str] secret: Specifies a primary secret for identity authentication, which contains `8` to `32`
+               characters. Only letters, digits, hyphens (-) and underscore (_) are allowed.
+        :param pulumi.Input[bool] secure_access: Specifies whether the device is connected through a secure protocol.
+               This parameter is only valid when `secret` or `fingerprint` is specified, and suggest setting it to **true**.
+               If ignored, it means accessing through insecure protocols, and the device is susceptible to security risks such as
+               counterfeiting, please be cautious with this configuration.
+        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['DeviceShadowArgs']]]] shadows: Specifies the initial configuration of the device.
+               The shadow structure is documented below.
         :param pulumi.Input[str] space_id: Specifies the resource space ID which the device belongs to.
                Changing this parameter will create a new resource.
         :param pulumi.Input[str] status: The status of device. The valid values are **INACTIVE**, **ONLINE**, **OFFLINE**, **FROZEN**, **ABNORMAL**.
@@ -782,7 +1138,9 @@ class Device(pulumi.CustomResource):
         __props__.__dict__["auth_type"] = auth_type
         __props__.__dict__["description"] = description
         __props__.__dict__["device_id"] = device_id
+        __props__.__dict__["extension_info"] = extension_info
         __props__.__dict__["fingerprint"] = fingerprint
+        __props__.__dict__["force_disconnect"] = force_disconnect
         __props__.__dict__["frozen"] = frozen
         __props__.__dict__["gateway_id"] = gateway_id
         __props__.__dict__["name"] = name
@@ -790,7 +1148,11 @@ class Device(pulumi.CustomResource):
         __props__.__dict__["node_type"] = node_type
         __props__.__dict__["product_id"] = product_id
         __props__.__dict__["region"] = region
+        __props__.__dict__["secondary_fingerprint"] = secondary_fingerprint
+        __props__.__dict__["secondary_secret"] = secondary_secret
         __props__.__dict__["secret"] = secret
+        __props__.__dict__["secure_access"] = secure_access
+        __props__.__dict__["shadows"] = shadows
         __props__.__dict__["space_id"] = space_id
         __props__.__dict__["status"] = status
         __props__.__dict__["tags"] = tags
@@ -810,7 +1172,7 @@ class Device(pulumi.CustomResource):
     @pulumi.getter
     def description(self) -> pulumi.Output[Optional[str]]:
         """
-        Specifies the description of device. The description contains a maximum of 2048
+        Specifies the description of device. The description contains a maximum of `2,048`
         characters. Only letters, Chinese characters, digits, hyphens (-), underscore (_) and the following special characters
         are allowed: `?'#().,&%@!`.
         """
@@ -820,27 +1182,45 @@ class Device(pulumi.CustomResource):
     @pulumi.getter(name="deviceId")
     def device_id(self) -> pulumi.Output[str]:
         """
-        Specifies the device ID, which contains 4 to 256 characters.
+        Specifies the device ID, which contains `4` to `256` characters.
         Only letters, digits, hyphens (-) and underscore (_) are allowed. If omitted, the platform will automatically allocate
         a device ID. Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "device_id")
 
     @property
+    @pulumi.getter(name="extensionInfo")
+    def extension_info(self) -> pulumi.Output[Optional[Mapping[str, str]]]:
+        """
+        Specifies the extended information of the device.
+        The users can be customized the content. The maximum size of the value is `1` KB.
+        """
+        return pulumi.get(self, "extension_info")
+
+    @property
     @pulumi.getter
     def fingerprint(self) -> pulumi.Output[str]:
         """
-        Specifies a fingerprint of X.509 certificate for identity authentication,
+        Specifies a primary fingerprint of X.509 certificate for identity authentication,
         which is a 40-digit or 64-digit hexadecimal string. For more detail, please see
         [Registering a Device Authenticated by an X.509 Certificate](https://support.huaweicloud.com/en-us/usermanual-iothub/iot_01_0055.html).
         """
         return pulumi.get(self, "fingerprint")
 
     @property
+    @pulumi.getter(name="forceDisconnect")
+    def force_disconnect(self) -> pulumi.Output[Optional[bool]]:
+        """
+        Specifies whether to force device disconnection when resetting secrets or
+        fingerprints, currently, only long connections are allowed. The default value is **false**.
+        """
+        return pulumi.get(self, "force_disconnect")
+
+    @property
     @pulumi.getter
     def frozen(self) -> pulumi.Output[bool]:
         """
-        Specifies whether to freeze the device. Defaults to `false`.
+        Specifies whether to freeze the device. Defaults to **false**.
         """
         return pulumi.get(self, "frozen")
 
@@ -858,7 +1238,7 @@ class Device(pulumi.CustomResource):
     @pulumi.getter
     def name(self) -> pulumi.Output[str]:
         """
-        Specifies the device name, which contains 4 to 256 characters. Only letters,
+        Specifies the device name, which contains `4` to `256` characters. Only letters,
         Chinese characters, digits, hyphens (-), underscore (_) and the following special characters are allowed: `?'#().,&%@!`.
         """
         return pulumi.get(self, "name")
@@ -867,7 +1247,7 @@ class Device(pulumi.CustomResource):
     @pulumi.getter(name="nodeId")
     def node_id(self) -> pulumi.Output[str]:
         """
-        Specifies the node ID, which contains 4 to 256 characters.
+        Specifies the node ID, which contains `4` to `256` characters.
         The node ID can be IMEI, MAC address, or serial number. Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "node_id")
@@ -902,13 +1282,57 @@ class Device(pulumi.CustomResource):
         return pulumi.get(self, "region")
 
     @property
+    @pulumi.getter(name="secondaryFingerprint")
+    def secondary_fingerprint(self) -> pulumi.Output[str]:
+        """
+        Specifies a secondary fingerprint of X.509 certificate for identity
+        authentication. When primary fingerprint verification fails, secondary fingerprint verification will be enabled, and
+        the secondary fingerprint has the same effectiveness as the primary fingerprint.
+        Which is a 40-digit or 64-digit hexadecimal string. For more detail, please see
+        [Registering a Device Authenticated by an X.509 Certificate](https://support.huaweicloud.com/en-us/usermanual-iothub/iot_01_0055.html).
+        """
+        return pulumi.get(self, "secondary_fingerprint")
+
+    @property
+    @pulumi.getter(name="secondarySecret")
+    def secondary_secret(self) -> pulumi.Output[str]:
+        """
+        Specifies a secondary secret for identity authentication.
+        When the primary secret verification fails, the secondary secret verification will be enabled, and the secondary
+        secret has the same effect as the primary secret; The secondary secret is not effective for devices connected to the
+        COAP protocol. Which contains `8` to `32` characters.
+        Only letters, digits, hyphens (-) and underscore (_) are allowed.
+        """
+        return pulumi.get(self, "secondary_secret")
+
+    @property
     @pulumi.getter
     def secret(self) -> pulumi.Output[str]:
         """
-        Specifies a secret for identity authentication, which contains 8 to 32 characters.
-        Only letters, digits, hyphens (-) and underscore (_) are allowed.
+        Specifies a primary secret for identity authentication, which contains `8` to `32`
+        characters. Only letters, digits, hyphens (-) and underscore (_) are allowed.
         """
         return pulumi.get(self, "secret")
+
+    @property
+    @pulumi.getter(name="secureAccess")
+    def secure_access(self) -> pulumi.Output[bool]:
+        """
+        Specifies whether the device is connected through a secure protocol.
+        This parameter is only valid when `secret` or `fingerprint` is specified, and suggest setting it to **true**.
+        If ignored, it means accessing through insecure protocols, and the device is susceptible to security risks such as
+        counterfeiting, please be cautious with this configuration.
+        """
+        return pulumi.get(self, "secure_access")
+
+    @property
+    @pulumi.getter
+    def shadows(self) -> pulumi.Output[Optional[Sequence['outputs.DeviceShadow']]]:
+        """
+        Specifies the initial configuration of the device.
+        The shadow structure is documented below.
+        """
+        return pulumi.get(self, "shadows")
 
     @property
     @pulumi.getter(name="spaceId")

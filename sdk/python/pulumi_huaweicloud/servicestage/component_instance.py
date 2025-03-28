@@ -667,7 +667,7 @@ class ComponentInstance(pulumi.CustomResource):
 
         ## Import
 
-        Instances can be imported using their related `application_id`, `component_id` and `id`, separated by a slash (/), e.g.
+        Instances can be imported using their related `application_id`, `component_id` and `id`, separated by a slash (/), e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:ServiceStage/componentInstance:ComponentInstance test 4e65a759-e7b1-4e9e-8277-857f8e261f3c/4e65a759-e7b1-4e9e-8277-857f8e261f3c/c0a13d88-d4e3-11ec-93a9-0255ac101d30
@@ -823,7 +823,7 @@ class ComponentInstance(pulumi.CustomResource):
 
         ## Import
 
-        Instances can be imported using their related `application_id`, `component_id` and `id`, separated by a slash (/), e.g.
+        Instances can be imported using their related `application_id`, `component_id` and `id`, separated by a slash (/), e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:ServiceStage/componentInstance:ComponentInstance test 4e65a759-e7b1-4e9e-8277-857f8e261f3c/4e65a759-e7b1-4e9e-8277-857f8e261f3c/c0a13d88-d4e3-11ec-93a9-0255ac101d30

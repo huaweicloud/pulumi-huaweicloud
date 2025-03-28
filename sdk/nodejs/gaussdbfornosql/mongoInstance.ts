@@ -6,10 +6,10 @@ import { input as inputs, output as outputs } from "../types";
 import * as utilities from "../utilities";
 
 /**
- * GaussDB for mongo instance management within HuaweiCoud.
+ * GeminiDB Mongo instance management within HuaweiCould.
  *
  * ## Example Usage
- * ### create a gaussdb for mongo instance with tags
+ * ### create a geminidb mongo instance with tags
  *
  * ```typescript
  * import * as pulumi from "@pulumi/pulumi";
@@ -29,7 +29,7 @@ import * as utilities from "../utilities";
  *     },
  * });
  * ```
- * ### create a gaussdb mongo instance with backup strategy
+ * ### create a geminidb mongo instance with backup strategy
  *
  * ```typescript
  * import * as pulumi from "@pulumi/pulumi";
@@ -52,7 +52,7 @@ import * as utilities from "../utilities";
  *
  * ## Import
  *
- * GaussDB mongo instance can be imported using the `id`, e.g.
+ * GaussDB mongo instance can be imported using the `id`, e.g. bash
  *
  * ```sh
  *  $ pulumi import huaweicloud:GaussDBforNoSQL/mongoInstance:MongoInstance instance_1 2d3cb29c73754417bbbf46b1f856b371in10
@@ -131,7 +131,7 @@ export class MongoInstance extends pulumi.CustomResource {
     public readonly dedicatedResourceName!: pulumi.Output<string>;
     /**
      * Specifies the enterprise project id, Only valid for users who
-     * have enabled the enterprise multi-project service. Changing this parameter will create a new resource.
+     * have enabled the enterprise multi-project service.
      */
     public readonly enterpriseProjectId!: pulumi.Output<string | undefined>;
     /**
@@ -159,12 +159,12 @@ export class MongoInstance extends pulumi.CustomResource {
     public /*out*/ readonly mode!: pulumi.Output<string>;
     /**
      * Specifies the instance name, which can be the same as an existing instance name. The
-     * value must be **4** to **64** characters in length and start with a letter. It is case-sensitive and can contain only
+     * value must be `4` to `64` characters in length and start with a letter. It is case-sensitive and can contain only
      * letters, digits, hyphens (-), and underscores (_).
      */
     public readonly name!: pulumi.Output<string>;
     /**
-     * Specifies the number of nodes, only **3** is supported now. Defaults to **3**.
+     * Specifies the number of nodes, only `3` is supported now. Defaults to `3`.
      * Changing this parameter will create a new resource.
      */
     public readonly nodeNum!: pulumi.Output<number | undefined>;
@@ -173,16 +173,17 @@ export class MongoInstance extends pulumi.CustomResource {
      */
     public /*out*/ readonly nodes!: pulumi.Output<outputs.GaussDBforNoSQL.MongoInstanceNode[]>;
     /**
-     * Specifies the database password. The value must be **8** to **32** characters in
+     * Specifies the database password. The value must be `8` to `32` characters in
      * length, including uppercase and lowercase letters, digits, and special characters, such as ~!@#%^*-_=+? You are
      * advised to enter a strong password to improve security, preventing security risks such as brute force cracking.
      */
     public readonly password!: pulumi.Output<string>;
     /**
-     * Specifies the charging period of the instance.
-     * If `periodUnit` is set to **month** , the value ranges from **1** to **9**. If `periodUnit` is set to **year**, the
-     * value ranges from **1** to **3**. This parameter is mandatory if `chargingMode` is set to **prePaid**. Changing this
-     * will do nothing.
+     * Specifies the charging period of the instance.  
+     * If `periodUnit` is set to **month** , the value ranges from `1` to `9`.
+     * If `periodUnit` is set to *year*, the value ranges from `1` to `3`.
+     * This parameter is mandatory if `chargingMode` is set to **prePaid**.
+     * Changing this will do nothing.
      */
     public readonly period!: pulumi.Output<number | undefined>;
     /**
@@ -228,8 +229,8 @@ export class MongoInstance extends pulumi.CustomResource {
      */
     public readonly tags!: pulumi.Output<{[key: string]: string} | undefined>;
     /**
-     * Specifies the storage space in GB. The value must be a multiple of **10**. For a
-     * GaussDB mongo DB instance, the minimum storage space is **100** GB, and the maximum storage space is related to the
+     * Specifies the storage space in GB. The value must be a multiple of `10`. For a
+     * GaussDB mongo DB instance, the minimum storage space is `100` GB, and the maximum storage space is related to the
      * instance performance specifications. For details,
      * see [DB Instance Specifications](https://support.huaweicloud.com/intl/en-us/mongoug-nosql/nosql_05_0029.html)
      */
@@ -389,7 +390,7 @@ export interface MongoInstanceState {
     dedicatedResourceName?: pulumi.Input<string>;
     /**
      * Specifies the enterprise project id, Only valid for users who
-     * have enabled the enterprise multi-project service. Changing this parameter will create a new resource.
+     * have enabled the enterprise multi-project service.
      */
     enterpriseProjectId?: pulumi.Input<string>;
     /**
@@ -417,12 +418,12 @@ export interface MongoInstanceState {
     mode?: pulumi.Input<string>;
     /**
      * Specifies the instance name, which can be the same as an existing instance name. The
-     * value must be **4** to **64** characters in length and start with a letter. It is case-sensitive and can contain only
+     * value must be `4` to `64` characters in length and start with a letter. It is case-sensitive and can contain only
      * letters, digits, hyphens (-), and underscores (_).
      */
     name?: pulumi.Input<string>;
     /**
-     * Specifies the number of nodes, only **3** is supported now. Defaults to **3**.
+     * Specifies the number of nodes, only `3` is supported now. Defaults to `3`.
      * Changing this parameter will create a new resource.
      */
     nodeNum?: pulumi.Input<number>;
@@ -431,16 +432,17 @@ export interface MongoInstanceState {
      */
     nodes?: pulumi.Input<pulumi.Input<inputs.GaussDBforNoSQL.MongoInstanceNode>[]>;
     /**
-     * Specifies the database password. The value must be **8** to **32** characters in
+     * Specifies the database password. The value must be `8` to `32` characters in
      * length, including uppercase and lowercase letters, digits, and special characters, such as ~!@#%^*-_=+? You are
      * advised to enter a strong password to improve security, preventing security risks such as brute force cracking.
      */
     password?: pulumi.Input<string>;
     /**
-     * Specifies the charging period of the instance.
-     * If `periodUnit` is set to **month** , the value ranges from **1** to **9**. If `periodUnit` is set to **year**, the
-     * value ranges from **1** to **3**. This parameter is mandatory if `chargingMode` is set to **prePaid**. Changing this
-     * will do nothing.
+     * Specifies the charging period of the instance.  
+     * If `periodUnit` is set to **month** , the value ranges from `1` to `9`.
+     * If `periodUnit` is set to *year*, the value ranges from `1` to `3`.
+     * This parameter is mandatory if `chargingMode` is set to **prePaid**.
+     * Changing this will do nothing.
      */
     period?: pulumi.Input<number>;
     /**
@@ -486,8 +488,8 @@ export interface MongoInstanceState {
      */
     tags?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
     /**
-     * Specifies the storage space in GB. The value must be a multiple of **10**. For a
-     * GaussDB mongo DB instance, the minimum storage space is **100** GB, and the maximum storage space is related to the
+     * Specifies the storage space in GB. The value must be a multiple of `10`. For a
+     * GaussDB mongo DB instance, the minimum storage space is `100` GB, and the maximum storage space is related to the
      * instance performance specifications. For details,
      * see [DB Instance Specifications](https://support.huaweicloud.com/intl/en-us/mongoug-nosql/nosql_05_0029.html)
      */
@@ -543,7 +545,7 @@ export interface MongoInstanceArgs {
     dedicatedResourceName?: pulumi.Input<string>;
     /**
      * Specifies the enterprise project id, Only valid for users who
-     * have enabled the enterprise multi-project service. Changing this parameter will create a new resource.
+     * have enabled the enterprise multi-project service.
      */
     enterpriseProjectId?: pulumi.Input<string>;
     /**
@@ -559,26 +561,27 @@ export interface MongoInstanceArgs {
     forceImport?: pulumi.Input<boolean>;
     /**
      * Specifies the instance name, which can be the same as an existing instance name. The
-     * value must be **4** to **64** characters in length and start with a letter. It is case-sensitive and can contain only
+     * value must be `4` to `64` characters in length and start with a letter. It is case-sensitive and can contain only
      * letters, digits, hyphens (-), and underscores (_).
      */
     name?: pulumi.Input<string>;
     /**
-     * Specifies the number of nodes, only **3** is supported now. Defaults to **3**.
+     * Specifies the number of nodes, only `3` is supported now. Defaults to `3`.
      * Changing this parameter will create a new resource.
      */
     nodeNum?: pulumi.Input<number>;
     /**
-     * Specifies the database password. The value must be **8** to **32** characters in
+     * Specifies the database password. The value must be `8` to `32` characters in
      * length, including uppercase and lowercase letters, digits, and special characters, such as ~!@#%^*-_=+? You are
      * advised to enter a strong password to improve security, preventing security risks such as brute force cracking.
      */
     password: pulumi.Input<string>;
     /**
-     * Specifies the charging period of the instance.
-     * If `periodUnit` is set to **month** , the value ranges from **1** to **9**. If `periodUnit` is set to **year**, the
-     * value ranges from **1** to **3**. This parameter is mandatory if `chargingMode` is set to **prePaid**. Changing this
-     * will do nothing.
+     * Specifies the charging period of the instance.  
+     * If `periodUnit` is set to **month** , the value ranges from `1` to `9`.
+     * If `periodUnit` is set to *year*, the value ranges from `1` to `3`.
+     * This parameter is mandatory if `chargingMode` is set to **prePaid**.
+     * Changing this will do nothing.
      */
     period?: pulumi.Input<number>;
     /**
@@ -612,8 +615,8 @@ export interface MongoInstanceArgs {
      */
     tags?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
     /**
-     * Specifies the storage space in GB. The value must be a multiple of **10**. For a
-     * GaussDB mongo DB instance, the minimum storage space is **100** GB, and the maximum storage space is related to the
+     * Specifies the storage space in GB. The value must be a multiple of `10`. For a
+     * GaussDB mongo DB instance, the minimum storage space is `100` GB, and the maximum storage space is related to the
      * instance performance specifications. For details,
      * see [DB Instance Specifications](https://support.huaweicloud.com/intl/en-us/mongoug-nosql/nosql_05_0029.html)
      */

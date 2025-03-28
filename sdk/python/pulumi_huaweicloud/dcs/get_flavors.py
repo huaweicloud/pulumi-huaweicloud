@@ -61,7 +61,7 @@ class GetFlavorsResult:
 
     @property
     @pulumi.getter
-    def capacity(self) -> float:
+    def capacity(self) -> Optional[float]:
         """
         The total memory of the cache, in GB.
         """
@@ -200,7 +200,7 @@ def get_flavors(cache_mode: Optional[str] = None,
 
 @_utilities.lift_output_func(get_flavors)
 def get_flavors_output(cache_mode: Optional[pulumi.Input[Optional[str]]] = None,
-                       capacity: Optional[pulumi.Input[float]] = None,
+                       capacity: Optional[pulumi.Input[Optional[float]]] = None,
                        cpu_architecture: Optional[pulumi.Input[Optional[str]]] = None,
                        engine: Optional[pulumi.Input[Optional[str]]] = None,
                        engine_version: Optional[pulumi.Input[Optional[str]]] = None,

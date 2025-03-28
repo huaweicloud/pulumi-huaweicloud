@@ -29,13 +29,23 @@ import * as utilities from "../utilities";
  *     password: "123456",
  * })});
  * ```
+ * ### Encrypt String Binary
+ *
+ * ```typescript
+ * import * as pulumi from "@pulumi/pulumi";
+ * import * as pulumi from "@huaweicloudos/pulumi";
+ *
+ * const config = new pulumi.Config();
+ * const secretBinary = config.requireObject("secretBinary");
+ * const test3 = new huaweicloud.dew.Secret("test3", {secretBinary: secretBinary});
+ * ```
  *
  * ## Import
  *
- * CSMS secret can be imported using the ID and the name of secret, separated by a slash, e.g.
+ * CSMS secret can be imported using the ID and the name of secret, separated by a slash, e.g. bash
  *
  * ```sh
- *  $ pulumi import huaweicloud:Dew/secret:Secret test 93cba7f5-550b-45dc-912e-277b3296fb27/test_secret
+ *  $ pulumi import huaweicloud:Dew/secret:Secret test <id>/<name>
  * ```
  */
 export class Secret extends pulumi.CustomResource {
@@ -71,40 +81,72 @@ export class Secret extends pulumi.CustomResource {
      */
     public /*out*/ readonly createTime!: pulumi.Output<string>;
     /**
-     * The description of a secret.
+     * Specifies the description of a secret.
      */
     public readonly description!: pulumi.Output<string | undefined>;
+    /**
+     * Specifies the enterprise project ID to which the secret belongs.
+     * If omitted, the default enterprise project will be used.
+     * If the enterprise project function is not enabled, ignore this parameter.
+     */
+    public readonly enterpriseProjectId!: pulumi.Output<string>;
+    /**
+     * Specifies the event list associated with the secret.
+     * Currently, only one event can be associated.
+     */
+    public readonly eventSubscriptions!: pulumi.Output<string | undefined>;
+    /**
+     * Specifies the expiration time of a secret, `expireTime` can only be edited
+     * when `status` is **ENABLED**. The time is in the format of timestamp, that is, the offset milliseconds
+     * from 1970-01-01 00:00:00 UTC to the specified time. The time must be greater than the current time.
+     */
+    public readonly expireTime!: pulumi.Output<number>;
     public readonly kmsKeyId!: pulumi.Output<string>;
     /**
      * The latest version id.
      */
     public /*out*/ readonly latestVersion!: pulumi.Output<string>;
     /**
-     * The secret name. The maximum length is 64 characters.
+     * Specifies the secret name. The maximum length is 64 characters.
      * Only digits, letters, underscores(_), hyphens(-) and dots(.) are allowed.
      */
     public readonly name!: pulumi.Output<string>;
     /**
-     * The region in which to create the CSMS secrets.
+     * Specifies the region in which to create the CSMS secrets.
      * If omitted, the provider-level region will be used. Changing this setting will create a new resource.
      */
     public readonly region!: pulumi.Output<string>;
+    /**
+     * Specifies the plaintext of a binary secret encoded using Base64. CSMS encrypts
+     * the plaintext and stores it in the initial version of the secret. The maximum size is 32 KB.
+     */
+    public readonly secretBinary!: pulumi.Output<string | undefined>;
     /**
      * The secret ID in UUID format.
      */
     public /*out*/ readonly secretId!: pulumi.Output<string>;
     /**
-     * The plaintext of a secret in text format. The maximum size is 32 KB.
+     * Specifies the plaintext of a text secret. CSMS encrypts the plaintext and stores
+     * it in the initial version of the secret. The maximum size is 32 KB.
      */
-    public readonly secretText!: pulumi.Output<string>;
+    public readonly secretText!: pulumi.Output<string | undefined>;
     /**
-     * The CSMS secret status. Values can be: ENABLED, DISABLED, PENDING_DELETE and FROZEN.
+     * Specifies the type of the secret.
+     * Currently, only supported **COMMON**. The default value is **COMMON**.
+     */
+    public readonly secretType!: pulumi.Output<string>;
+    /**
+     * The CSMS secret status. Values can be: **ENABLED**, **DISABLED**, **PENDING_DELETE** and **FROZEN**.
      */
     public /*out*/ readonly status!: pulumi.Output<string>;
     /**
-     * The tags of a CSMS secrets, key/value pair format.
+     * Specifies the tags of a CSMS secrets, key/value pair format.
      */
     public readonly tags!: pulumi.Output<{[key: string]: string} | undefined>;
+    /**
+     * The secret version status list.
+     */
+    public /*out*/ readonly versionStages!: pulumi.Output<string[]>;
 
     /**
      * Create a Secret resource with the given unique name, arguments, and options.
@@ -113,7 +155,7 @@ export class Secret extends pulumi.CustomResource {
      * @param args The arguments to use to populate this resource's properties.
      * @param opts A bag of options that control this resource's behavior.
      */
-    constructor(name: string, args: SecretArgs, opts?: pulumi.CustomResourceOptions)
+    constructor(name: string, args?: SecretArgs, opts?: pulumi.CustomResourceOptions)
     constructor(name: string, argsOrState?: SecretArgs | SecretState, opts?: pulumi.CustomResourceOptions) {
         let resourceInputs: pulumi.Inputs = {};
         opts = opts || {};
@@ -121,29 +163,38 @@ export class Secret extends pulumi.CustomResource {
             const state = argsOrState as SecretState | undefined;
             resourceInputs["createTime"] = state ? state.createTime : undefined;
             resourceInputs["description"] = state ? state.description : undefined;
+            resourceInputs["enterpriseProjectId"] = state ? state.enterpriseProjectId : undefined;
+            resourceInputs["eventSubscriptions"] = state ? state.eventSubscriptions : undefined;
+            resourceInputs["expireTime"] = state ? state.expireTime : undefined;
             resourceInputs["kmsKeyId"] = state ? state.kmsKeyId : undefined;
             resourceInputs["latestVersion"] = state ? state.latestVersion : undefined;
             resourceInputs["name"] = state ? state.name : undefined;
             resourceInputs["region"] = state ? state.region : undefined;
+            resourceInputs["secretBinary"] = state ? state.secretBinary : undefined;
             resourceInputs["secretId"] = state ? state.secretId : undefined;
             resourceInputs["secretText"] = state ? state.secretText : undefined;
+            resourceInputs["secretType"] = state ? state.secretType : undefined;
             resourceInputs["status"] = state ? state.status : undefined;
             resourceInputs["tags"] = state ? state.tags : undefined;
+            resourceInputs["versionStages"] = state ? state.versionStages : undefined;
         } else {
             const args = argsOrState as SecretArgs | undefined;
-            if ((!args || args.secretText === undefined) && !opts.urn) {
-                throw new Error("Missing required property 'secretText'");
-            }
             resourceInputs["description"] = args ? args.description : undefined;
+            resourceInputs["enterpriseProjectId"] = args ? args.enterpriseProjectId : undefined;
+            resourceInputs["eventSubscriptions"] = args ? args.eventSubscriptions : undefined;
+            resourceInputs["expireTime"] = args ? args.expireTime : undefined;
             resourceInputs["kmsKeyId"] = args ? args.kmsKeyId : undefined;
             resourceInputs["name"] = args ? args.name : undefined;
             resourceInputs["region"] = args ? args.region : undefined;
+            resourceInputs["secretBinary"] = args ? args.secretBinary : undefined;
             resourceInputs["secretText"] = args ? args.secretText : undefined;
+            resourceInputs["secretType"] = args ? args.secretType : undefined;
             resourceInputs["tags"] = args ? args.tags : undefined;
             resourceInputs["createTime"] = undefined /*out*/;
             resourceInputs["latestVersion"] = undefined /*out*/;
             resourceInputs["secretId"] = undefined /*out*/;
             resourceInputs["status"] = undefined /*out*/;
+            resourceInputs["versionStages"] = undefined /*out*/;
         }
         opts = pulumi.mergeOptions(utilities.resourceOptsDefaults(), opts);
         super(Secret.__pulumiType, name, resourceInputs, opts);
@@ -159,40 +210,72 @@ export interface SecretState {
      */
     createTime?: pulumi.Input<string>;
     /**
-     * The description of a secret.
+     * Specifies the description of a secret.
      */
     description?: pulumi.Input<string>;
+    /**
+     * Specifies the enterprise project ID to which the secret belongs.
+     * If omitted, the default enterprise project will be used.
+     * If the enterprise project function is not enabled, ignore this parameter.
+     */
+    enterpriseProjectId?: pulumi.Input<string>;
+    /**
+     * Specifies the event list associated with the secret.
+     * Currently, only one event can be associated.
+     */
+    eventSubscriptions?: pulumi.Input<string>;
+    /**
+     * Specifies the expiration time of a secret, `expireTime` can only be edited
+     * when `status` is **ENABLED**. The time is in the format of timestamp, that is, the offset milliseconds
+     * from 1970-01-01 00:00:00 UTC to the specified time. The time must be greater than the current time.
+     */
+    expireTime?: pulumi.Input<number>;
     kmsKeyId?: pulumi.Input<string>;
     /**
      * The latest version id.
      */
     latestVersion?: pulumi.Input<string>;
     /**
-     * The secret name. The maximum length is 64 characters.
+     * Specifies the secret name. The maximum length is 64 characters.
      * Only digits, letters, underscores(_), hyphens(-) and dots(.) are allowed.
      */
     name?: pulumi.Input<string>;
     /**
-     * The region in which to create the CSMS secrets.
+     * Specifies the region in which to create the CSMS secrets.
      * If omitted, the provider-level region will be used. Changing this setting will create a new resource.
      */
     region?: pulumi.Input<string>;
+    /**
+     * Specifies the plaintext of a binary secret encoded using Base64. CSMS encrypts
+     * the plaintext and stores it in the initial version of the secret. The maximum size is 32 KB.
+     */
+    secretBinary?: pulumi.Input<string>;
     /**
      * The secret ID in UUID format.
      */
     secretId?: pulumi.Input<string>;
     /**
-     * The plaintext of a secret in text format. The maximum size is 32 KB.
+     * Specifies the plaintext of a text secret. CSMS encrypts the plaintext and stores
+     * it in the initial version of the secret. The maximum size is 32 KB.
      */
     secretText?: pulumi.Input<string>;
     /**
-     * The CSMS secret status. Values can be: ENABLED, DISABLED, PENDING_DELETE and FROZEN.
+     * Specifies the type of the secret.
+     * Currently, only supported **COMMON**. The default value is **COMMON**.
+     */
+    secretType?: pulumi.Input<string>;
+    /**
+     * The CSMS secret status. Values can be: **ENABLED**, **DISABLED**, **PENDING_DELETE** and **FROZEN**.
      */
     status?: pulumi.Input<string>;
     /**
-     * The tags of a CSMS secrets, key/value pair format.
+     * Specifies the tags of a CSMS secrets, key/value pair format.
      */
     tags?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
+    /**
+     * The secret version status list.
+     */
+    versionStages?: pulumi.Input<pulumi.Input<string>[]>;
 }
 
 /**
@@ -200,26 +283,54 @@ export interface SecretState {
  */
 export interface SecretArgs {
     /**
-     * The description of a secret.
+     * Specifies the description of a secret.
      */
     description?: pulumi.Input<string>;
+    /**
+     * Specifies the enterprise project ID to which the secret belongs.
+     * If omitted, the default enterprise project will be used.
+     * If the enterprise project function is not enabled, ignore this parameter.
+     */
+    enterpriseProjectId?: pulumi.Input<string>;
+    /**
+     * Specifies the event list associated with the secret.
+     * Currently, only one event can be associated.
+     */
+    eventSubscriptions?: pulumi.Input<string>;
+    /**
+     * Specifies the expiration time of a secret, `expireTime` can only be edited
+     * when `status` is **ENABLED**. The time is in the format of timestamp, that is, the offset milliseconds
+     * from 1970-01-01 00:00:00 UTC to the specified time. The time must be greater than the current time.
+     */
+    expireTime?: pulumi.Input<number>;
     kmsKeyId?: pulumi.Input<string>;
     /**
-     * The secret name. The maximum length is 64 characters.
+     * Specifies the secret name. The maximum length is 64 characters.
      * Only digits, letters, underscores(_), hyphens(-) and dots(.) are allowed.
      */
     name?: pulumi.Input<string>;
     /**
-     * The region in which to create the CSMS secrets.
+     * Specifies the region in which to create the CSMS secrets.
      * If omitted, the provider-level region will be used. Changing this setting will create a new resource.
      */
     region?: pulumi.Input<string>;
     /**
-     * The plaintext of a secret in text format. The maximum size is 32 KB.
+     * Specifies the plaintext of a binary secret encoded using Base64. CSMS encrypts
+     * the plaintext and stores it in the initial version of the secret. The maximum size is 32 KB.
      */
-    secretText: pulumi.Input<string>;
+    secretBinary?: pulumi.Input<string>;
     /**
-     * The tags of a CSMS secrets, key/value pair format.
+     * Specifies the plaintext of a text secret. CSMS encrypts the plaintext and stores
+     * it in the initial version of the secret. The maximum size is 32 KB.
+     */
+    secretText?: pulumi.Input<string>;
+    /**
+     * Specifies the type of the secret.
+     * Currently, only supported **COMMON**. The default value is **COMMON**.
+     */
+    secretType?: pulumi.Input<string>;
+    /**
+     * Specifies the tags of a CSMS secrets, key/value pair format.
      */
     tags?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
 }

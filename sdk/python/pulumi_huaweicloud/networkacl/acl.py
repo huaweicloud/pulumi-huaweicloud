@@ -308,6 +308,8 @@ class Acl(pulumi.CustomResource):
                  subnets: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  __props__=None):
         """
+        !> **WARNING:** It has been deprecated, use `Vpc.NetworkAcl` instead.
+
         Manages a network ACL resource within HuaweiCloud.
 
         ## Example Usage
@@ -356,6 +358,8 @@ class Acl(pulumi.CustomResource):
                  args: Optional[AclArgs] = None,
                  opts: Optional[pulumi.ResourceOptions] = None):
         """
+        !> **WARNING:** It has been deprecated, use `Vpc.NetworkAcl` instead.
+
         Manages a network ACL resource within HuaweiCloud.
 
         ## Example Usage

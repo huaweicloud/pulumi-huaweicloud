@@ -5,41 +5,57 @@ import * as pulumi from "@pulumi/pulumi";
 import * as utilities from "../utilities";
 
 /**
- * Manages an Image resource within HuaweiCloud IMS.
+ * !> **WARNING:** It has been deprecated, please select the corresponding resource replacement based on the image type and
+ * creation method, please use resources named in `huaweicloudImsXxxXxxImage` format instead.
+ *
+ * Manages an IMS image resource within HuaweiCloud.
  *
  * ## Example Usage
- * ### Creating an image from OBS bucket
- *
- * ```typescript
- * import * as pulumi from "@pulumi/pulumi";
- * import * as huaweicloud from "@pulumi/huaweicloud";
- *
- * const imsTestFile = new huaweicloud.Ims.Image("ims_test_file", {
- *     description: "Create an image from the OBS bucket.",
- *     imageUrl: "ims-image:centos70.qcow2",
- *     minDisk: 40,
- *     tags: {
- *         foo: "bar1",
- *         key: "value",
- *     },
- * });
- * ```
- * ### Creating a whole image from an existing ECS
+ * ### Creating a system image from an existing ECS instance
  *
  * ```typescript
  * import * as pulumi from "@pulumi/pulumi";
  * import * as pulumi from "@huaweicloudos/pulumi";
  *
  * const config = new pulumi.Config();
- * const vaultId = config.requireObject("vaultId");
+ * const name = config.requireObject("name");
  * const instanceId = config.requireObject("instanceId");
  * const test = new huaweicloud.ims.Image("test", {
  *     instanceId: instanceId,
- *     vaultId: vaultId,
  *     tags: {
- *         foo: "bar2",
+ *         foo: "bar",
  *         key: "value",
  *     },
+ * });
+ * ```
+ * ### Creating a system image from OBS bucket
+ *
+ * ```typescript
+ * import * as pulumi from "@pulumi/pulumi";
+ * import * as pulumi from "@huaweicloudos/pulumi";
+ *
+ * const config = new pulumi.Config();
+ * const name = config.requireObject("name");
+ * const imageUrl = config.requireObject("imageUrl");
+ * const minDisk = config.requireObject("minDisk");
+ * const test = new huaweicloud.ims.Image("test", {
+ *     imageUrl: imageUrl,
+ *     minDisk: minDisk,
+ * });
+ * ```
+ * ### Creating a whole image from an existing ECS instance
+ *
+ * ```typescript
+ * import * as pulumi from "@pulumi/pulumi";
+ * import * as pulumi from "@huaweicloudos/pulumi";
+ *
+ * const config = new pulumi.Config();
+ * const name = config.requireObject("name");
+ * const instanceId = config.requireObject("instanceId");
+ * const vaultId = config.requireObject("vaultId");
+ * const test = new huaweicloud.ims.Image("test", {
+ *     instanceId: instanceId,
+ *     vaultId: vaultId,
  * });
  * ```
  * ### Creating a whole image from CBR backup
@@ -49,25 +65,31 @@ import * as utilities from "../utilities";
  * import * as pulumi from "@huaweicloudos/pulumi";
  *
  * const config = new pulumi.Config();
+ * const name = config.requireObject("name");
  * const backupId = config.requireObject("backupId");
- * const test = new huaweicloud.ims.Image("test", {
- *     backupId: backupId,
- *     tags: {
- *         foo: "bar1",
- *         key: "value",
- *     },
- * });
+ * const test = new huaweicloud.ims.Image("test", {backupId: backupId});
+ * ```
+ * ### Creating a data image from the data disk bound to the ECS instance
+ *
+ * ```typescript
+ * import * as pulumi from "@pulumi/pulumi";
+ * import * as pulumi from "@huaweicloudos/pulumi";
+ *
+ * const config = new pulumi.Config();
+ * const name = config.requireObject("name");
+ * const volumeId = config.requireObject("volumeId");
+ * const test = new huaweicloud.ims.Image("test", {volumeId: volumeId});
  * ```
  *
  * ## Import
  *
- * Images can be imported using the `id`, e.g. bash
+ * Image can be imported using the `id`, e.g. bash
  *
  * ```sh
- *  $ pulumi import huaweicloud:Ims/image:Image my_image <id>
+ *  $ pulumi import huaweicloud:Ims/image:Image test <id>
  * ```
  *
- *  Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response. The missing attributes include`vault_id`. It is generally recommended running `terraform plan` after importing the image. You can then decide if changes should be applied to the image, or the resource definition should be updated to align with the image. Also you can ignore changes as below. resource "huaweicloud_images_image" "test" {
+ *  Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response. The missing attributes include`vault_id`. It is generally recommended running `terraform plan` after importing the image. You can then decide if changes should be applied to the image, or the resource definition should be updated to align with the image. Also, you can ignore changes as below. hcl resource "huaweicloud_images_image" "test" {
  *
  *  ...
  *
@@ -110,8 +132,9 @@ export class Image extends pulumi.CustomResource {
     }
 
     /**
-     * The ID of the CBR backup that needs to be converted into an image. This
-     * parameter is mandatory when you create a private whole image from a CBR backup.
+     * Specifies the ID of the CBR backup that needs to be converted into an
+     * image. This parameter is valid and mandatory only when you create a private whole image from a CBR backup.
+     * Changing this parameter will create a new resource.
      */
     public readonly backupId!: pulumi.Output<string>;
     /**
@@ -119,25 +142,27 @@ export class Image extends pulumi.CustomResource {
      */
     public /*out*/ readonly checksum!: pulumi.Output<string>;
     /**
-     * The master key used for encrypting an image.
+     * Specifies the master key used for encrypting an image.
+     * Changing this parameter will create a new resource.
      */
     public readonly cmkId!: pulumi.Output<string | undefined>;
     /**
-     * The image resource. The pattern can be 'instance,*instance_id*', 'file,*image_url*'
-     * or 'server_backup,*backup_id*'.
+     * The image resource. The pattern can be **server_backup,backup_id**, **instance,instance_id**,
+     * **file,image_url**, or **volume,volume_id**.
      */
     public /*out*/ readonly dataOrigin!: pulumi.Output<string>;
     /**
-     * A description of the image.
+     * Specifies the description of the image.
      */
     public readonly description!: pulumi.Output<string | undefined>;
     /**
-     * The image file format. The value can be `vhd`, `zvhd`, `raw`, `zvhd2`, or `qcow2`.
+     * The image file format. The value can be **vhd**, **zvhd**, **raw**, **zvhd2**, or **qcow2**.
      */
     public /*out*/ readonly diskFormat!: pulumi.Output<string>;
     /**
-     * The enterprise project id of the image. Changing this creates a
-     * new image.
+     * Specifies the enterprise project ID to which the IMS image
+     * belongs. For enterprise users, if omitted, default enterprise project will be used.
+     * Changing this parameter will create a new resource.
      */
     public readonly enterpriseProjectId!: pulumi.Output<string>;
     /**
@@ -145,67 +170,87 @@ export class Image extends pulumi.CustomResource {
      */
     public /*out*/ readonly imageSize!: pulumi.Output<string>;
     /**
-     * The URL of the external image file in the OBS bucket. This parameter is
-     * mandatory when you create a private image from an external file uploaded to an OBS bucket. The format is *OBS bucket
-     * name:Image file name*.
+     * Specifies the URL of the external image file in the OBS bucket, the format
+     * is **OBS bucket name:Image file name**, e.g. **obs_bucket_name:image_test.vhd**. The storage category for OBS bucket
+     * and image file must be OBS standard storage. This parameter is valid and mandatory when you create a private system
+     * image from an external file uploaded to an OBS bucket, and this parameter can only be used with `minDisk`.
+     * Changing this parameter will create a new resource.
      */
     public readonly imageUrl!: pulumi.Output<string | undefined>;
     /**
-     * The ID of the ECS that needs to be converted into an image. This
-     * parameter is mandatory when you create a private image or a private whole image from an ECS.
-     * If the value of `vaultId` is not empty, then a whole image will be created.
+     * Specifies the ID of the ECS that needs to be converted into an image.
+     * This parameter is valid and mandatory only when you create a private system image or a private whole image from an
+     * ECS instance. Changing this parameter will create a new resource.
+     * + If the value of `vaultId` is empty, then a private system image will be created.
+     * + If the value of `vaultId` is not empty, then a private whole image will be created.
      */
     public readonly instanceId!: pulumi.Output<string>;
     /**
-     * If automatic configuration is required, set the value to true. Otherwise, set
-     * the value to false.
+     * Specifies whether to automatically configure. If automatic backend
+     * configuration is required, set the value to **true**, Otherwise, set it to **false**. The default value is **false**.
+     * Changing this parameter will create a new resource.
      */
     public readonly isConfig!: pulumi.Output<boolean | undefined>;
     /**
-     * The maximum memory of the image in the unit of MB.
+     * Specifies the maximum memory of the image in the unit of MB.
      */
     public readonly maxRam!: pulumi.Output<number>;
     /**
-     * The minimum size of the system disk in the unit of GB. This parameter is
-     * mandatory when you create a private image from an external file uploaded to an OBS bucket. The value ranges from 1 GB
-     * to 1024 GB.
+     * Specifies the minimum size of the system disk in the unit of GB. This parameter
+     * is valid and mandatory when you create a private system image from an external file uploaded to an OBS bucket.
+     * Changing this parameter will create a new resource.
+     * + When the operating system is Linux, the value ranges from `10` to `1,024`.
+     * + When the operating system is Windows, the value ranges from `20` to `1,024`.
      */
     public readonly minDisk!: pulumi.Output<number | undefined>;
     /**
-     * The minimum memory of the image in the unit of MB. The default value is 0,
+     * Specifies the minimum memory of the image in the unit of MB. The default value is `0`,
      * indicating that the memory is not restricted.
      */
     public readonly minRam!: pulumi.Output<number>;
     /**
-     * The name of the image.
+     * Specifies the name of the image.
      */
     public readonly name!: pulumi.Output<string>;
     /**
-     * The OS version. This parameter is valid when you create a private image
-     * from an external file uploaded to an OBS bucket.
+     * Specifies the OS version.
+     * Changing this parameter will create a new resource.
+     * For its values, see [API docs](https://support.huaweicloud.com/intl/en-us/api-ims/ims_03_0910.html).
      */
     public readonly osVersion!: pulumi.Output<string>;
+    /**
+     * Specifies the region in which to create the resource.
+     * If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
+     */
+    public readonly region!: pulumi.Output<string>;
     /**
      * The status of the image.
      */
     public /*out*/ readonly status!: pulumi.Output<string>;
     /**
-     * The tags of the image.
+     * Specifies the key/value pairs to associate with the image.
      */
     public readonly tags!: pulumi.Output<{[key: string]: string} | undefined>;
     /**
-     * The image type. Must be one of `ECS`, `FusionCompute`, `BMS`, or `Ironic`.
+     * Specifies the image type. The value can be **ECS**, **FusionCompute**, **BMS**,
+     * or **Ironic**. Changing this parameter will create a new resource.
      */
     public readonly type!: pulumi.Output<string | undefined>;
     /**
-     * The ID of the vault to which an ECS is to be added or has been added.
-     * This parameter is mandatory when you create a private whole image from an ECS.
+     * Specifies the ID of the vault to which an ECS instance is to be added or has
+     * been added. This parameter can only be used with `instanceId`. Changing this parameter will create a new resource.
      */
     public readonly vaultId!: pulumi.Output<string | undefined>;
     /**
      * Whether the image is visible to other tenants.
      */
     public /*out*/ readonly visibility!: pulumi.Output<string>;
+    /**
+     * Specifies the ID of the data disk. This parameter is valid and mandatory
+     * when you create a private data image from an ECS instance, and the data disk must be bound to the ECS instance.
+     * Changing this parameter will create a new resource.
+     */
+    public readonly volumeId!: pulumi.Output<string>;
 
     /**
      * Create a Image resource with the given unique name, arguments, and options.
@@ -236,11 +281,13 @@ export class Image extends pulumi.CustomResource {
             resourceInputs["minRam"] = state ? state.minRam : undefined;
             resourceInputs["name"] = state ? state.name : undefined;
             resourceInputs["osVersion"] = state ? state.osVersion : undefined;
+            resourceInputs["region"] = state ? state.region : undefined;
             resourceInputs["status"] = state ? state.status : undefined;
             resourceInputs["tags"] = state ? state.tags : undefined;
             resourceInputs["type"] = state ? state.type : undefined;
             resourceInputs["vaultId"] = state ? state.vaultId : undefined;
             resourceInputs["visibility"] = state ? state.visibility : undefined;
+            resourceInputs["volumeId"] = state ? state.volumeId : undefined;
         } else {
             const args = argsOrState as ImageArgs | undefined;
             resourceInputs["backupId"] = args ? args.backupId : undefined;
@@ -255,9 +302,11 @@ export class Image extends pulumi.CustomResource {
             resourceInputs["minRam"] = args ? args.minRam : undefined;
             resourceInputs["name"] = args ? args.name : undefined;
             resourceInputs["osVersion"] = args ? args.osVersion : undefined;
+            resourceInputs["region"] = args ? args.region : undefined;
             resourceInputs["tags"] = args ? args.tags : undefined;
             resourceInputs["type"] = args ? args.type : undefined;
             resourceInputs["vaultId"] = args ? args.vaultId : undefined;
+            resourceInputs["volumeId"] = args ? args.volumeId : undefined;
             resourceInputs["checksum"] = undefined /*out*/;
             resourceInputs["dataOrigin"] = undefined /*out*/;
             resourceInputs["diskFormat"] = undefined /*out*/;
@@ -275,8 +324,9 @@ export class Image extends pulumi.CustomResource {
  */
 export interface ImageState {
     /**
-     * The ID of the CBR backup that needs to be converted into an image. This
-     * parameter is mandatory when you create a private whole image from a CBR backup.
+     * Specifies the ID of the CBR backup that needs to be converted into an
+     * image. This parameter is valid and mandatory only when you create a private whole image from a CBR backup.
+     * Changing this parameter will create a new resource.
      */
     backupId?: pulumi.Input<string>;
     /**
@@ -284,25 +334,27 @@ export interface ImageState {
      */
     checksum?: pulumi.Input<string>;
     /**
-     * The master key used for encrypting an image.
+     * Specifies the master key used for encrypting an image.
+     * Changing this parameter will create a new resource.
      */
     cmkId?: pulumi.Input<string>;
     /**
-     * The image resource. The pattern can be 'instance,*instance_id*', 'file,*image_url*'
-     * or 'server_backup,*backup_id*'.
+     * The image resource. The pattern can be **server_backup,backup_id**, **instance,instance_id**,
+     * **file,image_url**, or **volume,volume_id**.
      */
     dataOrigin?: pulumi.Input<string>;
     /**
-     * A description of the image.
+     * Specifies the description of the image.
      */
     description?: pulumi.Input<string>;
     /**
-     * The image file format. The value can be `vhd`, `zvhd`, `raw`, `zvhd2`, or `qcow2`.
+     * The image file format. The value can be **vhd**, **zvhd**, **raw**, **zvhd2**, or **qcow2**.
      */
     diskFormat?: pulumi.Input<string>;
     /**
-     * The enterprise project id of the image. Changing this creates a
-     * new image.
+     * Specifies the enterprise project ID to which the IMS image
+     * belongs. For enterprise users, if omitted, default enterprise project will be used.
+     * Changing this parameter will create a new resource.
      */
     enterpriseProjectId?: pulumi.Input<string>;
     /**
@@ -310,67 +362,87 @@ export interface ImageState {
      */
     imageSize?: pulumi.Input<string>;
     /**
-     * The URL of the external image file in the OBS bucket. This parameter is
-     * mandatory when you create a private image from an external file uploaded to an OBS bucket. The format is *OBS bucket
-     * name:Image file name*.
+     * Specifies the URL of the external image file in the OBS bucket, the format
+     * is **OBS bucket name:Image file name**, e.g. **obs_bucket_name:image_test.vhd**. The storage category for OBS bucket
+     * and image file must be OBS standard storage. This parameter is valid and mandatory when you create a private system
+     * image from an external file uploaded to an OBS bucket, and this parameter can only be used with `minDisk`.
+     * Changing this parameter will create a new resource.
      */
     imageUrl?: pulumi.Input<string>;
     /**
-     * The ID of the ECS that needs to be converted into an image. This
-     * parameter is mandatory when you create a private image or a private whole image from an ECS.
-     * If the value of `vaultId` is not empty, then a whole image will be created.
+     * Specifies the ID of the ECS that needs to be converted into an image.
+     * This parameter is valid and mandatory only when you create a private system image or a private whole image from an
+     * ECS instance. Changing this parameter will create a new resource.
+     * + If the value of `vaultId` is empty, then a private system image will be created.
+     * + If the value of `vaultId` is not empty, then a private whole image will be created.
      */
     instanceId?: pulumi.Input<string>;
     /**
-     * If automatic configuration is required, set the value to true. Otherwise, set
-     * the value to false.
+     * Specifies whether to automatically configure. If automatic backend
+     * configuration is required, set the value to **true**, Otherwise, set it to **false**. The default value is **false**.
+     * Changing this parameter will create a new resource.
      */
     isConfig?: pulumi.Input<boolean>;
     /**
-     * The maximum memory of the image in the unit of MB.
+     * Specifies the maximum memory of the image in the unit of MB.
      */
     maxRam?: pulumi.Input<number>;
     /**
-     * The minimum size of the system disk in the unit of GB. This parameter is
-     * mandatory when you create a private image from an external file uploaded to an OBS bucket. The value ranges from 1 GB
-     * to 1024 GB.
+     * Specifies the minimum size of the system disk in the unit of GB. This parameter
+     * is valid and mandatory when you create a private system image from an external file uploaded to an OBS bucket.
+     * Changing this parameter will create a new resource.
+     * + When the operating system is Linux, the value ranges from `10` to `1,024`.
+     * + When the operating system is Windows, the value ranges from `20` to `1,024`.
      */
     minDisk?: pulumi.Input<number>;
     /**
-     * The minimum memory of the image in the unit of MB. The default value is 0,
+     * Specifies the minimum memory of the image in the unit of MB. The default value is `0`,
      * indicating that the memory is not restricted.
      */
     minRam?: pulumi.Input<number>;
     /**
-     * The name of the image.
+     * Specifies the name of the image.
      */
     name?: pulumi.Input<string>;
     /**
-     * The OS version. This parameter is valid when you create a private image
-     * from an external file uploaded to an OBS bucket.
+     * Specifies the OS version.
+     * Changing this parameter will create a new resource.
+     * For its values, see [API docs](https://support.huaweicloud.com/intl/en-us/api-ims/ims_03_0910.html).
      */
     osVersion?: pulumi.Input<string>;
+    /**
+     * Specifies the region in which to create the resource.
+     * If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
+     */
+    region?: pulumi.Input<string>;
     /**
      * The status of the image.
      */
     status?: pulumi.Input<string>;
     /**
-     * The tags of the image.
+     * Specifies the key/value pairs to associate with the image.
      */
     tags?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
     /**
-     * The image type. Must be one of `ECS`, `FusionCompute`, `BMS`, or `Ironic`.
+     * Specifies the image type. The value can be **ECS**, **FusionCompute**, **BMS**,
+     * or **Ironic**. Changing this parameter will create a new resource.
      */
     type?: pulumi.Input<string>;
     /**
-     * The ID of the vault to which an ECS is to be added or has been added.
-     * This parameter is mandatory when you create a private whole image from an ECS.
+     * Specifies the ID of the vault to which an ECS instance is to be added or has
+     * been added. This parameter can only be used with `instanceId`. Changing this parameter will create a new resource.
      */
     vaultId?: pulumi.Input<string>;
     /**
      * Whether the image is visible to other tenants.
      */
     visibility?: pulumi.Input<string>;
+    /**
+     * Specifies the ID of the data disk. This parameter is valid and mandatory
+     * when you create a private data image from an ECS instance, and the data disk must be bound to the ECS instance.
+     * Changing this parameter will create a new resource.
+     */
+    volumeId?: pulumi.Input<string>;
 }
 
 /**
@@ -378,75 +450,98 @@ export interface ImageState {
  */
 export interface ImageArgs {
     /**
-     * The ID of the CBR backup that needs to be converted into an image. This
-     * parameter is mandatory when you create a private whole image from a CBR backup.
+     * Specifies the ID of the CBR backup that needs to be converted into an
+     * image. This parameter is valid and mandatory only when you create a private whole image from a CBR backup.
+     * Changing this parameter will create a new resource.
      */
     backupId?: pulumi.Input<string>;
     /**
-     * The master key used for encrypting an image.
+     * Specifies the master key used for encrypting an image.
+     * Changing this parameter will create a new resource.
      */
     cmkId?: pulumi.Input<string>;
     /**
-     * A description of the image.
+     * Specifies the description of the image.
      */
     description?: pulumi.Input<string>;
     /**
-     * The enterprise project id of the image. Changing this creates a
-     * new image.
+     * Specifies the enterprise project ID to which the IMS image
+     * belongs. For enterprise users, if omitted, default enterprise project will be used.
+     * Changing this parameter will create a new resource.
      */
     enterpriseProjectId?: pulumi.Input<string>;
     /**
-     * The URL of the external image file in the OBS bucket. This parameter is
-     * mandatory when you create a private image from an external file uploaded to an OBS bucket. The format is *OBS bucket
-     * name:Image file name*.
+     * Specifies the URL of the external image file in the OBS bucket, the format
+     * is **OBS bucket name:Image file name**, e.g. **obs_bucket_name:image_test.vhd**. The storage category for OBS bucket
+     * and image file must be OBS standard storage. This parameter is valid and mandatory when you create a private system
+     * image from an external file uploaded to an OBS bucket, and this parameter can only be used with `minDisk`.
+     * Changing this parameter will create a new resource.
      */
     imageUrl?: pulumi.Input<string>;
     /**
-     * The ID of the ECS that needs to be converted into an image. This
-     * parameter is mandatory when you create a private image or a private whole image from an ECS.
-     * If the value of `vaultId` is not empty, then a whole image will be created.
+     * Specifies the ID of the ECS that needs to be converted into an image.
+     * This parameter is valid and mandatory only when you create a private system image or a private whole image from an
+     * ECS instance. Changing this parameter will create a new resource.
+     * + If the value of `vaultId` is empty, then a private system image will be created.
+     * + If the value of `vaultId` is not empty, then a private whole image will be created.
      */
     instanceId?: pulumi.Input<string>;
     /**
-     * If automatic configuration is required, set the value to true. Otherwise, set
-     * the value to false.
+     * Specifies whether to automatically configure. If automatic backend
+     * configuration is required, set the value to **true**, Otherwise, set it to **false**. The default value is **false**.
+     * Changing this parameter will create a new resource.
      */
     isConfig?: pulumi.Input<boolean>;
     /**
-     * The maximum memory of the image in the unit of MB.
+     * Specifies the maximum memory of the image in the unit of MB.
      */
     maxRam?: pulumi.Input<number>;
     /**
-     * The minimum size of the system disk in the unit of GB. This parameter is
-     * mandatory when you create a private image from an external file uploaded to an OBS bucket. The value ranges from 1 GB
-     * to 1024 GB.
+     * Specifies the minimum size of the system disk in the unit of GB. This parameter
+     * is valid and mandatory when you create a private system image from an external file uploaded to an OBS bucket.
+     * Changing this parameter will create a new resource.
+     * + When the operating system is Linux, the value ranges from `10` to `1,024`.
+     * + When the operating system is Windows, the value ranges from `20` to `1,024`.
      */
     minDisk?: pulumi.Input<number>;
     /**
-     * The minimum memory of the image in the unit of MB. The default value is 0,
+     * Specifies the minimum memory of the image in the unit of MB. The default value is `0`,
      * indicating that the memory is not restricted.
      */
     minRam?: pulumi.Input<number>;
     /**
-     * The name of the image.
+     * Specifies the name of the image.
      */
     name?: pulumi.Input<string>;
     /**
-     * The OS version. This parameter is valid when you create a private image
-     * from an external file uploaded to an OBS bucket.
+     * Specifies the OS version.
+     * Changing this parameter will create a new resource.
+     * For its values, see [API docs](https://support.huaweicloud.com/intl/en-us/api-ims/ims_03_0910.html).
      */
     osVersion?: pulumi.Input<string>;
     /**
-     * The tags of the image.
+     * Specifies the region in which to create the resource.
+     * If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
+     */
+    region?: pulumi.Input<string>;
+    /**
+     * Specifies the key/value pairs to associate with the image.
      */
     tags?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
     /**
-     * The image type. Must be one of `ECS`, `FusionCompute`, `BMS`, or `Ironic`.
+     * Specifies the image type. The value can be **ECS**, **FusionCompute**, **BMS**,
+     * or **Ironic**. Changing this parameter will create a new resource.
      */
     type?: pulumi.Input<string>;
     /**
-     * The ID of the vault to which an ECS is to be added or has been added.
-     * This parameter is mandatory when you create a private whole image from an ECS.
+     * Specifies the ID of the vault to which an ECS instance is to be added or has
+     * been added. This parameter can only be used with `instanceId`. Changing this parameter will create a new resource.
      */
     vaultId?: pulumi.Input<string>;
+    /**
+     * Specifies the ID of the data disk. This parameter is valid and mandatory
+     * when you create a private data image from an ECS instance, and the data disk must be bound to the ECS instance.
+     * Changing this parameter will create a new resource.
+     */
+    volumeId?: pulumi.Input<string>;
 }

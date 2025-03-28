@@ -79,7 +79,7 @@ import * as utilities from "../utilities";
  *
  * ## Import
  *
- * PVCs can be imported using the `namespace`, `volume_type` and `id`, e.g.
+ * PVCs can be imported using the `namespace`, `volume_type` and `id`, e.g. bash
  *
  * ```sh
  *  $ pulumi import huaweicloud:Cci/pvc:Pvc test <namespace>/<volume_type>/<id>
@@ -123,8 +123,8 @@ export class Pvc extends pulumi.CustomResource {
     public /*out*/ readonly creationTimestamp!: pulumi.Output<string>;
     /**
      * Specifies the share path of the SFS storage bound to the CCI
-     * Namespace. Required if `volumeType` is *nfs-rw*, *efs-standard* or *efs-performance*. Changing this will create a new
-     * PVC resource.
+     * Namespace. Required if `volumeType` is **nfs-rw**, **efs-standard** or **efs-performance**.
+     * Changing this will create a new PVC resource.
      */
     public readonly deviceMountPath!: pulumi.Output<string>;
     /**
@@ -158,8 +158,8 @@ export class Pvc extends pulumi.CustomResource {
     public readonly volumeId!: pulumi.Output<string>;
     /**
      * Specifies the type of the storage bound to the CCI Namespace. The valid
-     * values are *sas*, *ssd*, *sata*, *obs*, *nfs-rw*, *efs-standard* and *efs-performance*, Defalut to *sas*. Changing
-     * this will create a new PVC resource.
+     * values are **sas**, **ssd**, **sata**, **obs**, **nfs-rw**, **efs-standard** and **efs-performance**,
+     * Default to **sas**. Changing this will create a new PVC resource.
      */
     public readonly volumeType!: pulumi.Output<string | undefined>;
 
@@ -224,8 +224,8 @@ export interface PvcState {
     creationTimestamp?: pulumi.Input<string>;
     /**
      * Specifies the share path of the SFS storage bound to the CCI
-     * Namespace. Required if `volumeType` is *nfs-rw*, *efs-standard* or *efs-performance*. Changing this will create a new
-     * PVC resource.
+     * Namespace. Required if `volumeType` is **nfs-rw**, **efs-standard** or **efs-performance**.
+     * Changing this will create a new PVC resource.
      */
     deviceMountPath?: pulumi.Input<string>;
     /**
@@ -259,8 +259,8 @@ export interface PvcState {
     volumeId?: pulumi.Input<string>;
     /**
      * Specifies the type of the storage bound to the CCI Namespace. The valid
-     * values are *sas*, *ssd*, *sata*, *obs*, *nfs-rw*, *efs-standard* and *efs-performance*, Defalut to *sas*. Changing
-     * this will create a new PVC resource.
+     * values are **sas**, **ssd**, **sata**, **obs**, **nfs-rw**, **efs-standard** and **efs-performance**,
+     * Default to **sas**. Changing this will create a new PVC resource.
      */
     volumeType?: pulumi.Input<string>;
 }
@@ -271,8 +271,8 @@ export interface PvcState {
 export interface PvcArgs {
     /**
      * Specifies the share path of the SFS storage bound to the CCI
-     * Namespace. Required if `volumeType` is *nfs-rw*, *efs-standard* or *efs-performance*. Changing this will create a new
-     * PVC resource.
+     * Namespace. Required if `volumeType` is **nfs-rw**, **efs-standard** or **efs-performance**.
+     * Changing this will create a new PVC resource.
      */
     deviceMountPath?: pulumi.Input<string>;
     /**
@@ -298,8 +298,8 @@ export interface PvcArgs {
     volumeId: pulumi.Input<string>;
     /**
      * Specifies the type of the storage bound to the CCI Namespace. The valid
-     * values are *sas*, *ssd*, *sata*, *obs*, *nfs-rw*, *efs-standard* and *efs-performance*, Defalut to *sas*. Changing
-     * this will create a new PVC resource.
+     * values are **sas**, **ssd**, **sata**, **obs**, **nfs-rw**, **efs-standard** and **efs-performance**,
+     * Default to **sas**. Changing this will create a new PVC resource.
      */
     volumeType?: pulumi.Input<string>;
 }

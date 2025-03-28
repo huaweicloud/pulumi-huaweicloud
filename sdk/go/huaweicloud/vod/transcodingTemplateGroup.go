@@ -63,7 +63,7 @@ import (
 //
 // ## Import
 //
-// VOD transcoding template groups can be imported using the `id`, e.g.
+// VOD transcoding template groups can be imported using the `id`, e.g. bash
 //
 // ```sh
 //
@@ -82,14 +82,14 @@ type TranscodingTemplateGroup struct {
 	AutoEncrypt pulumi.BoolPtrOutput `pulumi:"autoEncrypt"`
 	// Specifies the description of the template group.
 	Description pulumi.StringPtrOutput `pulumi:"description"`
-	// Specifies the HLS segment duration. The value can be: **2**, **3**, **5**
-	// and **10**. Defaults to: **5**. This parameter is used only when `outputFormat` is set to **HLS** or **DASH_HLS**.
+	// Specifies the HLS segment duration. The value can be: `2`, `3`, `5`
+	// and `10`. Defaults to: `5`. This parameter is used only when `outputFormat` is set to **HLS** or **DASH_HLS**.
 	HlsSegmentDuration pulumi.IntOutput `pulumi:"hlsSegmentDuration"`
 	// Specifies whether to use this group as default group. Defaults to: **false**.
 	IsDefault pulumi.BoolPtrOutput `pulumi:"isDefault"`
 	// Specifies whether to enable low bitrate HD. Defaults to: **false**.
 	LowBitrateHd pulumi.BoolPtrOutput `pulumi:"lowBitrateHd"`
-	// Specifies the name of the template group. The value can be a string of 1 to 128
+	// Specifies the name of the template group. The value can be a string of `1` to `128`
 	// characters that can consist of letters, digits and underscores (_).
 	Name pulumi.StringOutput `pulumi:"name"`
 	// Specifies the quality info list of the template group.
@@ -149,14 +149,14 @@ type transcodingTemplateGroupState struct {
 	AutoEncrypt *bool `pulumi:"autoEncrypt"`
 	// Specifies the description of the template group.
 	Description *string `pulumi:"description"`
-	// Specifies the HLS segment duration. The value can be: **2**, **3**, **5**
-	// and **10**. Defaults to: **5**. This parameter is used only when `outputFormat` is set to **HLS** or **DASH_HLS**.
+	// Specifies the HLS segment duration. The value can be: `2`, `3`, `5`
+	// and `10`. Defaults to: `5`. This parameter is used only when `outputFormat` is set to **HLS** or **DASH_HLS**.
 	HlsSegmentDuration *int `pulumi:"hlsSegmentDuration"`
 	// Specifies whether to use this group as default group. Defaults to: **false**.
 	IsDefault *bool `pulumi:"isDefault"`
 	// Specifies whether to enable low bitrate HD. Defaults to: **false**.
 	LowBitrateHd *bool `pulumi:"lowBitrateHd"`
-	// Specifies the name of the template group. The value can be a string of 1 to 128
+	// Specifies the name of the template group. The value can be a string of `1` to `128`
 	// characters that can consist of letters, digits and underscores (_).
 	Name *string `pulumi:"name"`
 	// Specifies the quality info list of the template group.
@@ -184,14 +184,14 @@ type TranscodingTemplateGroupState struct {
 	AutoEncrypt pulumi.BoolPtrInput
 	// Specifies the description of the template group.
 	Description pulumi.StringPtrInput
-	// Specifies the HLS segment duration. The value can be: **2**, **3**, **5**
-	// and **10**. Defaults to: **5**. This parameter is used only when `outputFormat` is set to **HLS** or **DASH_HLS**.
+	// Specifies the HLS segment duration. The value can be: `2`, `3`, `5`
+	// and `10`. Defaults to: `5`. This parameter is used only when `outputFormat` is set to **HLS** or **DASH_HLS**.
 	HlsSegmentDuration pulumi.IntPtrInput
 	// Specifies whether to use this group as default group. Defaults to: **false**.
 	IsDefault pulumi.BoolPtrInput
 	// Specifies whether to enable low bitrate HD. Defaults to: **false**.
 	LowBitrateHd pulumi.BoolPtrInput
-	// Specifies the name of the template group. The value can be a string of 1 to 128
+	// Specifies the name of the template group. The value can be a string of `1` to `128`
 	// characters that can consist of letters, digits and underscores (_).
 	Name pulumi.StringPtrInput
 	// Specifies the quality info list of the template group.
@@ -223,14 +223,14 @@ type transcodingTemplateGroupArgs struct {
 	AutoEncrypt *bool `pulumi:"autoEncrypt"`
 	// Specifies the description of the template group.
 	Description *string `pulumi:"description"`
-	// Specifies the HLS segment duration. The value can be: **2**, **3**, **5**
-	// and **10**. Defaults to: **5**. This parameter is used only when `outputFormat` is set to **HLS** or **DASH_HLS**.
+	// Specifies the HLS segment duration. The value can be: `2`, `3`, `5`
+	// and `10`. Defaults to: `5`. This parameter is used only when `outputFormat` is set to **HLS** or **DASH_HLS**.
 	HlsSegmentDuration *int `pulumi:"hlsSegmentDuration"`
 	// Specifies whether to use this group as default group. Defaults to: **false**.
 	IsDefault *bool `pulumi:"isDefault"`
 	// Specifies whether to enable low bitrate HD. Defaults to: **false**.
 	LowBitrateHd *bool `pulumi:"lowBitrateHd"`
-	// Specifies the name of the template group. The value can be a string of 1 to 128
+	// Specifies the name of the template group. The value can be a string of `1` to `128`
 	// characters that can consist of letters, digits and underscores (_).
 	Name *string `pulumi:"name"`
 	// Specifies the quality info list of the template group.
@@ -257,14 +257,14 @@ type TranscodingTemplateGroupArgs struct {
 	AutoEncrypt pulumi.BoolPtrInput
 	// Specifies the description of the template group.
 	Description pulumi.StringPtrInput
-	// Specifies the HLS segment duration. The value can be: **2**, **3**, **5**
-	// and **10**. Defaults to: **5**. This parameter is used only when `outputFormat` is set to **HLS** or **DASH_HLS**.
+	// Specifies the HLS segment duration. The value can be: `2`, `3`, `5`
+	// and `10`. Defaults to: `5`. This parameter is used only when `outputFormat` is set to **HLS** or **DASH_HLS**.
 	HlsSegmentDuration pulumi.IntPtrInput
 	// Specifies whether to use this group as default group. Defaults to: **false**.
 	IsDefault pulumi.BoolPtrInput
 	// Specifies whether to enable low bitrate HD. Defaults to: **false**.
 	LowBitrateHd pulumi.BoolPtrInput
-	// Specifies the name of the template group. The value can be a string of 1 to 128
+	// Specifies the name of the template group. The value can be a string of `1` to `128`
 	// characters that can consist of letters, digits and underscores (_).
 	Name pulumi.StringPtrInput
 	// Specifies the quality info list of the template group.
@@ -385,8 +385,8 @@ func (o TranscodingTemplateGroupOutput) Description() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *TranscodingTemplateGroup) pulumi.StringPtrOutput { return v.Description }).(pulumi.StringPtrOutput)
 }
 
-// Specifies the HLS segment duration. The value can be: **2**, **3**, **5**
-// and **10**. Defaults to: **5**. This parameter is used only when `outputFormat` is set to **HLS** or **DASH_HLS**.
+// Specifies the HLS segment duration. The value can be: `2`, `3`, `5`
+// and `10`. Defaults to: `5`. This parameter is used only when `outputFormat` is set to **HLS** or **DASH_HLS**.
 func (o TranscodingTemplateGroupOutput) HlsSegmentDuration() pulumi.IntOutput {
 	return o.ApplyT(func(v *TranscodingTemplateGroup) pulumi.IntOutput { return v.HlsSegmentDuration }).(pulumi.IntOutput)
 }
@@ -401,7 +401,7 @@ func (o TranscodingTemplateGroupOutput) LowBitrateHd() pulumi.BoolPtrOutput {
 	return o.ApplyT(func(v *TranscodingTemplateGroup) pulumi.BoolPtrOutput { return v.LowBitrateHd }).(pulumi.BoolPtrOutput)
 }
 
-// Specifies the name of the template group. The value can be a string of 1 to 128
+// Specifies the name of the template group. The value can be a string of `1` to `128`
 // characters that can consist of letters, digits and underscores (_).
 func (o TranscodingTemplateGroupOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v *TranscodingTemplateGroup) pulumi.StringOutput { return v.Name }).(pulumi.StringOutput)

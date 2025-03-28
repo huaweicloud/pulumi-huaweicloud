@@ -39,6 +39,7 @@ class InstanceArgs:
                  maintain_begin: Optional[pulumi.Input[str]] = None,
                  maintain_end: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
+                 parameters: Optional[pulumi.Input[Sequence[pulumi.Input['InstanceParameterArgs']]]] = None,
                  password: Optional[pulumi.Input[str]] = None,
                  period: Optional[pulumi.Input[int]] = None,
                  period_type: Optional[pulumi.Input[str]] = None,
@@ -51,6 +52,7 @@ class InstanceArgs:
                  reserved_ips: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  save_days: Optional[pulumi.Input[int]] = None,
                  security_group_id: Optional[pulumi.Input[str]] = None,
+                 ssl_enable: Optional[pulumi.Input[bool]] = None,
                  tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  template_id: Optional[pulumi.Input[str]] = None,
                  whitelist_enable: Optional[pulumi.Input[bool]] = None,
@@ -81,7 +83,7 @@ class InstanceArgs:
                Master/Standby, Proxy Cluster, and Redis Cluster DCS instances support cross-AZ deployment.
                You can specify an AZ for the standby node. When specifying AZs for nodes, use commas (,) to separate AZs.
                Changing this creates a new instance.
-        :param pulumi.Input[Sequence[pulumi.Input[int]]] backup_ats: Day in a week on which backup starts, the value ranges from 1 to 7.
+        :param pulumi.Input[Sequence[pulumi.Input[int]]] backup_ats: Day in a week on which backup starts, the value ranges from `1` to `7`.
                Where: 1 indicates Monday; 7 indicates Sunday.
         :param pulumi.Input['InstanceBackupPolicyArgs'] backup_policy: Specifies the backup configuration to be used with the instance.
                The structure is described below.
@@ -105,7 +107,6 @@ class InstanceArgs:
                It is mandatory when the engine is *Redis*, the value can be 3.0, 4.0, 5.0 or 6.0.
                Changing this creates a new instance.
         :param pulumi.Input[str] enterprise_project_id: The enterprise project id of the dcs instance.
-               Changing this creates a new instance.
         :param pulumi.Input[str] flavor: The flavor of the cache instance, which including the total memory, available memory,
                maximum number of connections allowed, maximum/assured bandwidth and reference performance.
                It also includes the modes of Redis instances. You can query the *flavor* as follows:
@@ -113,27 +114,23 @@ class InstanceArgs:
                + Query some flavors
                in [DCS Instance Specifications](https://support.huaweicloud.com/intl/en-us/productdesc-dcs/dcs-pd-200713003.html)
                + Log in to the DCS console, click *Buy DCS Instance*, and find the corresponding instance specification.
-        :param pulumi.Input[str] maintain_begin: Time at which the maintenance time window starts.
-               The valid values are `22:00:00`, `02:00:00`, `06:00:00`, `10:00:00`, `14:00:00` and `18:00:00`.
-               Default value is `02:00:00`.
+        :param pulumi.Input[str] maintain_begin: Time at which the maintenance time window starts. Defaults to **02:00:00**.
                + The start time and end time of a maintenance time window must indicate the time segment of a supported maintenance
                time window.
-               + Parameters `maintain_begin` and `maintain_end` must be set in pairs.
-               + If parameter maintain_begin is left blank, parameter maintain_end is also blank.
-               In this case, the system automatically allocates the default start time 02:00:00.
-        :param pulumi.Input[str] maintain_end: Time at which the maintenance time window ends.
-               The valid values are `22:00:00`, `02:00:00`, `06:00:00`, `10:00:00`, `14:00:00` and `18:00:00`.
-               Default value is `06:00:00`.
+               + The start time must be on the hour, such as **18:00:00**.
+               + If parameter `maintain_begin` is left blank, parameter `maintain_end` is also blank.
+               In this case, the system automatically allocates the default start time **02:00:00**.
+        :param pulumi.Input[str] maintain_end: Time at which the maintenance time window ends. Defaults to **06:00:00**.
                + The start time and end time of a maintenance time window must indicate the time segment of a supported maintenance
                time window.
-               + The end time is four hours later than the start time.
-               For example, if the start time is 22:00:00, the end time is 02:00:00.
-               + Parameters `maintain_begin` and `maintain_end` must be set in pairs.
-               + If parameter maintain_end is left blank, parameter maintain_begin is also blank.
-               In this case, the system automatically allocates the default end time 06:00:00.
-        :param pulumi.Input[str] name: Specifies the name of an instance.
-               The name must be 4 to 64 characters and start with a letter.
-               Only chinese, letters (case-insensitive), digits, underscores (_) ,and hyphens (-) are allowed.
+               + The end time is one hour later than the start time. For example, if the start time is **18:00:00**, the end time is
+               **19:00:00**.
+               + If parameter `maintain_end` is left blank, parameter `maintain_begin` is also blank.
+               In this case, the system automatically allocates the default end time **06:00:00**.
+        :param pulumi.Input[str] name: Specifies the name of the configuration item.
+        :param pulumi.Input[Sequence[pulumi.Input['InstanceParameterArgs']]] parameters: Specify an array of one or more parameters to be set to the DCS instance after
+               launched. You can check on console to see which parameters supported.
+               The parameters structure is documented below.
         :param pulumi.Input[str] password: Specifies the password of a DCS instance.
                The password of a DCS instance must meet the following complexity requirements:
                + Must be a string of 8 to 32 bits in length.
@@ -164,10 +161,11 @@ class InstanceArgs:
                The valid commands that can be renamed are: **command**, **keys**, **flushdb**, **flushall** and **hgetall**.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] reserved_ips: Specifies IP addresses to retain. Mandatory during cluster scale-in. If this
                parameter is not set, the system randomly deletes unnecessary shards.
-        :param pulumi.Input[int] save_days: Retention time. Unit: day, the value ranges from 1 to 7.
+        :param pulumi.Input[int] save_days: Retention time. Unit: day, the value ranges from `1` to `7`.
                This parameter is required if the backup_type is **auto**.
         :param pulumi.Input[str] security_group_id: The ID of the security group which the instance belongs to.
                This parameter is mandatory for Memcached and Redis 3.0 version.
+        :param pulumi.Input[bool] ssl_enable: Specifies whether to enable the SSL. Value options: **true**, **false**.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: The key/value pairs to associate with the dcs instance.
         :param pulumi.Input[str] template_id: The Parameter Template ID.
                Changing this creates a new instance resource.
@@ -236,6 +234,8 @@ class InstanceArgs:
             pulumi.set(__self__, "maintain_end", maintain_end)
         if name is not None:
             pulumi.set(__self__, "name", name)
+        if parameters is not None:
+            pulumi.set(__self__, "parameters", parameters)
         if password is not None:
             pulumi.set(__self__, "password", password)
         if period is not None:
@@ -269,6 +269,8 @@ class InstanceArgs:
             pulumi.set(__self__, "save_days", save_days)
         if security_group_id is not None:
             pulumi.set(__self__, "security_group_id", security_group_id)
+        if ssl_enable is not None:
+            pulumi.set(__self__, "ssl_enable", ssl_enable)
         if tags is not None:
             pulumi.set(__self__, "tags", tags)
         if template_id is not None:
@@ -401,7 +403,7 @@ class InstanceArgs:
     @pulumi.getter(name="backupAts")
     def backup_ats(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[int]]]]:
         """
-        Day in a week on which backup starts, the value ranges from 1 to 7.
+        Day in a week on which backup starts, the value ranges from `1` to `7`.
         Where: 1 indicates Monday; 7 indicates Sunday.
         """
         return pulumi.get(self, "backup_ats")
@@ -513,7 +515,6 @@ class InstanceArgs:
     def enterprise_project_id(self) -> Optional[pulumi.Input[str]]:
         """
         The enterprise project id of the dcs instance.
-        Changing this creates a new instance.
         """
         return pulumi.get(self, "enterprise_project_id")
 
@@ -552,14 +553,12 @@ class InstanceArgs:
     @pulumi.getter(name="maintainBegin")
     def maintain_begin(self) -> Optional[pulumi.Input[str]]:
         """
-        Time at which the maintenance time window starts.
-        The valid values are `22:00:00`, `02:00:00`, `06:00:00`, `10:00:00`, `14:00:00` and `18:00:00`.
-        Default value is `02:00:00`.
+        Time at which the maintenance time window starts. Defaults to **02:00:00**.
         + The start time and end time of a maintenance time window must indicate the time segment of a supported maintenance
         time window.
-        + Parameters `maintain_begin` and `maintain_end` must be set in pairs.
-        + If parameter maintain_begin is left blank, parameter maintain_end is also blank.
-        In this case, the system automatically allocates the default start time 02:00:00.
+        + The start time must be on the hour, such as **18:00:00**.
+        + If parameter `maintain_begin` is left blank, parameter `maintain_end` is also blank.
+        In this case, the system automatically allocates the default start time **02:00:00**.
         """
         return pulumi.get(self, "maintain_begin")
 
@@ -571,16 +570,13 @@ class InstanceArgs:
     @pulumi.getter(name="maintainEnd")
     def maintain_end(self) -> Optional[pulumi.Input[str]]:
         """
-        Time at which the maintenance time window ends.
-        The valid values are `22:00:00`, `02:00:00`, `06:00:00`, `10:00:00`, `14:00:00` and `18:00:00`.
-        Default value is `06:00:00`.
+        Time at which the maintenance time window ends. Defaults to **06:00:00**.
         + The start time and end time of a maintenance time window must indicate the time segment of a supported maintenance
         time window.
-        + The end time is four hours later than the start time.
-        For example, if the start time is 22:00:00, the end time is 02:00:00.
-        + Parameters `maintain_begin` and `maintain_end` must be set in pairs.
-        + If parameter maintain_end is left blank, parameter maintain_begin is also blank.
-        In this case, the system automatically allocates the default end time 06:00:00.
+        + The end time is one hour later than the start time. For example, if the start time is **18:00:00**, the end time is
+        **19:00:00**.
+        + If parameter `maintain_end` is left blank, parameter `maintain_begin` is also blank.
+        In this case, the system automatically allocates the default end time **06:00:00**.
         """
         return pulumi.get(self, "maintain_end")
 
@@ -592,15 +588,27 @@ class InstanceArgs:
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the name of an instance.
-        The name must be 4 to 64 characters and start with a letter.
-        Only chinese, letters (case-insensitive), digits, underscores (_) ,and hyphens (-) are allowed.
+        Specifies the name of the configuration item.
         """
         return pulumi.get(self, "name")
 
     @name.setter
     def name(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "name", value)
+
+    @property
+    @pulumi.getter
+    def parameters(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['InstanceParameterArgs']]]]:
+        """
+        Specify an array of one or more parameters to be set to the DCS instance after
+        launched. You can check on console to see which parameters supported.
+        The parameters structure is documented below.
+        """
+        return pulumi.get(self, "parameters")
+
+    @parameters.setter
+    def parameters(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['InstanceParameterArgs']]]]):
+        pulumi.set(self, "parameters", value)
 
     @property
     @pulumi.getter
@@ -744,7 +752,7 @@ class InstanceArgs:
     @pulumi.getter(name="saveDays")
     def save_days(self) -> Optional[pulumi.Input[int]]:
         """
-        Retention time. Unit: day, the value ranges from 1 to 7.
+        Retention time. Unit: day, the value ranges from `1` to `7`.
         This parameter is required if the backup_type is **auto**.
         """
         return pulumi.get(self, "save_days")
@@ -765,6 +773,18 @@ class InstanceArgs:
     @security_group_id.setter
     def security_group_id(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "security_group_id", value)
+
+    @property
+    @pulumi.getter(name="sslEnable")
+    def ssl_enable(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies whether to enable the SSL. Value options: **true**, **false**.
+        """
+        return pulumi.get(self, "ssl_enable")
+
+    @ssl_enable.setter
+    def ssl_enable(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "ssl_enable", value)
 
     @property
     @pulumi.getter
@@ -829,9 +849,13 @@ class _InstanceState:
                  backup_ats: Optional[pulumi.Input[Sequence[pulumi.Input[int]]]] = None,
                  backup_policy: Optional[pulumi.Input['InstanceBackupPolicyArgs']] = None,
                  backup_type: Optional[pulumi.Input[str]] = None,
+                 bandwidth_infos: Optional[pulumi.Input[Sequence[pulumi.Input['InstanceBandwidthInfoArgs']]]] = None,
                  begin_at: Optional[pulumi.Input[str]] = None,
+                 cache_mode: Optional[pulumi.Input[str]] = None,
                  capacity: Optional[pulumi.Input[float]] = None,
                  charging_mode: Optional[pulumi.Input[str]] = None,
+                 cpu_type: Optional[pulumi.Input[str]] = None,
+                 created_at: Optional[pulumi.Input[str]] = None,
                  deleted_nodes: Optional[pulumi.Input[str]] = None,
                  description: Optional[pulumi.Input[str]] = None,
                  domain_name: Optional[pulumi.Input[str]] = None,
@@ -842,11 +866,13 @@ class _InstanceState:
                  flavor: Optional[pulumi.Input[str]] = None,
                  internal_version: Optional[pulumi.Input[str]] = None,
                  ip: Optional[pulumi.Input[str]] = None,
+                 launched_at: Optional[pulumi.Input[str]] = None,
                  maintain_begin: Optional[pulumi.Input[str]] = None,
                  maintain_end: Optional[pulumi.Input[str]] = None,
                  max_memory: Optional[pulumi.Input[int]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  order_id: Optional[pulumi.Input[str]] = None,
+                 parameters: Optional[pulumi.Input[Sequence[pulumi.Input['InstanceParameterArgs']]]] = None,
                  password: Optional[pulumi.Input[str]] = None,
                  period: Optional[pulumi.Input[int]] = None,
                  period_type: Optional[pulumi.Input[str]] = None,
@@ -854,17 +880,24 @@ class _InstanceState:
                  port: Optional[pulumi.Input[int]] = None,
                  private_ip: Optional[pulumi.Input[str]] = None,
                  product_id: Optional[pulumi.Input[str]] = None,
+                 product_type: Optional[pulumi.Input[str]] = None,
+                 readonly_domain_name: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
                  rename_commands: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
+                 replica_count: Optional[pulumi.Input[int]] = None,
                  reserved_ips: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  save_days: Optional[pulumi.Input[int]] = None,
                  security_group_id: Optional[pulumi.Input[str]] = None,
                  security_group_name: Optional[pulumi.Input[str]] = None,
+                 sharding_count: Optional[pulumi.Input[int]] = None,
+                 ssl_enable: Optional[pulumi.Input[bool]] = None,
                  status: Optional[pulumi.Input[str]] = None,
+                 subnet_cidr: Optional[pulumi.Input[str]] = None,
                  subnet_id: Optional[pulumi.Input[str]] = None,
                  subnet_name: Optional[pulumi.Input[str]] = None,
                  tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  template_id: Optional[pulumi.Input[str]] = None,
+                 transparent_client_ip_enable: Optional[pulumi.Input[bool]] = None,
                  used_memory: Optional[pulumi.Input[int]] = None,
                  user_id: Optional[pulumi.Input[str]] = None,
                  user_name: Optional[pulumi.Input[str]] = None,
@@ -884,15 +917,18 @@ class _InstanceState:
                Master/Standby, Proxy Cluster, and Redis Cluster DCS instances support cross-AZ deployment.
                You can specify an AZ for the standby node. When specifying AZs for nodes, use commas (,) to separate AZs.
                Changing this creates a new instance.
-        :param pulumi.Input[Sequence[pulumi.Input[int]]] backup_ats: Day in a week on which backup starts, the value ranges from 1 to 7.
+        :param pulumi.Input[Sequence[pulumi.Input[int]]] backup_ats: Day in a week on which backup starts, the value ranges from `1` to `7`.
                Where: 1 indicates Monday; 7 indicates Sunday.
         :param pulumi.Input['InstanceBackupPolicyArgs'] backup_policy: Specifies the backup configuration to be used with the instance.
                The structure is described below.
         :param pulumi.Input[str] backup_type: Backup type. Default value is `auto`. The valid values are as follows:
                + `auto`: automatic backup.
                + `manual`: manual backup.
+        :param pulumi.Input[Sequence[pulumi.Input['InstanceBandwidthInfoArgs']]] bandwidth_infos: Indicates the bandwidth information of the instance.
+               The bandwidth_info structure is documented below.
         :param pulumi.Input[str] begin_at: Time at which backup starts.
                Format: `hh24:00-hh24:00`, "00:00-01:00" indicates that backup starts at 00:00:00.
+        :param pulumi.Input[str] cache_mode: Indicates the instance type. The value can be **single**, **ha**, **cluster** or **proxy**.
         :param pulumi.Input[float] capacity: Specifies the cache capacity. Unit: GB.
                + **Redis4.0, Redis5.0 and Redis6.0**: Stand-alone and active/standby type instance values: `0.125`, `0.25`,
                `0.5`, `1`, `2`, `4`, `8`, `16`, `32` and `64`.
@@ -907,6 +943,8 @@ class _InstanceState:
                + `postPaid`: indicates the pay-per-use billing mode.
                Default value is `postPaid`.
                Changing this creates a new instance.
+        :param pulumi.Input[str] cpu_type: Indicates the CPU type of the instance. The value can be **x86_64** or **aarch64**.
+        :param pulumi.Input[str] created_at: Indicates the time when the instance is created, in RFC3339 format.
         :param pulumi.Input[str] deleted_nodes: Specifies the ID of the replica to delete. This parameter is mandatory when
                you delete replicas of a master/standby DCS Redis 4.0 or 5.0 instance. Currently, only one replica can be deleted
                at a time.
@@ -919,7 +957,6 @@ class _InstanceState:
                It is mandatory when the engine is *Redis*, the value can be 3.0, 4.0, 5.0 or 6.0.
                Changing this creates a new instance.
         :param pulumi.Input[str] enterprise_project_id: The enterprise project id of the dcs instance.
-               Changing this creates a new instance.
         :param pulumi.Input[str] flavor: The flavor of the cache instance, which including the total memory, available memory,
                maximum number of connections allowed, maximum/assured bandwidth and reference performance.
                It also includes the modes of Redis instances. You can query the *flavor* as follows:
@@ -927,29 +964,26 @@ class _InstanceState:
                + Query some flavors
                in [DCS Instance Specifications](https://support.huaweicloud.com/intl/en-us/productdesc-dcs/dcs-pd-200713003.html)
                + Log in to the DCS console, click *Buy DCS Instance*, and find the corresponding instance specification.
-        :param pulumi.Input[str] maintain_begin: Time at which the maintenance time window starts.
-               The valid values are `22:00:00`, `02:00:00`, `06:00:00`, `10:00:00`, `14:00:00` and `18:00:00`.
-               Default value is `02:00:00`.
+        :param pulumi.Input[str] launched_at: Indicates the time when the instance is started, in RFC3339 format.
+        :param pulumi.Input[str] maintain_begin: Time at which the maintenance time window starts. Defaults to **02:00:00**.
                + The start time and end time of a maintenance time window must indicate the time segment of a supported maintenance
                time window.
-               + Parameters `maintain_begin` and `maintain_end` must be set in pairs.
-               + If parameter maintain_begin is left blank, parameter maintain_end is also blank.
-               In this case, the system automatically allocates the default start time 02:00:00.
-        :param pulumi.Input[str] maintain_end: Time at which the maintenance time window ends.
-               The valid values are `22:00:00`, `02:00:00`, `06:00:00`, `10:00:00`, `14:00:00` and `18:00:00`.
-               Default value is `06:00:00`.
+               + The start time must be on the hour, such as **18:00:00**.
+               + If parameter `maintain_begin` is left blank, parameter `maintain_end` is also blank.
+               In this case, the system automatically allocates the default start time **02:00:00**.
+        :param pulumi.Input[str] maintain_end: Time at which the maintenance time window ends. Defaults to **06:00:00**.
                + The start time and end time of a maintenance time window must indicate the time segment of a supported maintenance
                time window.
-               + The end time is four hours later than the start time.
-               For example, if the start time is 22:00:00, the end time is 02:00:00.
-               + Parameters `maintain_begin` and `maintain_end` must be set in pairs.
-               + If parameter maintain_end is left blank, parameter maintain_begin is also blank.
-               In this case, the system automatically allocates the default end time 06:00:00.
+               + The end time is one hour later than the start time. For example, if the start time is **18:00:00**, the end time is
+               **19:00:00**.
+               + If parameter `maintain_end` is left blank, parameter `maintain_begin` is also blank.
+               In this case, the system automatically allocates the default end time **06:00:00**.
         :param pulumi.Input[int] max_memory: Total memory size. Unit: MB.
-        :param pulumi.Input[str] name: Specifies the name of an instance.
-               The name must be 4 to 64 characters and start with a letter.
-               Only chinese, letters (case-insensitive), digits, underscores (_) ,and hyphens (-) are allowed.
+        :param pulumi.Input[str] name: Specifies the name of the configuration item.
         :param pulumi.Input[str] order_id: The ID of the order that created the instance.
+        :param pulumi.Input[Sequence[pulumi.Input['InstanceParameterArgs']]] parameters: Specify an array of one or more parameters to be set to the DCS instance after
+               launched. You can check on console to see which parameters supported.
+               The parameters structure is documented below.
         :param pulumi.Input[str] password: Specifies the password of a DCS instance.
                The password of a DCS instance must meet the following complexity requirements:
                + Must be a string of 8 to 32 bits in length.
@@ -973,18 +1007,24 @@ class _InstanceState:
                You can specify an available IP for the Redis instance (except for the Redis Cluster type).
                If omitted, the system will automatically allocate an available IP address to the Redis instance.
                Changing this creates a new instance resource.
+        :param pulumi.Input[str] product_type: Indicates the product type of the instance. The value can be: **generic** or **enterprise**.
+        :param pulumi.Input[str] readonly_domain_name: Indicates the read-only domain name of the instance. This parameter is available
+               only for master/standby instances.
         :param pulumi.Input[str] region: Specifies the region in which to create the DCS instance resource.
                If omitted, the provider-level region will be used. Changing this creates a new DCS instance resource.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] rename_commands: Critical command renaming, which is supported only by Redis 4.0 and
                Redis 5.0 instances but not by Redis 3.0 instance.
                The valid commands that can be renamed are: **command**, **keys**, **flushdb**, **flushall** and **hgetall**.
+        :param pulumi.Input[int] replica_count: Indicates the number of replicas in the instance.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] reserved_ips: Specifies IP addresses to retain. Mandatory during cluster scale-in. If this
                parameter is not set, the system randomly deletes unnecessary shards.
-        :param pulumi.Input[int] save_days: Retention time. Unit: day, the value ranges from 1 to 7.
+        :param pulumi.Input[int] save_days: Retention time. Unit: day, the value ranges from `1` to `7`.
                This parameter is required if the backup_type is **auto**.
         :param pulumi.Input[str] security_group_id: The ID of the security group which the instance belongs to.
                This parameter is mandatory for Memcached and Redis 3.0 version.
         :param pulumi.Input[str] security_group_name: The name of security group which the instance belongs to.
+        :param pulumi.Input[int] sharding_count: Indicates the number of shards in a cluster instance.
+        :param pulumi.Input[bool] ssl_enable: Specifies whether to enable the SSL. Value options: **true**, **false**.
         :param pulumi.Input[str] status: Cache instance status. The valid values are as follows:
                + `RUNNING`: The instance is running properly.
                Only instances in the Running state can provide in-memory cache service.
@@ -995,12 +1035,14 @@ class _InstanceState:
                + `EXTENDING`: The instance is being scaled up.
                + `RESTORING`: The instance data is being restored.
                + `FLUSHING`: The DCS instance is being cleared.
+        :param pulumi.Input[str] subnet_cidr: Indicates the subnet segment.
         :param pulumi.Input[str] subnet_id: The ID of subnet which the instance belongs to.
                Changing this creates a new instance resource.
         :param pulumi.Input[str] subnet_name: The name of subnet which the instance belongs to.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: The key/value pairs to associate with the dcs instance.
         :param pulumi.Input[str] template_id: The Parameter Template ID.
                Changing this creates a new instance resource.
+        :param pulumi.Input[bool] transparent_client_ip_enable: Indicates whether client IP pass-through is enabled.
         :param pulumi.Input[int] used_memory: Size of the used memory. Unit: MB.
         :param pulumi.Input[str] vpc_id: The ID of VPC which the instance belongs to.
                Changing this creates a new instance resource.
@@ -1038,15 +1080,23 @@ class _InstanceState:
             pulumi.log.warn("""backup_type is deprecated: Deprecated, please use `backup_policy` instead""")
         if backup_type is not None:
             pulumi.set(__self__, "backup_type", backup_type)
+        if bandwidth_infos is not None:
+            pulumi.set(__self__, "bandwidth_infos", bandwidth_infos)
         if begin_at is not None:
             warnings.warn("""Deprecated, please use `backup_policy` instead""", DeprecationWarning)
             pulumi.log.warn("""begin_at is deprecated: Deprecated, please use `backup_policy` instead""")
         if begin_at is not None:
             pulumi.set(__self__, "begin_at", begin_at)
+        if cache_mode is not None:
+            pulumi.set(__self__, "cache_mode", cache_mode)
         if capacity is not None:
             pulumi.set(__self__, "capacity", capacity)
         if charging_mode is not None:
             pulumi.set(__self__, "charging_mode", charging_mode)
+        if cpu_type is not None:
+            pulumi.set(__self__, "cpu_type", cpu_type)
+        if created_at is not None:
+            pulumi.set(__self__, "created_at", created_at)
         if deleted_nodes is not None:
             pulumi.set(__self__, "deleted_nodes", deleted_nodes)
         if description is not None:
@@ -1076,6 +1126,8 @@ class _InstanceState:
             pulumi.log.warn("""ip is deprecated: Deprecated, please us `private_ip` instead.""")
         if ip is not None:
             pulumi.set(__self__, "ip", ip)
+        if launched_at is not None:
+            pulumi.set(__self__, "launched_at", launched_at)
         if maintain_begin is not None:
             pulumi.set(__self__, "maintain_begin", maintain_begin)
         if maintain_end is not None:
@@ -1086,6 +1138,8 @@ class _InstanceState:
             pulumi.set(__self__, "name", name)
         if order_id is not None:
             pulumi.set(__self__, "order_id", order_id)
+        if parameters is not None:
+            pulumi.set(__self__, "parameters", parameters)
         if password is not None:
             pulumi.set(__self__, "password", password)
         if period is not None:
@@ -1106,10 +1160,16 @@ class _InstanceState:
             pulumi.log.warn("""product_id is deprecated: Deprecated, please use `flavor` instead""")
         if product_id is not None:
             pulumi.set(__self__, "product_id", product_id)
+        if product_type is not None:
+            pulumi.set(__self__, "product_type", product_type)
+        if readonly_domain_name is not None:
+            pulumi.set(__self__, "readonly_domain_name", readonly_domain_name)
         if region is not None:
             pulumi.set(__self__, "region", region)
         if rename_commands is not None:
             pulumi.set(__self__, "rename_commands", rename_commands)
+        if replica_count is not None:
+            pulumi.set(__self__, "replica_count", replica_count)
         if reserved_ips is not None:
             pulumi.set(__self__, "reserved_ips", reserved_ips)
         if save_days is not None:
@@ -1121,8 +1181,14 @@ class _InstanceState:
             pulumi.set(__self__, "security_group_id", security_group_id)
         if security_group_name is not None:
             pulumi.set(__self__, "security_group_name", security_group_name)
+        if sharding_count is not None:
+            pulumi.set(__self__, "sharding_count", sharding_count)
+        if ssl_enable is not None:
+            pulumi.set(__self__, "ssl_enable", ssl_enable)
         if status is not None:
             pulumi.set(__self__, "status", status)
+        if subnet_cidr is not None:
+            pulumi.set(__self__, "subnet_cidr", subnet_cidr)
         if subnet_id is not None:
             pulumi.set(__self__, "subnet_id", subnet_id)
         if subnet_name is not None:
@@ -1131,6 +1197,8 @@ class _InstanceState:
             pulumi.set(__self__, "tags", tags)
         if template_id is not None:
             pulumi.set(__self__, "template_id", template_id)
+        if transparent_client_ip_enable is not None:
+            pulumi.set(__self__, "transparent_client_ip_enable", transparent_client_ip_enable)
         if used_memory is not None:
             pulumi.set(__self__, "used_memory", used_memory)
         if user_id is not None:
@@ -1217,7 +1285,7 @@ class _InstanceState:
     @pulumi.getter(name="backupAts")
     def backup_ats(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[int]]]]:
         """
-        Day in a week on which backup starts, the value ranges from 1 to 7.
+        Day in a week on which backup starts, the value ranges from `1` to `7`.
         Where: 1 indicates Monday; 7 indicates Sunday.
         """
         return pulumi.get(self, "backup_ats")
@@ -1254,6 +1322,19 @@ class _InstanceState:
         pulumi.set(self, "backup_type", value)
 
     @property
+    @pulumi.getter(name="bandwidthInfos")
+    def bandwidth_infos(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['InstanceBandwidthInfoArgs']]]]:
+        """
+        Indicates the bandwidth information of the instance.
+        The bandwidth_info structure is documented below.
+        """
+        return pulumi.get(self, "bandwidth_infos")
+
+    @bandwidth_infos.setter
+    def bandwidth_infos(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['InstanceBandwidthInfoArgs']]]]):
+        pulumi.set(self, "bandwidth_infos", value)
+
+    @property
     @pulumi.getter(name="beginAt")
     def begin_at(self) -> Optional[pulumi.Input[str]]:
         """
@@ -1265,6 +1346,18 @@ class _InstanceState:
     @begin_at.setter
     def begin_at(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "begin_at", value)
+
+    @property
+    @pulumi.getter(name="cacheMode")
+    def cache_mode(self) -> Optional[pulumi.Input[str]]:
+        """
+        Indicates the instance type. The value can be **single**, **ha**, **cluster** or **proxy**.
+        """
+        return pulumi.get(self, "cache_mode")
+
+    @cache_mode.setter
+    def cache_mode(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "cache_mode", value)
 
     @property
     @pulumi.getter
@@ -1301,6 +1394,30 @@ class _InstanceState:
     @charging_mode.setter
     def charging_mode(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "charging_mode", value)
+
+    @property
+    @pulumi.getter(name="cpuType")
+    def cpu_type(self) -> Optional[pulumi.Input[str]]:
+        """
+        Indicates the CPU type of the instance. The value can be **x86_64** or **aarch64**.
+        """
+        return pulumi.get(self, "cpu_type")
+
+    @cpu_type.setter
+    def cpu_type(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "cpu_type", value)
+
+    @property
+    @pulumi.getter(name="createdAt")
+    def created_at(self) -> Optional[pulumi.Input[str]]:
+        """
+        Indicates the time when the instance is created, in RFC3339 format.
+        """
+        return pulumi.get(self, "created_at")
+
+    @created_at.setter
+    def created_at(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "created_at", value)
 
     @property
     @pulumi.getter(name="deletedNodes")
@@ -1373,7 +1490,6 @@ class _InstanceState:
     def enterprise_project_id(self) -> Optional[pulumi.Input[str]]:
         """
         The enterprise project id of the dcs instance.
-        Changing this creates a new instance.
         """
         return pulumi.get(self, "enterprise_project_id")
 
@@ -1427,17 +1543,27 @@ class _InstanceState:
         pulumi.set(self, "ip", value)
 
     @property
+    @pulumi.getter(name="launchedAt")
+    def launched_at(self) -> Optional[pulumi.Input[str]]:
+        """
+        Indicates the time when the instance is started, in RFC3339 format.
+        """
+        return pulumi.get(self, "launched_at")
+
+    @launched_at.setter
+    def launched_at(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "launched_at", value)
+
+    @property
     @pulumi.getter(name="maintainBegin")
     def maintain_begin(self) -> Optional[pulumi.Input[str]]:
         """
-        Time at which the maintenance time window starts.
-        The valid values are `22:00:00`, `02:00:00`, `06:00:00`, `10:00:00`, `14:00:00` and `18:00:00`.
-        Default value is `02:00:00`.
+        Time at which the maintenance time window starts. Defaults to **02:00:00**.
         + The start time and end time of a maintenance time window must indicate the time segment of a supported maintenance
         time window.
-        + Parameters `maintain_begin` and `maintain_end` must be set in pairs.
-        + If parameter maintain_begin is left blank, parameter maintain_end is also blank.
-        In this case, the system automatically allocates the default start time 02:00:00.
+        + The start time must be on the hour, such as **18:00:00**.
+        + If parameter `maintain_begin` is left blank, parameter `maintain_end` is also blank.
+        In this case, the system automatically allocates the default start time **02:00:00**.
         """
         return pulumi.get(self, "maintain_begin")
 
@@ -1449,16 +1575,13 @@ class _InstanceState:
     @pulumi.getter(name="maintainEnd")
     def maintain_end(self) -> Optional[pulumi.Input[str]]:
         """
-        Time at which the maintenance time window ends.
-        The valid values are `22:00:00`, `02:00:00`, `06:00:00`, `10:00:00`, `14:00:00` and `18:00:00`.
-        Default value is `06:00:00`.
+        Time at which the maintenance time window ends. Defaults to **06:00:00**.
         + The start time and end time of a maintenance time window must indicate the time segment of a supported maintenance
         time window.
-        + The end time is four hours later than the start time.
-        For example, if the start time is 22:00:00, the end time is 02:00:00.
-        + Parameters `maintain_begin` and `maintain_end` must be set in pairs.
-        + If parameter maintain_end is left blank, parameter maintain_begin is also blank.
-        In this case, the system automatically allocates the default end time 06:00:00.
+        + The end time is one hour later than the start time. For example, if the start time is **18:00:00**, the end time is
+        **19:00:00**.
+        + If parameter `maintain_end` is left blank, parameter `maintain_begin` is also blank.
+        In this case, the system automatically allocates the default end time **06:00:00**.
         """
         return pulumi.get(self, "maintain_end")
 
@@ -1482,9 +1605,7 @@ class _InstanceState:
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the name of an instance.
-        The name must be 4 to 64 characters and start with a letter.
-        Only chinese, letters (case-insensitive), digits, underscores (_) ,and hyphens (-) are allowed.
+        Specifies the name of the configuration item.
         """
         return pulumi.get(self, "name")
 
@@ -1503,6 +1624,20 @@ class _InstanceState:
     @order_id.setter
     def order_id(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "order_id", value)
+
+    @property
+    @pulumi.getter
+    def parameters(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['InstanceParameterArgs']]]]:
+        """
+        Specify an array of one or more parameters to be set to the DCS instance after
+        launched. You can check on console to see which parameters supported.
+        The parameters structure is documented below.
+        """
+        return pulumi.get(self, "parameters")
+
+    @parameters.setter
+    def parameters(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['InstanceParameterArgs']]]]):
+        pulumi.set(self, "parameters", value)
 
     @property
     @pulumi.getter
@@ -1603,6 +1738,31 @@ class _InstanceState:
         pulumi.set(self, "product_id", value)
 
     @property
+    @pulumi.getter(name="productType")
+    def product_type(self) -> Optional[pulumi.Input[str]]:
+        """
+        Indicates the product type of the instance. The value can be: **generic** or **enterprise**.
+        """
+        return pulumi.get(self, "product_type")
+
+    @product_type.setter
+    def product_type(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "product_type", value)
+
+    @property
+    @pulumi.getter(name="readonlyDomainName")
+    def readonly_domain_name(self) -> Optional[pulumi.Input[str]]:
+        """
+        Indicates the read-only domain name of the instance. This parameter is available
+        only for master/standby instances.
+        """
+        return pulumi.get(self, "readonly_domain_name")
+
+    @readonly_domain_name.setter
+    def readonly_domain_name(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "readonly_domain_name", value)
+
+    @property
     @pulumi.getter
     def region(self) -> Optional[pulumi.Input[str]]:
         """
@@ -1630,6 +1790,18 @@ class _InstanceState:
         pulumi.set(self, "rename_commands", value)
 
     @property
+    @pulumi.getter(name="replicaCount")
+    def replica_count(self) -> Optional[pulumi.Input[int]]:
+        """
+        Indicates the number of replicas in the instance.
+        """
+        return pulumi.get(self, "replica_count")
+
+    @replica_count.setter
+    def replica_count(self, value: Optional[pulumi.Input[int]]):
+        pulumi.set(self, "replica_count", value)
+
+    @property
     @pulumi.getter(name="reservedIps")
     def reserved_ips(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]:
         """
@@ -1646,7 +1818,7 @@ class _InstanceState:
     @pulumi.getter(name="saveDays")
     def save_days(self) -> Optional[pulumi.Input[int]]:
         """
-        Retention time. Unit: day, the value ranges from 1 to 7.
+        Retention time. Unit: day, the value ranges from `1` to `7`.
         This parameter is required if the backup_type is **auto**.
         """
         return pulumi.get(self, "save_days")
@@ -1681,6 +1853,30 @@ class _InstanceState:
         pulumi.set(self, "security_group_name", value)
 
     @property
+    @pulumi.getter(name="shardingCount")
+    def sharding_count(self) -> Optional[pulumi.Input[int]]:
+        """
+        Indicates the number of shards in a cluster instance.
+        """
+        return pulumi.get(self, "sharding_count")
+
+    @sharding_count.setter
+    def sharding_count(self, value: Optional[pulumi.Input[int]]):
+        pulumi.set(self, "sharding_count", value)
+
+    @property
+    @pulumi.getter(name="sslEnable")
+    def ssl_enable(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies whether to enable the SSL. Value options: **true**, **false**.
+        """
+        return pulumi.get(self, "ssl_enable")
+
+    @ssl_enable.setter
+    def ssl_enable(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "ssl_enable", value)
+
+    @property
     @pulumi.getter
     def status(self) -> Optional[pulumi.Input[str]]:
         """
@@ -1700,6 +1896,18 @@ class _InstanceState:
     @status.setter
     def status(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "status", value)
+
+    @property
+    @pulumi.getter(name="subnetCidr")
+    def subnet_cidr(self) -> Optional[pulumi.Input[str]]:
+        """
+        Indicates the subnet segment.
+        """
+        return pulumi.get(self, "subnet_cidr")
+
+    @subnet_cidr.setter
+    def subnet_cidr(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "subnet_cidr", value)
 
     @property
     @pulumi.getter(name="subnetId")
@@ -1750,6 +1958,18 @@ class _InstanceState:
     @template_id.setter
     def template_id(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "template_id", value)
+
+    @property
+    @pulumi.getter(name="transparentClientIpEnable")
+    def transparent_client_ip_enable(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Indicates whether client IP pass-through is enabled.
+        """
+        return pulumi.get(self, "transparent_client_ip_enable")
+
+    @transparent_client_ip_enable.setter
+    def transparent_client_ip_enable(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "transparent_client_ip_enable", value)
 
     @property
     @pulumi.getter(name="usedMemory")
@@ -1859,6 +2079,7 @@ class Instance(pulumi.CustomResource):
                  maintain_begin: Optional[pulumi.Input[str]] = None,
                  maintain_end: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
+                 parameters: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['InstanceParameterArgs']]]]] = None,
                  password: Optional[pulumi.Input[str]] = None,
                  period: Optional[pulumi.Input[int]] = None,
                  period_type: Optional[pulumi.Input[str]] = None,
@@ -1871,6 +2092,7 @@ class Instance(pulumi.CustomResource):
                  reserved_ips: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  save_days: Optional[pulumi.Input[int]] = None,
                  security_group_id: Optional[pulumi.Input[str]] = None,
+                 ssl_enable: Optional[pulumi.Input[bool]] = None,
                  subnet_id: Optional[pulumi.Input[str]] = None,
                  tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  template_id: Optional[pulumi.Input[str]] = None,
@@ -1958,6 +2180,18 @@ class Instance(pulumi.CustomResource):
                         "172.16.0.0/24",
                     ],
                 ),
+            ],
+            parameters=[
+                huaweicloud.dcs.InstanceParameterArgs(
+                    id="1",
+                    name="timeout",
+                    value="500",
+                ),
+                huaweicloud.dcs.InstanceParameterArgs(
+                    id="3",
+                    name="hash-max-ziplist-entries",
+                    value="4096",
+                ),
             ])
         ```
 
@@ -1969,7 +2203,7 @@ class Instance(pulumi.CustomResource):
          $ pulumi import huaweicloud:Dcs/instance:Instance instance_1 80e373f9-872e-4046-aae9-ccd9ddc55511
         ```
 
-         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`password`, `auto_renew`, `period`, `period_unit`, `rename_commands`, `internal_version`, `save_days`, `backup_type`, `begin_at`, `period_type`, `backup_at`. It is generally recommended running `terraform plan` after importing an instance. You can then decide if changes should be applied to the instance, or the resource definition should be updated to align with the instance. Also you can ignore changes as below. resource "huaweicloud_dcs_instance" "instance_1" {
+         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`password`, `auto_renew`, `period`, `period_unit`, `rename_commands`, `internal_version`, `save_days`, `backup_type`, `begin_at`, `period_type`, `backup_at`, `parameters`. It is generally recommended running `terraform plan` after importing an instance. You can then decide if changes should be applied to the instance, or the resource definition should be updated to align with the instance. Also you can ignore changes as below. hcl resource "huaweicloud_dcs_instance" "instance_1" {
 
          ...
 
@@ -1995,7 +2229,7 @@ class Instance(pulumi.CustomResource):
                Master/Standby, Proxy Cluster, and Redis Cluster DCS instances support cross-AZ deployment.
                You can specify an AZ for the standby node. When specifying AZs for nodes, use commas (,) to separate AZs.
                Changing this creates a new instance.
-        :param pulumi.Input[Sequence[pulumi.Input[int]]] backup_ats: Day in a week on which backup starts, the value ranges from 1 to 7.
+        :param pulumi.Input[Sequence[pulumi.Input[int]]] backup_ats: Day in a week on which backup starts, the value ranges from `1` to `7`.
                Where: 1 indicates Monday; 7 indicates Sunday.
         :param pulumi.Input[pulumi.InputType['InstanceBackupPolicyArgs']] backup_policy: Specifies the backup configuration to be used with the instance.
                The structure is described below.
@@ -2029,7 +2263,6 @@ class Instance(pulumi.CustomResource):
                It is mandatory when the engine is *Redis*, the value can be 3.0, 4.0, 5.0 or 6.0.
                Changing this creates a new instance.
         :param pulumi.Input[str] enterprise_project_id: The enterprise project id of the dcs instance.
-               Changing this creates a new instance.
         :param pulumi.Input[str] flavor: The flavor of the cache instance, which including the total memory, available memory,
                maximum number of connections allowed, maximum/assured bandwidth and reference performance.
                It also includes the modes of Redis instances. You can query the *flavor* as follows:
@@ -2037,27 +2270,23 @@ class Instance(pulumi.CustomResource):
                + Query some flavors
                in [DCS Instance Specifications](https://support.huaweicloud.com/intl/en-us/productdesc-dcs/dcs-pd-200713003.html)
                + Log in to the DCS console, click *Buy DCS Instance*, and find the corresponding instance specification.
-        :param pulumi.Input[str] maintain_begin: Time at which the maintenance time window starts.
-               The valid values are `22:00:00`, `02:00:00`, `06:00:00`, `10:00:00`, `14:00:00` and `18:00:00`.
-               Default value is `02:00:00`.
+        :param pulumi.Input[str] maintain_begin: Time at which the maintenance time window starts. Defaults to **02:00:00**.
                + The start time and end time of a maintenance time window must indicate the time segment of a supported maintenance
                time window.
-               + Parameters `maintain_begin` and `maintain_end` must be set in pairs.
-               + If parameter maintain_begin is left blank, parameter maintain_end is also blank.
-               In this case, the system automatically allocates the default start time 02:00:00.
-        :param pulumi.Input[str] maintain_end: Time at which the maintenance time window ends.
-               The valid values are `22:00:00`, `02:00:00`, `06:00:00`, `10:00:00`, `14:00:00` and `18:00:00`.
-               Default value is `06:00:00`.
+               + The start time must be on the hour, such as **18:00:00**.
+               + If parameter `maintain_begin` is left blank, parameter `maintain_end` is also blank.
+               In this case, the system automatically allocates the default start time **02:00:00**.
+        :param pulumi.Input[str] maintain_end: Time at which the maintenance time window ends. Defaults to **06:00:00**.
                + The start time and end time of a maintenance time window must indicate the time segment of a supported maintenance
                time window.
-               + The end time is four hours later than the start time.
-               For example, if the start time is 22:00:00, the end time is 02:00:00.
-               + Parameters `maintain_begin` and `maintain_end` must be set in pairs.
-               + If parameter maintain_end is left blank, parameter maintain_begin is also blank.
-               In this case, the system automatically allocates the default end time 06:00:00.
-        :param pulumi.Input[str] name: Specifies the name of an instance.
-               The name must be 4 to 64 characters and start with a letter.
-               Only chinese, letters (case-insensitive), digits, underscores (_) ,and hyphens (-) are allowed.
+               + The end time is one hour later than the start time. For example, if the start time is **18:00:00**, the end time is
+               **19:00:00**.
+               + If parameter `maintain_end` is left blank, parameter `maintain_begin` is also blank.
+               In this case, the system automatically allocates the default end time **06:00:00**.
+        :param pulumi.Input[str] name: Specifies the name of the configuration item.
+        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['InstanceParameterArgs']]]] parameters: Specify an array of one or more parameters to be set to the DCS instance after
+               launched. You can check on console to see which parameters supported.
+               The parameters structure is documented below.
         :param pulumi.Input[str] password: Specifies the password of a DCS instance.
                The password of a DCS instance must meet the following complexity requirements:
                + Must be a string of 8 to 32 bits in length.
@@ -2088,10 +2317,11 @@ class Instance(pulumi.CustomResource):
                The valid commands that can be renamed are: **command**, **keys**, **flushdb**, **flushall** and **hgetall**.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] reserved_ips: Specifies IP addresses to retain. Mandatory during cluster scale-in. If this
                parameter is not set, the system randomly deletes unnecessary shards.
-        :param pulumi.Input[int] save_days: Retention time. Unit: day, the value ranges from 1 to 7.
+        :param pulumi.Input[int] save_days: Retention time. Unit: day, the value ranges from `1` to `7`.
                This parameter is required if the backup_type is **auto**.
         :param pulumi.Input[str] security_group_id: The ID of the security group which the instance belongs to.
                This parameter is mandatory for Memcached and Redis 3.0 version.
+        :param pulumi.Input[bool] ssl_enable: Specifies whether to enable the SSL. Value options: **true**, **false**.
         :param pulumi.Input[str] subnet_id: The ID of subnet which the instance belongs to.
                Changing this creates a new instance resource.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: The key/value pairs to associate with the dcs instance.
@@ -2190,6 +2420,18 @@ class Instance(pulumi.CustomResource):
                         "172.16.0.0/24",
                     ],
                 ),
+            ],
+            parameters=[
+                huaweicloud.dcs.InstanceParameterArgs(
+                    id="1",
+                    name="timeout",
+                    value="500",
+                ),
+                huaweicloud.dcs.InstanceParameterArgs(
+                    id="3",
+                    name="hash-max-ziplist-entries",
+                    value="4096",
+                ),
             ])
         ```
 
@@ -2201,7 +2443,7 @@ class Instance(pulumi.CustomResource):
          $ pulumi import huaweicloud:Dcs/instance:Instance instance_1 80e373f9-872e-4046-aae9-ccd9ddc55511
         ```
 
-         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`password`, `auto_renew`, `period`, `period_unit`, `rename_commands`, `internal_version`, `save_days`, `backup_type`, `begin_at`, `period_type`, `backup_at`. It is generally recommended running `terraform plan` after importing an instance. You can then decide if changes should be applied to the instance, or the resource definition should be updated to align with the instance. Also you can ignore changes as below. resource "huaweicloud_dcs_instance" "instance_1" {
+         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`password`, `auto_renew`, `period`, `period_unit`, `rename_commands`, `internal_version`, `save_days`, `backup_type`, `begin_at`, `period_type`, `backup_at`, `parameters`. It is generally recommended running `terraform plan` after importing an instance. You can then decide if changes should be applied to the instance, or the resource definition should be updated to align with the instance. Also you can ignore changes as below. hcl resource "huaweicloud_dcs_instance" "instance_1" {
 
          ...
 
@@ -2251,6 +2493,7 @@ class Instance(pulumi.CustomResource):
                  maintain_begin: Optional[pulumi.Input[str]] = None,
                  maintain_end: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
+                 parameters: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['InstanceParameterArgs']]]]] = None,
                  password: Optional[pulumi.Input[str]] = None,
                  period: Optional[pulumi.Input[int]] = None,
                  period_type: Optional[pulumi.Input[str]] = None,
@@ -2263,6 +2506,7 @@ class Instance(pulumi.CustomResource):
                  reserved_ips: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  save_days: Optional[pulumi.Input[int]] = None,
                  security_group_id: Optional[pulumi.Input[str]] = None,
+                 ssl_enable: Optional[pulumi.Input[bool]] = None,
                  subnet_id: Optional[pulumi.Input[str]] = None,
                  tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  template_id: Optional[pulumi.Input[str]] = None,
@@ -2321,6 +2565,7 @@ class Instance(pulumi.CustomResource):
             __props__.__dict__["maintain_begin"] = maintain_begin
             __props__.__dict__["maintain_end"] = maintain_end
             __props__.__dict__["name"] = name
+            __props__.__dict__["parameters"] = parameters
             __props__.__dict__["password"] = password
             __props__.__dict__["period"] = period
             if period_type is not None and not opts.urn:
@@ -2342,6 +2587,7 @@ class Instance(pulumi.CustomResource):
                 pulumi.log.warn("""save_days is deprecated: Deprecated, please use `backup_policy` instead""")
             __props__.__dict__["save_days"] = save_days
             __props__.__dict__["security_group_id"] = security_group_id
+            __props__.__dict__["ssl_enable"] = ssl_enable
             if subnet_id is None and not opts.urn:
                 raise TypeError("Missing required property 'subnet_id'")
             __props__.__dict__["subnet_id"] = subnet_id
@@ -2352,14 +2598,25 @@ class Instance(pulumi.CustomResource):
             __props__.__dict__["vpc_id"] = vpc_id
             __props__.__dict__["whitelist_enable"] = whitelist_enable
             __props__.__dict__["whitelists"] = whitelists
+            __props__.__dict__["bandwidth_infos"] = None
+            __props__.__dict__["cache_mode"] = None
+            __props__.__dict__["cpu_type"] = None
+            __props__.__dict__["created_at"] = None
             __props__.__dict__["domain_name"] = None
             __props__.__dict__["internal_version"] = None
             __props__.__dict__["ip"] = None
+            __props__.__dict__["launched_at"] = None
             __props__.__dict__["max_memory"] = None
             __props__.__dict__["order_id"] = None
+            __props__.__dict__["product_type"] = None
+            __props__.__dict__["readonly_domain_name"] = None
+            __props__.__dict__["replica_count"] = None
             __props__.__dict__["security_group_name"] = None
+            __props__.__dict__["sharding_count"] = None
             __props__.__dict__["status"] = None
+            __props__.__dict__["subnet_cidr"] = None
             __props__.__dict__["subnet_name"] = None
+            __props__.__dict__["transparent_client_ip_enable"] = None
             __props__.__dict__["used_memory"] = None
             __props__.__dict__["user_id"] = None
             __props__.__dict__["user_name"] = None
@@ -2382,9 +2639,13 @@ class Instance(pulumi.CustomResource):
             backup_ats: Optional[pulumi.Input[Sequence[pulumi.Input[int]]]] = None,
             backup_policy: Optional[pulumi.Input[pulumi.InputType['InstanceBackupPolicyArgs']]] = None,
             backup_type: Optional[pulumi.Input[str]] = None,
+            bandwidth_infos: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['InstanceBandwidthInfoArgs']]]]] = None,
             begin_at: Optional[pulumi.Input[str]] = None,
+            cache_mode: Optional[pulumi.Input[str]] = None,
             capacity: Optional[pulumi.Input[float]] = None,
             charging_mode: Optional[pulumi.Input[str]] = None,
+            cpu_type: Optional[pulumi.Input[str]] = None,
+            created_at: Optional[pulumi.Input[str]] = None,
             deleted_nodes: Optional[pulumi.Input[str]] = None,
             description: Optional[pulumi.Input[str]] = None,
             domain_name: Optional[pulumi.Input[str]] = None,
@@ -2395,11 +2656,13 @@ class Instance(pulumi.CustomResource):
             flavor: Optional[pulumi.Input[str]] = None,
             internal_version: Optional[pulumi.Input[str]] = None,
             ip: Optional[pulumi.Input[str]] = None,
+            launched_at: Optional[pulumi.Input[str]] = None,
             maintain_begin: Optional[pulumi.Input[str]] = None,
             maintain_end: Optional[pulumi.Input[str]] = None,
             max_memory: Optional[pulumi.Input[int]] = None,
             name: Optional[pulumi.Input[str]] = None,
             order_id: Optional[pulumi.Input[str]] = None,
+            parameters: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['InstanceParameterArgs']]]]] = None,
             password: Optional[pulumi.Input[str]] = None,
             period: Optional[pulumi.Input[int]] = None,
             period_type: Optional[pulumi.Input[str]] = None,
@@ -2407,17 +2670,24 @@ class Instance(pulumi.CustomResource):
             port: Optional[pulumi.Input[int]] = None,
             private_ip: Optional[pulumi.Input[str]] = None,
             product_id: Optional[pulumi.Input[str]] = None,
+            product_type: Optional[pulumi.Input[str]] = None,
+            readonly_domain_name: Optional[pulumi.Input[str]] = None,
             region: Optional[pulumi.Input[str]] = None,
             rename_commands: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
+            replica_count: Optional[pulumi.Input[int]] = None,
             reserved_ips: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
             save_days: Optional[pulumi.Input[int]] = None,
             security_group_id: Optional[pulumi.Input[str]] = None,
             security_group_name: Optional[pulumi.Input[str]] = None,
+            sharding_count: Optional[pulumi.Input[int]] = None,
+            ssl_enable: Optional[pulumi.Input[bool]] = None,
             status: Optional[pulumi.Input[str]] = None,
+            subnet_cidr: Optional[pulumi.Input[str]] = None,
             subnet_id: Optional[pulumi.Input[str]] = None,
             subnet_name: Optional[pulumi.Input[str]] = None,
             tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
             template_id: Optional[pulumi.Input[str]] = None,
+            transparent_client_ip_enable: Optional[pulumi.Input[bool]] = None,
             used_memory: Optional[pulumi.Input[int]] = None,
             user_id: Optional[pulumi.Input[str]] = None,
             user_name: Optional[pulumi.Input[str]] = None,
@@ -2442,15 +2712,18 @@ class Instance(pulumi.CustomResource):
                Master/Standby, Proxy Cluster, and Redis Cluster DCS instances support cross-AZ deployment.
                You can specify an AZ for the standby node. When specifying AZs for nodes, use commas (,) to separate AZs.
                Changing this creates a new instance.
-        :param pulumi.Input[Sequence[pulumi.Input[int]]] backup_ats: Day in a week on which backup starts, the value ranges from 1 to 7.
+        :param pulumi.Input[Sequence[pulumi.Input[int]]] backup_ats: Day in a week on which backup starts, the value ranges from `1` to `7`.
                Where: 1 indicates Monday; 7 indicates Sunday.
         :param pulumi.Input[pulumi.InputType['InstanceBackupPolicyArgs']] backup_policy: Specifies the backup configuration to be used with the instance.
                The structure is described below.
         :param pulumi.Input[str] backup_type: Backup type. Default value is `auto`. The valid values are as follows:
                + `auto`: automatic backup.
                + `manual`: manual backup.
+        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['InstanceBandwidthInfoArgs']]]] bandwidth_infos: Indicates the bandwidth information of the instance.
+               The bandwidth_info structure is documented below.
         :param pulumi.Input[str] begin_at: Time at which backup starts.
                Format: `hh24:00-hh24:00`, "00:00-01:00" indicates that backup starts at 00:00:00.
+        :param pulumi.Input[str] cache_mode: Indicates the instance type. The value can be **single**, **ha**, **cluster** or **proxy**.
         :param pulumi.Input[float] capacity: Specifies the cache capacity. Unit: GB.
                + **Redis4.0, Redis5.0 and Redis6.0**: Stand-alone and active/standby type instance values: `0.125`, `0.25`,
                `0.5`, `1`, `2`, `4`, `8`, `16`, `32` and `64`.
@@ -2465,6 +2738,8 @@ class Instance(pulumi.CustomResource):
                + `postPaid`: indicates the pay-per-use billing mode.
                Default value is `postPaid`.
                Changing this creates a new instance.
+        :param pulumi.Input[str] cpu_type: Indicates the CPU type of the instance. The value can be **x86_64** or **aarch64**.
+        :param pulumi.Input[str] created_at: Indicates the time when the instance is created, in RFC3339 format.
         :param pulumi.Input[str] deleted_nodes: Specifies the ID of the replica to delete. This parameter is mandatory when
                you delete replicas of a master/standby DCS Redis 4.0 or 5.0 instance. Currently, only one replica can be deleted
                at a time.
@@ -2477,7 +2752,6 @@ class Instance(pulumi.CustomResource):
                It is mandatory when the engine is *Redis*, the value can be 3.0, 4.0, 5.0 or 6.0.
                Changing this creates a new instance.
         :param pulumi.Input[str] enterprise_project_id: The enterprise project id of the dcs instance.
-               Changing this creates a new instance.
         :param pulumi.Input[str] flavor: The flavor of the cache instance, which including the total memory, available memory,
                maximum number of connections allowed, maximum/assured bandwidth and reference performance.
                It also includes the modes of Redis instances. You can query the *flavor* as follows:
@@ -2485,29 +2759,26 @@ class Instance(pulumi.CustomResource):
                + Query some flavors
                in [DCS Instance Specifications](https://support.huaweicloud.com/intl/en-us/productdesc-dcs/dcs-pd-200713003.html)
                + Log in to the DCS console, click *Buy DCS Instance*, and find the corresponding instance specification.
-        :param pulumi.Input[str] maintain_begin: Time at which the maintenance time window starts.
-               The valid values are `22:00:00`, `02:00:00`, `06:00:00`, `10:00:00`, `14:00:00` and `18:00:00`.
-               Default value is `02:00:00`.
+        :param pulumi.Input[str] launched_at: Indicates the time when the instance is started, in RFC3339 format.
+        :param pulumi.Input[str] maintain_begin: Time at which the maintenance time window starts. Defaults to **02:00:00**.
                + The start time and end time of a maintenance time window must indicate the time segment of a supported maintenance
                time window.
-               + Parameters `maintain_begin` and `maintain_end` must be set in pairs.
-               + If parameter maintain_begin is left blank, parameter maintain_end is also blank.
-               In this case, the system automatically allocates the default start time 02:00:00.
-        :param pulumi.Input[str] maintain_end: Time at which the maintenance time window ends.
-               The valid values are `22:00:00`, `02:00:00`, `06:00:00`, `10:00:00`, `14:00:00` and `18:00:00`.
-               Default value is `06:00:00`.
+               + The start time must be on the hour, such as **18:00:00**.
+               + If parameter `maintain_begin` is left blank, parameter `maintain_end` is also blank.
+               In this case, the system automatically allocates the default start time **02:00:00**.
+        :param pulumi.Input[str] maintain_end: Time at which the maintenance time window ends. Defaults to **06:00:00**.
                + The start time and end time of a maintenance time window must indicate the time segment of a supported maintenance
                time window.
-               + The end time is four hours later than the start time.
-               For example, if the start time is 22:00:00, the end time is 02:00:00.
-               + Parameters `maintain_begin` and `maintain_end` must be set in pairs.
-               + If parameter maintain_end is left blank, parameter maintain_begin is also blank.
-               In this case, the system automatically allocates the default end time 06:00:00.
+               + The end time is one hour later than the start time. For example, if the start time is **18:00:00**, the end time is
+               **19:00:00**.
+               + If parameter `maintain_end` is left blank, parameter `maintain_begin` is also blank.
+               In this case, the system automatically allocates the default end time **06:00:00**.
         :param pulumi.Input[int] max_memory: Total memory size. Unit: MB.
-        :param pulumi.Input[str] name: Specifies the name of an instance.
-               The name must be 4 to 64 characters and start with a letter.
-               Only chinese, letters (case-insensitive), digits, underscores (_) ,and hyphens (-) are allowed.
+        :param pulumi.Input[str] name: Specifies the name of the configuration item.
         :param pulumi.Input[str] order_id: The ID of the order that created the instance.
+        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['InstanceParameterArgs']]]] parameters: Specify an array of one or more parameters to be set to the DCS instance after
+               launched. You can check on console to see which parameters supported.
+               The parameters structure is documented below.
         :param pulumi.Input[str] password: Specifies the password of a DCS instance.
                The password of a DCS instance must meet the following complexity requirements:
                + Must be a string of 8 to 32 bits in length.
@@ -2531,18 +2802,24 @@ class Instance(pulumi.CustomResource):
                You can specify an available IP for the Redis instance (except for the Redis Cluster type).
                If omitted, the system will automatically allocate an available IP address to the Redis instance.
                Changing this creates a new instance resource.
+        :param pulumi.Input[str] product_type: Indicates the product type of the instance. The value can be: **generic** or **enterprise**.
+        :param pulumi.Input[str] readonly_domain_name: Indicates the read-only domain name of the instance. This parameter is available
+               only for master/standby instances.
         :param pulumi.Input[str] region: Specifies the region in which to create the DCS instance resource.
                If omitted, the provider-level region will be used. Changing this creates a new DCS instance resource.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] rename_commands: Critical command renaming, which is supported only by Redis 4.0 and
                Redis 5.0 instances but not by Redis 3.0 instance.
                The valid commands that can be renamed are: **command**, **keys**, **flushdb**, **flushall** and **hgetall**.
+        :param pulumi.Input[int] replica_count: Indicates the number of replicas in the instance.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] reserved_ips: Specifies IP addresses to retain. Mandatory during cluster scale-in. If this
                parameter is not set, the system randomly deletes unnecessary shards.
-        :param pulumi.Input[int] save_days: Retention time. Unit: day, the value ranges from 1 to 7.
+        :param pulumi.Input[int] save_days: Retention time. Unit: day, the value ranges from `1` to `7`.
                This parameter is required if the backup_type is **auto**.
         :param pulumi.Input[str] security_group_id: The ID of the security group which the instance belongs to.
                This parameter is mandatory for Memcached and Redis 3.0 version.
         :param pulumi.Input[str] security_group_name: The name of security group which the instance belongs to.
+        :param pulumi.Input[int] sharding_count: Indicates the number of shards in a cluster instance.
+        :param pulumi.Input[bool] ssl_enable: Specifies whether to enable the SSL. Value options: **true**, **false**.
         :param pulumi.Input[str] status: Cache instance status. The valid values are as follows:
                + `RUNNING`: The instance is running properly.
                Only instances in the Running state can provide in-memory cache service.
@@ -2553,12 +2830,14 @@ class Instance(pulumi.CustomResource):
                + `EXTENDING`: The instance is being scaled up.
                + `RESTORING`: The instance data is being restored.
                + `FLUSHING`: The DCS instance is being cleared.
+        :param pulumi.Input[str] subnet_cidr: Indicates the subnet segment.
         :param pulumi.Input[str] subnet_id: The ID of subnet which the instance belongs to.
                Changing this creates a new instance resource.
         :param pulumi.Input[str] subnet_name: The name of subnet which the instance belongs to.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: The key/value pairs to associate with the dcs instance.
         :param pulumi.Input[str] template_id: The Parameter Template ID.
                Changing this creates a new instance resource.
+        :param pulumi.Input[bool] transparent_client_ip_enable: Indicates whether client IP pass-through is enabled.
         :param pulumi.Input[int] used_memory: Size of the used memory. Unit: MB.
         :param pulumi.Input[str] vpc_id: The ID of VPC which the instance belongs to.
                Changing this creates a new instance resource.
@@ -2580,9 +2859,13 @@ class Instance(pulumi.CustomResource):
         __props__.__dict__["backup_ats"] = backup_ats
         __props__.__dict__["backup_policy"] = backup_policy
         __props__.__dict__["backup_type"] = backup_type
+        __props__.__dict__["bandwidth_infos"] = bandwidth_infos
         __props__.__dict__["begin_at"] = begin_at
+        __props__.__dict__["cache_mode"] = cache_mode
         __props__.__dict__["capacity"] = capacity
         __props__.__dict__["charging_mode"] = charging_mode
+        __props__.__dict__["cpu_type"] = cpu_type
+        __props__.__dict__["created_at"] = created_at
         __props__.__dict__["deleted_nodes"] = deleted_nodes
         __props__.__dict__["description"] = description
         __props__.__dict__["domain_name"] = domain_name
@@ -2593,11 +2876,13 @@ class Instance(pulumi.CustomResource):
         __props__.__dict__["flavor"] = flavor
         __props__.__dict__["internal_version"] = internal_version
         __props__.__dict__["ip"] = ip
+        __props__.__dict__["launched_at"] = launched_at
         __props__.__dict__["maintain_begin"] = maintain_begin
         __props__.__dict__["maintain_end"] = maintain_end
         __props__.__dict__["max_memory"] = max_memory
         __props__.__dict__["name"] = name
         __props__.__dict__["order_id"] = order_id
+        __props__.__dict__["parameters"] = parameters
         __props__.__dict__["password"] = password
         __props__.__dict__["period"] = period
         __props__.__dict__["period_type"] = period_type
@@ -2605,17 +2890,24 @@ class Instance(pulumi.CustomResource):
         __props__.__dict__["port"] = port
         __props__.__dict__["private_ip"] = private_ip
         __props__.__dict__["product_id"] = product_id
+        __props__.__dict__["product_type"] = product_type
+        __props__.__dict__["readonly_domain_name"] = readonly_domain_name
         __props__.__dict__["region"] = region
         __props__.__dict__["rename_commands"] = rename_commands
+        __props__.__dict__["replica_count"] = replica_count
         __props__.__dict__["reserved_ips"] = reserved_ips
         __props__.__dict__["save_days"] = save_days
         __props__.__dict__["security_group_id"] = security_group_id
         __props__.__dict__["security_group_name"] = security_group_name
+        __props__.__dict__["sharding_count"] = sharding_count
+        __props__.__dict__["ssl_enable"] = ssl_enable
         __props__.__dict__["status"] = status
+        __props__.__dict__["subnet_cidr"] = subnet_cidr
         __props__.__dict__["subnet_id"] = subnet_id
         __props__.__dict__["subnet_name"] = subnet_name
         __props__.__dict__["tags"] = tags
         __props__.__dict__["template_id"] = template_id
+        __props__.__dict__["transparent_client_ip_enable"] = transparent_client_ip_enable
         __props__.__dict__["used_memory"] = used_memory
         __props__.__dict__["user_id"] = user_id
         __props__.__dict__["user_name"] = user_name
@@ -2670,7 +2962,7 @@ class Instance(pulumi.CustomResource):
     @pulumi.getter(name="backupAts")
     def backup_ats(self) -> pulumi.Output[Optional[Sequence[int]]]:
         """
-        Day in a week on which backup starts, the value ranges from 1 to 7.
+        Day in a week on which backup starts, the value ranges from `1` to `7`.
         Where: 1 indicates Monday; 7 indicates Sunday.
         """
         return pulumi.get(self, "backup_ats")
@@ -2695,6 +2987,15 @@ class Instance(pulumi.CustomResource):
         return pulumi.get(self, "backup_type")
 
     @property
+    @pulumi.getter(name="bandwidthInfos")
+    def bandwidth_infos(self) -> pulumi.Output[Sequence['outputs.InstanceBandwidthInfo']]:
+        """
+        Indicates the bandwidth information of the instance.
+        The bandwidth_info structure is documented below.
+        """
+        return pulumi.get(self, "bandwidth_infos")
+
+    @property
     @pulumi.getter(name="beginAt")
     def begin_at(self) -> pulumi.Output[Optional[str]]:
         """
@@ -2702,6 +3003,14 @@ class Instance(pulumi.CustomResource):
         Format: `hh24:00-hh24:00`, "00:00-01:00" indicates that backup starts at 00:00:00.
         """
         return pulumi.get(self, "begin_at")
+
+    @property
+    @pulumi.getter(name="cacheMode")
+    def cache_mode(self) -> pulumi.Output[str]:
+        """
+        Indicates the instance type. The value can be **single**, **ha**, **cluster** or **proxy**.
+        """
+        return pulumi.get(self, "cache_mode")
 
     @property
     @pulumi.getter
@@ -2730,6 +3039,22 @@ class Instance(pulumi.CustomResource):
         Changing this creates a new instance.
         """
         return pulumi.get(self, "charging_mode")
+
+    @property
+    @pulumi.getter(name="cpuType")
+    def cpu_type(self) -> pulumi.Output[str]:
+        """
+        Indicates the CPU type of the instance. The value can be **x86_64** or **aarch64**.
+        """
+        return pulumi.get(self, "cpu_type")
+
+    @property
+    @pulumi.getter(name="createdAt")
+    def created_at(self) -> pulumi.Output[str]:
+        """
+        Indicates the time when the instance is created, in RFC3339 format.
+        """
+        return pulumi.get(self, "created_at")
 
     @property
     @pulumi.getter(name="deletedNodes")
@@ -2782,7 +3107,6 @@ class Instance(pulumi.CustomResource):
     def enterprise_project_id(self) -> pulumi.Output[str]:
         """
         The enterprise project id of the dcs instance.
-        Changing this creates a new instance.
         """
         return pulumi.get(self, "enterprise_project_id")
 
@@ -2816,34 +3140,37 @@ class Instance(pulumi.CustomResource):
         return pulumi.get(self, "ip")
 
     @property
-    @pulumi.getter(name="maintainBegin")
-    def maintain_begin(self) -> pulumi.Output[Optional[str]]:
+    @pulumi.getter(name="launchedAt")
+    def launched_at(self) -> pulumi.Output[str]:
         """
-        Time at which the maintenance time window starts.
-        The valid values are `22:00:00`, `02:00:00`, `06:00:00`, `10:00:00`, `14:00:00` and `18:00:00`.
-        Default value is `02:00:00`.
+        Indicates the time when the instance is started, in RFC3339 format.
+        """
+        return pulumi.get(self, "launched_at")
+
+    @property
+    @pulumi.getter(name="maintainBegin")
+    def maintain_begin(self) -> pulumi.Output[str]:
+        """
+        Time at which the maintenance time window starts. Defaults to **02:00:00**.
         + The start time and end time of a maintenance time window must indicate the time segment of a supported maintenance
         time window.
-        + Parameters `maintain_begin` and `maintain_end` must be set in pairs.
-        + If parameter maintain_begin is left blank, parameter maintain_end is also blank.
-        In this case, the system automatically allocates the default start time 02:00:00.
+        + The start time must be on the hour, such as **18:00:00**.
+        + If parameter `maintain_begin` is left blank, parameter `maintain_end` is also blank.
+        In this case, the system automatically allocates the default start time **02:00:00**.
         """
         return pulumi.get(self, "maintain_begin")
 
     @property
     @pulumi.getter(name="maintainEnd")
-    def maintain_end(self) -> pulumi.Output[Optional[str]]:
+    def maintain_end(self) -> pulumi.Output[str]:
         """
-        Time at which the maintenance time window ends.
-        The valid values are `22:00:00`, `02:00:00`, `06:00:00`, `10:00:00`, `14:00:00` and `18:00:00`.
-        Default value is `06:00:00`.
+        Time at which the maintenance time window ends. Defaults to **06:00:00**.
         + The start time and end time of a maintenance time window must indicate the time segment of a supported maintenance
         time window.
-        + The end time is four hours later than the start time.
-        For example, if the start time is 22:00:00, the end time is 02:00:00.
-        + Parameters `maintain_begin` and `maintain_end` must be set in pairs.
-        + If parameter maintain_end is left blank, parameter maintain_begin is also blank.
-        In this case, the system automatically allocates the default end time 06:00:00.
+        + The end time is one hour later than the start time. For example, if the start time is **18:00:00**, the end time is
+        **19:00:00**.
+        + If parameter `maintain_end` is left blank, parameter `maintain_begin` is also blank.
+        In this case, the system automatically allocates the default end time **06:00:00**.
         """
         return pulumi.get(self, "maintain_end")
 
@@ -2859,9 +3186,7 @@ class Instance(pulumi.CustomResource):
     @pulumi.getter
     def name(self) -> pulumi.Output[str]:
         """
-        Specifies the name of an instance.
-        The name must be 4 to 64 characters and start with a letter.
-        Only chinese, letters (case-insensitive), digits, underscores (_) ,and hyphens (-) are allowed.
+        Specifies the name of the configuration item.
         """
         return pulumi.get(self, "name")
 
@@ -2872,6 +3197,16 @@ class Instance(pulumi.CustomResource):
         The ID of the order that created the instance.
         """
         return pulumi.get(self, "order_id")
+
+    @property
+    @pulumi.getter
+    def parameters(self) -> pulumi.Output[Sequence['outputs.InstanceParameter']]:
+        """
+        Specify an array of one or more parameters to be set to the DCS instance after
+        launched. You can check on console to see which parameters supported.
+        The parameters structure is documented below.
+        """
+        return pulumi.get(self, "parameters")
 
     @property
     @pulumi.getter
@@ -2944,6 +3279,23 @@ class Instance(pulumi.CustomResource):
         return pulumi.get(self, "product_id")
 
     @property
+    @pulumi.getter(name="productType")
+    def product_type(self) -> pulumi.Output[str]:
+        """
+        Indicates the product type of the instance. The value can be: **generic** or **enterprise**.
+        """
+        return pulumi.get(self, "product_type")
+
+    @property
+    @pulumi.getter(name="readonlyDomainName")
+    def readonly_domain_name(self) -> pulumi.Output[str]:
+        """
+        Indicates the read-only domain name of the instance. This parameter is available
+        only for master/standby instances.
+        """
+        return pulumi.get(self, "readonly_domain_name")
+
+    @property
     @pulumi.getter
     def region(self) -> pulumi.Output[str]:
         """
@@ -2963,6 +3315,14 @@ class Instance(pulumi.CustomResource):
         return pulumi.get(self, "rename_commands")
 
     @property
+    @pulumi.getter(name="replicaCount")
+    def replica_count(self) -> pulumi.Output[int]:
+        """
+        Indicates the number of replicas in the instance.
+        """
+        return pulumi.get(self, "replica_count")
+
+    @property
     @pulumi.getter(name="reservedIps")
     def reserved_ips(self) -> pulumi.Output[Optional[Sequence[str]]]:
         """
@@ -2975,7 +3335,7 @@ class Instance(pulumi.CustomResource):
     @pulumi.getter(name="saveDays")
     def save_days(self) -> pulumi.Output[Optional[int]]:
         """
-        Retention time. Unit: day, the value ranges from 1 to 7.
+        Retention time. Unit: day, the value ranges from `1` to `7`.
         This parameter is required if the backup_type is **auto**.
         """
         return pulumi.get(self, "save_days")
@@ -2998,6 +3358,22 @@ class Instance(pulumi.CustomResource):
         return pulumi.get(self, "security_group_name")
 
     @property
+    @pulumi.getter(name="shardingCount")
+    def sharding_count(self) -> pulumi.Output[int]:
+        """
+        Indicates the number of shards in a cluster instance.
+        """
+        return pulumi.get(self, "sharding_count")
+
+    @property
+    @pulumi.getter(name="sslEnable")
+    def ssl_enable(self) -> pulumi.Output[bool]:
+        """
+        Specifies whether to enable the SSL. Value options: **true**, **false**.
+        """
+        return pulumi.get(self, "ssl_enable")
+
+    @property
     @pulumi.getter
     def status(self) -> pulumi.Output[str]:
         """
@@ -3013,6 +3389,14 @@ class Instance(pulumi.CustomResource):
         + `FLUSHING`: The DCS instance is being cleared.
         """
         return pulumi.get(self, "status")
+
+    @property
+    @pulumi.getter(name="subnetCidr")
+    def subnet_cidr(self) -> pulumi.Output[str]:
+        """
+        Indicates the subnet segment.
+        """
+        return pulumi.get(self, "subnet_cidr")
 
     @property
     @pulumi.getter(name="subnetId")
@@ -3047,6 +3431,14 @@ class Instance(pulumi.CustomResource):
         Changing this creates a new instance resource.
         """
         return pulumi.get(self, "template_id")
+
+    @property
+    @pulumi.getter(name="transparentClientIpEnable")
+    def transparent_client_ip_enable(self) -> pulumi.Output[bool]:
+        """
+        Indicates whether client IP pass-through is enabled.
+        """
+        return pulumi.get(self, "transparent_client_ip_enable")
 
     @property
     @pulumi.getter(name="usedMemory")

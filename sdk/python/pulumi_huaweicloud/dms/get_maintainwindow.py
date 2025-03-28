@@ -96,7 +96,7 @@ def get_maintainwindow(begin: Optional[str] = None,
                        seq: Optional[int] = None,
                        opts: Optional[pulumi.InvokeOptions] = None) -> AwaitableGetMaintainwindowResult:
     """
-    Use this data source to get the ID of an available HuaweiCloud dms maintainwindow.
+    Use this data source to get the ID of an available HuaweiCloud dms maintenance windows.
 
     ## Example Usage
 
@@ -111,7 +111,7 @@ def get_maintainwindow(begin: Optional[str] = None,
     :param str begin: Indicates the time at which a maintenance time window starts.
     :param bool default: Indicates whether a maintenance time window is set to the default time segment.
     :param str end: Indicates the time at which a maintenance time window ends.
-    :param str region: The region in which to obtain the dms maintainwindows. If omitted, the provider-level
+    :param str region: The region in which to obtain the dms maintenance windows. If omitted, the provider-level
            region will be used.
     :param int seq: Indicates the sequential number of a maintenance time window.
     """
@@ -141,7 +141,7 @@ def get_maintainwindow_output(begin: Optional[pulumi.Input[Optional[str]]] = Non
                               seq: Optional[pulumi.Input[Optional[int]]] = None,
                               opts: Optional[pulumi.InvokeOptions] = None) -> pulumi.Output[GetMaintainwindowResult]:
     """
-    Use this data source to get the ID of an available HuaweiCloud dms maintainwindow.
+    Use this data source to get the ID of an available HuaweiCloud dms maintenance windows.
 
     ## Example Usage
 
@@ -156,7 +156,7 @@ def get_maintainwindow_output(begin: Optional[pulumi.Input[Optional[str]]] = Non
     :param str begin: Indicates the time at which a maintenance time window starts.
     :param bool default: Indicates whether a maintenance time window is set to the default time segment.
     :param str end: Indicates the time at which a maintenance time window ends.
-    :param str region: The region in which to obtain the dms maintainwindows. If omitted, the provider-level
+    :param str region: The region in which to obtain the dms maintenance windows. If omitted, the provider-level
            region will be used.
     :param int seq: Indicates the sequential number of a maintenance time window.
     """

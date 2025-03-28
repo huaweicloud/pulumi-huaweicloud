@@ -71,7 +71,49 @@ import * as utilities from "../utilities";
  *     }],
  * });
  * ```
- * ## Alarm rule for event monitoring
+ * ### Alarm rule for All instance
+ *
+ * ```typescript
+ * import * as pulumi from "@pulumi/pulumi";
+ * import * as pulumi from "@huaweicloudos/pulumi";
+ *
+ * const config = new pulumi.Config();
+ * const topicUrn = config.requireObject("topicUrn");
+ * const test = new huaweicloud.cse.Alarmrule("test", {
+ *     alarmName: "rule-test",
+ *     alarmActionEnabled: true,
+ *     alarmEnabled: true,
+ *     alarmType: "ALL_INSTANCE",
+ *     metric: {
+ *         namespace: "AGT.ECS",
+ *     },
+ *     resources: [{
+ *         dimensions: [
+ *             {
+ *                 name: "instance_id",
+ *             },
+ *             {
+ *                 name: "mount_point",
+ *             },
+ *         ],
+ *     }],
+ *     conditions: [{
+ *         alarmLevel: 2,
+ *         suppressDuration: 0,
+ *         period: 1,
+ *         filter: "average",
+ *         comparisonOperator: ">",
+ *         value: 80,
+ *         count: 1,
+ *         metricName: "disk_usedPercent",
+ *     }],
+ *     alarmActions: [{
+ *         type: "notification",
+ *         notificationLists: [topicUrn],
+ *     }],
+ * });
+ * ```
+ * ### Alarm rule for event monitoring
  *
  * ```typescript
  * import * as pulumi from "@pulumi/pulumi";
@@ -106,7 +148,7 @@ import * as utilities from "../utilities";
  *
  * ## Import
  *
- * CES alarm rules can be imported using the `id`, e.g.
+ * CES alarm rules can be imported using the `id`, e.g. bash
  *
  * ```sh
  *  $ pulumi import huaweicloud:Cse/alarmrule:Alarmrule alarm_rule al1619578509719Ga0X1RGWv
@@ -165,8 +207,8 @@ export class Alarmrule extends pulumi.CustomResource {
      */
     public readonly alarmLevel!: pulumi.Output<number>;
     /**
-     * Specifies the name of an alarm rule. The value can be a string of 1 to 128
-     * characters that can consist of letters, digits, underscores (_), hyphens (-) and chinese characters.
+     * Specifies the name of an alarm rule. The value can be a string of `1` to `128`
+     * characters that can consist of English letters, Chinese characters, digits, underscores (_), hyphens (-).
      */
     public readonly alarmName!: pulumi.Output<string>;
     /**
@@ -186,8 +228,7 @@ export class Alarmrule extends pulumi.CustomResource {
      */
     public readonly conditions!: pulumi.Output<outputs.Cse.AlarmruleCondition[]>;
     /**
-     * Specifies the enterprise project id of the alarm rule. Changing
-     * this creates a new resource.
+     * Specifies the enterprise project ID of the alarm rule.
      */
     public readonly enterpriseProjectId!: pulumi.Output<string>;
     /**
@@ -330,8 +371,8 @@ export interface AlarmruleState {
      */
     alarmLevel?: pulumi.Input<number>;
     /**
-     * Specifies the name of an alarm rule. The value can be a string of 1 to 128
-     * characters that can consist of letters, digits, underscores (_), hyphens (-) and chinese characters.
+     * Specifies the name of an alarm rule. The value can be a string of `1` to `128`
+     * characters that can consist of English letters, Chinese characters, digits, underscores (_), hyphens (-).
      */
     alarmName?: pulumi.Input<string>;
     /**
@@ -351,8 +392,7 @@ export interface AlarmruleState {
      */
     conditions?: pulumi.Input<pulumi.Input<inputs.Cse.AlarmruleCondition>[]>;
     /**
-     * Specifies the enterprise project id of the alarm rule. Changing
-     * this creates a new resource.
+     * Specifies the enterprise project ID of the alarm rule.
      */
     enterpriseProjectId?: pulumi.Input<string>;
     /**
@@ -428,8 +468,8 @@ export interface AlarmruleArgs {
      */
     alarmLevel?: pulumi.Input<number>;
     /**
-     * Specifies the name of an alarm rule. The value can be a string of 1 to 128
-     * characters that can consist of letters, digits, underscores (_), hyphens (-) and chinese characters.
+     * Specifies the name of an alarm rule. The value can be a string of `1` to `128`
+     * characters that can consist of English letters, Chinese characters, digits, underscores (_), hyphens (-).
      */
     alarmName: pulumi.Input<string>;
     /**
@@ -442,8 +482,7 @@ export interface AlarmruleArgs {
      */
     conditions: pulumi.Input<pulumi.Input<inputs.Cse.AlarmruleCondition>[]>;
     /**
-     * Specifies the enterprise project id of the alarm rule. Changing
-     * this creates a new resource.
+     * Specifies the enterprise project ID of the alarm rule.
      */
     enterpriseProjectId?: pulumi.Input<string>;
     /**

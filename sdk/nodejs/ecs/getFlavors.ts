@@ -2,6 +2,7 @@
 // *** Do not edit by hand unless you're certain you know what you are doing! ***
 
 import * as pulumi from "@pulumi/pulumi";
+import { input as inputs, output as outputs } from "../types";
 import * as utilities from "../utilities";
 
 /**
@@ -39,6 +40,7 @@ export function getFlavors(args?: GetFlavorsArgs, opts?: pulumi.InvokeOptions): 
         "memorySize": args.memorySize,
         "performanceType": args.performanceType,
         "region": args.region,
+        "storageType": args.storageType,
     }, opts);
 }
 
@@ -78,6 +80,10 @@ export interface GetFlavorsArgs {
      * If omitted, the provider-level region will be used.
      */
     region?: string;
+    /**
+     * Specifies the storage type.
+     */
+    storageType?: string;
 }
 
 /**
@@ -85,7 +91,17 @@ export interface GetFlavorsArgs {
  */
 export interface GetFlavorsResult {
     readonly availabilityZone?: string;
+    /**
+     * The number of vCPUs.
+     */
     readonly cpuCoreCount?: number;
+    /**
+     * List of ECS flavors details. The object structure of each flavor is documented below.
+     */
+    readonly flavors: outputs.Ecs.GetFlavorsFlavor[];
+    /**
+     * The generation of the flavor.
+     */
     readonly generation?: string;
     /**
      * The provider-assigned unique ID for this managed resource.
@@ -95,9 +111,19 @@ export interface GetFlavorsResult {
      * A list of flavor IDs.
      */
     readonly ids: string[];
+    /**
+     * The memory size in GB.
+     */
     readonly memorySize?: number;
+    /**
+     * The performance type of the flavor.
+     */
     readonly performanceType?: string;
     readonly region: string;
+    /**
+     * The storage type of the flavor.
+     */
+    readonly storageType?: string;
 }
 
 export function getFlavorsOutput(args?: GetFlavorsOutputArgs, opts?: pulumi.InvokeOptions): pulumi.Output<GetFlavorsResult> {
@@ -140,4 +166,8 @@ export interface GetFlavorsOutputArgs {
      * If omitted, the provider-level region will be used.
      */
     region?: pulumi.Input<string>;
+    /**
+     * Specifies the storage type.
+     */
+    storageType?: pulumi.Input<string>;
 }

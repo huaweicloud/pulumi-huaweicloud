@@ -37,6 +37,9 @@ type ClusterAnalysisCoreNodes struct {
 	// Changing this will create a new MapReduce cluster resource.
 	Flavor string `pulumi:"flavor"`
 	// The host list of this nodes group in the cluster.
+	// * `bootstrap_scripts/start_time` - The execution time of one bootstrap action script, in RFC-3339 format.
+	// * `bootstrap_scripts/state` - The status of one bootstrap action script.
+	//   The valid value are **PENDING**, **IN_PROGRESS**, **SUCCESS**, and **FAILURE**.
 	HostIps []string `pulumi:"hostIps"`
 	// Specifies the number of nodes for the node group.
 	NodeNumber int `pulumi:"nodeNumber"`
@@ -86,6 +89,9 @@ type ClusterAnalysisCoreNodesArgs struct {
 	// Changing this will create a new MapReduce cluster resource.
 	Flavor pulumi.StringInput `pulumi:"flavor"`
 	// The host list of this nodes group in the cluster.
+	// * `bootstrap_scripts/start_time` - The execution time of one bootstrap action script, in RFC-3339 format.
+	// * `bootstrap_scripts/state` - The status of one bootstrap action script.
+	//   The valid value are **PENDING**, **IN_PROGRESS**, **SUCCESS**, and **FAILURE**.
 	HostIps pulumi.StringArrayInput `pulumi:"hostIps"`
 	// Specifies the number of nodes for the node group.
 	NodeNumber pulumi.IntInput `pulumi:"nodeNumber"`
@@ -215,6 +221,9 @@ func (o ClusterAnalysisCoreNodesOutput) Flavor() pulumi.StringOutput {
 }
 
 // The host list of this nodes group in the cluster.
+//   - `bootstrap_scripts/start_time` - The execution time of one bootstrap action script, in RFC-3339 format.
+//   - `bootstrap_scripts/state` - The status of one bootstrap action script.
+//     The valid value are **PENDING**, **IN_PROGRESS**, **SUCCESS**, and **FAILURE**.
 func (o ClusterAnalysisCoreNodesOutput) HostIps() pulumi.StringArrayOutput {
 	return o.ApplyT(func(v ClusterAnalysisCoreNodes) []string { return v.HostIps }).(pulumi.StringArrayOutput)
 }
@@ -326,6 +335,9 @@ func (o ClusterAnalysisCoreNodesPtrOutput) Flavor() pulumi.StringPtrOutput {
 }
 
 // The host list of this nodes group in the cluster.
+//   - `bootstrap_scripts/start_time` - The execution time of one bootstrap action script, in RFC-3339 format.
+//   - `bootstrap_scripts/state` - The status of one bootstrap action script.
+//     The valid value are **PENDING**, **IN_PROGRESS**, **SUCCESS**, and **FAILURE**.
 func (o ClusterAnalysisCoreNodesPtrOutput) HostIps() pulumi.StringArrayOutput {
 	return o.ApplyT(func(v *ClusterAnalysisCoreNodes) []string {
 		if v == nil {
@@ -394,6 +406,9 @@ type ClusterAnalysisTaskNodes struct {
 	// Changing this will create a new MapReduce cluster resource.
 	Flavor string `pulumi:"flavor"`
 	// The host list of this nodes group in the cluster.
+	// * `bootstrap_scripts/start_time` - The execution time of one bootstrap action script, in RFC-3339 format.
+	// * `bootstrap_scripts/state` - The status of one bootstrap action script.
+	//   The valid value are **PENDING**, **IN_PROGRESS**, **SUCCESS**, and **FAILURE**.
 	HostIps []string `pulumi:"hostIps"`
 	// Specifies the number of nodes for the node group.
 	NodeNumber int `pulumi:"nodeNumber"`
@@ -443,6 +458,9 @@ type ClusterAnalysisTaskNodesArgs struct {
 	// Changing this will create a new MapReduce cluster resource.
 	Flavor pulumi.StringInput `pulumi:"flavor"`
 	// The host list of this nodes group in the cluster.
+	// * `bootstrap_scripts/start_time` - The execution time of one bootstrap action script, in RFC-3339 format.
+	// * `bootstrap_scripts/state` - The status of one bootstrap action script.
+	//   The valid value are **PENDING**, **IN_PROGRESS**, **SUCCESS**, and **FAILURE**.
 	HostIps pulumi.StringArrayInput `pulumi:"hostIps"`
 	// Specifies the number of nodes for the node group.
 	NodeNumber pulumi.IntInput `pulumi:"nodeNumber"`
@@ -572,6 +590,9 @@ func (o ClusterAnalysisTaskNodesOutput) Flavor() pulumi.StringOutput {
 }
 
 // The host list of this nodes group in the cluster.
+//   - `bootstrap_scripts/start_time` - The execution time of one bootstrap action script, in RFC-3339 format.
+//   - `bootstrap_scripts/state` - The status of one bootstrap action script.
+//     The valid value are **PENDING**, **IN_PROGRESS**, **SUCCESS**, and **FAILURE**.
 func (o ClusterAnalysisTaskNodesOutput) HostIps() pulumi.StringArrayOutput {
 	return o.ApplyT(func(v ClusterAnalysisTaskNodes) []string { return v.HostIps }).(pulumi.StringArrayOutput)
 }
@@ -683,6 +704,9 @@ func (o ClusterAnalysisTaskNodesPtrOutput) Flavor() pulumi.StringPtrOutput {
 }
 
 // The host list of this nodes group in the cluster.
+//   - `bootstrap_scripts/start_time` - The execution time of one bootstrap action script, in RFC-3339 format.
+//   - `bootstrap_scripts/state` - The status of one bootstrap action script.
+//     The valid value are **PENDING**, **IN_PROGRESS**, **SUCCESS**, and **FAILURE**.
 func (o ClusterAnalysisTaskNodesPtrOutput) HostIps() pulumi.StringArrayOutput {
 	return o.ApplyT(func(v *ClusterAnalysisTaskNodes) []string {
 		if v == nil {
@@ -724,11 +748,225 @@ func (o ClusterAnalysisTaskNodesPtrOutput) RootVolumeType() pulumi.StringPtrOutp
 	}).(pulumi.StringPtrOutput)
 }
 
+type ClusterBootstrapScript struct {
+	// Specifies whether the bootstrap action script runs only on active master nodes.
+	// The default value is **false**, indicating that the bootstrap action script can run on all master nodes.
+	ActiveMaster *bool `pulumi:"activeMaster"`
+	// Specifies whether the bootstrap action script is executed
+	// before component start.
+	// The options are as follows:
+	// + **false**: After component start. The default value is **false**.
+	// + **true**: Before component start.
+	BeforeComponentStart *bool `pulumi:"beforeComponentStart"`
+	// Specifies whether the bootstrap action script involves root user
+	// operations.
+	// Changing this will create a new MapReduce cluster resource.
+	ExecuteNeedSudoRoot *bool `pulumi:"executeNeedSudoRoot"`
+	// Specifies the action after the bootstrap action script fails to be executed.
+	// The options are as follows:
+	// + **continue**: Continue to execute subsequent scripts.
+	// + **errorout**: Stop the action.
+	FailAction string `pulumi:"failAction"`
+	// Specifies the name of a bootstrap action script.
+	// Changing this will create a new MapReduce cluster resource.
+	Name string `pulumi:"name"`
+	// Specifies names of the node group where the bootstrap action script is executed.
+	Nodes []string `pulumi:"nodes"`
+	// Specifies bootstrap action script parameters.
+	Parameters *string `pulumi:"parameters"`
+	StartTime  *string `pulumi:"startTime"`
+	State      *string `pulumi:"state"`
+	// Specifies the path of a bootstrap action script.
+	// Set this parameter to an OBS bucket path or a local VM path.
+	// + **OBS bucket path**: The path of an OBS file system starts with *s3a://* or *obs://* and end with *.sh*.
+	// + **Local VM path**: The script path must start with a slash (/) and end with *.sh*.
+	Uri string `pulumi:"uri"`
+}
+
+// ClusterBootstrapScriptInput is an input type that accepts ClusterBootstrapScriptArgs and ClusterBootstrapScriptOutput values.
+// You can construct a concrete instance of `ClusterBootstrapScriptInput` via:
+//
+//	ClusterBootstrapScriptArgs{...}
+type ClusterBootstrapScriptInput interface {
+	pulumi.Input
+
+	ToClusterBootstrapScriptOutput() ClusterBootstrapScriptOutput
+	ToClusterBootstrapScriptOutputWithContext(context.Context) ClusterBootstrapScriptOutput
+}
+
+type ClusterBootstrapScriptArgs struct {
+	// Specifies whether the bootstrap action script runs only on active master nodes.
+	// The default value is **false**, indicating that the bootstrap action script can run on all master nodes.
+	ActiveMaster pulumi.BoolPtrInput `pulumi:"activeMaster"`
+	// Specifies whether the bootstrap action script is executed
+	// before component start.
+	// The options are as follows:
+	// + **false**: After component start. The default value is **false**.
+	// + **true**: Before component start.
+	BeforeComponentStart pulumi.BoolPtrInput `pulumi:"beforeComponentStart"`
+	// Specifies whether the bootstrap action script involves root user
+	// operations.
+	// Changing this will create a new MapReduce cluster resource.
+	ExecuteNeedSudoRoot pulumi.BoolPtrInput `pulumi:"executeNeedSudoRoot"`
+	// Specifies the action after the bootstrap action script fails to be executed.
+	// The options are as follows:
+	// + **continue**: Continue to execute subsequent scripts.
+	// + **errorout**: Stop the action.
+	FailAction pulumi.StringInput `pulumi:"failAction"`
+	// Specifies the name of a bootstrap action script.
+	// Changing this will create a new MapReduce cluster resource.
+	Name pulumi.StringInput `pulumi:"name"`
+	// Specifies names of the node group where the bootstrap action script is executed.
+	Nodes pulumi.StringArrayInput `pulumi:"nodes"`
+	// Specifies bootstrap action script parameters.
+	Parameters pulumi.StringPtrInput `pulumi:"parameters"`
+	StartTime  pulumi.StringPtrInput `pulumi:"startTime"`
+	State      pulumi.StringPtrInput `pulumi:"state"`
+	// Specifies the path of a bootstrap action script.
+	// Set this parameter to an OBS bucket path or a local VM path.
+	// + **OBS bucket path**: The path of an OBS file system starts with *s3a://* or *obs://* and end with *.sh*.
+	// + **Local VM path**: The script path must start with a slash (/) and end with *.sh*.
+	Uri pulumi.StringInput `pulumi:"uri"`
+}
+
+func (ClusterBootstrapScriptArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*ClusterBootstrapScript)(nil)).Elem()
+}
+
+func (i ClusterBootstrapScriptArgs) ToClusterBootstrapScriptOutput() ClusterBootstrapScriptOutput {
+	return i.ToClusterBootstrapScriptOutputWithContext(context.Background())
+}
+
+func (i ClusterBootstrapScriptArgs) ToClusterBootstrapScriptOutputWithContext(ctx context.Context) ClusterBootstrapScriptOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(ClusterBootstrapScriptOutput)
+}
+
+// ClusterBootstrapScriptArrayInput is an input type that accepts ClusterBootstrapScriptArray and ClusterBootstrapScriptArrayOutput values.
+// You can construct a concrete instance of `ClusterBootstrapScriptArrayInput` via:
+//
+//	ClusterBootstrapScriptArray{ ClusterBootstrapScriptArgs{...} }
+type ClusterBootstrapScriptArrayInput interface {
+	pulumi.Input
+
+	ToClusterBootstrapScriptArrayOutput() ClusterBootstrapScriptArrayOutput
+	ToClusterBootstrapScriptArrayOutputWithContext(context.Context) ClusterBootstrapScriptArrayOutput
+}
+
+type ClusterBootstrapScriptArray []ClusterBootstrapScriptInput
+
+func (ClusterBootstrapScriptArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]ClusterBootstrapScript)(nil)).Elem()
+}
+
+func (i ClusterBootstrapScriptArray) ToClusterBootstrapScriptArrayOutput() ClusterBootstrapScriptArrayOutput {
+	return i.ToClusterBootstrapScriptArrayOutputWithContext(context.Background())
+}
+
+func (i ClusterBootstrapScriptArray) ToClusterBootstrapScriptArrayOutputWithContext(ctx context.Context) ClusterBootstrapScriptArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(ClusterBootstrapScriptArrayOutput)
+}
+
+type ClusterBootstrapScriptOutput struct{ *pulumi.OutputState }
+
+func (ClusterBootstrapScriptOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*ClusterBootstrapScript)(nil)).Elem()
+}
+
+func (o ClusterBootstrapScriptOutput) ToClusterBootstrapScriptOutput() ClusterBootstrapScriptOutput {
+	return o
+}
+
+func (o ClusterBootstrapScriptOutput) ToClusterBootstrapScriptOutputWithContext(ctx context.Context) ClusterBootstrapScriptOutput {
+	return o
+}
+
+// Specifies whether the bootstrap action script runs only on active master nodes.
+// The default value is **false**, indicating that the bootstrap action script can run on all master nodes.
+func (o ClusterBootstrapScriptOutput) ActiveMaster() pulumi.BoolPtrOutput {
+	return o.ApplyT(func(v ClusterBootstrapScript) *bool { return v.ActiveMaster }).(pulumi.BoolPtrOutput)
+}
+
+// Specifies whether the bootstrap action script is executed
+// before component start.
+// The options are as follows:
+// + **false**: After component start. The default value is **false**.
+// + **true**: Before component start.
+func (o ClusterBootstrapScriptOutput) BeforeComponentStart() pulumi.BoolPtrOutput {
+	return o.ApplyT(func(v ClusterBootstrapScript) *bool { return v.BeforeComponentStart }).(pulumi.BoolPtrOutput)
+}
+
+// Specifies whether the bootstrap action script involves root user
+// operations.
+// Changing this will create a new MapReduce cluster resource.
+func (o ClusterBootstrapScriptOutput) ExecuteNeedSudoRoot() pulumi.BoolPtrOutput {
+	return o.ApplyT(func(v ClusterBootstrapScript) *bool { return v.ExecuteNeedSudoRoot }).(pulumi.BoolPtrOutput)
+}
+
+// Specifies the action after the bootstrap action script fails to be executed.
+// The options are as follows:
+// + **continue**: Continue to execute subsequent scripts.
+// + **errorout**: Stop the action.
+func (o ClusterBootstrapScriptOutput) FailAction() pulumi.StringOutput {
+	return o.ApplyT(func(v ClusterBootstrapScript) string { return v.FailAction }).(pulumi.StringOutput)
+}
+
+// Specifies the name of a bootstrap action script.
+// Changing this will create a new MapReduce cluster resource.
+func (o ClusterBootstrapScriptOutput) Name() pulumi.StringOutput {
+	return o.ApplyT(func(v ClusterBootstrapScript) string { return v.Name }).(pulumi.StringOutput)
+}
+
+// Specifies names of the node group where the bootstrap action script is executed.
+func (o ClusterBootstrapScriptOutput) Nodes() pulumi.StringArrayOutput {
+	return o.ApplyT(func(v ClusterBootstrapScript) []string { return v.Nodes }).(pulumi.StringArrayOutput)
+}
+
+// Specifies bootstrap action script parameters.
+func (o ClusterBootstrapScriptOutput) Parameters() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v ClusterBootstrapScript) *string { return v.Parameters }).(pulumi.StringPtrOutput)
+}
+
+func (o ClusterBootstrapScriptOutput) StartTime() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v ClusterBootstrapScript) *string { return v.StartTime }).(pulumi.StringPtrOutput)
+}
+
+func (o ClusterBootstrapScriptOutput) State() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v ClusterBootstrapScript) *string { return v.State }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the path of a bootstrap action script.
+// Set this parameter to an OBS bucket path or a local VM path.
+// + **OBS bucket path**: The path of an OBS file system starts with *s3a://* or *obs://* and end with *.sh*.
+// + **Local VM path**: The script path must start with a slash (/) and end with *.sh*.
+func (o ClusterBootstrapScriptOutput) Uri() pulumi.StringOutput {
+	return o.ApplyT(func(v ClusterBootstrapScript) string { return v.Uri }).(pulumi.StringOutput)
+}
+
+type ClusterBootstrapScriptArrayOutput struct{ *pulumi.OutputState }
+
+func (ClusterBootstrapScriptArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]ClusterBootstrapScript)(nil)).Elem()
+}
+
+func (o ClusterBootstrapScriptArrayOutput) ToClusterBootstrapScriptArrayOutput() ClusterBootstrapScriptArrayOutput {
+	return o
+}
+
+func (o ClusterBootstrapScriptArrayOutput) ToClusterBootstrapScriptArrayOutputWithContext(ctx context.Context) ClusterBootstrapScriptArrayOutput {
+	return o
+}
+
+func (o ClusterBootstrapScriptArrayOutput) Index(i pulumi.IntInput) ClusterBootstrapScriptOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) ClusterBootstrapScript {
+		return vs[0].([]ClusterBootstrapScript)[vs[1].(int)]
+	}).(ClusterBootstrapScriptOutput)
+}
+
 type ClusterComponentConfig struct {
 	// Specifies the configuration of component installed.
 	// The object structure is documented below.
 	Configs []ClusterComponentConfigConfig `pulumi:"configs"`
-	// Specifies the component name of the cluster which has installed.
+	// Specifies the name of a bootstrap action script.
 	// Changing this will create a new MapReduce cluster resource.
 	Name string `pulumi:"name"`
 }
@@ -748,7 +986,7 @@ type ClusterComponentConfigArgs struct {
 	// Specifies the configuration of component installed.
 	// The object structure is documented below.
 	Configs ClusterComponentConfigConfigArrayInput `pulumi:"configs"`
-	// Specifies the component name of the cluster which has installed.
+	// Specifies the name of a bootstrap action script.
 	// Changing this will create a new MapReduce cluster resource.
 	Name pulumi.StringInput `pulumi:"name"`
 }
@@ -810,7 +1048,7 @@ func (o ClusterComponentConfigOutput) Configs() ClusterComponentConfigConfigArra
 	return o.ApplyT(func(v ClusterComponentConfig) []ClusterComponentConfigConfig { return v.Configs }).(ClusterComponentConfigConfigArrayOutput)
 }
 
-// Specifies the component name of the cluster which has installed.
+// Specifies the name of a bootstrap action script.
 // Changing this will create a new MapReduce cluster resource.
 func (o ClusterComponentConfigOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v ClusterComponentConfig) string { return v.Name }).(pulumi.StringOutput)
@@ -989,6 +1227,9 @@ type ClusterCustomNode struct {
 	// Specifies the name of nodes for the node group.
 	GroupName string `pulumi:"groupName"`
 	// The host list of this nodes group in the cluster.
+	// * `bootstrap_scripts/start_time` - The execution time of one bootstrap action script, in RFC-3339 format.
+	// * `bootstrap_scripts/state` - The status of one bootstrap action script.
+	//   The valid value are **PENDING**, **IN_PROGRESS**, **SUCCESS**, and **FAILURE**.
 	HostIps []string `pulumi:"hostIps"`
 	// Specifies the number of nodes for the node group.
 	NodeNumber int `pulumi:"nodeNumber"`
@@ -1040,6 +1281,9 @@ type ClusterCustomNodeArgs struct {
 	// Specifies the name of nodes for the node group.
 	GroupName pulumi.StringInput `pulumi:"groupName"`
 	// The host list of this nodes group in the cluster.
+	// * `bootstrap_scripts/start_time` - The execution time of one bootstrap action script, in RFC-3339 format.
+	// * `bootstrap_scripts/state` - The status of one bootstrap action script.
+	//   The valid value are **PENDING**, **IN_PROGRESS**, **SUCCESS**, and **FAILURE**.
 	HostIps pulumi.StringArrayInput `pulumi:"hostIps"`
 	// Specifies the number of nodes for the node group.
 	NodeNumber pulumi.IntInput `pulumi:"nodeNumber"`
@@ -1148,6 +1392,9 @@ func (o ClusterCustomNodeOutput) GroupName() pulumi.StringOutput {
 }
 
 // The host list of this nodes group in the cluster.
+//   - `bootstrap_scripts/start_time` - The execution time of one bootstrap action script, in RFC-3339 format.
+//   - `bootstrap_scripts/state` - The status of one bootstrap action script.
+//     The valid value are **PENDING**, **IN_PROGRESS**, **SUCCESS**, and **FAILURE**.
 func (o ClusterCustomNodeOutput) HostIps() pulumi.StringArrayOutput {
 	return o.ApplyT(func(v ClusterCustomNode) []string { return v.HostIps }).(pulumi.StringArrayOutput)
 }
@@ -1189,6 +1436,163 @@ func (o ClusterCustomNodeArrayOutput) Index(i pulumi.IntInput) ClusterCustomNode
 	}).(ClusterCustomNodeOutput)
 }
 
+type ClusterExternalDatasource struct {
+	// Specifies the component name. The valid values are `Hive` and `Ranger`.
+	// Changing this will create a new MapReduce cluster resource.
+	ComponentName string `pulumi:"componentName"`
+	// Specifies the data connection ID.
+	// This parameter is mandatory if `sourceType` is not **LOCAL_DB**.
+	// Changing this will create a new MapReduce cluster resource.
+	DataConnectionId *string `pulumi:"dataConnectionId"`
+	// Specifies the component role type.
+	// The options are as follows:
+	// + **hive_metastore**: Hive Metastore role.
+	// + **ranger_data**: Ranger role.
+	RoleType string `pulumi:"roleType"`
+	// Specifies the data connection type.
+	// The options are as follows:
+	// + **LOCAL_DB**: Local metadata.
+	// + **RDS_POSTGRES**: RDS PostgreSQL database.
+	// + **RDS_MYSQL**: RDS MySQL database.
+	// + **gaussdb-mysql**: GaussDB(for MySQL).
+	SourceType string `pulumi:"sourceType"`
+}
+
+// ClusterExternalDatasourceInput is an input type that accepts ClusterExternalDatasourceArgs and ClusterExternalDatasourceOutput values.
+// You can construct a concrete instance of `ClusterExternalDatasourceInput` via:
+//
+//	ClusterExternalDatasourceArgs{...}
+type ClusterExternalDatasourceInput interface {
+	pulumi.Input
+
+	ToClusterExternalDatasourceOutput() ClusterExternalDatasourceOutput
+	ToClusterExternalDatasourceOutputWithContext(context.Context) ClusterExternalDatasourceOutput
+}
+
+type ClusterExternalDatasourceArgs struct {
+	// Specifies the component name. The valid values are `Hive` and `Ranger`.
+	// Changing this will create a new MapReduce cluster resource.
+	ComponentName pulumi.StringInput `pulumi:"componentName"`
+	// Specifies the data connection ID.
+	// This parameter is mandatory if `sourceType` is not **LOCAL_DB**.
+	// Changing this will create a new MapReduce cluster resource.
+	DataConnectionId pulumi.StringPtrInput `pulumi:"dataConnectionId"`
+	// Specifies the component role type.
+	// The options are as follows:
+	// + **hive_metastore**: Hive Metastore role.
+	// + **ranger_data**: Ranger role.
+	RoleType pulumi.StringInput `pulumi:"roleType"`
+	// Specifies the data connection type.
+	// The options are as follows:
+	// + **LOCAL_DB**: Local metadata.
+	// + **RDS_POSTGRES**: RDS PostgreSQL database.
+	// + **RDS_MYSQL**: RDS MySQL database.
+	// + **gaussdb-mysql**: GaussDB(for MySQL).
+	SourceType pulumi.StringInput `pulumi:"sourceType"`
+}
+
+func (ClusterExternalDatasourceArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*ClusterExternalDatasource)(nil)).Elem()
+}
+
+func (i ClusterExternalDatasourceArgs) ToClusterExternalDatasourceOutput() ClusterExternalDatasourceOutput {
+	return i.ToClusterExternalDatasourceOutputWithContext(context.Background())
+}
+
+func (i ClusterExternalDatasourceArgs) ToClusterExternalDatasourceOutputWithContext(ctx context.Context) ClusterExternalDatasourceOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(ClusterExternalDatasourceOutput)
+}
+
+// ClusterExternalDatasourceArrayInput is an input type that accepts ClusterExternalDatasourceArray and ClusterExternalDatasourceArrayOutput values.
+// You can construct a concrete instance of `ClusterExternalDatasourceArrayInput` via:
+//
+//	ClusterExternalDatasourceArray{ ClusterExternalDatasourceArgs{...} }
+type ClusterExternalDatasourceArrayInput interface {
+	pulumi.Input
+
+	ToClusterExternalDatasourceArrayOutput() ClusterExternalDatasourceArrayOutput
+	ToClusterExternalDatasourceArrayOutputWithContext(context.Context) ClusterExternalDatasourceArrayOutput
+}
+
+type ClusterExternalDatasourceArray []ClusterExternalDatasourceInput
+
+func (ClusterExternalDatasourceArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]ClusterExternalDatasource)(nil)).Elem()
+}
+
+func (i ClusterExternalDatasourceArray) ToClusterExternalDatasourceArrayOutput() ClusterExternalDatasourceArrayOutput {
+	return i.ToClusterExternalDatasourceArrayOutputWithContext(context.Background())
+}
+
+func (i ClusterExternalDatasourceArray) ToClusterExternalDatasourceArrayOutputWithContext(ctx context.Context) ClusterExternalDatasourceArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(ClusterExternalDatasourceArrayOutput)
+}
+
+type ClusterExternalDatasourceOutput struct{ *pulumi.OutputState }
+
+func (ClusterExternalDatasourceOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*ClusterExternalDatasource)(nil)).Elem()
+}
+
+func (o ClusterExternalDatasourceOutput) ToClusterExternalDatasourceOutput() ClusterExternalDatasourceOutput {
+	return o
+}
+
+func (o ClusterExternalDatasourceOutput) ToClusterExternalDatasourceOutputWithContext(ctx context.Context) ClusterExternalDatasourceOutput {
+	return o
+}
+
+// Specifies the component name. The valid values are `Hive` and `Ranger`.
+// Changing this will create a new MapReduce cluster resource.
+func (o ClusterExternalDatasourceOutput) ComponentName() pulumi.StringOutput {
+	return o.ApplyT(func(v ClusterExternalDatasource) string { return v.ComponentName }).(pulumi.StringOutput)
+}
+
+// Specifies the data connection ID.
+// This parameter is mandatory if `sourceType` is not **LOCAL_DB**.
+// Changing this will create a new MapReduce cluster resource.
+func (o ClusterExternalDatasourceOutput) DataConnectionId() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v ClusterExternalDatasource) *string { return v.DataConnectionId }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the component role type.
+// The options are as follows:
+// + **hive_metastore**: Hive Metastore role.
+// + **ranger_data**: Ranger role.
+func (o ClusterExternalDatasourceOutput) RoleType() pulumi.StringOutput {
+	return o.ApplyT(func(v ClusterExternalDatasource) string { return v.RoleType }).(pulumi.StringOutput)
+}
+
+// Specifies the data connection type.
+// The options are as follows:
+// + **LOCAL_DB**: Local metadata.
+// + **RDS_POSTGRES**: RDS PostgreSQL database.
+// + **RDS_MYSQL**: RDS MySQL database.
+// + **gaussdb-mysql**: GaussDB(for MySQL).
+func (o ClusterExternalDatasourceOutput) SourceType() pulumi.StringOutput {
+	return o.ApplyT(func(v ClusterExternalDatasource) string { return v.SourceType }).(pulumi.StringOutput)
+}
+
+type ClusterExternalDatasourceArrayOutput struct{ *pulumi.OutputState }
+
+func (ClusterExternalDatasourceArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]ClusterExternalDatasource)(nil)).Elem()
+}
+
+func (o ClusterExternalDatasourceArrayOutput) ToClusterExternalDatasourceArrayOutput() ClusterExternalDatasourceArrayOutput {
+	return o
+}
+
+func (o ClusterExternalDatasourceArrayOutput) ToClusterExternalDatasourceArrayOutputWithContext(ctx context.Context) ClusterExternalDatasourceArrayOutput {
+	return o
+}
+
+func (o ClusterExternalDatasourceArrayOutput) Index(i pulumi.IntInput) ClusterExternalDatasourceOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) ClusterExternalDatasource {
+		return vs[0].([]ClusterExternalDatasource)[vs[1].(int)]
+	}).(ClusterExternalDatasourceOutput)
+}
+
 type ClusterMasterNodes struct {
 	// Specifies the roles deployed in a node group.This argument is mandatory
 	// when the cluster type is **CUSTOM**. Each character string represents a role expression.
@@ -1216,6 +1620,9 @@ type ClusterMasterNodes struct {
 	// Changing this will create a new MapReduce cluster resource.
 	Flavor string `pulumi:"flavor"`
 	// The host list of this nodes group in the cluster.
+	// * `bootstrap_scripts/start_time` - The execution time of one bootstrap action script, in RFC-3339 format.
+	// * `bootstrap_scripts/state` - The status of one bootstrap action script.
+	//   The valid value are **PENDING**, **IN_PROGRESS**, **SUCCESS**, and **FAILURE**.
 	HostIps []string `pulumi:"hostIps"`
 	// Specifies the number of nodes for the node group.
 	NodeNumber int `pulumi:"nodeNumber"`
@@ -1265,6 +1672,9 @@ type ClusterMasterNodesArgs struct {
 	// Changing this will create a new MapReduce cluster resource.
 	Flavor pulumi.StringInput `pulumi:"flavor"`
 	// The host list of this nodes group in the cluster.
+	// * `bootstrap_scripts/start_time` - The execution time of one bootstrap action script, in RFC-3339 format.
+	// * `bootstrap_scripts/state` - The status of one bootstrap action script.
+	//   The valid value are **PENDING**, **IN_PROGRESS**, **SUCCESS**, and **FAILURE**.
 	HostIps pulumi.StringArrayInput `pulumi:"hostIps"`
 	// Specifies the number of nodes for the node group.
 	NodeNumber pulumi.IntInput `pulumi:"nodeNumber"`
@@ -1394,6 +1804,9 @@ func (o ClusterMasterNodesOutput) Flavor() pulumi.StringOutput {
 }
 
 // The host list of this nodes group in the cluster.
+//   - `bootstrap_scripts/start_time` - The execution time of one bootstrap action script, in RFC-3339 format.
+//   - `bootstrap_scripts/state` - The status of one bootstrap action script.
+//     The valid value are **PENDING**, **IN_PROGRESS**, **SUCCESS**, and **FAILURE**.
 func (o ClusterMasterNodesOutput) HostIps() pulumi.StringArrayOutput {
 	return o.ApplyT(func(v ClusterMasterNodes) []string { return v.HostIps }).(pulumi.StringArrayOutput)
 }
@@ -1505,6 +1918,9 @@ func (o ClusterMasterNodesPtrOutput) Flavor() pulumi.StringPtrOutput {
 }
 
 // The host list of this nodes group in the cluster.
+//   - `bootstrap_scripts/start_time` - The execution time of one bootstrap action script, in RFC-3339 format.
+//   - `bootstrap_scripts/state` - The status of one bootstrap action script.
+//     The valid value are **PENDING**, **IN_PROGRESS**, **SUCCESS**, and **FAILURE**.
 func (o ClusterMasterNodesPtrOutput) HostIps() pulumi.StringArrayOutput {
 	return o.ApplyT(func(v *ClusterMasterNodes) []string {
 		if v == nil {
@@ -1546,6 +1962,170 @@ func (o ClusterMasterNodesPtrOutput) RootVolumeType() pulumi.StringPtrOutput {
 	}).(pulumi.StringPtrOutput)
 }
 
+type ClusterSmnNotify struct {
+	// Specifies the subscription rule name.
+	// Changing this will create a new MapReduce cluster resource.
+	SubscriptionName string `pulumi:"subscriptionName"`
+	// Specifies the Uniform Resource Name (URN) of the topic.
+	// Changing this will create a new MapReduce cluster resource.
+	TopicUrn string `pulumi:"topicUrn"`
+}
+
+// ClusterSmnNotifyInput is an input type that accepts ClusterSmnNotifyArgs and ClusterSmnNotifyOutput values.
+// You can construct a concrete instance of `ClusterSmnNotifyInput` via:
+//
+//	ClusterSmnNotifyArgs{...}
+type ClusterSmnNotifyInput interface {
+	pulumi.Input
+
+	ToClusterSmnNotifyOutput() ClusterSmnNotifyOutput
+	ToClusterSmnNotifyOutputWithContext(context.Context) ClusterSmnNotifyOutput
+}
+
+type ClusterSmnNotifyArgs struct {
+	// Specifies the subscription rule name.
+	// Changing this will create a new MapReduce cluster resource.
+	SubscriptionName pulumi.StringInput `pulumi:"subscriptionName"`
+	// Specifies the Uniform Resource Name (URN) of the topic.
+	// Changing this will create a new MapReduce cluster resource.
+	TopicUrn pulumi.StringInput `pulumi:"topicUrn"`
+}
+
+func (ClusterSmnNotifyArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*ClusterSmnNotify)(nil)).Elem()
+}
+
+func (i ClusterSmnNotifyArgs) ToClusterSmnNotifyOutput() ClusterSmnNotifyOutput {
+	return i.ToClusterSmnNotifyOutputWithContext(context.Background())
+}
+
+func (i ClusterSmnNotifyArgs) ToClusterSmnNotifyOutputWithContext(ctx context.Context) ClusterSmnNotifyOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(ClusterSmnNotifyOutput)
+}
+
+func (i ClusterSmnNotifyArgs) ToClusterSmnNotifyPtrOutput() ClusterSmnNotifyPtrOutput {
+	return i.ToClusterSmnNotifyPtrOutputWithContext(context.Background())
+}
+
+func (i ClusterSmnNotifyArgs) ToClusterSmnNotifyPtrOutputWithContext(ctx context.Context) ClusterSmnNotifyPtrOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(ClusterSmnNotifyOutput).ToClusterSmnNotifyPtrOutputWithContext(ctx)
+}
+
+// ClusterSmnNotifyPtrInput is an input type that accepts ClusterSmnNotifyArgs, ClusterSmnNotifyPtr and ClusterSmnNotifyPtrOutput values.
+// You can construct a concrete instance of `ClusterSmnNotifyPtrInput` via:
+//
+//	        ClusterSmnNotifyArgs{...}
+//
+//	or:
+//
+//	        nil
+type ClusterSmnNotifyPtrInput interface {
+	pulumi.Input
+
+	ToClusterSmnNotifyPtrOutput() ClusterSmnNotifyPtrOutput
+	ToClusterSmnNotifyPtrOutputWithContext(context.Context) ClusterSmnNotifyPtrOutput
+}
+
+type clusterSmnNotifyPtrType ClusterSmnNotifyArgs
+
+func ClusterSmnNotifyPtr(v *ClusterSmnNotifyArgs) ClusterSmnNotifyPtrInput {
+	return (*clusterSmnNotifyPtrType)(v)
+}
+
+func (*clusterSmnNotifyPtrType) ElementType() reflect.Type {
+	return reflect.TypeOf((**ClusterSmnNotify)(nil)).Elem()
+}
+
+func (i *clusterSmnNotifyPtrType) ToClusterSmnNotifyPtrOutput() ClusterSmnNotifyPtrOutput {
+	return i.ToClusterSmnNotifyPtrOutputWithContext(context.Background())
+}
+
+func (i *clusterSmnNotifyPtrType) ToClusterSmnNotifyPtrOutputWithContext(ctx context.Context) ClusterSmnNotifyPtrOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(ClusterSmnNotifyPtrOutput)
+}
+
+type ClusterSmnNotifyOutput struct{ *pulumi.OutputState }
+
+func (ClusterSmnNotifyOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*ClusterSmnNotify)(nil)).Elem()
+}
+
+func (o ClusterSmnNotifyOutput) ToClusterSmnNotifyOutput() ClusterSmnNotifyOutput {
+	return o
+}
+
+func (o ClusterSmnNotifyOutput) ToClusterSmnNotifyOutputWithContext(ctx context.Context) ClusterSmnNotifyOutput {
+	return o
+}
+
+func (o ClusterSmnNotifyOutput) ToClusterSmnNotifyPtrOutput() ClusterSmnNotifyPtrOutput {
+	return o.ToClusterSmnNotifyPtrOutputWithContext(context.Background())
+}
+
+func (o ClusterSmnNotifyOutput) ToClusterSmnNotifyPtrOutputWithContext(ctx context.Context) ClusterSmnNotifyPtrOutput {
+	return o.ApplyTWithContext(ctx, func(_ context.Context, v ClusterSmnNotify) *ClusterSmnNotify {
+		return &v
+	}).(ClusterSmnNotifyPtrOutput)
+}
+
+// Specifies the subscription rule name.
+// Changing this will create a new MapReduce cluster resource.
+func (o ClusterSmnNotifyOutput) SubscriptionName() pulumi.StringOutput {
+	return o.ApplyT(func(v ClusterSmnNotify) string { return v.SubscriptionName }).(pulumi.StringOutput)
+}
+
+// Specifies the Uniform Resource Name (URN) of the topic.
+// Changing this will create a new MapReduce cluster resource.
+func (o ClusterSmnNotifyOutput) TopicUrn() pulumi.StringOutput {
+	return o.ApplyT(func(v ClusterSmnNotify) string { return v.TopicUrn }).(pulumi.StringOutput)
+}
+
+type ClusterSmnNotifyPtrOutput struct{ *pulumi.OutputState }
+
+func (ClusterSmnNotifyPtrOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((**ClusterSmnNotify)(nil)).Elem()
+}
+
+func (o ClusterSmnNotifyPtrOutput) ToClusterSmnNotifyPtrOutput() ClusterSmnNotifyPtrOutput {
+	return o
+}
+
+func (o ClusterSmnNotifyPtrOutput) ToClusterSmnNotifyPtrOutputWithContext(ctx context.Context) ClusterSmnNotifyPtrOutput {
+	return o
+}
+
+func (o ClusterSmnNotifyPtrOutput) Elem() ClusterSmnNotifyOutput {
+	return o.ApplyT(func(v *ClusterSmnNotify) ClusterSmnNotify {
+		if v != nil {
+			return *v
+		}
+		var ret ClusterSmnNotify
+		return ret
+	}).(ClusterSmnNotifyOutput)
+}
+
+// Specifies the subscription rule name.
+// Changing this will create a new MapReduce cluster resource.
+func (o ClusterSmnNotifyPtrOutput) SubscriptionName() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *ClusterSmnNotify) *string {
+		if v == nil {
+			return nil
+		}
+		return &v.SubscriptionName
+	}).(pulumi.StringPtrOutput)
+}
+
+// Specifies the Uniform Resource Name (URN) of the topic.
+// Changing this will create a new MapReduce cluster resource.
+func (o ClusterSmnNotifyPtrOutput) TopicUrn() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *ClusterSmnNotify) *string {
+		if v == nil {
+			return nil
+		}
+		return &v.TopicUrn
+	}).(pulumi.StringPtrOutput)
+}
+
 type ClusterStreamingCoreNodes struct {
 	// Specifies the roles deployed in a node group.This argument is mandatory
 	// when the cluster type is **CUSTOM**. Each character string represents a role expression.
@@ -1573,6 +2153,9 @@ type ClusterStreamingCoreNodes struct {
 	// Changing this will create a new MapReduce cluster resource.
 	Flavor string `pulumi:"flavor"`
 	// The host list of this nodes group in the cluster.
+	// * `bootstrap_scripts/start_time` - The execution time of one bootstrap action script, in RFC-3339 format.
+	// * `bootstrap_scripts/state` - The status of one bootstrap action script.
+	//   The valid value are **PENDING**, **IN_PROGRESS**, **SUCCESS**, and **FAILURE**.
 	HostIps []string `pulumi:"hostIps"`
 	// Specifies the number of nodes for the node group.
 	NodeNumber int `pulumi:"nodeNumber"`
@@ -1622,6 +2205,9 @@ type ClusterStreamingCoreNodesArgs struct {
 	// Changing this will create a new MapReduce cluster resource.
 	Flavor pulumi.StringInput `pulumi:"flavor"`
 	// The host list of this nodes group in the cluster.
+	// * `bootstrap_scripts/start_time` - The execution time of one bootstrap action script, in RFC-3339 format.
+	// * `bootstrap_scripts/state` - The status of one bootstrap action script.
+	//   The valid value are **PENDING**, **IN_PROGRESS**, **SUCCESS**, and **FAILURE**.
 	HostIps pulumi.StringArrayInput `pulumi:"hostIps"`
 	// Specifies the number of nodes for the node group.
 	NodeNumber pulumi.IntInput `pulumi:"nodeNumber"`
@@ -1751,6 +2337,9 @@ func (o ClusterStreamingCoreNodesOutput) Flavor() pulumi.StringOutput {
 }
 
 // The host list of this nodes group in the cluster.
+//   - `bootstrap_scripts/start_time` - The execution time of one bootstrap action script, in RFC-3339 format.
+//   - `bootstrap_scripts/state` - The status of one bootstrap action script.
+//     The valid value are **PENDING**, **IN_PROGRESS**, **SUCCESS**, and **FAILURE**.
 func (o ClusterStreamingCoreNodesOutput) HostIps() pulumi.StringArrayOutput {
 	return o.ApplyT(func(v ClusterStreamingCoreNodes) []string { return v.HostIps }).(pulumi.StringArrayOutput)
 }
@@ -1862,6 +2451,9 @@ func (o ClusterStreamingCoreNodesPtrOutput) Flavor() pulumi.StringPtrOutput {
 }
 
 // The host list of this nodes group in the cluster.
+//   - `bootstrap_scripts/start_time` - The execution time of one bootstrap action script, in RFC-3339 format.
+//   - `bootstrap_scripts/state` - The status of one bootstrap action script.
+//     The valid value are **PENDING**, **IN_PROGRESS**, **SUCCESS**, and **FAILURE**.
 func (o ClusterStreamingCoreNodesPtrOutput) HostIps() pulumi.StringArrayOutput {
 	return o.ApplyT(func(v *ClusterStreamingCoreNodes) []string {
 		if v == nil {
@@ -1930,6 +2522,9 @@ type ClusterStreamingTaskNodes struct {
 	// Changing this will create a new MapReduce cluster resource.
 	Flavor string `pulumi:"flavor"`
 	// The host list of this nodes group in the cluster.
+	// * `bootstrap_scripts/start_time` - The execution time of one bootstrap action script, in RFC-3339 format.
+	// * `bootstrap_scripts/state` - The status of one bootstrap action script.
+	//   The valid value are **PENDING**, **IN_PROGRESS**, **SUCCESS**, and **FAILURE**.
 	HostIps []string `pulumi:"hostIps"`
 	// Specifies the number of nodes for the node group.
 	NodeNumber int `pulumi:"nodeNumber"`
@@ -1979,6 +2574,9 @@ type ClusterStreamingTaskNodesArgs struct {
 	// Changing this will create a new MapReduce cluster resource.
 	Flavor pulumi.StringInput `pulumi:"flavor"`
 	// The host list of this nodes group in the cluster.
+	// * `bootstrap_scripts/start_time` - The execution time of one bootstrap action script, in RFC-3339 format.
+	// * `bootstrap_scripts/state` - The status of one bootstrap action script.
+	//   The valid value are **PENDING**, **IN_PROGRESS**, **SUCCESS**, and **FAILURE**.
 	HostIps pulumi.StringArrayInput `pulumi:"hostIps"`
 	// Specifies the number of nodes for the node group.
 	NodeNumber pulumi.IntInput `pulumi:"nodeNumber"`
@@ -2108,6 +2706,9 @@ func (o ClusterStreamingTaskNodesOutput) Flavor() pulumi.StringOutput {
 }
 
 // The host list of this nodes group in the cluster.
+//   - `bootstrap_scripts/start_time` - The execution time of one bootstrap action script, in RFC-3339 format.
+//   - `bootstrap_scripts/state` - The status of one bootstrap action script.
+//     The valid value are **PENDING**, **IN_PROGRESS**, **SUCCESS**, and **FAILURE**.
 func (o ClusterStreamingTaskNodesOutput) HostIps() pulumi.StringArrayOutput {
 	return o.ApplyT(func(v ClusterStreamingTaskNodes) []string { return v.HostIps }).(pulumi.StringArrayOutput)
 }
@@ -2219,6 +2820,9 @@ func (o ClusterStreamingTaskNodesPtrOutput) Flavor() pulumi.StringPtrOutput {
 }
 
 // The host list of this nodes group in the cluster.
+//   - `bootstrap_scripts/start_time` - The execution time of one bootstrap action script, in RFC-3339 format.
+//   - `bootstrap_scripts/state` - The status of one bootstrap action script.
+//     The valid value are **PENDING**, **IN_PROGRESS**, **SUCCESS**, and **FAILURE**.
 func (o ClusterStreamingTaskNodesPtrOutput) HostIps() pulumi.StringArrayOutput {
 	return o.ApplyT(func(v *ClusterStreamingTaskNodes) []string {
 		if v == nil {
@@ -2265,14 +2869,20 @@ func init() {
 	pulumi.RegisterInputType(reflect.TypeOf((*ClusterAnalysisCoreNodesPtrInput)(nil)).Elem(), ClusterAnalysisCoreNodesArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*ClusterAnalysisTaskNodesInput)(nil)).Elem(), ClusterAnalysisTaskNodesArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*ClusterAnalysisTaskNodesPtrInput)(nil)).Elem(), ClusterAnalysisTaskNodesArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*ClusterBootstrapScriptInput)(nil)).Elem(), ClusterBootstrapScriptArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*ClusterBootstrapScriptArrayInput)(nil)).Elem(), ClusterBootstrapScriptArray{})
 	pulumi.RegisterInputType(reflect.TypeOf((*ClusterComponentConfigInput)(nil)).Elem(), ClusterComponentConfigArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*ClusterComponentConfigArrayInput)(nil)).Elem(), ClusterComponentConfigArray{})
 	pulumi.RegisterInputType(reflect.TypeOf((*ClusterComponentConfigConfigInput)(nil)).Elem(), ClusterComponentConfigConfigArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*ClusterComponentConfigConfigArrayInput)(nil)).Elem(), ClusterComponentConfigConfigArray{})
 	pulumi.RegisterInputType(reflect.TypeOf((*ClusterCustomNodeInput)(nil)).Elem(), ClusterCustomNodeArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*ClusterCustomNodeArrayInput)(nil)).Elem(), ClusterCustomNodeArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*ClusterExternalDatasourceInput)(nil)).Elem(), ClusterExternalDatasourceArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*ClusterExternalDatasourceArrayInput)(nil)).Elem(), ClusterExternalDatasourceArray{})
 	pulumi.RegisterInputType(reflect.TypeOf((*ClusterMasterNodesInput)(nil)).Elem(), ClusterMasterNodesArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*ClusterMasterNodesPtrInput)(nil)).Elem(), ClusterMasterNodesArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*ClusterSmnNotifyInput)(nil)).Elem(), ClusterSmnNotifyArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*ClusterSmnNotifyPtrInput)(nil)).Elem(), ClusterSmnNotifyArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*ClusterStreamingCoreNodesInput)(nil)).Elem(), ClusterStreamingCoreNodesArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*ClusterStreamingCoreNodesPtrInput)(nil)).Elem(), ClusterStreamingCoreNodesArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*ClusterStreamingTaskNodesInput)(nil)).Elem(), ClusterStreamingTaskNodesArgs{})
@@ -2281,14 +2891,20 @@ func init() {
 	pulumi.RegisterOutputType(ClusterAnalysisCoreNodesPtrOutput{})
 	pulumi.RegisterOutputType(ClusterAnalysisTaskNodesOutput{})
 	pulumi.RegisterOutputType(ClusterAnalysisTaskNodesPtrOutput{})
+	pulumi.RegisterOutputType(ClusterBootstrapScriptOutput{})
+	pulumi.RegisterOutputType(ClusterBootstrapScriptArrayOutput{})
 	pulumi.RegisterOutputType(ClusterComponentConfigOutput{})
 	pulumi.RegisterOutputType(ClusterComponentConfigArrayOutput{})
 	pulumi.RegisterOutputType(ClusterComponentConfigConfigOutput{})
 	pulumi.RegisterOutputType(ClusterComponentConfigConfigArrayOutput{})
 	pulumi.RegisterOutputType(ClusterCustomNodeOutput{})
 	pulumi.RegisterOutputType(ClusterCustomNodeArrayOutput{})
+	pulumi.RegisterOutputType(ClusterExternalDatasourceOutput{})
+	pulumi.RegisterOutputType(ClusterExternalDatasourceArrayOutput{})
 	pulumi.RegisterOutputType(ClusterMasterNodesOutput{})
 	pulumi.RegisterOutputType(ClusterMasterNodesPtrOutput{})
+	pulumi.RegisterOutputType(ClusterSmnNotifyOutput{})
+	pulumi.RegisterOutputType(ClusterSmnNotifyPtrOutput{})
 	pulumi.RegisterOutputType(ClusterStreamingCoreNodesOutput{})
 	pulumi.RegisterOutputType(ClusterStreamingCoreNodesPtrOutput{})
 	pulumi.RegisterOutputType(ClusterStreamingTaskNodesOutput{})

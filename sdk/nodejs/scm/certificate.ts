@@ -6,75 +6,6 @@ import { input as inputs, output as outputs } from "../types";
 import * as utilities from "../utilities";
 
 /**
- * SSL Certificate Manager (SCM) allows you to purchase Secure Sockets Layer (SSL) certificates from the world's leading
- * digital certificate authorities (CAs), upload existing SSL certificates, and centrally manage all your SSL certificates
- * in one place.
- *
- * ## Example Usage
- * ### Load the certificate contents from the local files
- *
- * ```typescript
- * import * as pulumi from "@pulumi/pulumi";
- * import * as fs from "fs";
- * import * as pulumi from "@huaweicloudos/pulumi";
- *
- * const certificate1 = new huaweicloud.scm.Certificate("certificate1", {
- *     certificate: fs.readFileSync("/usr/local/data/certificate/cert_xxx/xxx_ca.crt"),
- *     certificateChain: fs.readFileSync("/usr/local/data/certificate/cert_xxx/xxx_ca_chain.crt"),
- *     privateKey: fs.readFileSync("/usr/local/data/certificate/cert_xxx/xxx_server.key"),
- * });
- * ```
- * ### Write the contents of the certificate into the Terrafrom script
- *
- * ```typescript
- * import * as pulumi from "@pulumi/pulumi";
- * import * as huaweicloud from "@pulumi/huaweicloud";
- *
- * const certificate2 = new huaweicloud.Scm.Certificate("certificate_2", {
- *     certificate: `-----BEGIN CERTIFICATE-----
- * MIIC9DCCAl2gAwIBAgIUUcJZn3ep4l8iHu6lL/jE2UV+G8gwDQYJKoZIhvcNAQEL
- * ZWlqaW5nMQswC...
- * (This is an example, please replace it with a encrypted key of valid SSL certificate.)
- * -----END CERTIFICATE----------
- * `,
- *     certificateChain: `-----BEGIN CERTIFICATE-----
- * MIIC9DCCAl2gAwIBAgIUUcJZn3ep4l8iHu6lL/jE2UV+G8gwDQYJKoZIhvcNAQEL
- * BQAwgYsxCzAJB...
- * (This is an example, please replace it with a encrypted key of valid SSL certificate.)
- * -----END CERTIFICATE----------
- * `,
- *     privateKey: `-----BEGIN PRIVATE KEY-----
- * QWH3GbHx5bGQyexHj2hre4yEahn4dAKKdjSAMUuSfLWygp2pEdNFOegYTdqk/snv
- * mhNmxp74oUcVfi1Msw6KY2...
- * (This is an example, please replace it with a encrypted key of valid SSL certificate.)
- * -----END PRIVATE KEY-----
- * `,
- * });
- * ```
- * ### Push the SSL certificate to another HUAWEI CLOUD service
- *
- * ```typescript
- * import * as pulumi from "@pulumi/pulumi";
- * import * as fs from "fs";
- * import * as pulumi from "@huaweicloudos/pulumi";
- *
- * // Load the certificate contents from the local files.
- * const certificate3 = new huaweicloud.scm.Certificate("certificate3", {
- *     certificate: fs.readFileSync("/usr/local/data/certificate/cert_xxx/xxx_ca.crt"),
- *     certificateChain: fs.readFileSync("/usr/local/data/certificate/cert_xxx/xxx_ca_chain.crt"),
- *     privateKey: fs.readFileSync("/usr/local/data/certificate/cert_xxx/xxx_server.key"),
- *     targets: [
- *         {
- *             projects: ["la-south-2"],
- *             service: "Enhance_ELB",
- *         },
- *         {
- *             service: "CDN",
- *         },
- *     ],
- * });
- * ```
- *
  * ## Import
  *
  * Certificates can be imported using the `id`, e.g.
@@ -117,17 +48,19 @@ export class Certificate extends pulumi.CustomResource {
      */
     public /*out*/ readonly authentifications!: pulumi.Output<outputs.Scm.CertificateAuthentification[]>;
     /**
-     * The public encrypted key of the Certificate, PEM format.
+     * Specifies the content of the Certificate, PEM format.
+     * It can include intermediate certificates and root certificates. If the `certificateChain` is passed into
+     * the certificate chain, then this field only takes the certificate itself.
      * Changing this parameter will create a new resource.
      */
     public readonly certificate!: pulumi.Output<string>;
     /**
-     * The chain of the certificate.
-     * It can be extracted from the *server.crt* file in the Nginx directory,
+     * Specifies the chain of the certificate.
+     * It can passed by `certificate`. It can be extracted from the *server.crt* file in the Nginx directory,
      * usually after the second paragraph is the certificate chain.
      * Changing this parameter will create a new resource.
      */
-    public readonly certificateChain!: pulumi.Output<string>;
+    public readonly certificateChain!: pulumi.Output<string | undefined>;
     /**
      * Domain name mapping to the verification value
      */
@@ -137,7 +70,24 @@ export class Certificate extends pulumi.CustomResource {
      */
     public /*out*/ readonly domainCount!: pulumi.Output<number>;
     /**
-     * Human-readable name for the Certificate.
+     * Specifies the encrypted content of the state secret certificate.
+     * Using the escape character `\n` or `\r\n` to replace carriage return and line feed characters.
+     */
+    public readonly encCertificate!: pulumi.Output<string | undefined>;
+    /**
+     * Specifies the encrypted private key of the state secret certificate.
+     * Password-protected private keys cannot be uploaded, and using the escape character `\n` or `\r\n` to replace carriage
+     * return and line feed characters.
+     */
+    public readonly encPrivateKey!: pulumi.Output<string | undefined>;
+    /**
+     * Specifies the enterprise project ID. This parameter is only
+     * valid for enterprise users. Resources under all authorized enterprise projects of the tenant will be queried by default
+     * if this parameter is not specified for enterprise users.
+     */
+    public readonly enterpriseProjectId!: pulumi.Output<string>;
+    /**
+     * Specifies the human-readable name for the certificate.
      * Does not have to be unique. The value contains a maximum of 63 characters.
      * Changing this parameter will create a new resource.
      */
@@ -151,7 +101,7 @@ export class Certificate extends pulumi.CustomResource {
      */
     public /*out*/ readonly notBefore!: pulumi.Output<string>;
     /**
-     * The private encrypted key of the Certificate, PEM format.
+     * Specifies the private encrypted key of the Certificate, PEM format.
      * Changing this parameter will create a new resource.
      */
     public readonly privateKey!: pulumi.Output<string>;
@@ -160,7 +110,7 @@ export class Certificate extends pulumi.CustomResource {
      */
     public /*out*/ readonly pushSupport!: pulumi.Output<string>;
     /**
-     * The region in which to create the SCM certificate resource.
+     * Specifies the region in which to create the SCM certificate resource.
      * If omitted, the provider-level region will be used.
      * Changing this setting will push a new certificate.
      */
@@ -170,7 +120,8 @@ export class Certificate extends pulumi.CustomResource {
      */
     public /*out*/ readonly status!: pulumi.Output<string>;
     /**
-     * The service to which the certificate needs to be pushed.
+     * Specifies the service to which the certificate needs to be pushed.
+     * The target structure is documented below.
      */
     public readonly targets!: pulumi.Output<outputs.Scm.CertificateTarget[] | undefined>;
 
@@ -192,6 +143,9 @@ export class Certificate extends pulumi.CustomResource {
             resourceInputs["certificateChain"] = state ? state.certificateChain : undefined;
             resourceInputs["domain"] = state ? state.domain : undefined;
             resourceInputs["domainCount"] = state ? state.domainCount : undefined;
+            resourceInputs["encCertificate"] = state ? state.encCertificate : undefined;
+            resourceInputs["encPrivateKey"] = state ? state.encPrivateKey : undefined;
+            resourceInputs["enterpriseProjectId"] = state ? state.enterpriseProjectId : undefined;
             resourceInputs["name"] = state ? state.name : undefined;
             resourceInputs["notAfter"] = state ? state.notAfter : undefined;
             resourceInputs["notBefore"] = state ? state.notBefore : undefined;
@@ -205,14 +159,14 @@ export class Certificate extends pulumi.CustomResource {
             if ((!args || args.certificate === undefined) && !opts.urn) {
                 throw new Error("Missing required property 'certificate'");
             }
-            if ((!args || args.certificateChain === undefined) && !opts.urn) {
-                throw new Error("Missing required property 'certificateChain'");
-            }
             if ((!args || args.privateKey === undefined) && !opts.urn) {
                 throw new Error("Missing required property 'privateKey'");
             }
             resourceInputs["certificate"] = args ? args.certificate : undefined;
             resourceInputs["certificateChain"] = args ? args.certificateChain : undefined;
+            resourceInputs["encCertificate"] = args ? args.encCertificate : undefined;
+            resourceInputs["encPrivateKey"] = args ? args.encPrivateKey : undefined;
+            resourceInputs["enterpriseProjectId"] = args ? args.enterpriseProjectId : undefined;
             resourceInputs["name"] = args ? args.name : undefined;
             resourceInputs["privateKey"] = args ? args.privateKey : undefined;
             resourceInputs["region"] = args ? args.region : undefined;
@@ -240,13 +194,15 @@ export interface CertificateState {
      */
     authentifications?: pulumi.Input<pulumi.Input<inputs.Scm.CertificateAuthentification>[]>;
     /**
-     * The public encrypted key of the Certificate, PEM format.
+     * Specifies the content of the Certificate, PEM format.
+     * It can include intermediate certificates and root certificates. If the `certificateChain` is passed into
+     * the certificate chain, then this field only takes the certificate itself.
      * Changing this parameter will create a new resource.
      */
     certificate?: pulumi.Input<string>;
     /**
-     * The chain of the certificate.
-     * It can be extracted from the *server.crt* file in the Nginx directory,
+     * Specifies the chain of the certificate.
+     * It can passed by `certificate`. It can be extracted from the *server.crt* file in the Nginx directory,
      * usually after the second paragraph is the certificate chain.
      * Changing this parameter will create a new resource.
      */
@@ -260,7 +216,24 @@ export interface CertificateState {
      */
     domainCount?: pulumi.Input<number>;
     /**
-     * Human-readable name for the Certificate.
+     * Specifies the encrypted content of the state secret certificate.
+     * Using the escape character `\n` or `\r\n` to replace carriage return and line feed characters.
+     */
+    encCertificate?: pulumi.Input<string>;
+    /**
+     * Specifies the encrypted private key of the state secret certificate.
+     * Password-protected private keys cannot be uploaded, and using the escape character `\n` or `\r\n` to replace carriage
+     * return and line feed characters.
+     */
+    encPrivateKey?: pulumi.Input<string>;
+    /**
+     * Specifies the enterprise project ID. This parameter is only
+     * valid for enterprise users. Resources under all authorized enterprise projects of the tenant will be queried by default
+     * if this parameter is not specified for enterprise users.
+     */
+    enterpriseProjectId?: pulumi.Input<string>;
+    /**
+     * Specifies the human-readable name for the certificate.
      * Does not have to be unique. The value contains a maximum of 63 characters.
      * Changing this parameter will create a new resource.
      */
@@ -274,7 +247,7 @@ export interface CertificateState {
      */
     notBefore?: pulumi.Input<string>;
     /**
-     * The private encrypted key of the Certificate, PEM format.
+     * Specifies the private encrypted key of the Certificate, PEM format.
      * Changing this parameter will create a new resource.
      */
     privateKey?: pulumi.Input<string>;
@@ -283,7 +256,7 @@ export interface CertificateState {
      */
     pushSupport?: pulumi.Input<string>;
     /**
-     * The region in which to create the SCM certificate resource.
+     * Specifies the region in which to create the SCM certificate resource.
      * If omitted, the provider-level region will be used.
      * Changing this setting will push a new certificate.
      */
@@ -293,7 +266,8 @@ export interface CertificateState {
      */
     status?: pulumi.Input<string>;
     /**
-     * The service to which the certificate needs to be pushed.
+     * Specifies the service to which the certificate needs to be pushed.
+     * The target structure is documented below.
      */
     targets?: pulumi.Input<pulumi.Input<inputs.Scm.CertificateTarget>[]>;
 }
@@ -303,36 +277,56 @@ export interface CertificateState {
  */
 export interface CertificateArgs {
     /**
-     * The public encrypted key of the Certificate, PEM format.
+     * Specifies the content of the Certificate, PEM format.
+     * It can include intermediate certificates and root certificates. If the `certificateChain` is passed into
+     * the certificate chain, then this field only takes the certificate itself.
      * Changing this parameter will create a new resource.
      */
     certificate: pulumi.Input<string>;
     /**
-     * The chain of the certificate.
-     * It can be extracted from the *server.crt* file in the Nginx directory,
+     * Specifies the chain of the certificate.
+     * It can passed by `certificate`. It can be extracted from the *server.crt* file in the Nginx directory,
      * usually after the second paragraph is the certificate chain.
      * Changing this parameter will create a new resource.
      */
-    certificateChain: pulumi.Input<string>;
+    certificateChain?: pulumi.Input<string>;
     /**
-     * Human-readable name for the Certificate.
+     * Specifies the encrypted content of the state secret certificate.
+     * Using the escape character `\n` or `\r\n` to replace carriage return and line feed characters.
+     */
+    encCertificate?: pulumi.Input<string>;
+    /**
+     * Specifies the encrypted private key of the state secret certificate.
+     * Password-protected private keys cannot be uploaded, and using the escape character `\n` or `\r\n` to replace carriage
+     * return and line feed characters.
+     */
+    encPrivateKey?: pulumi.Input<string>;
+    /**
+     * Specifies the enterprise project ID. This parameter is only
+     * valid for enterprise users. Resources under all authorized enterprise projects of the tenant will be queried by default
+     * if this parameter is not specified for enterprise users.
+     */
+    enterpriseProjectId?: pulumi.Input<string>;
+    /**
+     * Specifies the human-readable name for the certificate.
      * Does not have to be unique. The value contains a maximum of 63 characters.
      * Changing this parameter will create a new resource.
      */
     name?: pulumi.Input<string>;
     /**
-     * The private encrypted key of the Certificate, PEM format.
+     * Specifies the private encrypted key of the Certificate, PEM format.
      * Changing this parameter will create a new resource.
      */
     privateKey: pulumi.Input<string>;
     /**
-     * The region in which to create the SCM certificate resource.
+     * Specifies the region in which to create the SCM certificate resource.
      * If omitted, the provider-level region will be used.
      * Changing this setting will push a new certificate.
      */
     region?: pulumi.Input<string>;
     /**
-     * The service to which the certificate needs to be pushed.
+     * Specifies the service to which the certificate needs to be pushed.
+     * The target structure is documented below.
      */
     targets?: pulumi.Input<pulumi.Input<inputs.Scm.CertificateTarget>[]>;
 }

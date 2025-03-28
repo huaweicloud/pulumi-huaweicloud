@@ -25,18 +25,24 @@ class ClusterArgs:
                  vpc_id: pulumi.Input[str],
                  analysis_core_nodes: Optional[pulumi.Input['ClusterAnalysisCoreNodesArgs']] = None,
                  analysis_task_nodes: Optional[pulumi.Input['ClusterAnalysisTaskNodesArgs']] = None,
+                 bootstrap_scripts: Optional[pulumi.Input[Sequence[pulumi.Input['ClusterBootstrapScriptArgs']]]] = None,
+                 charging_mode: Optional[pulumi.Input[str]] = None,
                  component_configs: Optional[pulumi.Input[Sequence[pulumi.Input['ClusterComponentConfigArgs']]]] = None,
                  custom_nodes: Optional[pulumi.Input[Sequence[pulumi.Input['ClusterCustomNodeArgs']]]] = None,
                  eip_id: Optional[pulumi.Input[str]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
+                 external_datasources: Optional[pulumi.Input[Sequence[pulumi.Input['ClusterExternalDatasourceArgs']]]] = None,
                  log_collection: Optional[pulumi.Input[bool]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  node_admin_pass: Optional[pulumi.Input[str]] = None,
                  node_key_pair: Optional[pulumi.Input[str]] = None,
+                 period: Optional[pulumi.Input[int]] = None,
+                 period_unit: Optional[pulumi.Input[str]] = None,
                  public_ip: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
                  safe_mode: Optional[pulumi.Input[bool]] = None,
                  security_group_ids: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
+                 smn_notify: Optional[pulumi.Input['ClusterSmnNotifyArgs']] = None,
                  streaming_core_nodes: Optional[pulumi.Input['ClusterStreamingCoreNodesArgs']] = None,
                  streaming_task_nodes: Optional[pulumi.Input['ClusterStreamingTaskNodesArgs']] = None,
                  tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
@@ -71,6 +77,13 @@ class ClusterArgs:
                MapReduce cluster.
                The `nodes` object structure of the `analysis_task_nodes` is documented below.
                Changing this will create a new MapReduce cluster resource.
+        :param pulumi.Input[Sequence[pulumi.Input['ClusterBootstrapScriptArgs']]] bootstrap_scripts: Specifies the bootstrap action scripts.
+               Bootstrap action scripts will be executed on specified cluster nodes before or after big data components are
+               started. You can execute bootstrap actions to install third-party software, modify the cluster running environment,
+               and customize cluster configuration. [Learn more](https://support.huaweicloud.com/intl/en-us/usermanual-mrs/mrs_01_0414.html)
+        :param pulumi.Input[str] charging_mode: Specifies the charging mode of the cluster.  
+               Valid values are **prePaid** and **postPaid**, defaults to **postPaid**.
+               Changing this parameter will create a new MapReduce cluster resource.
         :param pulumi.Input[Sequence[pulumi.Input['ClusterComponentConfigArgs']]] component_configs: Specifies the component configurations of the cluster.
                The object structure is documented below.
                Changing this will create a new MapReduce cluster resource.
@@ -81,11 +94,13 @@ class ClusterArgs:
                The EIP must have been created and must be in the same region as the cluster.
                Changing this will create a new MapReduce cluster resource.
         :param pulumi.Input[str] enterprise_project_id: Specifies a unique ID in UUID format of enterprise project.
+        :param pulumi.Input[Sequence[pulumi.Input['ClusterExternalDatasourceArgs']]] external_datasources: Specifies the external datasource configurations of the cluster.
+               The object structure is documented below.
                Changing this will create a new MapReduce cluster resource.
         :param pulumi.Input[bool] log_collection: Specifies whether logs are collected when cluster installation fails.
                Defaults to true. If `log_collection` set true, the OBS buckets will be created and only used to collect logs that
                record MapReduce cluster creation failures. Changing this will create a new MapReduce cluster resource.
-        :param pulumi.Input[str] name: Specifies the component name of the cluster which has installed.
+        :param pulumi.Input[str] name: Specifies the name of a bootstrap action script.
                Changing this will create a new MapReduce cluster resource.
         :param pulumi.Input[str] node_admin_pass: Specifies the administrator password, which is used to log in to the
                each nodes(/ECSs). The password can contain 8 to 26 characters and cannot be the username or the username spelled
@@ -94,6 +109,14 @@ class ClusterArgs:
                and `node_key_pair` are alternative.
         :param pulumi.Input[str] node_key_pair: Specifies the name of a key pair, which is used to log in to the each
                nodes(/ECSs). Changing this will create a new MapReduce cluster resource.
+        :param pulumi.Input[int] period: Specifies the charging period of the cluster.  
+               If `period_unit` is set to **month**, the value ranges from 1 to 9.
+               If `period_unit` is set to **year**, the value ranges from 1 to 3.
+               This parameter is mandatory if `charging_mode` is set to **prePaid**.
+               Changing this parameter will create a new MapReduce cluster resource.
+        :param pulumi.Input[str] period_unit: Specifies the charging period unit of the cluster.  
+               Valid values are **month** and **year**. This parameter is mandatory if `charging_mode` is set to **prePaid**.
+               Changing this parameter will create a new MapReduce cluster resource.
         :param pulumi.Input[str] public_ip: Specifies the EIP address which bound to the MapReduce cluster.
                The EIP must have been created and must be in the same region as the cluster.
                Changing this will create a new MapReduce cluster resource.
@@ -105,6 +128,9 @@ class ClusterArgs:
                + **false**: disable Kerberos authentication. Changing this will create a new MapReduce cluster resource.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] security_group_ids: Specifies an array of one or more security group ID to attach to the
                MapReduce cluster. If using the specified security group, the group need to open the specified port (9022) rules.
+        :param pulumi.Input['ClusterSmnNotifyArgs'] smn_notify: Specifies the alarm configuration of the cluster. The smn_notify
+               structure is documented below.
+               Changing this will create a new MapReduce cluster resource.
         :param pulumi.Input['ClusterStreamingCoreNodesArgs'] streaming_core_nodes: Specifies the informations about streaming core nodes in the
                MapReduce cluster.
                The `nodes` object structure of the `streaming_core_nodes` is documented below.
@@ -125,7 +151,7 @@ class ClusterArgs:
                + **mgmt_control_data_separated_v2**: The management role and control role are deployed on different Master nodes,
                and data instances are deployed in different node groups. This deployment mode is applicable to a cluster with more
                than 500 nodes. Components can be deployed separately, which can be used for a larger cluster scale.
-        :param pulumi.Input[str] type: Specifies the type of the MapReduce cluster. The valid values are **ANALYSIS***,
+        :param pulumi.Input[str] type: Specifies the type of the MapReduce cluster. The valid values are **ANALYSIS**,
                **STREAMING** and **MIXED**, defaults to **ANALYSIS**. Changing this will create a new MapReduce cluster resource.
         """
         pulumi.set(__self__, "availability_zone", availability_zone)
@@ -139,6 +165,10 @@ class ClusterArgs:
             pulumi.set(__self__, "analysis_core_nodes", analysis_core_nodes)
         if analysis_task_nodes is not None:
             pulumi.set(__self__, "analysis_task_nodes", analysis_task_nodes)
+        if bootstrap_scripts is not None:
+            pulumi.set(__self__, "bootstrap_scripts", bootstrap_scripts)
+        if charging_mode is not None:
+            pulumi.set(__self__, "charging_mode", charging_mode)
         if component_configs is not None:
             pulumi.set(__self__, "component_configs", component_configs)
         if custom_nodes is not None:
@@ -147,6 +177,8 @@ class ClusterArgs:
             pulumi.set(__self__, "eip_id", eip_id)
         if enterprise_project_id is not None:
             pulumi.set(__self__, "enterprise_project_id", enterprise_project_id)
+        if external_datasources is not None:
+            pulumi.set(__self__, "external_datasources", external_datasources)
         if log_collection is not None:
             pulumi.set(__self__, "log_collection", log_collection)
         if name is not None:
@@ -155,6 +187,10 @@ class ClusterArgs:
             pulumi.set(__self__, "node_admin_pass", node_admin_pass)
         if node_key_pair is not None:
             pulumi.set(__self__, "node_key_pair", node_key_pair)
+        if period is not None:
+            pulumi.set(__self__, "period", period)
+        if period_unit is not None:
+            pulumi.set(__self__, "period_unit", period_unit)
         if public_ip is not None:
             pulumi.set(__self__, "public_ip", public_ip)
         if region is not None:
@@ -163,6 +199,8 @@ class ClusterArgs:
             pulumi.set(__self__, "safe_mode", safe_mode)
         if security_group_ids is not None:
             pulumi.set(__self__, "security_group_ids", security_group_ids)
+        if smn_notify is not None:
+            pulumi.set(__self__, "smn_notify", smn_notify)
         if streaming_core_nodes is not None:
             pulumi.set(__self__, "streaming_core_nodes", streaming_core_nodes)
         if streaming_task_nodes is not None:
@@ -301,6 +339,35 @@ class ClusterArgs:
         pulumi.set(self, "analysis_task_nodes", value)
 
     @property
+    @pulumi.getter(name="bootstrapScripts")
+    def bootstrap_scripts(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['ClusterBootstrapScriptArgs']]]]:
+        """
+        Specifies the bootstrap action scripts.
+        Bootstrap action scripts will be executed on specified cluster nodes before or after big data components are
+        started. You can execute bootstrap actions to install third-party software, modify the cluster running environment,
+        and customize cluster configuration. [Learn more](https://support.huaweicloud.com/intl/en-us/usermanual-mrs/mrs_01_0414.html)
+        """
+        return pulumi.get(self, "bootstrap_scripts")
+
+    @bootstrap_scripts.setter
+    def bootstrap_scripts(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['ClusterBootstrapScriptArgs']]]]):
+        pulumi.set(self, "bootstrap_scripts", value)
+
+    @property
+    @pulumi.getter(name="chargingMode")
+    def charging_mode(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the charging mode of the cluster.  
+        Valid values are **prePaid** and **postPaid**, defaults to **postPaid**.
+        Changing this parameter will create a new MapReduce cluster resource.
+        """
+        return pulumi.get(self, "charging_mode")
+
+    @charging_mode.setter
+    def charging_mode(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "charging_mode", value)
+
+    @property
     @pulumi.getter(name="componentConfigs")
     def component_configs(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['ClusterComponentConfigArgs']]]]:
         """
@@ -347,13 +414,26 @@ class ClusterArgs:
     def enterprise_project_id(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies a unique ID in UUID format of enterprise project.
-        Changing this will create a new MapReduce cluster resource.
         """
         return pulumi.get(self, "enterprise_project_id")
 
     @enterprise_project_id.setter
     def enterprise_project_id(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "enterprise_project_id", value)
+
+    @property
+    @pulumi.getter(name="externalDatasources")
+    def external_datasources(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['ClusterExternalDatasourceArgs']]]]:
+        """
+        Specifies the external datasource configurations of the cluster.
+        The object structure is documented below.
+        Changing this will create a new MapReduce cluster resource.
+        """
+        return pulumi.get(self, "external_datasources")
+
+    @external_datasources.setter
+    def external_datasources(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['ClusterExternalDatasourceArgs']]]]):
+        pulumi.set(self, "external_datasources", value)
 
     @property
     @pulumi.getter(name="logCollection")
@@ -373,7 +453,7 @@ class ClusterArgs:
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the component name of the cluster which has installed.
+        Specifies the name of a bootstrap action script.
         Changing this will create a new MapReduce cluster resource.
         """
         return pulumi.get(self, "name")
@@ -410,6 +490,36 @@ class ClusterArgs:
     @node_key_pair.setter
     def node_key_pair(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "node_key_pair", value)
+
+    @property
+    @pulumi.getter
+    def period(self) -> Optional[pulumi.Input[int]]:
+        """
+        Specifies the charging period of the cluster.  
+        If `period_unit` is set to **month**, the value ranges from 1 to 9.
+        If `period_unit` is set to **year**, the value ranges from 1 to 3.
+        This parameter is mandatory if `charging_mode` is set to **prePaid**.
+        Changing this parameter will create a new MapReduce cluster resource.
+        """
+        return pulumi.get(self, "period")
+
+    @period.setter
+    def period(self, value: Optional[pulumi.Input[int]]):
+        pulumi.set(self, "period", value)
+
+    @property
+    @pulumi.getter(name="periodUnit")
+    def period_unit(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the charging period unit of the cluster.  
+        Valid values are **month** and **year**. This parameter is mandatory if `charging_mode` is set to **prePaid**.
+        Changing this parameter will create a new MapReduce cluster resource.
+        """
+        return pulumi.get(self, "period_unit")
+
+    @period_unit.setter
+    def period_unit(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "period_unit", value)
 
     @property
     @pulumi.getter(name="publicIp")
@@ -465,6 +575,20 @@ class ClusterArgs:
     @security_group_ids.setter
     def security_group_ids(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]):
         pulumi.set(self, "security_group_ids", value)
+
+    @property
+    @pulumi.getter(name="smnNotify")
+    def smn_notify(self) -> Optional[pulumi.Input['ClusterSmnNotifyArgs']]:
+        """
+        Specifies the alarm configuration of the cluster. The smn_notify
+        structure is documented below.
+        Changing this will create a new MapReduce cluster resource.
+        """
+        return pulumi.get(self, "smn_notify")
+
+    @smn_notify.setter
+    def smn_notify(self, value: Optional[pulumi.Input['ClusterSmnNotifyArgs']]):
+        pulumi.set(self, "smn_notify", value)
 
     @property
     @pulumi.getter(name="streamingCoreNodes")
@@ -534,7 +658,7 @@ class ClusterArgs:
     @pulumi.getter
     def type(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the type of the MapReduce cluster. The valid values are **ANALYSIS***,
+        Specifies the type of the MapReduce cluster. The valid values are **ANALYSIS**,
         **STREAMING** and **MIXED**, defaults to **ANALYSIS**. Changing this will create a new MapReduce cluster resource.
         """
         return pulumi.get(self, "type")
@@ -550,6 +674,8 @@ class _ClusterState:
                  analysis_core_nodes: Optional[pulumi.Input['ClusterAnalysisCoreNodesArgs']] = None,
                  analysis_task_nodes: Optional[pulumi.Input['ClusterAnalysisTaskNodesArgs']] = None,
                  availability_zone: Optional[pulumi.Input[str]] = None,
+                 bootstrap_scripts: Optional[pulumi.Input[Sequence[pulumi.Input['ClusterBootstrapScriptArgs']]]] = None,
+                 charging_mode: Optional[pulumi.Input[str]] = None,
                  charging_start_time: Optional[pulumi.Input[str]] = None,
                  component_configs: Optional[pulumi.Input[Sequence[pulumi.Input['ClusterComponentConfigArgs']]]] = None,
                  component_lists: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
@@ -557,6 +683,7 @@ class _ClusterState:
                  custom_nodes: Optional[pulumi.Input[Sequence[pulumi.Input['ClusterCustomNodeArgs']]]] = None,
                  eip_id: Optional[pulumi.Input[str]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
+                 external_datasources: Optional[pulumi.Input[Sequence[pulumi.Input['ClusterExternalDatasourceArgs']]]] = None,
                  log_collection: Optional[pulumi.Input[bool]] = None,
                  manager_admin_pass: Optional[pulumi.Input[str]] = None,
                  master_node_ip: Optional[pulumi.Input[str]] = None,
@@ -564,11 +691,14 @@ class _ClusterState:
                  name: Optional[pulumi.Input[str]] = None,
                  node_admin_pass: Optional[pulumi.Input[str]] = None,
                  node_key_pair: Optional[pulumi.Input[str]] = None,
+                 period: Optional[pulumi.Input[int]] = None,
+                 period_unit: Optional[pulumi.Input[str]] = None,
                  private_ip: Optional[pulumi.Input[str]] = None,
                  public_ip: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
                  safe_mode: Optional[pulumi.Input[bool]] = None,
                  security_group_ids: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
+                 smn_notify: Optional[pulumi.Input['ClusterSmnNotifyArgs']] = None,
                  status: Optional[pulumi.Input[str]] = None,
                  streaming_core_nodes: Optional[pulumi.Input['ClusterStreamingCoreNodesArgs']] = None,
                  streaming_task_nodes: Optional[pulumi.Input['ClusterStreamingTaskNodesArgs']] = None,
@@ -593,6 +723,13 @@ class _ClusterState:
         :param pulumi.Input[str] availability_zone: Specifies the availability zone in which to create the cluster.
                Please following [reference](https://developer.huaweicloud.com/intl/en-us/endpoint?all)
                Changing this will create a new MapReduce cluster resource.
+        :param pulumi.Input[Sequence[pulumi.Input['ClusterBootstrapScriptArgs']]] bootstrap_scripts: Specifies the bootstrap action scripts.
+               Bootstrap action scripts will be executed on specified cluster nodes before or after big data components are
+               started. You can execute bootstrap actions to install third-party software, modify the cluster running environment,
+               and customize cluster configuration. [Learn more](https://support.huaweicloud.com/intl/en-us/usermanual-mrs/mrs_01_0414.html)
+        :param pulumi.Input[str] charging_mode: Specifies the charging mode of the cluster.  
+               Valid values are **prePaid** and **postPaid**, defaults to **postPaid**.
+               Changing this parameter will create a new MapReduce cluster resource.
         :param pulumi.Input[str] charging_start_time: The charging start time which is the start time of billing, in RFC-3339 format.
         :param pulumi.Input[Sequence[pulumi.Input['ClusterComponentConfigArgs']]] component_configs: Specifies the component configurations of the cluster.
                The object structure is documented below.
@@ -608,6 +745,8 @@ class _ClusterState:
                The EIP must have been created and must be in the same region as the cluster.
                Changing this will create a new MapReduce cluster resource.
         :param pulumi.Input[str] enterprise_project_id: Specifies a unique ID in UUID format of enterprise project.
+        :param pulumi.Input[Sequence[pulumi.Input['ClusterExternalDatasourceArgs']]] external_datasources: Specifies the external datasource configurations of the cluster.
+               The object structure is documented below.
                Changing this will create a new MapReduce cluster resource.
         :param pulumi.Input[bool] log_collection: Specifies whether logs are collected when cluster installation fails.
                Defaults to true. If `log_collection` set true, the OBS buckets will be created and only used to collect logs that
@@ -620,7 +759,7 @@ class _ClusterState:
         :param pulumi.Input['ClusterMasterNodesArgs'] master_nodes: Specifies the informations about master nodes in the MapReduce cluster.
                The `nodes` object structure of the `master_nodes` is documented below.
                Changing this will create a new MapReduce cluster resource.
-        :param pulumi.Input[str] name: Specifies the component name of the cluster which has installed.
+        :param pulumi.Input[str] name: Specifies the name of a bootstrap action script.
                Changing this will create a new MapReduce cluster resource.
         :param pulumi.Input[str] node_admin_pass: Specifies the administrator password, which is used to log in to the
                each nodes(/ECSs). The password can contain 8 to 26 characters and cannot be the username or the username spelled
@@ -629,6 +768,14 @@ class _ClusterState:
                and `node_key_pair` are alternative.
         :param pulumi.Input[str] node_key_pair: Specifies the name of a key pair, which is used to log in to the each
                nodes(/ECSs). Changing this will create a new MapReduce cluster resource.
+        :param pulumi.Input[int] period: Specifies the charging period of the cluster.  
+               If `period_unit` is set to **month**, the value ranges from 1 to 9.
+               If `period_unit` is set to **year**, the value ranges from 1 to 3.
+               This parameter is mandatory if `charging_mode` is set to **prePaid**.
+               Changing this parameter will create a new MapReduce cluster resource.
+        :param pulumi.Input[str] period_unit: Specifies the charging period unit of the cluster.  
+               Valid values are **month** and **year**. This parameter is mandatory if `charging_mode` is set to **prePaid**.
+               Changing this parameter will create a new MapReduce cluster resource.
         :param pulumi.Input[str] private_ip: The preferred private IP address of the master node.
         :param pulumi.Input[str] public_ip: Specifies the EIP address which bound to the MapReduce cluster.
                The EIP must have been created and must be in the same region as the cluster.
@@ -641,6 +788,9 @@ class _ClusterState:
                + **false**: disable Kerberos authentication. Changing this will create a new MapReduce cluster resource.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] security_group_ids: Specifies an array of one or more security group ID to attach to the
                MapReduce cluster. If using the specified security group, the group need to open the specified port (9022) rules.
+        :param pulumi.Input['ClusterSmnNotifyArgs'] smn_notify: Specifies the alarm configuration of the cluster. The smn_notify
+               structure is documented below.
+               Changing this will create a new MapReduce cluster resource.
         :param pulumi.Input[str] status: The cluster state, which include: running, frozen, abnormal and failed.
         :param pulumi.Input['ClusterStreamingCoreNodesArgs'] streaming_core_nodes: Specifies the informations about streaming core nodes in the
                MapReduce cluster.
@@ -665,7 +815,7 @@ class _ClusterState:
                and data instances are deployed in different node groups. This deployment mode is applicable to a cluster with more
                than 500 nodes. Components can be deployed separately, which can be used for a larger cluster scale.
         :param pulumi.Input[int] total_node_number: The total number of nodes deployed in the cluster.
-        :param pulumi.Input[str] type: Specifies the type of the MapReduce cluster. The valid values are **ANALYSIS***,
+        :param pulumi.Input[str] type: Specifies the type of the MapReduce cluster. The valid values are **ANALYSIS**,
                **STREAMING** and **MIXED**, defaults to **ANALYSIS**. Changing this will create a new MapReduce cluster resource.
         :param pulumi.Input[str] update_time: The cluster update time, in RFC-3339 format.
         :param pulumi.Input[str] version: Specifies the MapReduce cluster version. The valid values are `MRS 1.9.2`
@@ -679,6 +829,10 @@ class _ClusterState:
             pulumi.set(__self__, "analysis_task_nodes", analysis_task_nodes)
         if availability_zone is not None:
             pulumi.set(__self__, "availability_zone", availability_zone)
+        if bootstrap_scripts is not None:
+            pulumi.set(__self__, "bootstrap_scripts", bootstrap_scripts)
+        if charging_mode is not None:
+            pulumi.set(__self__, "charging_mode", charging_mode)
         if charging_start_time is not None:
             pulumi.set(__self__, "charging_start_time", charging_start_time)
         if component_configs is not None:
@@ -693,6 +847,8 @@ class _ClusterState:
             pulumi.set(__self__, "eip_id", eip_id)
         if enterprise_project_id is not None:
             pulumi.set(__self__, "enterprise_project_id", enterprise_project_id)
+        if external_datasources is not None:
+            pulumi.set(__self__, "external_datasources", external_datasources)
         if log_collection is not None:
             pulumi.set(__self__, "log_collection", log_collection)
         if manager_admin_pass is not None:
@@ -707,6 +863,10 @@ class _ClusterState:
             pulumi.set(__self__, "node_admin_pass", node_admin_pass)
         if node_key_pair is not None:
             pulumi.set(__self__, "node_key_pair", node_key_pair)
+        if period is not None:
+            pulumi.set(__self__, "period", period)
+        if period_unit is not None:
+            pulumi.set(__self__, "period_unit", period_unit)
         if private_ip is not None:
             pulumi.set(__self__, "private_ip", private_ip)
         if public_ip is not None:
@@ -717,6 +877,8 @@ class _ClusterState:
             pulumi.set(__self__, "safe_mode", safe_mode)
         if security_group_ids is not None:
             pulumi.set(__self__, "security_group_ids", security_group_ids)
+        if smn_notify is not None:
+            pulumi.set(__self__, "smn_notify", smn_notify)
         if status is not None:
             pulumi.set(__self__, "status", status)
         if streaming_core_nodes is not None:
@@ -783,6 +945,35 @@ class _ClusterState:
     @availability_zone.setter
     def availability_zone(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "availability_zone", value)
+
+    @property
+    @pulumi.getter(name="bootstrapScripts")
+    def bootstrap_scripts(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['ClusterBootstrapScriptArgs']]]]:
+        """
+        Specifies the bootstrap action scripts.
+        Bootstrap action scripts will be executed on specified cluster nodes before or after big data components are
+        started. You can execute bootstrap actions to install third-party software, modify the cluster running environment,
+        and customize cluster configuration. [Learn more](https://support.huaweicloud.com/intl/en-us/usermanual-mrs/mrs_01_0414.html)
+        """
+        return pulumi.get(self, "bootstrap_scripts")
+
+    @bootstrap_scripts.setter
+    def bootstrap_scripts(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['ClusterBootstrapScriptArgs']]]]):
+        pulumi.set(self, "bootstrap_scripts", value)
+
+    @property
+    @pulumi.getter(name="chargingMode")
+    def charging_mode(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the charging mode of the cluster.  
+        Valid values are **prePaid** and **postPaid**, defaults to **postPaid**.
+        Changing this parameter will create a new MapReduce cluster resource.
+        """
+        return pulumi.get(self, "charging_mode")
+
+    @charging_mode.setter
+    def charging_mode(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "charging_mode", value)
 
     @property
     @pulumi.getter(name="chargingStartTime")
@@ -869,13 +1060,26 @@ class _ClusterState:
     def enterprise_project_id(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies a unique ID in UUID format of enterprise project.
-        Changing this will create a new MapReduce cluster resource.
         """
         return pulumi.get(self, "enterprise_project_id")
 
     @enterprise_project_id.setter
     def enterprise_project_id(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "enterprise_project_id", value)
+
+    @property
+    @pulumi.getter(name="externalDatasources")
+    def external_datasources(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['ClusterExternalDatasourceArgs']]]]:
+        """
+        Specifies the external datasource configurations of the cluster.
+        The object structure is documented below.
+        Changing this will create a new MapReduce cluster resource.
+        """
+        return pulumi.get(self, "external_datasources")
+
+    @external_datasources.setter
+    def external_datasources(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['ClusterExternalDatasourceArgs']]]]):
+        pulumi.set(self, "external_datasources", value)
 
     @property
     @pulumi.getter(name="logCollection")
@@ -936,7 +1140,7 @@ class _ClusterState:
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the component name of the cluster which has installed.
+        Specifies the name of a bootstrap action script.
         Changing this will create a new MapReduce cluster resource.
         """
         return pulumi.get(self, "name")
@@ -973,6 +1177,36 @@ class _ClusterState:
     @node_key_pair.setter
     def node_key_pair(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "node_key_pair", value)
+
+    @property
+    @pulumi.getter
+    def period(self) -> Optional[pulumi.Input[int]]:
+        """
+        Specifies the charging period of the cluster.  
+        If `period_unit` is set to **month**, the value ranges from 1 to 9.
+        If `period_unit` is set to **year**, the value ranges from 1 to 3.
+        This parameter is mandatory if `charging_mode` is set to **prePaid**.
+        Changing this parameter will create a new MapReduce cluster resource.
+        """
+        return pulumi.get(self, "period")
+
+    @period.setter
+    def period(self, value: Optional[pulumi.Input[int]]):
+        pulumi.set(self, "period", value)
+
+    @property
+    @pulumi.getter(name="periodUnit")
+    def period_unit(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the charging period unit of the cluster.  
+        Valid values are **month** and **year**. This parameter is mandatory if `charging_mode` is set to **prePaid**.
+        Changing this parameter will create a new MapReduce cluster resource.
+        """
+        return pulumi.get(self, "period_unit")
+
+    @period_unit.setter
+    def period_unit(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "period_unit", value)
 
     @property
     @pulumi.getter(name="privateIp")
@@ -1040,6 +1274,20 @@ class _ClusterState:
     @security_group_ids.setter
     def security_group_ids(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]):
         pulumi.set(self, "security_group_ids", value)
+
+    @property
+    @pulumi.getter(name="smnNotify")
+    def smn_notify(self) -> Optional[pulumi.Input['ClusterSmnNotifyArgs']]:
+        """
+        Specifies the alarm configuration of the cluster. The smn_notify
+        structure is documented below.
+        Changing this will create a new MapReduce cluster resource.
+        """
+        return pulumi.get(self, "smn_notify")
+
+    @smn_notify.setter
+    def smn_notify(self, value: Optional[pulumi.Input['ClusterSmnNotifyArgs']]):
+        pulumi.set(self, "smn_notify", value)
 
     @property
     @pulumi.getter
@@ -1146,7 +1394,7 @@ class _ClusterState:
     @pulumi.getter
     def type(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the type of the MapReduce cluster. The valid values are **ANALYSIS***,
+        Specifies the type of the MapReduce cluster. The valid values are **ANALYSIS**,
         **STREAMING** and **MIXED**, defaults to **ANALYSIS**. Changing this will create a new MapReduce cluster resource.
         """
         return pulumi.get(self, "type")
@@ -1202,21 +1450,27 @@ class Cluster(pulumi.CustomResource):
                  analysis_core_nodes: Optional[pulumi.Input[pulumi.InputType['ClusterAnalysisCoreNodesArgs']]] = None,
                  analysis_task_nodes: Optional[pulumi.Input[pulumi.InputType['ClusterAnalysisTaskNodesArgs']]] = None,
                  availability_zone: Optional[pulumi.Input[str]] = None,
+                 bootstrap_scripts: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ClusterBootstrapScriptArgs']]]]] = None,
+                 charging_mode: Optional[pulumi.Input[str]] = None,
                  component_configs: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ClusterComponentConfigArgs']]]]] = None,
                  component_lists: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  custom_nodes: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ClusterCustomNodeArgs']]]]] = None,
                  eip_id: Optional[pulumi.Input[str]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
+                 external_datasources: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ClusterExternalDatasourceArgs']]]]] = None,
                  log_collection: Optional[pulumi.Input[bool]] = None,
                  manager_admin_pass: Optional[pulumi.Input[str]] = None,
                  master_nodes: Optional[pulumi.Input[pulumi.InputType['ClusterMasterNodesArgs']]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  node_admin_pass: Optional[pulumi.Input[str]] = None,
                  node_key_pair: Optional[pulumi.Input[str]] = None,
+                 period: Optional[pulumi.Input[int]] = None,
+                 period_unit: Optional[pulumi.Input[str]] = None,
                  public_ip: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
                  safe_mode: Optional[pulumi.Input[bool]] = None,
                  security_group_ids: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
+                 smn_notify: Optional[pulumi.Input[pulumi.InputType['ClusterSmnNotifyArgs']]] = None,
                  streaming_core_nodes: Optional[pulumi.Input[pulumi.InputType['ClusterStreamingCoreNodesArgs']]] = None,
                  streaming_task_nodes: Optional[pulumi.Input[pulumi.InputType['ClusterStreamingTaskNodesArgs']]] = None,
                  subnet_id: Optional[pulumi.Input[str]] = None,
@@ -1345,62 +1599,56 @@ class Cluster(pulumi.CustomResource):
         subnet_id = config.require_object("subnetId")
         testcluster = huaweicloud.mrs.Cluster("testcluster",
             availability_zone=test_availability_zones.names[0],
-            version="MRS 1.9.2",
+            version="MRS 3.1.5",
             type="MIXED",
             component_lists=[
                 "Hadoop",
-                "Spark",
-                "Hive",
+                "ZooKeeper",
+                "Ranger",
                 "Tez",
-                "Storm",
+                "Spark2x",
+                "Hive",
+                "Kafka",
+                "Flume",
             ],
             manager_admin_pass=password,
             node_admin_pass=password,
             vpc_id=vpc_id,
             subnet_id=subnet_id,
             master_nodes=huaweicloud.mrs.ClusterMasterNodesArgs(
-                flavor="c6.2xlarge.4.linux.bigdata",
+                flavor="ac7.4xlarge.4.linux.bigdata",
                 node_number=2,
                 root_volume_type="SAS",
-                root_volume_size=300,
+                root_volume_size=100,
                 data_volume_type="SAS",
-                data_volume_size=480,
+                data_volume_size=200,
                 data_volume_count=1,
             ),
             analysis_core_nodes=huaweicloud.mrs.ClusterAnalysisCoreNodesArgs(
-                flavor="c6.2xlarge.4.linux.bigdata",
+                flavor="ac7.4xlarge.4.linux.bigdata",
                 node_number=2,
                 root_volume_type="SAS",
-                root_volume_size=300,
+                root_volume_size=100,
                 data_volume_type="SAS",
-                data_volume_size=480,
+                data_volume_size=200,
                 data_volume_count=1,
             ),
             streaming_core_nodes=huaweicloud.mrs.ClusterStreamingCoreNodesArgs(
-                flavor="c6.2xlarge.4.linux.bigdata",
+                flavor="ac7.4xlarge.4.linux.bigdata",
                 node_number=2,
                 root_volume_type="SAS",
-                root_volume_size=300,
+                root_volume_size=100,
                 data_volume_type="SAS",
-                data_volume_size=480,
+                data_volume_size=200,
                 data_volume_count=1,
             ),
             analysis_task_nodes=huaweicloud.mrs.ClusterAnalysisTaskNodesArgs(
-                flavor="c6.2xlarge.4.linux.bigdata",
-                node_number=1,
+                flavor="ac7.4xlarge.4.linux.bigdata",
+                node_number=2,
                 root_volume_type="SAS",
-                root_volume_size=300,
+                root_volume_size=100,
                 data_volume_type="SAS",
-                data_volume_size=480,
-                data_volume_count=1,
-            ),
-            streaming_task_nodes=huaweicloud.mrs.ClusterStreamingTaskNodesArgs(
-                flavor="c6.2xlarge.4.linux.bigdata",
-                node_number=1,
-                root_volume_type="SAS",
-                root_volume_size=300,
-                data_volume_type="SAS",
-                data_volume_size=480,
+                data_volume_size=200,
                 data_volume_count=1,
             ),
             tags={
@@ -1543,6 +1791,51 @@ class Cluster(pulumi.CustomResource):
                 "key": "value",
             })
         ```
+        ### Create a prePaid stream cluster
+
+        ```python
+        import pulumi
+        import pulumi_huaweicloud as huaweicloud
+
+        test_availability_zones = huaweicloud.get_availability_zones()
+        config = pulumi.Config()
+        cluster_name = config.require_object("clusterName")
+        password = config.require_object("password")
+        vpc_id = config.require_object("vpcId")
+        subnet_id = config.require_object("subnetId")
+        period = config.require_object("period")
+        period_unit = config.require_object("periodUnit")
+        testcluster = huaweicloud.mrs.Cluster("testcluster",
+            availability_zone=test_availability_zones.names[0],
+            type="STREAMING",
+            version="MRS 1.9.2",
+            manager_admin_pass=password,
+            node_admin_pass=password,
+            vpc_id=vpc_id,
+            subnet_id=subnet_id,
+            component_lists=["Storm"],
+            charging_mode="prePaid",
+            period=period,
+            period_unit=period_unit,
+            master_nodes=huaweicloud.mrs.ClusterMasterNodesArgs(
+                flavor="c6.2xlarge.4.linux.bigdata",
+                node_number=2,
+                root_volume_type="SAS",
+                root_volume_size=300,
+                data_volume_type="SAS",
+                data_volume_size=480,
+                data_volume_count=1,
+            ),
+            streaming_core_nodes=huaweicloud.mrs.ClusterStreamingCoreNodesArgs(
+                flavor="c6.2xlarge.4.linux.bigdata",
+                node_number=2,
+                root_volume_type="SAS",
+                root_volume_size=300,
+                data_volume_type="SAS",
+                data_volume_size=480,
+                data_volume_count=1,
+            ))
+        ```
 
         ## Import
 
@@ -1552,7 +1845,7 @@ class Cluster(pulumi.CustomResource):
          $ pulumi import huaweicloud:Mrs/cluster:cluster test b11b407c-e604-4e8d-8bc4-92398320b847
         ```
 
-         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`manager_admin_pass`, `node_admin_pass`,`template_id`, `assigned_roles` and `component_configs`. It is generally recommended running `terraform plan` after importing a cluster. You can then decide if changes should be applied to the cluster, or the resource definition should be updated to align with the cluster. Also you can ignore changes as below. hcl resource "huaweicloud_mapreduce_cluster" "test" {
+         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`manager_admin_pass`, `node_admin_pass`,`template_id`, `assigned_roles`, `external_datasources`, `component_configs`, `smn_notify`, `charging_mode`, `period` and `period_unit`. It is generally recommended running `terraform plan` after importing a cluster. You can then decide if changes should be applied to the cluster, or the resource definition should be updated to align with the cluster. Also you can ignore changes as below. hcl resource "huaweicloud_mapreduce_cluster" "test" {
 
          ...
 
@@ -1560,7 +1853,9 @@ class Cluster(pulumi.CustomResource):
 
          ignore_changes = [
 
-         manager_admin_pass, node_admin_pass,
+         manager_admin_pass, node_admin_pass, template_id, assigned_roles, external_datasources, component_configs, smn_notify,
+
+         charging_mode, period, period_unit,
 
          ]
 
@@ -1579,6 +1874,13 @@ class Cluster(pulumi.CustomResource):
         :param pulumi.Input[str] availability_zone: Specifies the availability zone in which to create the cluster.
                Please following [reference](https://developer.huaweicloud.com/intl/en-us/endpoint?all)
                Changing this will create a new MapReduce cluster resource.
+        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ClusterBootstrapScriptArgs']]]] bootstrap_scripts: Specifies the bootstrap action scripts.
+               Bootstrap action scripts will be executed on specified cluster nodes before or after big data components are
+               started. You can execute bootstrap actions to install third-party software, modify the cluster running environment,
+               and customize cluster configuration. [Learn more](https://support.huaweicloud.com/intl/en-us/usermanual-mrs/mrs_01_0414.html)
+        :param pulumi.Input[str] charging_mode: Specifies the charging mode of the cluster.  
+               Valid values are **prePaid** and **postPaid**, defaults to **postPaid**.
+               Changing this parameter will create a new MapReduce cluster resource.
         :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ClusterComponentConfigArgs']]]] component_configs: Specifies the component configurations of the cluster.
                The object structure is documented below.
                Changing this will create a new MapReduce cluster resource.
@@ -1592,6 +1894,8 @@ class Cluster(pulumi.CustomResource):
                The EIP must have been created and must be in the same region as the cluster.
                Changing this will create a new MapReduce cluster resource.
         :param pulumi.Input[str] enterprise_project_id: Specifies a unique ID in UUID format of enterprise project.
+        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ClusterExternalDatasourceArgs']]]] external_datasources: Specifies the external datasource configurations of the cluster.
+               The object structure is documented below.
                Changing this will create a new MapReduce cluster resource.
         :param pulumi.Input[bool] log_collection: Specifies whether logs are collected when cluster installation fails.
                Defaults to true. If `log_collection` set true, the OBS buckets will be created and only used to collect logs that
@@ -1603,7 +1907,7 @@ class Cluster(pulumi.CustomResource):
         :param pulumi.Input[pulumi.InputType['ClusterMasterNodesArgs']] master_nodes: Specifies the informations about master nodes in the MapReduce cluster.
                The `nodes` object structure of the `master_nodes` is documented below.
                Changing this will create a new MapReduce cluster resource.
-        :param pulumi.Input[str] name: Specifies the component name of the cluster which has installed.
+        :param pulumi.Input[str] name: Specifies the name of a bootstrap action script.
                Changing this will create a new MapReduce cluster resource.
         :param pulumi.Input[str] node_admin_pass: Specifies the administrator password, which is used to log in to the
                each nodes(/ECSs). The password can contain 8 to 26 characters and cannot be the username or the username spelled
@@ -1612,6 +1916,14 @@ class Cluster(pulumi.CustomResource):
                and `node_key_pair` are alternative.
         :param pulumi.Input[str] node_key_pair: Specifies the name of a key pair, which is used to log in to the each
                nodes(/ECSs). Changing this will create a new MapReduce cluster resource.
+        :param pulumi.Input[int] period: Specifies the charging period of the cluster.  
+               If `period_unit` is set to **month**, the value ranges from 1 to 9.
+               If `period_unit` is set to **year**, the value ranges from 1 to 3.
+               This parameter is mandatory if `charging_mode` is set to **prePaid**.
+               Changing this parameter will create a new MapReduce cluster resource.
+        :param pulumi.Input[str] period_unit: Specifies the charging period unit of the cluster.  
+               Valid values are **month** and **year**. This parameter is mandatory if `charging_mode` is set to **prePaid**.
+               Changing this parameter will create a new MapReduce cluster resource.
         :param pulumi.Input[str] public_ip: Specifies the EIP address which bound to the MapReduce cluster.
                The EIP must have been created and must be in the same region as the cluster.
                Changing this will create a new MapReduce cluster resource.
@@ -1623,6 +1935,9 @@ class Cluster(pulumi.CustomResource):
                + **false**: disable Kerberos authentication. Changing this will create a new MapReduce cluster resource.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] security_group_ids: Specifies an array of one or more security group ID to attach to the
                MapReduce cluster. If using the specified security group, the group need to open the specified port (9022) rules.
+        :param pulumi.Input[pulumi.InputType['ClusterSmnNotifyArgs']] smn_notify: Specifies the alarm configuration of the cluster. The smn_notify
+               structure is documented below.
+               Changing this will create a new MapReduce cluster resource.
         :param pulumi.Input[pulumi.InputType['ClusterStreamingCoreNodesArgs']] streaming_core_nodes: Specifies the informations about streaming core nodes in the
                MapReduce cluster.
                The `nodes` object structure of the `streaming_core_nodes` is documented below.
@@ -1645,7 +1960,7 @@ class Cluster(pulumi.CustomResource):
                + **mgmt_control_data_separated_v2**: The management role and control role are deployed on different Master nodes,
                and data instances are deployed in different node groups. This deployment mode is applicable to a cluster with more
                than 500 nodes. Components can be deployed separately, which can be used for a larger cluster scale.
-        :param pulumi.Input[str] type: Specifies the type of the MapReduce cluster. The valid values are **ANALYSIS***,
+        :param pulumi.Input[str] type: Specifies the type of the MapReduce cluster. The valid values are **ANALYSIS**,
                **STREAMING** and **MIXED**, defaults to **ANALYSIS**. Changing this will create a new MapReduce cluster resource.
         :param pulumi.Input[str] version: Specifies the MapReduce cluster version. The valid values are `MRS 1.9.2`
                , `MRS 3.0.5` and `MRS 3.1.0`. Changing this will create a new MapReduce cluster resource.
@@ -1777,62 +2092,56 @@ class Cluster(pulumi.CustomResource):
         subnet_id = config.require_object("subnetId")
         testcluster = huaweicloud.mrs.Cluster("testcluster",
             availability_zone=test_availability_zones.names[0],
-            version="MRS 1.9.2",
+            version="MRS 3.1.5",
             type="MIXED",
             component_lists=[
                 "Hadoop",
-                "Spark",
-                "Hive",
+                "ZooKeeper",
+                "Ranger",
                 "Tez",
-                "Storm",
+                "Spark2x",
+                "Hive",
+                "Kafka",
+                "Flume",
             ],
             manager_admin_pass=password,
             node_admin_pass=password,
             vpc_id=vpc_id,
             subnet_id=subnet_id,
             master_nodes=huaweicloud.mrs.ClusterMasterNodesArgs(
-                flavor="c6.2xlarge.4.linux.bigdata",
+                flavor="ac7.4xlarge.4.linux.bigdata",
                 node_number=2,
                 root_volume_type="SAS",
-                root_volume_size=300,
+                root_volume_size=100,
                 data_volume_type="SAS",
-                data_volume_size=480,
+                data_volume_size=200,
                 data_volume_count=1,
             ),
             analysis_core_nodes=huaweicloud.mrs.ClusterAnalysisCoreNodesArgs(
-                flavor="c6.2xlarge.4.linux.bigdata",
+                flavor="ac7.4xlarge.4.linux.bigdata",
                 node_number=2,
                 root_volume_type="SAS",
-                root_volume_size=300,
+                root_volume_size=100,
                 data_volume_type="SAS",
-                data_volume_size=480,
+                data_volume_size=200,
                 data_volume_count=1,
             ),
             streaming_core_nodes=huaweicloud.mrs.ClusterStreamingCoreNodesArgs(
-                flavor="c6.2xlarge.4.linux.bigdata",
+                flavor="ac7.4xlarge.4.linux.bigdata",
                 node_number=2,
                 root_volume_type="SAS",
-                root_volume_size=300,
+                root_volume_size=100,
                 data_volume_type="SAS",
-                data_volume_size=480,
+                data_volume_size=200,
                 data_volume_count=1,
             ),
             analysis_task_nodes=huaweicloud.mrs.ClusterAnalysisTaskNodesArgs(
-                flavor="c6.2xlarge.4.linux.bigdata",
-                node_number=1,
+                flavor="ac7.4xlarge.4.linux.bigdata",
+                node_number=2,
                 root_volume_type="SAS",
-                root_volume_size=300,
+                root_volume_size=100,
                 data_volume_type="SAS",
-                data_volume_size=480,
-                data_volume_count=1,
-            ),
-            streaming_task_nodes=huaweicloud.mrs.ClusterStreamingTaskNodesArgs(
-                flavor="c6.2xlarge.4.linux.bigdata",
-                node_number=1,
-                root_volume_type="SAS",
-                root_volume_size=300,
-                data_volume_type="SAS",
-                data_volume_size=480,
+                data_volume_size=200,
                 data_volume_count=1,
             ),
             tags={
@@ -1975,6 +2284,51 @@ class Cluster(pulumi.CustomResource):
                 "key": "value",
             })
         ```
+        ### Create a prePaid stream cluster
+
+        ```python
+        import pulumi
+        import pulumi_huaweicloud as huaweicloud
+
+        test_availability_zones = huaweicloud.get_availability_zones()
+        config = pulumi.Config()
+        cluster_name = config.require_object("clusterName")
+        password = config.require_object("password")
+        vpc_id = config.require_object("vpcId")
+        subnet_id = config.require_object("subnetId")
+        period = config.require_object("period")
+        period_unit = config.require_object("periodUnit")
+        testcluster = huaweicloud.mrs.Cluster("testcluster",
+            availability_zone=test_availability_zones.names[0],
+            type="STREAMING",
+            version="MRS 1.9.2",
+            manager_admin_pass=password,
+            node_admin_pass=password,
+            vpc_id=vpc_id,
+            subnet_id=subnet_id,
+            component_lists=["Storm"],
+            charging_mode="prePaid",
+            period=period,
+            period_unit=period_unit,
+            master_nodes=huaweicloud.mrs.ClusterMasterNodesArgs(
+                flavor="c6.2xlarge.4.linux.bigdata",
+                node_number=2,
+                root_volume_type="SAS",
+                root_volume_size=300,
+                data_volume_type="SAS",
+                data_volume_size=480,
+                data_volume_count=1,
+            ),
+            streaming_core_nodes=huaweicloud.mrs.ClusterStreamingCoreNodesArgs(
+                flavor="c6.2xlarge.4.linux.bigdata",
+                node_number=2,
+                root_volume_type="SAS",
+                root_volume_size=300,
+                data_volume_type="SAS",
+                data_volume_size=480,
+                data_volume_count=1,
+            ))
+        ```
 
         ## Import
 
@@ -1984,7 +2338,7 @@ class Cluster(pulumi.CustomResource):
          $ pulumi import huaweicloud:Mrs/cluster:cluster test b11b407c-e604-4e8d-8bc4-92398320b847
         ```
 
-         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`manager_admin_pass`, `node_admin_pass`,`template_id`, `assigned_roles` and `component_configs`. It is generally recommended running `terraform plan` after importing a cluster. You can then decide if changes should be applied to the cluster, or the resource definition should be updated to align with the cluster. Also you can ignore changes as below. hcl resource "huaweicloud_mapreduce_cluster" "test" {
+         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`manager_admin_pass`, `node_admin_pass`,`template_id`, `assigned_roles`, `external_datasources`, `component_configs`, `smn_notify`, `charging_mode`, `period` and `period_unit`. It is generally recommended running `terraform plan` after importing a cluster. You can then decide if changes should be applied to the cluster, or the resource definition should be updated to align with the cluster. Also you can ignore changes as below. hcl resource "huaweicloud_mapreduce_cluster" "test" {
 
          ...
 
@@ -1992,7 +2346,9 @@ class Cluster(pulumi.CustomResource):
 
          ignore_changes = [
 
-         manager_admin_pass, node_admin_pass,
+         manager_admin_pass, node_admin_pass, template_id, assigned_roles, external_datasources, component_configs, smn_notify,
+
+         charging_mode, period, period_unit,
 
          ]
 
@@ -2016,21 +2372,27 @@ class Cluster(pulumi.CustomResource):
                  analysis_core_nodes: Optional[pulumi.Input[pulumi.InputType['ClusterAnalysisCoreNodesArgs']]] = None,
                  analysis_task_nodes: Optional[pulumi.Input[pulumi.InputType['ClusterAnalysisTaskNodesArgs']]] = None,
                  availability_zone: Optional[pulumi.Input[str]] = None,
+                 bootstrap_scripts: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ClusterBootstrapScriptArgs']]]]] = None,
+                 charging_mode: Optional[pulumi.Input[str]] = None,
                  component_configs: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ClusterComponentConfigArgs']]]]] = None,
                  component_lists: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  custom_nodes: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ClusterCustomNodeArgs']]]]] = None,
                  eip_id: Optional[pulumi.Input[str]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
+                 external_datasources: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ClusterExternalDatasourceArgs']]]]] = None,
                  log_collection: Optional[pulumi.Input[bool]] = None,
                  manager_admin_pass: Optional[pulumi.Input[str]] = None,
                  master_nodes: Optional[pulumi.Input[pulumi.InputType['ClusterMasterNodesArgs']]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  node_admin_pass: Optional[pulumi.Input[str]] = None,
                  node_key_pair: Optional[pulumi.Input[str]] = None,
+                 period: Optional[pulumi.Input[int]] = None,
+                 period_unit: Optional[pulumi.Input[str]] = None,
                  public_ip: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
                  safe_mode: Optional[pulumi.Input[bool]] = None,
                  security_group_ids: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
+                 smn_notify: Optional[pulumi.Input[pulumi.InputType['ClusterSmnNotifyArgs']]] = None,
                  streaming_core_nodes: Optional[pulumi.Input[pulumi.InputType['ClusterStreamingCoreNodesArgs']]] = None,
                  streaming_task_nodes: Optional[pulumi.Input[pulumi.InputType['ClusterStreamingTaskNodesArgs']]] = None,
                  subnet_id: Optional[pulumi.Input[str]] = None,
@@ -2053,6 +2415,8 @@ class Cluster(pulumi.CustomResource):
             if availability_zone is None and not opts.urn:
                 raise TypeError("Missing required property 'availability_zone'")
             __props__.__dict__["availability_zone"] = availability_zone
+            __props__.__dict__["bootstrap_scripts"] = bootstrap_scripts
+            __props__.__dict__["charging_mode"] = charging_mode
             __props__.__dict__["component_configs"] = component_configs
             if component_lists is None and not opts.urn:
                 raise TypeError("Missing required property 'component_lists'")
@@ -2060,6 +2424,7 @@ class Cluster(pulumi.CustomResource):
             __props__.__dict__["custom_nodes"] = custom_nodes
             __props__.__dict__["eip_id"] = eip_id
             __props__.__dict__["enterprise_project_id"] = enterprise_project_id
+            __props__.__dict__["external_datasources"] = external_datasources
             __props__.__dict__["log_collection"] = log_collection
             if manager_admin_pass is None and not opts.urn:
                 raise TypeError("Missing required property 'manager_admin_pass'")
@@ -2070,10 +2435,13 @@ class Cluster(pulumi.CustomResource):
             __props__.__dict__["name"] = name
             __props__.__dict__["node_admin_pass"] = node_admin_pass
             __props__.__dict__["node_key_pair"] = node_key_pair
+            __props__.__dict__["period"] = period
+            __props__.__dict__["period_unit"] = period_unit
             __props__.__dict__["public_ip"] = public_ip
             __props__.__dict__["region"] = region
             __props__.__dict__["safe_mode"] = safe_mode
             __props__.__dict__["security_group_ids"] = security_group_ids
+            __props__.__dict__["smn_notify"] = smn_notify
             __props__.__dict__["streaming_core_nodes"] = streaming_core_nodes
             __props__.__dict__["streaming_task_nodes"] = streaming_task_nodes
             if subnet_id is None and not opts.urn:
@@ -2108,6 +2476,8 @@ class Cluster(pulumi.CustomResource):
             analysis_core_nodes: Optional[pulumi.Input[pulumi.InputType['ClusterAnalysisCoreNodesArgs']]] = None,
             analysis_task_nodes: Optional[pulumi.Input[pulumi.InputType['ClusterAnalysisTaskNodesArgs']]] = None,
             availability_zone: Optional[pulumi.Input[str]] = None,
+            bootstrap_scripts: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ClusterBootstrapScriptArgs']]]]] = None,
+            charging_mode: Optional[pulumi.Input[str]] = None,
             charging_start_time: Optional[pulumi.Input[str]] = None,
             component_configs: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ClusterComponentConfigArgs']]]]] = None,
             component_lists: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
@@ -2115,6 +2485,7 @@ class Cluster(pulumi.CustomResource):
             custom_nodes: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ClusterCustomNodeArgs']]]]] = None,
             eip_id: Optional[pulumi.Input[str]] = None,
             enterprise_project_id: Optional[pulumi.Input[str]] = None,
+            external_datasources: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ClusterExternalDatasourceArgs']]]]] = None,
             log_collection: Optional[pulumi.Input[bool]] = None,
             manager_admin_pass: Optional[pulumi.Input[str]] = None,
             master_node_ip: Optional[pulumi.Input[str]] = None,
@@ -2122,11 +2493,14 @@ class Cluster(pulumi.CustomResource):
             name: Optional[pulumi.Input[str]] = None,
             node_admin_pass: Optional[pulumi.Input[str]] = None,
             node_key_pair: Optional[pulumi.Input[str]] = None,
+            period: Optional[pulumi.Input[int]] = None,
+            period_unit: Optional[pulumi.Input[str]] = None,
             private_ip: Optional[pulumi.Input[str]] = None,
             public_ip: Optional[pulumi.Input[str]] = None,
             region: Optional[pulumi.Input[str]] = None,
             safe_mode: Optional[pulumi.Input[bool]] = None,
             security_group_ids: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
+            smn_notify: Optional[pulumi.Input[pulumi.InputType['ClusterSmnNotifyArgs']]] = None,
             status: Optional[pulumi.Input[str]] = None,
             streaming_core_nodes: Optional[pulumi.Input[pulumi.InputType['ClusterStreamingCoreNodesArgs']]] = None,
             streaming_task_nodes: Optional[pulumi.Input[pulumi.InputType['ClusterStreamingTaskNodesArgs']]] = None,
@@ -2156,6 +2530,13 @@ class Cluster(pulumi.CustomResource):
         :param pulumi.Input[str] availability_zone: Specifies the availability zone in which to create the cluster.
                Please following [reference](https://developer.huaweicloud.com/intl/en-us/endpoint?all)
                Changing this will create a new MapReduce cluster resource.
+        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ClusterBootstrapScriptArgs']]]] bootstrap_scripts: Specifies the bootstrap action scripts.
+               Bootstrap action scripts will be executed on specified cluster nodes before or after big data components are
+               started. You can execute bootstrap actions to install third-party software, modify the cluster running environment,
+               and customize cluster configuration. [Learn more](https://support.huaweicloud.com/intl/en-us/usermanual-mrs/mrs_01_0414.html)
+        :param pulumi.Input[str] charging_mode: Specifies the charging mode of the cluster.  
+               Valid values are **prePaid** and **postPaid**, defaults to **postPaid**.
+               Changing this parameter will create a new MapReduce cluster resource.
         :param pulumi.Input[str] charging_start_time: The charging start time which is the start time of billing, in RFC-3339 format.
         :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ClusterComponentConfigArgs']]]] component_configs: Specifies the component configurations of the cluster.
                The object structure is documented below.
@@ -2171,6 +2552,8 @@ class Cluster(pulumi.CustomResource):
                The EIP must have been created and must be in the same region as the cluster.
                Changing this will create a new MapReduce cluster resource.
         :param pulumi.Input[str] enterprise_project_id: Specifies a unique ID in UUID format of enterprise project.
+        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ClusterExternalDatasourceArgs']]]] external_datasources: Specifies the external datasource configurations of the cluster.
+               The object structure is documented below.
                Changing this will create a new MapReduce cluster resource.
         :param pulumi.Input[bool] log_collection: Specifies whether logs are collected when cluster installation fails.
                Defaults to true. If `log_collection` set true, the OBS buckets will be created and only used to collect logs that
@@ -2183,7 +2566,7 @@ class Cluster(pulumi.CustomResource):
         :param pulumi.Input[pulumi.InputType['ClusterMasterNodesArgs']] master_nodes: Specifies the informations about master nodes in the MapReduce cluster.
                The `nodes` object structure of the `master_nodes` is documented below.
                Changing this will create a new MapReduce cluster resource.
-        :param pulumi.Input[str] name: Specifies the component name of the cluster which has installed.
+        :param pulumi.Input[str] name: Specifies the name of a bootstrap action script.
                Changing this will create a new MapReduce cluster resource.
         :param pulumi.Input[str] node_admin_pass: Specifies the administrator password, which is used to log in to the
                each nodes(/ECSs). The password can contain 8 to 26 characters and cannot be the username or the username spelled
@@ -2192,6 +2575,14 @@ class Cluster(pulumi.CustomResource):
                and `node_key_pair` are alternative.
         :param pulumi.Input[str] node_key_pair: Specifies the name of a key pair, which is used to log in to the each
                nodes(/ECSs). Changing this will create a new MapReduce cluster resource.
+        :param pulumi.Input[int] period: Specifies the charging period of the cluster.  
+               If `period_unit` is set to **month**, the value ranges from 1 to 9.
+               If `period_unit` is set to **year**, the value ranges from 1 to 3.
+               This parameter is mandatory if `charging_mode` is set to **prePaid**.
+               Changing this parameter will create a new MapReduce cluster resource.
+        :param pulumi.Input[str] period_unit: Specifies the charging period unit of the cluster.  
+               Valid values are **month** and **year**. This parameter is mandatory if `charging_mode` is set to **prePaid**.
+               Changing this parameter will create a new MapReduce cluster resource.
         :param pulumi.Input[str] private_ip: The preferred private IP address of the master node.
         :param pulumi.Input[str] public_ip: Specifies the EIP address which bound to the MapReduce cluster.
                The EIP must have been created and must be in the same region as the cluster.
@@ -2204,6 +2595,9 @@ class Cluster(pulumi.CustomResource):
                + **false**: disable Kerberos authentication. Changing this will create a new MapReduce cluster resource.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] security_group_ids: Specifies an array of one or more security group ID to attach to the
                MapReduce cluster. If using the specified security group, the group need to open the specified port (9022) rules.
+        :param pulumi.Input[pulumi.InputType['ClusterSmnNotifyArgs']] smn_notify: Specifies the alarm configuration of the cluster. The smn_notify
+               structure is documented below.
+               Changing this will create a new MapReduce cluster resource.
         :param pulumi.Input[str] status: The cluster state, which include: running, frozen, abnormal and failed.
         :param pulumi.Input[pulumi.InputType['ClusterStreamingCoreNodesArgs']] streaming_core_nodes: Specifies the informations about streaming core nodes in the
                MapReduce cluster.
@@ -2228,7 +2622,7 @@ class Cluster(pulumi.CustomResource):
                and data instances are deployed in different node groups. This deployment mode is applicable to a cluster with more
                than 500 nodes. Components can be deployed separately, which can be used for a larger cluster scale.
         :param pulumi.Input[int] total_node_number: The total number of nodes deployed in the cluster.
-        :param pulumi.Input[str] type: Specifies the type of the MapReduce cluster. The valid values are **ANALYSIS***,
+        :param pulumi.Input[str] type: Specifies the type of the MapReduce cluster. The valid values are **ANALYSIS**,
                **STREAMING** and **MIXED**, defaults to **ANALYSIS**. Changing this will create a new MapReduce cluster resource.
         :param pulumi.Input[str] update_time: The cluster update time, in RFC-3339 format.
         :param pulumi.Input[str] version: Specifies the MapReduce cluster version. The valid values are `MRS 1.9.2`
@@ -2243,6 +2637,8 @@ class Cluster(pulumi.CustomResource):
         __props__.__dict__["analysis_core_nodes"] = analysis_core_nodes
         __props__.__dict__["analysis_task_nodes"] = analysis_task_nodes
         __props__.__dict__["availability_zone"] = availability_zone
+        __props__.__dict__["bootstrap_scripts"] = bootstrap_scripts
+        __props__.__dict__["charging_mode"] = charging_mode
         __props__.__dict__["charging_start_time"] = charging_start_time
         __props__.__dict__["component_configs"] = component_configs
         __props__.__dict__["component_lists"] = component_lists
@@ -2250,6 +2646,7 @@ class Cluster(pulumi.CustomResource):
         __props__.__dict__["custom_nodes"] = custom_nodes
         __props__.__dict__["eip_id"] = eip_id
         __props__.__dict__["enterprise_project_id"] = enterprise_project_id
+        __props__.__dict__["external_datasources"] = external_datasources
         __props__.__dict__["log_collection"] = log_collection
         __props__.__dict__["manager_admin_pass"] = manager_admin_pass
         __props__.__dict__["master_node_ip"] = master_node_ip
@@ -2257,11 +2654,14 @@ class Cluster(pulumi.CustomResource):
         __props__.__dict__["name"] = name
         __props__.__dict__["node_admin_pass"] = node_admin_pass
         __props__.__dict__["node_key_pair"] = node_key_pair
+        __props__.__dict__["period"] = period
+        __props__.__dict__["period_unit"] = period_unit
         __props__.__dict__["private_ip"] = private_ip
         __props__.__dict__["public_ip"] = public_ip
         __props__.__dict__["region"] = region
         __props__.__dict__["safe_mode"] = safe_mode
         __props__.__dict__["security_group_ids"] = security_group_ids
+        __props__.__dict__["smn_notify"] = smn_notify
         __props__.__dict__["status"] = status
         __props__.__dict__["streaming_core_nodes"] = streaming_core_nodes
         __props__.__dict__["streaming_task_nodes"] = streaming_task_nodes
@@ -2306,6 +2706,27 @@ class Cluster(pulumi.CustomResource):
         Changing this will create a new MapReduce cluster resource.
         """
         return pulumi.get(self, "availability_zone")
+
+    @property
+    @pulumi.getter(name="bootstrapScripts")
+    def bootstrap_scripts(self) -> pulumi.Output[Optional[Sequence['outputs.ClusterBootstrapScript']]]:
+        """
+        Specifies the bootstrap action scripts.
+        Bootstrap action scripts will be executed on specified cluster nodes before or after big data components are
+        started. You can execute bootstrap actions to install third-party software, modify the cluster running environment,
+        and customize cluster configuration. [Learn more](https://support.huaweicloud.com/intl/en-us/usermanual-mrs/mrs_01_0414.html)
+        """
+        return pulumi.get(self, "bootstrap_scripts")
+
+    @property
+    @pulumi.getter(name="chargingMode")
+    def charging_mode(self) -> pulumi.Output[str]:
+        """
+        Specifies the charging mode of the cluster.  
+        Valid values are **prePaid** and **postPaid**, defaults to **postPaid**.
+        Changing this parameter will create a new MapReduce cluster resource.
+        """
+        return pulumi.get(self, "charging_mode")
 
     @property
     @pulumi.getter(name="chargingStartTime")
@@ -2368,9 +2789,18 @@ class Cluster(pulumi.CustomResource):
     def enterprise_project_id(self) -> pulumi.Output[str]:
         """
         Specifies a unique ID in UUID format of enterprise project.
-        Changing this will create a new MapReduce cluster resource.
         """
         return pulumi.get(self, "enterprise_project_id")
+
+    @property
+    @pulumi.getter(name="externalDatasources")
+    def external_datasources(self) -> pulumi.Output[Optional[Sequence['outputs.ClusterExternalDatasource']]]:
+        """
+        Specifies the external datasource configurations of the cluster.
+        The object structure is documented below.
+        Changing this will create a new MapReduce cluster resource.
+        """
+        return pulumi.get(self, "external_datasources")
 
     @property
     @pulumi.getter(name="logCollection")
@@ -2415,7 +2845,7 @@ class Cluster(pulumi.CustomResource):
     @pulumi.getter
     def name(self) -> pulumi.Output[str]:
         """
-        Specifies the component name of the cluster which has installed.
+        Specifies the name of a bootstrap action script.
         Changing this will create a new MapReduce cluster resource.
         """
         return pulumi.get(self, "name")
@@ -2440,6 +2870,28 @@ class Cluster(pulumi.CustomResource):
         nodes(/ECSs). Changing this will create a new MapReduce cluster resource.
         """
         return pulumi.get(self, "node_key_pair")
+
+    @property
+    @pulumi.getter
+    def period(self) -> pulumi.Output[Optional[int]]:
+        """
+        Specifies the charging period of the cluster.  
+        If `period_unit` is set to **month**, the value ranges from 1 to 9.
+        If `period_unit` is set to **year**, the value ranges from 1 to 3.
+        This parameter is mandatory if `charging_mode` is set to **prePaid**.
+        Changing this parameter will create a new MapReduce cluster resource.
+        """
+        return pulumi.get(self, "period")
+
+    @property
+    @pulumi.getter(name="periodUnit")
+    def period_unit(self) -> pulumi.Output[Optional[str]]:
+        """
+        Specifies the charging period unit of the cluster.  
+        Valid values are **month** and **year**. This parameter is mandatory if `charging_mode` is set to **prePaid**.
+        Changing this parameter will create a new MapReduce cluster resource.
+        """
+        return pulumi.get(self, "period_unit")
 
     @property
     @pulumi.getter(name="privateIp")
@@ -2487,6 +2939,16 @@ class Cluster(pulumi.CustomResource):
         MapReduce cluster. If using the specified security group, the group need to open the specified port (9022) rules.
         """
         return pulumi.get(self, "security_group_ids")
+
+    @property
+    @pulumi.getter(name="smnNotify")
+    def smn_notify(self) -> pulumi.Output[Optional['outputs.ClusterSmnNotify']]:
+        """
+        Specifies the alarm configuration of the cluster. The smn_notify
+        structure is documented below.
+        Changing this will create a new MapReduce cluster resource.
+        """
+        return pulumi.get(self, "smn_notify")
 
     @property
     @pulumi.getter
@@ -2565,7 +3027,7 @@ class Cluster(pulumi.CustomResource):
     @pulumi.getter
     def type(self) -> pulumi.Output[Optional[str]]:
         """
-        Specifies the type of the MapReduce cluster. The valid values are **ANALYSIS***,
+        Specifies the type of the MapReduce cluster. The valid values are **ANALYSIS**,
         **STREAMING** and **MIXED**, defaults to **ANALYSIS**. Changing this will create a new MapReduce cluster resource.
         """
         return pulumi.get(self, "type")

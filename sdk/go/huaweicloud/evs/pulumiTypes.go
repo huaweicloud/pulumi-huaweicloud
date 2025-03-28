@@ -140,7 +140,11 @@ type GetVolumesVolume struct {
 	EnterpriseProjectId string `pulumi:"enterpriseProjectId"`
 	// The ID of the attached resource in UUID format.
 	Id string `pulumi:"id"`
-	// The disk name.
+	// the IOPS(Input/Output Operations Per Second) of the volume. Only valid when `volumeType` is **GPSSD2** or
+	// **ESSD2**.
+	Iops int `pulumi:"iops"`
+	// Specifies the name for the disks. This field will undergo a fuzzy matching query, the
+	// query result is for all disks whose names contain this value.
 	Name string `pulumi:"name"`
 	// The service type, such as EVS, DSS or DESS.
 	ServiceType string `pulumi:"serviceType"`
@@ -165,8 +169,18 @@ type GetVolumesVolume struct {
 	Status string `pulumi:"status"`
 	// Specifies the included key/value pairs which associated with the desired disk.
 	Tags map[string]string `pulumi:"tags"`
+	// The throughput of the system disk. Only valid when `volumeType` is **GPSSD2**.
+	Throughput int `pulumi:"throughput"`
 	// The time when the disk was updated.
 	UpdateAt string `pulumi:"updateAt"`
+	// The disk type. Valid values are as follows:
+	// + **SAS**: High I/O type.
+	// + **SSD**: Ultra-high I/O type.
+	// + **GPSSD**: General purpose SSD type.
+	// + **ESSD**: Extreme SSD type.
+	// + **GPSSD2**: General purpose SSD V2 type.
+	// + **ESSD2**: Extreme SSD V2 type.
+	VolumeType string `pulumi:"volumeType"`
 	// The unique identifier used when attaching the disk.
 	Wwn string `pulumi:"wwn"`
 }
@@ -197,7 +211,11 @@ type GetVolumesVolumeArgs struct {
 	EnterpriseProjectId pulumi.StringInput `pulumi:"enterpriseProjectId"`
 	// The ID of the attached resource in UUID format.
 	Id pulumi.StringInput `pulumi:"id"`
-	// The disk name.
+	// the IOPS(Input/Output Operations Per Second) of the volume. Only valid when `volumeType` is **GPSSD2** or
+	// **ESSD2**.
+	Iops pulumi.IntInput `pulumi:"iops"`
+	// Specifies the name for the disks. This field will undergo a fuzzy matching query, the
+	// query result is for all disks whose names contain this value.
 	Name pulumi.StringInput `pulumi:"name"`
 	// The service type, such as EVS, DSS or DESS.
 	ServiceType pulumi.StringInput `pulumi:"serviceType"`
@@ -222,8 +240,18 @@ type GetVolumesVolumeArgs struct {
 	Status pulumi.StringInput `pulumi:"status"`
 	// Specifies the included key/value pairs which associated with the desired disk.
 	Tags pulumi.StringMapInput `pulumi:"tags"`
+	// The throughput of the system disk. Only valid when `volumeType` is **GPSSD2**.
+	Throughput pulumi.IntInput `pulumi:"throughput"`
 	// The time when the disk was updated.
 	UpdateAt pulumi.StringInput `pulumi:"updateAt"`
+	// The disk type. Valid values are as follows:
+	// + **SAS**: High I/O type.
+	// + **SSD**: Ultra-high I/O type.
+	// + **GPSSD**: General purpose SSD type.
+	// + **ESSD**: Extreme SSD type.
+	// + **GPSSD2**: General purpose SSD V2 type.
+	// + **ESSD2**: Extreme SSD V2 type.
+	VolumeType pulumi.StringInput `pulumi:"volumeType"`
 	// The unique identifier used when attaching the disk.
 	Wwn pulumi.StringInput `pulumi:"wwn"`
 }
@@ -314,7 +342,14 @@ func (o GetVolumesVolumeOutput) Id() pulumi.StringOutput {
 	return o.ApplyT(func(v GetVolumesVolume) string { return v.Id }).(pulumi.StringOutput)
 }
 
-// The disk name.
+// the IOPS(Input/Output Operations Per Second) of the volume. Only valid when `volumeType` is **GPSSD2** or
+// **ESSD2**.
+func (o GetVolumesVolumeOutput) Iops() pulumi.IntOutput {
+	return o.ApplyT(func(v GetVolumesVolume) int { return v.Iops }).(pulumi.IntOutput)
+}
+
+// Specifies the name for the disks. This field will undergo a fuzzy matching query, the
+// query result is for all disks whose names contain this value.
 func (o GetVolumesVolumeOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v GetVolumesVolume) string { return v.Name }).(pulumi.StringOutput)
 }
@@ -357,9 +392,25 @@ func (o GetVolumesVolumeOutput) Tags() pulumi.StringMapOutput {
 	return o.ApplyT(func(v GetVolumesVolume) map[string]string { return v.Tags }).(pulumi.StringMapOutput)
 }
 
+// The throughput of the system disk. Only valid when `volumeType` is **GPSSD2**.
+func (o GetVolumesVolumeOutput) Throughput() pulumi.IntOutput {
+	return o.ApplyT(func(v GetVolumesVolume) int { return v.Throughput }).(pulumi.IntOutput)
+}
+
 // The time when the disk was updated.
 func (o GetVolumesVolumeOutput) UpdateAt() pulumi.StringOutput {
 	return o.ApplyT(func(v GetVolumesVolume) string { return v.UpdateAt }).(pulumi.StringOutput)
+}
+
+// The disk type. Valid values are as follows:
+// + **SAS**: High I/O type.
+// + **SSD**: Ultra-high I/O type.
+// + **GPSSD**: General purpose SSD type.
+// + **ESSD**: Extreme SSD type.
+// + **GPSSD2**: General purpose SSD V2 type.
+// + **ESSD2**: Extreme SSD V2 type.
+func (o GetVolumesVolumeOutput) VolumeType() pulumi.StringOutput {
+	return o.ApplyT(func(v GetVolumesVolume) string { return v.VolumeType }).(pulumi.StringOutput)
 }
 
 // The unique identifier used when attaching the disk.

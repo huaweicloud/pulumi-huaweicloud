@@ -8,6 +8,7 @@ import pulumi
 import pulumi.runtime
 from typing import Any, Mapping, Optional, Sequence, Union, overload
 from .. import _utilities
+from . import outputs
 
 __all__ = [
     'GetFlavorsResult',
@@ -21,13 +22,16 @@ class GetFlavorsResult:
     """
     A collection of values returned by getFlavors.
     """
-    def __init__(__self__, availability_zone=None, cpu_core_count=None, generation=None, id=None, ids=None, memory_size=None, performance_type=None, region=None):
+    def __init__(__self__, availability_zone=None, cpu_core_count=None, flavors=None, generation=None, id=None, ids=None, memory_size=None, performance_type=None, region=None, storage_type=None):
         if availability_zone and not isinstance(availability_zone, str):
             raise TypeError("Expected argument 'availability_zone' to be a str")
         pulumi.set(__self__, "availability_zone", availability_zone)
         if cpu_core_count and not isinstance(cpu_core_count, int):
             raise TypeError("Expected argument 'cpu_core_count' to be a int")
         pulumi.set(__self__, "cpu_core_count", cpu_core_count)
+        if flavors and not isinstance(flavors, list):
+            raise TypeError("Expected argument 'flavors' to be a list")
+        pulumi.set(__self__, "flavors", flavors)
         if generation and not isinstance(generation, str):
             raise TypeError("Expected argument 'generation' to be a str")
         pulumi.set(__self__, "generation", generation)
@@ -46,6 +50,9 @@ class GetFlavorsResult:
         if region and not isinstance(region, str):
             raise TypeError("Expected argument 'region' to be a str")
         pulumi.set(__self__, "region", region)
+        if storage_type and not isinstance(storage_type, str):
+            raise TypeError("Expected argument 'storage_type' to be a str")
+        pulumi.set(__self__, "storage_type", storage_type)
 
     @property
     @pulumi.getter(name="availabilityZone")
@@ -55,11 +62,25 @@ class GetFlavorsResult:
     @property
     @pulumi.getter(name="cpuCoreCount")
     def cpu_core_count(self) -> Optional[int]:
+        """
+        The number of vCPUs.
+        """
         return pulumi.get(self, "cpu_core_count")
 
     @property
     @pulumi.getter
+    def flavors(self) -> Sequence['outputs.GetFlavorsFlavorResult']:
+        """
+        List of ECS flavors details. The object structure of each flavor is documented below.
+        """
+        return pulumi.get(self, "flavors")
+
+    @property
+    @pulumi.getter
     def generation(self) -> Optional[str]:
+        """
+        The generation of the flavor.
+        """
         return pulumi.get(self, "generation")
 
     @property
@@ -81,17 +102,31 @@ class GetFlavorsResult:
     @property
     @pulumi.getter(name="memorySize")
     def memory_size(self) -> Optional[int]:
+        """
+        The memory size in GB.
+        """
         return pulumi.get(self, "memory_size")
 
     @property
     @pulumi.getter(name="performanceType")
     def performance_type(self) -> Optional[str]:
+        """
+        The performance type of the flavor.
+        """
         return pulumi.get(self, "performance_type")
 
     @property
     @pulumi.getter
     def region(self) -> str:
         return pulumi.get(self, "region")
+
+    @property
+    @pulumi.getter(name="storageType")
+    def storage_type(self) -> Optional[str]:
+        """
+        The storage type of the flavor.
+        """
+        return pulumi.get(self, "storage_type")
 
 
 class AwaitableGetFlavorsResult(GetFlavorsResult):
@@ -102,12 +137,14 @@ class AwaitableGetFlavorsResult(GetFlavorsResult):
         return GetFlavorsResult(
             availability_zone=self.availability_zone,
             cpu_core_count=self.cpu_core_count,
+            flavors=self.flavors,
             generation=self.generation,
             id=self.id,
             ids=self.ids,
             memory_size=self.memory_size,
             performance_type=self.performance_type,
-            region=self.region)
+            region=self.region,
+            storage_type=self.storage_type)
 
 
 def get_flavors(availability_zone: Optional[str] = None,
@@ -116,6 +153,7 @@ def get_flavors(availability_zone: Optional[str] = None,
                 memory_size: Optional[int] = None,
                 performance_type: Optional[str] = None,
                 region: Optional[str] = None,
+                storage_type: Optional[str] = None,
                 opts: Optional[pulumi.InvokeOptions] = None) -> AwaitableGetFlavorsResult:
     """
     Use this data source to get the available Compute Flavors.
@@ -150,6 +188,7 @@ def get_flavors(availability_zone: Optional[str] = None,
            + **diskintensive**: Disk-intensive
     :param str region: The region in which to obtain the flavors.
            If omitted, the provider-level region will be used.
+    :param str storage_type: Specifies the storage type.
     """
     __args__ = dict()
     __args__['availabilityZone'] = availability_zone
@@ -158,18 +197,21 @@ def get_flavors(availability_zone: Optional[str] = None,
     __args__['memorySize'] = memory_size
     __args__['performanceType'] = performance_type
     __args__['region'] = region
+    __args__['storageType'] = storage_type
     opts = pulumi.InvokeOptions.merge(_utilities.get_invoke_opts_defaults(), opts)
     __ret__ = pulumi.runtime.invoke('huaweicloud:Ecs/getFlavors:getFlavors', __args__, opts=opts, typ=GetFlavorsResult).value
 
     return AwaitableGetFlavorsResult(
         availability_zone=__ret__.availability_zone,
         cpu_core_count=__ret__.cpu_core_count,
+        flavors=__ret__.flavors,
         generation=__ret__.generation,
         id=__ret__.id,
         ids=__ret__.ids,
         memory_size=__ret__.memory_size,
         performance_type=__ret__.performance_type,
-        region=__ret__.region)
+        region=__ret__.region,
+        storage_type=__ret__.storage_type)
 
 
 @_utilities.lift_output_func(get_flavors)
@@ -179,6 +221,7 @@ def get_flavors_output(availability_zone: Optional[pulumi.Input[Optional[str]]] 
                        memory_size: Optional[pulumi.Input[Optional[int]]] = None,
                        performance_type: Optional[pulumi.Input[Optional[str]]] = None,
                        region: Optional[pulumi.Input[Optional[str]]] = None,
+                       storage_type: Optional[pulumi.Input[Optional[str]]] = None,
                        opts: Optional[pulumi.InvokeOptions] = None) -> pulumi.Output[GetFlavorsResult]:
     """
     Use this data source to get the available Compute Flavors.
@@ -213,5 +256,6 @@ def get_flavors_output(availability_zone: Optional[pulumi.Input[Optional[str]]] 
            + **diskintensive**: Disk-intensive
     :param str region: The region in which to obtain the flavors.
            If omitted, the provider-level region will be used.
+    :param str storage_type: Specifies the storage type.
     """
     ...

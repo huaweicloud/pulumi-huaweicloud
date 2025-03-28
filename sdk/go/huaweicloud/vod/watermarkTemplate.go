@@ -48,7 +48,7 @@ import (
 //
 // ## Import
 //
-// The template can be imported using the `id`, e.g.
+// The template can be imported using the `id`, e.g. bash
 //
 // ```sh
 //
@@ -56,7 +56,7 @@ import (
 //
 // ```
 //
-//	Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`image_file`. It is generally recommended running `terraform plan` after importing a watermark template. You can then decide if changes should be applied to the watermark template, or the resource definition should be updated to align with the watermark template. Also you can ignore changes as below. resource "huaweicloud_vod_watermark_template" "test" {
+//	Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`image_file`. It is generally recommended running `terraform plan` after importing a watermark template. You can then decide if changes should be applied to the watermark template, or the resource definition should be updated to align with the watermark template. Also you can ignore changes as below. hcl resource "huaweicloud_vod_watermark_template" "test" {
 //
 //	...
 //
@@ -93,7 +93,7 @@ type WatermarkTemplate struct {
 	ImageType pulumi.StringOutput `pulumi:"imageType"`
 	// The watermark image URL.
 	ImageUrl pulumi.StringOutput `pulumi:"imageUrl"`
-	// Specifies the template name, which contains a maximum of 128 characters.
+	// Specifies the template name, which contains a maximum of `128` characters.
 	Name pulumi.StringOutput `pulumi:"name"`
 	// Specifies the location of the watermark. The valid values are **TOPRIGHT**,
 	// **TOPLEFT**, **BOTTOMRIGHT** and **BOTTOMLEFT**. Defaults to: **TOPRIGHT**.
@@ -176,7 +176,7 @@ type watermarkTemplateState struct {
 	ImageType *string `pulumi:"imageType"`
 	// The watermark image URL.
 	ImageUrl *string `pulumi:"imageUrl"`
-	// Specifies the template name, which contains a maximum of 128 characters.
+	// Specifies the template name, which contains a maximum of `128` characters.
 	Name *string `pulumi:"name"`
 	// Specifies the location of the watermark. The valid values are **TOPRIGHT**,
 	// **TOPLEFT**, **BOTTOMRIGHT** and **BOTTOMLEFT**. Defaults to: **TOPRIGHT**.
@@ -224,7 +224,7 @@ type WatermarkTemplateState struct {
 	ImageType pulumi.StringPtrInput
 	// The watermark image URL.
 	ImageUrl pulumi.StringPtrInput
-	// Specifies the template name, which contains a maximum of 128 characters.
+	// Specifies the template name, which contains a maximum of `128` characters.
 	Name pulumi.StringPtrInput
 	// Specifies the location of the watermark. The valid values are **TOPRIGHT**,
 	// **TOPLEFT**, **BOTTOMRIGHT** and **BOTTOMLEFT**. Defaults to: **TOPRIGHT**.
@@ -274,7 +274,7 @@ type watermarkTemplateArgs struct {
 	// Specifies the image file type. The valid values are **PNG**, **JPG**
 	// and **JPEG**. Changing this creates a new resource.
 	ImageType string `pulumi:"imageType"`
-	// Specifies the template name, which contains a maximum of 128 characters.
+	// Specifies the template name, which contains a maximum of `128` characters.
 	Name *string `pulumi:"name"`
 	// Specifies the location of the watermark. The valid values are **TOPRIGHT**,
 	// **TOPLEFT**, **BOTTOMRIGHT** and **BOTTOMLEFT**. Defaults to: **TOPRIGHT**.
@@ -319,7 +319,7 @@ type WatermarkTemplateArgs struct {
 	// Specifies the image file type. The valid values are **PNG**, **JPG**
 	// and **JPEG**. Changing this creates a new resource.
 	ImageType pulumi.StringInput
-	// Specifies the template name, which contains a maximum of 128 characters.
+	// Specifies the template name, which contains a maximum of `128` characters.
 	Name pulumi.StringPtrInput
 	// Specifies the location of the watermark. The valid values are **TOPRIGHT**,
 	// **TOPLEFT**, **BOTTOMRIGHT** and **BOTTOMLEFT**. Defaults to: **TOPRIGHT**.
@@ -469,7 +469,7 @@ func (o WatermarkTemplateOutput) ImageUrl() pulumi.StringOutput {
 	return o.ApplyT(func(v *WatermarkTemplate) pulumi.StringOutput { return v.ImageUrl }).(pulumi.StringOutput)
 }
 
-// Specifies the template name, which contains a maximum of 128 characters.
+// Specifies the template name, which contains a maximum of `128` characters.
 func (o WatermarkTemplateOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v *WatermarkTemplate) pulumi.StringOutput { return v.Name }).(pulumi.StringOutput)
 }

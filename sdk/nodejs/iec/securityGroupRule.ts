@@ -69,12 +69,12 @@ export class SecurityGroupRule extends pulumi.CustomResource {
     public readonly ethertype!: pulumi.Output<string | undefined>;
     /**
      * Specifies the higher part of the allowed port range, valid integer value
-     * needs to be between 1 and 65535. Changing this parameter creates a new security group rule resource.
+     * needs to be between `1` and `65,535`. Changing this parameter creates a new security group rule resource.
      */
     public readonly portRangeMax!: pulumi.Output<number | undefined>;
     /**
      * Specifies the lower part of the allowed port range, valid integer value
-     * needs to be between 1 and 65535. Changing this parameter creates a new security group rule resource.
+     * needs to be between `1` and `65,535`. Changing this parameter creates a new security group rule resource.
      */
     public readonly portRangeMin!: pulumi.Output<number | undefined>;
     /**
@@ -170,12 +170,12 @@ export interface SecurityGroupRuleState {
     ethertype?: pulumi.Input<string>;
     /**
      * Specifies the higher part of the allowed port range, valid integer value
-     * needs to be between 1 and 65535. Changing this parameter creates a new security group rule resource.
+     * needs to be between `1` and `65,535`. Changing this parameter creates a new security group rule resource.
      */
     portRangeMax?: pulumi.Input<number>;
     /**
      * Specifies the lower part of the allowed port range, valid integer value
-     * needs to be between 1 and 65535. Changing this parameter creates a new security group rule resource.
+     * needs to be between `1` and `65,535`. Changing this parameter creates a new security group rule resource.
      */
     portRangeMin?: pulumi.Input<number>;
     /**
@@ -224,12 +224,12 @@ export interface SecurityGroupRuleArgs {
     ethertype?: pulumi.Input<string>;
     /**
      * Specifies the higher part of the allowed port range, valid integer value
-     * needs to be between 1 and 65535. Changing this parameter creates a new security group rule resource.
+     * needs to be between `1` and `65,535`. Changing this parameter creates a new security group rule resource.
      */
     portRangeMax?: pulumi.Input<number>;
     /**
      * Specifies the lower part of the allowed port range, valid integer value
-     * needs to be between 1 and 65535. Changing this parameter creates a new security group rule resource.
+     * needs to be between `1` and `65,535`. Changing this parameter creates a new security group rule resource.
      */
     portRangeMin?: pulumi.Input<number>;
     /**

@@ -22,7 +22,7 @@ class GetNodeResult:
     """
     A collection of values returned by getNode.
     """
-    def __init__(__self__, availability_zone=None, billing_mode=None, cluster_id=None, data_volumes=None, ecs_group_id=None, flavor_id=None, id=None, key_pair=None, name=None, node_id=None, os=None, private_ip=None, public_ip=None, region=None, root_volumes=None, server_id=None, status=None, subnet_id=None, tags=None):
+    def __init__(__self__, availability_zone=None, billing_mode=None, cluster_id=None, data_volumes=None, ecs_group_id=None, enterprise_project_id=None, flavor_id=None, hostname_configs=None, id=None, key_pair=None, name=None, node_id=None, os=None, private_ip=None, public_ip=None, region=None, root_volumes=None, server_id=None, status=None, subnet_id=None, tags=None):
         if availability_zone and not isinstance(availability_zone, str):
             raise TypeError("Expected argument 'availability_zone' to be a str")
         pulumi.set(__self__, "availability_zone", availability_zone)
@@ -38,9 +38,15 @@ class GetNodeResult:
         if ecs_group_id and not isinstance(ecs_group_id, str):
             raise TypeError("Expected argument 'ecs_group_id' to be a str")
         pulumi.set(__self__, "ecs_group_id", ecs_group_id)
+        if enterprise_project_id and not isinstance(enterprise_project_id, str):
+            raise TypeError("Expected argument 'enterprise_project_id' to be a str")
+        pulumi.set(__self__, "enterprise_project_id", enterprise_project_id)
         if flavor_id and not isinstance(flavor_id, str):
             raise TypeError("Expected argument 'flavor_id' to be a str")
         pulumi.set(__self__, "flavor_id", flavor_id)
+        if hostname_configs and not isinstance(hostname_configs, list):
+            raise TypeError("Expected argument 'hostname_configs' to be a list")
+        pulumi.set(__self__, "hostname_configs", hostname_configs)
         if id and not isinstance(id, str):
             raise TypeError("Expected argument 'id' to be a str")
         pulumi.set(__self__, "id", id)
@@ -119,12 +125,29 @@ class GetNodeResult:
         return pulumi.get(self, "ecs_group_id")
 
     @property
+    @pulumi.getter(name="enterpriseProjectId")
+    def enterprise_project_id(self) -> str:
+        """
+        The enterprise project ID of the node.
+        """
+        return pulumi.get(self, "enterprise_project_id")
+
+    @property
     @pulumi.getter(name="flavorId")
     def flavor_id(self) -> str:
         """
         The flavor ID to be used.
         """
         return pulumi.get(self, "flavor_id")
+
+    @property
+    @pulumi.getter(name="hostnameConfigs")
+    def hostname_configs(self) -> Sequence['outputs.GetNodeHostnameConfigResult']:
+        """
+        The hostname config of the kubernetes node.
+        The object structure is documented below.
+        """
+        return pulumi.get(self, "hostname_configs")
 
     @property
     @pulumi.getter
@@ -230,7 +253,9 @@ class AwaitableGetNodeResult(GetNodeResult):
             cluster_id=self.cluster_id,
             data_volumes=self.data_volumes,
             ecs_group_id=self.ecs_group_id,
+            enterprise_project_id=self.enterprise_project_id,
             flavor_id=self.flavor_id,
+            hostname_configs=self.hostname_configs,
             id=self.id,
             key_pair=self.key_pair,
             name=self.name,
@@ -291,7 +316,9 @@ def get_node(cluster_id: Optional[str] = None,
         cluster_id=__ret__.cluster_id,
         data_volumes=__ret__.data_volumes,
         ecs_group_id=__ret__.ecs_group_id,
+        enterprise_project_id=__ret__.enterprise_project_id,
         flavor_id=__ret__.flavor_id,
+        hostname_configs=__ret__.hostname_configs,
         id=__ret__.id,
         key_pair=__ret__.key_pair,
         name=__ret__.name,

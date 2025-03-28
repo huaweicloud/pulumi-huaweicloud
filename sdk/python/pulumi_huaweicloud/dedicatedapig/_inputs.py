@@ -28,7 +28,10 @@ __all__ = [
     'CustomAuthorizerIdentityArgs',
     'GroupEnvironmentArgs',
     'GroupEnvironmentVariableArgs',
+    'GroupUrlDomainArgs',
+    'InstanceCustomIngressPortArgs',
     'ResponseRuleArgs',
+    'ResponseRuleHeaderArgs',
     'ThrottlingPolicyAppThrottleArgs',
     'ThrottlingPolicyUserThrottleArgs',
     'VpcChannelMemberArgs',
@@ -47,9 +50,11 @@ class ApiBackendParamArgs:
         :param pulumi.Input[str] location: Specifies the location of the backend parameter.  
                The valid values are **PATH**, **QUERY** and **HEADER**.
         :param pulumi.Input[str] name: Specifies the backend policy name.  
-               The valid length is limited from can contain `3` to `64`, only letters, digits and underscores (_) are allowed.
+               The valid length is limited from `3` to `64`, only letters, digits and underscores (_) are allowed.
+               It must start with a letter.
         :param pulumi.Input[str] type: Specifies the condition type of the backend policy.  
                The valid values are **Equal**, **Enumerated** and **Matching**, defaults to **Equal**.
+               When the `sys_name` is **req_method**, the valid values are **Equal** and **Enumerated**.
         :param pulumi.Input[str] value: Specifies the value of the backend policy.  
                For a condition with the input parameter source:
                + If the condition type is **Enumerated**, separate condition values with commas.
@@ -86,7 +91,8 @@ class ApiBackendParamArgs:
     def name(self) -> pulumi.Input[str]:
         """
         Specifies the backend policy name.  
-        The valid length is limited from can contain `3` to `64`, only letters, digits and underscores (_) are allowed.
+        The valid length is limited from `3` to `64`, only letters, digits and underscores (_) are allowed.
+        It must start with a letter.
         """
         return pulumi.get(self, "name")
 
@@ -100,6 +106,7 @@ class ApiBackendParamArgs:
         """
         Specifies the condition type of the backend policy.  
         The valid values are **Equal**, **Enumerated** and **Matching**, defaults to **Equal**.
+        When the `sys_name` is **req_method**, the valid values are **Equal** and **Enumerated**.
         """
         return pulumi.get(self, "type")
 
@@ -154,23 +161,41 @@ class ApiFuncGraphArgs:
     def __init__(__self__, *,
                  function_urn: pulumi.Input[str],
                  authorizer_id: Optional[pulumi.Input[str]] = None,
+                 function_alias_urn: Optional[pulumi.Input[str]] = None,
                  invocation_type: Optional[pulumi.Input[str]] = None,
+                 network_type: Optional[pulumi.Input[str]] = None,
+                 request_protocol: Optional[pulumi.Input[str]] = None,
                  timeout: Optional[pulumi.Input[int]] = None,
                  version: Optional[pulumi.Input[str]] = None):
         """
         :param pulumi.Input[str] function_urn: Specifies the URN of the FunctionGraph function.
         :param pulumi.Input[str] authorizer_id: Specifies the ID of the backend custom authorization.
-        :param pulumi.Input[str] invocation_type: Specifies the invocation type.  
+        :param pulumi.Input[str] function_alias_urn: Specifies the alias URN of the FunctionGraph function.  
+               The format is `{function_urn}:!{alias}`.
+        :param pulumi.Input[str] invocation_type: Specifies the invocation mode of the FunctionGraph function.  
                The valid values are **async** and **sync**, defaults to **sync**.
+        :param pulumi.Input[str] network_type: Specifies the network architecture (framework) type of the FunctionGraph function.
+               **V1**: Non-VPC network framework.
+               **V2**: VPC network framework.
+        :param pulumi.Input[str] request_protocol: Specifies the backend request protocol. The valid values are **HTTP** and
+               **HTTPS**, defaults to **HTTPS**.
         :param pulumi.Input[int] timeout: Specifies the timeout, in ms, which allowed for APIG to request the backend service. The
                valid value is range from `1` to `600,000`, defaults to `5,000`.
-        :param pulumi.Input[str] version: Specifies the version of the FunctionGraph function.
+        :param pulumi.Input[str] version: Specifies the version of the FunctionGraph function.  
+               Required if the parameter `function_alias_urn` is omitted and this parameter is useless if the parameter
+               `function_alias_urn` is set.
         """
         pulumi.set(__self__, "function_urn", function_urn)
         if authorizer_id is not None:
             pulumi.set(__self__, "authorizer_id", authorizer_id)
+        if function_alias_urn is not None:
+            pulumi.set(__self__, "function_alias_urn", function_alias_urn)
         if invocation_type is not None:
             pulumi.set(__self__, "invocation_type", invocation_type)
+        if network_type is not None:
+            pulumi.set(__self__, "network_type", network_type)
+        if request_protocol is not None:
+            pulumi.set(__self__, "request_protocol", request_protocol)
         if timeout is not None:
             pulumi.set(__self__, "timeout", timeout)
         if version is not None:
@@ -201,10 +226,23 @@ class ApiFuncGraphArgs:
         pulumi.set(self, "authorizer_id", value)
 
     @property
+    @pulumi.getter(name="functionAliasUrn")
+    def function_alias_urn(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the alias URN of the FunctionGraph function.  
+        The format is `{function_urn}:!{alias}`.
+        """
+        return pulumi.get(self, "function_alias_urn")
+
+    @function_alias_urn.setter
+    def function_alias_urn(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "function_alias_urn", value)
+
+    @property
     @pulumi.getter(name="invocationType")
     def invocation_type(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the invocation type.  
+        Specifies the invocation mode of the FunctionGraph function.  
         The valid values are **async** and **sync**, defaults to **sync**.
         """
         return pulumi.get(self, "invocation_type")
@@ -212,6 +250,33 @@ class ApiFuncGraphArgs:
     @invocation_type.setter
     def invocation_type(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "invocation_type", value)
+
+    @property
+    @pulumi.getter(name="networkType")
+    def network_type(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the network architecture (framework) type of the FunctionGraph function.
+        **V1**: Non-VPC network framework.
+        **V2**: VPC network framework.
+        """
+        return pulumi.get(self, "network_type")
+
+    @network_type.setter
+    def network_type(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "network_type", value)
+
+    @property
+    @pulumi.getter(name="requestProtocol")
+    def request_protocol(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the backend request protocol. The valid values are **HTTP** and
+        **HTTPS**, defaults to **HTTPS**.
+        """
+        return pulumi.get(self, "request_protocol")
+
+    @request_protocol.setter
+    def request_protocol(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "request_protocol", value)
 
     @property
     @pulumi.getter
@@ -230,7 +295,9 @@ class ApiFuncGraphArgs:
     @pulumi.getter
     def version(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the version of the FunctionGraph function.
+        Specifies the version of the FunctionGraph function.  
+        Required if the parameter `function_alias_urn` is omitted and this parameter is useless if the parameter
+        `function_alias_urn` is set.
         """
         return pulumi.get(self, "version")
 
@@ -248,7 +315,11 @@ class ApiFuncGraphPolicyArgs:
                  authorizer_id: Optional[pulumi.Input[str]] = None,
                  backend_params: Optional[pulumi.Input[Sequence[pulumi.Input['ApiFuncGraphPolicyBackendParamArgs']]]] = None,
                  effective_mode: Optional[pulumi.Input[str]] = None,
+                 function_alias_urn: Optional[pulumi.Input[str]] = None,
                  invocation_mode: Optional[pulumi.Input[str]] = None,
+                 invocation_type: Optional[pulumi.Input[str]] = None,
+                 network_type: Optional[pulumi.Input[str]] = None,
+                 request_protocol: Optional[pulumi.Input[str]] = None,
                  timeout: Optional[pulumi.Input[int]] = None,
                  version: Optional[pulumi.Input[str]] = None):
         """
@@ -257,17 +328,27 @@ class ApiFuncGraphPolicyArgs:
                The object structure is documented below.
         :param pulumi.Input[str] function_urn: Specifies the URN of the FunctionGraph function.
         :param pulumi.Input[str] name: Specifies the backend policy name.  
-               The valid length is limited from can contain `3` to `64`, only letters, digits and underscores (_) are allowed.
+               The valid length is limited from `3` to `64`, only letters, digits and underscores (_) are allowed.
+               It must start with a letter.
         :param pulumi.Input[str] authorizer_id: Specifies the ID of the backend custom authorization.
         :param pulumi.Input[Sequence[pulumi.Input['ApiFuncGraphPolicyBackendParamArgs']]] backend_params: Specifies an array of one or more backend parameters. The maximum of request
                parameters is 50. The object structure is documented above.
         :param pulumi.Input[str] effective_mode: Specifies the effective mode of the backend policy. The valid values are **ALL**
                and **ANY**, defaults to **ANY**.
-        :param pulumi.Input[str] invocation_mode: Specifies the invocation mode of the FunctionGraph function.  
+        :param pulumi.Input[str] function_alias_urn: Specifies the alias URN of the FunctionGraph function.  
+               The format is `{function_urn}:!{alias}`.
+        :param pulumi.Input[str] invocation_type: Specifies the invocation mode of the FunctionGraph function.  
                The valid values are **async** and **sync**, defaults to **sync**.
+        :param pulumi.Input[str] network_type: Specifies the network architecture (framework) type of the FunctionGraph function.
+               **V1**: Non-VPC network framework.
+               **V2**: VPC network framework.
+        :param pulumi.Input[str] request_protocol: Specifies the backend request protocol. The valid values are **HTTP** and
+               **HTTPS**, defaults to **HTTPS**.
         :param pulumi.Input[int] timeout: Specifies the timeout, in ms, which allowed for APIG to request the backend service. The
                valid value is range from `1` to `600,000`, defaults to `5,000`.
-        :param pulumi.Input[str] version: Specifies the version of the FunctionGraph function.
+        :param pulumi.Input[str] version: Specifies the version of the FunctionGraph function.  
+               Required if the parameter `function_alias_urn` is omitted and this parameter is useless if the parameter
+               `function_alias_urn` is set.
         """
         pulumi.set(__self__, "conditions", conditions)
         pulumi.set(__self__, "function_urn", function_urn)
@@ -278,8 +359,16 @@ class ApiFuncGraphPolicyArgs:
             pulumi.set(__self__, "backend_params", backend_params)
         if effective_mode is not None:
             pulumi.set(__self__, "effective_mode", effective_mode)
+        if function_alias_urn is not None:
+            pulumi.set(__self__, "function_alias_urn", function_alias_urn)
         if invocation_mode is not None:
             pulumi.set(__self__, "invocation_mode", invocation_mode)
+        if invocation_type is not None:
+            pulumi.set(__self__, "invocation_type", invocation_type)
+        if network_type is not None:
+            pulumi.set(__self__, "network_type", network_type)
+        if request_protocol is not None:
+            pulumi.set(__self__, "request_protocol", request_protocol)
         if timeout is not None:
             pulumi.set(__self__, "timeout", timeout)
         if version is not None:
@@ -316,7 +405,8 @@ class ApiFuncGraphPolicyArgs:
     def name(self) -> pulumi.Input[str]:
         """
         Specifies the backend policy name.  
-        The valid length is limited from can contain `3` to `64`, only letters, digits and underscores (_) are allowed.
+        The valid length is limited from `3` to `64`, only letters, digits and underscores (_) are allowed.
+        It must start with a letter.
         """
         return pulumi.get(self, "name")
 
@@ -363,17 +453,66 @@ class ApiFuncGraphPolicyArgs:
         pulumi.set(self, "effective_mode", value)
 
     @property
+    @pulumi.getter(name="functionAliasUrn")
+    def function_alias_urn(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the alias URN of the FunctionGraph function.  
+        The format is `{function_urn}:!{alias}`.
+        """
+        return pulumi.get(self, "function_alias_urn")
+
+    @function_alias_urn.setter
+    def function_alias_urn(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "function_alias_urn", value)
+
+    @property
     @pulumi.getter(name="invocationMode")
     def invocation_mode(self) -> Optional[pulumi.Input[str]]:
-        """
-        Specifies the invocation mode of the FunctionGraph function.  
-        The valid values are **async** and **sync**, defaults to **sync**.
-        """
         return pulumi.get(self, "invocation_mode")
 
     @invocation_mode.setter
     def invocation_mode(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "invocation_mode", value)
+
+    @property
+    @pulumi.getter(name="invocationType")
+    def invocation_type(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the invocation mode of the FunctionGraph function.  
+        The valid values are **async** and **sync**, defaults to **sync**.
+        """
+        return pulumi.get(self, "invocation_type")
+
+    @invocation_type.setter
+    def invocation_type(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "invocation_type", value)
+
+    @property
+    @pulumi.getter(name="networkType")
+    def network_type(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the network architecture (framework) type of the FunctionGraph function.
+        **V1**: Non-VPC network framework.
+        **V2**: VPC network framework.
+        """
+        return pulumi.get(self, "network_type")
+
+    @network_type.setter
+    def network_type(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "network_type", value)
+
+    @property
+    @pulumi.getter(name="requestProtocol")
+    def request_protocol(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the backend request protocol. The valid values are **HTTP** and
+        **HTTPS**, defaults to **HTTPS**.
+        """
+        return pulumi.get(self, "request_protocol")
+
+    @request_protocol.setter
+    def request_protocol(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "request_protocol", value)
 
     @property
     @pulumi.getter
@@ -392,7 +531,9 @@ class ApiFuncGraphPolicyArgs:
     @pulumi.getter
     def version(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the version of the FunctionGraph function.
+        Specifies the version of the FunctionGraph function.  
+        Required if the parameter `function_alias_urn` is omitted and this parameter is useless if the parameter
+        `function_alias_urn` is set.
         """
         return pulumi.get(self, "version")
 
@@ -414,9 +555,11 @@ class ApiFuncGraphPolicyBackendParamArgs:
         :param pulumi.Input[str] location: Specifies the location of the backend parameter.  
                The valid values are **PATH**, **QUERY** and **HEADER**.
         :param pulumi.Input[str] name: Specifies the backend policy name.  
-               The valid length is limited from can contain `3` to `64`, only letters, digits and underscores (_) are allowed.
+               The valid length is limited from `3` to `64`, only letters, digits and underscores (_) are allowed.
+               It must start with a letter.
         :param pulumi.Input[str] type: Specifies the condition type of the backend policy.  
                The valid values are **Equal**, **Enumerated** and **Matching**, defaults to **Equal**.
+               When the `sys_name` is **req_method**, the valid values are **Equal** and **Enumerated**.
         :param pulumi.Input[str] value: Specifies the value of the backend policy.  
                For a condition with the input parameter source:
                + If the condition type is **Enumerated**, separate condition values with commas.
@@ -453,7 +596,8 @@ class ApiFuncGraphPolicyBackendParamArgs:
     def name(self) -> pulumi.Input[str]:
         """
         Specifies the backend policy name.  
-        The valid length is limited from can contain `3` to `64`, only letters, digits and underscores (_) are allowed.
+        The valid length is limited from `3` to `64`, only letters, digits and underscores (_) are allowed.
+        It must start with a letter.
         """
         return pulumi.get(self, "name")
 
@@ -467,6 +611,7 @@ class ApiFuncGraphPolicyBackendParamArgs:
         """
         Specifies the condition type of the backend policy.  
         The valid values are **Equal**, **Enumerated** and **Matching**, defaults to **Equal**.
+        When the `sys_name` is **req_method**, the valid values are **Equal** and **Enumerated**.
         """
         return pulumi.get(self, "type")
 
@@ -520,26 +665,57 @@ class ApiFuncGraphPolicyBackendParamArgs:
 class ApiFuncGraphPolicyConditionArgs:
     def __init__(__self__, *,
                  value: pulumi.Input[str],
+                 cookie_name: Optional[pulumi.Input[str]] = None,
+                 frontend_authorizer_name: Optional[pulumi.Input[str]] = None,
+                 mapped_param_location: Optional[pulumi.Input[str]] = None,
+                 mapped_param_name: Optional[pulumi.Input[str]] = None,
                  param_name: Optional[pulumi.Input[str]] = None,
                  source: Optional[pulumi.Input[str]] = None,
+                 sys_name: Optional[pulumi.Input[str]] = None,
                  type: Optional[pulumi.Input[str]] = None):
         """
         :param pulumi.Input[str] value: Specifies the value of the backend policy.  
                For a condition with the input parameter source:
                + If the condition type is **Enumerated**, separate condition values with commas.
                + If the condition type is **Matching**, enter a regular expression compatible with PERL.
+        :param pulumi.Input[str] cookie_name: Specifies the cookie parameter name.
+               This parameter is required if the policy type is **cookie**.
+        :param pulumi.Input[str] frontend_authorizer_name: Specifies the frontend authentication parameter name.
+               This parameter is required if the policy type is **frontend_authorizer**. It consists of two parts,
+               the first part is the fixed format **$context.authorizer.frontend.**, and the second part is the
+               frontend authentication parameter name. e.g. **$context.authorizer.frontend.user_name**.
+        :param pulumi.Input[str] mapped_param_location: Specifies the location of a parameter generated after orchestration.
+               This parameter is required if the policy type is **orchestration**.
+               The generated parameter location must exist in the orchestration rule bound to the API.
+        :param pulumi.Input[str] mapped_param_name: Specifies the name of a parameter generated after orchestration.
+               This parameter is required if the policy type is **orchestration**.
+               The generated parameter name must exist in the orchestration rule bound to the API.
         :param pulumi.Input[str] param_name: Specifies the request parameter name.
-               This parameter is required if the policy type is **param**.
+               This parameter is required if the policy type is **param**. The valid values are **user_age** and **X-TEST-ENUM**.
         :param pulumi.Input[str] source: Specifies the backend policy type.  
-               The valid values are **param** and **source**, defaults to **source**.
+               The valid values are **param**, **source**, **system**, **cookie** and **frontend_authorizer**, defaults to **source**.
+        :param pulumi.Input[str] sys_name: Specifies the gateway built-in parameter name.
+               This parameter is required if the policy type is **system**.
+               The valid values are **req_path** and **req_method**.
         :param pulumi.Input[str] type: Specifies the condition type of the backend policy.  
                The valid values are **Equal**, **Enumerated** and **Matching**, defaults to **Equal**.
+               When the `sys_name` is **req_method**, the valid values are **Equal** and **Enumerated**.
         """
         pulumi.set(__self__, "value", value)
+        if cookie_name is not None:
+            pulumi.set(__self__, "cookie_name", cookie_name)
+        if frontend_authorizer_name is not None:
+            pulumi.set(__self__, "frontend_authorizer_name", frontend_authorizer_name)
+        if mapped_param_location is not None:
+            pulumi.set(__self__, "mapped_param_location", mapped_param_location)
+        if mapped_param_name is not None:
+            pulumi.set(__self__, "mapped_param_name", mapped_param_name)
         if param_name is not None:
             pulumi.set(__self__, "param_name", param_name)
         if source is not None:
             pulumi.set(__self__, "source", source)
+        if sys_name is not None:
+            pulumi.set(__self__, "sys_name", sys_name)
         if type is not None:
             pulumi.set(__self__, "type", type)
 
@@ -559,11 +735,67 @@ class ApiFuncGraphPolicyConditionArgs:
         pulumi.set(self, "value", value)
 
     @property
+    @pulumi.getter(name="cookieName")
+    def cookie_name(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the cookie parameter name.
+        This parameter is required if the policy type is **cookie**.
+        """
+        return pulumi.get(self, "cookie_name")
+
+    @cookie_name.setter
+    def cookie_name(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "cookie_name", value)
+
+    @property
+    @pulumi.getter(name="frontendAuthorizerName")
+    def frontend_authorizer_name(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the frontend authentication parameter name.
+        This parameter is required if the policy type is **frontend_authorizer**. It consists of two parts,
+        the first part is the fixed format **$context.authorizer.frontend.**, and the second part is the
+        frontend authentication parameter name. e.g. **$context.authorizer.frontend.user_name**.
+        """
+        return pulumi.get(self, "frontend_authorizer_name")
+
+    @frontend_authorizer_name.setter
+    def frontend_authorizer_name(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "frontend_authorizer_name", value)
+
+    @property
+    @pulumi.getter(name="mappedParamLocation")
+    def mapped_param_location(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the location of a parameter generated after orchestration.
+        This parameter is required if the policy type is **orchestration**.
+        The generated parameter location must exist in the orchestration rule bound to the API.
+        """
+        return pulumi.get(self, "mapped_param_location")
+
+    @mapped_param_location.setter
+    def mapped_param_location(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "mapped_param_location", value)
+
+    @property
+    @pulumi.getter(name="mappedParamName")
+    def mapped_param_name(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the name of a parameter generated after orchestration.
+        This parameter is required if the policy type is **orchestration**.
+        The generated parameter name must exist in the orchestration rule bound to the API.
+        """
+        return pulumi.get(self, "mapped_param_name")
+
+    @mapped_param_name.setter
+    def mapped_param_name(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "mapped_param_name", value)
+
+    @property
     @pulumi.getter(name="paramName")
     def param_name(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the request parameter name.
-        This parameter is required if the policy type is **param**.
+        This parameter is required if the policy type is **param**. The valid values are **user_age** and **X-TEST-ENUM**.
         """
         return pulumi.get(self, "param_name")
 
@@ -576,7 +808,7 @@ class ApiFuncGraphPolicyConditionArgs:
     def source(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the backend policy type.  
-        The valid values are **param** and **source**, defaults to **source**.
+        The valid values are **param**, **source**, **system**, **cookie** and **frontend_authorizer**, defaults to **source**.
         """
         return pulumi.get(self, "source")
 
@@ -585,11 +817,26 @@ class ApiFuncGraphPolicyConditionArgs:
         pulumi.set(self, "source", value)
 
     @property
+    @pulumi.getter(name="sysName")
+    def sys_name(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the gateway built-in parameter name.
+        This parameter is required if the policy type is **system**.
+        The valid values are **req_path** and **req_method**.
+        """
+        return pulumi.get(self, "sys_name")
+
+    @sys_name.setter
+    def sys_name(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "sys_name", value)
+
+    @property
     @pulumi.getter
     def type(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the condition type of the backend policy.  
         The valid values are **Equal**, **Enumerated** and **Matching**, defaults to **Equal**.
+        When the `sys_name` is **req_method**, the valid values are **Equal** and **Enumerated**.
         """
         return pulumi.get(self, "type")
 
@@ -602,16 +849,20 @@ class ApiFuncGraphPolicyConditionArgs:
 class ApiMockArgs:
     def __init__(__self__, *,
                  authorizer_id: Optional[pulumi.Input[str]] = None,
-                 response: Optional[pulumi.Input[str]] = None):
+                 response: Optional[pulumi.Input[str]] = None,
+                 status_code: Optional[pulumi.Input[int]] = None):
         """
         :param pulumi.Input[str] authorizer_id: Specifies the ID of the backend custom authorization.
-        :param pulumi.Input[str] response: Specifies the response of the backend policy.  
+        :param pulumi.Input[str] response: Specifies the response content of the mock.  
                The description contains a maximum of `2,048` characters and the angle brackets (< and >) are not allowed.
+        :param pulumi.Input[int] status_code: Specifies the custom status code of the mock response.
         """
         if authorizer_id is not None:
             pulumi.set(__self__, "authorizer_id", authorizer_id)
         if response is not None:
             pulumi.set(__self__, "response", response)
+        if status_code is not None:
+            pulumi.set(__self__, "status_code", status_code)
 
     @property
     @pulumi.getter(name="authorizerId")
@@ -629,7 +880,7 @@ class ApiMockArgs:
     @pulumi.getter
     def response(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the response of the backend policy.  
+        Specifies the response content of the mock.  
         The description contains a maximum of `2,048` characters and the angle brackets (< and >) are not allowed.
         """
         return pulumi.get(self, "response")
@@ -637,6 +888,18 @@ class ApiMockArgs:
     @response.setter
     def response(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "response", value)
+
+    @property
+    @pulumi.getter(name="statusCode")
+    def status_code(self) -> Optional[pulumi.Input[int]]:
+        """
+        Specifies the custom status code of the mock response.
+        """
+        return pulumi.get(self, "status_code")
+
+    @status_code.setter
+    def status_code(self, value: Optional[pulumi.Input[int]]):
+        pulumi.set(self, "status_code", value)
 
 
 @pulumi.input_type
@@ -647,20 +910,23 @@ class ApiMockPolicyArgs:
                  authorizer_id: Optional[pulumi.Input[str]] = None,
                  backend_params: Optional[pulumi.Input[Sequence[pulumi.Input['ApiMockPolicyBackendParamArgs']]]] = None,
                  effective_mode: Optional[pulumi.Input[str]] = None,
-                 response: Optional[pulumi.Input[str]] = None):
+                 response: Optional[pulumi.Input[str]] = None,
+                 status_code: Optional[pulumi.Input[int]] = None):
         """
         :param pulumi.Input[Sequence[pulumi.Input['ApiMockPolicyConditionArgs']]] conditions: Specifies an array of one or more policy conditions.  
                Up to five conditions can be set.
                The object structure is documented below.
         :param pulumi.Input[str] name: Specifies the backend policy name.  
-               The valid length is limited from can contain `3` to `64`, only letters, digits and underscores (_) are allowed.
+               The valid length is limited from `3` to `64`, only letters, digits and underscores (_) are allowed.
+               It must start with a letter.
         :param pulumi.Input[str] authorizer_id: Specifies the ID of the backend custom authorization.
         :param pulumi.Input[Sequence[pulumi.Input['ApiMockPolicyBackendParamArgs']]] backend_params: Specifies an array of one or more backend parameters. The maximum of request
                parameters is 50. The object structure is documented above.
         :param pulumi.Input[str] effective_mode: Specifies the effective mode of the backend policy. The valid values are **ALL**
                and **ANY**, defaults to **ANY**.
-        :param pulumi.Input[str] response: Specifies the response of the backend policy.  
+        :param pulumi.Input[str] response: Specifies the response content of the mock.  
                The description contains a maximum of `2,048` characters and the angle brackets (< and >) are not allowed.
+        :param pulumi.Input[int] status_code: Specifies the custom status code of the mock response.
         """
         pulumi.set(__self__, "conditions", conditions)
         pulumi.set(__self__, "name", name)
@@ -672,6 +938,8 @@ class ApiMockPolicyArgs:
             pulumi.set(__self__, "effective_mode", effective_mode)
         if response is not None:
             pulumi.set(__self__, "response", response)
+        if status_code is not None:
+            pulumi.set(__self__, "status_code", status_code)
 
     @property
     @pulumi.getter
@@ -692,7 +960,8 @@ class ApiMockPolicyArgs:
     def name(self) -> pulumi.Input[str]:
         """
         Specifies the backend policy name.  
-        The valid length is limited from can contain `3` to `64`, only letters, digits and underscores (_) are allowed.
+        The valid length is limited from `3` to `64`, only letters, digits and underscores (_) are allowed.
+        It must start with a letter.
         """
         return pulumi.get(self, "name")
 
@@ -742,7 +1011,7 @@ class ApiMockPolicyArgs:
     @pulumi.getter
     def response(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the response of the backend policy.  
+        Specifies the response content of the mock.  
         The description contains a maximum of `2,048` characters and the angle brackets (< and >) are not allowed.
         """
         return pulumi.get(self, "response")
@@ -750,6 +1019,18 @@ class ApiMockPolicyArgs:
     @response.setter
     def response(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "response", value)
+
+    @property
+    @pulumi.getter(name="statusCode")
+    def status_code(self) -> Optional[pulumi.Input[int]]:
+        """
+        Specifies the custom status code of the mock response.
+        """
+        return pulumi.get(self, "status_code")
+
+    @status_code.setter
+    def status_code(self, value: Optional[pulumi.Input[int]]):
+        pulumi.set(self, "status_code", value)
 
 
 @pulumi.input_type
@@ -765,9 +1046,11 @@ class ApiMockPolicyBackendParamArgs:
         :param pulumi.Input[str] location: Specifies the location of the backend parameter.  
                The valid values are **PATH**, **QUERY** and **HEADER**.
         :param pulumi.Input[str] name: Specifies the backend policy name.  
-               The valid length is limited from can contain `3` to `64`, only letters, digits and underscores (_) are allowed.
+               The valid length is limited from `3` to `64`, only letters, digits and underscores (_) are allowed.
+               It must start with a letter.
         :param pulumi.Input[str] type: Specifies the condition type of the backend policy.  
                The valid values are **Equal**, **Enumerated** and **Matching**, defaults to **Equal**.
+               When the `sys_name` is **req_method**, the valid values are **Equal** and **Enumerated**.
         :param pulumi.Input[str] value: Specifies the value of the backend policy.  
                For a condition with the input parameter source:
                + If the condition type is **Enumerated**, separate condition values with commas.
@@ -804,7 +1087,8 @@ class ApiMockPolicyBackendParamArgs:
     def name(self) -> pulumi.Input[str]:
         """
         Specifies the backend policy name.  
-        The valid length is limited from can contain `3` to `64`, only letters, digits and underscores (_) are allowed.
+        The valid length is limited from `3` to `64`, only letters, digits and underscores (_) are allowed.
+        It must start with a letter.
         """
         return pulumi.get(self, "name")
 
@@ -818,6 +1102,7 @@ class ApiMockPolicyBackendParamArgs:
         """
         Specifies the condition type of the backend policy.  
         The valid values are **Equal**, **Enumerated** and **Matching**, defaults to **Equal**.
+        When the `sys_name` is **req_method**, the valid values are **Equal** and **Enumerated**.
         """
         return pulumi.get(self, "type")
 
@@ -871,26 +1156,57 @@ class ApiMockPolicyBackendParamArgs:
 class ApiMockPolicyConditionArgs:
     def __init__(__self__, *,
                  value: pulumi.Input[str],
+                 cookie_name: Optional[pulumi.Input[str]] = None,
+                 frontend_authorizer_name: Optional[pulumi.Input[str]] = None,
+                 mapped_param_location: Optional[pulumi.Input[str]] = None,
+                 mapped_param_name: Optional[pulumi.Input[str]] = None,
                  param_name: Optional[pulumi.Input[str]] = None,
                  source: Optional[pulumi.Input[str]] = None,
+                 sys_name: Optional[pulumi.Input[str]] = None,
                  type: Optional[pulumi.Input[str]] = None):
         """
         :param pulumi.Input[str] value: Specifies the value of the backend policy.  
                For a condition with the input parameter source:
                + If the condition type is **Enumerated**, separate condition values with commas.
                + If the condition type is **Matching**, enter a regular expression compatible with PERL.
+        :param pulumi.Input[str] cookie_name: Specifies the cookie parameter name.
+               This parameter is required if the policy type is **cookie**.
+        :param pulumi.Input[str] frontend_authorizer_name: Specifies the frontend authentication parameter name.
+               This parameter is required if the policy type is **frontend_authorizer**. It consists of two parts,
+               the first part is the fixed format **$context.authorizer.frontend.**, and the second part is the
+               frontend authentication parameter name. e.g. **$context.authorizer.frontend.user_name**.
+        :param pulumi.Input[str] mapped_param_location: Specifies the location of a parameter generated after orchestration.
+               This parameter is required if the policy type is **orchestration**.
+               The generated parameter location must exist in the orchestration rule bound to the API.
+        :param pulumi.Input[str] mapped_param_name: Specifies the name of a parameter generated after orchestration.
+               This parameter is required if the policy type is **orchestration**.
+               The generated parameter name must exist in the orchestration rule bound to the API.
         :param pulumi.Input[str] param_name: Specifies the request parameter name.
-               This parameter is required if the policy type is **param**.
+               This parameter is required if the policy type is **param**. The valid values are **user_age** and **X-TEST-ENUM**.
         :param pulumi.Input[str] source: Specifies the backend policy type.  
-               The valid values are **param** and **source**, defaults to **source**.
+               The valid values are **param**, **source**, **system**, **cookie** and **frontend_authorizer**, defaults to **source**.
+        :param pulumi.Input[str] sys_name: Specifies the gateway built-in parameter name.
+               This parameter is required if the policy type is **system**.
+               The valid values are **req_path** and **req_method**.
         :param pulumi.Input[str] type: Specifies the condition type of the backend policy.  
                The valid values are **Equal**, **Enumerated** and **Matching**, defaults to **Equal**.
+               When the `sys_name` is **req_method**, the valid values are **Equal** and **Enumerated**.
         """
         pulumi.set(__self__, "value", value)
+        if cookie_name is not None:
+            pulumi.set(__self__, "cookie_name", cookie_name)
+        if frontend_authorizer_name is not None:
+            pulumi.set(__self__, "frontend_authorizer_name", frontend_authorizer_name)
+        if mapped_param_location is not None:
+            pulumi.set(__self__, "mapped_param_location", mapped_param_location)
+        if mapped_param_name is not None:
+            pulumi.set(__self__, "mapped_param_name", mapped_param_name)
         if param_name is not None:
             pulumi.set(__self__, "param_name", param_name)
         if source is not None:
             pulumi.set(__self__, "source", source)
+        if sys_name is not None:
+            pulumi.set(__self__, "sys_name", sys_name)
         if type is not None:
             pulumi.set(__self__, "type", type)
 
@@ -910,11 +1226,67 @@ class ApiMockPolicyConditionArgs:
         pulumi.set(self, "value", value)
 
     @property
+    @pulumi.getter(name="cookieName")
+    def cookie_name(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the cookie parameter name.
+        This parameter is required if the policy type is **cookie**.
+        """
+        return pulumi.get(self, "cookie_name")
+
+    @cookie_name.setter
+    def cookie_name(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "cookie_name", value)
+
+    @property
+    @pulumi.getter(name="frontendAuthorizerName")
+    def frontend_authorizer_name(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the frontend authentication parameter name.
+        This parameter is required if the policy type is **frontend_authorizer**. It consists of two parts,
+        the first part is the fixed format **$context.authorizer.frontend.**, and the second part is the
+        frontend authentication parameter name. e.g. **$context.authorizer.frontend.user_name**.
+        """
+        return pulumi.get(self, "frontend_authorizer_name")
+
+    @frontend_authorizer_name.setter
+    def frontend_authorizer_name(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "frontend_authorizer_name", value)
+
+    @property
+    @pulumi.getter(name="mappedParamLocation")
+    def mapped_param_location(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the location of a parameter generated after orchestration.
+        This parameter is required if the policy type is **orchestration**.
+        The generated parameter location must exist in the orchestration rule bound to the API.
+        """
+        return pulumi.get(self, "mapped_param_location")
+
+    @mapped_param_location.setter
+    def mapped_param_location(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "mapped_param_location", value)
+
+    @property
+    @pulumi.getter(name="mappedParamName")
+    def mapped_param_name(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the name of a parameter generated after orchestration.
+        This parameter is required if the policy type is **orchestration**.
+        The generated parameter name must exist in the orchestration rule bound to the API.
+        """
+        return pulumi.get(self, "mapped_param_name")
+
+    @mapped_param_name.setter
+    def mapped_param_name(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "mapped_param_name", value)
+
+    @property
     @pulumi.getter(name="paramName")
     def param_name(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the request parameter name.
-        This parameter is required if the policy type is **param**.
+        This parameter is required if the policy type is **param**. The valid values are **user_age** and **X-TEST-ENUM**.
         """
         return pulumi.get(self, "param_name")
 
@@ -927,7 +1299,7 @@ class ApiMockPolicyConditionArgs:
     def source(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the backend policy type.  
-        The valid values are **param** and **source**, defaults to **source**.
+        The valid values are **param**, **source**, **system**, **cookie** and **frontend_authorizer**, defaults to **source**.
         """
         return pulumi.get(self, "source")
 
@@ -936,11 +1308,26 @@ class ApiMockPolicyConditionArgs:
         pulumi.set(self, "source", value)
 
     @property
+    @pulumi.getter(name="sysName")
+    def sys_name(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the gateway built-in parameter name.
+        This parameter is required if the policy type is **system**.
+        The valid values are **req_path** and **req_method**.
+        """
+        return pulumi.get(self, "sys_name")
+
+    @sys_name.setter
+    def sys_name(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "sys_name", value)
+
+    @property
     @pulumi.getter
     def type(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the condition type of the backend policy.  
         The valid values are **Equal**, **Enumerated** and **Matching**, defaults to **Equal**.
+        When the `sys_name` is **req_method**, the valid values are **Equal** and **Enumerated**.
         """
         return pulumi.get(self, "type")
 
@@ -992,37 +1379,53 @@ class ApiPublishmentHistoryArgs:
 class ApiRequestParamArgs:
     def __init__(__self__, *,
                  name: pulumi.Input[str],
-                 required: pulumi.Input[bool],
                  default: Optional[pulumi.Input[str]] = None,
                  description: Optional[pulumi.Input[str]] = None,
+                 enumeration: Optional[pulumi.Input[str]] = None,
                  example: Optional[pulumi.Input[str]] = None,
                  location: Optional[pulumi.Input[str]] = None,
                  maximum: Optional[pulumi.Input[int]] = None,
                  minimum: Optional[pulumi.Input[int]] = None,
-                 type: Optional[pulumi.Input[str]] = None):
+                 orchestrations: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
+                 passthrough: Optional[pulumi.Input[bool]] = None,
+                 required: Optional[pulumi.Input[bool]] = None,
+                 type: Optional[pulumi.Input[str]] = None,
+                 valid_enable: Optional[pulumi.Input[int]] = None):
         """
         :param pulumi.Input[str] name: Specifies the backend policy name.  
-               The valid length is limited from can contain `3` to `64`, only letters, digits and underscores (_) are allowed.
-        :param pulumi.Input[bool] required: Specifies whether the request parameter is required.
+               The valid length is limited from `3` to `64`, only letters, digits and underscores (_) are allowed.
+               It must start with a letter.
         :param pulumi.Input[str] default: Specifies the default value of the request parameter.
                The value contains a maximum of `255` characters and the angle brackets (< and >) are not allowed.
         :param pulumi.Input[str] description: Specifies the description of the constant or system parameter.  
                The description contains a maximum of `255` characters and the angle brackets (< and >) are not allowed.
+        :param pulumi.Input[str] enumeration: Specifies the enumerated value(s).
+               Use commas to separate multiple enumeration values, such as **VALUE_A,VALUE_B**.
         :param pulumi.Input[str] example: Specifies the example value of the request parameter.  
                The example contains a maximum of `255` characters and the angle brackets (< and >) are not allowed.
         :param pulumi.Input[str] location: Specifies the location of the backend parameter.  
                The valid values are **PATH**, **QUERY** and **HEADER**.
         :param pulumi.Input[int] maximum: Specifies the maximum value or size of the request parameter.
         :param pulumi.Input[int] minimum: Specifies the minimum value or size of the request parameter.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] orchestrations: Specifies the list of orchestration rule IDs which parameter used.  
+               The order of the IDs determines the priority of the rules, and the priority decreases according to the order of the
+               list elements.
+        :param pulumi.Input[bool] passthrough: Specifies whether to transparently transfer the parameter.
+        :param pulumi.Input[bool] required: Specifies whether the request parameter is required.
         :param pulumi.Input[str] type: Specifies the condition type of the backend policy.  
                The valid values are **Equal**, **Enumerated** and **Matching**, defaults to **Equal**.
+               When the `sys_name` is **req_method**, the valid values are **Equal** and **Enumerated**.
+        :param pulumi.Input[int] valid_enable: Specifies whether to enable the parameter validation.
+               + **1**: enable
+               + **2**: disable (by default)
         """
         pulumi.set(__self__, "name", name)
-        pulumi.set(__self__, "required", required)
         if default is not None:
             pulumi.set(__self__, "default", default)
         if description is not None:
             pulumi.set(__self__, "description", description)
+        if enumeration is not None:
+            pulumi.set(__self__, "enumeration", enumeration)
         if example is not None:
             pulumi.set(__self__, "example", example)
         if location is not None:
@@ -1031,33 +1434,30 @@ class ApiRequestParamArgs:
             pulumi.set(__self__, "maximum", maximum)
         if minimum is not None:
             pulumi.set(__self__, "minimum", minimum)
+        if orchestrations is not None:
+            pulumi.set(__self__, "orchestrations", orchestrations)
+        if passthrough is not None:
+            pulumi.set(__self__, "passthrough", passthrough)
+        if required is not None:
+            pulumi.set(__self__, "required", required)
         if type is not None:
             pulumi.set(__self__, "type", type)
+        if valid_enable is not None:
+            pulumi.set(__self__, "valid_enable", valid_enable)
 
     @property
     @pulumi.getter
     def name(self) -> pulumi.Input[str]:
         """
         Specifies the backend policy name.  
-        The valid length is limited from can contain `3` to `64`, only letters, digits and underscores (_) are allowed.
+        The valid length is limited from `3` to `64`, only letters, digits and underscores (_) are allowed.
+        It must start with a letter.
         """
         return pulumi.get(self, "name")
 
     @name.setter
     def name(self, value: pulumi.Input[str]):
         pulumi.set(self, "name", value)
-
-    @property
-    @pulumi.getter
-    def required(self) -> pulumi.Input[bool]:
-        """
-        Specifies whether the request parameter is required.
-        """
-        return pulumi.get(self, "required")
-
-    @required.setter
-    def required(self, value: pulumi.Input[bool]):
-        pulumi.set(self, "required", value)
 
     @property
     @pulumi.getter
@@ -1084,6 +1484,19 @@ class ApiRequestParamArgs:
     @description.setter
     def description(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "description", value)
+
+    @property
+    @pulumi.getter
+    def enumeration(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the enumerated value(s).
+        Use commas to separate multiple enumeration values, such as **VALUE_A,VALUE_B**.
+        """
+        return pulumi.get(self, "enumeration")
+
+    @enumeration.setter
+    def enumeration(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "enumeration", value)
 
     @property
     @pulumi.getter
@@ -1137,16 +1550,69 @@ class ApiRequestParamArgs:
 
     @property
     @pulumi.getter
+    def orchestrations(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]:
+        """
+        Specifies the list of orchestration rule IDs which parameter used.  
+        The order of the IDs determines the priority of the rules, and the priority decreases according to the order of the
+        list elements.
+        """
+        return pulumi.get(self, "orchestrations")
+
+    @orchestrations.setter
+    def orchestrations(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]):
+        pulumi.set(self, "orchestrations", value)
+
+    @property
+    @pulumi.getter
+    def passthrough(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies whether to transparently transfer the parameter.
+        """
+        return pulumi.get(self, "passthrough")
+
+    @passthrough.setter
+    def passthrough(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "passthrough", value)
+
+    @property
+    @pulumi.getter
+    def required(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies whether the request parameter is required.
+        """
+        return pulumi.get(self, "required")
+
+    @required.setter
+    def required(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "required", value)
+
+    @property
+    @pulumi.getter
     def type(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the condition type of the backend policy.  
         The valid values are **Equal**, **Enumerated** and **Matching**, defaults to **Equal**.
+        When the `sys_name` is **req_method**, the valid values are **Equal** and **Enumerated**.
         """
         return pulumi.get(self, "type")
 
     @type.setter
     def type(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "type", value)
+
+    @property
+    @pulumi.getter(name="validEnable")
+    def valid_enable(self) -> Optional[pulumi.Input[int]]:
+        """
+        Specifies whether to enable the parameter validation.
+        + **1**: enable
+        + **2**: disable (by default)
+        """
+        return pulumi.get(self, "valid_enable")
+
+    @valid_enable.setter
+    def valid_enable(self, value: Optional[pulumi.Input[int]]):
+        pulumi.set(self, "valid_enable", value)
 
 
 @pulumi.input_type
@@ -1158,6 +1624,7 @@ class ApiWebArgs:
                  host_header: Optional[pulumi.Input[str]] = None,
                  request_method: Optional[pulumi.Input[str]] = None,
                  request_protocol: Optional[pulumi.Input[str]] = None,
+                 retry_count: Optional[pulumi.Input[int]] = None,
                  ssl_enable: Optional[pulumi.Input[bool]] = None,
                  timeout: Optional[pulumi.Input[int]] = None,
                  vpc_channel_id: Optional[pulumi.Input[str]] = None):
@@ -1183,6 +1650,11 @@ class ApiWebArgs:
                The valid types are **GET**, **POST**, **PUT**, **DELETE**, **HEAD**, **PATCH**, **OPTIONS** and **ANY**.
         :param pulumi.Input[str] request_protocol: Specifies the backend request protocol. The valid values are **HTTP** and
                **HTTPS**, defaults to **HTTPS**.
+        :param pulumi.Input[int] retry_count: Specifies the number of retry attempts to request the backend service.
+               The valid value ranges from `-1` to `10`, defaults to `-1`.
+               `-1` indicates that idempotent APIs will retry once and non-idempotent APIs will not retry.
+               **POST** and **PATCH** are not-idempotent.
+               **GET**, **HEAD**, **PUT**, **OPTIONS** and **DELETE** are idempotent.
         :param pulumi.Input[bool] ssl_enable: Specifies whether to enable two-way authentication, defaults to **false**.
         :param pulumi.Input[int] timeout: Specifies the timeout, in ms, which allowed for APIG to request the backend service. The
                valid value is range from `1` to `600,000`, defaults to `5,000`.
@@ -1200,6 +1672,8 @@ class ApiWebArgs:
             pulumi.set(__self__, "request_method", request_method)
         if request_protocol is not None:
             pulumi.set(__self__, "request_protocol", request_protocol)
+        if retry_count is not None:
+            pulumi.set(__self__, "retry_count", retry_count)
         if ssl_enable is not None:
             pulumi.set(__self__, "ssl_enable", ssl_enable)
         if timeout is not None:
@@ -1295,6 +1769,22 @@ class ApiWebArgs:
         pulumi.set(self, "request_protocol", value)
 
     @property
+    @pulumi.getter(name="retryCount")
+    def retry_count(self) -> Optional[pulumi.Input[int]]:
+        """
+        Specifies the number of retry attempts to request the backend service.
+        The valid value ranges from `-1` to `10`, defaults to `-1`.
+        `-1` indicates that idempotent APIs will retry once and non-idempotent APIs will not retry.
+        **POST** and **PATCH** are not-idempotent.
+        **GET**, **HEAD**, **PUT**, **OPTIONS** and **DELETE** are idempotent.
+        """
+        return pulumi.get(self, "retry_count")
+
+    @retry_count.setter
+    def retry_count(self, value: Optional[pulumi.Input[int]]):
+        pulumi.set(self, "retry_count", value)
+
+    @property
     @pulumi.getter(name="sslEnable")
     def ssl_enable(self) -> Optional[pulumi.Input[bool]]:
         """
@@ -1346,6 +1836,7 @@ class ApiWebPolicyArgs:
                  effective_mode: Optional[pulumi.Input[str]] = None,
                  host_header: Optional[pulumi.Input[str]] = None,
                  request_protocol: Optional[pulumi.Input[str]] = None,
+                 retry_count: Optional[pulumi.Input[int]] = None,
                  timeout: Optional[pulumi.Input[int]] = None,
                  vpc_channel_id: Optional[pulumi.Input[str]] = None):
         """
@@ -1353,7 +1844,8 @@ class ApiWebPolicyArgs:
                Up to five conditions can be set.
                The object structure is documented below.
         :param pulumi.Input[str] name: Specifies the backend policy name.  
-               The valid length is limited from can contain `3` to `64`, only letters, digits and underscores (_) are allowed.
+               The valid length is limited from `3` to `64`, only letters, digits and underscores (_) are allowed.
+               It must start with a letter.
         :param pulumi.Input[str] path: Specifies the backend request address, which can contain a maximum of `512` characters and
                must comply with URI specifications.
                + The address can contain request parameters enclosed with brackets ({}).
@@ -1379,6 +1871,11 @@ class ApiWebPolicyArgs:
                By default, the original host header of the request is used.
         :param pulumi.Input[str] request_protocol: Specifies the backend request protocol. The valid values are **HTTP** and
                **HTTPS**, defaults to **HTTPS**.
+        :param pulumi.Input[int] retry_count: Specifies the number of retry attempts to request the backend service.
+               The valid value ranges from `-1` to `10`, defaults to `-1`.
+               `-1` indicates that idempotent APIs will retry once and non-idempotent APIs will not retry.
+               **POST** and **PATCH** are not-idempotent.
+               **GET**, **HEAD**, **PUT**, **OPTIONS** and **DELETE** are idempotent.
         :param pulumi.Input[int] timeout: Specifies the timeout, in ms, which allowed for APIG to request the backend service. The
                valid value is range from `1` to `600,000`, defaults to `5,000`.
         :param pulumi.Input[str] vpc_channel_id: Specifies the VPC channel ID.  
@@ -1400,6 +1897,8 @@ class ApiWebPolicyArgs:
             pulumi.set(__self__, "host_header", host_header)
         if request_protocol is not None:
             pulumi.set(__self__, "request_protocol", request_protocol)
+        if retry_count is not None:
+            pulumi.set(__self__, "retry_count", retry_count)
         if timeout is not None:
             pulumi.set(__self__, "timeout", timeout)
         if vpc_channel_id is not None:
@@ -1424,7 +1923,8 @@ class ApiWebPolicyArgs:
     def name(self) -> pulumi.Input[str]:
         """
         Specifies the backend policy name.  
-        The valid length is limited from can contain `3` to `64`, only letters, digits and underscores (_) are allowed.
+        The valid length is limited from `3` to `64`, only letters, digits and underscores (_) are allowed.
+        It must start with a letter.
         """
         return pulumi.get(self, "name")
 
@@ -1546,6 +2046,22 @@ class ApiWebPolicyArgs:
         pulumi.set(self, "request_protocol", value)
 
     @property
+    @pulumi.getter(name="retryCount")
+    def retry_count(self) -> Optional[pulumi.Input[int]]:
+        """
+        Specifies the number of retry attempts to request the backend service.
+        The valid value ranges from `-1` to `10`, defaults to `-1`.
+        `-1` indicates that idempotent APIs will retry once and non-idempotent APIs will not retry.
+        **POST** and **PATCH** are not-idempotent.
+        **GET**, **HEAD**, **PUT**, **OPTIONS** and **DELETE** are idempotent.
+        """
+        return pulumi.get(self, "retry_count")
+
+    @retry_count.setter
+    def retry_count(self, value: Optional[pulumi.Input[int]]):
+        pulumi.set(self, "retry_count", value)
+
+    @property
     @pulumi.getter
     def timeout(self) -> Optional[pulumi.Input[int]]:
         """
@@ -1585,9 +2101,11 @@ class ApiWebPolicyBackendParamArgs:
         :param pulumi.Input[str] location: Specifies the location of the backend parameter.  
                The valid values are **PATH**, **QUERY** and **HEADER**.
         :param pulumi.Input[str] name: Specifies the backend policy name.  
-               The valid length is limited from can contain `3` to `64`, only letters, digits and underscores (_) are allowed.
+               The valid length is limited from `3` to `64`, only letters, digits and underscores (_) are allowed.
+               It must start with a letter.
         :param pulumi.Input[str] type: Specifies the condition type of the backend policy.  
                The valid values are **Equal**, **Enumerated** and **Matching**, defaults to **Equal**.
+               When the `sys_name` is **req_method**, the valid values are **Equal** and **Enumerated**.
         :param pulumi.Input[str] value: Specifies the value of the backend policy.  
                For a condition with the input parameter source:
                + If the condition type is **Enumerated**, separate condition values with commas.
@@ -1624,7 +2142,8 @@ class ApiWebPolicyBackendParamArgs:
     def name(self) -> pulumi.Input[str]:
         """
         Specifies the backend policy name.  
-        The valid length is limited from can contain `3` to `64`, only letters, digits and underscores (_) are allowed.
+        The valid length is limited from `3` to `64`, only letters, digits and underscores (_) are allowed.
+        It must start with a letter.
         """
         return pulumi.get(self, "name")
 
@@ -1638,6 +2157,7 @@ class ApiWebPolicyBackendParamArgs:
         """
         Specifies the condition type of the backend policy.  
         The valid values are **Equal**, **Enumerated** and **Matching**, defaults to **Equal**.
+        When the `sys_name` is **req_method**, the valid values are **Equal** and **Enumerated**.
         """
         return pulumi.get(self, "type")
 
@@ -1691,26 +2211,57 @@ class ApiWebPolicyBackendParamArgs:
 class ApiWebPolicyConditionArgs:
     def __init__(__self__, *,
                  value: pulumi.Input[str],
+                 cookie_name: Optional[pulumi.Input[str]] = None,
+                 frontend_authorizer_name: Optional[pulumi.Input[str]] = None,
+                 mapped_param_location: Optional[pulumi.Input[str]] = None,
+                 mapped_param_name: Optional[pulumi.Input[str]] = None,
                  param_name: Optional[pulumi.Input[str]] = None,
                  source: Optional[pulumi.Input[str]] = None,
+                 sys_name: Optional[pulumi.Input[str]] = None,
                  type: Optional[pulumi.Input[str]] = None):
         """
         :param pulumi.Input[str] value: Specifies the value of the backend policy.  
                For a condition with the input parameter source:
                + If the condition type is **Enumerated**, separate condition values with commas.
                + If the condition type is **Matching**, enter a regular expression compatible with PERL.
+        :param pulumi.Input[str] cookie_name: Specifies the cookie parameter name.
+               This parameter is required if the policy type is **cookie**.
+        :param pulumi.Input[str] frontend_authorizer_name: Specifies the frontend authentication parameter name.
+               This parameter is required if the policy type is **frontend_authorizer**. It consists of two parts,
+               the first part is the fixed format **$context.authorizer.frontend.**, and the second part is the
+               frontend authentication parameter name. e.g. **$context.authorizer.frontend.user_name**.
+        :param pulumi.Input[str] mapped_param_location: Specifies the location of a parameter generated after orchestration.
+               This parameter is required if the policy type is **orchestration**.
+               The generated parameter location must exist in the orchestration rule bound to the API.
+        :param pulumi.Input[str] mapped_param_name: Specifies the name of a parameter generated after orchestration.
+               This parameter is required if the policy type is **orchestration**.
+               The generated parameter name must exist in the orchestration rule bound to the API.
         :param pulumi.Input[str] param_name: Specifies the request parameter name.
-               This parameter is required if the policy type is **param**.
+               This parameter is required if the policy type is **param**. The valid values are **user_age** and **X-TEST-ENUM**.
         :param pulumi.Input[str] source: Specifies the backend policy type.  
-               The valid values are **param** and **source**, defaults to **source**.
+               The valid values are **param**, **source**, **system**, **cookie** and **frontend_authorizer**, defaults to **source**.
+        :param pulumi.Input[str] sys_name: Specifies the gateway built-in parameter name.
+               This parameter is required if the policy type is **system**.
+               The valid values are **req_path** and **req_method**.
         :param pulumi.Input[str] type: Specifies the condition type of the backend policy.  
                The valid values are **Equal**, **Enumerated** and **Matching**, defaults to **Equal**.
+               When the `sys_name` is **req_method**, the valid values are **Equal** and **Enumerated**.
         """
         pulumi.set(__self__, "value", value)
+        if cookie_name is not None:
+            pulumi.set(__self__, "cookie_name", cookie_name)
+        if frontend_authorizer_name is not None:
+            pulumi.set(__self__, "frontend_authorizer_name", frontend_authorizer_name)
+        if mapped_param_location is not None:
+            pulumi.set(__self__, "mapped_param_location", mapped_param_location)
+        if mapped_param_name is not None:
+            pulumi.set(__self__, "mapped_param_name", mapped_param_name)
         if param_name is not None:
             pulumi.set(__self__, "param_name", param_name)
         if source is not None:
             pulumi.set(__self__, "source", source)
+        if sys_name is not None:
+            pulumi.set(__self__, "sys_name", sys_name)
         if type is not None:
             pulumi.set(__self__, "type", type)
 
@@ -1730,11 +2281,67 @@ class ApiWebPolicyConditionArgs:
         pulumi.set(self, "value", value)
 
     @property
+    @pulumi.getter(name="cookieName")
+    def cookie_name(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the cookie parameter name.
+        This parameter is required if the policy type is **cookie**.
+        """
+        return pulumi.get(self, "cookie_name")
+
+    @cookie_name.setter
+    def cookie_name(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "cookie_name", value)
+
+    @property
+    @pulumi.getter(name="frontendAuthorizerName")
+    def frontend_authorizer_name(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the frontend authentication parameter name.
+        This parameter is required if the policy type is **frontend_authorizer**. It consists of two parts,
+        the first part is the fixed format **$context.authorizer.frontend.**, and the second part is the
+        frontend authentication parameter name. e.g. **$context.authorizer.frontend.user_name**.
+        """
+        return pulumi.get(self, "frontend_authorizer_name")
+
+    @frontend_authorizer_name.setter
+    def frontend_authorizer_name(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "frontend_authorizer_name", value)
+
+    @property
+    @pulumi.getter(name="mappedParamLocation")
+    def mapped_param_location(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the location of a parameter generated after orchestration.
+        This parameter is required if the policy type is **orchestration**.
+        The generated parameter location must exist in the orchestration rule bound to the API.
+        """
+        return pulumi.get(self, "mapped_param_location")
+
+    @mapped_param_location.setter
+    def mapped_param_location(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "mapped_param_location", value)
+
+    @property
+    @pulumi.getter(name="mappedParamName")
+    def mapped_param_name(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the name of a parameter generated after orchestration.
+        This parameter is required if the policy type is **orchestration**.
+        The generated parameter name must exist in the orchestration rule bound to the API.
+        """
+        return pulumi.get(self, "mapped_param_name")
+
+    @mapped_param_name.setter
+    def mapped_param_name(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "mapped_param_name", value)
+
+    @property
     @pulumi.getter(name="paramName")
     def param_name(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the request parameter name.
-        This parameter is required if the policy type is **param**.
+        This parameter is required if the policy type is **param**. The valid values are **user_age** and **X-TEST-ENUM**.
         """
         return pulumi.get(self, "param_name")
 
@@ -1747,7 +2354,7 @@ class ApiWebPolicyConditionArgs:
     def source(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the backend policy type.  
-        The valid values are **param** and **source**, defaults to **source**.
+        The valid values are **param**, **source**, **system**, **cookie** and **frontend_authorizer**, defaults to **source**.
         """
         return pulumi.get(self, "source")
 
@@ -1756,11 +2363,26 @@ class ApiWebPolicyConditionArgs:
         pulumi.set(self, "source", value)
 
     @property
+    @pulumi.getter(name="sysName")
+    def sys_name(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the gateway built-in parameter name.
+        This parameter is required if the policy type is **system**.
+        The valid values are **req_path** and **req_method**.
+        """
+        return pulumi.get(self, "sys_name")
+
+    @sys_name.setter
+    def sys_name(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "sys_name", value)
+
+    @property
     @pulumi.getter
     def type(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the condition type of the backend policy.  
         The valid values are **Equal**, **Enumerated** and **Matching**, defaults to **Equal**.
+        When the `sys_name` is **req_method**, the valid values are **Equal** and **Enumerated**.
         """
         return pulumi.get(self, "type")
 
@@ -1875,12 +2497,7 @@ class GroupEnvironmentVariableArgs:
                  id: Optional[pulumi.Input[str]] = None,
                  variable_id: Optional[pulumi.Input[str]] = None):
         """
-        :param pulumi.Input[str] name: Specifies the variable name.  
-               The valid length is limited from `3` to `32` characters.
-               Only letters, digits, hyphens (-), and underscores (_) are allowed, and must start with a letter.
-               In the definition of an API, `name` (case-sensitive) indicates a variable, such as #Name#.
-               It is replaced by the actual value when the API is published in an environment.
-               The variable names are not allowed to be repeated for an API group.
+        :param pulumi.Input[str] name: Specifies the domain name. The valid must comply with the domian name specifications.
         :param pulumi.Input[str] value: Specifies the variable value.  
                The valid length is limited from `1` to `255` characters.
                Only letters, digits and special characters (_-/.:) are allowed.
@@ -1900,12 +2517,7 @@ class GroupEnvironmentVariableArgs:
     @pulumi.getter
     def name(self) -> pulumi.Input[str]:
         """
-        Specifies the variable name.  
-        The valid length is limited from `3` to `32` characters.
-        Only letters, digits, hyphens (-), and underscores (_) are allowed, and must start with a letter.
-        In the definition of an API, `name` (case-sensitive) indicates a variable, such as #Name#.
-        It is replaced by the actual value when the API is published in an environment.
-        The variable names are not allowed to be repeated for an API group.
+        Specifies the domain name. The valid must comply with the domian name specifications.
         """
         return pulumi.get(self, "name")
 
@@ -1950,33 +2562,188 @@ class GroupEnvironmentVariableArgs:
 
 
 @pulumi.input_type
+class GroupUrlDomainArgs:
+    def __init__(__self__, *,
+                 name: pulumi.Input[str],
+                 is_http_redirect_to_https: Optional[pulumi.Input[bool]] = None,
+                 min_ssl_version: Optional[pulumi.Input[str]] = None):
+        """
+        :param pulumi.Input[str] name: Specifies the domain name. The valid must comply with the domian name specifications.
+        :param pulumi.Input[bool] is_http_redirect_to_https: Specifies whether to enable redirection from `HTTP` to `HTTPS`.
+               The default value is `false`.
+        :param pulumi.Input[str] min_ssl_version: Specifies the minimum TLS version that can be used to access the domain name,
+               the default value is `TLSv1.2`.
+               The valid values are as follows:
+               + **TLSv1.1**
+               + **TLSv1.2**
+        """
+        pulumi.set(__self__, "name", name)
+        if is_http_redirect_to_https is not None:
+            pulumi.set(__self__, "is_http_redirect_to_https", is_http_redirect_to_https)
+        if min_ssl_version is not None:
+            pulumi.set(__self__, "min_ssl_version", min_ssl_version)
+
+    @property
+    @pulumi.getter
+    def name(self) -> pulumi.Input[str]:
+        """
+        Specifies the domain name. The valid must comply with the domian name specifications.
+        """
+        return pulumi.get(self, "name")
+
+    @name.setter
+    def name(self, value: pulumi.Input[str]):
+        pulumi.set(self, "name", value)
+
+    @property
+    @pulumi.getter(name="isHttpRedirectToHttps")
+    def is_http_redirect_to_https(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies whether to enable redirection from `HTTP` to `HTTPS`.
+        The default value is `false`.
+        """
+        return pulumi.get(self, "is_http_redirect_to_https")
+
+    @is_http_redirect_to_https.setter
+    def is_http_redirect_to_https(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "is_http_redirect_to_https", value)
+
+    @property
+    @pulumi.getter(name="minSslVersion")
+    def min_ssl_version(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the minimum TLS version that can be used to access the domain name,
+        the default value is `TLSv1.2`.
+        The valid values are as follows:
+        + **TLSv1.1**
+        + **TLSv1.2**
+        """
+        return pulumi.get(self, "min_ssl_version")
+
+    @min_ssl_version.setter
+    def min_ssl_version(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "min_ssl_version", value)
+
+
+@pulumi.input_type
+class InstanceCustomIngressPortArgs:
+    def __init__(__self__, *,
+                 port: pulumi.Input[int],
+                 protocol: pulumi.Input[str],
+                 id: Optional[pulumi.Input[str]] = None,
+                 status: Optional[pulumi.Input[str]] = None):
+        """
+        :param pulumi.Input[int] port: Specified port of the custom ingress port.
+               The valid value is range form `1,024` to `49,151`.
+        :param pulumi.Input[str] protocol: Specified protocol of the custom ingress port.  
+               The valid values are as follows:
+               + **HTTP**
+               + **HTTPS**
+        :param pulumi.Input[str] id: The ID of the custom ingress port.
+        :param pulumi.Input[str] status: The current status of the custom ingress port.
+               + **normal**
+               + **abnormal**
+        """
+        pulumi.set(__self__, "port", port)
+        pulumi.set(__self__, "protocol", protocol)
+        if id is not None:
+            pulumi.set(__self__, "id", id)
+        if status is not None:
+            pulumi.set(__self__, "status", status)
+
+    @property
+    @pulumi.getter
+    def port(self) -> pulumi.Input[int]:
+        """
+        Specified port of the custom ingress port.
+        The valid value is range form `1,024` to `49,151`.
+        """
+        return pulumi.get(self, "port")
+
+    @port.setter
+    def port(self, value: pulumi.Input[int]):
+        pulumi.set(self, "port", value)
+
+    @property
+    @pulumi.getter
+    def protocol(self) -> pulumi.Input[str]:
+        """
+        Specified protocol of the custom ingress port.  
+        The valid values are as follows:
+        + **HTTP**
+        + **HTTPS**
+        """
+        return pulumi.get(self, "protocol")
+
+    @protocol.setter
+    def protocol(self, value: pulumi.Input[str]):
+        pulumi.set(self, "protocol", value)
+
+    @property
+    @pulumi.getter
+    def id(self) -> Optional[pulumi.Input[str]]:
+        """
+        The ID of the custom ingress port.
+        """
+        return pulumi.get(self, "id")
+
+    @id.setter
+    def id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "id", value)
+
+    @property
+    @pulumi.getter
+    def status(self) -> Optional[pulumi.Input[str]]:
+        """
+        The current status of the custom ingress port.
+        + **normal**
+        + **abnormal**
+        """
+        return pulumi.get(self, "status")
+
+    @status.setter
+    def status(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "status", value)
+
+
+@pulumi.input_type
 class ResponseRuleArgs:
     def __init__(__self__, *,
                  body: pulumi.Input[str],
                  error_type: pulumi.Input[str],
+                 headers: Optional[pulumi.Input[Sequence[pulumi.Input['ResponseRuleHeaderArgs']]]] = None,
                  status_code: Optional[pulumi.Input[int]] = None):
         """
         :param pulumi.Input[str] body: Specifies the body template of the API response rule, e.g.
                `{\\"code\\":\\"$context.authorizer.frontend.code\\",\\"message\\":\\"$context.authorizer.frontend.message\\"}`
         :param pulumi.Input[str] error_type: Specifies the error type of the API response rule.
-               + **AUTH_FAILURE**: Authentication failed.
-               + **AUTH_HEADER_MISSING**: The identity source is missing.
-               + **AUTHORIZER_FAILURE**: Custom authentication failed.
-               + **AUTHORIZER_CONF_FAILURE**: There has been a custom authorizer error.
-               + **AUTHORIZER_IDENTITIES_FAILURE**: The identity source of the custom authorizer is invalid.
-               + **BACKEND_UNAVAILABLE**: The backend service is unavailable.
-               + **BACKEND_TIMEOUT**: Communication with the backend service timed out.
-               + **THROTTLED**: The request was rejected due to request throttling.
-               + **UNAUTHORIZED**: The app you are using has not been authorized to call the API.
-               + **ACCESS_DENIED**: Access denied.
-               + **NOT_FOUND**: No API is found.
-               + **REQUEST_PARAMETERS_FAILURE**: The request parameters are incorrect.
-               + **DEFAULT_4XX**: Another 4XX error occurred.
-               + **DEFAULT_5XX**: Another 5XX error occurred.
+               The valid values and the related default status code are as follows:
+               + **ACCESS_DENIED**: (**403**) Access denied.
+               + **AUTH_FAILURE**: (**401**) Authentication failed.
+               + **AUTH_HEADER_MISSING**: (**401**) The identity source is missing.
+               + **AUTHORIZER_CONF_FAILURE**: (**500**) There has been a custom authorizer error.
+               + **AUTHORIZER_FAILURE**: (**500**) Custom authentication failed.
+               + **AUTHORIZER_IDENTITIES_FAILURE**: (**401**) The identity source of the custom authorizer is invalid.
+               + **BACKEND_TIMEOUT**: (**504**) Communication with the backend service timed out.
+               + **BACKEND_UNAVAILABLE**: (**502**) The backend service is unavailable.
+               + **NOT_FOUND**: (**404**) No API is found.
+               + **REQUEST_PARAMETERS_FAILURE**: (**400**) The request parameters are incorrect.
+               + **THROTTLED**: (**429**) The request was rejected due to request throttling.
+               + **UNAUTHORIZED**: (**401**) The app you are using has not been authorized to call the API.
+               + **DEFAULT_4XX**: (**NONE**) Another 4XX error occurred.
+               + **DEFAULT_5XX**: (**NONE**) Another 5XX error occurred.
+               + **THIRD_AUTH_CONF_FAILURE**: (**500**) Third-party authorizer configuration error.
+               + **THIRD_AUTH_FAILURE**: (**401**) Third-party authentication failed.
+               + **THIRD_AUTH_IDENTITIES_FAILURE**: (**401**) Identity source of the third-party authorizer is invalid.
+        :param pulumi.Input[Sequence[pulumi.Input['ResponseRuleHeaderArgs']]] headers: Specifies the configuration of the custom response headers.  
+               The headers structure is documented below.
         :param pulumi.Input[int] status_code: Specifies the HTTP status code of the API response rule.
+               The valid value is range from `200` to `599`.
         """
         pulumi.set(__self__, "body", body)
         pulumi.set(__self__, "error_type", error_type)
+        if headers is not None:
+            pulumi.set(__self__, "headers", headers)
         if status_code is not None:
             pulumi.set(__self__, "status_code", status_code)
 
@@ -1998,20 +2765,24 @@ class ResponseRuleArgs:
     def error_type(self) -> pulumi.Input[str]:
         """
         Specifies the error type of the API response rule.
-        + **AUTH_FAILURE**: Authentication failed.
-        + **AUTH_HEADER_MISSING**: The identity source is missing.
-        + **AUTHORIZER_FAILURE**: Custom authentication failed.
-        + **AUTHORIZER_CONF_FAILURE**: There has been a custom authorizer error.
-        + **AUTHORIZER_IDENTITIES_FAILURE**: The identity source of the custom authorizer is invalid.
-        + **BACKEND_UNAVAILABLE**: The backend service is unavailable.
-        + **BACKEND_TIMEOUT**: Communication with the backend service timed out.
-        + **THROTTLED**: The request was rejected due to request throttling.
-        + **UNAUTHORIZED**: The app you are using has not been authorized to call the API.
-        + **ACCESS_DENIED**: Access denied.
-        + **NOT_FOUND**: No API is found.
-        + **REQUEST_PARAMETERS_FAILURE**: The request parameters are incorrect.
-        + **DEFAULT_4XX**: Another 4XX error occurred.
-        + **DEFAULT_5XX**: Another 5XX error occurred.
+        The valid values and the related default status code are as follows:
+        + **ACCESS_DENIED**: (**403**) Access denied.
+        + **AUTH_FAILURE**: (**401**) Authentication failed.
+        + **AUTH_HEADER_MISSING**: (**401**) The identity source is missing.
+        + **AUTHORIZER_CONF_FAILURE**: (**500**) There has been a custom authorizer error.
+        + **AUTHORIZER_FAILURE**: (**500**) Custom authentication failed.
+        + **AUTHORIZER_IDENTITIES_FAILURE**: (**401**) The identity source of the custom authorizer is invalid.
+        + **BACKEND_TIMEOUT**: (**504**) Communication with the backend service timed out.
+        + **BACKEND_UNAVAILABLE**: (**502**) The backend service is unavailable.
+        + **NOT_FOUND**: (**404**) No API is found.
+        + **REQUEST_PARAMETERS_FAILURE**: (**400**) The request parameters are incorrect.
+        + **THROTTLED**: (**429**) The request was rejected due to request throttling.
+        + **UNAUTHORIZED**: (**401**) The app you are using has not been authorized to call the API.
+        + **DEFAULT_4XX**: (**NONE**) Another 4XX error occurred.
+        + **DEFAULT_5XX**: (**NONE**) Another 5XX error occurred.
+        + **THIRD_AUTH_CONF_FAILURE**: (**500**) Third-party authorizer configuration error.
+        + **THIRD_AUTH_FAILURE**: (**401**) Third-party authentication failed.
+        + **THIRD_AUTH_IDENTITIES_FAILURE**: (**401**) Identity source of the third-party authorizer is invalid.
         """
         return pulumi.get(self, "error_type")
 
@@ -2020,16 +2791,71 @@ class ResponseRuleArgs:
         pulumi.set(self, "error_type", value)
 
     @property
+    @pulumi.getter
+    def headers(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['ResponseRuleHeaderArgs']]]]:
+        """
+        Specifies the configuration of the custom response headers.  
+        The headers structure is documented below.
+        """
+        return pulumi.get(self, "headers")
+
+    @headers.setter
+    def headers(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['ResponseRuleHeaderArgs']]]]):
+        pulumi.set(self, "headers", value)
+
+    @property
     @pulumi.getter(name="statusCode")
     def status_code(self) -> Optional[pulumi.Input[int]]:
         """
         Specifies the HTTP status code of the API response rule.
+        The valid value is range from `200` to `599`.
         """
         return pulumi.get(self, "status_code")
 
     @status_code.setter
     def status_code(self, value: Optional[pulumi.Input[int]]):
         pulumi.set(self, "status_code", value)
+
+
+@pulumi.input_type
+class ResponseRuleHeaderArgs:
+    def __init__(__self__, *,
+                 key: pulumi.Input[str],
+                 value: pulumi.Input[str]):
+        """
+        :param pulumi.Input[str] key: Specifies the key name of the response header.
+               The valid length is limited from `1` to `128`, only English letters, digits and hyphens (-) are allowed.
+        :param pulumi.Input[str] value: Specifies the value for the specified response header key.
+               The valid length is limited from `1` to `1,024`.
+        """
+        pulumi.set(__self__, "key", key)
+        pulumi.set(__self__, "value", value)
+
+    @property
+    @pulumi.getter
+    def key(self) -> pulumi.Input[str]:
+        """
+        Specifies the key name of the response header.
+        The valid length is limited from `1` to `128`, only English letters, digits and hyphens (-) are allowed.
+        """
+        return pulumi.get(self, "key")
+
+    @key.setter
+    def key(self, value: pulumi.Input[str]):
+        pulumi.set(self, "key", value)
+
+    @property
+    @pulumi.getter
+    def value(self) -> pulumi.Input[str]:
+        """
+        Specifies the value for the specified response header key.
+        The valid length is limited from `1` to `1,024`.
+        """
+        return pulumi.get(self, "value")
+
+    @value.setter
+    def value(self, value: pulumi.Input[str]):
+        pulumi.set(self, "value", value)
 
 
 @pulumi.input_type

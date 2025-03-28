@@ -33,9 +33,18 @@ export class Database_privilege extends pulumi.CustomResource {
         return obj['__pulumiType'] === Database_privilege.__pulumiType;
     }
 
+    /**
+     * Specifies the database name.
+     */
     public readonly dbName!: pulumi.Output<string>;
+    /**
+     * Specifies the ID of the RDS Mysql instance.
+     */
     public readonly instanceId!: pulumi.Output<string>;
     public readonly region!: pulumi.Output<string>;
+    /**
+     * Specifies the account that associated with the database.
+     */
     public readonly users!: pulumi.Output<outputs.Rds.Database_privilegeUser[]>;
 
     /**
@@ -80,9 +89,18 @@ export class Database_privilege extends pulumi.CustomResource {
  * Input properties used for looking up and filtering Database_privilege resources.
  */
 export interface Database_privilegeState {
+    /**
+     * Specifies the database name.
+     */
     dbName?: pulumi.Input<string>;
+    /**
+     * Specifies the ID of the RDS Mysql instance.
+     */
     instanceId?: pulumi.Input<string>;
     region?: pulumi.Input<string>;
+    /**
+     * Specifies the account that associated with the database.
+     */
     users?: pulumi.Input<pulumi.Input<inputs.Rds.Database_privilegeUser>[]>;
 }
 
@@ -90,8 +108,17 @@ export interface Database_privilegeState {
  * The set of arguments for constructing a Database_privilege resource.
  */
 export interface Database_privilegeArgs {
+    /**
+     * Specifies the database name.
+     */
     dbName: pulumi.Input<string>;
+    /**
+     * Specifies the ID of the RDS Mysql instance.
+     */
     instanceId: pulumi.Input<string>;
     region?: pulumi.Input<string>;
+    /**
+     * Specifies the account that associated with the database.
+     */
     users: pulumi.Input<pulumi.Input<inputs.Rds.Database_privilegeUser>[]>;
 }

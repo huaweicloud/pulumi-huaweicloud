@@ -11,10 +11,12 @@ from .. import _utilities
 from . import outputs
 
 __all__ = [
+    'OpengaussInstanceAdvanceFeature',
     'OpengaussInstanceBackupStrategy',
     'OpengaussInstanceDatastore',
     'OpengaussInstanceHa',
     'OpengaussInstanceNode',
+    'OpengaussInstanceParameter',
     'OpengaussInstanceVolume',
     'GetOpengaussInstanceBackupStrategyResult',
     'GetOpengaussInstanceDatastoreResult',
@@ -28,6 +30,35 @@ __all__ = [
     'GetOpengaussInstancesInstanceNodeResult',
     'GetOpengaussInstancesInstanceVolumeResult',
 ]
+
+@pulumi.output_type
+class OpengaussInstanceAdvanceFeature(dict):
+    def __init__(__self__, *,
+                 name: str,
+                 value: str):
+        """
+        :param str name: Specifies the name of the advance feature.
+        :param str value: Specifies the value of the advance feature.
+        """
+        pulumi.set(__self__, "name", name)
+        pulumi.set(__self__, "value", value)
+
+    @property
+    @pulumi.getter
+    def name(self) -> str:
+        """
+        Specifies the name of the advance feature.
+        """
+        return pulumi.get(self, "name")
+
+    @property
+    @pulumi.getter
+    def value(self) -> str:
+        """
+        Specifies the value of the advance feature.
+        """
+        return pulumi.get(self, "value")
+
 
 @pulumi.output_type
 class OpengaussInstanceBackupStrategy(dict):
@@ -129,6 +160,8 @@ class OpengaussInstanceHa(dict):
         suggest = None
         if key == "replicationMode":
             suggest = "replication_mode"
+        elif key == "instanceMode":
+            suggest = "instance_mode"
 
         if suggest:
             pulumi.log.warn(f"Key '{key}' not found in OpengaussInstanceHa. Access the value via the '{suggest}' property getter instead.")
@@ -144,27 +177,34 @@ class OpengaussInstanceHa(dict):
     def __init__(__self__, *,
                  mode: str,
                  replication_mode: str,
-                 consistency: Optional[str] = None):
+                 consistency: Optional[str] = None,
+                 instance_mode: Optional[str] = None):
         """
-        :param str mode: Specifies the database mode.
+        :param str mode: Specifies the deployment model.
                The valid values are **enterprise** and **centralization_standard**.
                Changing this parameter will create a new resource.
         :param str replication_mode: Specifies the database replication mode.
                Only **sync** is supported now. Changing this parameter will create a new resource.
         :param str consistency: Specifies the database consistency mode.
-               The valid values are **strong** and **eventual**, not case sensitive.
+               The valid values are **strong** and **eventual**, not case-sensitive.
                Changing this parameter will create a new resource.
+        :param str instance_mode: Specifies the product type of the instance. Value options:
+               + **enterprise**: The instance of the enterprise edition will be created.
+               + **basic**: The instance of the basic edition will be created.
+               + **ecology**: The instance of the ecosystem edition will be created.
         """
         pulumi.set(__self__, "mode", mode)
         pulumi.set(__self__, "replication_mode", replication_mode)
         if consistency is not None:
             pulumi.set(__self__, "consistency", consistency)
+        if instance_mode is not None:
+            pulumi.set(__self__, "instance_mode", instance_mode)
 
     @property
     @pulumi.getter
     def mode(self) -> str:
         """
-        Specifies the database mode.
+        Specifies the deployment model.
         The valid values are **enterprise** and **centralization_standard**.
         Changing this parameter will create a new resource.
         """
@@ -184,10 +224,21 @@ class OpengaussInstanceHa(dict):
     def consistency(self) -> Optional[str]:
         """
         Specifies the database consistency mode.
-        The valid values are **strong** and **eventual**, not case sensitive.
+        The valid values are **strong** and **eventual**, not case-sensitive.
         Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "consistency")
+
+    @property
+    @pulumi.getter(name="instanceMode")
+    def instance_mode(self) -> Optional[str]:
+        """
+        Specifies the product type of the instance. Value options:
+        + **enterprise**: The instance of the enterprise edition will be created.
+        + **basic**: The instance of the basic edition will be created.
+        + **ecology**: The instance of the ecosystem edition will be created.
+        """
+        return pulumi.get(self, "instance_mode")
 
 
 @pulumi.output_type
@@ -197,6 +248,10 @@ class OpengaussInstanceNode(dict):
         suggest = None
         if key == "availabilityZone":
             suggest = "availability_zone"
+        elif key == "privateIp":
+            suggest = "private_ip"
+        elif key == "publicIp":
+            suggest = "public_ip"
 
         if suggest:
             pulumi.log.warn(f"Key '{key}' not found in OpengaussInstanceNode. Access the value via the '{suggest}' property getter instead.")
@@ -213,15 +268,17 @@ class OpengaussInstanceNode(dict):
                  availability_zone: Optional[str] = None,
                  id: Optional[str] = None,
                  name: Optional[str] = None,
+                 private_ip: Optional[str] = None,
+                 public_ip: Optional[str] = None,
                  role: Optional[str] = None,
                  status: Optional[str] = None):
         """
         :param str availability_zone: Specifies the availability zone information, can be three same or
                different az like **cn-north-4a,cn-north-4a,cn-north-4a**. Changing this parameter will create a new resource.
         :param str id: Indicates the node ID.
-        :param str name: Specifies the instance name, which can be the same as an existing instance name.
-               The value must be `4` to `64` characters in length and start with a letter. It is case-sensitive and can contain only
-               letters, digits, hyphens (-), and underscores (_).
+        :param str name: Specifies the name of the advance feature.
+        :param str private_ip: Indicates the private IP address of the node.
+        :param str public_ip: Indicates the EIP that has been bound.
         :param str role: Indicates the node role.
                + **master**.
                + **slave**.
@@ -233,6 +290,10 @@ class OpengaussInstanceNode(dict):
             pulumi.set(__self__, "id", id)
         if name is not None:
             pulumi.set(__self__, "name", name)
+        if private_ip is not None:
+            pulumi.set(__self__, "private_ip", private_ip)
+        if public_ip is not None:
+            pulumi.set(__self__, "public_ip", public_ip)
         if role is not None:
             pulumi.set(__self__, "role", role)
         if status is not None:
@@ -259,11 +320,25 @@ class OpengaussInstanceNode(dict):
     @pulumi.getter
     def name(self) -> Optional[str]:
         """
-        Specifies the instance name, which can be the same as an existing instance name.
-        The value must be `4` to `64` characters in length and start with a letter. It is case-sensitive and can contain only
-        letters, digits, hyphens (-), and underscores (_).
+        Specifies the name of the advance feature.
         """
         return pulumi.get(self, "name")
+
+    @property
+    @pulumi.getter(name="privateIp")
+    def private_ip(self) -> Optional[str]:
+        """
+        Indicates the private IP address of the node.
+        """
+        return pulumi.get(self, "private_ip")
+
+    @property
+    @pulumi.getter(name="publicIp")
+    def public_ip(self) -> Optional[str]:
+        """
+        Indicates the EIP that has been bound.
+        """
+        return pulumi.get(self, "public_ip")
 
     @property
     @pulumi.getter
@@ -282,6 +357,35 @@ class OpengaussInstanceNode(dict):
         Indicates the node status.
         """
         return pulumi.get(self, "status")
+
+
+@pulumi.output_type
+class OpengaussInstanceParameter(dict):
+    def __init__(__self__, *,
+                 name: str,
+                 value: str):
+        """
+        :param str name: Specifies the name of the advance feature.
+        :param str value: Specifies the value of the advance feature.
+        """
+        pulumi.set(__self__, "name", name)
+        pulumi.set(__self__, "value", value)
+
+    @property
+    @pulumi.getter
+    def name(self) -> str:
+        """
+        Specifies the name of the advance feature.
+        """
+        return pulumi.get(self, "name")
+
+    @property
+    @pulumi.getter
+    def value(self) -> str:
+        """
+        Specifies the value of the advance feature.
+        """
+        return pulumi.get(self, "value")
 
 
 @pulumi.output_type
@@ -459,8 +563,9 @@ class GetOpengaussInstanceVolumeResult(dict):
                  size: int,
                  type: str):
         """
-        :param int size: Indicates the volume size.
-        :param str type: Indicates the volume type.
+        :param int size: Indicates the volume size. For ECS deployment: The value is from (Number of shards x 40 GB) to (Number of
+               shards x 24 TB) and must be a multiple of (Number of shards x 4 GB).
+        :param str type: Indicates the volume type. Value options: **ULTRAHIGH**, **ESSD**.
         """
         pulumi.set(__self__, "size", size)
         pulumi.set(__self__, "type", type)
@@ -469,7 +574,8 @@ class GetOpengaussInstanceVolumeResult(dict):
     @pulumi.getter
     def size(self) -> int:
         """
-        Indicates the volume size.
+        Indicates the volume size. For ECS deployment: The value is from (Number of shards x 40 GB) to (Number of
+        shards x 24 TB) and must be a multiple of (Number of shards x 4 GB).
         """
         return pulumi.get(self, "size")
 
@@ -477,7 +583,7 @@ class GetOpengaussInstanceVolumeResult(dict):
     @pulumi.getter
     def type(self) -> str:
         """
-        Indicates the volume type.
+        Indicates the volume type. Value options: **ULTRAHIGH**, **ESSD**.
         """
         return pulumi.get(self, "type")
 
@@ -495,6 +601,7 @@ class GetOpengaussInstancesInstanceResult(dict):
                  has: Sequence['outputs.GetOpengaussInstancesInstanceHaResult'],
                  id: str,
                  maintenance_window: str,
+                 mysql_compatibility_port: str,
                  name: str,
                  nodes: Sequence['outputs.GetOpengaussInstancesInstanceNodeResult'],
                  port: int,
@@ -522,6 +629,7 @@ class GetOpengaussInstancesInstanceResult(dict):
         :param Sequence['GetOpengaussInstancesInstanceHaArgs'] has: Indicates the instance ha information. Structure is documented below.
         :param str id: Indicates the node ID.
         :param str maintenance_window: Indicates the maintenance window.
+        :param str mysql_compatibility_port: Indicates the port for MySQL compatibility.
         :param str name: Specifies the name of the instance.
         :param Sequence['GetOpengaussInstancesInstanceNodeArgs'] nodes: Indicates the instance nodes information. Structure is documented below.
         :param int port: Indicates the database port.
@@ -550,6 +658,7 @@ class GetOpengaussInstancesInstanceResult(dict):
         pulumi.set(__self__, "has", has)
         pulumi.set(__self__, "id", id)
         pulumi.set(__self__, "maintenance_window", maintenance_window)
+        pulumi.set(__self__, "mysql_compatibility_port", mysql_compatibility_port)
         pulumi.set(__self__, "name", name)
         pulumi.set(__self__, "nodes", nodes)
         pulumi.set(__self__, "port", port)
@@ -646,6 +755,14 @@ class GetOpengaussInstancesInstanceResult(dict):
         Indicates the maintenance window.
         """
         return pulumi.get(self, "maintenance_window")
+
+    @property
+    @pulumi.getter(name="mysqlCompatibilityPort")
+    def mysql_compatibility_port(self) -> str:
+        """
+        Indicates the port for MySQL compatibility.
+        """
+        return pulumi.get(self, "mysql_compatibility_port")
 
     @property
     @pulumi.getter

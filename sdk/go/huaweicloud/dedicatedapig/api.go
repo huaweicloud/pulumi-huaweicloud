@@ -14,6 +14,7 @@ import (
 // Manages an APIG API resource within HuaweiCloud.
 //
 // ## Example Usage
+// ### Create an API with the Web backend and the protocol type is HTTP
 //
 // ```go
 // package main
@@ -94,6 +95,13 @@ type Api struct {
 	// request body, media type or parameters.
 	// The request body does not exceed `20,480` characters.
 	BodyDescription pulumi.StringPtrOutput `pulumi:"bodyDescription"`
+	// Specifies the content type of the request body.\
+	// The valid values are as follows:
+	// + **application/json**
+	// + **application/xml**
+	// + **multipart/form-data**
+	// + **text/plain**
+	ContentType pulumi.StringOutput `pulumi:"contentType"`
 	// Specifies whether CORS is supported, defaults to **false**.
 	Cors pulumi.BoolPtrOutput `pulumi:"cors"`
 	// Specifies the description of the constant or system parameter.\
@@ -110,11 +118,21 @@ type Api struct {
 	// The maximum blocks of the policy is 5.
 	// The object structure is documented below.
 	FuncGraphPolicies ApiFuncGraphPolicyArrayOutput `pulumi:"funcGraphPolicies"`
-	// Specifies an ID of the APIG group to which the API belongs to.
+	// Specifies the ID of the APIG group to which the API belongs.\
+	// Changing this will create a new API resource.
 	GroupId pulumi.StringOutput `pulumi:"groupId"`
 	// Specifies an ID of the APIG dedicated instance to which the API belongs
 	// to. Changing this will create a new API resource.
 	InstanceId pulumi.StringOutput `pulumi:"instanceId"`
+	// Specifies whether to perform base64 encoding on the body for interaction
+	// with FunctionGraph.
+	// Defaults to **true**.
+	// The body does not need to be encoded using base64 only when `contentType` is set to **application/json**.
+	// These scenarios which can be applied:
+	// + Custom authentication.
+	// + Bound circuit breaker plug-in with FunctionGraph backend downgrade policy.
+	// + APIs with FunctionGraph backend.
+	IsSendFgBodyBase64 pulumi.BoolPtrOutput `pulumi:"isSendFgBodyBase64"`
 	// Specifies the route matching mode.\
 	// The valid values are **Exact** and **Prefix**, defaults to **Exact**.
 	Matching pulumi.StringPtrOutput `pulumi:"matching"`
@@ -127,7 +145,8 @@ type Api struct {
 	// The object structure is documented below.
 	MockPolicies ApiMockPolicyArrayOutput `pulumi:"mockPolicies"`
 	// Specifies the backend policy name.\
-	// The valid length is limited from can contain `3` to `64`, only letters, digits and underscores (_) are allowed.
+	// The valid length is limited from `3` to `64`, only letters, digits and underscores (_) are allowed.
+	// It must start with a letter.
 	Name pulumi.StringOutput `pulumi:"name"`
 	// Specifies the region where the API is located.\
 	// If omitted, the provider-level region will be used. Changing this will create a new API resource.
@@ -152,7 +171,7 @@ type Api struct {
 	// Specifies the APIG group response ID.
 	ResponseId pulumi.StringPtrOutput `pulumi:"responseId"`
 	// Specifies the security authentication mode of the API request.\
-	// The valid values are **NONE**, **APP** and **IAM**, defaults to **NONE**.
+	// The valid values are **NONE**, **APP**, **IAM** and **AUTHORIZER**, defaults to **NONE**.
 	SecurityAuthentication pulumi.StringPtrOutput `pulumi:"securityAuthentication"`
 	// Specifies whether the authentication of the application code is enabled.\
 	// The application code must located in the header when `simpleAuthentication` is true.
@@ -160,8 +179,11 @@ type Api struct {
 	// Specifies the example response for a successful request.\
 	// The response contains a maximum of `20,480` characters.
 	SuccessResponse pulumi.StringPtrOutput `pulumi:"successResponse"`
+	// Specifies the list of tags configuration.
+	Tags pulumi.StringArrayOutput `pulumi:"tags"`
 	// Specifies the condition type of the backend policy.\
 	// The valid values are **Equal**, **Enumerated** and **Matching**, defaults to **Equal**.
+	// When the `sysName` is **req_method**, the valid values are **Equal** and **Enumerated**.
 	Type pulumi.StringOutput `pulumi:"type"`
 	// The latest update time of the API.
 	UpdatedAt pulumi.StringOutput `pulumi:"updatedAt"`
@@ -231,6 +253,13 @@ type apiState struct {
 	// request body, media type or parameters.
 	// The request body does not exceed `20,480` characters.
 	BodyDescription *string `pulumi:"bodyDescription"`
+	// Specifies the content type of the request body.\
+	// The valid values are as follows:
+	// + **application/json**
+	// + **application/xml**
+	// + **multipart/form-data**
+	// + **text/plain**
+	ContentType *string `pulumi:"contentType"`
 	// Specifies whether CORS is supported, defaults to **false**.
 	Cors *bool `pulumi:"cors"`
 	// Specifies the description of the constant or system parameter.\
@@ -247,11 +276,21 @@ type apiState struct {
 	// The maximum blocks of the policy is 5.
 	// The object structure is documented below.
 	FuncGraphPolicies []ApiFuncGraphPolicy `pulumi:"funcGraphPolicies"`
-	// Specifies an ID of the APIG group to which the API belongs to.
+	// Specifies the ID of the APIG group to which the API belongs.\
+	// Changing this will create a new API resource.
 	GroupId *string `pulumi:"groupId"`
 	// Specifies an ID of the APIG dedicated instance to which the API belongs
 	// to. Changing this will create a new API resource.
 	InstanceId *string `pulumi:"instanceId"`
+	// Specifies whether to perform base64 encoding on the body for interaction
+	// with FunctionGraph.
+	// Defaults to **true**.
+	// The body does not need to be encoded using base64 only when `contentType` is set to **application/json**.
+	// These scenarios which can be applied:
+	// + Custom authentication.
+	// + Bound circuit breaker plug-in with FunctionGraph backend downgrade policy.
+	// + APIs with FunctionGraph backend.
+	IsSendFgBodyBase64 *bool `pulumi:"isSendFgBodyBase64"`
 	// Specifies the route matching mode.\
 	// The valid values are **Exact** and **Prefix**, defaults to **Exact**.
 	Matching *string `pulumi:"matching"`
@@ -264,7 +303,8 @@ type apiState struct {
 	// The object structure is documented below.
 	MockPolicies []ApiMockPolicy `pulumi:"mockPolicies"`
 	// Specifies the backend policy name.\
-	// The valid length is limited from can contain `3` to `64`, only letters, digits and underscores (_) are allowed.
+	// The valid length is limited from `3` to `64`, only letters, digits and underscores (_) are allowed.
+	// It must start with a letter.
 	Name *string `pulumi:"name"`
 	// Specifies the region where the API is located.\
 	// If omitted, the provider-level region will be used. Changing this will create a new API resource.
@@ -289,7 +329,7 @@ type apiState struct {
 	// Specifies the APIG group response ID.
 	ResponseId *string `pulumi:"responseId"`
 	// Specifies the security authentication mode of the API request.\
-	// The valid values are **NONE**, **APP** and **IAM**, defaults to **NONE**.
+	// The valid values are **NONE**, **APP**, **IAM** and **AUTHORIZER**, defaults to **NONE**.
 	SecurityAuthentication *string `pulumi:"securityAuthentication"`
 	// Specifies whether the authentication of the application code is enabled.\
 	// The application code must located in the header when `simpleAuthentication` is true.
@@ -297,8 +337,11 @@ type apiState struct {
 	// Specifies the example response for a successful request.\
 	// The response contains a maximum of `20,480` characters.
 	SuccessResponse *string `pulumi:"successResponse"`
+	// Specifies the list of tags configuration.
+	Tags []string `pulumi:"tags"`
 	// Specifies the condition type of the backend policy.\
 	// The valid values are **Equal**, **Enumerated** and **Matching**, defaults to **Equal**.
+	// When the `sysName` is **req_method**, the valid values are **Equal** and **Enumerated**.
 	Type *string `pulumi:"type"`
 	// The latest update time of the API.
 	UpdatedAt *string `pulumi:"updatedAt"`
@@ -321,6 +364,13 @@ type ApiState struct {
 	// request body, media type or parameters.
 	// The request body does not exceed `20,480` characters.
 	BodyDescription pulumi.StringPtrInput
+	// Specifies the content type of the request body.\
+	// The valid values are as follows:
+	// + **application/json**
+	// + **application/xml**
+	// + **multipart/form-data**
+	// + **text/plain**
+	ContentType pulumi.StringPtrInput
 	// Specifies whether CORS is supported, defaults to **false**.
 	Cors pulumi.BoolPtrInput
 	// Specifies the description of the constant or system parameter.\
@@ -337,11 +387,21 @@ type ApiState struct {
 	// The maximum blocks of the policy is 5.
 	// The object structure is documented below.
 	FuncGraphPolicies ApiFuncGraphPolicyArrayInput
-	// Specifies an ID of the APIG group to which the API belongs to.
+	// Specifies the ID of the APIG group to which the API belongs.\
+	// Changing this will create a new API resource.
 	GroupId pulumi.StringPtrInput
 	// Specifies an ID of the APIG dedicated instance to which the API belongs
 	// to. Changing this will create a new API resource.
 	InstanceId pulumi.StringPtrInput
+	// Specifies whether to perform base64 encoding on the body for interaction
+	// with FunctionGraph.
+	// Defaults to **true**.
+	// The body does not need to be encoded using base64 only when `contentType` is set to **application/json**.
+	// These scenarios which can be applied:
+	// + Custom authentication.
+	// + Bound circuit breaker plug-in with FunctionGraph backend downgrade policy.
+	// + APIs with FunctionGraph backend.
+	IsSendFgBodyBase64 pulumi.BoolPtrInput
 	// Specifies the route matching mode.\
 	// The valid values are **Exact** and **Prefix**, defaults to **Exact**.
 	Matching pulumi.StringPtrInput
@@ -354,7 +414,8 @@ type ApiState struct {
 	// The object structure is documented below.
 	MockPolicies ApiMockPolicyArrayInput
 	// Specifies the backend policy name.\
-	// The valid length is limited from can contain `3` to `64`, only letters, digits and underscores (_) are allowed.
+	// The valid length is limited from `3` to `64`, only letters, digits and underscores (_) are allowed.
+	// It must start with a letter.
 	Name pulumi.StringPtrInput
 	// Specifies the region where the API is located.\
 	// If omitted, the provider-level region will be used. Changing this will create a new API resource.
@@ -379,7 +440,7 @@ type ApiState struct {
 	// Specifies the APIG group response ID.
 	ResponseId pulumi.StringPtrInput
 	// Specifies the security authentication mode of the API request.\
-	// The valid values are **NONE**, **APP** and **IAM**, defaults to **NONE**.
+	// The valid values are **NONE**, **APP**, **IAM** and **AUTHORIZER**, defaults to **NONE**.
 	SecurityAuthentication pulumi.StringPtrInput
 	// Specifies whether the authentication of the application code is enabled.\
 	// The application code must located in the header when `simpleAuthentication` is true.
@@ -387,8 +448,11 @@ type ApiState struct {
 	// Specifies the example response for a successful request.\
 	// The response contains a maximum of `20,480` characters.
 	SuccessResponse pulumi.StringPtrInput
+	// Specifies the list of tags configuration.
+	Tags pulumi.StringArrayInput
 	// Specifies the condition type of the backend policy.\
 	// The valid values are **Equal**, **Enumerated** and **Matching**, defaults to **Equal**.
+	// When the `sysName` is **req_method**, the valid values are **Equal** and **Enumerated**.
 	Type pulumi.StringPtrInput
 	// The latest update time of the API.
 	UpdatedAt pulumi.StringPtrInput
@@ -415,6 +479,13 @@ type apiArgs struct {
 	// request body, media type or parameters.
 	// The request body does not exceed `20,480` characters.
 	BodyDescription *string `pulumi:"bodyDescription"`
+	// Specifies the content type of the request body.\
+	// The valid values are as follows:
+	// + **application/json**
+	// + **application/xml**
+	// + **multipart/form-data**
+	// + **text/plain**
+	ContentType *string `pulumi:"contentType"`
 	// Specifies whether CORS is supported, defaults to **false**.
 	Cors *bool `pulumi:"cors"`
 	// Specifies the description of the constant or system parameter.\
@@ -431,11 +502,21 @@ type apiArgs struct {
 	// The maximum blocks of the policy is 5.
 	// The object structure is documented below.
 	FuncGraphPolicies []ApiFuncGraphPolicy `pulumi:"funcGraphPolicies"`
-	// Specifies an ID of the APIG group to which the API belongs to.
+	// Specifies the ID of the APIG group to which the API belongs.\
+	// Changing this will create a new API resource.
 	GroupId string `pulumi:"groupId"`
 	// Specifies an ID of the APIG dedicated instance to which the API belongs
 	// to. Changing this will create a new API resource.
 	InstanceId string `pulumi:"instanceId"`
+	// Specifies whether to perform base64 encoding on the body for interaction
+	// with FunctionGraph.
+	// Defaults to **true**.
+	// The body does not need to be encoded using base64 only when `contentType` is set to **application/json**.
+	// These scenarios which can be applied:
+	// + Custom authentication.
+	// + Bound circuit breaker plug-in with FunctionGraph backend downgrade policy.
+	// + APIs with FunctionGraph backend.
+	IsSendFgBodyBase64 *bool `pulumi:"isSendFgBodyBase64"`
 	// Specifies the route matching mode.\
 	// The valid values are **Exact** and **Prefix**, defaults to **Exact**.
 	Matching *string `pulumi:"matching"`
@@ -448,7 +529,8 @@ type apiArgs struct {
 	// The object structure is documented below.
 	MockPolicies []ApiMockPolicy `pulumi:"mockPolicies"`
 	// Specifies the backend policy name.\
-	// The valid length is limited from can contain `3` to `64`, only letters, digits and underscores (_) are allowed.
+	// The valid length is limited from `3` to `64`, only letters, digits and underscores (_) are allowed.
+	// It must start with a letter.
 	Name *string `pulumi:"name"`
 	// Specifies the region where the API is located.\
 	// If omitted, the provider-level region will be used. Changing this will create a new API resource.
@@ -471,7 +553,7 @@ type apiArgs struct {
 	// Specifies the APIG group response ID.
 	ResponseId *string `pulumi:"responseId"`
 	// Specifies the security authentication mode of the API request.\
-	// The valid values are **NONE**, **APP** and **IAM**, defaults to **NONE**.
+	// The valid values are **NONE**, **APP**, **IAM** and **AUTHORIZER**, defaults to **NONE**.
 	SecurityAuthentication *string `pulumi:"securityAuthentication"`
 	// Specifies whether the authentication of the application code is enabled.\
 	// The application code must located in the header when `simpleAuthentication` is true.
@@ -479,8 +561,11 @@ type apiArgs struct {
 	// Specifies the example response for a successful request.\
 	// The response contains a maximum of `20,480` characters.
 	SuccessResponse *string `pulumi:"successResponse"`
+	// Specifies the list of tags configuration.
+	Tags []string `pulumi:"tags"`
 	// Specifies the condition type of the backend policy.\
 	// The valid values are **Equal**, **Enumerated** and **Matching**, defaults to **Equal**.
+	// When the `sysName` is **req_method**, the valid values are **Equal** and **Enumerated**.
 	Type string `pulumi:"type"`
 	// Specifies the web backend details.\
 	// The object structure is documented below. Changing this will create a new API resource.
@@ -502,6 +587,13 @@ type ApiArgs struct {
 	// request body, media type or parameters.
 	// The request body does not exceed `20,480` characters.
 	BodyDescription pulumi.StringPtrInput
+	// Specifies the content type of the request body.\
+	// The valid values are as follows:
+	// + **application/json**
+	// + **application/xml**
+	// + **multipart/form-data**
+	// + **text/plain**
+	ContentType pulumi.StringPtrInput
 	// Specifies whether CORS is supported, defaults to **false**.
 	Cors pulumi.BoolPtrInput
 	// Specifies the description of the constant or system parameter.\
@@ -518,11 +610,21 @@ type ApiArgs struct {
 	// The maximum blocks of the policy is 5.
 	// The object structure is documented below.
 	FuncGraphPolicies ApiFuncGraphPolicyArrayInput
-	// Specifies an ID of the APIG group to which the API belongs to.
+	// Specifies the ID of the APIG group to which the API belongs.\
+	// Changing this will create a new API resource.
 	GroupId pulumi.StringInput
 	// Specifies an ID of the APIG dedicated instance to which the API belongs
 	// to. Changing this will create a new API resource.
 	InstanceId pulumi.StringInput
+	// Specifies whether to perform base64 encoding on the body for interaction
+	// with FunctionGraph.
+	// Defaults to **true**.
+	// The body does not need to be encoded using base64 only when `contentType` is set to **application/json**.
+	// These scenarios which can be applied:
+	// + Custom authentication.
+	// + Bound circuit breaker plug-in with FunctionGraph backend downgrade policy.
+	// + APIs with FunctionGraph backend.
+	IsSendFgBodyBase64 pulumi.BoolPtrInput
 	// Specifies the route matching mode.\
 	// The valid values are **Exact** and **Prefix**, defaults to **Exact**.
 	Matching pulumi.StringPtrInput
@@ -535,7 +637,8 @@ type ApiArgs struct {
 	// The object structure is documented below.
 	MockPolicies ApiMockPolicyArrayInput
 	// Specifies the backend policy name.\
-	// The valid length is limited from can contain `3` to `64`, only letters, digits and underscores (_) are allowed.
+	// The valid length is limited from `3` to `64`, only letters, digits and underscores (_) are allowed.
+	// It must start with a letter.
 	Name pulumi.StringPtrInput
 	// Specifies the region where the API is located.\
 	// If omitted, the provider-level region will be used. Changing this will create a new API resource.
@@ -558,7 +661,7 @@ type ApiArgs struct {
 	// Specifies the APIG group response ID.
 	ResponseId pulumi.StringPtrInput
 	// Specifies the security authentication mode of the API request.\
-	// The valid values are **NONE**, **APP** and **IAM**, defaults to **NONE**.
+	// The valid values are **NONE**, **APP**, **IAM** and **AUTHORIZER**, defaults to **NONE**.
 	SecurityAuthentication pulumi.StringPtrInput
 	// Specifies whether the authentication of the application code is enabled.\
 	// The application code must located in the header when `simpleAuthentication` is true.
@@ -566,8 +669,11 @@ type ApiArgs struct {
 	// Specifies the example response for a successful request.\
 	// The response contains a maximum of `20,480` characters.
 	SuccessResponse pulumi.StringPtrInput
+	// Specifies the list of tags configuration.
+	Tags pulumi.StringArrayInput
 	// Specifies the condition type of the backend policy.\
 	// The valid values are **Equal**, **Enumerated** and **Matching**, defaults to **Equal**.
+	// When the `sysName` is **req_method**, the valid values are **Equal** and **Enumerated**.
 	Type pulumi.StringInput
 	// Specifies the web backend details.\
 	// The object structure is documented below. Changing this will create a new API resource.
@@ -683,6 +789,16 @@ func (o ApiOutput) BodyDescription() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Api) pulumi.StringPtrOutput { return v.BodyDescription }).(pulumi.StringPtrOutput)
 }
 
+// Specifies the content type of the request body.\
+// The valid values are as follows:
+// + **application/json**
+// + **application/xml**
+// + **multipart/form-data**
+// + **text/plain**
+func (o ApiOutput) ContentType() pulumi.StringOutput {
+	return o.ApplyT(func(v *Api) pulumi.StringOutput { return v.ContentType }).(pulumi.StringOutput)
+}
+
 // Specifies whether CORS is supported, defaults to **false**.
 func (o ApiOutput) Cors() pulumi.BoolPtrOutput {
 	return o.ApplyT(func(v *Api) pulumi.BoolPtrOutput { return v.Cors }).(pulumi.BoolPtrOutput)
@@ -714,7 +830,8 @@ func (o ApiOutput) FuncGraphPolicies() ApiFuncGraphPolicyArrayOutput {
 	return o.ApplyT(func(v *Api) ApiFuncGraphPolicyArrayOutput { return v.FuncGraphPolicies }).(ApiFuncGraphPolicyArrayOutput)
 }
 
-// Specifies an ID of the APIG group to which the API belongs to.
+// Specifies the ID of the APIG group to which the API belongs.\
+// Changing this will create a new API resource.
 func (o ApiOutput) GroupId() pulumi.StringOutput {
 	return o.ApplyT(func(v *Api) pulumi.StringOutput { return v.GroupId }).(pulumi.StringOutput)
 }
@@ -723,6 +840,18 @@ func (o ApiOutput) GroupId() pulumi.StringOutput {
 // to. Changing this will create a new API resource.
 func (o ApiOutput) InstanceId() pulumi.StringOutput {
 	return o.ApplyT(func(v *Api) pulumi.StringOutput { return v.InstanceId }).(pulumi.StringOutput)
+}
+
+// Specifies whether to perform base64 encoding on the body for interaction
+// with FunctionGraph.
+// Defaults to **true**.
+// The body does not need to be encoded using base64 only when `contentType` is set to **application/json**.
+// These scenarios which can be applied:
+// + Custom authentication.
+// + Bound circuit breaker plug-in with FunctionGraph backend downgrade policy.
+// + APIs with FunctionGraph backend.
+func (o ApiOutput) IsSendFgBodyBase64() pulumi.BoolPtrOutput {
+	return o.ApplyT(func(v *Api) pulumi.BoolPtrOutput { return v.IsSendFgBodyBase64 }).(pulumi.BoolPtrOutput)
 }
 
 // Specifies the route matching mode.\
@@ -746,7 +875,8 @@ func (o ApiOutput) MockPolicies() ApiMockPolicyArrayOutput {
 }
 
 // Specifies the backend policy name.\
-// The valid length is limited from can contain `3` to `64`, only letters, digits and underscores (_) are allowed.
+// The valid length is limited from `3` to `64`, only letters, digits and underscores (_) are allowed.
+// It must start with a letter.
 func (o ApiOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v *Api) pulumi.StringOutput { return v.Name }).(pulumi.StringOutput)
 }
@@ -795,7 +925,7 @@ func (o ApiOutput) ResponseId() pulumi.StringPtrOutput {
 }
 
 // Specifies the security authentication mode of the API request.\
-// The valid values are **NONE**, **APP** and **IAM**, defaults to **NONE**.
+// The valid values are **NONE**, **APP**, **IAM** and **AUTHORIZER**, defaults to **NONE**.
 func (o ApiOutput) SecurityAuthentication() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Api) pulumi.StringPtrOutput { return v.SecurityAuthentication }).(pulumi.StringPtrOutput)
 }
@@ -812,8 +942,14 @@ func (o ApiOutput) SuccessResponse() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Api) pulumi.StringPtrOutput { return v.SuccessResponse }).(pulumi.StringPtrOutput)
 }
 
+// Specifies the list of tags configuration.
+func (o ApiOutput) Tags() pulumi.StringArrayOutput {
+	return o.ApplyT(func(v *Api) pulumi.StringArrayOutput { return v.Tags }).(pulumi.StringArrayOutput)
+}
+
 // Specifies the condition type of the backend policy.\
 // The valid values are **Equal**, **Enumerated** and **Matching**, defaults to **Equal**.
+// When the `sysName` is **req_method**, the valid values are **Equal** and **Enumerated**.
 func (o ApiOutput) Type() pulumi.StringOutput {
 	return o.ApplyT(func(v *Api) pulumi.StringOutput { return v.Type }).(pulumi.StringOutput)
 }

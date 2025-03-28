@@ -41,7 +41,7 @@ import * as utilities from "../utilities";
  *
  * ## Import
  *
- * API can be imported using the `id`, e.g.
+ * API can be imported using the `id`, e.g. bash
  *
  * ```sh
  *  $ pulumi import huaweicloud:SharedApig/api:Api api "774438a28a574ac8a496325d1bf51807"

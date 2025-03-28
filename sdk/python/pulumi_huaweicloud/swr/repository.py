@@ -22,13 +22,16 @@ class RepositoryArgs:
                  region: Optional[pulumi.Input[str]] = None):
         """
         The set of arguments for constructing a Repository resource.
-        :param pulumi.Input[str] organization: Specifies the name of the organization (namespace) the repository belongs.
-               Changing this creates a new resource.
+        :param pulumi.Input[str] organization: Specifies the name of the organization (namespace) the repository
+               belongs. Changing this creates a new resource.
         :param pulumi.Input[str] category: Specifies the category of the repository.
                The value can be `app_server`, `linux`, `framework_app`, `database`, `lang`, `other`, `windows`, `arm`.
         :param pulumi.Input[str] description: Specifies the description of the repository.
         :param pulumi.Input[bool] is_public: Specifies whether the repository is public. Default is false.
-        :param pulumi.Input[str] name: Specifies the name of the repository. Changing this creates a new resource.
+        :param pulumi.Input[str] name: Specifies the name of the repository.  
+               The valid length is limited from `1` to `128`, only lowercase letters, digits, periods (.), hyphens (-) and
+               underscores (_) are allowed. Periods, underscores, and hyphens cannot be placed next to each other.
+               A maximum of two consecutive underscores are allowed. Changing this creates a new resource.
         :param pulumi.Input[str] region: Specifies the region in which to create the resource. If omitted, the
                provider-level region will be used. Changing this creates a new resource.
         """
@@ -48,8 +51,8 @@ class RepositoryArgs:
     @pulumi.getter
     def organization(self) -> pulumi.Input[str]:
         """
-        Specifies the name of the organization (namespace) the repository belongs.
-        Changing this creates a new resource.
+        Specifies the name of the organization (namespace) the repository
+        belongs. Changing this creates a new resource.
         """
         return pulumi.get(self, "organization")
 
@@ -98,7 +101,10 @@ class RepositoryArgs:
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the name of the repository. Changing this creates a new resource.
+        Specifies the name of the repository.  
+        The valid length is limited from `1` to `128`, only lowercase letters, digits, periods (.), hyphens (-) and
+        underscores (_) are allowed. Periods, underscores, and hyphens cannot be placed next to each other.
+        A maximum of two consecutive underscores are allowed. Changing this creates a new resource.
         """
         return pulumi.get(self, "name")
 
@@ -141,10 +147,13 @@ class _RepositoryState:
         :param pulumi.Input[str] description: Specifies the description of the repository.
         :param pulumi.Input[str] internal_path: Intra-cluster image address for docker pull.
         :param pulumi.Input[bool] is_public: Specifies whether the repository is public. Default is false.
-        :param pulumi.Input[str] name: Specifies the name of the repository. Changing this creates a new resource.
+        :param pulumi.Input[str] name: Specifies the name of the repository.  
+               The valid length is limited from `1` to `128`, only lowercase letters, digits, periods (.), hyphens (-) and
+               underscores (_) are allowed. Periods, underscores, and hyphens cannot be placed next to each other.
+               A maximum of two consecutive underscores are allowed. Changing this creates a new resource.
         :param pulumi.Input[int] num_images: Number of image tags in a repository.
-        :param pulumi.Input[str] organization: Specifies the name of the organization (namespace) the repository belongs.
-               Changing this creates a new resource.
+        :param pulumi.Input[str] organization: Specifies the name of the organization (namespace) the repository
+               belongs. Changing this creates a new resource.
         :param pulumi.Input[str] path: Image address for docker pull.
         :param pulumi.Input[str] region: Specifies the region in which to create the resource. If omitted, the
                provider-level region will be used. Changing this creates a new resource.
@@ -227,7 +236,10 @@ class _RepositoryState:
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the name of the repository. Changing this creates a new resource.
+        Specifies the name of the repository.  
+        The valid length is limited from `1` to `128`, only lowercase letters, digits, periods (.), hyphens (-) and
+        underscores (_) are allowed. Periods, underscores, and hyphens cannot be placed next to each other.
+        A maximum of two consecutive underscores are allowed. Changing this creates a new resource.
         """
         return pulumi.get(self, "name")
 
@@ -251,8 +263,8 @@ class _RepositoryState:
     @pulumi.getter
     def organization(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the name of the organization (namespace) the repository belongs.
-        Changing this creates a new resource.
+        Specifies the name of the organization (namespace) the repository
+        belongs. Changing this creates a new resource.
         """
         return pulumi.get(self, "organization")
 
@@ -341,7 +353,7 @@ class Repository(pulumi.CustomResource):
 
         ## Import
 
-        Repository can be imported using the organization name and repository name separated by a slash, e.g.
+        Repository can be imported using the organization name and repository name separated by a slash, e.g.bash
 
         ```sh
          $ pulumi import huaweicloud:Swr/repository:Repository test org-name/repo-name
@@ -353,9 +365,12 @@ class Repository(pulumi.CustomResource):
                The value can be `app_server`, `linux`, `framework_app`, `database`, `lang`, `other`, `windows`, `arm`.
         :param pulumi.Input[str] description: Specifies the description of the repository.
         :param pulumi.Input[bool] is_public: Specifies whether the repository is public. Default is false.
-        :param pulumi.Input[str] name: Specifies the name of the repository. Changing this creates a new resource.
-        :param pulumi.Input[str] organization: Specifies the name of the organization (namespace) the repository belongs.
-               Changing this creates a new resource.
+        :param pulumi.Input[str] name: Specifies the name of the repository.  
+               The valid length is limited from `1` to `128`, only lowercase letters, digits, periods (.), hyphens (-) and
+               underscores (_) are allowed. Periods, underscores, and hyphens cannot be placed next to each other.
+               A maximum of two consecutive underscores are allowed. Changing this creates a new resource.
+        :param pulumi.Input[str] organization: Specifies the name of the organization (namespace) the repository
+               belongs. Changing this creates a new resource.
         :param pulumi.Input[str] region: Specifies the region in which to create the resource. If omitted, the
                provider-level region will be used. Changing this creates a new resource.
         """
@@ -384,7 +399,7 @@ class Repository(pulumi.CustomResource):
 
         ## Import
 
-        Repository can be imported using the organization name and repository name separated by a slash, e.g.
+        Repository can be imported using the organization name and repository name separated by a slash, e.g.bash
 
         ```sh
          $ pulumi import huaweicloud:Swr/repository:Repository test org-name/repo-name
@@ -466,10 +481,13 @@ class Repository(pulumi.CustomResource):
         :param pulumi.Input[str] description: Specifies the description of the repository.
         :param pulumi.Input[str] internal_path: Intra-cluster image address for docker pull.
         :param pulumi.Input[bool] is_public: Specifies whether the repository is public. Default is false.
-        :param pulumi.Input[str] name: Specifies the name of the repository. Changing this creates a new resource.
+        :param pulumi.Input[str] name: Specifies the name of the repository.  
+               The valid length is limited from `1` to `128`, only lowercase letters, digits, periods (.), hyphens (-) and
+               underscores (_) are allowed. Periods, underscores, and hyphens cannot be placed next to each other.
+               A maximum of two consecutive underscores are allowed. Changing this creates a new resource.
         :param pulumi.Input[int] num_images: Number of image tags in a repository.
-        :param pulumi.Input[str] organization: Specifies the name of the organization (namespace) the repository belongs.
-               Changing this creates a new resource.
+        :param pulumi.Input[str] organization: Specifies the name of the organization (namespace) the repository
+               belongs. Changing this creates a new resource.
         :param pulumi.Input[str] path: Image address for docker pull.
         :param pulumi.Input[str] region: Specifies the region in which to create the resource. If omitted, the
                provider-level region will be used. Changing this creates a new resource.
@@ -530,7 +548,10 @@ class Repository(pulumi.CustomResource):
     @pulumi.getter
     def name(self) -> pulumi.Output[str]:
         """
-        Specifies the name of the repository. Changing this creates a new resource.
+        Specifies the name of the repository.  
+        The valid length is limited from `1` to `128`, only lowercase letters, digits, periods (.), hyphens (-) and
+        underscores (_) are allowed. Periods, underscores, and hyphens cannot be placed next to each other.
+        A maximum of two consecutive underscores are allowed. Changing this creates a new resource.
         """
         return pulumi.get(self, "name")
 
@@ -546,8 +567,8 @@ class Repository(pulumi.CustomResource):
     @pulumi.getter
     def organization(self) -> pulumi.Output[str]:
         """
-        Specifies the name of the organization (namespace) the repository belongs.
-        Changing this creates a new resource.
+        Specifies the name of the organization (namespace) the repository
+        belongs. Changing this creates a new resource.
         """
         return pulumi.get(self, "organization")
 

@@ -106,7 +106,7 @@ import (
 //
 // ## Import
 //
-// vpc route tables can be imported using the `id`, e.g.
+// vpc route tables can be imported using the `id`, e.g. bash
 //
 // ```sh
 //
@@ -120,7 +120,7 @@ type RouteTable struct {
 	// The value is a string of no more than 255 characters and cannot contain angle brackets (< or >).
 	Description pulumi.StringPtrOutput `pulumi:"description"`
 	// Specifies the route table name. The value is a string of no more than
-	// 64 characters that can contain letters, digits, underscores (_), hyphens (-), and periods (.).
+	// `64` characters that can contain letters, digits, underscores (_), hyphens (-), and periods (.).
 	Name pulumi.StringOutput `pulumi:"name"`
 	// The region in which to create the vpc route table.
 	// If omitted, the provider-level region will be used. Changing this creates a new resource.
@@ -172,7 +172,7 @@ type routeTableState struct {
 	// The value is a string of no more than 255 characters and cannot contain angle brackets (< or >).
 	Description *string `pulumi:"description"`
 	// Specifies the route table name. The value is a string of no more than
-	// 64 characters that can contain letters, digits, underscores (_), hyphens (-), and periods (.).
+	// `64` characters that can contain letters, digits, underscores (_), hyphens (-), and periods (.).
 	Name *string `pulumi:"name"`
 	// The region in which to create the vpc route table.
 	// If omitted, the provider-level region will be used. Changing this creates a new resource.
@@ -192,7 +192,7 @@ type RouteTableState struct {
 	// The value is a string of no more than 255 characters and cannot contain angle brackets (< or >).
 	Description pulumi.StringPtrInput
 	// Specifies the route table name. The value is a string of no more than
-	// 64 characters that can contain letters, digits, underscores (_), hyphens (-), and periods (.).
+	// `64` characters that can contain letters, digits, underscores (_), hyphens (-), and periods (.).
 	Name pulumi.StringPtrInput
 	// The region in which to create the vpc route table.
 	// If omitted, the provider-level region will be used. Changing this creates a new resource.
@@ -216,7 +216,7 @@ type routeTableArgs struct {
 	// The value is a string of no more than 255 characters and cannot contain angle brackets (< or >).
 	Description *string `pulumi:"description"`
 	// Specifies the route table name. The value is a string of no more than
-	// 64 characters that can contain letters, digits, underscores (_), hyphens (-), and periods (.).
+	// `64` characters that can contain letters, digits, underscores (_), hyphens (-), and periods (.).
 	Name *string `pulumi:"name"`
 	// The region in which to create the vpc route table.
 	// If omitted, the provider-level region will be used. Changing this creates a new resource.
@@ -237,7 +237,7 @@ type RouteTableArgs struct {
 	// The value is a string of no more than 255 characters and cannot contain angle brackets (< or >).
 	Description pulumi.StringPtrInput
 	// Specifies the route table name. The value is a string of no more than
-	// 64 characters that can contain letters, digits, underscores (_), hyphens (-), and periods (.).
+	// `64` characters that can contain letters, digits, underscores (_), hyphens (-), and periods (.).
 	Name pulumi.StringPtrInput
 	// The region in which to create the vpc route table.
 	// If omitted, the provider-level region will be used. Changing this creates a new resource.
@@ -346,7 +346,7 @@ func (o RouteTableOutput) Description() pulumi.StringPtrOutput {
 }
 
 // Specifies the route table name. The value is a string of no more than
-// 64 characters that can contain letters, digits, underscores (_), hyphens (-), and periods (.).
+// `64` characters that can contain letters, digits, underscores (_), hyphens (-), and periods (.).
 func (o RouteTableOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v *RouteTable) pulumi.StringOutput { return v.Name }).(pulumi.StringOutput)
 }

@@ -18,8 +18,8 @@ class GroupMembershipArgs:
                  users: pulumi.Input[Sequence[pulumi.Input[str]]]):
         """
         The set of arguments for constructing a GroupMembership resource.
-        :param pulumi.Input[str] group: The group ID of this membership.
-        :param pulumi.Input[Sequence[pulumi.Input[str]]] users: A List of user IDs to associate to the group.
+        :param pulumi.Input[str] group: Specifies the group ID of this membership.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] users: Specifies a list of IAM user IDs to associate to the group.
         """
         pulumi.set(__self__, "group", group)
         pulumi.set(__self__, "users", users)
@@ -28,7 +28,7 @@ class GroupMembershipArgs:
     @pulumi.getter
     def group(self) -> pulumi.Input[str]:
         """
-        The group ID of this membership.
+        Specifies the group ID of this membership.
         """
         return pulumi.get(self, "group")
 
@@ -40,7 +40,7 @@ class GroupMembershipArgs:
     @pulumi.getter
     def users(self) -> pulumi.Input[Sequence[pulumi.Input[str]]]:
         """
-        A List of user IDs to associate to the group.
+        Specifies a list of IAM user IDs to associate to the group.
         """
         return pulumi.get(self, "users")
 
@@ -56,8 +56,8 @@ class _GroupMembershipState:
                  users: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None):
         """
         Input properties used for looking up and filtering GroupMembership resources.
-        :param pulumi.Input[str] group: The group ID of this membership.
-        :param pulumi.Input[Sequence[pulumi.Input[str]]] users: A List of user IDs to associate to the group.
+        :param pulumi.Input[str] group: Specifies the group ID of this membership.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] users: Specifies a list of IAM user IDs to associate to the group.
         """
         if group is not None:
             pulumi.set(__self__, "group", group)
@@ -68,7 +68,7 @@ class _GroupMembershipState:
     @pulumi.getter
     def group(self) -> Optional[pulumi.Input[str]]:
         """
-        The group ID of this membership.
+        Specifies the group ID of this membership.
         """
         return pulumi.get(self, "group")
 
@@ -80,7 +80,7 @@ class _GroupMembershipState:
     @pulumi.getter
     def users(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]:
         """
-        A List of user IDs to associate to the group.
+        Specifies a list of IAM user IDs to associate to the group.
         """
         return pulumi.get(self, "users")
 
@@ -98,9 +98,9 @@ class GroupMembership(pulumi.CustomResource):
                  users: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  __props__=None):
         """
-        Manages a User Group Membership resource within HuaweiCloud IAM service.
+        Manages an IAM group membership resource within HuaweiCloud.
 
-        Note: You *must* have admin privileges in your HuaweiCloud cloud to use this resource.
+        > **NOTE:** You *must* have admin privileges to use this resource.
 
         ## Example Usage
 
@@ -108,13 +108,16 @@ class GroupMembership(pulumi.CustomResource):
         import pulumi
         import pulumi_huaweicloud as huaweicloud
 
+        config = pulumi.Config()
+        user1_password = config.require_object("user1Password")
+        user2_password = config.require_object("user2Password")
         group1 = huaweicloud.iam.Group("group1", description="This is a test group")
         user1 = huaweicloud.iam.User("user1",
             enabled=True,
-            password="password12345!")
+            password=user1_password)
         user2 = huaweicloud.iam.User("user2",
             enabled=True,
-            password="password12345!")
+            password=user2_password)
         membership1 = huaweicloud.iam.GroupMembership("membership1",
             group=group1.id,
             users=[
@@ -125,8 +128,8 @@ class GroupMembership(pulumi.CustomResource):
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[str] group: The group ID of this membership.
-        :param pulumi.Input[Sequence[pulumi.Input[str]]] users: A List of user IDs to associate to the group.
+        :param pulumi.Input[str] group: Specifies the group ID of this membership.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] users: Specifies a list of IAM user IDs to associate to the group.
         """
         ...
     @overload
@@ -135,9 +138,9 @@ class GroupMembership(pulumi.CustomResource):
                  args: GroupMembershipArgs,
                  opts: Optional[pulumi.ResourceOptions] = None):
         """
-        Manages a User Group Membership resource within HuaweiCloud IAM service.
+        Manages an IAM group membership resource within HuaweiCloud.
 
-        Note: You *must* have admin privileges in your HuaweiCloud cloud to use this resource.
+        > **NOTE:** You *must* have admin privileges to use this resource.
 
         ## Example Usage
 
@@ -145,13 +148,16 @@ class GroupMembership(pulumi.CustomResource):
         import pulumi
         import pulumi_huaweicloud as huaweicloud
 
+        config = pulumi.Config()
+        user1_password = config.require_object("user1Password")
+        user2_password = config.require_object("user2Password")
         group1 = huaweicloud.iam.Group("group1", description="This is a test group")
         user1 = huaweicloud.iam.User("user1",
             enabled=True,
-            password="password12345!")
+            password=user1_password)
         user2 = huaweicloud.iam.User("user2",
             enabled=True,
-            password="password12345!")
+            password=user2_password)
         membership1 = huaweicloud.iam.GroupMembership("membership1",
             group=group1.id,
             users=[
@@ -211,8 +217,8 @@ class GroupMembership(pulumi.CustomResource):
         :param str resource_name: The unique name of the resulting resource.
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[str] group: The group ID of this membership.
-        :param pulumi.Input[Sequence[pulumi.Input[str]]] users: A List of user IDs to associate to the group.
+        :param pulumi.Input[str] group: Specifies the group ID of this membership.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] users: Specifies a list of IAM user IDs to associate to the group.
         """
         opts = pulumi.ResourceOptions.merge(opts, pulumi.ResourceOptions(id=id))
 
@@ -226,7 +232,7 @@ class GroupMembership(pulumi.CustomResource):
     @pulumi.getter
     def group(self) -> pulumi.Output[str]:
         """
-        The group ID of this membership.
+        Specifies the group ID of this membership.
         """
         return pulumi.get(self, "group")
 
@@ -234,7 +240,7 @@ class GroupMembership(pulumi.CustomResource):
     @pulumi.getter
     def users(self) -> pulumi.Output[Sequence[str]]:
         """
-        A List of user IDs to associate to the group.
+        Specifies a list of IAM user IDs to associate to the group.
         """
         return pulumi.get(self, "users")
 

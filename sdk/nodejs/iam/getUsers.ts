@@ -8,7 +8,7 @@ import * as utilities from "../utilities";
 /**
  * Use this data source to query the IAM user list within HuaweiCloud.
  *
- * > You *must* have IAM read privileges to use this data source.
+ * > **NOTE:** You *must* have IAM read privileges to use this data source.
  *
  * ## Example Usage
  *

@@ -8,6 +8,8 @@ import pulumi
 import pulumi.runtime
 from typing import Any, Mapping, Optional, Sequence, Union, overload
 from .. import _utilities
+from . import outputs
+from ._inputs import *
 
 __all__ = ['InstanceArgs', 'Instance']
 
@@ -21,14 +23,19 @@ class InstanceArgs:
                  availability_zones: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  available_zones: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  bandwidth_size: Optional[pulumi.Input[int]] = None,
+                 custom_ingress_ports: Optional[pulumi.Input[Sequence[pulumi.Input['InstanceCustomIngressPortArgs']]]] = None,
                  description: Optional[pulumi.Input[str]] = None,
                  eip_id: Optional[pulumi.Input[str]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
+                 ingress_bandwidth_charging_mode: Optional[pulumi.Input[str]] = None,
+                 ingress_bandwidth_size: Optional[pulumi.Input[int]] = None,
                  ipv6_enable: Optional[pulumi.Input[bool]] = None,
                  loadbalancer_provider: Optional[pulumi.Input[str]] = None,
                  maintain_begin: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
-                 region: Optional[pulumi.Input[str]] = None):
+                 region: Optional[pulumi.Input[str]] = None,
+                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
+                 vpcep_service_name: Optional[pulumi.Input[str]] = None):
         """
         The set of arguments for constructing a Instance resource.
         :param pulumi.Input[str] edition: Specifies the edition of the dedicated instance.  
@@ -54,18 +61,23 @@ class InstanceArgs:
         :param pulumi.Input[Sequence[pulumi.Input[str]]] available_zones: schema: Deprecated; The name list of availability zones for the dedicated instance.
         :param pulumi.Input[int] bandwidth_size: Specifies the egress bandwidth size of the dedicated instance.  
                The valid value ranges from `0` to `2,000`.
+        :param pulumi.Input[Sequence[pulumi.Input['InstanceCustomIngressPortArgs']]] custom_ingress_ports: Specified the list of the instance custom ingress ports.
+               The custom_ingress_ports structure is documented below.
         :param pulumi.Input[str] description: Specifies the description of the dedicated instance.  
                The description contain a maximum of `255` characters and the angle brackets (< and >) are not allowed.
-        :param pulumi.Input[str] eip_id: Specifies the EIP ID associated with the dedicated instance.
+        :param pulumi.Input[str] eip_id: The EIP ID associated with the dedicated instance.
         :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID to which the dedicated
-               instance belongs.
-               This parameter is required for enterprise users. Changing this will create a new resource.
+               instance belongs. This parameter is required for enterprise users.
+        :param pulumi.Input[str] ingress_bandwidth_charging_mode: Specifies the ingress bandwidth billing type of the dedicated instance.
+               The valid values are as follows:
+               + **bandwidth**: Billed by bandwidth.
+               + **traffic**: Billed by traffic.
+        :param pulumi.Input[int] ingress_bandwidth_size: Specifies the ingress bandwidth size of the dedicated instance.  
+               The minimum value is `5`
         :param pulumi.Input[bool] ipv6_enable: Specifies whether public access with an IPv6 address is supported.  
                Changing this will create a new resource.
-        :param pulumi.Input[str] loadbalancer_provider: Specifies the provider type of load balancer used by the
-               dedicated instance.
-               The valid values are as follows:
-               + **lvs**: Linux virtual server.
+        :param pulumi.Input[str] loadbalancer_provider: The type of load balancer used by the dedicated instance.  
+               The valid value is as follows:
                + **elb**: Elastic load balance.
         :param pulumi.Input[str] maintain_begin: Specifies the start time of the maintenance time window.  
                The format is **xx:00:00**, the value of **xx** can be `02`, `06`, `10`, `14`, `18` or `22`.
@@ -75,6 +87,12 @@ class InstanceArgs:
         :param pulumi.Input[str] region: Specifies the region in which to create the dedicated instance resource.  
                If omitted, the provider-level region will be used.
                Changing this will create a new resource.
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the dedicated instance.
+        :param pulumi.Input[str] vpcep_service_name: Specifies the name of the VPC endpoint service.
+               It can contain a maximum of 16 characters, including letters, digits, underscores (_), and hyphens (-).
+               If this parameter is not specified, the system automatically generates a name in the "{region}.apig.{service_id}" format.
+               If this parameter is specified, the system automatically generates a name in the
+               "{region}.{vpcep_service_name}.{service_id}" format.
         """
         pulumi.set(__self__, "edition", edition)
         pulumi.set(__self__, "security_group_id", security_group_id)
@@ -86,12 +104,18 @@ class InstanceArgs:
             pulumi.set(__self__, "available_zones", available_zones)
         if bandwidth_size is not None:
             pulumi.set(__self__, "bandwidth_size", bandwidth_size)
+        if custom_ingress_ports is not None:
+            pulumi.set(__self__, "custom_ingress_ports", custom_ingress_ports)
         if description is not None:
             pulumi.set(__self__, "description", description)
         if eip_id is not None:
             pulumi.set(__self__, "eip_id", eip_id)
         if enterprise_project_id is not None:
             pulumi.set(__self__, "enterprise_project_id", enterprise_project_id)
+        if ingress_bandwidth_charging_mode is not None:
+            pulumi.set(__self__, "ingress_bandwidth_charging_mode", ingress_bandwidth_charging_mode)
+        if ingress_bandwidth_size is not None:
+            pulumi.set(__self__, "ingress_bandwidth_size", ingress_bandwidth_size)
         if ipv6_enable is not None:
             pulumi.set(__self__, "ipv6_enable", ipv6_enable)
         if loadbalancer_provider is not None:
@@ -102,6 +126,10 @@ class InstanceArgs:
             pulumi.set(__self__, "name", name)
         if region is not None:
             pulumi.set(__self__, "region", region)
+        if tags is not None:
+            pulumi.set(__self__, "tags", tags)
+        if vpcep_service_name is not None:
+            pulumi.set(__self__, "vpcep_service_name", vpcep_service_name)
 
     @property
     @pulumi.getter
@@ -204,6 +232,19 @@ class InstanceArgs:
         pulumi.set(self, "bandwidth_size", value)
 
     @property
+    @pulumi.getter(name="customIngressPorts")
+    def custom_ingress_ports(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['InstanceCustomIngressPortArgs']]]]:
+        """
+        Specified the list of the instance custom ingress ports.
+        The custom_ingress_ports structure is documented below.
+        """
+        return pulumi.get(self, "custom_ingress_ports")
+
+    @custom_ingress_ports.setter
+    def custom_ingress_ports(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['InstanceCustomIngressPortArgs']]]]):
+        pulumi.set(self, "custom_ingress_ports", value)
+
+    @property
     @pulumi.getter
     def description(self) -> Optional[pulumi.Input[str]]:
         """
@@ -220,7 +261,7 @@ class InstanceArgs:
     @pulumi.getter(name="eipId")
     def eip_id(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the EIP ID associated with the dedicated instance.
+        The EIP ID associated with the dedicated instance.
         """
         return pulumi.get(self, "eip_id")
 
@@ -233,14 +274,41 @@ class InstanceArgs:
     def enterprise_project_id(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the enterprise project ID to which the dedicated
-        instance belongs.
-        This parameter is required for enterprise users. Changing this will create a new resource.
+        instance belongs. This parameter is required for enterprise users.
         """
         return pulumi.get(self, "enterprise_project_id")
 
     @enterprise_project_id.setter
     def enterprise_project_id(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "enterprise_project_id", value)
+
+    @property
+    @pulumi.getter(name="ingressBandwidthChargingMode")
+    def ingress_bandwidth_charging_mode(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the ingress bandwidth billing type of the dedicated instance.
+        The valid values are as follows:
+        + **bandwidth**: Billed by bandwidth.
+        + **traffic**: Billed by traffic.
+        """
+        return pulumi.get(self, "ingress_bandwidth_charging_mode")
+
+    @ingress_bandwidth_charging_mode.setter
+    def ingress_bandwidth_charging_mode(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "ingress_bandwidth_charging_mode", value)
+
+    @property
+    @pulumi.getter(name="ingressBandwidthSize")
+    def ingress_bandwidth_size(self) -> Optional[pulumi.Input[int]]:
+        """
+        Specifies the ingress bandwidth size of the dedicated instance.  
+        The minimum value is `5`
+        """
+        return pulumi.get(self, "ingress_bandwidth_size")
+
+    @ingress_bandwidth_size.setter
+    def ingress_bandwidth_size(self, value: Optional[pulumi.Input[int]]):
+        pulumi.set(self, "ingress_bandwidth_size", value)
 
     @property
     @pulumi.getter(name="ipv6Enable")
@@ -259,10 +327,8 @@ class InstanceArgs:
     @pulumi.getter(name="loadbalancerProvider")
     def loadbalancer_provider(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the provider type of load balancer used by the
-        dedicated instance.
-        The valid values are as follows:
-        + **lvs**: Linux virtual server.
+        The type of load balancer used by the dedicated instance.  
+        The valid value is as follows:
         + **elb**: Elastic load balance.
         """
         return pulumi.get(self, "loadbalancer_provider")
@@ -312,6 +378,34 @@ class InstanceArgs:
     def region(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "region", value)
 
+    @property
+    @pulumi.getter
+    def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]:
+        """
+        Specifies the key/value pairs to associate with the dedicated instance.
+        """
+        return pulumi.get(self, "tags")
+
+    @tags.setter
+    def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]):
+        pulumi.set(self, "tags", value)
+
+    @property
+    @pulumi.getter(name="vpcepServiceName")
+    def vpcep_service_name(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the name of the VPC endpoint service.
+        It can contain a maximum of 16 characters, including letters, digits, underscores (_), and hyphens (-).
+        If this parameter is not specified, the system automatically generates a name in the "{region}.apig.{service_id}" format.
+        If this parameter is specified, the system automatically generates a name in the
+        "{region}.{vpcep_service_name}.{service_id}" format.
+        """
+        return pulumi.get(self, "vpcep_service_name")
+
+    @vpcep_service_name.setter
+    def vpcep_service_name(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "vpcep_service_name", value)
+
 
 @pulumi.input_type
 class _InstanceState:
@@ -321,12 +415,15 @@ class _InstanceState:
                  bandwidth_size: Optional[pulumi.Input[int]] = None,
                  create_time: Optional[pulumi.Input[str]] = None,
                  created_at: Optional[pulumi.Input[str]] = None,
+                 custom_ingress_ports: Optional[pulumi.Input[Sequence[pulumi.Input['InstanceCustomIngressPortArgs']]]] = None,
                  description: Optional[pulumi.Input[str]] = None,
                  edition: Optional[pulumi.Input[str]] = None,
                  egress_address: Optional[pulumi.Input[str]] = None,
                  eip_id: Optional[pulumi.Input[str]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  ingress_address: Optional[pulumi.Input[str]] = None,
+                 ingress_bandwidth_charging_mode: Optional[pulumi.Input[str]] = None,
+                 ingress_bandwidth_size: Optional[pulumi.Input[int]] = None,
                  ipv6_enable: Optional[pulumi.Input[bool]] = None,
                  loadbalancer_provider: Optional[pulumi.Input[str]] = None,
                  maintain_begin: Optional[pulumi.Input[str]] = None,
@@ -337,8 +434,11 @@ class _InstanceState:
                  status: Optional[pulumi.Input[str]] = None,
                  subnet_id: Optional[pulumi.Input[str]] = None,
                  supported_features: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
+                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  vpc_id: Optional[pulumi.Input[str]] = None,
-                 vpc_ingress_address: Optional[pulumi.Input[str]] = None):
+                 vpc_ingress_address: Optional[pulumi.Input[str]] = None,
+                 vpcep_service_address: Optional[pulumi.Input[str]] = None,
+                 vpcep_service_name: Optional[pulumi.Input[str]] = None):
         """
         Input properties used for looking up and filtering Instance resources.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] availability_zones: Specifies the name list of availability zones for the dedicated
@@ -350,6 +450,8 @@ class _InstanceState:
                The valid value ranges from `0` to `2,000`.
         :param pulumi.Input[str] create_time: schema: Deprecated; Time when the dedicated instance is created.
         :param pulumi.Input[str] created_at: Time when the dedicated instance is created, in RFC-3339 format.
+        :param pulumi.Input[Sequence[pulumi.Input['InstanceCustomIngressPortArgs']]] custom_ingress_ports: Specified the list of the instance custom ingress ports.
+               The custom_ingress_ports structure is documented below.
         :param pulumi.Input[str] description: Specifies the description of the dedicated instance.  
                The description contain a maximum of `255` characters and the angle brackets (< and >) are not allowed.
         :param pulumi.Input[str] edition: Specifies the edition of the dedicated instance.  
@@ -363,17 +465,20 @@ class _InstanceState:
                + **ENTERPRISE_IPV6**: IPv6 instance of the Enterprise Edition.
                + **PLATINUM_IPV6**: IPv6 instance of the Platinum Edition.
         :param pulumi.Input[str] egress_address: The egress (NAT) public IP address.
-        :param pulumi.Input[str] eip_id: Specifies the EIP ID associated with the dedicated instance.
+        :param pulumi.Input[str] eip_id: The EIP ID associated with the dedicated instance.
         :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID to which the dedicated
-               instance belongs.
-               This parameter is required for enterprise users. Changing this will create a new resource.
+               instance belongs. This parameter is required for enterprise users.
         :param pulumi.Input[str] ingress_address: The ingress EIP address.
+        :param pulumi.Input[str] ingress_bandwidth_charging_mode: Specifies the ingress bandwidth billing type of the dedicated instance.
+               The valid values are as follows:
+               + **bandwidth**: Billed by bandwidth.
+               + **traffic**: Billed by traffic.
+        :param pulumi.Input[int] ingress_bandwidth_size: Specifies the ingress bandwidth size of the dedicated instance.  
+               The minimum value is `5`
         :param pulumi.Input[bool] ipv6_enable: Specifies whether public access with an IPv6 address is supported.  
                Changing this will create a new resource.
-        :param pulumi.Input[str] loadbalancer_provider: Specifies the provider type of load balancer used by the
-               dedicated instance.
-               The valid values are as follows:
-               + **lvs**: Linux virtual server.
+        :param pulumi.Input[str] loadbalancer_provider: The type of load balancer used by the dedicated instance.  
+               The valid value is as follows:
                + **elb**: Elastic load balance.
         :param pulumi.Input[str] maintain_begin: Specifies the start time of the maintenance time window.  
                The format is **xx:00:00**, the value of **xx** can be `02`, `06`, `10`, `14`, `18` or `22`.
@@ -386,13 +491,24 @@ class _InstanceState:
                Changing this will create a new resource.
         :param pulumi.Input[str] security_group_id: Specifies the ID of the security group to which the dedicated instance
                belongs to.
-        :param pulumi.Input[str] status: Status of the dedicated instance.
+        :param pulumi.Input[str] status: The current status of the custom ingress port.
+               + **normal**
+               + **abnormal**
         :param pulumi.Input[str] subnet_id: Specifies the ID of the VPC subnet used to create the dedicated instance.  
                Changing this will create a new resource.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] supported_features: The supported features of the APIG dedicated instance.
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the dedicated instance.
         :param pulumi.Input[str] vpc_id: Specifies the ID of the VPC used to create the dedicated instance.  
                Changing this will create a new resource.
         :param pulumi.Input[str] vpc_ingress_address: The ingress private IP address of the VPC.
+        :param pulumi.Input[str] vpcep_service_address: The address (full name) of the VPC endpoint service, in the
+               "{region}.{vpcep_service_name}.{service_id}" format. If this parameter is not specified, the system automatically
+               generates a name in the "{region}.apig.{service_id}" format.
+        :param pulumi.Input[str] vpcep_service_name: Specifies the name of the VPC endpoint service.
+               It can contain a maximum of 16 characters, including letters, digits, underscores (_), and hyphens (-).
+               If this parameter is not specified, the system automatically generates a name in the "{region}.apig.{service_id}" format.
+               If this parameter is specified, the system automatically generates a name in the
+               "{region}.{vpcep_service_name}.{service_id}" format.
         """
         if availability_zones is not None:
             pulumi.set(__self__, "availability_zones", availability_zones)
@@ -407,6 +523,8 @@ class _InstanceState:
             pulumi.set(__self__, "create_time", create_time)
         if created_at is not None:
             pulumi.set(__self__, "created_at", created_at)
+        if custom_ingress_ports is not None:
+            pulumi.set(__self__, "custom_ingress_ports", custom_ingress_ports)
         if description is not None:
             pulumi.set(__self__, "description", description)
         if edition is not None:
@@ -419,6 +537,10 @@ class _InstanceState:
             pulumi.set(__self__, "enterprise_project_id", enterprise_project_id)
         if ingress_address is not None:
             pulumi.set(__self__, "ingress_address", ingress_address)
+        if ingress_bandwidth_charging_mode is not None:
+            pulumi.set(__self__, "ingress_bandwidth_charging_mode", ingress_bandwidth_charging_mode)
+        if ingress_bandwidth_size is not None:
+            pulumi.set(__self__, "ingress_bandwidth_size", ingress_bandwidth_size)
         if ipv6_enable is not None:
             pulumi.set(__self__, "ipv6_enable", ipv6_enable)
         if loadbalancer_provider is not None:
@@ -439,10 +561,16 @@ class _InstanceState:
             pulumi.set(__self__, "subnet_id", subnet_id)
         if supported_features is not None:
             pulumi.set(__self__, "supported_features", supported_features)
+        if tags is not None:
+            pulumi.set(__self__, "tags", tags)
         if vpc_id is not None:
             pulumi.set(__self__, "vpc_id", vpc_id)
         if vpc_ingress_address is not None:
             pulumi.set(__self__, "vpc_ingress_address", vpc_ingress_address)
+        if vpcep_service_address is not None:
+            pulumi.set(__self__, "vpcep_service_address", vpcep_service_address)
+        if vpcep_service_name is not None:
+            pulumi.set(__self__, "vpcep_service_name", vpcep_service_name)
 
     @property
     @pulumi.getter(name="availabilityZones")
@@ -509,6 +637,19 @@ class _InstanceState:
         pulumi.set(self, "created_at", value)
 
     @property
+    @pulumi.getter(name="customIngressPorts")
+    def custom_ingress_ports(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['InstanceCustomIngressPortArgs']]]]:
+        """
+        Specified the list of the instance custom ingress ports.
+        The custom_ingress_ports structure is documented below.
+        """
+        return pulumi.get(self, "custom_ingress_ports")
+
+    @custom_ingress_ports.setter
+    def custom_ingress_ports(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['InstanceCustomIngressPortArgs']]]]):
+        pulumi.set(self, "custom_ingress_ports", value)
+
+    @property
     @pulumi.getter
     def description(self) -> Optional[pulumi.Input[str]]:
         """
@@ -558,7 +699,7 @@ class _InstanceState:
     @pulumi.getter(name="eipId")
     def eip_id(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the EIP ID associated with the dedicated instance.
+        The EIP ID associated with the dedicated instance.
         """
         return pulumi.get(self, "eip_id")
 
@@ -571,8 +712,7 @@ class _InstanceState:
     def enterprise_project_id(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the enterprise project ID to which the dedicated
-        instance belongs.
-        This parameter is required for enterprise users. Changing this will create a new resource.
+        instance belongs. This parameter is required for enterprise users.
         """
         return pulumi.get(self, "enterprise_project_id")
 
@@ -593,6 +733,34 @@ class _InstanceState:
         pulumi.set(self, "ingress_address", value)
 
     @property
+    @pulumi.getter(name="ingressBandwidthChargingMode")
+    def ingress_bandwidth_charging_mode(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the ingress bandwidth billing type of the dedicated instance.
+        The valid values are as follows:
+        + **bandwidth**: Billed by bandwidth.
+        + **traffic**: Billed by traffic.
+        """
+        return pulumi.get(self, "ingress_bandwidth_charging_mode")
+
+    @ingress_bandwidth_charging_mode.setter
+    def ingress_bandwidth_charging_mode(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "ingress_bandwidth_charging_mode", value)
+
+    @property
+    @pulumi.getter(name="ingressBandwidthSize")
+    def ingress_bandwidth_size(self) -> Optional[pulumi.Input[int]]:
+        """
+        Specifies the ingress bandwidth size of the dedicated instance.  
+        The minimum value is `5`
+        """
+        return pulumi.get(self, "ingress_bandwidth_size")
+
+    @ingress_bandwidth_size.setter
+    def ingress_bandwidth_size(self, value: Optional[pulumi.Input[int]]):
+        pulumi.set(self, "ingress_bandwidth_size", value)
+
+    @property
     @pulumi.getter(name="ipv6Enable")
     def ipv6_enable(self) -> Optional[pulumi.Input[bool]]:
         """
@@ -609,10 +777,8 @@ class _InstanceState:
     @pulumi.getter(name="loadbalancerProvider")
     def loadbalancer_provider(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the provider type of load balancer used by the
-        dedicated instance.
-        The valid values are as follows:
-        + **lvs**: Linux virtual server.
+        The type of load balancer used by the dedicated instance.  
+        The valid value is as follows:
         + **elb**: Elastic load balance.
         """
         return pulumi.get(self, "loadbalancer_provider")
@@ -691,7 +857,9 @@ class _InstanceState:
     @pulumi.getter
     def status(self) -> Optional[pulumi.Input[str]]:
         """
-        Status of the dedicated instance.
+        The current status of the custom ingress port.
+        + **normal**
+        + **abnormal**
         """
         return pulumi.get(self, "status")
 
@@ -725,6 +893,18 @@ class _InstanceState:
         pulumi.set(self, "supported_features", value)
 
     @property
+    @pulumi.getter
+    def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]:
+        """
+        Specifies the key/value pairs to associate with the dedicated instance.
+        """
+        return pulumi.get(self, "tags")
+
+    @tags.setter
+    def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]):
+        pulumi.set(self, "tags", value)
+
+    @property
     @pulumi.getter(name="vpcId")
     def vpc_id(self) -> Optional[pulumi.Input[str]]:
         """
@@ -749,6 +929,36 @@ class _InstanceState:
     def vpc_ingress_address(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "vpc_ingress_address", value)
 
+    @property
+    @pulumi.getter(name="vpcepServiceAddress")
+    def vpcep_service_address(self) -> Optional[pulumi.Input[str]]:
+        """
+        The address (full name) of the VPC endpoint service, in the
+        "{region}.{vpcep_service_name}.{service_id}" format. If this parameter is not specified, the system automatically
+        generates a name in the "{region}.apig.{service_id}" format.
+        """
+        return pulumi.get(self, "vpcep_service_address")
+
+    @vpcep_service_address.setter
+    def vpcep_service_address(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "vpcep_service_address", value)
+
+    @property
+    @pulumi.getter(name="vpcepServiceName")
+    def vpcep_service_name(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the name of the VPC endpoint service.
+        It can contain a maximum of 16 characters, including letters, digits, underscores (_), and hyphens (-).
+        If this parameter is not specified, the system automatically generates a name in the "{region}.apig.{service_id}" format.
+        If this parameter is specified, the system automatically generates a name in the
+        "{region}.{vpcep_service_name}.{service_id}" format.
+        """
+        return pulumi.get(self, "vpcep_service_name")
+
+    @vpcep_service_name.setter
+    def vpcep_service_name(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "vpcep_service_name", value)
+
 
 class Instance(pulumi.CustomResource):
     @overload
@@ -758,10 +968,13 @@ class Instance(pulumi.CustomResource):
                  availability_zones: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  available_zones: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  bandwidth_size: Optional[pulumi.Input[int]] = None,
+                 custom_ingress_ports: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['InstanceCustomIngressPortArgs']]]]] = None,
                  description: Optional[pulumi.Input[str]] = None,
                  edition: Optional[pulumi.Input[str]] = None,
                  eip_id: Optional[pulumi.Input[str]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
+                 ingress_bandwidth_charging_mode: Optional[pulumi.Input[str]] = None,
+                 ingress_bandwidth_size: Optional[pulumi.Input[int]] = None,
                  ipv6_enable: Optional[pulumi.Input[bool]] = None,
                  loadbalancer_provider: Optional[pulumi.Input[str]] = None,
                  maintain_begin: Optional[pulumi.Input[str]] = None,
@@ -769,7 +982,9 @@ class Instance(pulumi.CustomResource):
                  region: Optional[pulumi.Input[str]] = None,
                  security_group_id: Optional[pulumi.Input[str]] = None,
                  subnet_id: Optional[pulumi.Input[str]] = None,
+                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  vpc_id: Optional[pulumi.Input[str]] = None,
+                 vpcep_service_name: Optional[pulumi.Input[str]] = None,
                  __props__=None):
         """
         Manages an APIG dedicated instance resource within HuaweiCloud.
@@ -785,7 +1000,6 @@ class Instance(pulumi.CustomResource):
         vpc_id = config.require_object("vpcId")
         subnet_id = config.require_object("subnetId")
         security_group_id = config.require_object("securityGroupId")
-        eip_id = config.require_object("eipId")
         enterprise_project_id = config.require_object("enterpriseProjectId")
         test_availability_zones = huaweicloud.get_availability_zones()
         test_instance = huaweicloud.dedicated_apig.Instance("testInstance",
@@ -797,16 +1011,18 @@ class Instance(pulumi.CustomResource):
             maintain_begin="06:00:00",
             description="Created by script",
             bandwidth_size=3,
-            eip_id=eip_id,
             available_zones=[
                 test_availability_zones.names[0],
                 test_availability_zones.names[1],
-            ])
+            ],
+            tags={
+                "foo": "bar",
+            })
         ```
 
         ## Import
 
-        Dedicated instances can be imported by their `id`, e.g.
+        Dedicated instances can be imported by their `id`, e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:DedicatedApig/instance:Instance test de379eed30aa4d31a84f426ea3c7ef4e
@@ -821,6 +1037,8 @@ class Instance(pulumi.CustomResource):
         :param pulumi.Input[Sequence[pulumi.Input[str]]] available_zones: schema: Deprecated; The name list of availability zones for the dedicated instance.
         :param pulumi.Input[int] bandwidth_size: Specifies the egress bandwidth size of the dedicated instance.  
                The valid value ranges from `0` to `2,000`.
+        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['InstanceCustomIngressPortArgs']]]] custom_ingress_ports: Specified the list of the instance custom ingress ports.
+               The custom_ingress_ports structure is documented below.
         :param pulumi.Input[str] description: Specifies the description of the dedicated instance.  
                The description contain a maximum of `255` characters and the angle brackets (< and >) are not allowed.
         :param pulumi.Input[str] edition: Specifies the edition of the dedicated instance.  
@@ -833,16 +1051,19 @@ class Instance(pulumi.CustomResource):
                + **PROFESSIONAL_IPV6**: IPv6 instance of the Professional Edition.
                + **ENTERPRISE_IPV6**: IPv6 instance of the Enterprise Edition.
                + **PLATINUM_IPV6**: IPv6 instance of the Platinum Edition.
-        :param pulumi.Input[str] eip_id: Specifies the EIP ID associated with the dedicated instance.
+        :param pulumi.Input[str] eip_id: The EIP ID associated with the dedicated instance.
         :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID to which the dedicated
-               instance belongs.
-               This parameter is required for enterprise users. Changing this will create a new resource.
+               instance belongs. This parameter is required for enterprise users.
+        :param pulumi.Input[str] ingress_bandwidth_charging_mode: Specifies the ingress bandwidth billing type of the dedicated instance.
+               The valid values are as follows:
+               + **bandwidth**: Billed by bandwidth.
+               + **traffic**: Billed by traffic.
+        :param pulumi.Input[int] ingress_bandwidth_size: Specifies the ingress bandwidth size of the dedicated instance.  
+               The minimum value is `5`
         :param pulumi.Input[bool] ipv6_enable: Specifies whether public access with an IPv6 address is supported.  
                Changing this will create a new resource.
-        :param pulumi.Input[str] loadbalancer_provider: Specifies the provider type of load balancer used by the
-               dedicated instance.
-               The valid values are as follows:
-               + **lvs**: Linux virtual server.
+        :param pulumi.Input[str] loadbalancer_provider: The type of load balancer used by the dedicated instance.  
+               The valid value is as follows:
                + **elb**: Elastic load balance.
         :param pulumi.Input[str] maintain_begin: Specifies the start time of the maintenance time window.  
                The format is **xx:00:00**, the value of **xx** can be `02`, `06`, `10`, `14`, `18` or `22`.
@@ -856,8 +1077,14 @@ class Instance(pulumi.CustomResource):
                belongs to.
         :param pulumi.Input[str] subnet_id: Specifies the ID of the VPC subnet used to create the dedicated instance.  
                Changing this will create a new resource.
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the dedicated instance.
         :param pulumi.Input[str] vpc_id: Specifies the ID of the VPC used to create the dedicated instance.  
                Changing this will create a new resource.
+        :param pulumi.Input[str] vpcep_service_name: Specifies the name of the VPC endpoint service.
+               It can contain a maximum of 16 characters, including letters, digits, underscores (_), and hyphens (-).
+               If this parameter is not specified, the system automatically generates a name in the "{region}.apig.{service_id}" format.
+               If this parameter is specified, the system automatically generates a name in the
+               "{region}.{vpcep_service_name}.{service_id}" format.
         """
         ...
     @overload
@@ -879,7 +1106,6 @@ class Instance(pulumi.CustomResource):
         vpc_id = config.require_object("vpcId")
         subnet_id = config.require_object("subnetId")
         security_group_id = config.require_object("securityGroupId")
-        eip_id = config.require_object("eipId")
         enterprise_project_id = config.require_object("enterpriseProjectId")
         test_availability_zones = huaweicloud.get_availability_zones()
         test_instance = huaweicloud.dedicated_apig.Instance("testInstance",
@@ -891,16 +1117,18 @@ class Instance(pulumi.CustomResource):
             maintain_begin="06:00:00",
             description="Created by script",
             bandwidth_size=3,
-            eip_id=eip_id,
             available_zones=[
                 test_availability_zones.names[0],
                 test_availability_zones.names[1],
-            ])
+            ],
+            tags={
+                "foo": "bar",
+            })
         ```
 
         ## Import
 
-        Dedicated instances can be imported by their `id`, e.g.
+        Dedicated instances can be imported by their `id`, e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:DedicatedApig/instance:Instance test de379eed30aa4d31a84f426ea3c7ef4e
@@ -924,10 +1152,13 @@ class Instance(pulumi.CustomResource):
                  availability_zones: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  available_zones: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  bandwidth_size: Optional[pulumi.Input[int]] = None,
+                 custom_ingress_ports: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['InstanceCustomIngressPortArgs']]]]] = None,
                  description: Optional[pulumi.Input[str]] = None,
                  edition: Optional[pulumi.Input[str]] = None,
                  eip_id: Optional[pulumi.Input[str]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
+                 ingress_bandwidth_charging_mode: Optional[pulumi.Input[str]] = None,
+                 ingress_bandwidth_size: Optional[pulumi.Input[int]] = None,
                  ipv6_enable: Optional[pulumi.Input[bool]] = None,
                  loadbalancer_provider: Optional[pulumi.Input[str]] = None,
                  maintain_begin: Optional[pulumi.Input[str]] = None,
@@ -935,7 +1166,9 @@ class Instance(pulumi.CustomResource):
                  region: Optional[pulumi.Input[str]] = None,
                  security_group_id: Optional[pulumi.Input[str]] = None,
                  subnet_id: Optional[pulumi.Input[str]] = None,
+                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  vpc_id: Optional[pulumi.Input[str]] = None,
+                 vpcep_service_name: Optional[pulumi.Input[str]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -948,12 +1181,15 @@ class Instance(pulumi.CustomResource):
             __props__.__dict__["availability_zones"] = availability_zones
             __props__.__dict__["available_zones"] = available_zones
             __props__.__dict__["bandwidth_size"] = bandwidth_size
+            __props__.__dict__["custom_ingress_ports"] = custom_ingress_ports
             __props__.__dict__["description"] = description
             if edition is None and not opts.urn:
                 raise TypeError("Missing required property 'edition'")
             __props__.__dict__["edition"] = edition
             __props__.__dict__["eip_id"] = eip_id
             __props__.__dict__["enterprise_project_id"] = enterprise_project_id
+            __props__.__dict__["ingress_bandwidth_charging_mode"] = ingress_bandwidth_charging_mode
+            __props__.__dict__["ingress_bandwidth_size"] = ingress_bandwidth_size
             __props__.__dict__["ipv6_enable"] = ipv6_enable
             __props__.__dict__["loadbalancer_provider"] = loadbalancer_provider
             __props__.__dict__["maintain_begin"] = maintain_begin
@@ -965,9 +1201,11 @@ class Instance(pulumi.CustomResource):
             if subnet_id is None and not opts.urn:
                 raise TypeError("Missing required property 'subnet_id'")
             __props__.__dict__["subnet_id"] = subnet_id
+            __props__.__dict__["tags"] = tags
             if vpc_id is None and not opts.urn:
                 raise TypeError("Missing required property 'vpc_id'")
             __props__.__dict__["vpc_id"] = vpc_id
+            __props__.__dict__["vpcep_service_name"] = vpcep_service_name
             __props__.__dict__["create_time"] = None
             __props__.__dict__["created_at"] = None
             __props__.__dict__["egress_address"] = None
@@ -976,6 +1214,7 @@ class Instance(pulumi.CustomResource):
             __props__.__dict__["status"] = None
             __props__.__dict__["supported_features"] = None
             __props__.__dict__["vpc_ingress_address"] = None
+            __props__.__dict__["vpcep_service_address"] = None
         super(Instance, __self__).__init__(
             'huaweicloud:DedicatedApig/instance:Instance',
             resource_name,
@@ -991,12 +1230,15 @@ class Instance(pulumi.CustomResource):
             bandwidth_size: Optional[pulumi.Input[int]] = None,
             create_time: Optional[pulumi.Input[str]] = None,
             created_at: Optional[pulumi.Input[str]] = None,
+            custom_ingress_ports: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['InstanceCustomIngressPortArgs']]]]] = None,
             description: Optional[pulumi.Input[str]] = None,
             edition: Optional[pulumi.Input[str]] = None,
             egress_address: Optional[pulumi.Input[str]] = None,
             eip_id: Optional[pulumi.Input[str]] = None,
             enterprise_project_id: Optional[pulumi.Input[str]] = None,
             ingress_address: Optional[pulumi.Input[str]] = None,
+            ingress_bandwidth_charging_mode: Optional[pulumi.Input[str]] = None,
+            ingress_bandwidth_size: Optional[pulumi.Input[int]] = None,
             ipv6_enable: Optional[pulumi.Input[bool]] = None,
             loadbalancer_provider: Optional[pulumi.Input[str]] = None,
             maintain_begin: Optional[pulumi.Input[str]] = None,
@@ -1007,8 +1249,11 @@ class Instance(pulumi.CustomResource):
             status: Optional[pulumi.Input[str]] = None,
             subnet_id: Optional[pulumi.Input[str]] = None,
             supported_features: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
+            tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
             vpc_id: Optional[pulumi.Input[str]] = None,
-            vpc_ingress_address: Optional[pulumi.Input[str]] = None) -> 'Instance':
+            vpc_ingress_address: Optional[pulumi.Input[str]] = None,
+            vpcep_service_address: Optional[pulumi.Input[str]] = None,
+            vpcep_service_name: Optional[pulumi.Input[str]] = None) -> 'Instance':
         """
         Get an existing Instance resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.
@@ -1025,6 +1270,8 @@ class Instance(pulumi.CustomResource):
                The valid value ranges from `0` to `2,000`.
         :param pulumi.Input[str] create_time: schema: Deprecated; Time when the dedicated instance is created.
         :param pulumi.Input[str] created_at: Time when the dedicated instance is created, in RFC-3339 format.
+        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['InstanceCustomIngressPortArgs']]]] custom_ingress_ports: Specified the list of the instance custom ingress ports.
+               The custom_ingress_ports structure is documented below.
         :param pulumi.Input[str] description: Specifies the description of the dedicated instance.  
                The description contain a maximum of `255` characters and the angle brackets (< and >) are not allowed.
         :param pulumi.Input[str] edition: Specifies the edition of the dedicated instance.  
@@ -1038,17 +1285,20 @@ class Instance(pulumi.CustomResource):
                + **ENTERPRISE_IPV6**: IPv6 instance of the Enterprise Edition.
                + **PLATINUM_IPV6**: IPv6 instance of the Platinum Edition.
         :param pulumi.Input[str] egress_address: The egress (NAT) public IP address.
-        :param pulumi.Input[str] eip_id: Specifies the EIP ID associated with the dedicated instance.
+        :param pulumi.Input[str] eip_id: The EIP ID associated with the dedicated instance.
         :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID to which the dedicated
-               instance belongs.
-               This parameter is required for enterprise users. Changing this will create a new resource.
+               instance belongs. This parameter is required for enterprise users.
         :param pulumi.Input[str] ingress_address: The ingress EIP address.
+        :param pulumi.Input[str] ingress_bandwidth_charging_mode: Specifies the ingress bandwidth billing type of the dedicated instance.
+               The valid values are as follows:
+               + **bandwidth**: Billed by bandwidth.
+               + **traffic**: Billed by traffic.
+        :param pulumi.Input[int] ingress_bandwidth_size: Specifies the ingress bandwidth size of the dedicated instance.  
+               The minimum value is `5`
         :param pulumi.Input[bool] ipv6_enable: Specifies whether public access with an IPv6 address is supported.  
                Changing this will create a new resource.
-        :param pulumi.Input[str] loadbalancer_provider: Specifies the provider type of load balancer used by the
-               dedicated instance.
-               The valid values are as follows:
-               + **lvs**: Linux virtual server.
+        :param pulumi.Input[str] loadbalancer_provider: The type of load balancer used by the dedicated instance.  
+               The valid value is as follows:
                + **elb**: Elastic load balance.
         :param pulumi.Input[str] maintain_begin: Specifies the start time of the maintenance time window.  
                The format is **xx:00:00**, the value of **xx** can be `02`, `06`, `10`, `14`, `18` or `22`.
@@ -1061,13 +1311,24 @@ class Instance(pulumi.CustomResource):
                Changing this will create a new resource.
         :param pulumi.Input[str] security_group_id: Specifies the ID of the security group to which the dedicated instance
                belongs to.
-        :param pulumi.Input[str] status: Status of the dedicated instance.
+        :param pulumi.Input[str] status: The current status of the custom ingress port.
+               + **normal**
+               + **abnormal**
         :param pulumi.Input[str] subnet_id: Specifies the ID of the VPC subnet used to create the dedicated instance.  
                Changing this will create a new resource.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] supported_features: The supported features of the APIG dedicated instance.
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the dedicated instance.
         :param pulumi.Input[str] vpc_id: Specifies the ID of the VPC used to create the dedicated instance.  
                Changing this will create a new resource.
         :param pulumi.Input[str] vpc_ingress_address: The ingress private IP address of the VPC.
+        :param pulumi.Input[str] vpcep_service_address: The address (full name) of the VPC endpoint service, in the
+               "{region}.{vpcep_service_name}.{service_id}" format. If this parameter is not specified, the system automatically
+               generates a name in the "{region}.apig.{service_id}" format.
+        :param pulumi.Input[str] vpcep_service_name: Specifies the name of the VPC endpoint service.
+               It can contain a maximum of 16 characters, including letters, digits, underscores (_), and hyphens (-).
+               If this parameter is not specified, the system automatically generates a name in the "{region}.apig.{service_id}" format.
+               If this parameter is specified, the system automatically generates a name in the
+               "{region}.{vpcep_service_name}.{service_id}" format.
         """
         opts = pulumi.ResourceOptions.merge(opts, pulumi.ResourceOptions(id=id))
 
@@ -1078,12 +1339,15 @@ class Instance(pulumi.CustomResource):
         __props__.__dict__["bandwidth_size"] = bandwidth_size
         __props__.__dict__["create_time"] = create_time
         __props__.__dict__["created_at"] = created_at
+        __props__.__dict__["custom_ingress_ports"] = custom_ingress_ports
         __props__.__dict__["description"] = description
         __props__.__dict__["edition"] = edition
         __props__.__dict__["egress_address"] = egress_address
         __props__.__dict__["eip_id"] = eip_id
         __props__.__dict__["enterprise_project_id"] = enterprise_project_id
         __props__.__dict__["ingress_address"] = ingress_address
+        __props__.__dict__["ingress_bandwidth_charging_mode"] = ingress_bandwidth_charging_mode
+        __props__.__dict__["ingress_bandwidth_size"] = ingress_bandwidth_size
         __props__.__dict__["ipv6_enable"] = ipv6_enable
         __props__.__dict__["loadbalancer_provider"] = loadbalancer_provider
         __props__.__dict__["maintain_begin"] = maintain_begin
@@ -1094,8 +1358,11 @@ class Instance(pulumi.CustomResource):
         __props__.__dict__["status"] = status
         __props__.__dict__["subnet_id"] = subnet_id
         __props__.__dict__["supported_features"] = supported_features
+        __props__.__dict__["tags"] = tags
         __props__.__dict__["vpc_id"] = vpc_id
         __props__.__dict__["vpc_ingress_address"] = vpc_ingress_address
+        __props__.__dict__["vpcep_service_address"] = vpcep_service_address
+        __props__.__dict__["vpcep_service_name"] = vpcep_service_name
         return Instance(resource_name, opts=opts, __props__=__props__)
 
     @property
@@ -1143,6 +1410,15 @@ class Instance(pulumi.CustomResource):
         return pulumi.get(self, "created_at")
 
     @property
+    @pulumi.getter(name="customIngressPorts")
+    def custom_ingress_ports(self) -> pulumi.Output[Optional[Sequence['outputs.InstanceCustomIngressPort']]]:
+        """
+        Specified the list of the instance custom ingress ports.
+        The custom_ingress_ports structure is documented below.
+        """
+        return pulumi.get(self, "custom_ingress_ports")
+
+    @property
     @pulumi.getter
     def description(self) -> pulumi.Output[Optional[str]]:
         """
@@ -1180,7 +1456,7 @@ class Instance(pulumi.CustomResource):
     @pulumi.getter(name="eipId")
     def eip_id(self) -> pulumi.Output[str]:
         """
-        Specifies the EIP ID associated with the dedicated instance.
+        The EIP ID associated with the dedicated instance.
         """
         return pulumi.get(self, "eip_id")
 
@@ -1189,8 +1465,7 @@ class Instance(pulumi.CustomResource):
     def enterprise_project_id(self) -> pulumi.Output[str]:
         """
         Specifies the enterprise project ID to which the dedicated
-        instance belongs.
-        This parameter is required for enterprise users. Changing this will create a new resource.
+        instance belongs. This parameter is required for enterprise users.
         """
         return pulumi.get(self, "enterprise_project_id")
 
@@ -1201,6 +1476,26 @@ class Instance(pulumi.CustomResource):
         The ingress EIP address.
         """
         return pulumi.get(self, "ingress_address")
+
+    @property
+    @pulumi.getter(name="ingressBandwidthChargingMode")
+    def ingress_bandwidth_charging_mode(self) -> pulumi.Output[Optional[str]]:
+        """
+        Specifies the ingress bandwidth billing type of the dedicated instance.
+        The valid values are as follows:
+        + **bandwidth**: Billed by bandwidth.
+        + **traffic**: Billed by traffic.
+        """
+        return pulumi.get(self, "ingress_bandwidth_charging_mode")
+
+    @property
+    @pulumi.getter(name="ingressBandwidthSize")
+    def ingress_bandwidth_size(self) -> pulumi.Output[Optional[int]]:
+        """
+        Specifies the ingress bandwidth size of the dedicated instance.  
+        The minimum value is `5`
+        """
+        return pulumi.get(self, "ingress_bandwidth_size")
 
     @property
     @pulumi.getter(name="ipv6Enable")
@@ -1215,10 +1510,8 @@ class Instance(pulumi.CustomResource):
     @pulumi.getter(name="loadbalancerProvider")
     def loadbalancer_provider(self) -> pulumi.Output[str]:
         """
-        Specifies the provider type of load balancer used by the
-        dedicated instance.
-        The valid values are as follows:
-        + **lvs**: Linux virtual server.
+        The type of load balancer used by the dedicated instance.  
+        The valid value is as follows:
         + **elb**: Elastic load balance.
         """
         return pulumi.get(self, "loadbalancer_provider")
@@ -1273,7 +1566,9 @@ class Instance(pulumi.CustomResource):
     @pulumi.getter
     def status(self) -> pulumi.Output[str]:
         """
-        Status of the dedicated instance.
+        The current status of the custom ingress port.
+        + **normal**
+        + **abnormal**
         """
         return pulumi.get(self, "status")
 
@@ -1295,6 +1590,14 @@ class Instance(pulumi.CustomResource):
         return pulumi.get(self, "supported_features")
 
     @property
+    @pulumi.getter
+    def tags(self) -> pulumi.Output[Optional[Mapping[str, str]]]:
+        """
+        Specifies the key/value pairs to associate with the dedicated instance.
+        """
+        return pulumi.get(self, "tags")
+
+    @property
     @pulumi.getter(name="vpcId")
     def vpc_id(self) -> pulumi.Output[str]:
         """
@@ -1310,4 +1613,26 @@ class Instance(pulumi.CustomResource):
         The ingress private IP address of the VPC.
         """
         return pulumi.get(self, "vpc_ingress_address")
+
+    @property
+    @pulumi.getter(name="vpcepServiceAddress")
+    def vpcep_service_address(self) -> pulumi.Output[str]:
+        """
+        The address (full name) of the VPC endpoint service, in the
+        "{region}.{vpcep_service_name}.{service_id}" format. If this parameter is not specified, the system automatically
+        generates a name in the "{region}.apig.{service_id}" format.
+        """
+        return pulumi.get(self, "vpcep_service_address")
+
+    @property
+    @pulumi.getter(name="vpcepServiceName")
+    def vpcep_service_name(self) -> pulumi.Output[str]:
+        """
+        Specifies the name of the VPC endpoint service.
+        It can contain a maximum of 16 characters, including letters, digits, underscores (_), and hyphens (-).
+        If this parameter is not specified, the system automatically generates a name in the "{region}.apig.{service_id}" format.
+        If this parameter is specified, the system automatically generates a name in the
+        "{region}.{vpcep_service_name}.{service_id}" format.
+        """
+        return pulumi.get(self, "vpcep_service_name")
 

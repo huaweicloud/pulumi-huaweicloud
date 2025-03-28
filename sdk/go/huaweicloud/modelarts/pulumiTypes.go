@@ -36,7 +36,7 @@ type DatasetDataSource struct {
 	// Specifies the table name of DWS/DLI when `dataType` is `1` or `2`.
 	// Changing this parameter will create a new resource.
 	TableName *string `pulumi:"tableName"`
-	// Specifies the user name of databse when `dataType` is `1`.
+	// Specifies the user name of database when `dataType` is `1`.
 	// Changing this parameter will create a new resource.
 	UserName *string `pulumi:"userName"`
 	// Specifies whether the data contains table header when the type
@@ -81,7 +81,7 @@ type DatasetDataSourceArgs struct {
 	// Specifies the table name of DWS/DLI when `dataType` is `1` or `2`.
 	// Changing this parameter will create a new resource.
 	TableName pulumi.StringPtrInput `pulumi:"tableName"`
-	// Specifies the user name of databse when `dataType` is `1`.
+	// Specifies the user name of database when `dataType` is `1`.
 	// Changing this parameter will create a new resource.
 	UserName pulumi.StringPtrInput `pulumi:"userName"`
 	// Specifies whether the data contains table header when the type
@@ -212,7 +212,7 @@ func (o DatasetDataSourceOutput) TableName() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v DatasetDataSource) *string { return v.TableName }).(pulumi.StringPtrOutput)
 }
 
-// Specifies the user name of databse when `dataType` is `1`.
+// Specifies the user name of database when `dataType` is `1`.
 // Changing this parameter will create a new resource.
 func (o DatasetDataSourceOutput) UserName() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v DatasetDataSource) *string { return v.UserName }).(pulumi.StringPtrOutput)
@@ -329,7 +329,7 @@ func (o DatasetDataSourcePtrOutput) TableName() pulumi.StringPtrOutput {
 	}).(pulumi.StringPtrOutput)
 }
 
-// Specifies the user name of databse when `dataType` is `1`.
+// Specifies the user name of database when `dataType` is `1`.
 // Changing this parameter will create a new resource.
 func (o DatasetDataSourcePtrOutput) UserName() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *DatasetDataSource) *string {
@@ -775,7 +775,9 @@ func (o DatasetSchemaArrayOutput) Index(i pulumi.IntInput) DatasetSchemaOutput {
 }
 
 type NotebookMountStorageType struct {
-	// The mount ID.
+	// Specifies the ID of dedicated storage disk, which is mandatory when the `type`
+	// is `EFS` and the `ownership` is `DEDICATED`.
+	// Changing this parameter will create a new resource.
 	Id *string `pulumi:"id"`
 	// The local mount path.
 	MountPath *string `pulumi:"mountPath"`
@@ -801,7 +803,9 @@ type NotebookMountStorageTypeInput interface {
 }
 
 type NotebookMountStorageTypeArgs struct {
-	// The mount ID.
+	// Specifies the ID of dedicated storage disk, which is mandatory when the `type`
+	// is `EFS` and the `ownership` is `DEDICATED`.
+	// Changing this parameter will create a new resource.
 	Id pulumi.StringPtrInput `pulumi:"id"`
 	// The local mount path.
 	MountPath pulumi.StringPtrInput `pulumi:"mountPath"`
@@ -866,7 +870,9 @@ func (o NotebookMountStorageTypeOutput) ToNotebookMountStorageTypeOutputWithCont
 	return o
 }
 
-// The mount ID.
+// Specifies the ID of dedicated storage disk, which is mandatory when the `type`
+// is `EFS` and the `ownership` is `DEDICATED`.
+// Changing this parameter will create a new resource.
 func (o NotebookMountStorageTypeOutput) Id() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v NotebookMountStorageType) *string { return v.Id }).(pulumi.StringPtrOutput)
 }
@@ -914,19 +920,23 @@ func (o NotebookMountStorageTypeArrayOutput) Index(i pulumi.IntInput) NotebookMo
 }
 
 type NotebookVolume struct {
+	// Specifies the ID of dedicated storage disk, which is mandatory when the `type`
+	// is `EFS` and the `ownership` is `DEDICATED`.
+	// Changing this parameter will create a new resource.
+	Id *string `pulumi:"id"`
 	// The local mount path.
 	MountPath *string `pulumi:"mountPath"`
 	// Specifies the volume ownership. The options are as follows:
 	// - *MANAGED*: shared storage disk of the ModelArts service.
 	// - *DEDICATED*: dedicated storage disk, only supported when the category is `EFS`.
 	Ownership *string `pulumi:"ownership"`
-	// Specifies the volume size. Its value range is from 5 GB to 4096 GB.
+	// Specifies the volume size. Its value range is from `5` GB to `4,096` GB.
 	Size *int `pulumi:"size"`
 	// Specifies the volume type. The options are as follows:
 	// - *EFS*: use Scalable File Service, default 50GB is **free**.
 	// - *EVS*: use Elastic Volume Service, default size is 5 GB.
 	Type string `pulumi:"type"`
-	// Specifies the uri of dedicated storage disk, which is mandatory when the `type`
+	// Specifies the URL of dedicated storage disk, which is mandatory when the `type`
 	// is `EFS` and the `ownership` is `DEDICATED`. Example: `192.168.0.1:/user-9sfdsdgdfgh5ea4d56871e75d6966aa274/mount/`.
 	// Changing this parameter will create a new resource.
 	Uri *string `pulumi:"uri"`
@@ -944,19 +954,23 @@ type NotebookVolumeInput interface {
 }
 
 type NotebookVolumeArgs struct {
+	// Specifies the ID of dedicated storage disk, which is mandatory when the `type`
+	// is `EFS` and the `ownership` is `DEDICATED`.
+	// Changing this parameter will create a new resource.
+	Id pulumi.StringPtrInput `pulumi:"id"`
 	// The local mount path.
 	MountPath pulumi.StringPtrInput `pulumi:"mountPath"`
 	// Specifies the volume ownership. The options are as follows:
 	// - *MANAGED*: shared storage disk of the ModelArts service.
 	// - *DEDICATED*: dedicated storage disk, only supported when the category is `EFS`.
 	Ownership pulumi.StringPtrInput `pulumi:"ownership"`
-	// Specifies the volume size. Its value range is from 5 GB to 4096 GB.
+	// Specifies the volume size. Its value range is from `5` GB to `4,096` GB.
 	Size pulumi.IntPtrInput `pulumi:"size"`
 	// Specifies the volume type. The options are as follows:
 	// - *EFS*: use Scalable File Service, default 50GB is **free**.
 	// - *EVS*: use Elastic Volume Service, default size is 5 GB.
 	Type pulumi.StringInput `pulumi:"type"`
-	// Specifies the uri of dedicated storage disk, which is mandatory when the `type`
+	// Specifies the URL of dedicated storage disk, which is mandatory when the `type`
 	// is `EFS` and the `ownership` is `DEDICATED`. Example: `192.168.0.1:/user-9sfdsdgdfgh5ea4d56871e75d6966aa274/mount/`.
 	// Changing this parameter will create a new resource.
 	Uri pulumi.StringPtrInput `pulumi:"uri"`
@@ -1039,6 +1053,13 @@ func (o NotebookVolumeOutput) ToNotebookVolumePtrOutputWithContext(ctx context.C
 	}).(NotebookVolumePtrOutput)
 }
 
+// Specifies the ID of dedicated storage disk, which is mandatory when the `type`
+// is `EFS` and the `ownership` is `DEDICATED`.
+// Changing this parameter will create a new resource.
+func (o NotebookVolumeOutput) Id() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v NotebookVolume) *string { return v.Id }).(pulumi.StringPtrOutput)
+}
+
 // The local mount path.
 func (o NotebookVolumeOutput) MountPath() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v NotebookVolume) *string { return v.MountPath }).(pulumi.StringPtrOutput)
@@ -1051,7 +1072,7 @@ func (o NotebookVolumeOutput) Ownership() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v NotebookVolume) *string { return v.Ownership }).(pulumi.StringPtrOutput)
 }
 
-// Specifies the volume size. Its value range is from 5 GB to 4096 GB.
+// Specifies the volume size. Its value range is from `5` GB to `4,096` GB.
 func (o NotebookVolumeOutput) Size() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v NotebookVolume) *int { return v.Size }).(pulumi.IntPtrOutput)
 }
@@ -1063,7 +1084,7 @@ func (o NotebookVolumeOutput) Type() pulumi.StringOutput {
 	return o.ApplyT(func(v NotebookVolume) string { return v.Type }).(pulumi.StringOutput)
 }
 
-// Specifies the uri of dedicated storage disk, which is mandatory when the `type`
+// Specifies the URL of dedicated storage disk, which is mandatory when the `type`
 // is `EFS` and the `ownership` is `DEDICATED`. Example: `192.168.0.1:/user-9sfdsdgdfgh5ea4d56871e75d6966aa274/mount/`.
 // Changing this parameter will create a new resource.
 func (o NotebookVolumeOutput) Uri() pulumi.StringPtrOutput {
@@ -1094,6 +1115,18 @@ func (o NotebookVolumePtrOutput) Elem() NotebookVolumeOutput {
 	}).(NotebookVolumeOutput)
 }
 
+// Specifies the ID of dedicated storage disk, which is mandatory when the `type`
+// is `EFS` and the `ownership` is `DEDICATED`.
+// Changing this parameter will create a new resource.
+func (o NotebookVolumePtrOutput) Id() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *NotebookVolume) *string {
+		if v == nil {
+			return nil
+		}
+		return v.Id
+	}).(pulumi.StringPtrOutput)
+}
+
 // The local mount path.
 func (o NotebookVolumePtrOutput) MountPath() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *NotebookVolume) *string {
@@ -1116,7 +1149,7 @@ func (o NotebookVolumePtrOutput) Ownership() pulumi.StringPtrOutput {
 	}).(pulumi.StringPtrOutput)
 }
 
-// Specifies the volume size. Its value range is from 5 GB to 4096 GB.
+// Specifies the volume size. Its value range is from `5` GB to `4,096` GB.
 func (o NotebookVolumePtrOutput) Size() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v *NotebookVolume) *int {
 		if v == nil {
@@ -1138,7 +1171,7 @@ func (o NotebookVolumePtrOutput) Type() pulumi.StringPtrOutput {
 	}).(pulumi.StringPtrOutput)
 }
 
-// Specifies the uri of dedicated storage disk, which is mandatory when the `type`
+// Specifies the URL of dedicated storage disk, which is mandatory when the `type`
 // is `EFS` and the `ownership` is `DEDICATED`. Example: `192.168.0.1:/user-9sfdsdgdfgh5ea4d56871e75d6966aa274/mount/`.
 // Changing this parameter will create a new resource.
 func (o NotebookVolumePtrOutput) Uri() pulumi.StringPtrOutput {

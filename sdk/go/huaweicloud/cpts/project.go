@@ -40,7 +40,7 @@ import (
 //
 // ## Import
 //
-// Projects can be imported using the `id`, e.g.
+// Projects can be imported using the `id`, e.g. bash
 //
 // ```sh
 //
@@ -53,9 +53,9 @@ type Project struct {
 	// The creation time, in UTC format.
 	CreatedAt pulumi.StringOutput `pulumi:"createdAt"`
 	// Specifies the description of the project, which can contain a maximum of
-	// 50 characters.
+	// `50` characters.
 	Description pulumi.StringPtrOutput `pulumi:"description"`
-	// Specifies a name for the project, which can contain a maximum of 42 characters.
+	// Specifies a name for the project, which can contain a maximum of `42` characters.
 	Name pulumi.StringOutput `pulumi:"name"`
 	// Specifies the region in which to create the project resource. If omitted, the
 	// provider-level region will be used. Changing this parameter will create a new resource.
@@ -97,9 +97,9 @@ type projectState struct {
 	// The creation time, in UTC format.
 	CreatedAt *string `pulumi:"createdAt"`
 	// Specifies the description of the project, which can contain a maximum of
-	// 50 characters.
+	// `50` characters.
 	Description *string `pulumi:"description"`
-	// Specifies a name for the project, which can contain a maximum of 42 characters.
+	// Specifies a name for the project, which can contain a maximum of `42` characters.
 	Name *string `pulumi:"name"`
 	// Specifies the region in which to create the project resource. If omitted, the
 	// provider-level region will be used. Changing this parameter will create a new resource.
@@ -112,9 +112,9 @@ type ProjectState struct {
 	// The creation time, in UTC format.
 	CreatedAt pulumi.StringPtrInput
 	// Specifies the description of the project, which can contain a maximum of
-	// 50 characters.
+	// `50` characters.
 	Description pulumi.StringPtrInput
-	// Specifies a name for the project, which can contain a maximum of 42 characters.
+	// Specifies a name for the project, which can contain a maximum of `42` characters.
 	Name pulumi.StringPtrInput
 	// Specifies the region in which to create the project resource. If omitted, the
 	// provider-level region will be used. Changing this parameter will create a new resource.
@@ -129,9 +129,9 @@ func (ProjectState) ElementType() reflect.Type {
 
 type projectArgs struct {
 	// Specifies the description of the project, which can contain a maximum of
-	// 50 characters.
+	// `50` characters.
 	Description *string `pulumi:"description"`
-	// Specifies a name for the project, which can contain a maximum of 42 characters.
+	// Specifies a name for the project, which can contain a maximum of `42` characters.
 	Name *string `pulumi:"name"`
 	// Specifies the region in which to create the project resource. If omitted, the
 	// provider-level region will be used. Changing this parameter will create a new resource.
@@ -141,9 +141,9 @@ type projectArgs struct {
 // The set of arguments for constructing a Project resource.
 type ProjectArgs struct {
 	// Specifies the description of the project, which can contain a maximum of
-	// 50 characters.
+	// `50` characters.
 	Description pulumi.StringPtrInput
-	// Specifies a name for the project, which can contain a maximum of 42 characters.
+	// Specifies a name for the project, which can contain a maximum of `42` characters.
 	Name pulumi.StringPtrInput
 	// Specifies the region in which to create the project resource. If omitted, the
 	// provider-level region will be used. Changing this parameter will create a new resource.
@@ -243,12 +243,12 @@ func (o ProjectOutput) CreatedAt() pulumi.StringOutput {
 }
 
 // Specifies the description of the project, which can contain a maximum of
-// 50 characters.
+// `50` characters.
 func (o ProjectOutput) Description() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Project) pulumi.StringPtrOutput { return v.Description }).(pulumi.StringPtrOutput)
 }
 
-// Specifies a name for the project, which can contain a maximum of 42 characters.
+// Specifies a name for the project, which can contain a maximum of `42` characters.
 func (o ProjectOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v *Project) pulumi.StringOutput { return v.Name }).(pulumi.StringOutput)
 }

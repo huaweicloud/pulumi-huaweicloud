@@ -10,6 +10,8 @@ import (
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
+// !> **WARNING:** It has been deprecated, use `huaweicloudCcmCertificates` to get the CCM SSL certificates.
+//
 // Use this data source to get the list of SCM certificates.
 //
 // ## Example Usage

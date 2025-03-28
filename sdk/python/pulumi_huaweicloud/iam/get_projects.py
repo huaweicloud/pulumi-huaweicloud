@@ -45,7 +45,7 @@ class GetProjectsResult:
     @pulumi.getter
     def name(self) -> Optional[str]:
         """
-        The project name.
+        The IAM project name.
         """
         return pulumi.get(self, "name")
 
@@ -72,9 +72,9 @@ class AwaitableGetProjectsResult(GetProjectsResult):
 def get_projects(name: Optional[str] = None,
                  opts: Optional[pulumi.InvokeOptions] = None) -> AwaitableGetProjectsResult:
     """
-    Use this data source to query the project list within HuaweiCloud.
+    Use this data source to query the IAM project list within HuaweiCloud.
 
-    > You *must* have IAM read privileges to use this data source.
+    > **NOTE:** You *must* have IAM read privileges to use this data source.
 
     ## Example Usage
     ### Obtain project information by name
@@ -95,7 +95,7 @@ def get_projects(name: Optional[str] = None,
     ```
 
 
-    :param str name: Specifies the project name to query.
+    :param str name: Specifies the IAM project name to query.
     """
     __args__ = dict()
     __args__['name'] = name
@@ -112,9 +112,9 @@ def get_projects(name: Optional[str] = None,
 def get_projects_output(name: Optional[pulumi.Input[Optional[str]]] = None,
                         opts: Optional[pulumi.InvokeOptions] = None) -> pulumi.Output[GetProjectsResult]:
     """
-    Use this data source to query the project list within HuaweiCloud.
+    Use this data source to query the IAM project list within HuaweiCloud.
 
-    > You *must* have IAM read privileges to use this data source.
+    > **NOTE:** You *must* have IAM read privileges to use this data source.
 
     ## Example Usage
     ### Obtain project information by name
@@ -135,6 +135,6 @@ def get_projects_output(name: Optional[pulumi.Input[Optional[str]]] = None,
     ```
 
 
-    :param str name: Specifies the project name to query.
+    :param str name: Specifies the IAM project name to query.
     """
     ...

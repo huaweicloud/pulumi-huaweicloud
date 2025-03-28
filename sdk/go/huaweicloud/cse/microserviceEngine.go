@@ -14,6 +14,7 @@ import (
 // Manages a dedicated microservice engine (2.0+) resource within HuaweiCloud.
 //
 // ## Example Usage
+// ### Create an engine for the default type CSE
 //
 // ```go
 // package main
@@ -31,14 +32,48 @@ import (
 //			cfg := config.New(ctx, "")
 //			engineName := cfg.RequireObject("engineName")
 //			networkId := cfg.RequireObject("networkId")
-//			az1 := cfg.RequireObject("az1")
+//			floatingIpId := cfg.RequireObject("floatingIpId")
+//			availabilityZones := cfg.Require("availabilityZones")
+//			managerPassword := cfg.RequireObject("managerPassword")
 //			_, err := Cse.NewMicroserviceEngine(ctx, "test", &Cse.MicroserviceEngineArgs{
-//				Flavor:    pulumi.String("cse.s1.small2"),
+//				Flavor:            pulumi.String("cse.s1.small2"),
+//				NetworkId:         pulumi.Any(networkId),
+//				EipId:             pulumi.Any(floatingIpId),
+//				AvailabilityZones: availabilityZones,
+//				AuthType:          pulumi.String("RBAC"),
+//				AdminPass:         pulumi.Any(managerPassword),
+//			})
+//			if err != nil {
+//				return err
+//			}
+//			return nil
+//		})
+//	}
+//
+// ```
+// ### Create an engine for the type Nacos
+//
+// ```go
+// package main
+//
+// import (
+//
+//	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud/Cse"
+//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi/config"
+//
+// )
+//
+//	func main() {
+//		pulumi.Run(func(ctx *pulumi.Context) error {
+//			cfg := config.New(ctx, "")
+//			engineName := cfg.RequireObject("engineName")
+//			networkId := cfg.RequireObject("networkId")
+//			_, err := Cse.NewMicroserviceEngine(ctx, "test", &Cse.MicroserviceEngineArgs{
+//				Flavor:    pulumi.String("cse.nacos2.c1.large.10"),
 //				NetworkId: pulumi.Any(networkId),
 //				AuthType:  pulumi.String("NONE"),
-//				AvailabilityZones: pulumi.StringArray{
-//					pulumi.Any(az1),
-//				},
+//				Version:   pulumi.String("Nacos2"),
 //			})
 //			if err != nil {
 //				return err
@@ -59,7 +94,7 @@ import (
 //
 // ```
 //
-//	Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes are `admin_pass` and `extend_params`. It is generally recommended running `terraform plan` after importing an instance. You can then decide if changes should be applied to the instance, or the resource definition should be updated to align with the instance. Also you can ignore changes as below. resource "huaweicloud_cse_microservice_engine" "test" {
+//	Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes are `admin_pass` and `extend_params`. It is generally recommended running `terraform plan` after importing an instance. You can then decide if changes should be applied to the instance, or the resource definition should be updated to align with the instance. Also you can ignore changes as below. hcl resource "huaweicloud_cse_microservice_engine" "test" {
 //
 //	...
 //
@@ -102,7 +137,8 @@ type MicroserviceEngine struct {
 	//   After security authentication is disabled, all users who use the engine can use the engine without using the account
 	//   and password, and have the same operation permissions on all services.
 	AuthType pulumi.StringOutput `pulumi:"authType"`
-	// Specifies the list of availability zone.
+	// Specifies the list of availability zones.\
+	// Required if the `version` is **CSE2**.
 	// Changing this will create a new engine.
 	AvailabilityZones pulumi.StringArrayOutput `pulumi:"availabilityZones"`
 	// The address of config center.
@@ -118,7 +154,7 @@ type MicroserviceEngine struct {
 	// Specifies the enterprise project ID to which the dedicated
 	// microservice engine belongs.
 	// Changing this will create a new engine.
-	EnterpriseProjectId pulumi.StringPtrOutput `pulumi:"enterpriseProjectId"`
+	EnterpriseProjectId pulumi.StringOutput `pulumi:"enterpriseProjectId"`
 	// Specifies the additional parameters for the dedicated microservice engine.
 	// Changing this will create a new engine.
 	ExtendParams pulumi.StringMapOutput `pulumi:"extendParams"`
@@ -143,8 +179,10 @@ type MicroserviceEngine struct {
 	// The connection address of service center.
 	// The object structure is documented below.
 	ServiceRegistryAddresses MicroserviceEngineServiceRegistryAddressArrayOutput `pulumi:"serviceRegistryAddresses"`
-	// Specifies the version of the dedicated microservice engine. The value can be:
-	// **CSE2**. Defaults to: **CSE2**. Changing this will create a new engine.
+	// Specifies the version of the dedicated microservice engine.\
+	// The valid values are as follows:
+	// + **CSE2**
+	// + **Nacos2**
 	Version pulumi.StringPtrOutput `pulumi:"version"`
 }
 
@@ -157,9 +195,6 @@ func NewMicroserviceEngine(ctx *pulumi.Context,
 
 	if args.AuthType == nil {
 		return nil, errors.New("invalid value for required argument 'AuthType'")
-	}
-	if args.AvailabilityZones == nil {
-		return nil, errors.New("invalid value for required argument 'AvailabilityZones'")
 	}
 	if args.Flavor == nil {
 		return nil, errors.New("invalid value for required argument 'Flavor'")
@@ -209,7 +244,8 @@ type microserviceEngineState struct {
 	//   After security authentication is disabled, all users who use the engine can use the engine without using the account
 	//   and password, and have the same operation permissions on all services.
 	AuthType *string `pulumi:"authType"`
-	// Specifies the list of availability zone.
+	// Specifies the list of availability zones.\
+	// Required if the `version` is **CSE2**.
 	// Changing this will create a new engine.
 	AvailabilityZones []string `pulumi:"availabilityZones"`
 	// The address of config center.
@@ -250,8 +286,10 @@ type microserviceEngineState struct {
 	// The connection address of service center.
 	// The object structure is documented below.
 	ServiceRegistryAddresses []MicroserviceEngineServiceRegistryAddress `pulumi:"serviceRegistryAddresses"`
-	// Specifies the version of the dedicated microservice engine. The value can be:
-	// **CSE2**. Defaults to: **CSE2**. Changing this will create a new engine.
+	// Specifies the version of the dedicated microservice engine.\
+	// The valid values are as follows:
+	// + **CSE2**
+	// + **Nacos2**
 	Version *string `pulumi:"version"`
 }
 
@@ -275,7 +313,8 @@ type MicroserviceEngineState struct {
 	//   After security authentication is disabled, all users who use the engine can use the engine without using the account
 	//   and password, and have the same operation permissions on all services.
 	AuthType pulumi.StringPtrInput
-	// Specifies the list of availability zone.
+	// Specifies the list of availability zones.\
+	// Required if the `version` is **CSE2**.
 	// Changing this will create a new engine.
 	AvailabilityZones pulumi.StringArrayInput
 	// The address of config center.
@@ -316,8 +355,10 @@ type MicroserviceEngineState struct {
 	// The connection address of service center.
 	// The object structure is documented below.
 	ServiceRegistryAddresses MicroserviceEngineServiceRegistryAddressArrayInput
-	// Specifies the version of the dedicated microservice engine. The value can be:
-	// **CSE2**. Defaults to: **CSE2**. Changing this will create a new engine.
+	// Specifies the version of the dedicated microservice engine.\
+	// The valid values are as follows:
+	// + **CSE2**
+	// + **Nacos2**
 	Version pulumi.StringPtrInput
 }
 
@@ -345,7 +386,8 @@ type microserviceEngineArgs struct {
 	//   After security authentication is disabled, all users who use the engine can use the engine without using the account
 	//   and password, and have the same operation permissions on all services.
 	AuthType string `pulumi:"authType"`
-	// Specifies the list of availability zone.
+	// Specifies the list of availability zones.\
+	// Required if the `version` is **CSE2**.
 	// Changing this will create a new engine.
 	AvailabilityZones []string `pulumi:"availabilityZones"`
 	// Specifies the description of the dedicated microservice engine.
@@ -376,8 +418,10 @@ type microserviceEngineArgs struct {
 	// Specifies the region in which to create the dedicated microservice engine.
 	// If omitted, the provider-level region will be used. Changing this will create a new engine.
 	Region *string `pulumi:"region"`
-	// Specifies the version of the dedicated microservice engine. The value can be:
-	// **CSE2**. Defaults to: **CSE2**. Changing this will create a new engine.
+	// Specifies the version of the dedicated microservice engine.\
+	// The valid values are as follows:
+	// + **CSE2**
+	// + **Nacos2**
 	Version *string `pulumi:"version"`
 }
 
@@ -402,7 +446,8 @@ type MicroserviceEngineArgs struct {
 	//   After security authentication is disabled, all users who use the engine can use the engine without using the account
 	//   and password, and have the same operation permissions on all services.
 	AuthType pulumi.StringInput
-	// Specifies the list of availability zone.
+	// Specifies the list of availability zones.\
+	// Required if the `version` is **CSE2**.
 	// Changing this will create a new engine.
 	AvailabilityZones pulumi.StringArrayInput
 	// Specifies the description of the dedicated microservice engine.
@@ -433,8 +478,10 @@ type MicroserviceEngineArgs struct {
 	// Specifies the region in which to create the dedicated microservice engine.
 	// If omitted, the provider-level region will be used. Changing this will create a new engine.
 	Region pulumi.StringPtrInput
-	// Specifies the version of the dedicated microservice engine. The value can be:
-	// **CSE2**. Defaults to: **CSE2**. Changing this will create a new engine.
+	// Specifies the version of the dedicated microservice engine.\
+	// The valid values are as follows:
+	// + **CSE2**
+	// + **Nacos2**
 	Version pulumi.StringPtrInput
 }
 
@@ -550,7 +597,8 @@ func (o MicroserviceEngineOutput) AuthType() pulumi.StringOutput {
 	return o.ApplyT(func(v *MicroserviceEngine) pulumi.StringOutput { return v.AuthType }).(pulumi.StringOutput)
 }
 
-// Specifies the list of availability zone.
+// Specifies the list of availability zones.\
+// Required if the `version` is **CSE2**.
 // Changing this will create a new engine.
 func (o MicroserviceEngineOutput) AvailabilityZones() pulumi.StringArrayOutput {
 	return o.ApplyT(func(v *MicroserviceEngine) pulumi.StringArrayOutput { return v.AvailabilityZones }).(pulumi.StringArrayOutput)
@@ -580,8 +628,8 @@ func (o MicroserviceEngineOutput) EipId() pulumi.StringPtrOutput {
 // Specifies the enterprise project ID to which the dedicated
 // microservice engine belongs.
 // Changing this will create a new engine.
-func (o MicroserviceEngineOutput) EnterpriseProjectId() pulumi.StringPtrOutput {
-	return o.ApplyT(func(v *MicroserviceEngine) pulumi.StringPtrOutput { return v.EnterpriseProjectId }).(pulumi.StringPtrOutput)
+func (o MicroserviceEngineOutput) EnterpriseProjectId() pulumi.StringOutput {
+	return o.ApplyT(func(v *MicroserviceEngine) pulumi.StringOutput { return v.EnterpriseProjectId }).(pulumi.StringOutput)
 }
 
 // Specifies the additional parameters for the dedicated microservice engine.
@@ -634,8 +682,10 @@ func (o MicroserviceEngineOutput) ServiceRegistryAddresses() MicroserviceEngineS
 	}).(MicroserviceEngineServiceRegistryAddressArrayOutput)
 }
 
-// Specifies the version of the dedicated microservice engine. The value can be:
-// **CSE2**. Defaults to: **CSE2**. Changing this will create a new engine.
+// Specifies the version of the dedicated microservice engine.\
+// The valid values are as follows:
+// + **CSE2**
+// + **Nacos2**
 func (o MicroserviceEngineOutput) Version() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *MicroserviceEngine) pulumi.StringPtrOutput { return v.Version }).(pulumi.StringPtrOutput)
 }

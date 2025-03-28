@@ -11,9 +11,9 @@ import (
 )
 
 type ZoneRouter struct {
-	// ID of the associated VPC.
+	// Specifies the ID of the associated VPC.
 	RouterId string `pulumi:"routerId"`
-	// The region of the VPC.
+	// Specifies the region of the VPC.
 	RouterRegion *string `pulumi:"routerRegion"`
 }
 
@@ -29,9 +29,9 @@ type ZoneRouterInput interface {
 }
 
 type ZoneRouterArgs struct {
-	// ID of the associated VPC.
+	// Specifies the ID of the associated VPC.
 	RouterId pulumi.StringInput `pulumi:"routerId"`
-	// The region of the VPC.
+	// Specifies the region of the VPC.
 	RouterRegion pulumi.StringPtrInput `pulumi:"routerRegion"`
 }
 
@@ -86,12 +86,12 @@ func (o ZoneRouterOutput) ToZoneRouterOutputWithContext(ctx context.Context) Zon
 	return o
 }
 
-// ID of the associated VPC.
+// Specifies the ID of the associated VPC.
 func (o ZoneRouterOutput) RouterId() pulumi.StringOutput {
 	return o.ApplyT(func(v ZoneRouter) string { return v.RouterId }).(pulumi.StringOutput)
 }
 
-// The region of the VPC.
+// Specifies the region of the VPC.
 func (o ZoneRouterOutput) RouterRegion() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v ZoneRouter) *string { return v.RouterRegion }).(pulumi.StringPtrOutput)
 }

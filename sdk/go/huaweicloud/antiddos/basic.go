@@ -49,7 +49,7 @@ import (
 //
 // ## Import
 //
-// Cloud Native Anti-DDos Basic resources can be imported using `eip_id`. e.g.
+// Cloud Native Anti-DDos Basic resources can be imported using `eip_id`. e.g. bash
 //
 // ```sh
 //
@@ -68,6 +68,9 @@ type Basic struct {
 	Region pulumi.StringOutput `pulumi:"region"`
 	// The Anti-DDos status.
 	Status pulumi.StringOutput `pulumi:"status"`
+	// Specifies the SMN topic URN. When the value is not empty, it means turning on the alarm
+	// notification. When the value is empty, it means turning off the alarm notification.
+	TopicUrn pulumi.StringPtrOutput `pulumi:"topicUrn"`
 	// Specifies the traffic cleaning threshold in Mbps.
 	// The value can be 10, 30, 50, 70, 100, 120, 150, 200, 250, 300, 1000 Mbps.
 	TrafficThreshold pulumi.IntOutput `pulumi:"trafficThreshold"`
@@ -118,6 +121,9 @@ type basicState struct {
 	Region *string `pulumi:"region"`
 	// The Anti-DDos status.
 	Status *string `pulumi:"status"`
+	// Specifies the SMN topic URN. When the value is not empty, it means turning on the alarm
+	// notification. When the value is empty, it means turning off the alarm notification.
+	TopicUrn *string `pulumi:"topicUrn"`
 	// Specifies the traffic cleaning threshold in Mbps.
 	// The value can be 10, 30, 50, 70, 100, 120, 150, 200, 250, 300, 1000 Mbps.
 	TrafficThreshold *int `pulumi:"trafficThreshold"`
@@ -133,6 +139,9 @@ type BasicState struct {
 	Region pulumi.StringPtrInput
 	// The Anti-DDos status.
 	Status pulumi.StringPtrInput
+	// Specifies the SMN topic URN. When the value is not empty, it means turning on the alarm
+	// notification. When the value is empty, it means turning off the alarm notification.
+	TopicUrn pulumi.StringPtrInput
 	// Specifies the traffic cleaning threshold in Mbps.
 	// The value can be 10, 30, 50, 70, 100, 120, 150, 200, 250, 300, 1000 Mbps.
 	TrafficThreshold pulumi.IntPtrInput
@@ -148,6 +157,9 @@ type basicArgs struct {
 	// Specifies the region in which to manage the Cloud Native Anti-DDos Basic resource.
 	// If omitted, the provider-level region will be used. Changing this creates a new resource.
 	Region *string `pulumi:"region"`
+	// Specifies the SMN topic URN. When the value is not empty, it means turning on the alarm
+	// notification. When the value is empty, it means turning off the alarm notification.
+	TopicUrn *string `pulumi:"topicUrn"`
 	// Specifies the traffic cleaning threshold in Mbps.
 	// The value can be 10, 30, 50, 70, 100, 120, 150, 200, 250, 300, 1000 Mbps.
 	TrafficThreshold int `pulumi:"trafficThreshold"`
@@ -160,6 +172,9 @@ type BasicArgs struct {
 	// Specifies the region in which to manage the Cloud Native Anti-DDos Basic resource.
 	// If omitted, the provider-level region will be used. Changing this creates a new resource.
 	Region pulumi.StringPtrInput
+	// Specifies the SMN topic URN. When the value is not empty, it means turning on the alarm
+	// notification. When the value is empty, it means turning off the alarm notification.
+	TopicUrn pulumi.StringPtrInput
 	// Specifies the traffic cleaning threshold in Mbps.
 	// The value can be 10, 30, 50, 70, 100, 120, 150, 200, 250, 300, 1000 Mbps.
 	TrafficThreshold pulumi.IntInput
@@ -271,6 +286,12 @@ func (o BasicOutput) Region() pulumi.StringOutput {
 // The Anti-DDos status.
 func (o BasicOutput) Status() pulumi.StringOutput {
 	return o.ApplyT(func(v *Basic) pulumi.StringOutput { return v.Status }).(pulumi.StringOutput)
+}
+
+// Specifies the SMN topic URN. When the value is not empty, it means turning on the alarm
+// notification. When the value is empty, it means turning off the alarm notification.
+func (o BasicOutput) TopicUrn() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *Basic) pulumi.StringPtrOutput { return v.TopicUrn }).(pulumi.StringPtrOutput)
 }
 
 // Specifies the traffic cleaning threshold in Mbps.

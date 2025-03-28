@@ -5,9 +5,9 @@ import * as pulumi from "@pulumi/pulumi";
 import * as utilities from "../utilities";
 
 /**
- * Use this data source to get the ID of an IAM **custom policy**.
+ * Use this data source to get details of the specified IAM **custom policy**.
  *
- * > You *must* have IAM read privileges to use this data source.
+ * > **NOTE:** You *must* have IAM read privileges to use this data source.
  *
  * ## Example Usage
  *
@@ -15,8 +15,8 @@ import * as utilities from "../utilities";
  * import * as pulumi from "@pulumi/pulumi";
  * import * as huaweicloud from "@pulumi/huaweicloud";
  *
- * const role = pulumi.output(huaweicloud.Iam.getCustomRole({
- *     name: "custom_role",
+ * const policy = pulumi.output(huaweicloud.Iam.getCustomRole({
+ *     name: "custom_policy",
  * }));
  * ```
  */
@@ -42,27 +42,29 @@ export function getCustomRole(args?: GetCustomRoleArgs, opts?: pulumi.InvokeOpti
  */
 export interface GetCustomRoleArgs {
     /**
-     * Description of the custom policy.
+     * Specifies the description of the custom policy.
      */
     description?: string;
     /**
-     * The domain the policy belongs to.
+     * Specifies the domain the policy belongs to.
      */
     domainId?: string;
     /**
-     * ID of the custom policy.
+     * Specifies the ID of the custom policy. It's required if `name` is not specified.
      */
     id?: string;
     /**
-     * Name of the custom policy.
+     * Specifies the name of the custom policy. It's required if `id` is not specified.
      */
     name?: string;
     /**
-     * The number of citations for the custom policy.
+     * Specifies the number of citations for the custom policy.
      */
     references?: number;
     /**
-     * Display mode. Valid options are *AX*: Account level and *XA*: Project level.
+     * Specifies the display mode of the custom policy. Valid options are as follows:
+     * + **AX**: the global service project.
+     * + **XA**: region-specific projects.
      */
     type?: string;
 }
@@ -72,7 +74,7 @@ export interface GetCustomRoleArgs {
  */
 export interface GetCustomRoleResult {
     /**
-     * The catalog of the custom policy.
+     * The catalog of the custom policy. The value is **CUSTOMED**.
      */
     readonly catalog: string;
     readonly description: string;
@@ -80,7 +82,7 @@ export interface GetCustomRoleResult {
     readonly id: string;
     readonly name: string;
     /**
-     * Document of the custom policy.
+     * The content of the custom policy in JSON format.
      */
     readonly policy: string;
     readonly references: number;
@@ -96,27 +98,29 @@ export function getCustomRoleOutput(args?: GetCustomRoleOutputArgs, opts?: pulum
  */
 export interface GetCustomRoleOutputArgs {
     /**
-     * Description of the custom policy.
+     * Specifies the description of the custom policy.
      */
     description?: pulumi.Input<string>;
     /**
-     * The domain the policy belongs to.
+     * Specifies the domain the policy belongs to.
      */
     domainId?: pulumi.Input<string>;
     /**
-     * ID of the custom policy.
+     * Specifies the ID of the custom policy. It's required if `name` is not specified.
      */
     id?: pulumi.Input<string>;
     /**
-     * Name of the custom policy.
+     * Specifies the name of the custom policy. It's required if `id` is not specified.
      */
     name?: pulumi.Input<string>;
     /**
-     * The number of citations for the custom policy.
+     * Specifies the number of citations for the custom policy.
      */
     references?: pulumi.Input<number>;
     /**
-     * Display mode. Valid options are *AX*: Account level and *XA*: Project level.
+     * Specifies the display mode of the custom policy. Valid options are as follows:
+     * + **AX**: the global service project.
+     * + **XA**: region-specific projects.
      */
     type?: pulumi.Input<string>;
 }

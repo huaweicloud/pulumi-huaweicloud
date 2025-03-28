@@ -7,7 +7,7 @@ import * as utilities from "../utilities";
 /**
  * Manages a keypair resource within HuaweiCloud.
  *
- * By default, key pairs use the SSH-2 (RSA, 2048) algorithm for encryption and decryption.
+ * By default, keypair use the SSH-2 (RSA, 2048) algorithm for encryption and decryption.
  *
  * Keys imported support the following cryptographic algorithms:
  *
@@ -16,49 +16,66 @@ import * as utilities from "../utilities";
  *  * RSA-4096
  *
  * ## Example Usage
- * ### Create a new keypair which scope is Tenant-level and the private key is managed by HuaweiCloud
+ * ### Create a new KPS keypair
  *
  * ```typescript
  * import * as pulumi from "@pulumi/pulumi";
  * import * as pulumi from "@huaweicloudos/pulumi";
  *
- * const test = new huaweicloud.dew.Key("test", {keyAlias: "kms_test"});
- * const test_keypair = new huaweicloud.dew.Keypair("test-keypair", {
- *     scope: "account",
+ * const config = new pulumi.Config();
+ * const kmsKeyId = config.requireObject("kmsKeyId");
+ * const kmsKeyName = config.requireObject("kmsKeyName");
+ * const keyFile = config.requireObject("keyFile");
+ * const test = new huaweicloud.dew.Keypair("test", {
+ *     scope: "user",
  *     encryptionType: "kms",
- *     kmsKeyName: test.keyAlias,
+ *     kmsKeyId: kmsKeyId,
+ *     kmsKeyName: kmsKeyName,
+ *     description: "test description",
+ *     keyFile: keyFile,
  * });
  * ```
- * ### Create a new keypair and export private key to current folder
+ * ### Import an existing KPS keypair
  *
  * ```typescript
  * import * as pulumi from "@pulumi/pulumi";
- * import * as huaweicloud from "@pulumi/huaweicloud";
+ * import * as pulumi from "@huaweicloudos/pulumi";
  *
- * const test_keypair = new huaweicloud.Dew.Keypair("test-keypair", {
- *     keyFile: "private_key.pem",
+ * const config = new pulumi.Config();
+ * const publicKey = config.requireObject("publicKey");
+ * const privateKey = config.requireObject("privateKey");
+ * const test = new huaweicloud.dew.Keypair("test", {
+ *     scope: "account",
+ *     encryptionType: "default",
+ *     description: "test description",
+ *     publicKey: publicKey,
+ *     privateKey: privateKey,
  * });
  * ```
- * ### Import an existing keypair
+ * ### Import an existing KPS keypair without private key
  *
  * ```typescript
  * import * as pulumi from "@pulumi/pulumi";
- * import * as huaweicloud from "@pulumi/huaweicloud";
+ * import * as pulumi from "@huaweicloudos/pulumi";
  *
- * const test_keypair = new huaweicloud.Dew.Keypair("test-keypair", {
- *     publicKey: "ssh-rsa AAAAB3NzaC1yc2EAAAlJq5Pu+eizhou7nFFDxXofr2ySF8k/yuA9OnJdVF9Fbf85Z59CWNZBvcAT... root@terra-dev",
+ * const config = new pulumi.Config();
+ * const publicKey = config.requireObject("publicKey");
+ * const test = new huaweicloud.dew.Keypair("test", {
+ *     scope: "account",
+ *     description: "test description",
+ *     publicKey: publicKey,
  * });
  * ```
  *
  * ## Import
  *
- * Keypairs can be imported using the `name`, e.g.
+ * Keypair can be imported using the `name`, e.g. bash
  *
  * ```sh
- *  $ pulumi import huaweicloud:Dew/keypair:Keypair my-keypair test-keypair
+ *  $ pulumi import huaweicloud:Dew/keypair:Keypair test <name>
  * ```
  *
- *  Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`encryption_type`, and `kms_key_name`. It is generally recommended running `terraform plan` after importing a key pair. You can then decide if changes should be applied to the key pair, or the resource definition should be updated to align with the key pair. Also you can ignore changes as below. resource "huaweicloud_kps_keypair" "test" {
+ *  Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`encryption_type`, `kms_key_id`, `kms_key_name`, `key_file` and `private_key`. It is generally recommended running `terraform plan` after importing a keypair. You can then decide if changes should be applied to the keypair, or the resource definition should be updated to align with the keypair. Also, you can ignore changes as below. hcl resource "huaweicloud_kps_keypair" "test" {
  *
  *  ...
  *
@@ -66,7 +83,7 @@ import * as utilities from "../utilities";
  *
  *  ignore_changes = [
  *
- *  encryption_type, kms_key_name,
+ *  encryption_type, kms_key_id, kms_key_name, key_file, private_key
  *
  *  ]
  *
@@ -101,22 +118,21 @@ export class Keypair extends pulumi.CustomResource {
     }
 
     /**
-     * The key pair creation time.
+     * The keypair creation time.
      */
     public /*out*/ readonly createdAt!: pulumi.Output<string>;
     /**
-     * Specifies the description of key pair.
+     * Specifies the description of keypair.
      */
     public readonly description!: pulumi.Output<string | undefined>;
     /**
-     * Specifies encryption mode if manages the private key by HuaweiCloud.
-     * The options are as follows:
-     * - **default**: The default encryption mode. Applicable to sites where KMS is not deployed.
-     * - **kms**: KMS encryption mode.
+     * Specifies encryption mode. The options are as follows:
+     * + **default**: The default encryption mode. Applicable to sites where KMS is not deployed.
+     * + **kms**: KMS encryption mode.
      */
     public readonly encryptionType!: pulumi.Output<string>;
     /**
-     * Fingerprint information about an key pair.
+     * Fingerprint information about a keypair.
      */
     public /*out*/ readonly fingerprint!: pulumi.Output<string>;
     /**
@@ -125,24 +141,31 @@ export class Keypair extends pulumi.CustomResource {
     public /*out*/ readonly isManaged!: pulumi.Output<boolean>;
     /**
      * Specifies the path of the created private key.
-     * The private key file (**.pem**) is created only after the resource is created.
-     * Changing this parameter will create a new resource.
+     * The private key file (**.pem**) is created only when creating a KPS keypair.
+     * Importing an existing keypair will not obtain the private key information.
      */
     public readonly keyFile!: pulumi.Output<string>;
     /**
+     * Specifies the KMS key ID to encrypt private keys.
+     */
+    public readonly kmsKeyId!: pulumi.Output<string | undefined>;
+    /**
      * Specifies the KMS key name to encrypt private keys.
-     * It's mandatory when the `encryptionType` is `kms`. Changing this parameter will create a new resource.
      */
     public readonly kmsKeyName!: pulumi.Output<string | undefined>;
     /**
-     * Specifies a unique name for the keypair. The name can contain a maximum of 64
+     * Specifies a unique name for the keypair. The name can contain a maximum of `64`
      * characters, including letters, digits, underscores (_) and hyphens (-).
      * Changing this parameter will create a new resource.
      */
     public readonly name!: pulumi.Output<string>;
     /**
+     * Specifies the imported OpenSSH-formatted private key.
+     */
+    public readonly privateKey!: pulumi.Output<string | undefined>;
+    /**
      * Specifies the imported OpenSSH-formatted public key.
-     * Changing this parameter will create a new resource.
+     * It is required when import keypair. Changing this parameter will create a new resource.
      */
     public readonly publicKey!: pulumi.Output<string>;
     /**
@@ -151,11 +174,15 @@ export class Keypair extends pulumi.CustomResource {
      */
     public readonly region!: pulumi.Output<string>;
     /**
-     * Specifies the scope of key pair. The options are as follows:
-     * - **account**: Tenant-level, available to all users under the same account.
-     * - **user**: User-level, only available to that user.
+     * Specifies the scope of keypair. The options are as follows:
+     * + **account**: Tenant-level, available to all users under the same account.
+     * + **user**: User-level, only available to user.
      */
     public readonly scope!: pulumi.Output<string>;
+    /**
+     * Specifies the user ID to which the keypair belongs.
+     */
+    public readonly userId!: pulumi.Output<string>;
 
     /**
      * Create a Keypair resource with the given unique name, arguments, and options.
@@ -176,21 +203,27 @@ export class Keypair extends pulumi.CustomResource {
             resourceInputs["fingerprint"] = state ? state.fingerprint : undefined;
             resourceInputs["isManaged"] = state ? state.isManaged : undefined;
             resourceInputs["keyFile"] = state ? state.keyFile : undefined;
+            resourceInputs["kmsKeyId"] = state ? state.kmsKeyId : undefined;
             resourceInputs["kmsKeyName"] = state ? state.kmsKeyName : undefined;
             resourceInputs["name"] = state ? state.name : undefined;
+            resourceInputs["privateKey"] = state ? state.privateKey : undefined;
             resourceInputs["publicKey"] = state ? state.publicKey : undefined;
             resourceInputs["region"] = state ? state.region : undefined;
             resourceInputs["scope"] = state ? state.scope : undefined;
+            resourceInputs["userId"] = state ? state.userId : undefined;
         } else {
             const args = argsOrState as KeypairArgs | undefined;
             resourceInputs["description"] = args ? args.description : undefined;
             resourceInputs["encryptionType"] = args ? args.encryptionType : undefined;
             resourceInputs["keyFile"] = args ? args.keyFile : undefined;
+            resourceInputs["kmsKeyId"] = args ? args.kmsKeyId : undefined;
             resourceInputs["kmsKeyName"] = args ? args.kmsKeyName : undefined;
             resourceInputs["name"] = args ? args.name : undefined;
+            resourceInputs["privateKey"] = args ? args.privateKey : undefined;
             resourceInputs["publicKey"] = args ? args.publicKey : undefined;
             resourceInputs["region"] = args ? args.region : undefined;
             resourceInputs["scope"] = args ? args.scope : undefined;
+            resourceInputs["userId"] = args ? args.userId : undefined;
             resourceInputs["createdAt"] = undefined /*out*/;
             resourceInputs["fingerprint"] = undefined /*out*/;
             resourceInputs["isManaged"] = undefined /*out*/;
@@ -205,22 +238,21 @@ export class Keypair extends pulumi.CustomResource {
  */
 export interface KeypairState {
     /**
-     * The key pair creation time.
+     * The keypair creation time.
      */
     createdAt?: pulumi.Input<string>;
     /**
-     * Specifies the description of key pair.
+     * Specifies the description of keypair.
      */
     description?: pulumi.Input<string>;
     /**
-     * Specifies encryption mode if manages the private key by HuaweiCloud.
-     * The options are as follows:
-     * - **default**: The default encryption mode. Applicable to sites where KMS is not deployed.
-     * - **kms**: KMS encryption mode.
+     * Specifies encryption mode. The options are as follows:
+     * + **default**: The default encryption mode. Applicable to sites where KMS is not deployed.
+     * + **kms**: KMS encryption mode.
      */
     encryptionType?: pulumi.Input<string>;
     /**
-     * Fingerprint information about an key pair.
+     * Fingerprint information about a keypair.
      */
     fingerprint?: pulumi.Input<string>;
     /**
@@ -229,24 +261,31 @@ export interface KeypairState {
     isManaged?: pulumi.Input<boolean>;
     /**
      * Specifies the path of the created private key.
-     * The private key file (**.pem**) is created only after the resource is created.
-     * Changing this parameter will create a new resource.
+     * The private key file (**.pem**) is created only when creating a KPS keypair.
+     * Importing an existing keypair will not obtain the private key information.
      */
     keyFile?: pulumi.Input<string>;
     /**
+     * Specifies the KMS key ID to encrypt private keys.
+     */
+    kmsKeyId?: pulumi.Input<string>;
+    /**
      * Specifies the KMS key name to encrypt private keys.
-     * It's mandatory when the `encryptionType` is `kms`. Changing this parameter will create a new resource.
      */
     kmsKeyName?: pulumi.Input<string>;
     /**
-     * Specifies a unique name for the keypair. The name can contain a maximum of 64
+     * Specifies a unique name for the keypair. The name can contain a maximum of `64`
      * characters, including letters, digits, underscores (_) and hyphens (-).
      * Changing this parameter will create a new resource.
      */
     name?: pulumi.Input<string>;
     /**
+     * Specifies the imported OpenSSH-formatted private key.
+     */
+    privateKey?: pulumi.Input<string>;
+    /**
      * Specifies the imported OpenSSH-formatted public key.
-     * Changing this parameter will create a new resource.
+     * It is required when import keypair. Changing this parameter will create a new resource.
      */
     publicKey?: pulumi.Input<string>;
     /**
@@ -255,11 +294,15 @@ export interface KeypairState {
      */
     region?: pulumi.Input<string>;
     /**
-     * Specifies the scope of key pair. The options are as follows:
-     * - **account**: Tenant-level, available to all users under the same account.
-     * - **user**: User-level, only available to that user.
+     * Specifies the scope of keypair. The options are as follows:
+     * + **account**: Tenant-level, available to all users under the same account.
+     * + **user**: User-level, only available to user.
      */
     scope?: pulumi.Input<string>;
+    /**
+     * Specifies the user ID to which the keypair belongs.
+     */
+    userId?: pulumi.Input<string>;
 }
 
 /**
@@ -267,36 +310,42 @@ export interface KeypairState {
  */
 export interface KeypairArgs {
     /**
-     * Specifies the description of key pair.
+     * Specifies the description of keypair.
      */
     description?: pulumi.Input<string>;
     /**
-     * Specifies encryption mode if manages the private key by HuaweiCloud.
-     * The options are as follows:
-     * - **default**: The default encryption mode. Applicable to sites where KMS is not deployed.
-     * - **kms**: KMS encryption mode.
+     * Specifies encryption mode. The options are as follows:
+     * + **default**: The default encryption mode. Applicable to sites where KMS is not deployed.
+     * + **kms**: KMS encryption mode.
      */
     encryptionType?: pulumi.Input<string>;
     /**
      * Specifies the path of the created private key.
-     * The private key file (**.pem**) is created only after the resource is created.
-     * Changing this parameter will create a new resource.
+     * The private key file (**.pem**) is created only when creating a KPS keypair.
+     * Importing an existing keypair will not obtain the private key information.
      */
     keyFile?: pulumi.Input<string>;
     /**
+     * Specifies the KMS key ID to encrypt private keys.
+     */
+    kmsKeyId?: pulumi.Input<string>;
+    /**
      * Specifies the KMS key name to encrypt private keys.
-     * It's mandatory when the `encryptionType` is `kms`. Changing this parameter will create a new resource.
      */
     kmsKeyName?: pulumi.Input<string>;
     /**
-     * Specifies a unique name for the keypair. The name can contain a maximum of 64
+     * Specifies a unique name for the keypair. The name can contain a maximum of `64`
      * characters, including letters, digits, underscores (_) and hyphens (-).
      * Changing this parameter will create a new resource.
      */
     name?: pulumi.Input<string>;
     /**
+     * Specifies the imported OpenSSH-formatted private key.
+     */
+    privateKey?: pulumi.Input<string>;
+    /**
      * Specifies the imported OpenSSH-formatted public key.
-     * Changing this parameter will create a new resource.
+     * It is required when import keypair. Changing this parameter will create a new resource.
      */
     publicKey?: pulumi.Input<string>;
     /**
@@ -305,9 +354,13 @@ export interface KeypairArgs {
      */
     region?: pulumi.Input<string>;
     /**
-     * Specifies the scope of key pair. The options are as follows:
-     * - **account**: Tenant-level, available to all users under the same account.
-     * - **user**: User-level, only available to that user.
+     * Specifies the scope of keypair. The options are as follows:
+     * + **account**: Tenant-level, available to all users under the same account.
+     * + **user**: User-level, only available to user.
      */
     scope?: pulumi.Input<string>;
+    /**
+     * Specifies the user ID to which the keypair belongs.
+     */
+    userId?: pulumi.Input<string>;
 }

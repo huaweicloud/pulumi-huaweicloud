@@ -33,7 +33,7 @@ class DatabaseRoleArgs:
         :param pulumi.Input[str] region: Specifies the region where the DDS instance is located.
                Changing this parameter will create a new role.
         :param pulumi.Input[Sequence[pulumi.Input['DatabaseRoleRoleArgs']]] roles: Specifies the list of roles owned by the current role.
-               The object structure is documented below.
+               The roles structure is documented below.
                Changing this parameter will create a new role.
         """
         pulumi.set(__self__, "db_name", db_name)
@@ -103,7 +103,7 @@ class DatabaseRoleArgs:
     def roles(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['DatabaseRoleRoleArgs']]]]:
         """
         Specifies the list of roles owned by the current role.
-        The object structure is documented below.
+        The roles structure is documented below.
         Changing this parameter will create a new role.
         """
         return pulumi.get(self, "roles")
@@ -128,18 +128,18 @@ class _DatabaseRoleState:
         :param pulumi.Input[str] db_name: Specifies the database name to which this owned role belongs.
                Changing this parameter will create a new role.
         :param pulumi.Input[Sequence[pulumi.Input['DatabaseRoleInheritedPrivilegeArgs']]] inherited_privileges: The list of database privileges owned by the current role, includes all privileges
-               inherited by owned roles. The object structure is documented below.
+               inherited by owned roles. The inherited_privileges structure is documented below.
         :param pulumi.Input[str] instance_id: Specifies the DDS instance ID to which the role belongs.
                Changing this parameter will create a new role.
         :param pulumi.Input[str] name: Specifies the name of role owned by the current role.
                The name can contain `1` to `64` characters, only letters, digits, underscores (_), hyphens (-) and dots (.) are
                allowed. Changing this parameter will create a new role.
         :param pulumi.Input[Sequence[pulumi.Input['DatabaseRolePrivilegeArgs']]] privileges: The list of database privileges owned by the current role.
-               The object structure is documented below.
+               The privileges structure is documented below.
         :param pulumi.Input[str] region: Specifies the region where the DDS instance is located.
                Changing this parameter will create a new role.
         :param pulumi.Input[Sequence[pulumi.Input['DatabaseRoleRoleArgs']]] roles: Specifies the list of roles owned by the current role.
-               The object structure is documented below.
+               The roles structure is documented below.
                Changing this parameter will create a new role.
         """
         if db_name is not None:
@@ -175,7 +175,7 @@ class _DatabaseRoleState:
     def inherited_privileges(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['DatabaseRoleInheritedPrivilegeArgs']]]]:
         """
         The list of database privileges owned by the current role, includes all privileges
-        inherited by owned roles. The object structure is documented below.
+        inherited by owned roles. The inherited_privileges structure is documented below.
         """
         return pulumi.get(self, "inherited_privileges")
 
@@ -215,7 +215,7 @@ class _DatabaseRoleState:
     def privileges(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['DatabaseRolePrivilegeArgs']]]]:
         """
         The list of database privileges owned by the current role.
-        The object structure is documented below.
+        The privileges structure is documented below.
         """
         return pulumi.get(self, "privileges")
 
@@ -241,7 +241,7 @@ class _DatabaseRoleState:
     def roles(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['DatabaseRoleRoleArgs']]]]:
         """
         Specifies the list of roles owned by the current role.
-        The object structure is documented below.
+        The roles structure is documented below.
         Changing this parameter will create a new role.
         """
         return pulumi.get(self, "roles")
@@ -263,7 +263,7 @@ class DatabaseRole(pulumi.CustomResource):
                  roles: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['DatabaseRoleRoleArgs']]]]] = None,
                  __props__=None):
         """
-        Manages a database role resource within HuaweiCloud.
+        Manages a DDS database role resource within HuaweiCloud.
 
         ## Example Usage
 
@@ -288,10 +288,10 @@ class DatabaseRole(pulumi.CustomResource):
 
         ## Import
 
-        Database roles can be imported using their `id` (combination of `instance_id`, `db_name` and `name`), separated by a slash (/), e.g.
+        DDS database roles can be imported using the `instance_id`, `db_name` and `name` separated by slashes (/), e.g. bash
 
         ```sh
-         $ pulumi import huaweicloud:Dds/databaseRole:DatabaseRole test &ltinstance_id&gt/&ltdb_name&gt/&ltname&gt
+         $ pulumi import huaweicloud:Dds/databaseRole:DatabaseRole test <instance_id>/<db_name>/<name>
         ```
 
         :param str resource_name: The name of the resource.
@@ -306,7 +306,7 @@ class DatabaseRole(pulumi.CustomResource):
         :param pulumi.Input[str] region: Specifies the region where the DDS instance is located.
                Changing this parameter will create a new role.
         :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['DatabaseRoleRoleArgs']]]] roles: Specifies the list of roles owned by the current role.
-               The object structure is documented below.
+               The roles structure is documented below.
                Changing this parameter will create a new role.
         """
         ...
@@ -316,7 +316,7 @@ class DatabaseRole(pulumi.CustomResource):
                  args: DatabaseRoleArgs,
                  opts: Optional[pulumi.ResourceOptions] = None):
         """
-        Manages a database role resource within HuaweiCloud.
+        Manages a DDS database role resource within HuaweiCloud.
 
         ## Example Usage
 
@@ -341,10 +341,10 @@ class DatabaseRole(pulumi.CustomResource):
 
         ## Import
 
-        Database roles can be imported using their `id` (combination of `instance_id`, `db_name` and `name`), separated by a slash (/), e.g.
+        DDS database roles can be imported using the `instance_id`, `db_name` and `name` separated by slashes (/), e.g. bash
 
         ```sh
-         $ pulumi import huaweicloud:Dds/databaseRole:DatabaseRole test &ltinstance_id&gt/&ltdb_name&gt/&ltname&gt
+         $ pulumi import huaweicloud:Dds/databaseRole:DatabaseRole test <instance_id>/<db_name>/<name>
         ```
 
         :param str resource_name: The name of the resource.
@@ -414,18 +414,18 @@ class DatabaseRole(pulumi.CustomResource):
         :param pulumi.Input[str] db_name: Specifies the database name to which this owned role belongs.
                Changing this parameter will create a new role.
         :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['DatabaseRoleInheritedPrivilegeArgs']]]] inherited_privileges: The list of database privileges owned by the current role, includes all privileges
-               inherited by owned roles. The object structure is documented below.
+               inherited by owned roles. The inherited_privileges structure is documented below.
         :param pulumi.Input[str] instance_id: Specifies the DDS instance ID to which the role belongs.
                Changing this parameter will create a new role.
         :param pulumi.Input[str] name: Specifies the name of role owned by the current role.
                The name can contain `1` to `64` characters, only letters, digits, underscores (_), hyphens (-) and dots (.) are
                allowed. Changing this parameter will create a new role.
         :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['DatabaseRolePrivilegeArgs']]]] privileges: The list of database privileges owned by the current role.
-               The object structure is documented below.
+               The privileges structure is documented below.
         :param pulumi.Input[str] region: Specifies the region where the DDS instance is located.
                Changing this parameter will create a new role.
         :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['DatabaseRoleRoleArgs']]]] roles: Specifies the list of roles owned by the current role.
-               The object structure is documented below.
+               The roles structure is documented below.
                Changing this parameter will create a new role.
         """
         opts = pulumi.ResourceOptions.merge(opts, pulumi.ResourceOptions(id=id))
@@ -455,7 +455,7 @@ class DatabaseRole(pulumi.CustomResource):
     def inherited_privileges(self) -> pulumi.Output[Sequence['outputs.DatabaseRoleInheritedPrivilege']]:
         """
         The list of database privileges owned by the current role, includes all privileges
-        inherited by owned roles. The object structure is documented below.
+        inherited by owned roles. The inherited_privileges structure is documented below.
         """
         return pulumi.get(self, "inherited_privileges")
 
@@ -483,7 +483,7 @@ class DatabaseRole(pulumi.CustomResource):
     def privileges(self) -> pulumi.Output[Sequence['outputs.DatabaseRolePrivilege']]:
         """
         The list of database privileges owned by the current role.
-        The object structure is documented below.
+        The privileges structure is documented below.
         """
         return pulumi.get(self, "privileges")
 
@@ -501,7 +501,7 @@ class DatabaseRole(pulumi.CustomResource):
     def roles(self) -> pulumi.Output[Sequence['outputs.DatabaseRoleRole']]:
         """
         Specifies the list of roles owned by the current role.
-        The object structure is documented below.
+        The roles structure is documented below.
         Changing this parameter will create a new role.
         """
         return pulumi.get(self, "roles")

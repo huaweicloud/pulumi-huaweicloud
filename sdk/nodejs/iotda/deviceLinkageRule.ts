@@ -8,6 +8,13 @@ import * as utilities from "../utilities";
 /**
  * Manages an IoTDA device linkage rule within HuaweiCloud.
  *
+ * > When accessing an IoTDA **standard** or **enterprise** edition instance, you need to specify the IoTDA service
+ * endpoint in `provider` block.
+ * You can login to the IoTDA console, choose the instance **Overview** and click **Access Details**
+ * to view the HTTPS application access address. An example of the access address might be
+ * **9bc34xxxxx.st1.iotda-app.ap-southeast-1.myhuaweicloud.com**, then you need to configure the
+ * `provider` block as follows:
+ *
  * ## Example Usage
  *
  * ```typescript
@@ -79,7 +86,7 @@ import * as utilities from "../utilities";
  *
  * ## Import
  *
- * Device linkage rules can be imported using the `id`, e.g.
+ * Device linkage rules can be imported using the `id`, e.g. bash
  *
  * ```sh
  *  $ pulumi import huaweicloud:IoTDA/deviceLinkageRule:DeviceLinkageRule test 62b6cc5aa367f403fea86127
@@ -119,7 +126,8 @@ export class DeviceLinkageRule extends pulumi.CustomResource {
      */
     public readonly actions!: pulumi.Output<outputs.IoTDA.DeviceLinkageRuleAction[]>;
     /**
-     * Specifies the description of the alarm.
+     * Specifies the description of the alarm.  
+     * The value can contain a maximum of `256` characters.
      */
     public readonly description!: pulumi.Output<string | undefined>;
     /**
@@ -128,7 +136,7 @@ export class DeviceLinkageRule extends pulumi.CustomResource {
      */
     public readonly effectivePeriod!: pulumi.Output<outputs.IoTDA.DeviceLinkageRuleEffectivePeriod | undefined>;
     /**
-     * Specifies whether to enable the device linkage rule. Defaults to `true`.
+     * Specifies whether to enable the device linkage rule. Defaults to **true**.
      */
     public readonly enabled!: pulumi.Output<boolean | undefined>;
     /**
@@ -215,7 +223,8 @@ export interface DeviceLinkageRuleState {
      */
     actions?: pulumi.Input<pulumi.Input<inputs.IoTDA.DeviceLinkageRuleAction>[]>;
     /**
-     * Specifies the description of the alarm.
+     * Specifies the description of the alarm.  
+     * The value can contain a maximum of `256` characters.
      */
     description?: pulumi.Input<string>;
     /**
@@ -224,7 +233,7 @@ export interface DeviceLinkageRuleState {
      */
     effectivePeriod?: pulumi.Input<inputs.IoTDA.DeviceLinkageRuleEffectivePeriod>;
     /**
-     * Specifies whether to enable the device linkage rule. Defaults to `true`.
+     * Specifies whether to enable the device linkage rule. Defaults to **true**.
      */
     enabled?: pulumi.Input<boolean>;
     /**
@@ -264,7 +273,8 @@ export interface DeviceLinkageRuleArgs {
      */
     actions: pulumi.Input<pulumi.Input<inputs.IoTDA.DeviceLinkageRuleAction>[]>;
     /**
-     * Specifies the description of the alarm.
+     * Specifies the description of the alarm.  
+     * The value can contain a maximum of `256` characters.
      */
     description?: pulumi.Input<string>;
     /**
@@ -273,7 +283,7 @@ export interface DeviceLinkageRuleArgs {
      */
     effectivePeriod?: pulumi.Input<inputs.IoTDA.DeviceLinkageRuleEffectivePeriod>;
     /**
-     * Specifies whether to enable the device linkage rule. Defaults to `true`.
+     * Specifies whether to enable the device linkage rule. Defaults to **true**.
      */
     enabled?: pulumi.Input<boolean>;
     /**

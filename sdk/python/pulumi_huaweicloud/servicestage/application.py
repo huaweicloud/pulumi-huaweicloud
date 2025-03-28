@@ -25,7 +25,7 @@ class ApplicationArgs:
         The set of arguments for constructing a Application resource.
         :param pulumi.Input[str] description: Specifies the application description.
                The description can contain a maximum of `128` characters.
-        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise projcet ID to which the application
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID to which the application
                belongs. Changing this will create a new resource.
         :param pulumi.Input[Sequence[pulumi.Input['ApplicationEnvironmentArgs']]] environments: Specifies the configurations of the environment variables.
                The object structure is documented below.
@@ -62,7 +62,7 @@ class ApplicationArgs:
     @pulumi.getter(name="enterpriseProjectId")
     def enterprise_project_id(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the enterprise projcet ID to which the application
+        Specifies the enterprise project ID to which the application
         belongs. Changing this will create a new resource.
         """
         return pulumi.get(self, "enterprise_project_id")
@@ -125,7 +125,7 @@ class _ApplicationState:
         :param pulumi.Input[Sequence[pulumi.Input[str]]] component_ids: The list of component IDs associated under the application.
         :param pulumi.Input[str] description: Specifies the application description.
                The description can contain a maximum of `128` characters.
-        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise projcet ID to which the application
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID to which the application
                belongs. Changing this will create a new resource.
         :param pulumi.Input[Sequence[pulumi.Input['ApplicationEnvironmentArgs']]] environments: Specifies the configurations of the environment variables.
                The object structure is documented below.
@@ -176,7 +176,7 @@ class _ApplicationState:
     @pulumi.getter(name="enterpriseProjectId")
     def enterprise_project_id(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the enterprise projcet ID to which the application
+        Specifies the enterprise project ID to which the application
         belongs. Changing this will create a new resource.
         """
         return pulumi.get(self, "enterprise_project_id")
@@ -261,7 +261,7 @@ class Application(pulumi.CustomResource):
 
         ## Import
 
-        Applications can be imported using their `id`, e.g.
+        Applications can be imported using their `id`, e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:ServiceStage/application:Application test eeea08e7-c838-4794-926c-abc12f3e10e8
@@ -271,7 +271,7 @@ class Application(pulumi.CustomResource):
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[str] description: Specifies the application description.
                The description can contain a maximum of `128` characters.
-        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise projcet ID to which the application
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID to which the application
                belongs. Changing this will create a new resource.
         :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ApplicationEnvironmentArgs']]]] environments: Specifies the configurations of the environment variables.
                The object structure is documented below.
@@ -311,7 +311,7 @@ class Application(pulumi.CustomResource):
 
         ## Import
 
-        Applications can be imported using their `id`, e.g.
+        Applications can be imported using their `id`, e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:ServiceStage/application:Application test eeea08e7-c838-4794-926c-abc12f3e10e8
@@ -378,7 +378,7 @@ class Application(pulumi.CustomResource):
         :param pulumi.Input[Sequence[pulumi.Input[str]]] component_ids: The list of component IDs associated under the application.
         :param pulumi.Input[str] description: Specifies the application description.
                The description can contain a maximum of `128` characters.
-        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise projcet ID to which the application
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID to which the application
                belongs. Changing this will create a new resource.
         :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ApplicationEnvironmentArgs']]]] environments: Specifies the configurations of the environment variables.
                The object structure is documented below.
@@ -420,7 +420,7 @@ class Application(pulumi.CustomResource):
     @pulumi.getter(name="enterpriseProjectId")
     def enterprise_project_id(self) -> pulumi.Output[str]:
         """
-        Specifies the enterprise projcet ID to which the application
+        Specifies the enterprise project ID to which the application
         belongs. Changing this will create a new resource.
         """
         return pulumi.get(self, "enterprise_project_id")

@@ -15,7 +15,7 @@ import (
 //
 // ## Import
 //
-// Network VIPs can be imported using their `id`, e.g.
+// # Network VIPs can be imported using their `id`, e.g.bash
 //
 // ```sh
 //

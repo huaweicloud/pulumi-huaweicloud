@@ -91,7 +91,7 @@ import (
 //
 // ## Import
 //
-// The media asset can be imported using the `id`, e.g.
+// The media asset can be imported using the `id`, e.g. bash
 //
 // ```sh
 //
@@ -99,7 +99,7 @@ import (
 //
 // ```
 //
-//	Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`url`, `input_bucket`, `input_path`, `output_bucket`, `output_path`, `storage_mode`, `template_group_name`, `workflow_name`, `publish`, `auto_encrypt`, `auto_preload`, `review_template_id`, `thumbnail`. It is generally recommended running `terraform plan` after importing a media asset. You can then decide if changes should be applied to the media asset, or the resource definition should be updated to align with the media asset. Also you can ignore changes as below. resource "huaweicloud_vod_media_asset" "test" {
+//	Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`url`, `input_bucket`, `input_path`, `output_bucket`, `output_path`, `storage_mode`, `template_group_name`, `workflow_name`, `publish`, `auto_encrypt`, `auto_preload`, `review_template_id`, `thumbnail`. It is generally recommended running `terraform plan` after importing a media asset. You can then decide if changes should be applied to the media asset, or the resource definition should be updated to align with the media asset. Also you can ignore changes as below. hcl resource "huaweicloud_vod_media_asset" "test" {
 //
 //	...
 //
@@ -124,12 +124,13 @@ type MediaAsset struct {
 	// Specifies whether to automatically warm up the media to CDN. Defaults to: **false**.
 	// Changing this creates a new resource.
 	AutoPreload pulumi.BoolPtrOutput `pulumi:"autoPreload"`
-	// Specifies the category ID of the media asset. Default to: **-1**, which means the media
+	// Specifies the category ID of the media asset. Defaults to `-1`, which means the media
 	// asset will be categorized into the 'Other' category of system presets.
 	CategoryId pulumi.IntOutput `pulumi:"categoryId"`
 	// The category name of the media asset.
 	CategoryName pulumi.StringOutput `pulumi:"categoryName"`
-	// Specifies the media asset description, which contains a maximum of 1024 characters.
+	// Specifies the media asset description, which contains a maximum of `1,024`
+	// characters.
 	Description pulumi.StringPtrOutput `pulumi:"description"`
 	// Specifies the OBS bucket name of media source file.
 	// Either this field or `url` must be specified. Changing this creates a new resource.
@@ -149,7 +150,7 @@ type MediaAsset struct {
 	MediaType pulumi.StringOutput `pulumi:"mediaType"`
 	// The URL of original media file.
 	MediaUrl pulumi.StringOutput `pulumi:"mediaUrl"`
-	// Specifies the media asset name, which contains a maximum of 128 characters.
+	// Specifies the media asset name, which contains a maximum of `128` characters.
 	Name pulumi.StringOutput `pulumi:"name"`
 	// Specifies the output OBS bucket name.
 	// Changing this creates a new resource.
@@ -222,12 +223,13 @@ type mediaAssetState struct {
 	// Specifies whether to automatically warm up the media to CDN. Defaults to: **false**.
 	// Changing this creates a new resource.
 	AutoPreload *bool `pulumi:"autoPreload"`
-	// Specifies the category ID of the media asset. Default to: **-1**, which means the media
+	// Specifies the category ID of the media asset. Defaults to `-1`, which means the media
 	// asset will be categorized into the 'Other' category of system presets.
 	CategoryId *int `pulumi:"categoryId"`
 	// The category name of the media asset.
 	CategoryName *string `pulumi:"categoryName"`
-	// Specifies the media asset description, which contains a maximum of 1024 characters.
+	// Specifies the media asset description, which contains a maximum of `1,024`
+	// characters.
 	Description *string `pulumi:"description"`
 	// Specifies the OBS bucket name of media source file.
 	// Either this field or `url` must be specified. Changing this creates a new resource.
@@ -247,7 +249,7 @@ type mediaAssetState struct {
 	MediaType *string `pulumi:"mediaType"`
 	// The URL of original media file.
 	MediaUrl *string `pulumi:"mediaUrl"`
-	// Specifies the media asset name, which contains a maximum of 128 characters.
+	// Specifies the media asset name, which contains a maximum of `128` characters.
 	Name *string `pulumi:"name"`
 	// Specifies the output OBS bucket name.
 	// Changing this creates a new resource.
@@ -288,12 +290,13 @@ type MediaAssetState struct {
 	// Specifies whether to automatically warm up the media to CDN. Defaults to: **false**.
 	// Changing this creates a new resource.
 	AutoPreload pulumi.BoolPtrInput
-	// Specifies the category ID of the media asset. Default to: **-1**, which means the media
+	// Specifies the category ID of the media asset. Defaults to `-1`, which means the media
 	// asset will be categorized into the 'Other' category of system presets.
 	CategoryId pulumi.IntPtrInput
 	// The category name of the media asset.
 	CategoryName pulumi.StringPtrInput
-	// Specifies the media asset description, which contains a maximum of 1024 characters.
+	// Specifies the media asset description, which contains a maximum of `1,024`
+	// characters.
 	Description pulumi.StringPtrInput
 	// Specifies the OBS bucket name of media source file.
 	// Either this field or `url` must be specified. Changing this creates a new resource.
@@ -313,7 +316,7 @@ type MediaAssetState struct {
 	MediaType pulumi.StringPtrInput
 	// The URL of original media file.
 	MediaUrl pulumi.StringPtrInput
-	// Specifies the media asset name, which contains a maximum of 128 characters.
+	// Specifies the media asset name, which contains a maximum of `128` characters.
 	Name pulumi.StringPtrInput
 	// Specifies the output OBS bucket name.
 	// Changing this creates a new resource.
@@ -358,10 +361,11 @@ type mediaAssetArgs struct {
 	// Specifies whether to automatically warm up the media to CDN. Defaults to: **false**.
 	// Changing this creates a new resource.
 	AutoPreload *bool `pulumi:"autoPreload"`
-	// Specifies the category ID of the media asset. Default to: **-1**, which means the media
+	// Specifies the category ID of the media asset. Defaults to `-1`, which means the media
 	// asset will be categorized into the 'Other' category of system presets.
 	CategoryId *int `pulumi:"categoryId"`
-	// Specifies the media asset description, which contains a maximum of 1024 characters.
+	// Specifies the media asset description, which contains a maximum of `1,024`
+	// characters.
 	Description *string `pulumi:"description"`
 	// Specifies the OBS bucket name of media source file.
 	// Either this field or `url` must be specified. Changing this creates a new resource.
@@ -377,7 +381,7 @@ type mediaAssetArgs struct {
 	// **M3U8**, **MP3**, **OGG**, **WAV**, **WMA**, **APE**, **FLAC**, **AAC**, **AC3**, **MMF**, **AMR**, **M4A**,
 	// **M4R**, **WV**, **MP2**. Changing this creates a new resource.
 	MediaType string `pulumi:"mediaType"`
-	// Specifies the media asset name, which contains a maximum of 128 characters.
+	// Specifies the media asset name, which contains a maximum of `128` characters.
 	Name *string `pulumi:"name"`
 	// Specifies the output OBS bucket name.
 	// Changing this creates a new resource.
@@ -419,10 +423,11 @@ type MediaAssetArgs struct {
 	// Specifies whether to automatically warm up the media to CDN. Defaults to: **false**.
 	// Changing this creates a new resource.
 	AutoPreload pulumi.BoolPtrInput
-	// Specifies the category ID of the media asset. Default to: **-1**, which means the media
+	// Specifies the category ID of the media asset. Defaults to `-1`, which means the media
 	// asset will be categorized into the 'Other' category of system presets.
 	CategoryId pulumi.IntPtrInput
-	// Specifies the media asset description, which contains a maximum of 1024 characters.
+	// Specifies the media asset description, which contains a maximum of `1,024`
+	// characters.
 	Description pulumi.StringPtrInput
 	// Specifies the OBS bucket name of media source file.
 	// Either this field or `url` must be specified. Changing this creates a new resource.
@@ -438,7 +443,7 @@ type MediaAssetArgs struct {
 	// **M3U8**, **MP3**, **OGG**, **WAV**, **WMA**, **APE**, **FLAC**, **AAC**, **AC3**, **MMF**, **AMR**, **M4A**,
 	// **M4R**, **WV**, **MP2**. Changing this creates a new resource.
 	MediaType pulumi.StringInput
-	// Specifies the media asset name, which contains a maximum of 128 characters.
+	// Specifies the media asset name, which contains a maximum of `128` characters.
 	Name pulumi.StringPtrInput
 	// Specifies the output OBS bucket name.
 	// Changing this creates a new resource.
@@ -571,7 +576,7 @@ func (o MediaAssetOutput) AutoPreload() pulumi.BoolPtrOutput {
 	return o.ApplyT(func(v *MediaAsset) pulumi.BoolPtrOutput { return v.AutoPreload }).(pulumi.BoolPtrOutput)
 }
 
-// Specifies the category ID of the media asset. Default to: **-1**, which means the media
+// Specifies the category ID of the media asset. Defaults to `-1`, which means the media
 // asset will be categorized into the 'Other' category of system presets.
 func (o MediaAssetOutput) CategoryId() pulumi.IntOutput {
 	return o.ApplyT(func(v *MediaAsset) pulumi.IntOutput { return v.CategoryId }).(pulumi.IntOutput)
@@ -582,7 +587,8 @@ func (o MediaAssetOutput) CategoryName() pulumi.StringOutput {
 	return o.ApplyT(func(v *MediaAsset) pulumi.StringOutput { return v.CategoryName }).(pulumi.StringOutput)
 }
 
-// Specifies the media asset description, which contains a maximum of 1024 characters.
+// Specifies the media asset description, which contains a maximum of `1,024`
+// characters.
 func (o MediaAssetOutput) Description() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *MediaAsset) pulumi.StringPtrOutput { return v.Description }).(pulumi.StringPtrOutput)
 }
@@ -623,7 +629,7 @@ func (o MediaAssetOutput) MediaUrl() pulumi.StringOutput {
 	return o.ApplyT(func(v *MediaAsset) pulumi.StringOutput { return v.MediaUrl }).(pulumi.StringOutput)
 }
 
-// Specifies the media asset name, which contains a maximum of 128 characters.
+// Specifies the media asset name, which contains a maximum of `128` characters.
 func (o MediaAssetOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v *MediaAsset) pulumi.StringOutput { return v.Name }).(pulumi.StringOutput)
 }

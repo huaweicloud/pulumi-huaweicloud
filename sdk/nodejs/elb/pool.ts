@@ -27,7 +27,7 @@ import * as utilities from "../utilities";
  *
  * ## Import
  *
- * ELB pool can be imported using the pool ID, e.g.
+ * ELB pool can be imported using the pool ID, e.g. bash
  *
  * ```sh
  *  $ pulumi import huaweicloud:Elb/pool:Pool pool_1 5c20fdad-7288-11eb-b817-0255ac10158b
@@ -61,6 +61,9 @@ export class Pool extends pulumi.CustomResource {
         return obj['__pulumiType'] === Pool.__pulumiType;
     }
 
+    /**
+     * @deprecated this field is deprecated
+     */
     public readonly adminStateUp!: pulumi.Output<boolean | undefined>;
     /**
      * Human-readable description for the pool.
@@ -82,14 +85,29 @@ export class Pool extends pulumi.CustomResource {
      */
     public readonly loadbalancerId!: pulumi.Output<string>;
     /**
+     * The ID of the health check configured for the backend server group.
+     */
+    public /*out*/ readonly monitorId!: pulumi.Output<string>;
+    /**
      * Human-readable name for the pool.
      */
     public readonly name!: pulumi.Output<string>;
     /**
      * Omit this field to prevent session persistence. Indicates whether
-     * connections in the same session will be processed by the same Pool member or not. Changing this creates a new pool.
+     * connections in the same session will be processed by the same Pool member or not.
      */
     public readonly persistences!: pulumi.Output<outputs.Elb.PoolPersistence[] | undefined>;
+    /**
+     * The reason for update protection. Only valid when `protectionStatus` is
+     * **consoleProtection**.
+     */
+    public readonly protectionReason!: pulumi.Output<string | undefined>;
+    /**
+     * The protection status for update. Value options:
+     * + **nonProtection**: No protection.
+     * + **consoleProtection**: Console modification protection.
+     */
+    public readonly protectionStatus!: pulumi.Output<string>;
     /**
      * The protocol - can either be TCP, UDP or HTTP.
      * + When the protocol used by the listener is UDP, the protocol of the backend pool must be UDP.
@@ -125,8 +143,11 @@ export class Pool extends pulumi.CustomResource {
             resourceInputs["lbMethod"] = state ? state.lbMethod : undefined;
             resourceInputs["listenerId"] = state ? state.listenerId : undefined;
             resourceInputs["loadbalancerId"] = state ? state.loadbalancerId : undefined;
+            resourceInputs["monitorId"] = state ? state.monitorId : undefined;
             resourceInputs["name"] = state ? state.name : undefined;
             resourceInputs["persistences"] = state ? state.persistences : undefined;
+            resourceInputs["protectionReason"] = state ? state.protectionReason : undefined;
+            resourceInputs["protectionStatus"] = state ? state.protectionStatus : undefined;
             resourceInputs["protocol"] = state ? state.protocol : undefined;
             resourceInputs["region"] = state ? state.region : undefined;
             resourceInputs["tenantId"] = state ? state.tenantId : undefined;
@@ -145,9 +166,12 @@ export class Pool extends pulumi.CustomResource {
             resourceInputs["loadbalancerId"] = args ? args.loadbalancerId : undefined;
             resourceInputs["name"] = args ? args.name : undefined;
             resourceInputs["persistences"] = args ? args.persistences : undefined;
+            resourceInputs["protectionReason"] = args ? args.protectionReason : undefined;
+            resourceInputs["protectionStatus"] = args ? args.protectionStatus : undefined;
             resourceInputs["protocol"] = args ? args.protocol : undefined;
             resourceInputs["region"] = args ? args.region : undefined;
             resourceInputs["tenantId"] = args ? args.tenantId : undefined;
+            resourceInputs["monitorId"] = undefined /*out*/;
         }
         opts = pulumi.mergeOptions(utilities.resourceOptsDefaults(), opts);
         super(Pool.__pulumiType, name, resourceInputs, opts);
@@ -158,6 +182,9 @@ export class Pool extends pulumi.CustomResource {
  * Input properties used for looking up and filtering Pool resources.
  */
 export interface PoolState {
+    /**
+     * @deprecated this field is deprecated
+     */
     adminStateUp?: pulumi.Input<boolean>;
     /**
      * Human-readable description for the pool.
@@ -179,14 +206,29 @@ export interface PoolState {
      */
     loadbalancerId?: pulumi.Input<string>;
     /**
+     * The ID of the health check configured for the backend server group.
+     */
+    monitorId?: pulumi.Input<string>;
+    /**
      * Human-readable name for the pool.
      */
     name?: pulumi.Input<string>;
     /**
      * Omit this field to prevent session persistence. Indicates whether
-     * connections in the same session will be processed by the same Pool member or not. Changing this creates a new pool.
+     * connections in the same session will be processed by the same Pool member or not.
      */
     persistences?: pulumi.Input<pulumi.Input<inputs.Elb.PoolPersistence>[]>;
+    /**
+     * The reason for update protection. Only valid when `protectionStatus` is
+     * **consoleProtection**.
+     */
+    protectionReason?: pulumi.Input<string>;
+    /**
+     * The protection status for update. Value options:
+     * + **nonProtection**: No protection.
+     * + **consoleProtection**: Console modification protection.
+     */
+    protectionStatus?: pulumi.Input<string>;
     /**
      * The protocol - can either be TCP, UDP or HTTP.
      * + When the protocol used by the listener is UDP, the protocol of the backend pool must be UDP.
@@ -209,6 +251,9 @@ export interface PoolState {
  * The set of arguments for constructing a Pool resource.
  */
 export interface PoolArgs {
+    /**
+     * @deprecated this field is deprecated
+     */
     adminStateUp?: pulumi.Input<boolean>;
     /**
      * Human-readable description for the pool.
@@ -235,9 +280,20 @@ export interface PoolArgs {
     name?: pulumi.Input<string>;
     /**
      * Omit this field to prevent session persistence. Indicates whether
-     * connections in the same session will be processed by the same Pool member or not. Changing this creates a new pool.
+     * connections in the same session will be processed by the same Pool member or not.
      */
     persistences?: pulumi.Input<pulumi.Input<inputs.Elb.PoolPersistence>[]>;
+    /**
+     * The reason for update protection. Only valid when `protectionStatus` is
+     * **consoleProtection**.
+     */
+    protectionReason?: pulumi.Input<string>;
+    /**
+     * The protection status for update. Value options:
+     * + **nonProtection**: No protection.
+     * + **consoleProtection**: Console modification protection.
+     */
+    protectionStatus?: pulumi.Input<string>;
     /**
      * The protocol - can either be TCP, UDP or HTTP.
      * + When the protocol used by the listener is UDP, the protocol of the backend pool must be UDP.

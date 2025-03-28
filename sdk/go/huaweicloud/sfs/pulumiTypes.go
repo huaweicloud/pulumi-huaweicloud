@@ -186,7 +186,7 @@ type GetTurbosTurbo struct {
 	EnterpriseProjectId string `pulumi:"enterpriseProjectId"`
 	// The mount point of the SFS turbo file system.
 	ExportLocation string `pulumi:"exportLocation"`
-	// The resource ID of the SFS turbo file system.
+	// The data source ID of the SFS turbo file system.
 	Id string `pulumi:"id"`
 	// Specifies the name of the SFS turbo file system.
 	Name string `pulumi:"name"`
@@ -232,7 +232,7 @@ type GetTurbosTurboArgs struct {
 	EnterpriseProjectId pulumi.StringInput `pulumi:"enterpriseProjectId"`
 	// The mount point of the SFS turbo file system.
 	ExportLocation pulumi.StringInput `pulumi:"exportLocation"`
-	// The resource ID of the SFS turbo file system.
+	// The data source ID of the SFS turbo file system.
 	Id pulumi.StringInput `pulumi:"id"`
 	// Specifies the name of the SFS turbo file system.
 	Name pulumi.StringInput `pulumi:"name"`
@@ -335,7 +335,7 @@ func (o GetTurbosTurboOutput) ExportLocation() pulumi.StringOutput {
 	return o.ApplyT(func(v GetTurbosTurbo) string { return v.ExportLocation }).(pulumi.StringOutput)
 }
 
-// The resource ID of the SFS turbo file system.
+// The data source ID of the SFS turbo file system.
 func (o GetTurbosTurboOutput) Id() pulumi.StringOutput {
 	return o.ApplyT(func(v GetTurbosTurbo) string { return v.Id }).(pulumi.StringOutput)
 }

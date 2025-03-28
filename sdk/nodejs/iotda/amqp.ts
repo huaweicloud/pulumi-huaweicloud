@@ -5,23 +5,32 @@ import * as pulumi from "@pulumi/pulumi";
 import * as utilities from "../utilities";
 
 /**
- * Manages an IoTDA AMQP queue within HuaweiCloud.
+ * Manages an IoTDA AMQP queue resource within HuaweiCloud.
+ *
+ * > When accessing an IoTDA **standard** or **enterprise** edition instance, you need to specify the IoTDA service
+ *   endpoint in `provider` block.
+ *   You can login to the IoTDA console, choose the instance **Overview** and click **Access Details**
+ *   to view the HTTPS application access address. An example of the access address might be
+ *   **9bc34xxxxx.st1.iotda-app.ap-southeast-1.myhuaweicloud.com**, then you need to configure the
+ *   `provider` block as follows:
  *
  * ## Example Usage
  *
  * ```typescript
  * import * as pulumi from "@pulumi/pulumi";
- * import * as huaweicloud from "@pulumi/huaweicloud";
+ * import * as pulumi from "@huaweicloudos/pulumi";
  *
- * const queue = new huaweicloud.IoTDA.Amqp("queue", {});
+ * const config = new pulumi.Config();
+ * const queueName = config.requireObject("queueName");
+ * const test = new huaweicloud.iotda.Amqp("test", {});
  * ```
  *
  * ## Import
  *
- * AMQP queues can be imported using the `id`, e.g.
+ * The AMQP queue can be imported using the `id`, e.g. bash
  *
  * ```sh
- *  $ pulumi import huaweicloud:IoTDA/amqp:Amqp test 10022532f4f94f26b01daa1e424853e1
+ *  $ pulumi import huaweicloud:IoTDA/amqp:Amqp test <id>
  * ```
  */
 export class Amqp extends pulumi.CustomResource {
@@ -53,7 +62,12 @@ export class Amqp extends pulumi.CustomResource {
     }
 
     /**
-     * Specifies the AMQP queue name, which contains 8 to 128 characters.
+     * The creation time of the AMQP queue.
+     * The format is **yyyyMMdd'T'HHmmss'Z'**. e.g. **20151212T121212Z**.
+     */
+    public /*out*/ readonly createdAt!: pulumi.Output<string>;
+    /**
+     * Specifies the AMQP queue name, which contains `8` to `128` characters.
      * Only letters, digits, hyphens (-), underscores (_), dots (.) and colons (:) are allowed.
      * Changing this parameter will create a new resource.
      */
@@ -63,6 +77,11 @@ export class Amqp extends pulumi.CustomResource {
      * If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
      */
     public readonly region!: pulumi.Output<string>;
+    /**
+     * The latest update time of the AMQP queue.
+     * The format is **yyyyMMdd'T'HHmmss'Z'**. e.g. **20151212T121212Z**.
+     */
+    public /*out*/ readonly updatedAt!: pulumi.Output<string>;
 
     /**
      * Create a Amqp resource with the given unique name, arguments, and options.
@@ -77,12 +96,16 @@ export class Amqp extends pulumi.CustomResource {
         opts = opts || {};
         if (opts.id) {
             const state = argsOrState as AmqpState | undefined;
+            resourceInputs["createdAt"] = state ? state.createdAt : undefined;
             resourceInputs["name"] = state ? state.name : undefined;
             resourceInputs["region"] = state ? state.region : undefined;
+            resourceInputs["updatedAt"] = state ? state.updatedAt : undefined;
         } else {
             const args = argsOrState as AmqpArgs | undefined;
             resourceInputs["name"] = args ? args.name : undefined;
             resourceInputs["region"] = args ? args.region : undefined;
+            resourceInputs["createdAt"] = undefined /*out*/;
+            resourceInputs["updatedAt"] = undefined /*out*/;
         }
         opts = pulumi.mergeOptions(utilities.resourceOptsDefaults(), opts);
         super(Amqp.__pulumiType, name, resourceInputs, opts);
@@ -94,7 +117,12 @@ export class Amqp extends pulumi.CustomResource {
  */
 export interface AmqpState {
     /**
-     * Specifies the AMQP queue name, which contains 8 to 128 characters.
+     * The creation time of the AMQP queue.
+     * The format is **yyyyMMdd'T'HHmmss'Z'**. e.g. **20151212T121212Z**.
+     */
+    createdAt?: pulumi.Input<string>;
+    /**
+     * Specifies the AMQP queue name, which contains `8` to `128` characters.
      * Only letters, digits, hyphens (-), underscores (_), dots (.) and colons (:) are allowed.
      * Changing this parameter will create a new resource.
      */
@@ -104,6 +132,11 @@ export interface AmqpState {
      * If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
      */
     region?: pulumi.Input<string>;
+    /**
+     * The latest update time of the AMQP queue.
+     * The format is **yyyyMMdd'T'HHmmss'Z'**. e.g. **20151212T121212Z**.
+     */
+    updatedAt?: pulumi.Input<string>;
 }
 
 /**
@@ -111,7 +144,7 @@ export interface AmqpState {
  */
 export interface AmqpArgs {
     /**
-     * Specifies the AMQP queue name, which contains 8 to 128 characters.
+     * Specifies the AMQP queue name, which contains `8` to `128` characters.
      * Only letters, digits, hyphens (-), underscores (_), dots (.) and colons (:) are allowed.
      * Changing this parameter will create a new resource.
      */

@@ -5,7 +5,9 @@ import * as pulumi from "@pulumi/pulumi";
 import * as utilities from "../utilities";
 
 /**
- * Get the certificate in the WAF, including the one pushed from SCM.
+ * Use this data source to get the certificate of WAF within HuaweiCloud.
+ *
+ * > When multiple pieces of data are queried, the datasource will process the first piece of data and put it back.
  *
  * ## Example Usage
  *
@@ -15,13 +17,14 @@ import * as utilities from "../utilities";
  *
  * const config = new pulumi.Config();
  * const enterpriseProjectId = config.requireObject("enterpriseProjectId");
- * const certificate1 = huaweicloud.Waf.getCertificate({
- *     name: "certificate name",
+ * const test = huaweicloud.Waf.getCertificate({
+ *     name: "test-name",
  *     enterpriseProjectId: enterpriseProjectId,
  * });
  * ```
  */
-export function getCertificate(args: GetCertificateArgs, opts?: pulumi.InvokeOptions): Promise<GetCertificateResult> {
+export function getCertificate(args?: GetCertificateArgs, opts?: pulumi.InvokeOptions): Promise<GetCertificateResult> {
+    args = args || {};
     if (!opts) {
         opts = {}
     }
@@ -29,6 +32,7 @@ export function getCertificate(args: GetCertificateArgs, opts?: pulumi.InvokeOpt
     opts = pulumi.mergeOptions(utilities.resourceOptsDefaults(), opts);
     return pulumi.runtime.invoke("huaweicloud:Waf/getCertificate:getCertificate", {
         "enterpriseProjectId": args.enterpriseProjectId,
+        "expirationStatus": args.expirationStatus,
         "expireStatus": args.expireStatus,
         "name": args.name,
         "region": args.region,
@@ -40,23 +44,28 @@ export function getCertificate(args: GetCertificateArgs, opts?: pulumi.InvokeOpt
  */
 export interface GetCertificateArgs {
     /**
-     * The enterprise project ID of WAF certificate.
+     * Specifies the enterprise project ID of WAF certificate.
+     * For enterprise users, if omitted, default enterprise project will be used.
      */
     enterpriseProjectId?: string;
     /**
-     * The expire status of certificate. Defaults is `0`. The value can be:
-     * + `0`: not expire
-     * + `1`: has expired
-     * + `2`: wil expired soon
+     * Specifies the certificate expiration status. The options are as follows:
+     * + `0`: Not expired;
+     * + `1`: Expired;
+     * + `2`: Expired soon (The certificate will expire in one month.)
+     */
+    expirationStatus?: string;
+    /**
+     * @deprecated Use 'expiration_status' instead. 
      */
     expireStatus?: number;
     /**
-     * The name of certificate. The value is case sensitive and supports fuzzy matching.
+     * Specifies the name of certificate. The value is case-sensitive and supports fuzzy matching.
      */
-    name: string;
+    name?: string;
     /**
-     * The region in which to obtain the WAF. If omitted, the provider-level region will be
-     * used.
+     * Specifies the region in which to obtain the WAF. If omitted, the provider-level region
+     * will be used.
      */
     region?: string;
 }
@@ -65,12 +74,24 @@ export interface GetCertificateArgs {
  * A collection of values returned by getCertificate.
  */
 export interface GetCertificateResult {
-    readonly enterpriseProjectId?: string;
     /**
-     * Indicates the time when the certificate expires.
+     * Indicates the time when the certificate uploaded, in RFC3339 format.
+     */
+    readonly createdAt: string;
+    readonly enterpriseProjectId: string;
+    /**
+     * @deprecated Use 'expired_at' instead. 
      */
     readonly expiration: string;
+    readonly expirationStatus: string;
+    /**
+     * @deprecated Use 'expiration_status' instead. 
+     */
     readonly expireStatus?: number;
+    /**
+     * Indicates the time when the certificate expires, in RFC3339 format.
+     */
+    readonly expiredAt: string;
     /**
      * The provider-assigned unique ID for this managed resource.
      */
@@ -79,7 +100,7 @@ export interface GetCertificateResult {
     readonly region: string;
 }
 
-export function getCertificateOutput(args: GetCertificateOutputArgs, opts?: pulumi.InvokeOptions): pulumi.Output<GetCertificateResult> {
+export function getCertificateOutput(args?: GetCertificateOutputArgs, opts?: pulumi.InvokeOptions): pulumi.Output<GetCertificateResult> {
     return pulumi.output(args).apply(a => getCertificate(a, opts))
 }
 
@@ -88,23 +109,28 @@ export function getCertificateOutput(args: GetCertificateOutputArgs, opts?: pulu
  */
 export interface GetCertificateOutputArgs {
     /**
-     * The enterprise project ID of WAF certificate.
+     * Specifies the enterprise project ID of WAF certificate.
+     * For enterprise users, if omitted, default enterprise project will be used.
      */
     enterpriseProjectId?: pulumi.Input<string>;
     /**
-     * The expire status of certificate. Defaults is `0`. The value can be:
-     * + `0`: not expire
-     * + `1`: has expired
-     * + `2`: wil expired soon
+     * Specifies the certificate expiration status. The options are as follows:
+     * + `0`: Not expired;
+     * + `1`: Expired;
+     * + `2`: Expired soon (The certificate will expire in one month.)
+     */
+    expirationStatus?: pulumi.Input<string>;
+    /**
+     * @deprecated Use 'expiration_status' instead. 
      */
     expireStatus?: pulumi.Input<number>;
     /**
-     * The name of certificate. The value is case sensitive and supports fuzzy matching.
+     * Specifies the name of certificate. The value is case-sensitive and supports fuzzy matching.
      */
-    name: pulumi.Input<string>;
+    name?: pulumi.Input<string>;
     /**
-     * The region in which to obtain the WAF. If omitted, the provider-level region will be
-     * used.
+     * Specifies the region in which to obtain the WAF. If omitted, the provider-level region
+     * will be used.
      */
     region?: pulumi.Input<string>;
 }

@@ -52,7 +52,7 @@ import (
 //
 // ## Import
 //
-// VPCs can be imported using the `id`, e.g.
+// VPCs can be imported using the `id`, e.g. bash
 //
 // ```sh
 //

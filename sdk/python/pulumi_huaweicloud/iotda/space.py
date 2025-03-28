@@ -18,9 +18,8 @@ class SpaceArgs:
                  region: Optional[pulumi.Input[str]] = None):
         """
         The set of arguments for constructing a Space resource.
-        :param pulumi.Input[str] name: Specifies the space name. The name contains a maximum of 64 characters.
+        :param pulumi.Input[str] name: Specifies the space name. The name contains a maximum of `64` characters.
                Only letters, digits, hyphens (-), underscore (_) and the following special characters are allowed: `?'#().,&%@!`.
-               Changing this parameter will create a new resource.
         :param pulumi.Input[str] region: Specifies the region in which to create the IoTDA resource space resource.
                If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
         """
@@ -33,9 +32,8 @@ class SpaceArgs:
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the space name. The name contains a maximum of 64 characters.
+        Specifies the space name. The name contains a maximum of `64` characters.
         Only letters, digits, hyphens (-), underscore (_) and the following special characters are allowed: `?'#().,&%@!`.
-        Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "name")
 
@@ -67,9 +65,8 @@ class _SpaceState:
         Input properties used for looking up and filtering Space resources.
         :param pulumi.Input[bool] is_default: Whether it is the default resource space. The IoT platform automatically creates and assigns
                a default resource space (undeletable) to your account.
-        :param pulumi.Input[str] name: Specifies the space name. The name contains a maximum of 64 characters.
+        :param pulumi.Input[str] name: Specifies the space name. The name contains a maximum of `64` characters.
                Only letters, digits, hyphens (-), underscore (_) and the following special characters are allowed: `?'#().,&%@!`.
-               Changing this parameter will create a new resource.
         :param pulumi.Input[str] region: Specifies the region in which to create the IoTDA resource space resource.
                If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
         """
@@ -97,9 +94,8 @@ class _SpaceState:
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the space name. The name contains a maximum of 64 characters.
+        Specifies the space name. The name contains a maximum of `64` characters.
         Only letters, digits, hyphens (-), underscore (_) and the following special characters are allowed: `?'#().,&%@!`.
-        Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "name")
 
@@ -136,28 +132,38 @@ class Space(pulumi.CustomResource):
         configuration capabilities at the service layer. Resources (such as products and devices) must be created on
         a resource space.
 
+        > The **basic** edition instance does not support updating the resource.
+
+        > When accessing an IoTDA **standard** or **enterprise** edition instance, you need to specify
+          the IoTDA service endpoint in `provider` block.
+          You can login to the IoTDA console, choose the instance **Overview** and click **Access Details**
+          to view the HTTPS application access address. An example of the access address might be
+          *9bc34xxxxx.st1.iotda-app.ap-southeast-1.myhuaweicloud.com*, then you need to configure the
+          `provider` block as follows:
+
         ## Example Usage
 
         ```python
         import pulumi
         import pulumi_huaweicloud as huaweicloud
 
-        space = huaweicloud.io_tda.Space("space")
+        config = pulumi.Config()
+        name = config.require_object("name")
+        test = huaweicloud.io_tda.Space("test")
         ```
 
         ## Import
 
-        Spaces can be imported using the `id`, e.g.
+        The resource can be imported using the `id`, e.g. bash
 
         ```sh
-         $ pulumi import huaweicloud:IoTDA/space:Space test 10022532f4f94f26b01daa1e424853e1
+         $ pulumi import huaweicloud:IoTDA/space:Space test <id>
         ```
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[str] name: Specifies the space name. The name contains a maximum of 64 characters.
+        :param pulumi.Input[str] name: Specifies the space name. The name contains a maximum of `64` characters.
                Only letters, digits, hyphens (-), underscore (_) and the following special characters are allowed: `?'#().,&%@!`.
-               Changing this parameter will create a new resource.
         :param pulumi.Input[str] region: Specifies the region in which to create the IoTDA resource space resource.
                If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
         """
@@ -174,21 +180,32 @@ class Space(pulumi.CustomResource):
         configuration capabilities at the service layer. Resources (such as products and devices) must be created on
         a resource space.
 
+        > The **basic** edition instance does not support updating the resource.
+
+        > When accessing an IoTDA **standard** or **enterprise** edition instance, you need to specify
+          the IoTDA service endpoint in `provider` block.
+          You can login to the IoTDA console, choose the instance **Overview** and click **Access Details**
+          to view the HTTPS application access address. An example of the access address might be
+          *9bc34xxxxx.st1.iotda-app.ap-southeast-1.myhuaweicloud.com*, then you need to configure the
+          `provider` block as follows:
+
         ## Example Usage
 
         ```python
         import pulumi
         import pulumi_huaweicloud as huaweicloud
 
-        space = huaweicloud.io_tda.Space("space")
+        config = pulumi.Config()
+        name = config.require_object("name")
+        test = huaweicloud.io_tda.Space("test")
         ```
 
         ## Import
 
-        Spaces can be imported using the `id`, e.g.
+        The resource can be imported using the `id`, e.g. bash
 
         ```sh
-         $ pulumi import huaweicloud:IoTDA/space:Space test 10022532f4f94f26b01daa1e424853e1
+         $ pulumi import huaweicloud:IoTDA/space:Space test <id>
         ```
 
         :param str resource_name: The name of the resource.
@@ -242,9 +259,8 @@ class Space(pulumi.CustomResource):
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[bool] is_default: Whether it is the default resource space. The IoT platform automatically creates and assigns
                a default resource space (undeletable) to your account.
-        :param pulumi.Input[str] name: Specifies the space name. The name contains a maximum of 64 characters.
+        :param pulumi.Input[str] name: Specifies the space name. The name contains a maximum of `64` characters.
                Only letters, digits, hyphens (-), underscore (_) and the following special characters are allowed: `?'#().,&%@!`.
-               Changing this parameter will create a new resource.
         :param pulumi.Input[str] region: Specifies the region in which to create the IoTDA resource space resource.
                If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
         """
@@ -270,9 +286,8 @@ class Space(pulumi.CustomResource):
     @pulumi.getter
     def name(self) -> pulumi.Output[str]:
         """
-        Specifies the space name. The name contains a maximum of 64 characters.
+        Specifies the space name. The name contains a maximum of `64` characters.
         Only letters, digits, hyphens (-), underscore (_) and the following special characters are allowed: `?'#().,&%@!`.
-        Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "name")
 

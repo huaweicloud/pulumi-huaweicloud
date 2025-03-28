@@ -37,7 +37,7 @@ import * as utilities from "../utilities";
  *
  * ## Import
  *
- * Organization Permissions can be imported using the `id` (organization name), e.g.
+ * Organization Permissions can be imported using the `id` (organization name), e.g. bash
  *
  * ```sh
  *  $ pulumi import huaweicloud:Swr/organizationPermissions:OrganizationPermissions test terraform-test
@@ -86,7 +86,7 @@ export class OrganizationPermissions extends pulumi.CustomResource {
      */
     public readonly region!: pulumi.Output<string>;
     /**
-     * The permission informations of current user.
+     * The permission information of current user.
      */
     public /*out*/ readonly selfPermissions!: pulumi.Output<outputs.Swr.OrganizationPermissionsSelfPermission[]>;
     /**
@@ -151,7 +151,7 @@ export interface OrganizationPermissionsState {
      */
     region?: pulumi.Input<string>;
     /**
-     * The permission informations of current user.
+     * The permission information of current user.
      */
     selfPermissions?: pulumi.Input<pulumi.Input<inputs.Swr.OrganizationPermissionsSelfPermission>[]>;
     /**

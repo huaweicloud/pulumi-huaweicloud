@@ -87,9 +87,18 @@ export interface GetNodeResult {
      */
     readonly ecsGroupId: string;
     /**
+     * The enterprise project ID of the node.
+     */
+    readonly enterpriseProjectId: string;
+    /**
      * The flavor ID to be used.
      */
     readonly flavorId: string;
+    /**
+     * The hostname config of the kubernetes node.
+     * The object structure is documented below.
+     */
+    readonly hostnameConfigs: outputs.Cce.GetNodeHostnameConfig[];
     /**
      * The provider-assigned unique ID for this managed resource.
      */

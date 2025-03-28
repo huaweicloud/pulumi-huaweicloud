@@ -8,6 +8,8 @@ import pulumi
 import pulumi.runtime
 from typing import Any, Mapping, Optional, Sequence, Union, overload
 from .. import _utilities
+from . import outputs
+from ._inputs import *
 
 __all__ = ['MysqlProxyArgs', 'MysqlProxy']
 
@@ -17,29 +19,120 @@ class MysqlProxyArgs:
                  flavor: pulumi.Input[str],
                  instance_id: pulumi.Input[str],
                  node_num: pulumi.Input[int],
-                 region: Optional[pulumi.Input[str]] = None):
+                 access_control_ip_lists: Optional[pulumi.Input[Sequence[pulumi.Input['MysqlProxyAccessControlIpListArgs']]]] = None,
+                 access_control_type: Optional[pulumi.Input[str]] = None,
+                 connection_pool_type: Optional[pulumi.Input[str]] = None,
+                 consistence_mode: Optional[pulumi.Input[str]] = None,
+                 master_node_weight: Optional[pulumi.Input['MysqlProxyMasterNodeWeightArgs']] = None,
+                 new_node_auto_add_status: Optional[pulumi.Input[str]] = None,
+                 new_node_weight: Optional[pulumi.Input[int]] = None,
+                 open_access_control: Optional[pulumi.Input[bool]] = None,
+                 parameters: Optional[pulumi.Input[Sequence[pulumi.Input['MysqlProxyParameterArgs']]]] = None,
+                 port: Optional[pulumi.Input[int]] = None,
+                 proxy_mode: Optional[pulumi.Input[str]] = None,
+                 proxy_name: Optional[pulumi.Input[str]] = None,
+                 readonly_nodes_weights: Optional[pulumi.Input[Sequence[pulumi.Input['MysqlProxyReadonlyNodesWeightArgs']]]] = None,
+                 region: Optional[pulumi.Input[str]] = None,
+                 route_mode: Optional[pulumi.Input[int]] = None,
+                 subnet_id: Optional[pulumi.Input[str]] = None,
+                 transaction_split: Optional[pulumi.Input[str]] = None):
         """
         The set of arguments for constructing a MysqlProxy resource.
-        :param pulumi.Input[str] flavor: Specifies the flavor of the proxy.
-               Changing this parameter will create a new resource.
-        :param pulumi.Input[str] instance_id: Specifies the instance ID of the proxy.
-               Changing this parameter will create a new resource.
+        :param pulumi.Input[str] flavor: Specifies the flavor of the proxy. Changing this parameter will create a new
+               resource.
+        :param pulumi.Input[str] instance_id: Specifies the ID of the GaussDB MySQL instance. Changing this parameter
+               will create a new resource.
         :param pulumi.Input[int] node_num: Specifies the node count of the proxy.
+        :param pulumi.Input[Sequence[pulumi.Input['MysqlProxyAccessControlIpListArgs']]] access_control_ip_lists: Specifies the list of IP addresses that control access. A maximum of
+               `300` IP addresses or CIDR blocks can be added.
+               The access_control_ip_list structure is documented below.
+        :param pulumi.Input[str] access_control_type: Specifies the access control mode. Value options:
+               + **white**: indicates the whitelist.
+               + **black**: indicates the blacklist.
+        :param pulumi.Input[str] connection_pool_type: Specifies the connection pool type. Value options:
+               + **CLOSED**: The connection pool is not used.
+               + **SESSION**: The session-level connection pool is used.
+        :param pulumi.Input[str] consistence_mode: Specifies the consistency mode of the proxy. Value options:
+               + **session**: session consistency.
+               + **global**: global consistency.
+               + **eventual**: eventual consistency.
+        :param pulumi.Input['MysqlProxyMasterNodeWeightArgs'] master_node_weight: Specifies the read weight of the master node.
+               The master_node_weight structure is documented below.
+        :param pulumi.Input[str] new_node_auto_add_status: Specifies whether new nodes are automatically associate with proxy.
+               Value options:
+               + **ON**: New nodes are automatically associate with proxy.
+               + **OFF**: New nodes are not automatically associate with proxy.
+        :param pulumi.Input[int] new_node_weight: Specifies the read weight of the new node.
+               + If `route_mode` is `0` and `new_node_auto_add_status` is **ON**, the value of this parameter ranges from `0` to `1,000`.
+               + If `route_mode` is not `0` and `new_node_auto_add_status` is **OFF**, this parameter is unavailable.
+        :param pulumi.Input[bool] open_access_control: Specifies whether to enable access control.
+        :param pulumi.Input[Sequence[pulumi.Input['MysqlProxyParameterArgs']]] parameters: Specifies the list of parameters to be set to the GaussDB MySQL proxy after launched.
+               The parameters structure is documented below.
+        :param pulumi.Input[int] port: Specifies the port of the proxy.
+        :param pulumi.Input[str] proxy_mode: Specifies the type of the proxy. Changing this creates a new resource.
+               Value options:
+               + **readwrite**: read and write.
+               + **readonly**: read-only.
+        :param pulumi.Input[str] proxy_name: Specifies the name of the proxy. The name consists of `4` to `64` characters and
+               starts with a letter. It is case-sensitive and can contain only letters, digits, hyphens (-), and underscores (_).
+        :param pulumi.Input[Sequence[pulumi.Input['MysqlProxyReadonlyNodesWeightArgs']]] readonly_nodes_weights: Specifies the read weight of the read-only node.
+               The readonly_nodes_weight structure is documented below.
         :param pulumi.Input[str] region: The region in which to create the GaussDB mysql proxy resource. If omitted,
                the provider-level region will be used. Changing this creates a new resource.
+        :param pulumi.Input[int] route_mode: Specifies the routing policy of the proxy. Changing this creates a new
+               resource. Value options:
+               + **0**: weighted load balancing.
+               + **1**: load balancing (The primary node does not process read requests).
+               + **2**: load balancing (The primary node processes read requests).
+        :param pulumi.Input[str] subnet_id: Specifies the network ID of a subnet. Changing this creates a new resource.
+        :param pulumi.Input[str] transaction_split: Specifies whether the proxy transaction splitting is enabled. Value options:
+               + **ON**: Transaction splitting is enabled.
+               + **OFF**: Transaction splitting is disabled.
         """
         pulumi.set(__self__, "flavor", flavor)
         pulumi.set(__self__, "instance_id", instance_id)
         pulumi.set(__self__, "node_num", node_num)
+        if access_control_ip_lists is not None:
+            pulumi.set(__self__, "access_control_ip_lists", access_control_ip_lists)
+        if access_control_type is not None:
+            pulumi.set(__self__, "access_control_type", access_control_type)
+        if connection_pool_type is not None:
+            pulumi.set(__self__, "connection_pool_type", connection_pool_type)
+        if consistence_mode is not None:
+            pulumi.set(__self__, "consistence_mode", consistence_mode)
+        if master_node_weight is not None:
+            pulumi.set(__self__, "master_node_weight", master_node_weight)
+        if new_node_auto_add_status is not None:
+            pulumi.set(__self__, "new_node_auto_add_status", new_node_auto_add_status)
+        if new_node_weight is not None:
+            pulumi.set(__self__, "new_node_weight", new_node_weight)
+        if open_access_control is not None:
+            pulumi.set(__self__, "open_access_control", open_access_control)
+        if parameters is not None:
+            pulumi.set(__self__, "parameters", parameters)
+        if port is not None:
+            pulumi.set(__self__, "port", port)
+        if proxy_mode is not None:
+            pulumi.set(__self__, "proxy_mode", proxy_mode)
+        if proxy_name is not None:
+            pulumi.set(__self__, "proxy_name", proxy_name)
+        if readonly_nodes_weights is not None:
+            pulumi.set(__self__, "readonly_nodes_weights", readonly_nodes_weights)
         if region is not None:
             pulumi.set(__self__, "region", region)
+        if route_mode is not None:
+            pulumi.set(__self__, "route_mode", route_mode)
+        if subnet_id is not None:
+            pulumi.set(__self__, "subnet_id", subnet_id)
+        if transaction_split is not None:
+            pulumi.set(__self__, "transaction_split", transaction_split)
 
     @property
     @pulumi.getter
     def flavor(self) -> pulumi.Input[str]:
         """
-        Specifies the flavor of the proxy.
-        Changing this parameter will create a new resource.
+        Specifies the flavor of the proxy. Changing this parameter will create a new
+        resource.
         """
         return pulumi.get(self, "flavor")
 
@@ -51,8 +144,8 @@ class MysqlProxyArgs:
     @pulumi.getter(name="instanceId")
     def instance_id(self) -> pulumi.Input[str]:
         """
-        Specifies the instance ID of the proxy.
-        Changing this parameter will create a new resource.
+        Specifies the ID of the GaussDB MySQL instance. Changing this parameter
+        will create a new resource.
         """
         return pulumi.get(self, "instance_id")
 
@@ -73,6 +166,183 @@ class MysqlProxyArgs:
         pulumi.set(self, "node_num", value)
 
     @property
+    @pulumi.getter(name="accessControlIpLists")
+    def access_control_ip_lists(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['MysqlProxyAccessControlIpListArgs']]]]:
+        """
+        Specifies the list of IP addresses that control access. A maximum of
+        `300` IP addresses or CIDR blocks can be added.
+        The access_control_ip_list structure is documented below.
+        """
+        return pulumi.get(self, "access_control_ip_lists")
+
+    @access_control_ip_lists.setter
+    def access_control_ip_lists(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['MysqlProxyAccessControlIpListArgs']]]]):
+        pulumi.set(self, "access_control_ip_lists", value)
+
+    @property
+    @pulumi.getter(name="accessControlType")
+    def access_control_type(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the access control mode. Value options:
+        + **white**: indicates the whitelist.
+        + **black**: indicates the blacklist.
+        """
+        return pulumi.get(self, "access_control_type")
+
+    @access_control_type.setter
+    def access_control_type(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "access_control_type", value)
+
+    @property
+    @pulumi.getter(name="connectionPoolType")
+    def connection_pool_type(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the connection pool type. Value options:
+        + **CLOSED**: The connection pool is not used.
+        + **SESSION**: The session-level connection pool is used.
+        """
+        return pulumi.get(self, "connection_pool_type")
+
+    @connection_pool_type.setter
+    def connection_pool_type(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "connection_pool_type", value)
+
+    @property
+    @pulumi.getter(name="consistenceMode")
+    def consistence_mode(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the consistency mode of the proxy. Value options:
+        + **session**: session consistency.
+        + **global**: global consistency.
+        + **eventual**: eventual consistency.
+        """
+        return pulumi.get(self, "consistence_mode")
+
+    @consistence_mode.setter
+    def consistence_mode(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "consistence_mode", value)
+
+    @property
+    @pulumi.getter(name="masterNodeWeight")
+    def master_node_weight(self) -> Optional[pulumi.Input['MysqlProxyMasterNodeWeightArgs']]:
+        """
+        Specifies the read weight of the master node.
+        The master_node_weight structure is documented below.
+        """
+        return pulumi.get(self, "master_node_weight")
+
+    @master_node_weight.setter
+    def master_node_weight(self, value: Optional[pulumi.Input['MysqlProxyMasterNodeWeightArgs']]):
+        pulumi.set(self, "master_node_weight", value)
+
+    @property
+    @pulumi.getter(name="newNodeAutoAddStatus")
+    def new_node_auto_add_status(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies whether new nodes are automatically associate with proxy.
+        Value options:
+        + **ON**: New nodes are automatically associate with proxy.
+        + **OFF**: New nodes are not automatically associate with proxy.
+        """
+        return pulumi.get(self, "new_node_auto_add_status")
+
+    @new_node_auto_add_status.setter
+    def new_node_auto_add_status(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "new_node_auto_add_status", value)
+
+    @property
+    @pulumi.getter(name="newNodeWeight")
+    def new_node_weight(self) -> Optional[pulumi.Input[int]]:
+        """
+        Specifies the read weight of the new node.
+        + If `route_mode` is `0` and `new_node_auto_add_status` is **ON**, the value of this parameter ranges from `0` to `1,000`.
+        + If `route_mode` is not `0` and `new_node_auto_add_status` is **OFF**, this parameter is unavailable.
+        """
+        return pulumi.get(self, "new_node_weight")
+
+    @new_node_weight.setter
+    def new_node_weight(self, value: Optional[pulumi.Input[int]]):
+        pulumi.set(self, "new_node_weight", value)
+
+    @property
+    @pulumi.getter(name="openAccessControl")
+    def open_access_control(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies whether to enable access control.
+        """
+        return pulumi.get(self, "open_access_control")
+
+    @open_access_control.setter
+    def open_access_control(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "open_access_control", value)
+
+    @property
+    @pulumi.getter
+    def parameters(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['MysqlProxyParameterArgs']]]]:
+        """
+        Specifies the list of parameters to be set to the GaussDB MySQL proxy after launched.
+        The parameters structure is documented below.
+        """
+        return pulumi.get(self, "parameters")
+
+    @parameters.setter
+    def parameters(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['MysqlProxyParameterArgs']]]]):
+        pulumi.set(self, "parameters", value)
+
+    @property
+    @pulumi.getter
+    def port(self) -> Optional[pulumi.Input[int]]:
+        """
+        Specifies the port of the proxy.
+        """
+        return pulumi.get(self, "port")
+
+    @port.setter
+    def port(self, value: Optional[pulumi.Input[int]]):
+        pulumi.set(self, "port", value)
+
+    @property
+    @pulumi.getter(name="proxyMode")
+    def proxy_mode(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the type of the proxy. Changing this creates a new resource.
+        Value options:
+        + **readwrite**: read and write.
+        + **readonly**: read-only.
+        """
+        return pulumi.get(self, "proxy_mode")
+
+    @proxy_mode.setter
+    def proxy_mode(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "proxy_mode", value)
+
+    @property
+    @pulumi.getter(name="proxyName")
+    def proxy_name(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the name of the proxy. The name consists of `4` to `64` characters and
+        starts with a letter. It is case-sensitive and can contain only letters, digits, hyphens (-), and underscores (_).
+        """
+        return pulumi.get(self, "proxy_name")
+
+    @proxy_name.setter
+    def proxy_name(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "proxy_name", value)
+
+    @property
+    @pulumi.getter(name="readonlyNodesWeights")
+    def readonly_nodes_weights(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['MysqlProxyReadonlyNodesWeightArgs']]]]:
+        """
+        Specifies the read weight of the read-only node.
+        The readonly_nodes_weight structure is documented below.
+        """
+        return pulumi.get(self, "readonly_nodes_weights")
+
+    @readonly_nodes_weights.setter
+    def readonly_nodes_weights(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['MysqlProxyReadonlyNodesWeightArgs']]]]):
+        pulumi.set(self, "readonly_nodes_weights", value)
+
+    @property
     @pulumi.getter
     def region(self) -> Optional[pulumi.Input[str]]:
         """
@@ -85,40 +355,214 @@ class MysqlProxyArgs:
     def region(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "region", value)
 
+    @property
+    @pulumi.getter(name="routeMode")
+    def route_mode(self) -> Optional[pulumi.Input[int]]:
+        """
+        Specifies the routing policy of the proxy. Changing this creates a new
+        resource. Value options:
+        + **0**: weighted load balancing.
+        + **1**: load balancing (The primary node does not process read requests).
+        + **2**: load balancing (The primary node processes read requests).
+        """
+        return pulumi.get(self, "route_mode")
+
+    @route_mode.setter
+    def route_mode(self, value: Optional[pulumi.Input[int]]):
+        pulumi.set(self, "route_mode", value)
+
+    @property
+    @pulumi.getter(name="subnetId")
+    def subnet_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the network ID of a subnet. Changing this creates a new resource.
+        """
+        return pulumi.get(self, "subnet_id")
+
+    @subnet_id.setter
+    def subnet_id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "subnet_id", value)
+
+    @property
+    @pulumi.getter(name="transactionSplit")
+    def transaction_split(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies whether the proxy transaction splitting is enabled. Value options:
+        + **ON**: Transaction splitting is enabled.
+        + **OFF**: Transaction splitting is disabled.
+        """
+        return pulumi.get(self, "transaction_split")
+
+    @transaction_split.setter
+    def transaction_split(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "transaction_split", value)
+
 
 @pulumi.input_type
 class _MysqlProxyState:
     def __init__(__self__, *,
+                 access_control_ip_lists: Optional[pulumi.Input[Sequence[pulumi.Input['MysqlProxyAccessControlIpListArgs']]]] = None,
+                 access_control_type: Optional[pulumi.Input[str]] = None,
                  address: Optional[pulumi.Input[str]] = None,
+                 can_upgrade: Optional[pulumi.Input[bool]] = None,
+                 connection_pool_type: Optional[pulumi.Input[str]] = None,
+                 consistence_mode: Optional[pulumi.Input[str]] = None,
+                 current_version: Optional[pulumi.Input[str]] = None,
                  flavor: Optional[pulumi.Input[str]] = None,
                  instance_id: Optional[pulumi.Input[str]] = None,
+                 master_node_weight: Optional[pulumi.Input['MysqlProxyMasterNodeWeightArgs']] = None,
+                 new_node_auto_add_status: Optional[pulumi.Input[str]] = None,
+                 new_node_weight: Optional[pulumi.Input[int]] = None,
                  node_num: Optional[pulumi.Input[int]] = None,
+                 nodes: Optional[pulumi.Input[Sequence[pulumi.Input['MysqlProxyNodeArgs']]]] = None,
+                 open_access_control: Optional[pulumi.Input[bool]] = None,
+                 parameters: Optional[pulumi.Input[Sequence[pulumi.Input['MysqlProxyParameterArgs']]]] = None,
                  port: Optional[pulumi.Input[int]] = None,
-                 region: Optional[pulumi.Input[str]] = None):
+                 proxy_mode: Optional[pulumi.Input[str]] = None,
+                 proxy_name: Optional[pulumi.Input[str]] = None,
+                 readonly_nodes_weights: Optional[pulumi.Input[Sequence[pulumi.Input['MysqlProxyReadonlyNodesWeightArgs']]]] = None,
+                 region: Optional[pulumi.Input[str]] = None,
+                 route_mode: Optional[pulumi.Input[int]] = None,
+                 subnet_id: Optional[pulumi.Input[str]] = None,
+                 switch_connection_pool_type_enabled: Optional[pulumi.Input[bool]] = None,
+                 transaction_split: Optional[pulumi.Input[str]] = None):
         """
         Input properties used for looking up and filtering MysqlProxy resources.
+        :param pulumi.Input[Sequence[pulumi.Input['MysqlProxyAccessControlIpListArgs']]] access_control_ip_lists: Specifies the list of IP addresses that control access. A maximum of
+               `300` IP addresses or CIDR blocks can be added.
+               The access_control_ip_list structure is documented below.
+        :param pulumi.Input[str] access_control_type: Specifies the access control mode. Value options:
+               + **white**: indicates the whitelist.
+               + **black**: indicates the blacklist.
         :param pulumi.Input[str] address: Indicates the address of the proxy.
-        :param pulumi.Input[str] flavor: Specifies the flavor of the proxy.
-               Changing this parameter will create a new resource.
-        :param pulumi.Input[str] instance_id: Specifies the instance ID of the proxy.
-               Changing this parameter will create a new resource.
+        :param pulumi.Input[bool] can_upgrade: Indicates whether the proxy can be upgrade.
+        :param pulumi.Input[str] connection_pool_type: Specifies the connection pool type. Value options:
+               + **CLOSED**: The connection pool is not used.
+               + **SESSION**: The session-level connection pool is used.
+        :param pulumi.Input[str] consistence_mode: Specifies the consistency mode of the proxy. Value options:
+               + **session**: session consistency.
+               + **global**: global consistency.
+               + **eventual**: eventual consistency.
+        :param pulumi.Input[str] current_version: Indicates the current version of the proxy.
+        :param pulumi.Input[str] flavor: Specifies the flavor of the proxy. Changing this parameter will create a new
+               resource.
+        :param pulumi.Input[str] instance_id: Specifies the ID of the GaussDB MySQL instance. Changing this parameter
+               will create a new resource.
+        :param pulumi.Input['MysqlProxyMasterNodeWeightArgs'] master_node_weight: Specifies the read weight of the master node.
+               The master_node_weight structure is documented below.
+        :param pulumi.Input[str] new_node_auto_add_status: Specifies whether new nodes are automatically associate with proxy.
+               Value options:
+               + **ON**: New nodes are automatically associate with proxy.
+               + **OFF**: New nodes are not automatically associate with proxy.
+        :param pulumi.Input[int] new_node_weight: Specifies the read weight of the new node.
+               + If `route_mode` is `0` and `new_node_auto_add_status` is **ON**, the value of this parameter ranges from `0` to `1,000`.
+               + If `route_mode` is not `0` and `new_node_auto_add_status` is **OFF**, this parameter is unavailable.
         :param pulumi.Input[int] node_num: Specifies the node count of the proxy.
-        :param pulumi.Input[int] port: Indicates the port of the proxy.
+        :param pulumi.Input[Sequence[pulumi.Input['MysqlProxyNodeArgs']]] nodes: Indicates the node information of the proxy.
+               The nodes structure is documented below.
+        :param pulumi.Input[bool] open_access_control: Specifies whether to enable access control.
+        :param pulumi.Input[Sequence[pulumi.Input['MysqlProxyParameterArgs']]] parameters: Specifies the list of parameters to be set to the GaussDB MySQL proxy after launched.
+               The parameters structure is documented below.
+        :param pulumi.Input[int] port: Specifies the port of the proxy.
+        :param pulumi.Input[str] proxy_mode: Specifies the type of the proxy. Changing this creates a new resource.
+               Value options:
+               + **readwrite**: read and write.
+               + **readonly**: read-only.
+        :param pulumi.Input[str] proxy_name: Specifies the name of the proxy. The name consists of `4` to `64` characters and
+               starts with a letter. It is case-sensitive and can contain only letters, digits, hyphens (-), and underscores (_).
+        :param pulumi.Input[Sequence[pulumi.Input['MysqlProxyReadonlyNodesWeightArgs']]] readonly_nodes_weights: Specifies the read weight of the read-only node.
+               The readonly_nodes_weight structure is documented below.
         :param pulumi.Input[str] region: The region in which to create the GaussDB mysql proxy resource. If omitted,
                the provider-level region will be used. Changing this creates a new resource.
+        :param pulumi.Input[int] route_mode: Specifies the routing policy of the proxy. Changing this creates a new
+               resource. Value options:
+               + **0**: weighted load balancing.
+               + **1**: load balancing (The primary node does not process read requests).
+               + **2**: load balancing (The primary node processes read requests).
+        :param pulumi.Input[str] subnet_id: Specifies the network ID of a subnet. Changing this creates a new resource.
+        :param pulumi.Input[bool] switch_connection_pool_type_enabled: Indicates whether the proxy supports session-level connection pool.
+        :param pulumi.Input[str] transaction_split: Specifies whether the proxy transaction splitting is enabled. Value options:
+               + **ON**: Transaction splitting is enabled.
+               + **OFF**: Transaction splitting is disabled.
         """
+        if access_control_ip_lists is not None:
+            pulumi.set(__self__, "access_control_ip_lists", access_control_ip_lists)
+        if access_control_type is not None:
+            pulumi.set(__self__, "access_control_type", access_control_type)
         if address is not None:
             pulumi.set(__self__, "address", address)
+        if can_upgrade is not None:
+            pulumi.set(__self__, "can_upgrade", can_upgrade)
+        if connection_pool_type is not None:
+            pulumi.set(__self__, "connection_pool_type", connection_pool_type)
+        if consistence_mode is not None:
+            pulumi.set(__self__, "consistence_mode", consistence_mode)
+        if current_version is not None:
+            pulumi.set(__self__, "current_version", current_version)
         if flavor is not None:
             pulumi.set(__self__, "flavor", flavor)
         if instance_id is not None:
             pulumi.set(__self__, "instance_id", instance_id)
+        if master_node_weight is not None:
+            pulumi.set(__self__, "master_node_weight", master_node_weight)
+        if new_node_auto_add_status is not None:
+            pulumi.set(__self__, "new_node_auto_add_status", new_node_auto_add_status)
+        if new_node_weight is not None:
+            pulumi.set(__self__, "new_node_weight", new_node_weight)
         if node_num is not None:
             pulumi.set(__self__, "node_num", node_num)
+        if nodes is not None:
+            pulumi.set(__self__, "nodes", nodes)
+        if open_access_control is not None:
+            pulumi.set(__self__, "open_access_control", open_access_control)
+        if parameters is not None:
+            pulumi.set(__self__, "parameters", parameters)
         if port is not None:
             pulumi.set(__self__, "port", port)
+        if proxy_mode is not None:
+            pulumi.set(__self__, "proxy_mode", proxy_mode)
+        if proxy_name is not None:
+            pulumi.set(__self__, "proxy_name", proxy_name)
+        if readonly_nodes_weights is not None:
+            pulumi.set(__self__, "readonly_nodes_weights", readonly_nodes_weights)
         if region is not None:
             pulumi.set(__self__, "region", region)
+        if route_mode is not None:
+            pulumi.set(__self__, "route_mode", route_mode)
+        if subnet_id is not None:
+            pulumi.set(__self__, "subnet_id", subnet_id)
+        if switch_connection_pool_type_enabled is not None:
+            pulumi.set(__self__, "switch_connection_pool_type_enabled", switch_connection_pool_type_enabled)
+        if transaction_split is not None:
+            pulumi.set(__self__, "transaction_split", transaction_split)
+
+    @property
+    @pulumi.getter(name="accessControlIpLists")
+    def access_control_ip_lists(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['MysqlProxyAccessControlIpListArgs']]]]:
+        """
+        Specifies the list of IP addresses that control access. A maximum of
+        `300` IP addresses or CIDR blocks can be added.
+        The access_control_ip_list structure is documented below.
+        """
+        return pulumi.get(self, "access_control_ip_lists")
+
+    @access_control_ip_lists.setter
+    def access_control_ip_lists(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['MysqlProxyAccessControlIpListArgs']]]]):
+        pulumi.set(self, "access_control_ip_lists", value)
+
+    @property
+    @pulumi.getter(name="accessControlType")
+    def access_control_type(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the access control mode. Value options:
+        + **white**: indicates the whitelist.
+        + **black**: indicates the blacklist.
+        """
+        return pulumi.get(self, "access_control_type")
+
+    @access_control_type.setter
+    def access_control_type(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "access_control_type", value)
 
     @property
     @pulumi.getter
@@ -133,11 +577,64 @@ class _MysqlProxyState:
         pulumi.set(self, "address", value)
 
     @property
+    @pulumi.getter(name="canUpgrade")
+    def can_upgrade(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Indicates whether the proxy can be upgrade.
+        """
+        return pulumi.get(self, "can_upgrade")
+
+    @can_upgrade.setter
+    def can_upgrade(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "can_upgrade", value)
+
+    @property
+    @pulumi.getter(name="connectionPoolType")
+    def connection_pool_type(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the connection pool type. Value options:
+        + **CLOSED**: The connection pool is not used.
+        + **SESSION**: The session-level connection pool is used.
+        """
+        return pulumi.get(self, "connection_pool_type")
+
+    @connection_pool_type.setter
+    def connection_pool_type(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "connection_pool_type", value)
+
+    @property
+    @pulumi.getter(name="consistenceMode")
+    def consistence_mode(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the consistency mode of the proxy. Value options:
+        + **session**: session consistency.
+        + **global**: global consistency.
+        + **eventual**: eventual consistency.
+        """
+        return pulumi.get(self, "consistence_mode")
+
+    @consistence_mode.setter
+    def consistence_mode(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "consistence_mode", value)
+
+    @property
+    @pulumi.getter(name="currentVersion")
+    def current_version(self) -> Optional[pulumi.Input[str]]:
+        """
+        Indicates the current version of the proxy.
+        """
+        return pulumi.get(self, "current_version")
+
+    @current_version.setter
+    def current_version(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "current_version", value)
+
+    @property
     @pulumi.getter
     def flavor(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the flavor of the proxy.
-        Changing this parameter will create a new resource.
+        Specifies the flavor of the proxy. Changing this parameter will create a new
+        resource.
         """
         return pulumi.get(self, "flavor")
 
@@ -149,14 +646,56 @@ class _MysqlProxyState:
     @pulumi.getter(name="instanceId")
     def instance_id(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the instance ID of the proxy.
-        Changing this parameter will create a new resource.
+        Specifies the ID of the GaussDB MySQL instance. Changing this parameter
+        will create a new resource.
         """
         return pulumi.get(self, "instance_id")
 
     @instance_id.setter
     def instance_id(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "instance_id", value)
+
+    @property
+    @pulumi.getter(name="masterNodeWeight")
+    def master_node_weight(self) -> Optional[pulumi.Input['MysqlProxyMasterNodeWeightArgs']]:
+        """
+        Specifies the read weight of the master node.
+        The master_node_weight structure is documented below.
+        """
+        return pulumi.get(self, "master_node_weight")
+
+    @master_node_weight.setter
+    def master_node_weight(self, value: Optional[pulumi.Input['MysqlProxyMasterNodeWeightArgs']]):
+        pulumi.set(self, "master_node_weight", value)
+
+    @property
+    @pulumi.getter(name="newNodeAutoAddStatus")
+    def new_node_auto_add_status(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies whether new nodes are automatically associate with proxy.
+        Value options:
+        + **ON**: New nodes are automatically associate with proxy.
+        + **OFF**: New nodes are not automatically associate with proxy.
+        """
+        return pulumi.get(self, "new_node_auto_add_status")
+
+    @new_node_auto_add_status.setter
+    def new_node_auto_add_status(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "new_node_auto_add_status", value)
+
+    @property
+    @pulumi.getter(name="newNodeWeight")
+    def new_node_weight(self) -> Optional[pulumi.Input[int]]:
+        """
+        Specifies the read weight of the new node.
+        + If `route_mode` is `0` and `new_node_auto_add_status` is **ON**, the value of this parameter ranges from `0` to `1,000`.
+        + If `route_mode` is not `0` and `new_node_auto_add_status` is **OFF**, this parameter is unavailable.
+        """
+        return pulumi.get(self, "new_node_weight")
+
+    @new_node_weight.setter
+    def new_node_weight(self, value: Optional[pulumi.Input[int]]):
+        pulumi.set(self, "new_node_weight", value)
 
     @property
     @pulumi.getter(name="nodeNum")
@@ -172,15 +711,94 @@ class _MysqlProxyState:
 
     @property
     @pulumi.getter
+    def nodes(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['MysqlProxyNodeArgs']]]]:
+        """
+        Indicates the node information of the proxy.
+        The nodes structure is documented below.
+        """
+        return pulumi.get(self, "nodes")
+
+    @nodes.setter
+    def nodes(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['MysqlProxyNodeArgs']]]]):
+        pulumi.set(self, "nodes", value)
+
+    @property
+    @pulumi.getter(name="openAccessControl")
+    def open_access_control(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies whether to enable access control.
+        """
+        return pulumi.get(self, "open_access_control")
+
+    @open_access_control.setter
+    def open_access_control(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "open_access_control", value)
+
+    @property
+    @pulumi.getter
+    def parameters(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['MysqlProxyParameterArgs']]]]:
+        """
+        Specifies the list of parameters to be set to the GaussDB MySQL proxy after launched.
+        The parameters structure is documented below.
+        """
+        return pulumi.get(self, "parameters")
+
+    @parameters.setter
+    def parameters(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['MysqlProxyParameterArgs']]]]):
+        pulumi.set(self, "parameters", value)
+
+    @property
+    @pulumi.getter
     def port(self) -> Optional[pulumi.Input[int]]:
         """
-        Indicates the port of the proxy.
+        Specifies the port of the proxy.
         """
         return pulumi.get(self, "port")
 
     @port.setter
     def port(self, value: Optional[pulumi.Input[int]]):
         pulumi.set(self, "port", value)
+
+    @property
+    @pulumi.getter(name="proxyMode")
+    def proxy_mode(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the type of the proxy. Changing this creates a new resource.
+        Value options:
+        + **readwrite**: read and write.
+        + **readonly**: read-only.
+        """
+        return pulumi.get(self, "proxy_mode")
+
+    @proxy_mode.setter
+    def proxy_mode(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "proxy_mode", value)
+
+    @property
+    @pulumi.getter(name="proxyName")
+    def proxy_name(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the name of the proxy. The name consists of `4` to `64` characters and
+        starts with a letter. It is case-sensitive and can contain only letters, digits, hyphens (-), and underscores (_).
+        """
+        return pulumi.get(self, "proxy_name")
+
+    @proxy_name.setter
+    def proxy_name(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "proxy_name", value)
+
+    @property
+    @pulumi.getter(name="readonlyNodesWeights")
+    def readonly_nodes_weights(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['MysqlProxyReadonlyNodesWeightArgs']]]]:
+        """
+        Specifies the read weight of the read-only node.
+        The readonly_nodes_weight structure is documented below.
+        """
+        return pulumi.get(self, "readonly_nodes_weights")
+
+    @readonly_nodes_weights.setter
+    def readonly_nodes_weights(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['MysqlProxyReadonlyNodesWeightArgs']]]]):
+        pulumi.set(self, "readonly_nodes_weights", value)
 
     @property
     @pulumi.getter
@@ -195,22 +813,91 @@ class _MysqlProxyState:
     def region(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "region", value)
 
+    @property
+    @pulumi.getter(name="routeMode")
+    def route_mode(self) -> Optional[pulumi.Input[int]]:
+        """
+        Specifies the routing policy of the proxy. Changing this creates a new
+        resource. Value options:
+        + **0**: weighted load balancing.
+        + **1**: load balancing (The primary node does not process read requests).
+        + **2**: load balancing (The primary node processes read requests).
+        """
+        return pulumi.get(self, "route_mode")
+
+    @route_mode.setter
+    def route_mode(self, value: Optional[pulumi.Input[int]]):
+        pulumi.set(self, "route_mode", value)
+
+    @property
+    @pulumi.getter(name="subnetId")
+    def subnet_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the network ID of a subnet. Changing this creates a new resource.
+        """
+        return pulumi.get(self, "subnet_id")
+
+    @subnet_id.setter
+    def subnet_id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "subnet_id", value)
+
+    @property
+    @pulumi.getter(name="switchConnectionPoolTypeEnabled")
+    def switch_connection_pool_type_enabled(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Indicates whether the proxy supports session-level connection pool.
+        """
+        return pulumi.get(self, "switch_connection_pool_type_enabled")
+
+    @switch_connection_pool_type_enabled.setter
+    def switch_connection_pool_type_enabled(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "switch_connection_pool_type_enabled", value)
+
+    @property
+    @pulumi.getter(name="transactionSplit")
+    def transaction_split(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies whether the proxy transaction splitting is enabled. Value options:
+        + **ON**: Transaction splitting is enabled.
+        + **OFF**: Transaction splitting is disabled.
+        """
+        return pulumi.get(self, "transaction_split")
+
+    @transaction_split.setter
+    def transaction_split(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "transaction_split", value)
+
 
 class MysqlProxy(pulumi.CustomResource):
     @overload
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
+                 access_control_ip_lists: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['MysqlProxyAccessControlIpListArgs']]]]] = None,
+                 access_control_type: Optional[pulumi.Input[str]] = None,
+                 connection_pool_type: Optional[pulumi.Input[str]] = None,
+                 consistence_mode: Optional[pulumi.Input[str]] = None,
                  flavor: Optional[pulumi.Input[str]] = None,
                  instance_id: Optional[pulumi.Input[str]] = None,
+                 master_node_weight: Optional[pulumi.Input[pulumi.InputType['MysqlProxyMasterNodeWeightArgs']]] = None,
+                 new_node_auto_add_status: Optional[pulumi.Input[str]] = None,
+                 new_node_weight: Optional[pulumi.Input[int]] = None,
                  node_num: Optional[pulumi.Input[int]] = None,
+                 open_access_control: Optional[pulumi.Input[bool]] = None,
+                 parameters: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['MysqlProxyParameterArgs']]]]] = None,
+                 port: Optional[pulumi.Input[int]] = None,
+                 proxy_mode: Optional[pulumi.Input[str]] = None,
+                 proxy_name: Optional[pulumi.Input[str]] = None,
+                 readonly_nodes_weights: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['MysqlProxyReadonlyNodesWeightArgs']]]]] = None,
                  region: Optional[pulumi.Input[str]] = None,
+                 route_mode: Optional[pulumi.Input[int]] = None,
+                 subnet_id: Optional[pulumi.Input[str]] = None,
+                 transaction_split: Optional[pulumi.Input[str]] = None,
                  __props__=None):
         """
-        GaussDB mysql proxy management within HuaweiCoud.
+        Manages GaussDB mysql proxy resource within HuaweiCloud.
 
         ## Example Usage
-        ### create a proxy
 
         ```python
         import pulumi
@@ -218,29 +905,86 @@ class MysqlProxy(pulumi.CustomResource):
 
         config = pulumi.Config()
         instance_id = config.require_object("instanceId")
-        proxy1 = huaweicloud.gauss_db.MysqlProxy("proxy1",
+        test = huaweicloud.gauss_db.MysqlProxy("test",
             instance_id=instance_id,
-            flavor="gaussdb.proxy.xlarge.arm.2",
+            flavor="gaussdb.proxy.xlarge.x86.2",
             node_num=3)
         ```
 
         ## Import
 
-        GaussDB instance can be imported using the instance `id`, e.g.
+        The GaussDB MySQL proxy can be imported using the `instance_id` and `id` separated by a slash, e.g. bash
 
         ```sh
-         $ pulumi import huaweicloud:GaussDB/mysqlProxy:MysqlProxy proxy_1 ee678f40-ce8e-4d0c-8221-38dead426f06
+         $ pulumi import huaweicloud:GaussDB/mysqlProxy:MysqlProxy test <instance_id>/<id>
         ```
+
+         Note that the imported state may not be identical to your resource definition, due to the attribute missing from the API response. The missing attribute is`new_node_weight`, `proxy_mode`, `readonly_nodes_weight` and `parameters`. It is generally recommended running `terraform plan` after importing a GaussDB MySQL proxy. You can then decide if changes should be applied to the GaussDB MySQL proxy, or the resource definition should be updated to align with the GaussDB MySQL proxy. Also you can ignore changes as below. hcl resource "huaweicloud_gaussdb_mysql_proxy" "test" {
+
+         ...
+
+         lifecycle {
+
+         ignore_changes = [
+
+         new_node_weight, proxy_mode, readonly_nodes_weight, parameters,
+
+         ]
+
+         } }
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[str] flavor: Specifies the flavor of the proxy.
-               Changing this parameter will create a new resource.
-        :param pulumi.Input[str] instance_id: Specifies the instance ID of the proxy.
-               Changing this parameter will create a new resource.
+        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['MysqlProxyAccessControlIpListArgs']]]] access_control_ip_lists: Specifies the list of IP addresses that control access. A maximum of
+               `300` IP addresses or CIDR blocks can be added.
+               The access_control_ip_list structure is documented below.
+        :param pulumi.Input[str] access_control_type: Specifies the access control mode. Value options:
+               + **white**: indicates the whitelist.
+               + **black**: indicates the blacklist.
+        :param pulumi.Input[str] connection_pool_type: Specifies the connection pool type. Value options:
+               + **CLOSED**: The connection pool is not used.
+               + **SESSION**: The session-level connection pool is used.
+        :param pulumi.Input[str] consistence_mode: Specifies the consistency mode of the proxy. Value options:
+               + **session**: session consistency.
+               + **global**: global consistency.
+               + **eventual**: eventual consistency.
+        :param pulumi.Input[str] flavor: Specifies the flavor of the proxy. Changing this parameter will create a new
+               resource.
+        :param pulumi.Input[str] instance_id: Specifies the ID of the GaussDB MySQL instance. Changing this parameter
+               will create a new resource.
+        :param pulumi.Input[pulumi.InputType['MysqlProxyMasterNodeWeightArgs']] master_node_weight: Specifies the read weight of the master node.
+               The master_node_weight structure is documented below.
+        :param pulumi.Input[str] new_node_auto_add_status: Specifies whether new nodes are automatically associate with proxy.
+               Value options:
+               + **ON**: New nodes are automatically associate with proxy.
+               + **OFF**: New nodes are not automatically associate with proxy.
+        :param pulumi.Input[int] new_node_weight: Specifies the read weight of the new node.
+               + If `route_mode` is `0` and `new_node_auto_add_status` is **ON**, the value of this parameter ranges from `0` to `1,000`.
+               + If `route_mode` is not `0` and `new_node_auto_add_status` is **OFF**, this parameter is unavailable.
         :param pulumi.Input[int] node_num: Specifies the node count of the proxy.
+        :param pulumi.Input[bool] open_access_control: Specifies whether to enable access control.
+        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['MysqlProxyParameterArgs']]]] parameters: Specifies the list of parameters to be set to the GaussDB MySQL proxy after launched.
+               The parameters structure is documented below.
+        :param pulumi.Input[int] port: Specifies the port of the proxy.
+        :param pulumi.Input[str] proxy_mode: Specifies the type of the proxy. Changing this creates a new resource.
+               Value options:
+               + **readwrite**: read and write.
+               + **readonly**: read-only.
+        :param pulumi.Input[str] proxy_name: Specifies the name of the proxy. The name consists of `4` to `64` characters and
+               starts with a letter. It is case-sensitive and can contain only letters, digits, hyphens (-), and underscores (_).
+        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['MysqlProxyReadonlyNodesWeightArgs']]]] readonly_nodes_weights: Specifies the read weight of the read-only node.
+               The readonly_nodes_weight structure is documented below.
         :param pulumi.Input[str] region: The region in which to create the GaussDB mysql proxy resource. If omitted,
                the provider-level region will be used. Changing this creates a new resource.
+        :param pulumi.Input[int] route_mode: Specifies the routing policy of the proxy. Changing this creates a new
+               resource. Value options:
+               + **0**: weighted load balancing.
+               + **1**: load balancing (The primary node does not process read requests).
+               + **2**: load balancing (The primary node processes read requests).
+        :param pulumi.Input[str] subnet_id: Specifies the network ID of a subnet. Changing this creates a new resource.
+        :param pulumi.Input[str] transaction_split: Specifies whether the proxy transaction splitting is enabled. Value options:
+               + **ON**: Transaction splitting is enabled.
+               + **OFF**: Transaction splitting is disabled.
         """
         ...
     @overload
@@ -249,10 +993,9 @@ class MysqlProxy(pulumi.CustomResource):
                  args: MysqlProxyArgs,
                  opts: Optional[pulumi.ResourceOptions] = None):
         """
-        GaussDB mysql proxy management within HuaweiCoud.
+        Manages GaussDB mysql proxy resource within HuaweiCloud.
 
         ## Example Usage
-        ### create a proxy
 
         ```python
         import pulumi
@@ -260,19 +1003,33 @@ class MysqlProxy(pulumi.CustomResource):
 
         config = pulumi.Config()
         instance_id = config.require_object("instanceId")
-        proxy1 = huaweicloud.gauss_db.MysqlProxy("proxy1",
+        test = huaweicloud.gauss_db.MysqlProxy("test",
             instance_id=instance_id,
-            flavor="gaussdb.proxy.xlarge.arm.2",
+            flavor="gaussdb.proxy.xlarge.x86.2",
             node_num=3)
         ```
 
         ## Import
 
-        GaussDB instance can be imported using the instance `id`, e.g.
+        The GaussDB MySQL proxy can be imported using the `instance_id` and `id` separated by a slash, e.g. bash
 
         ```sh
-         $ pulumi import huaweicloud:GaussDB/mysqlProxy:MysqlProxy proxy_1 ee678f40-ce8e-4d0c-8221-38dead426f06
+         $ pulumi import huaweicloud:GaussDB/mysqlProxy:MysqlProxy test <instance_id>/<id>
         ```
+
+         Note that the imported state may not be identical to your resource definition, due to the attribute missing from the API response. The missing attribute is`new_node_weight`, `proxy_mode`, `readonly_nodes_weight` and `parameters`. It is generally recommended running `terraform plan` after importing a GaussDB MySQL proxy. You can then decide if changes should be applied to the GaussDB MySQL proxy, or the resource definition should be updated to align with the GaussDB MySQL proxy. Also you can ignore changes as below. hcl resource "huaweicloud_gaussdb_mysql_proxy" "test" {
+
+         ...
+
+         lifecycle {
+
+         ignore_changes = [
+
+         new_node_weight, proxy_mode, readonly_nodes_weight, parameters,
+
+         ]
+
+         } }
 
         :param str resource_name: The name of the resource.
         :param MysqlProxyArgs args: The arguments to use to populate this resource's properties.
@@ -289,10 +1046,26 @@ class MysqlProxy(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
+                 access_control_ip_lists: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['MysqlProxyAccessControlIpListArgs']]]]] = None,
+                 access_control_type: Optional[pulumi.Input[str]] = None,
+                 connection_pool_type: Optional[pulumi.Input[str]] = None,
+                 consistence_mode: Optional[pulumi.Input[str]] = None,
                  flavor: Optional[pulumi.Input[str]] = None,
                  instance_id: Optional[pulumi.Input[str]] = None,
+                 master_node_weight: Optional[pulumi.Input[pulumi.InputType['MysqlProxyMasterNodeWeightArgs']]] = None,
+                 new_node_auto_add_status: Optional[pulumi.Input[str]] = None,
+                 new_node_weight: Optional[pulumi.Input[int]] = None,
                  node_num: Optional[pulumi.Input[int]] = None,
+                 open_access_control: Optional[pulumi.Input[bool]] = None,
+                 parameters: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['MysqlProxyParameterArgs']]]]] = None,
+                 port: Optional[pulumi.Input[int]] = None,
+                 proxy_mode: Optional[pulumi.Input[str]] = None,
+                 proxy_name: Optional[pulumi.Input[str]] = None,
+                 readonly_nodes_weights: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['MysqlProxyReadonlyNodesWeightArgs']]]]] = None,
                  region: Optional[pulumi.Input[str]] = None,
+                 route_mode: Optional[pulumi.Input[int]] = None,
+                 subnet_id: Optional[pulumi.Input[str]] = None,
+                 transaction_split: Optional[pulumi.Input[str]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -302,18 +1075,37 @@ class MysqlProxy(pulumi.CustomResource):
                 raise TypeError('__props__ is only valid when passed in combination with a valid opts.id to get an existing resource')
             __props__ = MysqlProxyArgs.__new__(MysqlProxyArgs)
 
+            __props__.__dict__["access_control_ip_lists"] = access_control_ip_lists
+            __props__.__dict__["access_control_type"] = access_control_type
+            __props__.__dict__["connection_pool_type"] = connection_pool_type
+            __props__.__dict__["consistence_mode"] = consistence_mode
             if flavor is None and not opts.urn:
                 raise TypeError("Missing required property 'flavor'")
             __props__.__dict__["flavor"] = flavor
             if instance_id is None and not opts.urn:
                 raise TypeError("Missing required property 'instance_id'")
             __props__.__dict__["instance_id"] = instance_id
+            __props__.__dict__["master_node_weight"] = master_node_weight
+            __props__.__dict__["new_node_auto_add_status"] = new_node_auto_add_status
+            __props__.__dict__["new_node_weight"] = new_node_weight
             if node_num is None and not opts.urn:
                 raise TypeError("Missing required property 'node_num'")
             __props__.__dict__["node_num"] = node_num
+            __props__.__dict__["open_access_control"] = open_access_control
+            __props__.__dict__["parameters"] = parameters
+            __props__.__dict__["port"] = port
+            __props__.__dict__["proxy_mode"] = proxy_mode
+            __props__.__dict__["proxy_name"] = proxy_name
+            __props__.__dict__["readonly_nodes_weights"] = readonly_nodes_weights
             __props__.__dict__["region"] = region
+            __props__.__dict__["route_mode"] = route_mode
+            __props__.__dict__["subnet_id"] = subnet_id
+            __props__.__dict__["transaction_split"] = transaction_split
             __props__.__dict__["address"] = None
-            __props__.__dict__["port"] = None
+            __props__.__dict__["can_upgrade"] = None
+            __props__.__dict__["current_version"] = None
+            __props__.__dict__["nodes"] = None
+            __props__.__dict__["switch_connection_pool_type_enabled"] = None
         super(MysqlProxy, __self__).__init__(
             'huaweicloud:GaussDB/mysqlProxy:MysqlProxy',
             resource_name,
@@ -324,12 +1116,31 @@ class MysqlProxy(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
+            access_control_ip_lists: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['MysqlProxyAccessControlIpListArgs']]]]] = None,
+            access_control_type: Optional[pulumi.Input[str]] = None,
             address: Optional[pulumi.Input[str]] = None,
+            can_upgrade: Optional[pulumi.Input[bool]] = None,
+            connection_pool_type: Optional[pulumi.Input[str]] = None,
+            consistence_mode: Optional[pulumi.Input[str]] = None,
+            current_version: Optional[pulumi.Input[str]] = None,
             flavor: Optional[pulumi.Input[str]] = None,
             instance_id: Optional[pulumi.Input[str]] = None,
+            master_node_weight: Optional[pulumi.Input[pulumi.InputType['MysqlProxyMasterNodeWeightArgs']]] = None,
+            new_node_auto_add_status: Optional[pulumi.Input[str]] = None,
+            new_node_weight: Optional[pulumi.Input[int]] = None,
             node_num: Optional[pulumi.Input[int]] = None,
+            nodes: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['MysqlProxyNodeArgs']]]]] = None,
+            open_access_control: Optional[pulumi.Input[bool]] = None,
+            parameters: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['MysqlProxyParameterArgs']]]]] = None,
             port: Optional[pulumi.Input[int]] = None,
-            region: Optional[pulumi.Input[str]] = None) -> 'MysqlProxy':
+            proxy_mode: Optional[pulumi.Input[str]] = None,
+            proxy_name: Optional[pulumi.Input[str]] = None,
+            readonly_nodes_weights: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['MysqlProxyReadonlyNodesWeightArgs']]]]] = None,
+            region: Optional[pulumi.Input[str]] = None,
+            route_mode: Optional[pulumi.Input[int]] = None,
+            subnet_id: Optional[pulumi.Input[str]] = None,
+            switch_connection_pool_type_enabled: Optional[pulumi.Input[bool]] = None,
+            transaction_split: Optional[pulumi.Input[str]] = None) -> 'MysqlProxy':
         """
         Get an existing MysqlProxy resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.
@@ -337,27 +1148,113 @@ class MysqlProxy(pulumi.CustomResource):
         :param str resource_name: The unique name of the resulting resource.
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
+        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['MysqlProxyAccessControlIpListArgs']]]] access_control_ip_lists: Specifies the list of IP addresses that control access. A maximum of
+               `300` IP addresses or CIDR blocks can be added.
+               The access_control_ip_list structure is documented below.
+        :param pulumi.Input[str] access_control_type: Specifies the access control mode. Value options:
+               + **white**: indicates the whitelist.
+               + **black**: indicates the blacklist.
         :param pulumi.Input[str] address: Indicates the address of the proxy.
-        :param pulumi.Input[str] flavor: Specifies the flavor of the proxy.
-               Changing this parameter will create a new resource.
-        :param pulumi.Input[str] instance_id: Specifies the instance ID of the proxy.
-               Changing this parameter will create a new resource.
+        :param pulumi.Input[bool] can_upgrade: Indicates whether the proxy can be upgrade.
+        :param pulumi.Input[str] connection_pool_type: Specifies the connection pool type. Value options:
+               + **CLOSED**: The connection pool is not used.
+               + **SESSION**: The session-level connection pool is used.
+        :param pulumi.Input[str] consistence_mode: Specifies the consistency mode of the proxy. Value options:
+               + **session**: session consistency.
+               + **global**: global consistency.
+               + **eventual**: eventual consistency.
+        :param pulumi.Input[str] current_version: Indicates the current version of the proxy.
+        :param pulumi.Input[str] flavor: Specifies the flavor of the proxy. Changing this parameter will create a new
+               resource.
+        :param pulumi.Input[str] instance_id: Specifies the ID of the GaussDB MySQL instance. Changing this parameter
+               will create a new resource.
+        :param pulumi.Input[pulumi.InputType['MysqlProxyMasterNodeWeightArgs']] master_node_weight: Specifies the read weight of the master node.
+               The master_node_weight structure is documented below.
+        :param pulumi.Input[str] new_node_auto_add_status: Specifies whether new nodes are automatically associate with proxy.
+               Value options:
+               + **ON**: New nodes are automatically associate with proxy.
+               + **OFF**: New nodes are not automatically associate with proxy.
+        :param pulumi.Input[int] new_node_weight: Specifies the read weight of the new node.
+               + If `route_mode` is `0` and `new_node_auto_add_status` is **ON**, the value of this parameter ranges from `0` to `1,000`.
+               + If `route_mode` is not `0` and `new_node_auto_add_status` is **OFF**, this parameter is unavailable.
         :param pulumi.Input[int] node_num: Specifies the node count of the proxy.
-        :param pulumi.Input[int] port: Indicates the port of the proxy.
+        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['MysqlProxyNodeArgs']]]] nodes: Indicates the node information of the proxy.
+               The nodes structure is documented below.
+        :param pulumi.Input[bool] open_access_control: Specifies whether to enable access control.
+        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['MysqlProxyParameterArgs']]]] parameters: Specifies the list of parameters to be set to the GaussDB MySQL proxy after launched.
+               The parameters structure is documented below.
+        :param pulumi.Input[int] port: Specifies the port of the proxy.
+        :param pulumi.Input[str] proxy_mode: Specifies the type of the proxy. Changing this creates a new resource.
+               Value options:
+               + **readwrite**: read and write.
+               + **readonly**: read-only.
+        :param pulumi.Input[str] proxy_name: Specifies the name of the proxy. The name consists of `4` to `64` characters and
+               starts with a letter. It is case-sensitive and can contain only letters, digits, hyphens (-), and underscores (_).
+        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['MysqlProxyReadonlyNodesWeightArgs']]]] readonly_nodes_weights: Specifies the read weight of the read-only node.
+               The readonly_nodes_weight structure is documented below.
         :param pulumi.Input[str] region: The region in which to create the GaussDB mysql proxy resource. If omitted,
                the provider-level region will be used. Changing this creates a new resource.
+        :param pulumi.Input[int] route_mode: Specifies the routing policy of the proxy. Changing this creates a new
+               resource. Value options:
+               + **0**: weighted load balancing.
+               + **1**: load balancing (The primary node does not process read requests).
+               + **2**: load balancing (The primary node processes read requests).
+        :param pulumi.Input[str] subnet_id: Specifies the network ID of a subnet. Changing this creates a new resource.
+        :param pulumi.Input[bool] switch_connection_pool_type_enabled: Indicates whether the proxy supports session-level connection pool.
+        :param pulumi.Input[str] transaction_split: Specifies whether the proxy transaction splitting is enabled. Value options:
+               + **ON**: Transaction splitting is enabled.
+               + **OFF**: Transaction splitting is disabled.
         """
         opts = pulumi.ResourceOptions.merge(opts, pulumi.ResourceOptions(id=id))
 
         __props__ = _MysqlProxyState.__new__(_MysqlProxyState)
 
+        __props__.__dict__["access_control_ip_lists"] = access_control_ip_lists
+        __props__.__dict__["access_control_type"] = access_control_type
         __props__.__dict__["address"] = address
+        __props__.__dict__["can_upgrade"] = can_upgrade
+        __props__.__dict__["connection_pool_type"] = connection_pool_type
+        __props__.__dict__["consistence_mode"] = consistence_mode
+        __props__.__dict__["current_version"] = current_version
         __props__.__dict__["flavor"] = flavor
         __props__.__dict__["instance_id"] = instance_id
+        __props__.__dict__["master_node_weight"] = master_node_weight
+        __props__.__dict__["new_node_auto_add_status"] = new_node_auto_add_status
+        __props__.__dict__["new_node_weight"] = new_node_weight
         __props__.__dict__["node_num"] = node_num
+        __props__.__dict__["nodes"] = nodes
+        __props__.__dict__["open_access_control"] = open_access_control
+        __props__.__dict__["parameters"] = parameters
         __props__.__dict__["port"] = port
+        __props__.__dict__["proxy_mode"] = proxy_mode
+        __props__.__dict__["proxy_name"] = proxy_name
+        __props__.__dict__["readonly_nodes_weights"] = readonly_nodes_weights
         __props__.__dict__["region"] = region
+        __props__.__dict__["route_mode"] = route_mode
+        __props__.__dict__["subnet_id"] = subnet_id
+        __props__.__dict__["switch_connection_pool_type_enabled"] = switch_connection_pool_type_enabled
+        __props__.__dict__["transaction_split"] = transaction_split
         return MysqlProxy(resource_name, opts=opts, __props__=__props__)
+
+    @property
+    @pulumi.getter(name="accessControlIpLists")
+    def access_control_ip_lists(self) -> pulumi.Output[Sequence['outputs.MysqlProxyAccessControlIpList']]:
+        """
+        Specifies the list of IP addresses that control access. A maximum of
+        `300` IP addresses or CIDR blocks can be added.
+        The access_control_ip_list structure is documented below.
+        """
+        return pulumi.get(self, "access_control_ip_lists")
+
+    @property
+    @pulumi.getter(name="accessControlType")
+    def access_control_type(self) -> pulumi.Output[str]:
+        """
+        Specifies the access control mode. Value options:
+        + **white**: indicates the whitelist.
+        + **black**: indicates the blacklist.
+        """
+        return pulumi.get(self, "access_control_type")
 
     @property
     @pulumi.getter
@@ -368,11 +1265,48 @@ class MysqlProxy(pulumi.CustomResource):
         return pulumi.get(self, "address")
 
     @property
+    @pulumi.getter(name="canUpgrade")
+    def can_upgrade(self) -> pulumi.Output[bool]:
+        """
+        Indicates whether the proxy can be upgrade.
+        """
+        return pulumi.get(self, "can_upgrade")
+
+    @property
+    @pulumi.getter(name="connectionPoolType")
+    def connection_pool_type(self) -> pulumi.Output[str]:
+        """
+        Specifies the connection pool type. Value options:
+        + **CLOSED**: The connection pool is not used.
+        + **SESSION**: The session-level connection pool is used.
+        """
+        return pulumi.get(self, "connection_pool_type")
+
+    @property
+    @pulumi.getter(name="consistenceMode")
+    def consistence_mode(self) -> pulumi.Output[str]:
+        """
+        Specifies the consistency mode of the proxy. Value options:
+        + **session**: session consistency.
+        + **global**: global consistency.
+        + **eventual**: eventual consistency.
+        """
+        return pulumi.get(self, "consistence_mode")
+
+    @property
+    @pulumi.getter(name="currentVersion")
+    def current_version(self) -> pulumi.Output[str]:
+        """
+        Indicates the current version of the proxy.
+        """
+        return pulumi.get(self, "current_version")
+
+    @property
     @pulumi.getter
     def flavor(self) -> pulumi.Output[str]:
         """
-        Specifies the flavor of the proxy.
-        Changing this parameter will create a new resource.
+        Specifies the flavor of the proxy. Changing this parameter will create a new
+        resource.
         """
         return pulumi.get(self, "flavor")
 
@@ -380,10 +1314,40 @@ class MysqlProxy(pulumi.CustomResource):
     @pulumi.getter(name="instanceId")
     def instance_id(self) -> pulumi.Output[str]:
         """
-        Specifies the instance ID of the proxy.
-        Changing this parameter will create a new resource.
+        Specifies the ID of the GaussDB MySQL instance. Changing this parameter
+        will create a new resource.
         """
         return pulumi.get(self, "instance_id")
+
+    @property
+    @pulumi.getter(name="masterNodeWeight")
+    def master_node_weight(self) -> pulumi.Output['outputs.MysqlProxyMasterNodeWeight']:
+        """
+        Specifies the read weight of the master node.
+        The master_node_weight structure is documented below.
+        """
+        return pulumi.get(self, "master_node_weight")
+
+    @property
+    @pulumi.getter(name="newNodeAutoAddStatus")
+    def new_node_auto_add_status(self) -> pulumi.Output[str]:
+        """
+        Specifies whether new nodes are automatically associate with proxy.
+        Value options:
+        + **ON**: New nodes are automatically associate with proxy.
+        + **OFF**: New nodes are not automatically associate with proxy.
+        """
+        return pulumi.get(self, "new_node_auto_add_status")
+
+    @property
+    @pulumi.getter(name="newNodeWeight")
+    def new_node_weight(self) -> pulumi.Output[Optional[int]]:
+        """
+        Specifies the read weight of the new node.
+        + If `route_mode` is `0` and `new_node_auto_add_status` is **ON**, the value of this parameter ranges from `0` to `1,000`.
+        + If `route_mode` is not `0` and `new_node_auto_add_status` is **OFF**, this parameter is unavailable.
+        """
+        return pulumi.get(self, "new_node_weight")
 
     @property
     @pulumi.getter(name="nodeNum")
@@ -395,11 +1359,66 @@ class MysqlProxy(pulumi.CustomResource):
 
     @property
     @pulumi.getter
+    def nodes(self) -> pulumi.Output[Sequence['outputs.MysqlProxyNode']]:
+        """
+        Indicates the node information of the proxy.
+        The nodes structure is documented below.
+        """
+        return pulumi.get(self, "nodes")
+
+    @property
+    @pulumi.getter(name="openAccessControl")
+    def open_access_control(self) -> pulumi.Output[bool]:
+        """
+        Specifies whether to enable access control.
+        """
+        return pulumi.get(self, "open_access_control")
+
+    @property
+    @pulumi.getter
+    def parameters(self) -> pulumi.Output[Sequence['outputs.MysqlProxyParameter']]:
+        """
+        Specifies the list of parameters to be set to the GaussDB MySQL proxy after launched.
+        The parameters structure is documented below.
+        """
+        return pulumi.get(self, "parameters")
+
+    @property
+    @pulumi.getter
     def port(self) -> pulumi.Output[int]:
         """
-        Indicates the port of the proxy.
+        Specifies the port of the proxy.
         """
         return pulumi.get(self, "port")
+
+    @property
+    @pulumi.getter(name="proxyMode")
+    def proxy_mode(self) -> pulumi.Output[Optional[str]]:
+        """
+        Specifies the type of the proxy. Changing this creates a new resource.
+        Value options:
+        + **readwrite**: read and write.
+        + **readonly**: read-only.
+        """
+        return pulumi.get(self, "proxy_mode")
+
+    @property
+    @pulumi.getter(name="proxyName")
+    def proxy_name(self) -> pulumi.Output[str]:
+        """
+        Specifies the name of the proxy. The name consists of `4` to `64` characters and
+        starts with a letter. It is case-sensitive and can contain only letters, digits, hyphens (-), and underscores (_).
+        """
+        return pulumi.get(self, "proxy_name")
+
+    @property
+    @pulumi.getter(name="readonlyNodesWeights")
+    def readonly_nodes_weights(self) -> pulumi.Output[Sequence['outputs.MysqlProxyReadonlyNodesWeight']]:
+        """
+        Specifies the read weight of the read-only node.
+        The readonly_nodes_weight structure is documented below.
+        """
+        return pulumi.get(self, "readonly_nodes_weights")
 
     @property
     @pulumi.getter
@@ -409,4 +1428,42 @@ class MysqlProxy(pulumi.CustomResource):
         the provider-level region will be used. Changing this creates a new resource.
         """
         return pulumi.get(self, "region")
+
+    @property
+    @pulumi.getter(name="routeMode")
+    def route_mode(self) -> pulumi.Output[int]:
+        """
+        Specifies the routing policy of the proxy. Changing this creates a new
+        resource. Value options:
+        + **0**: weighted load balancing.
+        + **1**: load balancing (The primary node does not process read requests).
+        + **2**: load balancing (The primary node processes read requests).
+        """
+        return pulumi.get(self, "route_mode")
+
+    @property
+    @pulumi.getter(name="subnetId")
+    def subnet_id(self) -> pulumi.Output[str]:
+        """
+        Specifies the network ID of a subnet. Changing this creates a new resource.
+        """
+        return pulumi.get(self, "subnet_id")
+
+    @property
+    @pulumi.getter(name="switchConnectionPoolTypeEnabled")
+    def switch_connection_pool_type_enabled(self) -> pulumi.Output[bool]:
+        """
+        Indicates whether the proxy supports session-level connection pool.
+        """
+        return pulumi.get(self, "switch_connection_pool_type_enabled")
+
+    @property
+    @pulumi.getter(name="transactionSplit")
+    def transaction_split(self) -> pulumi.Output[str]:
+        """
+        Specifies whether the proxy transaction splitting is enabled. Value options:
+        + **ON**: Transaction splitting is enabled.
+        + **OFF**: Transaction splitting is disabled.
+        """
+        return pulumi.get(self, "transaction_split")
 

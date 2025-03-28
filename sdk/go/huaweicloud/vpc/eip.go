@@ -89,7 +89,7 @@ import (
 //
 // ## Import
 //
-// EIPs can be imported using the `id`, e.g.
+// EIPs can be imported using the `id`, e.g. bash
 //
 // ```sh
 //
@@ -101,6 +101,10 @@ type Eip struct {
 
 	// The IPv4 address of the EIP.
 	Address pulumi.StringOutput `pulumi:"address"`
+	// The associate id of EIP.
+	AssociateId pulumi.StringOutput `pulumi:"associateId"`
+	// The associate type of EIP. Values are **PORT**, **NATGW**, **ELB**, **ELBV1** and **VPN**.
+	AssociateType pulumi.StringOutput `pulumi:"associateType"`
 	// Deprecated: Deprecated
 	AutoPay pulumi.StringPtrOutput `pulumi:"autoPay"`
 	// Specifies whether auto renew is enabled.\
@@ -110,11 +114,16 @@ type Eip struct {
 	// The object structure is documented below.
 	Bandwidth EipBandwidthOutput `pulumi:"bandwidth"`
 	// Specifies the charging mode of the EIP.\
-	// The valid values are **prePaid** and **postPaid**, defaults to **postPaid**. Changing this will create a new resource.
+	// The valid values are **prePaid** and **postPaid**, defaults to **postPaid**.
 	ChargingMode pulumi.StringOutput `pulumi:"chargingMode"`
-	// Specifies the enterprise project ID to which the EIP belongs.\
-	// Changing this will create a new resource.
+	// The create time of EIP.
+	CreatedAt pulumi.StringOutput `pulumi:"createdAt"`
+	// Specifies the enterprise project ID to which the EIP belongs.
 	EnterpriseProjectId pulumi.StringOutput `pulumi:"enterpriseProjectId"`
+	// The instance id to which the port belongs. Return when `associateType` is **PORT**.
+	InstanceId pulumi.StringOutput `pulumi:"instanceId"`
+	// The instance type to which the port belongs. Return when `associateType` is **PORT**.
+	InstanceType pulumi.StringOutput `pulumi:"instanceType"`
 	// The IPv6 address of the EIP.
 	Ipv6Address pulumi.StringOutput `pulumi:"ipv6Address"`
 	// Specifies the bandwidth name.\
@@ -127,7 +136,6 @@ type Eip struct {
 	Period pulumi.IntPtrOutput `pulumi:"period"`
 	// Specifies the charging period unit of the EIP.\
 	// Valid values are **month** and **year**. This parameter is mandatory if `chargingMode` is set to **prePaid**.
-	// Changing this will create a new resource.
 	PeriodUnit pulumi.StringPtrOutput `pulumi:"periodUnit"`
 	// The port ID which the EIP associated with.
 	PortId pulumi.StringOutput `pulumi:"portId"`
@@ -143,6 +151,8 @@ type Eip struct {
 	Status pulumi.StringOutput `pulumi:"status"`
 	// Specifies the key/value pairs to associate with the EIP.
 	Tags pulumi.StringMapOutput `pulumi:"tags"`
+	// The update time of EIP.
+	UpdatedAt pulumi.StringOutput `pulumi:"updatedAt"`
 }
 
 // NewEip registers a new resource with the given unique name, arguments, and options.
@@ -183,6 +193,10 @@ func GetEip(ctx *pulumi.Context,
 type eipState struct {
 	// The IPv4 address of the EIP.
 	Address *string `pulumi:"address"`
+	// The associate id of EIP.
+	AssociateId *string `pulumi:"associateId"`
+	// The associate type of EIP. Values are **PORT**, **NATGW**, **ELB**, **ELBV1** and **VPN**.
+	AssociateType *string `pulumi:"associateType"`
 	// Deprecated: Deprecated
 	AutoPay *string `pulumi:"autoPay"`
 	// Specifies whether auto renew is enabled.\
@@ -192,11 +206,16 @@ type eipState struct {
 	// The object structure is documented below.
 	Bandwidth *EipBandwidth `pulumi:"bandwidth"`
 	// Specifies the charging mode of the EIP.\
-	// The valid values are **prePaid** and **postPaid**, defaults to **postPaid**. Changing this will create a new resource.
+	// The valid values are **prePaid** and **postPaid**, defaults to **postPaid**.
 	ChargingMode *string `pulumi:"chargingMode"`
-	// Specifies the enterprise project ID to which the EIP belongs.\
-	// Changing this will create a new resource.
+	// The create time of EIP.
+	CreatedAt *string `pulumi:"createdAt"`
+	// Specifies the enterprise project ID to which the EIP belongs.
 	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
+	// The instance id to which the port belongs. Return when `associateType` is **PORT**.
+	InstanceId *string `pulumi:"instanceId"`
+	// The instance type to which the port belongs. Return when `associateType` is **PORT**.
+	InstanceType *string `pulumi:"instanceType"`
 	// The IPv6 address of the EIP.
 	Ipv6Address *string `pulumi:"ipv6Address"`
 	// Specifies the bandwidth name.\
@@ -209,7 +228,6 @@ type eipState struct {
 	Period *int `pulumi:"period"`
 	// Specifies the charging period unit of the EIP.\
 	// Valid values are **month** and **year**. This parameter is mandatory if `chargingMode` is set to **prePaid**.
-	// Changing this will create a new resource.
 	PeriodUnit *string `pulumi:"periodUnit"`
 	// The port ID which the EIP associated with.
 	PortId *string `pulumi:"portId"`
@@ -225,11 +243,17 @@ type eipState struct {
 	Status *string `pulumi:"status"`
 	// Specifies the key/value pairs to associate with the EIP.
 	Tags map[string]string `pulumi:"tags"`
+	// The update time of EIP.
+	UpdatedAt *string `pulumi:"updatedAt"`
 }
 
 type EipState struct {
 	// The IPv4 address of the EIP.
 	Address pulumi.StringPtrInput
+	// The associate id of EIP.
+	AssociateId pulumi.StringPtrInput
+	// The associate type of EIP. Values are **PORT**, **NATGW**, **ELB**, **ELBV1** and **VPN**.
+	AssociateType pulumi.StringPtrInput
 	// Deprecated: Deprecated
 	AutoPay pulumi.StringPtrInput
 	// Specifies whether auto renew is enabled.\
@@ -239,11 +263,16 @@ type EipState struct {
 	// The object structure is documented below.
 	Bandwidth EipBandwidthPtrInput
 	// Specifies the charging mode of the EIP.\
-	// The valid values are **prePaid** and **postPaid**, defaults to **postPaid**. Changing this will create a new resource.
+	// The valid values are **prePaid** and **postPaid**, defaults to **postPaid**.
 	ChargingMode pulumi.StringPtrInput
-	// Specifies the enterprise project ID to which the EIP belongs.\
-	// Changing this will create a new resource.
+	// The create time of EIP.
+	CreatedAt pulumi.StringPtrInput
+	// Specifies the enterprise project ID to which the EIP belongs.
 	EnterpriseProjectId pulumi.StringPtrInput
+	// The instance id to which the port belongs. Return when `associateType` is **PORT**.
+	InstanceId pulumi.StringPtrInput
+	// The instance type to which the port belongs. Return when `associateType` is **PORT**.
+	InstanceType pulumi.StringPtrInput
 	// The IPv6 address of the EIP.
 	Ipv6Address pulumi.StringPtrInput
 	// Specifies the bandwidth name.\
@@ -256,7 +285,6 @@ type EipState struct {
 	Period pulumi.IntPtrInput
 	// Specifies the charging period unit of the EIP.\
 	// Valid values are **month** and **year**. This parameter is mandatory if `chargingMode` is set to **prePaid**.
-	// Changing this will create a new resource.
 	PeriodUnit pulumi.StringPtrInput
 	// The port ID which the EIP associated with.
 	PortId pulumi.StringPtrInput
@@ -272,6 +300,8 @@ type EipState struct {
 	Status pulumi.StringPtrInput
 	// Specifies the key/value pairs to associate with the EIP.
 	Tags pulumi.StringMapInput
+	// The update time of EIP.
+	UpdatedAt pulumi.StringPtrInput
 }
 
 func (EipState) ElementType() reflect.Type {
@@ -288,10 +318,9 @@ type eipArgs struct {
 	// The object structure is documented below.
 	Bandwidth EipBandwidth `pulumi:"bandwidth"`
 	// Specifies the charging mode of the EIP.\
-	// The valid values are **prePaid** and **postPaid**, defaults to **postPaid**. Changing this will create a new resource.
+	// The valid values are **prePaid** and **postPaid**, defaults to **postPaid**.
 	ChargingMode *string `pulumi:"chargingMode"`
-	// Specifies the enterprise project ID to which the EIP belongs.\
-	// Changing this will create a new resource.
+	// Specifies the enterprise project ID to which the EIP belongs.
 	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
 	// Specifies the bandwidth name.\
 	// The name can contain `1` to `64` characters, including letters, digits, underscores (_), hyphens (-), and periods (.).
@@ -303,7 +332,6 @@ type eipArgs struct {
 	Period *int `pulumi:"period"`
 	// Specifies the charging period unit of the EIP.\
 	// Valid values are **month** and **year**. This parameter is mandatory if `chargingMode` is set to **prePaid**.
-	// Changing this will create a new resource.
 	PeriodUnit *string `pulumi:"periodUnit"`
 	// Specifies the EIP configuration.\
 	// The object structure is documented below.
@@ -326,10 +354,9 @@ type EipArgs struct {
 	// The object structure is documented below.
 	Bandwidth EipBandwidthInput
 	// Specifies the charging mode of the EIP.\
-	// The valid values are **prePaid** and **postPaid**, defaults to **postPaid**. Changing this will create a new resource.
+	// The valid values are **prePaid** and **postPaid**, defaults to **postPaid**.
 	ChargingMode pulumi.StringPtrInput
-	// Specifies the enterprise project ID to which the EIP belongs.\
-	// Changing this will create a new resource.
+	// Specifies the enterprise project ID to which the EIP belongs.
 	EnterpriseProjectId pulumi.StringPtrInput
 	// Specifies the bandwidth name.\
 	// The name can contain `1` to `64` characters, including letters, digits, underscores (_), hyphens (-), and periods (.).
@@ -341,7 +368,6 @@ type EipArgs struct {
 	Period pulumi.IntPtrInput
 	// Specifies the charging period unit of the EIP.\
 	// Valid values are **month** and **year**. This parameter is mandatory if `chargingMode` is set to **prePaid**.
-	// Changing this will create a new resource.
 	PeriodUnit pulumi.StringPtrInput
 	// Specifies the EIP configuration.\
 	// The object structure is documented below.
@@ -445,6 +471,16 @@ func (o EipOutput) Address() pulumi.StringOutput {
 	return o.ApplyT(func(v *Eip) pulumi.StringOutput { return v.Address }).(pulumi.StringOutput)
 }
 
+// The associate id of EIP.
+func (o EipOutput) AssociateId() pulumi.StringOutput {
+	return o.ApplyT(func(v *Eip) pulumi.StringOutput { return v.AssociateId }).(pulumi.StringOutput)
+}
+
+// The associate type of EIP. Values are **PORT**, **NATGW**, **ELB**, **ELBV1** and **VPN**.
+func (o EipOutput) AssociateType() pulumi.StringOutput {
+	return o.ApplyT(func(v *Eip) pulumi.StringOutput { return v.AssociateType }).(pulumi.StringOutput)
+}
+
 // Deprecated: Deprecated
 func (o EipOutput) AutoPay() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Eip) pulumi.StringPtrOutput { return v.AutoPay }).(pulumi.StringPtrOutput)
@@ -463,15 +499,29 @@ func (o EipOutput) Bandwidth() EipBandwidthOutput {
 }
 
 // Specifies the charging mode of the EIP.\
-// The valid values are **prePaid** and **postPaid**, defaults to **postPaid**. Changing this will create a new resource.
+// The valid values are **prePaid** and **postPaid**, defaults to **postPaid**.
 func (o EipOutput) ChargingMode() pulumi.StringOutput {
 	return o.ApplyT(func(v *Eip) pulumi.StringOutput { return v.ChargingMode }).(pulumi.StringOutput)
 }
 
-// Specifies the enterprise project ID to which the EIP belongs.\
-// Changing this will create a new resource.
+// The create time of EIP.
+func (o EipOutput) CreatedAt() pulumi.StringOutput {
+	return o.ApplyT(func(v *Eip) pulumi.StringOutput { return v.CreatedAt }).(pulumi.StringOutput)
+}
+
+// Specifies the enterprise project ID to which the EIP belongs.
 func (o EipOutput) EnterpriseProjectId() pulumi.StringOutput {
 	return o.ApplyT(func(v *Eip) pulumi.StringOutput { return v.EnterpriseProjectId }).(pulumi.StringOutput)
+}
+
+// The instance id to which the port belongs. Return when `associateType` is **PORT**.
+func (o EipOutput) InstanceId() pulumi.StringOutput {
+	return o.ApplyT(func(v *Eip) pulumi.StringOutput { return v.InstanceId }).(pulumi.StringOutput)
+}
+
+// The instance type to which the port belongs. Return when `associateType` is **PORT**.
+func (o EipOutput) InstanceType() pulumi.StringOutput {
+	return o.ApplyT(func(v *Eip) pulumi.StringOutput { return v.InstanceType }).(pulumi.StringOutput)
 }
 
 // The IPv6 address of the EIP.
@@ -495,7 +545,6 @@ func (o EipOutput) Period() pulumi.IntPtrOutput {
 
 // Specifies the charging period unit of the EIP.\
 // Valid values are **month** and **year**. This parameter is mandatory if `chargingMode` is set to **prePaid**.
-// Changing this will create a new resource.
 func (o EipOutput) PeriodUnit() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Eip) pulumi.StringPtrOutput { return v.PeriodUnit }).(pulumi.StringPtrOutput)
 }
@@ -530,6 +579,11 @@ func (o EipOutput) Status() pulumi.StringOutput {
 // Specifies the key/value pairs to associate with the EIP.
 func (o EipOutput) Tags() pulumi.StringMapOutput {
 	return o.ApplyT(func(v *Eip) pulumi.StringMapOutput { return v.Tags }).(pulumi.StringMapOutput)
+}
+
+// The update time of EIP.
+func (o EipOutput) UpdatedAt() pulumi.StringOutput {
+	return o.ApplyT(func(v *Eip) pulumi.StringOutput { return v.UpdatedAt }).(pulumi.StringOutput)
 }
 
 type EipArrayOutput struct{ *pulumi.OutputState }

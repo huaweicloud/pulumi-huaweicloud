@@ -20,6 +20,7 @@ import * as utilities from "../utilities";
  * const vpcId = config.requireObject("vpcId");
  * const subnetId = config.requireObject("subnetId");
  * const securityGroupId = config.requireObject("securityGroupId");
+ * const accessPassword = config.requireObject("accessPassword");
  * const availabilityZones = config.getObject("availabilityZones") || [
  *     "your_availability_zones_a",
  *     "your_availability_zones_b",
@@ -43,10 +44,13 @@ import * as utilities from "../utilities";
  *     engineVersion: "2.7",
  *     storageSpace: 600,
  *     brokerNum: 3,
+ *     sslEnable: true,
  *     accessUser: "user",
- *     password: `Kafka_%^&_Test`,
- *     managerUser: "kafka_manager",
- *     managerPassword: "Kafka_Test^&*(",
+ *     password: accessPassword,
+ *     parameters: [{
+ *         name: "min.insync.replicas",
+ *         value: "2",
+ *     }],
  * });
  * ```
  *
@@ -58,7 +62,7 @@ import * as utilities from "../utilities";
  *  $ pulumi import huaweicloud:Dms/kafkaInstance:KafkaInstance huaweicloud_dms_kafka_instance.instance_1 8d3c7938-dc47-4937-a30f-c80de381c5e3
  * ```
  *
- *  Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`password`, `manager_password` and `public_ip_ids`. It is generally recommended running `terraform plan` after importing a DMS Kafka instance. You can then decide if changes should be applied to the instance, or the resource definition should be updated to align with the instance. Also you can ignore changes as below. resource "huaweicloud_dms_kafka_instance" "instance_1" {
+ *  Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`password`, `public_ip_ids`, `security_protocol`, `enabled_mechanisms` and `arch_type`. It is generally recommended running `terraform plan` after importing a DMS Kafka instance. You can then decide if changes should be applied to the instance, or the resource definition should be updated to align with the instance. Also you can ignore changes as below. hcl resource "huaweicloud_dms_kafka_instance" "instance_1" {
  *
  *  ...
  *
@@ -66,7 +70,7 @@ import * as utilities from "../utilities";
  *
  *  ignore_changes = [
  *
- *  password, manager_password,
+ *  password,
  *
  *  ]
  *
@@ -106,6 +110,11 @@ export class KafkaInstance extends pulumi.CustomResource {
      */
     public readonly accessUser!: pulumi.Output<string | undefined>;
     /**
+     * Specifies the CPU architecture. Valid value is **X86**.
+     * Changing this creates a new instance resource.
+     */
+    public readonly archType!: pulumi.Output<string | undefined>;
+    /**
      * Specifies whether auto renew is enabled. Valid values are "true" and "false".
      */
     public readonly autoRenew!: pulumi.Output<string | undefined>;
@@ -128,6 +137,10 @@ export class KafkaInstance extends pulumi.CustomResource {
      */
     public readonly brokerNum!: pulumi.Output<number>;
     /**
+     * Indicates whether the certificate can be replaced.
+     */
+    public /*out*/ readonly certReplaced!: pulumi.Output<boolean>;
+    /**
      * Specifies the charging mode of the instance. Valid values are *prePaid*
      * and *postPaid*, defaults to *postPaid*. Changing this creates a new resource.
      */
@@ -136,6 +149,18 @@ export class KafkaInstance extends pulumi.CustomResource {
      * Indicates the IP address of the DMS Kafka instance.
      */
     public /*out*/ readonly connectAddress!: pulumi.Output<string>;
+    /**
+     * Indicates the connector ID.
+     */
+    public /*out*/ readonly connectorId!: pulumi.Output<string>;
+    /**
+     * Indicates the number of connector node.
+     */
+    public /*out*/ readonly connectorNodeNum!: pulumi.Output<number>;
+    /**
+     * Indicates the create time.
+     */
+    public /*out*/ readonly createdAt!: pulumi.Output<string>;
     /**
      * Specifies the cross-VPC access information.
      * The object structure is documented below.
@@ -147,7 +172,7 @@ export class KafkaInstance extends pulumi.CustomResource {
      */
     public readonly description!: pulumi.Output<string | undefined>;
     /**
-     * Specifies whether to enable message dumping.
+     * Specifies whether to enable  message dumping(smart connect).
      * Changing this creates a new instance resource.
      */
     public readonly dumping!: pulumi.Output<boolean>;
@@ -156,13 +181,19 @@ export class KafkaInstance extends pulumi.CustomResource {
      * topic creation is enabled, a topic will be automatically created with 3 partitions and 3 replicas when a message is
      * produced to or consumed from a topic that does not exist.
      * The default value is false.
-     * Changing this creates a new instance resource.
      */
     public readonly enableAutoTopic!: pulumi.Output<boolean>;
     /**
      * Indicates whether public access to the DMS Kafka instance is enabled.
      */
     public /*out*/ readonly enablePublicIp!: pulumi.Output<boolean>;
+    /**
+     * Specifies the authentication mechanisms to use after SASL is
+     * enabled. Value options:
+     * + **PLAIN**: Simple username and password verification.
+     * + **SCRAM-SHA-512**: User credential verification, which is more secure than **PLAIN**.
+     */
+    public readonly enabledMechanisms!: pulumi.Output<string[] | undefined>;
     /**
      * Indicates the message engine.
      */
@@ -177,10 +208,27 @@ export class KafkaInstance extends pulumi.CustomResource {
      */
     public readonly enterpriseProjectId!: pulumi.Output<string>;
     /**
+     * Indicates the extend times. If the value exceeds `20`, disk expansion is no longer allowed.
+     */
+    public /*out*/ readonly extendTimes!: pulumi.Output<number>;
+    /**
      * Specifies the Kafka [flavor ID](https://support.huaweicloud.com/intl/en-us/productdesc-kafka/Kafka-specification.html),
      * e.g. **c6.2u4g.cluster**. This parameter and `productId` are alternative.
      */
     public readonly flavorId!: pulumi.Output<string | undefined>;
+    /**
+     * Indicates the IPv6 connect addresses list.
+     */
+    public /*out*/ readonly ipv6ConnectAddresses!: pulumi.Output<string[]>;
+    /**
+     * Specifies whether to enable IPv6. Defaults to **false**.
+     * Changing this creates a new instance resource.
+     */
+    public readonly ipv6Enable!: pulumi.Output<boolean>;
+    /**
+     * Indicates whether the instance is a new instance.
+     */
+    public /*out*/ readonly isLogicalVolume!: pulumi.Output<boolean>;
     /**
      * Specifies the time at which a maintenance time window starts. Format: HH:mm. The
      * start time and end time of a maintenance time window must indicate the time segment of a supported maintenance time
@@ -199,29 +247,27 @@ export class KafkaInstance extends pulumi.CustomResource {
      */
     public readonly maintainEnd!: pulumi.Output<string>;
     /**
-     * Indicates the Kafka Manager connection address of a Kafka instance.
+     * @deprecated Deprecated
      */
     public /*out*/ readonly managementConnectAddress!: pulumi.Output<string>;
     /**
-     * Specifies the password for logging in to the Kafka Manager. The
-     * password must meet the following complexity requirements: Must be 8 to 32 characters long. Must contain at least 2 of
-     * the following character types: lowercase letters, uppercase letters, digits, and special characters (`~!@#$%^&*()-_
-     * =+\\|[{}]:'",<.>/?). Changing this creates a new instance resource.
+     * @deprecated Deprecated
      */
-    public readonly managerPassword!: pulumi.Output<string>;
+    public readonly managerPassword!: pulumi.Output<string | undefined>;
     /**
-     * Specifies the username for logging in to the Kafka Manager. The username
-     * consists of 4 to 64 characters and can contain letters, digits, hyphens (-), and underscores (_). Changing this
-     * creates a new instance resource.
+     * @deprecated Deprecated
      */
-    public readonly managerUser!: pulumi.Output<string>;
+    public readonly managerUser!: pulumi.Output<string | undefined>;
     /**
      * @deprecated typo in manegement_connect_address, please use "management_connect_address" instead.
      */
     public /*out*/ readonly manegementConnectAddress!: pulumi.Output<string>;
     /**
-     * Specifies the name of the DMS Kafka instance. An instance name starts with a letter,
-     * consists of 4 to 64 characters, and supports only letters, digits, hyphens (-) and underscores (_).
+     * Indicates whether message query is enabled.
+     */
+    public /*out*/ readonly messageQueryInstEnable!: pulumi.Output<boolean>;
+    /**
+     * Specifies the parameter name. Static parameter needs to restart the instance to take effect.
      */
     public readonly name!: pulumi.Output<string>;
     /**
@@ -230,14 +276,26 @@ export class KafkaInstance extends pulumi.CustomResource {
      */
     public readonly networkId!: pulumi.Output<string>;
     /**
+     * Specifies the IPv4 private IP addresses for the new brokers.
+     */
+    public readonly newTenantIps!: pulumi.Output<string[] | undefined>;
+    /**
+     * Indicates the node quantity.
+     */
+    public /*out*/ readonly nodeNum!: pulumi.Output<number>;
+    /**
+     * Specifies the array of one or more parameters to be set to the Kafka instance after
+     * launched. The parameters structure is documented below.
+     */
+    public readonly parameters!: pulumi.Output<outputs.Dms.KafkaInstanceParameter[]>;
+    /**
      * Indicates the number of partitions in Kafka instance.
      */
     public /*out*/ readonly partitionNum!: pulumi.Output<number>;
     /**
-     * Specifies the password of SASL_SSL user. A password must meet the
-     * following complexity requirements: Must be 8 to 32 characters long. Must contain at least 2 of the following character
-     * types: lowercase letters, uppercase letters, digits, and special characters (`~!@#$%^&*()-_=+\\|[{}]:'",<.>/?).
-     * Changing this creates a new instance resource.
+     * Specifies the password of SASL_SSL user. A password must meet the following
+     * complexity requirements: Must be 8 to 32 characters long. Must contain at least 2 of the following character types:
+     * lowercase letters, uppercase letters, digits, and special characters (`~!@#$%^&*()-_=+\\|[{}]:'",<.>/?).
      */
     public readonly password!: pulumi.Output<string | undefined>;
     /**
@@ -253,14 +311,31 @@ export class KafkaInstance extends pulumi.CustomResource {
      */
     public readonly periodUnit!: pulumi.Output<string | undefined>;
     /**
+     * Indicates the connection address on the tenant side.
+     */
+    public /*out*/ readonly podConnectAddress!: pulumi.Output<string>;
+    /**
      * The port number.
      */
     public /*out*/ readonly port!: pulumi.Output<number>;
+    /**
+     * Indicates instance connection address. The structure is documented below.
+     * The portProtocols structure is documented below.
+     */
+    public /*out*/ readonly portProtocols!: pulumi.Output<outputs.Dms.KafkaInstancePortProtocol[]>;
     /**
      * Specifies a product ID, which includes bandwidth, partition, broker and default
      * storage capacity.
      */
     public readonly productId!: pulumi.Output<string | undefined>;
+    /**
+     * Indicates the public network access bandwidth.
+     */
+    public /*out*/ readonly publicBandwidth!: pulumi.Output<number>;
+    /**
+     * Indicates the public IP addresses list of the instance.
+     */
+    public /*out*/ readonly publicIpAddresses!: pulumi.Output<string[]>;
     /**
      * Specifies the IDs of the elastic IP address (EIP)
      * bound to the DMS Kafka instance. Changing this creates a new instance resource.
@@ -289,13 +364,29 @@ export class KafkaInstance extends pulumi.CustomResource {
      */
     public readonly securityGroupId!: pulumi.Output<string>;
     /**
-     * Indicates whether the Kafka SASL_SSL is enabled.
+     * Specifies the protocol to use after SASL is enabled. Value options:
+     * + **SASL_SSL**: Data is encrypted with SSL certificates for high-security transmission.
+     * + **SASL_PLAINTEXT**: Data is transmitted in plaintext with username and password authentication. This protocol only
+     * uses the SCRAM-SHA-512 mechanism and delivers high performance.
      */
-    public /*out*/ readonly sslEnable!: pulumi.Output<boolean>;
+    public readonly securityProtocol!: pulumi.Output<string | undefined>;
+    /**
+     * Specifies whether the Kafka SASL_SSL is enabled.
+     * Changing this creates a new resource.
+     */
+    public readonly sslEnable!: pulumi.Output<boolean>;
+    /**
+     * Indicates whether to enable two-way authentication.
+     */
+    public /*out*/ readonly sslTwoWayEnable!: pulumi.Output<boolean>;
     /**
      * Indicates the status of the DMS Kafka instance.
      */
     public /*out*/ readonly status!: pulumi.Output<string>;
+    /**
+     * Indicates the storage resource ID.
+     */
+    public /*out*/ readonly storageResourceId!: pulumi.Output<string>;
     /**
      * Specifies the message storage capacity, the unit is GB.
      * The storage spaces corresponding to the product IDs are as follows:
@@ -313,6 +404,10 @@ export class KafkaInstance extends pulumi.CustomResource {
      * + **dms.physical.storage.ultra.v2**: Type of the disk that uses ultra-high I/O.
      */
     public readonly storageSpecCode!: pulumi.Output<string>;
+    /**
+     * Indicates the storage type.
+     */
+    public /*out*/ readonly storageType!: pulumi.Output<string>;
     /**
      * The key/value pairs to associate with the DMS Kafka instance.
      */
@@ -334,6 +429,11 @@ export class KafkaInstance extends pulumi.CustomResource {
      */
     public /*out*/ readonly userName!: pulumi.Output<string>;
     /**
+     * Specifies whether the intra-VPC plaintext access is enabled.
+     * Defaults to **false**. Changing this creates a new resource.
+     */
+    public readonly vpcClientPlain!: pulumi.Output<boolean>;
+    /**
      * Specifies the ID of a VPC. Changing this creates a new instance resource.
      */
     public readonly vpcId!: pulumi.Output<string>;
@@ -352,61 +452,78 @@ export class KafkaInstance extends pulumi.CustomResource {
         if (opts.id) {
             const state = argsOrState as KafkaInstanceState | undefined;
             resourceInputs["accessUser"] = state ? state.accessUser : undefined;
+            resourceInputs["archType"] = state ? state.archType : undefined;
             resourceInputs["autoRenew"] = state ? state.autoRenew : undefined;
             resourceInputs["availabilityZones"] = state ? state.availabilityZones : undefined;
             resourceInputs["availableZones"] = state ? state.availableZones : undefined;
             resourceInputs["bandwidth"] = state ? state.bandwidth : undefined;
             resourceInputs["brokerNum"] = state ? state.brokerNum : undefined;
+            resourceInputs["certReplaced"] = state ? state.certReplaced : undefined;
             resourceInputs["chargingMode"] = state ? state.chargingMode : undefined;
             resourceInputs["connectAddress"] = state ? state.connectAddress : undefined;
+            resourceInputs["connectorId"] = state ? state.connectorId : undefined;
+            resourceInputs["connectorNodeNum"] = state ? state.connectorNodeNum : undefined;
+            resourceInputs["createdAt"] = state ? state.createdAt : undefined;
             resourceInputs["crossVpcAccesses"] = state ? state.crossVpcAccesses : undefined;
             resourceInputs["description"] = state ? state.description : undefined;
             resourceInputs["dumping"] = state ? state.dumping : undefined;
             resourceInputs["enableAutoTopic"] = state ? state.enableAutoTopic : undefined;
             resourceInputs["enablePublicIp"] = state ? state.enablePublicIp : undefined;
+            resourceInputs["enabledMechanisms"] = state ? state.enabledMechanisms : undefined;
             resourceInputs["engine"] = state ? state.engine : undefined;
             resourceInputs["engineVersion"] = state ? state.engineVersion : undefined;
             resourceInputs["enterpriseProjectId"] = state ? state.enterpriseProjectId : undefined;
+            resourceInputs["extendTimes"] = state ? state.extendTimes : undefined;
             resourceInputs["flavorId"] = state ? state.flavorId : undefined;
+            resourceInputs["ipv6ConnectAddresses"] = state ? state.ipv6ConnectAddresses : undefined;
+            resourceInputs["ipv6Enable"] = state ? state.ipv6Enable : undefined;
+            resourceInputs["isLogicalVolume"] = state ? state.isLogicalVolume : undefined;
             resourceInputs["maintainBegin"] = state ? state.maintainBegin : undefined;
             resourceInputs["maintainEnd"] = state ? state.maintainEnd : undefined;
             resourceInputs["managementConnectAddress"] = state ? state.managementConnectAddress : undefined;
             resourceInputs["managerPassword"] = state ? state.managerPassword : undefined;
             resourceInputs["managerUser"] = state ? state.managerUser : undefined;
             resourceInputs["manegementConnectAddress"] = state ? state.manegementConnectAddress : undefined;
+            resourceInputs["messageQueryInstEnable"] = state ? state.messageQueryInstEnable : undefined;
             resourceInputs["name"] = state ? state.name : undefined;
             resourceInputs["networkId"] = state ? state.networkId : undefined;
+            resourceInputs["newTenantIps"] = state ? state.newTenantIps : undefined;
+            resourceInputs["nodeNum"] = state ? state.nodeNum : undefined;
+            resourceInputs["parameters"] = state ? state.parameters : undefined;
             resourceInputs["partitionNum"] = state ? state.partitionNum : undefined;
             resourceInputs["password"] = state ? state.password : undefined;
             resourceInputs["period"] = state ? state.period : undefined;
             resourceInputs["periodUnit"] = state ? state.periodUnit : undefined;
+            resourceInputs["podConnectAddress"] = state ? state.podConnectAddress : undefined;
             resourceInputs["port"] = state ? state.port : undefined;
+            resourceInputs["portProtocols"] = state ? state.portProtocols : undefined;
             resourceInputs["productId"] = state ? state.productId : undefined;
+            resourceInputs["publicBandwidth"] = state ? state.publicBandwidth : undefined;
+            resourceInputs["publicIpAddresses"] = state ? state.publicIpAddresses : undefined;
             resourceInputs["publicIpIds"] = state ? state.publicIpIds : undefined;
             resourceInputs["region"] = state ? state.region : undefined;
             resourceInputs["resourceSpecCode"] = state ? state.resourceSpecCode : undefined;
             resourceInputs["retentionPolicy"] = state ? state.retentionPolicy : undefined;
             resourceInputs["securityGroupId"] = state ? state.securityGroupId : undefined;
+            resourceInputs["securityProtocol"] = state ? state.securityProtocol : undefined;
             resourceInputs["sslEnable"] = state ? state.sslEnable : undefined;
+            resourceInputs["sslTwoWayEnable"] = state ? state.sslTwoWayEnable : undefined;
             resourceInputs["status"] = state ? state.status : undefined;
+            resourceInputs["storageResourceId"] = state ? state.storageResourceId : undefined;
             resourceInputs["storageSpace"] = state ? state.storageSpace : undefined;
             resourceInputs["storageSpecCode"] = state ? state.storageSpecCode : undefined;
+            resourceInputs["storageType"] = state ? state.storageType : undefined;
             resourceInputs["tags"] = state ? state.tags : undefined;
             resourceInputs["type"] = state ? state.type : undefined;
             resourceInputs["usedStorageSpace"] = state ? state.usedStorageSpace : undefined;
             resourceInputs["userId"] = state ? state.userId : undefined;
             resourceInputs["userName"] = state ? state.userName : undefined;
+            resourceInputs["vpcClientPlain"] = state ? state.vpcClientPlain : undefined;
             resourceInputs["vpcId"] = state ? state.vpcId : undefined;
         } else {
             const args = argsOrState as KafkaInstanceArgs | undefined;
             if ((!args || args.engineVersion === undefined) && !opts.urn) {
                 throw new Error("Missing required property 'engineVersion'");
-            }
-            if ((!args || args.managerPassword === undefined) && !opts.urn) {
-                throw new Error("Missing required property 'managerPassword'");
-            }
-            if ((!args || args.managerUser === undefined) && !opts.urn) {
-                throw new Error("Missing required property 'managerUser'");
             }
             if ((!args || args.networkId === undefined) && !opts.urn) {
                 throw new Error("Missing required property 'networkId'");
@@ -421,6 +538,7 @@ export class KafkaInstance extends pulumi.CustomResource {
                 throw new Error("Missing required property 'vpcId'");
             }
             resourceInputs["accessUser"] = args ? args.accessUser : undefined;
+            resourceInputs["archType"] = args ? args.archType : undefined;
             resourceInputs["autoRenew"] = args ? args.autoRenew : undefined;
             resourceInputs["availabilityZones"] = args ? args.availabilityZones : undefined;
             resourceInputs["availableZones"] = args ? args.availableZones : undefined;
@@ -431,15 +549,19 @@ export class KafkaInstance extends pulumi.CustomResource {
             resourceInputs["description"] = args ? args.description : undefined;
             resourceInputs["dumping"] = args ? args.dumping : undefined;
             resourceInputs["enableAutoTopic"] = args ? args.enableAutoTopic : undefined;
+            resourceInputs["enabledMechanisms"] = args ? args.enabledMechanisms : undefined;
             resourceInputs["engineVersion"] = args ? args.engineVersion : undefined;
             resourceInputs["enterpriseProjectId"] = args ? args.enterpriseProjectId : undefined;
             resourceInputs["flavorId"] = args ? args.flavorId : undefined;
+            resourceInputs["ipv6Enable"] = args ? args.ipv6Enable : undefined;
             resourceInputs["maintainBegin"] = args ? args.maintainBegin : undefined;
             resourceInputs["maintainEnd"] = args ? args.maintainEnd : undefined;
             resourceInputs["managerPassword"] = args ? args.managerPassword : undefined;
             resourceInputs["managerUser"] = args ? args.managerUser : undefined;
             resourceInputs["name"] = args ? args.name : undefined;
             resourceInputs["networkId"] = args ? args.networkId : undefined;
+            resourceInputs["newTenantIps"] = args ? args.newTenantIps : undefined;
+            resourceInputs["parameters"] = args ? args.parameters : undefined;
             resourceInputs["password"] = args ? args.password : undefined;
             resourceInputs["period"] = args ? args.period : undefined;
             resourceInputs["periodUnit"] = args ? args.periodUnit : undefined;
@@ -448,20 +570,38 @@ export class KafkaInstance extends pulumi.CustomResource {
             resourceInputs["region"] = args ? args.region : undefined;
             resourceInputs["retentionPolicy"] = args ? args.retentionPolicy : undefined;
             resourceInputs["securityGroupId"] = args ? args.securityGroupId : undefined;
+            resourceInputs["securityProtocol"] = args ? args.securityProtocol : undefined;
+            resourceInputs["sslEnable"] = args ? args.sslEnable : undefined;
             resourceInputs["storageSpace"] = args ? args.storageSpace : undefined;
             resourceInputs["storageSpecCode"] = args ? args.storageSpecCode : undefined;
             resourceInputs["tags"] = args ? args.tags : undefined;
+            resourceInputs["vpcClientPlain"] = args ? args.vpcClientPlain : undefined;
             resourceInputs["vpcId"] = args ? args.vpcId : undefined;
+            resourceInputs["certReplaced"] = undefined /*out*/;
             resourceInputs["connectAddress"] = undefined /*out*/;
+            resourceInputs["connectorId"] = undefined /*out*/;
+            resourceInputs["connectorNodeNum"] = undefined /*out*/;
+            resourceInputs["createdAt"] = undefined /*out*/;
             resourceInputs["enablePublicIp"] = undefined /*out*/;
             resourceInputs["engine"] = undefined /*out*/;
+            resourceInputs["extendTimes"] = undefined /*out*/;
+            resourceInputs["ipv6ConnectAddresses"] = undefined /*out*/;
+            resourceInputs["isLogicalVolume"] = undefined /*out*/;
             resourceInputs["managementConnectAddress"] = undefined /*out*/;
             resourceInputs["manegementConnectAddress"] = undefined /*out*/;
+            resourceInputs["messageQueryInstEnable"] = undefined /*out*/;
+            resourceInputs["nodeNum"] = undefined /*out*/;
             resourceInputs["partitionNum"] = undefined /*out*/;
+            resourceInputs["podConnectAddress"] = undefined /*out*/;
             resourceInputs["port"] = undefined /*out*/;
+            resourceInputs["portProtocols"] = undefined /*out*/;
+            resourceInputs["publicBandwidth"] = undefined /*out*/;
+            resourceInputs["publicIpAddresses"] = undefined /*out*/;
             resourceInputs["resourceSpecCode"] = undefined /*out*/;
-            resourceInputs["sslEnable"] = undefined /*out*/;
+            resourceInputs["sslTwoWayEnable"] = undefined /*out*/;
             resourceInputs["status"] = undefined /*out*/;
+            resourceInputs["storageResourceId"] = undefined /*out*/;
+            resourceInputs["storageType"] = undefined /*out*/;
             resourceInputs["type"] = undefined /*out*/;
             resourceInputs["usedStorageSpace"] = undefined /*out*/;
             resourceInputs["userId"] = undefined /*out*/;
@@ -481,6 +621,11 @@ export interface KafkaInstanceState {
      * to 64 characters and supports only letters, digits, and hyphens (-). Changing this creates a new instance resource.
      */
     accessUser?: pulumi.Input<string>;
+    /**
+     * Specifies the CPU architecture. Valid value is **X86**.
+     * Changing this creates a new instance resource.
+     */
+    archType?: pulumi.Input<string>;
     /**
      * Specifies whether auto renew is enabled. Valid values are "true" and "false".
      */
@@ -504,6 +649,10 @@ export interface KafkaInstanceState {
      */
     brokerNum?: pulumi.Input<number>;
     /**
+     * Indicates whether the certificate can be replaced.
+     */
+    certReplaced?: pulumi.Input<boolean>;
+    /**
      * Specifies the charging mode of the instance. Valid values are *prePaid*
      * and *postPaid*, defaults to *postPaid*. Changing this creates a new resource.
      */
@@ -512,6 +661,18 @@ export interface KafkaInstanceState {
      * Indicates the IP address of the DMS Kafka instance.
      */
     connectAddress?: pulumi.Input<string>;
+    /**
+     * Indicates the connector ID.
+     */
+    connectorId?: pulumi.Input<string>;
+    /**
+     * Indicates the number of connector node.
+     */
+    connectorNodeNum?: pulumi.Input<number>;
+    /**
+     * Indicates the create time.
+     */
+    createdAt?: pulumi.Input<string>;
     /**
      * Specifies the cross-VPC access information.
      * The object structure is documented below.
@@ -523,7 +684,7 @@ export interface KafkaInstanceState {
      */
     description?: pulumi.Input<string>;
     /**
-     * Specifies whether to enable message dumping.
+     * Specifies whether to enable  message dumping(smart connect).
      * Changing this creates a new instance resource.
      */
     dumping?: pulumi.Input<boolean>;
@@ -532,13 +693,19 @@ export interface KafkaInstanceState {
      * topic creation is enabled, a topic will be automatically created with 3 partitions and 3 replicas when a message is
      * produced to or consumed from a topic that does not exist.
      * The default value is false.
-     * Changing this creates a new instance resource.
      */
     enableAutoTopic?: pulumi.Input<boolean>;
     /**
      * Indicates whether public access to the DMS Kafka instance is enabled.
      */
     enablePublicIp?: pulumi.Input<boolean>;
+    /**
+     * Specifies the authentication mechanisms to use after SASL is
+     * enabled. Value options:
+     * + **PLAIN**: Simple username and password verification.
+     * + **SCRAM-SHA-512**: User credential verification, which is more secure than **PLAIN**.
+     */
+    enabledMechanisms?: pulumi.Input<pulumi.Input<string>[]>;
     /**
      * Indicates the message engine.
      */
@@ -553,10 +720,27 @@ export interface KafkaInstanceState {
      */
     enterpriseProjectId?: pulumi.Input<string>;
     /**
+     * Indicates the extend times. If the value exceeds `20`, disk expansion is no longer allowed.
+     */
+    extendTimes?: pulumi.Input<number>;
+    /**
      * Specifies the Kafka [flavor ID](https://support.huaweicloud.com/intl/en-us/productdesc-kafka/Kafka-specification.html),
      * e.g. **c6.2u4g.cluster**. This parameter and `productId` are alternative.
      */
     flavorId?: pulumi.Input<string>;
+    /**
+     * Indicates the IPv6 connect addresses list.
+     */
+    ipv6ConnectAddresses?: pulumi.Input<pulumi.Input<string>[]>;
+    /**
+     * Specifies whether to enable IPv6. Defaults to **false**.
+     * Changing this creates a new instance resource.
+     */
+    ipv6Enable?: pulumi.Input<boolean>;
+    /**
+     * Indicates whether the instance is a new instance.
+     */
+    isLogicalVolume?: pulumi.Input<boolean>;
     /**
      * Specifies the time at which a maintenance time window starts. Format: HH:mm. The
      * start time and end time of a maintenance time window must indicate the time segment of a supported maintenance time
@@ -575,20 +759,15 @@ export interface KafkaInstanceState {
      */
     maintainEnd?: pulumi.Input<string>;
     /**
-     * Indicates the Kafka Manager connection address of a Kafka instance.
+     * @deprecated Deprecated
      */
     managementConnectAddress?: pulumi.Input<string>;
     /**
-     * Specifies the password for logging in to the Kafka Manager. The
-     * password must meet the following complexity requirements: Must be 8 to 32 characters long. Must contain at least 2 of
-     * the following character types: lowercase letters, uppercase letters, digits, and special characters (`~!@#$%^&*()-_
-     * =+\\|[{}]:'",<.>/?). Changing this creates a new instance resource.
+     * @deprecated Deprecated
      */
     managerPassword?: pulumi.Input<string>;
     /**
-     * Specifies the username for logging in to the Kafka Manager. The username
-     * consists of 4 to 64 characters and can contain letters, digits, hyphens (-), and underscores (_). Changing this
-     * creates a new instance resource.
+     * @deprecated Deprecated
      */
     managerUser?: pulumi.Input<string>;
     /**
@@ -596,8 +775,11 @@ export interface KafkaInstanceState {
      */
     manegementConnectAddress?: pulumi.Input<string>;
     /**
-     * Specifies the name of the DMS Kafka instance. An instance name starts with a letter,
-     * consists of 4 to 64 characters, and supports only letters, digits, hyphens (-) and underscores (_).
+     * Indicates whether message query is enabled.
+     */
+    messageQueryInstEnable?: pulumi.Input<boolean>;
+    /**
+     * Specifies the parameter name. Static parameter needs to restart the instance to take effect.
      */
     name?: pulumi.Input<string>;
     /**
@@ -606,14 +788,26 @@ export interface KafkaInstanceState {
      */
     networkId?: pulumi.Input<string>;
     /**
+     * Specifies the IPv4 private IP addresses for the new brokers.
+     */
+    newTenantIps?: pulumi.Input<pulumi.Input<string>[]>;
+    /**
+     * Indicates the node quantity.
+     */
+    nodeNum?: pulumi.Input<number>;
+    /**
+     * Specifies the array of one or more parameters to be set to the Kafka instance after
+     * launched. The parameters structure is documented below.
+     */
+    parameters?: pulumi.Input<pulumi.Input<inputs.Dms.KafkaInstanceParameter>[]>;
+    /**
      * Indicates the number of partitions in Kafka instance.
      */
     partitionNum?: pulumi.Input<number>;
     /**
-     * Specifies the password of SASL_SSL user. A password must meet the
-     * following complexity requirements: Must be 8 to 32 characters long. Must contain at least 2 of the following character
-     * types: lowercase letters, uppercase letters, digits, and special characters (`~!@#$%^&*()-_=+\\|[{}]:'",<.>/?).
-     * Changing this creates a new instance resource.
+     * Specifies the password of SASL_SSL user. A password must meet the following
+     * complexity requirements: Must be 8 to 32 characters long. Must contain at least 2 of the following character types:
+     * lowercase letters, uppercase letters, digits, and special characters (`~!@#$%^&*()-_=+\\|[{}]:'",<.>/?).
      */
     password?: pulumi.Input<string>;
     /**
@@ -629,14 +823,31 @@ export interface KafkaInstanceState {
      */
     periodUnit?: pulumi.Input<string>;
     /**
+     * Indicates the connection address on the tenant side.
+     */
+    podConnectAddress?: pulumi.Input<string>;
+    /**
      * The port number.
      */
     port?: pulumi.Input<number>;
+    /**
+     * Indicates instance connection address. The structure is documented below.
+     * The portProtocols structure is documented below.
+     */
+    portProtocols?: pulumi.Input<pulumi.Input<inputs.Dms.KafkaInstancePortProtocol>[]>;
     /**
      * Specifies a product ID, which includes bandwidth, partition, broker and default
      * storage capacity.
      */
     productId?: pulumi.Input<string>;
+    /**
+     * Indicates the public network access bandwidth.
+     */
+    publicBandwidth?: pulumi.Input<number>;
+    /**
+     * Indicates the public IP addresses list of the instance.
+     */
+    publicIpAddresses?: pulumi.Input<pulumi.Input<string>[]>;
     /**
      * Specifies the IDs of the elastic IP address (EIP)
      * bound to the DMS Kafka instance. Changing this creates a new instance resource.
@@ -665,13 +876,29 @@ export interface KafkaInstanceState {
      */
     securityGroupId?: pulumi.Input<string>;
     /**
-     * Indicates whether the Kafka SASL_SSL is enabled.
+     * Specifies the protocol to use after SASL is enabled. Value options:
+     * + **SASL_SSL**: Data is encrypted with SSL certificates for high-security transmission.
+     * + **SASL_PLAINTEXT**: Data is transmitted in plaintext with username and password authentication. This protocol only
+     * uses the SCRAM-SHA-512 mechanism and delivers high performance.
+     */
+    securityProtocol?: pulumi.Input<string>;
+    /**
+     * Specifies whether the Kafka SASL_SSL is enabled.
+     * Changing this creates a new resource.
      */
     sslEnable?: pulumi.Input<boolean>;
+    /**
+     * Indicates whether to enable two-way authentication.
+     */
+    sslTwoWayEnable?: pulumi.Input<boolean>;
     /**
      * Indicates the status of the DMS Kafka instance.
      */
     status?: pulumi.Input<string>;
+    /**
+     * Indicates the storage resource ID.
+     */
+    storageResourceId?: pulumi.Input<string>;
     /**
      * Specifies the message storage capacity, the unit is GB.
      * The storage spaces corresponding to the product IDs are as follows:
@@ -689,6 +916,10 @@ export interface KafkaInstanceState {
      * + **dms.physical.storage.ultra.v2**: Type of the disk that uses ultra-high I/O.
      */
     storageSpecCode?: pulumi.Input<string>;
+    /**
+     * Indicates the storage type.
+     */
+    storageType?: pulumi.Input<string>;
     /**
      * The key/value pairs to associate with the DMS Kafka instance.
      */
@@ -710,6 +941,11 @@ export interface KafkaInstanceState {
      */
     userName?: pulumi.Input<string>;
     /**
+     * Specifies whether the intra-VPC plaintext access is enabled.
+     * Defaults to **false**. Changing this creates a new resource.
+     */
+    vpcClientPlain?: pulumi.Input<boolean>;
+    /**
      * Specifies the ID of a VPC. Changing this creates a new instance resource.
      */
     vpcId?: pulumi.Input<string>;
@@ -724,6 +960,11 @@ export interface KafkaInstanceArgs {
      * to 64 characters and supports only letters, digits, and hyphens (-). Changing this creates a new instance resource.
      */
     accessUser?: pulumi.Input<string>;
+    /**
+     * Specifies the CPU architecture. Valid value is **X86**.
+     * Changing this creates a new instance resource.
+     */
+    archType?: pulumi.Input<string>;
     /**
      * Specifies whether auto renew is enabled. Valid values are "true" and "false".
      */
@@ -762,7 +1003,7 @@ export interface KafkaInstanceArgs {
      */
     description?: pulumi.Input<string>;
     /**
-     * Specifies whether to enable message dumping.
+     * Specifies whether to enable  message dumping(smart connect).
      * Changing this creates a new instance resource.
      */
     dumping?: pulumi.Input<boolean>;
@@ -771,9 +1012,15 @@ export interface KafkaInstanceArgs {
      * topic creation is enabled, a topic will be automatically created with 3 partitions and 3 replicas when a message is
      * produced to or consumed from a topic that does not exist.
      * The default value is false.
-     * Changing this creates a new instance resource.
      */
     enableAutoTopic?: pulumi.Input<boolean>;
+    /**
+     * Specifies the authentication mechanisms to use after SASL is
+     * enabled. Value options:
+     * + **PLAIN**: Simple username and password verification.
+     * + **SCRAM-SHA-512**: User credential verification, which is more secure than **PLAIN**.
+     */
+    enabledMechanisms?: pulumi.Input<pulumi.Input<string>[]>;
     /**
      * Specifies the version of the Kafka engine,
      * such as 1.1.0, 2.3.0, 2.7 or other supported versions. Changing this creates a new instance resource.
@@ -788,6 +1035,11 @@ export interface KafkaInstanceArgs {
      * e.g. **c6.2u4g.cluster**. This parameter and `productId` are alternative.
      */
     flavorId?: pulumi.Input<string>;
+    /**
+     * Specifies whether to enable IPv6. Defaults to **false**.
+     * Changing this creates a new instance resource.
+     */
+    ipv6Enable?: pulumi.Input<boolean>;
     /**
      * Specifies the time at which a maintenance time window starts. Format: HH:mm. The
      * start time and end time of a maintenance time window must indicate the time segment of a supported maintenance time
@@ -806,21 +1058,15 @@ export interface KafkaInstanceArgs {
      */
     maintainEnd?: pulumi.Input<string>;
     /**
-     * Specifies the password for logging in to the Kafka Manager. The
-     * password must meet the following complexity requirements: Must be 8 to 32 characters long. Must contain at least 2 of
-     * the following character types: lowercase letters, uppercase letters, digits, and special characters (`~!@#$%^&*()-_
-     * =+\\|[{}]:'",<.>/?). Changing this creates a new instance resource.
+     * @deprecated Deprecated
      */
-    managerPassword: pulumi.Input<string>;
+    managerPassword?: pulumi.Input<string>;
     /**
-     * Specifies the username for logging in to the Kafka Manager. The username
-     * consists of 4 to 64 characters and can contain letters, digits, hyphens (-), and underscores (_). Changing this
-     * creates a new instance resource.
+     * @deprecated Deprecated
      */
-    managerUser: pulumi.Input<string>;
+    managerUser?: pulumi.Input<string>;
     /**
-     * Specifies the name of the DMS Kafka instance. An instance name starts with a letter,
-     * consists of 4 to 64 characters, and supports only letters, digits, hyphens (-) and underscores (_).
+     * Specifies the parameter name. Static parameter needs to restart the instance to take effect.
      */
     name?: pulumi.Input<string>;
     /**
@@ -829,10 +1075,18 @@ export interface KafkaInstanceArgs {
      */
     networkId: pulumi.Input<string>;
     /**
-     * Specifies the password of SASL_SSL user. A password must meet the
-     * following complexity requirements: Must be 8 to 32 characters long. Must contain at least 2 of the following character
-     * types: lowercase letters, uppercase letters, digits, and special characters (`~!@#$%^&*()-_=+\\|[{}]:'",<.>/?).
-     * Changing this creates a new instance resource.
+     * Specifies the IPv4 private IP addresses for the new brokers.
+     */
+    newTenantIps?: pulumi.Input<pulumi.Input<string>[]>;
+    /**
+     * Specifies the array of one or more parameters to be set to the Kafka instance after
+     * launched. The parameters structure is documented below.
+     */
+    parameters?: pulumi.Input<pulumi.Input<inputs.Dms.KafkaInstanceParameter>[]>;
+    /**
+     * Specifies the password of SASL_SSL user. A password must meet the following
+     * complexity requirements: Must be 8 to 32 characters long. Must contain at least 2 of the following character types:
+     * lowercase letters, uppercase letters, digits, and special characters (`~!@#$%^&*()-_=+\\|[{}]:'",<.>/?).
      */
     password?: pulumi.Input<string>;
     /**
@@ -876,6 +1130,18 @@ export interface KafkaInstanceArgs {
      */
     securityGroupId: pulumi.Input<string>;
     /**
+     * Specifies the protocol to use after SASL is enabled. Value options:
+     * + **SASL_SSL**: Data is encrypted with SSL certificates for high-security transmission.
+     * + **SASL_PLAINTEXT**: Data is transmitted in plaintext with username and password authentication. This protocol only
+     * uses the SCRAM-SHA-512 mechanism and delivers high performance.
+     */
+    securityProtocol?: pulumi.Input<string>;
+    /**
+     * Specifies whether the Kafka SASL_SSL is enabled.
+     * Changing this creates a new resource.
+     */
+    sslEnable?: pulumi.Input<boolean>;
+    /**
      * Specifies the message storage capacity, the unit is GB.
      * The storage spaces corresponding to the product IDs are as follows:
      * + **c6.2u4g.cluster** (100MB bandwidth): `300` to `300,000` GB
@@ -896,6 +1162,11 @@ export interface KafkaInstanceArgs {
      * The key/value pairs to associate with the DMS Kafka instance.
      */
     tags?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
+    /**
+     * Specifies whether the intra-VPC plaintext access is enabled.
+     * Defaults to **false**. Changing this creates a new resource.
+     */
+    vpcClientPlain?: pulumi.Input<boolean>;
     /**
      * Specifies the ID of a VPC. Changing this creates a new instance resource.
      */

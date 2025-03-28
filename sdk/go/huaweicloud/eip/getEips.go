@@ -33,6 +33,8 @@ type GetEipsArgs struct {
 	IpVersion *int `pulumi:"ipVersion"`
 	// Specifies an array of one or more port ids which bound to the desired EIP.
 	PortIds []string `pulumi:"portIds"`
+	// Specifies an array of one or more private ip addresses of the desired EIP.
+	PrivateIps []string `pulumi:"privateIps"`
 	// Specifies an array of one or more public ip addresses of the desired EIP.
 	PublicIps []string `pulumi:"publicIps"`
 	// Specifies the region in which to obtain the EIP. If omitted, the provider-level region
@@ -52,10 +54,11 @@ type GetEipsResult struct {
 	Id  string   `pulumi:"id"`
 	Ids []string `pulumi:"ids"`
 	// The ip version of the EIP.
-	IpVersion *int     `pulumi:"ipVersion"`
-	PortIds   []string `pulumi:"portIds"`
-	PublicIps []string `pulumi:"publicIps"`
-	Region    string   `pulumi:"region"`
+	IpVersion  *int     `pulumi:"ipVersion"`
+	PortIds    []string `pulumi:"portIds"`
+	PrivateIps []string `pulumi:"privateIps"`
+	PublicIps  []string `pulumi:"publicIps"`
+	Region     string   `pulumi:"region"`
 	// The key/value pairs which associated with the EIP.
 	Tags map[string]string `pulumi:"tags"`
 }
@@ -85,6 +88,8 @@ type GetEipsOutputArgs struct {
 	IpVersion pulumi.IntPtrInput `pulumi:"ipVersion"`
 	// Specifies an array of one or more port ids which bound to the desired EIP.
 	PortIds pulumi.StringArrayInput `pulumi:"portIds"`
+	// Specifies an array of one or more private ip addresses of the desired EIP.
+	PrivateIps pulumi.StringArrayInput `pulumi:"privateIps"`
 	// Specifies an array of one or more public ip addresses of the desired EIP.
 	PublicIps pulumi.StringArrayInput `pulumi:"publicIps"`
 	// Specifies the region in which to obtain the EIP. If omitted, the provider-level region
@@ -139,6 +144,10 @@ func (o GetEipsResultOutput) IpVersion() pulumi.IntPtrOutput {
 
 func (o GetEipsResultOutput) PortIds() pulumi.StringArrayOutput {
 	return o.ApplyT(func(v GetEipsResult) []string { return v.PortIds }).(pulumi.StringArrayOutput)
+}
+
+func (o GetEipsResultOutput) PrivateIps() pulumi.StringArrayOutput {
+	return o.ApplyT(func(v GetEipsResult) []string { return v.PrivateIps }).(pulumi.StringArrayOutput)
 }
 
 func (o GetEipsResultOutput) PublicIps() pulumi.StringArrayOutput {

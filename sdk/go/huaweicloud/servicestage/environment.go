@@ -59,7 +59,7 @@ import (
 //
 // ## Import
 //
-// Environments can be imported using their `id`, e.g.
+// # Environments can be imported using their `id`, e.g.bash
 //
 // ```sh
 //
@@ -73,13 +73,13 @@ type Environment struct {
 	// The object structure is documented below.
 	BasicResources EnvironmentBasicResourceArrayOutput `pulumi:"basicResources"`
 	// Specifies the environment description.
-	// The description can contain a maximum of 128 characters.
+	// The description can contain a maximum of `128` characters.
 	Description pulumi.StringPtrOutput `pulumi:"description"`
-	// Specifies the enterprise projcet ID to which the application
+	// Specifies the enterprise project ID to which the application
 	// belongs. Changing this will create a new resource.
 	EnterpriseProjectId pulumi.StringOutput `pulumi:"enterpriseProjectId"`
 	// Specifies the environment name.
-	// The name can contain of 2 to 64 characters, only letters, digits, hyphens (-) and underscores (_) are allowed.
+	// The name can contain of `2` to `64` characters, only letters, digits, hyphens (-) and underscores (_) are allowed.
 	// The name must start with a letter and end with a letter or a digit.
 	Name pulumi.StringOutput `pulumi:"name"`
 	// Specifies the optional resources.
@@ -133,13 +133,13 @@ type environmentState struct {
 	// The object structure is documented below.
 	BasicResources []EnvironmentBasicResource `pulumi:"basicResources"`
 	// Specifies the environment description.
-	// The description can contain a maximum of 128 characters.
+	// The description can contain a maximum of `128` characters.
 	Description *string `pulumi:"description"`
-	// Specifies the enterprise projcet ID to which the application
+	// Specifies the enterprise project ID to which the application
 	// belongs. Changing this will create a new resource.
 	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
 	// Specifies the environment name.
-	// The name can contain of 2 to 64 characters, only letters, digits, hyphens (-) and underscores (_) are allowed.
+	// The name can contain of `2` to `64` characters, only letters, digits, hyphens (-) and underscores (_) are allowed.
 	// The name must start with a letter and end with a letter or a digit.
 	Name *string `pulumi:"name"`
 	// Specifies the optional resources.
@@ -158,13 +158,13 @@ type EnvironmentState struct {
 	// The object structure is documented below.
 	BasicResources EnvironmentBasicResourceArrayInput
 	// Specifies the environment description.
-	// The description can contain a maximum of 128 characters.
+	// The description can contain a maximum of `128` characters.
 	Description pulumi.StringPtrInput
-	// Specifies the enterprise projcet ID to which the application
+	// Specifies the enterprise project ID to which the application
 	// belongs. Changing this will create a new resource.
 	EnterpriseProjectId pulumi.StringPtrInput
 	// Specifies the environment name.
-	// The name can contain of 2 to 64 characters, only letters, digits, hyphens (-) and underscores (_) are allowed.
+	// The name can contain of `2` to `64` characters, only letters, digits, hyphens (-) and underscores (_) are allowed.
 	// The name must start with a letter and end with a letter or a digit.
 	Name pulumi.StringPtrInput
 	// Specifies the optional resources.
@@ -187,13 +187,13 @@ type environmentArgs struct {
 	// The object structure is documented below.
 	BasicResources []EnvironmentBasicResource `pulumi:"basicResources"`
 	// Specifies the environment description.
-	// The description can contain a maximum of 128 characters.
+	// The description can contain a maximum of `128` characters.
 	Description *string `pulumi:"description"`
-	// Specifies the enterprise projcet ID to which the application
+	// Specifies the enterprise project ID to which the application
 	// belongs. Changing this will create a new resource.
 	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
 	// Specifies the environment name.
-	// The name can contain of 2 to 64 characters, only letters, digits, hyphens (-) and underscores (_) are allowed.
+	// The name can contain of `2` to `64` characters, only letters, digits, hyphens (-) and underscores (_) are allowed.
 	// The name must start with a letter and end with a letter or a digit.
 	Name *string `pulumi:"name"`
 	// Specifies the optional resources.
@@ -213,13 +213,13 @@ type EnvironmentArgs struct {
 	// The object structure is documented below.
 	BasicResources EnvironmentBasicResourceArrayInput
 	// Specifies the environment description.
-	// The description can contain a maximum of 128 characters.
+	// The description can contain a maximum of `128` characters.
 	Description pulumi.StringPtrInput
-	// Specifies the enterprise projcet ID to which the application
+	// Specifies the enterprise project ID to which the application
 	// belongs. Changing this will create a new resource.
 	EnterpriseProjectId pulumi.StringPtrInput
 	// Specifies the environment name.
-	// The name can contain of 2 to 64 characters, only letters, digits, hyphens (-) and underscores (_) are allowed.
+	// The name can contain of `2` to `64` characters, only letters, digits, hyphens (-) and underscores (_) are allowed.
 	// The name must start with a letter and end with a letter or a digit.
 	Name pulumi.StringPtrInput
 	// Specifies the optional resources.
@@ -327,19 +327,19 @@ func (o EnvironmentOutput) BasicResources() EnvironmentBasicResourceArrayOutput 
 }
 
 // Specifies the environment description.
-// The description can contain a maximum of 128 characters.
+// The description can contain a maximum of `128` characters.
 func (o EnvironmentOutput) Description() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Environment) pulumi.StringPtrOutput { return v.Description }).(pulumi.StringPtrOutput)
 }
 
-// Specifies the enterprise projcet ID to which the application
+// Specifies the enterprise project ID to which the application
 // belongs. Changing this will create a new resource.
 func (o EnvironmentOutput) EnterpriseProjectId() pulumi.StringOutput {
 	return o.ApplyT(func(v *Environment) pulumi.StringOutput { return v.EnterpriseProjectId }).(pulumi.StringOutput)
 }
 
 // Specifies the environment name.
-// The name can contain of 2 to 64 characters, only letters, digits, hyphens (-) and underscores (_) are allowed.
+// The name can contain of `2` to `64` characters, only letters, digits, hyphens (-) and underscores (_) are allowed.
 // The name must start with a letter and end with a letter or a digit.
 func (o EnvironmentOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v *Environment) pulumi.StringOutput { return v.Name }).(pulumi.StringOutput)

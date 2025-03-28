@@ -15,15 +15,17 @@ import * as utilities from "../utilities";
  *
  * const config = new pulumi.Config();
  * const kafkaInstanceId = config.requireObject("kafkaInstanceId");
+ * const userPassword = config.requireObject("userPassword");
  * const user = new huaweicloud.dms.KafkaUser("user", {
  *     instanceId: kafkaInstanceId,
- *     password: "Test@123",
+ *     password: userPassword,
+ *     description: "test_description",
  * });
  * ```
  *
  * ## Import
  *
- * DMS kafka users can be imported using the kafka instance ID and user name separated by a slash, e.g.
+ * DMS kafka users can be imported using the kafka instance ID and user name separated by a slash, e.g. bash
  *
  * ```sh
  *  $ pulumi import huaweicloud:Dms/kafkaUser:KafkaUser user c8057fe5-23a8-46ef-ad83-c0055b4e0c5c/user_1
@@ -58,6 +60,18 @@ export class KafkaUser extends pulumi.CustomResource {
     }
 
     /**
+     * Indicates the create time.
+     */
+    public /*out*/ readonly createdAt!: pulumi.Output<string>;
+    /**
+     * Indicates whether the application is the default application.
+     */
+    public /*out*/ readonly defaultApp!: pulumi.Output<boolean>;
+    /**
+     * Specifies the description of the user.
+     */
+    public readonly description!: pulumi.Output<string | undefined>;
+    /**
      * Specifies the ID of the DMS kafka instance to which the user belongs.
      * Changing this creates a new resource.
      */
@@ -77,6 +91,10 @@ export class KafkaUser extends pulumi.CustomResource {
      * provider-level region will be used. Changing this creates a new resource.
      */
     public readonly region!: pulumi.Output<string>;
+    /**
+     * Indicates the user role.
+     */
+    public /*out*/ readonly role!: pulumi.Output<string>;
 
     /**
      * Create a KafkaUser resource with the given unique name, arguments, and options.
@@ -91,10 +109,14 @@ export class KafkaUser extends pulumi.CustomResource {
         opts = opts || {};
         if (opts.id) {
             const state = argsOrState as KafkaUserState | undefined;
+            resourceInputs["createdAt"] = state ? state.createdAt : undefined;
+            resourceInputs["defaultApp"] = state ? state.defaultApp : undefined;
+            resourceInputs["description"] = state ? state.description : undefined;
             resourceInputs["instanceId"] = state ? state.instanceId : undefined;
             resourceInputs["name"] = state ? state.name : undefined;
             resourceInputs["password"] = state ? state.password : undefined;
             resourceInputs["region"] = state ? state.region : undefined;
+            resourceInputs["role"] = state ? state.role : undefined;
         } else {
             const args = argsOrState as KafkaUserArgs | undefined;
             if ((!args || args.instanceId === undefined) && !opts.urn) {
@@ -103,10 +125,14 @@ export class KafkaUser extends pulumi.CustomResource {
             if ((!args || args.password === undefined) && !opts.urn) {
                 throw new Error("Missing required property 'password'");
             }
+            resourceInputs["description"] = args ? args.description : undefined;
             resourceInputs["instanceId"] = args ? args.instanceId : undefined;
             resourceInputs["name"] = args ? args.name : undefined;
             resourceInputs["password"] = args ? args.password : undefined;
             resourceInputs["region"] = args ? args.region : undefined;
+            resourceInputs["createdAt"] = undefined /*out*/;
+            resourceInputs["defaultApp"] = undefined /*out*/;
+            resourceInputs["role"] = undefined /*out*/;
         }
         opts = pulumi.mergeOptions(utilities.resourceOptsDefaults(), opts);
         super(KafkaUser.__pulumiType, name, resourceInputs, opts);
@@ -117,6 +143,18 @@ export class KafkaUser extends pulumi.CustomResource {
  * Input properties used for looking up and filtering KafkaUser resources.
  */
 export interface KafkaUserState {
+    /**
+     * Indicates the create time.
+     */
+    createdAt?: pulumi.Input<string>;
+    /**
+     * Indicates whether the application is the default application.
+     */
+    defaultApp?: pulumi.Input<boolean>;
+    /**
+     * Specifies the description of the user.
+     */
+    description?: pulumi.Input<string>;
     /**
      * Specifies the ID of the DMS kafka instance to which the user belongs.
      * Changing this creates a new resource.
@@ -137,12 +175,20 @@ export interface KafkaUserState {
      * provider-level region will be used. Changing this creates a new resource.
      */
     region?: pulumi.Input<string>;
+    /**
+     * Indicates the user role.
+     */
+    role?: pulumi.Input<string>;
 }
 
 /**
  * The set of arguments for constructing a KafkaUser resource.
  */
 export interface KafkaUserArgs {
+    /**
+     * Specifies the description of the user.
+     */
+    description?: pulumi.Input<string>;
     /**
      * Specifies the ID of the DMS kafka instance to which the user belongs.
      * Changing this creates a new resource.

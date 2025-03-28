@@ -22,14 +22,17 @@ class MicroserviceInstanceArgs:
                  microservice_id: pulumi.Input[str],
                  admin_pass: Optional[pulumi.Input[str]] = None,
                  admin_user: Optional[pulumi.Input[str]] = None,
+                 auth_address: Optional[pulumi.Input[str]] = None,
                  data_center: Optional[pulumi.Input['MicroserviceInstanceDataCenterArgs']] = None,
                  health_check: Optional[pulumi.Input['MicroserviceInstanceHealthCheckArgs']] = None,
                  properties: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  version: Optional[pulumi.Input[str]] = None):
         """
         The set of arguments for constructing a MicroserviceInstance resource.
-        :param pulumi.Input[str] connect_address: Specifies the connection address of service registry center for the
-               specified dedicated CSE engine. Changing this will create a new microservice instance.
+        :param pulumi.Input[str] connect_address: Specifies the address that used to access engine and manages
+               microservice instance.
+               Usually is the connection address of service center.
+               Changing this will create a new resource.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] endpoints: Specifies the access addresses information.
                Changing this will create a new microservice instance.
         :param pulumi.Input[str] host_name: Specifies the host name, such as `localhost`.
@@ -46,6 +49,9 @@ class MicroserviceInstanceArgs:
                + The password can only start with a letter.
         :param pulumi.Input[str] admin_user: Specifies the account name. The initial account name is **root**.
                Required if the `auth_type` of engine is **RBAC**. Changing this will create a new microservice instance.
+        :param pulumi.Input[str] auth_address: Specifies the address that used to request the access token.  
+               Usually is the connection address of service center.
+               Changing this will create a new resource.
         :param pulumi.Input['MicroserviceInstanceDataCenterArgs'] data_center: Specifies the data center configuration.
                The object structure is documented below.
                Changing this will create a new microservice instance.
@@ -65,6 +71,8 @@ class MicroserviceInstanceArgs:
             pulumi.set(__self__, "admin_pass", admin_pass)
         if admin_user is not None:
             pulumi.set(__self__, "admin_user", admin_user)
+        if auth_address is not None:
+            pulumi.set(__self__, "auth_address", auth_address)
         if data_center is not None:
             pulumi.set(__self__, "data_center", data_center)
         if health_check is not None:
@@ -78,8 +86,10 @@ class MicroserviceInstanceArgs:
     @pulumi.getter(name="connectAddress")
     def connect_address(self) -> pulumi.Input[str]:
         """
-        Specifies the connection address of service registry center for the
-        specified dedicated CSE engine. Changing this will create a new microservice instance.
+        Specifies the address that used to access engine and manages
+        microservice instance.
+        Usually is the connection address of service center.
+        Changing this will create a new resource.
         """
         return pulumi.get(self, "connect_address")
 
@@ -159,6 +169,20 @@ class MicroserviceInstanceArgs:
         pulumi.set(self, "admin_user", value)
 
     @property
+    @pulumi.getter(name="authAddress")
+    def auth_address(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the address that used to request the access token.  
+        Usually is the connection address of service center.
+        Changing this will create a new resource.
+        """
+        return pulumi.get(self, "auth_address")
+
+    @auth_address.setter
+    def auth_address(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "auth_address", value)
+
+    @property
     @pulumi.getter(name="dataCenter")
     def data_center(self) -> Optional[pulumi.Input['MicroserviceInstanceDataCenterArgs']]:
         """
@@ -218,6 +242,7 @@ class _MicroserviceInstanceState:
     def __init__(__self__, *,
                  admin_pass: Optional[pulumi.Input[str]] = None,
                  admin_user: Optional[pulumi.Input[str]] = None,
+                 auth_address: Optional[pulumi.Input[str]] = None,
                  connect_address: Optional[pulumi.Input[str]] = None,
                  data_center: Optional[pulumi.Input['MicroserviceInstanceDataCenterArgs']] = None,
                  endpoints: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
@@ -239,8 +264,13 @@ class _MicroserviceInstanceState:
                + The password can only start with a letter.
         :param pulumi.Input[str] admin_user: Specifies the account name. The initial account name is **root**.
                Required if the `auth_type` of engine is **RBAC**. Changing this will create a new microservice instance.
-        :param pulumi.Input[str] connect_address: Specifies the connection address of service registry center for the
-               specified dedicated CSE engine. Changing this will create a new microservice instance.
+        :param pulumi.Input[str] auth_address: Specifies the address that used to request the access token.  
+               Usually is the connection address of service center.
+               Changing this will create a new resource.
+        :param pulumi.Input[str] connect_address: Specifies the address that used to access engine and manages
+               microservice instance.
+               Usually is the connection address of service center.
+               Changing this will create a new resource.
         :param pulumi.Input['MicroserviceInstanceDataCenterArgs'] data_center: Specifies the data center configuration.
                The object structure is documented below.
                Changing this will create a new microservice instance.
@@ -263,6 +293,8 @@ class _MicroserviceInstanceState:
             pulumi.set(__self__, "admin_pass", admin_pass)
         if admin_user is not None:
             pulumi.set(__self__, "admin_user", admin_user)
+        if auth_address is not None:
+            pulumi.set(__self__, "auth_address", auth_address)
         if connect_address is not None:
             pulumi.set(__self__, "connect_address", connect_address)
         if data_center is not None:
@@ -315,11 +347,27 @@ class _MicroserviceInstanceState:
         pulumi.set(self, "admin_user", value)
 
     @property
+    @pulumi.getter(name="authAddress")
+    def auth_address(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the address that used to request the access token.  
+        Usually is the connection address of service center.
+        Changing this will create a new resource.
+        """
+        return pulumi.get(self, "auth_address")
+
+    @auth_address.setter
+    def auth_address(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "auth_address", value)
+
+    @property
     @pulumi.getter(name="connectAddress")
     def connect_address(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the connection address of service registry center for the
-        specified dedicated CSE engine. Changing this will create a new microservice instance.
+        Specifies the address that used to access engine and manages
+        microservice instance.
+        Usually is the connection address of service center.
+        Changing this will create a new resource.
         """
         return pulumi.get(self, "connect_address")
 
@@ -440,6 +488,7 @@ class MicroserviceInstance(pulumi.CustomResource):
                  opts: Optional[pulumi.ResourceOptions] = None,
                  admin_pass: Optional[pulumi.Input[str]] = None,
                  admin_user: Optional[pulumi.Input[str]] = None,
+                 auth_address: Optional[pulumi.Input[str]] = None,
                  connect_address: Optional[pulumi.Input[str]] = None,
                  data_center: Optional[pulumi.Input[pulumi.InputType['MicroserviceInstanceDataCenterArgs']]] = None,
                  endpoints: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
@@ -452,97 +501,52 @@ class MicroserviceInstance(pulumi.CustomResource):
         """
         Manages a dedicated microservice instance resource within HuaweiCloud.
 
+        > Before creating a configuration, make sure the engine has enabled the rules shown in the appendix
+           table.
+
         ## Example Usage
-        ### Create a microservice instance under a microservice with RBAC authentication of engine disabled
+        ## Appendix
 
-        ```python
-        import pulumi
-        import pulumi_huaweicloud as huaweicloud
+        <a name="microservice_instance_default_engine_access_rules"></a>
+        Security group rules required to access the engine:
+        (Remote is not the minimum range and can be adjusted according to business needs)
 
-        config = pulumi.Config()
-        engine_conn_addr = config.require_object("engineConnAddr")
-        microservice_id = config.require_object("microserviceId")
-        region_name = config.require_object("regionName")
-        az_name = config.require_object("azName")
-        test = huaweicloud.cse.MicroserviceInstance("test",
-            connect_address=engine_conn_addr,
-            microservice_id=microservice_id,
-            host_name="localhost",
-            endpoints=[
-                "grpc://127.0.1.132:9980",
-                "rest://127.0.0.111:8081",
-            ],
-            version="1.0.0",
-            properties={
-                "_TAGS": "A, B",
-                "attr1": "a",
-                "nodeIP": "127.0.0.1",
-            },
-            health_check=huaweicloud.cse.MicroserviceInstanceHealthCheckArgs(
-                mode="push",
-                interval=30,
-                max_retries=3,
-            ),
-            data_center=huaweicloud.cse.MicroserviceInstanceDataCenterArgs(
-                name="dc",
-                region=region_name,
-                availability_zone=az_name,
-            ))
-        ```
-        ### Create a microservice instance under a microservice with RBAC authentication of engine enabled
-
-        ```python
-        import pulumi
-        import pulumi_huaweicloud as huaweicloud
-
-        config = pulumi.Config()
-        engine_conn_addr = config.require_object("engineConnAddr")
-        microservice_id = config.require_object("microserviceId")
-        region_name = config.require_object("regionName")
-        az_name = config.require_object("azName")
-        test = huaweicloud.cse.MicroserviceInstance("test",
-            connect_address=engine_conn_addr,
-            microservice_id=microservice_id,
-            host_name="localhost",
-            endpoints=[
-                "grpc://127.0.1.132:9980",
-                "rest://127.0.0.111:8081",
-            ],
-            version="1.0.0",
-            properties={
-                "_TAGS": "A, B",
-                "attr1": "a",
-                "nodeIP": "127.0.0.1",
-            },
-            health_check=huaweicloud.cse.MicroserviceInstanceHealthCheckArgs(
-                mode="push",
-                interval=30,
-                max_retries=3,
-            ),
-            data_center=huaweicloud.cse.MicroserviceInstanceDataCenterArgs(
-                name="dc",
-                region=region_name,
-                availability_zone=az_name,
-            ),
-            admin_user="root",
-            admin_pass="Huawei!123")
-        ```
+        | Direction | Priority | Action | Protocol | Ports         | Ethertype | Remote                |
+        | --------- | -------- | ------ | -------- | ------------- | --------- | --------------------- |
+        | Ingress   | 1        | Allow  | ICMP     | All           | Ipv6      | ::/0                  |
+        | Ingress   | 1        | Allow  | TCP      | 30100-30130   | Ipv6      | ::/0                  |
+        | Ingress   | 1        | Allow  | All      | All           | Ipv6      | cse-engine-default-sg |
+        | Ingress   | 1        | Allow  | ICMP     | All           | Ipv4      | 0.0.0.0/0             |
+        | Ingress   | 1        | Allow  | TCP      | 30100-30130   | Ipv4      | 0.0.0.0/0             |
+        | Ingress   | 1        | Allow  | All      | All           | Ipv4      | cse-engine-default-sg |
+        | Egress    | 100      | Allow  | All      | All           | Ipv6      | ::/0                  |
+        | Egress    | 100      | Allow  | All      | All           | Ipv4      | 0.0.0.0/0             |
 
         ## Import
 
-        Microservices can be imported using related `connect_address`, `microservice_id` and their `id`, separated by a slash (/), e.g.
+        Microservice instances can be imported using related `auth_address`, `connect_address`, `microservice_id` and their `id`, separated by the slashes (/), e.g. bash
 
         ```sh
-         $ pulumi import huaweicloud:Cse/microserviceInstance:MicroserviceInstance test https://124.70.26.32:30100/f14960ba495e03f59f85aacaaafbdef3fbff3f0d/336e7428dd9411eca913fa163e7364b7
+         $ pulumi import huaweicloud:Cse/microserviceInstance:MicroserviceInstance test <auth_address>/<connect_address>/<microservice_id>/<id>
         ```
 
-         If you enabled the **RBAC** authorization, you also need to provide the account name and password, e.g.
+         If you enabled the **RBAC** authorization in the microservice engine, it's necessary to provide the account name (`admin_user`) and password (`admin_pass`) of the microservice engine. All fields separated by the slashes (/), e.g. bash
 
         ```sh
-         $ pulumi import huaweicloud:Cse/microserviceInstance:MicroserviceInstance test 'https://124.70.26.32:30100/f14960ba495e03f59f85aacaaafbdef3fbff3f0d/336e7428dd9411eca913fa163e7364b7/root/Test!123'
+         $ pulumi import huaweicloud:Cse/microserviceInstance:MicroserviceInstance test <auth_address>/<connect_address>/<microservice_id>/<id>/<admin_user>/<admin_pass>
         ```
 
-         The single quotes can help you solve the problem of special characters reporting errors on bash.
+         The single quotes (') or backslashes (\\\\) can help you solve the problem of special characters reporting errors on bash. bash
+
+        ```sh
+         $ pulumi import huaweicloud:Cse/microserviceInstance:MicroserviceInstance test https://124.70.26.32:30100/https://124.70.26.32:30100/f14960ba495e03f59f85aacaaafbdef3fbff3f0d/336e7428dd9411eca913fa163e7364b7/root/Test\\!123
+        ```
+
+         bash
+
+        ```sh
+         $ pulumi import huaweicloud:Cse/microserviceInstance:MicroserviceInstance test 'https://124.70.26.32:30100/https://124.70.26.32:30100/f14960ba495e03f59f85aacaaafbdef3fbff3f0d/336e7428dd9411eca913fa163e7364b7/root/Test!123'
+        ```
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -556,8 +560,13 @@ class MicroserviceInstance(pulumi.CustomResource):
                + The password can only start with a letter.
         :param pulumi.Input[str] admin_user: Specifies the account name. The initial account name is **root**.
                Required if the `auth_type` of engine is **RBAC**. Changing this will create a new microservice instance.
-        :param pulumi.Input[str] connect_address: Specifies the connection address of service registry center for the
-               specified dedicated CSE engine. Changing this will create a new microservice instance.
+        :param pulumi.Input[str] auth_address: Specifies the address that used to request the access token.  
+               Usually is the connection address of service center.
+               Changing this will create a new resource.
+        :param pulumi.Input[str] connect_address: Specifies the address that used to access engine and manages
+               microservice instance.
+               Usually is the connection address of service center.
+               Changing this will create a new resource.
         :param pulumi.Input[pulumi.InputType['MicroserviceInstanceDataCenterArgs']] data_center: Specifies the data center configuration.
                The object structure is documented below.
                Changing this will create a new microservice instance.
@@ -584,97 +593,52 @@ class MicroserviceInstance(pulumi.CustomResource):
         """
         Manages a dedicated microservice instance resource within HuaweiCloud.
 
+        > Before creating a configuration, make sure the engine has enabled the rules shown in the appendix
+           table.
+
         ## Example Usage
-        ### Create a microservice instance under a microservice with RBAC authentication of engine disabled
+        ## Appendix
 
-        ```python
-        import pulumi
-        import pulumi_huaweicloud as huaweicloud
+        <a name="microservice_instance_default_engine_access_rules"></a>
+        Security group rules required to access the engine:
+        (Remote is not the minimum range and can be adjusted according to business needs)
 
-        config = pulumi.Config()
-        engine_conn_addr = config.require_object("engineConnAddr")
-        microservice_id = config.require_object("microserviceId")
-        region_name = config.require_object("regionName")
-        az_name = config.require_object("azName")
-        test = huaweicloud.cse.MicroserviceInstance("test",
-            connect_address=engine_conn_addr,
-            microservice_id=microservice_id,
-            host_name="localhost",
-            endpoints=[
-                "grpc://127.0.1.132:9980",
-                "rest://127.0.0.111:8081",
-            ],
-            version="1.0.0",
-            properties={
-                "_TAGS": "A, B",
-                "attr1": "a",
-                "nodeIP": "127.0.0.1",
-            },
-            health_check=huaweicloud.cse.MicroserviceInstanceHealthCheckArgs(
-                mode="push",
-                interval=30,
-                max_retries=3,
-            ),
-            data_center=huaweicloud.cse.MicroserviceInstanceDataCenterArgs(
-                name="dc",
-                region=region_name,
-                availability_zone=az_name,
-            ))
-        ```
-        ### Create a microservice instance under a microservice with RBAC authentication of engine enabled
-
-        ```python
-        import pulumi
-        import pulumi_huaweicloud as huaweicloud
-
-        config = pulumi.Config()
-        engine_conn_addr = config.require_object("engineConnAddr")
-        microservice_id = config.require_object("microserviceId")
-        region_name = config.require_object("regionName")
-        az_name = config.require_object("azName")
-        test = huaweicloud.cse.MicroserviceInstance("test",
-            connect_address=engine_conn_addr,
-            microservice_id=microservice_id,
-            host_name="localhost",
-            endpoints=[
-                "grpc://127.0.1.132:9980",
-                "rest://127.0.0.111:8081",
-            ],
-            version="1.0.0",
-            properties={
-                "_TAGS": "A, B",
-                "attr1": "a",
-                "nodeIP": "127.0.0.1",
-            },
-            health_check=huaweicloud.cse.MicroserviceInstanceHealthCheckArgs(
-                mode="push",
-                interval=30,
-                max_retries=3,
-            ),
-            data_center=huaweicloud.cse.MicroserviceInstanceDataCenterArgs(
-                name="dc",
-                region=region_name,
-                availability_zone=az_name,
-            ),
-            admin_user="root",
-            admin_pass="Huawei!123")
-        ```
+        | Direction | Priority | Action | Protocol | Ports         | Ethertype | Remote                |
+        | --------- | -------- | ------ | -------- | ------------- | --------- | --------------------- |
+        | Ingress   | 1        | Allow  | ICMP     | All           | Ipv6      | ::/0                  |
+        | Ingress   | 1        | Allow  | TCP      | 30100-30130   | Ipv6      | ::/0                  |
+        | Ingress   | 1        | Allow  | All      | All           | Ipv6      | cse-engine-default-sg |
+        | Ingress   | 1        | Allow  | ICMP     | All           | Ipv4      | 0.0.0.0/0             |
+        | Ingress   | 1        | Allow  | TCP      | 30100-30130   | Ipv4      | 0.0.0.0/0             |
+        | Ingress   | 1        | Allow  | All      | All           | Ipv4      | cse-engine-default-sg |
+        | Egress    | 100      | Allow  | All      | All           | Ipv6      | ::/0                  |
+        | Egress    | 100      | Allow  | All      | All           | Ipv4      | 0.0.0.0/0             |
 
         ## Import
 
-        Microservices can be imported using related `connect_address`, `microservice_id` and their `id`, separated by a slash (/), e.g.
+        Microservice instances can be imported using related `auth_address`, `connect_address`, `microservice_id` and their `id`, separated by the slashes (/), e.g. bash
 
         ```sh
-         $ pulumi import huaweicloud:Cse/microserviceInstance:MicroserviceInstance test https://124.70.26.32:30100/f14960ba495e03f59f85aacaaafbdef3fbff3f0d/336e7428dd9411eca913fa163e7364b7
+         $ pulumi import huaweicloud:Cse/microserviceInstance:MicroserviceInstance test <auth_address>/<connect_address>/<microservice_id>/<id>
         ```
 
-         If you enabled the **RBAC** authorization, you also need to provide the account name and password, e.g.
+         If you enabled the **RBAC** authorization in the microservice engine, it's necessary to provide the account name (`admin_user`) and password (`admin_pass`) of the microservice engine. All fields separated by the slashes (/), e.g. bash
 
         ```sh
-         $ pulumi import huaweicloud:Cse/microserviceInstance:MicroserviceInstance test 'https://124.70.26.32:30100/f14960ba495e03f59f85aacaaafbdef3fbff3f0d/336e7428dd9411eca913fa163e7364b7/root/Test!123'
+         $ pulumi import huaweicloud:Cse/microserviceInstance:MicroserviceInstance test <auth_address>/<connect_address>/<microservice_id>/<id>/<admin_user>/<admin_pass>
         ```
 
-         The single quotes can help you solve the problem of special characters reporting errors on bash.
+         The single quotes (') or backslashes (\\\\) can help you solve the problem of special characters reporting errors on bash. bash
+
+        ```sh
+         $ pulumi import huaweicloud:Cse/microserviceInstance:MicroserviceInstance test https://124.70.26.32:30100/https://124.70.26.32:30100/f14960ba495e03f59f85aacaaafbdef3fbff3f0d/336e7428dd9411eca913fa163e7364b7/root/Test\\!123
+        ```
+
+         bash
+
+        ```sh
+         $ pulumi import huaweicloud:Cse/microserviceInstance:MicroserviceInstance test 'https://124.70.26.32:30100/https://124.70.26.32:30100/f14960ba495e03f59f85aacaaafbdef3fbff3f0d/336e7428dd9411eca913fa163e7364b7/root/Test!123'
+        ```
 
         :param str resource_name: The name of the resource.
         :param MicroserviceInstanceArgs args: The arguments to use to populate this resource's properties.
@@ -693,6 +657,7 @@ class MicroserviceInstance(pulumi.CustomResource):
                  opts: Optional[pulumi.ResourceOptions] = None,
                  admin_pass: Optional[pulumi.Input[str]] = None,
                  admin_user: Optional[pulumi.Input[str]] = None,
+                 auth_address: Optional[pulumi.Input[str]] = None,
                  connect_address: Optional[pulumi.Input[str]] = None,
                  data_center: Optional[pulumi.Input[pulumi.InputType['MicroserviceInstanceDataCenterArgs']]] = None,
                  endpoints: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
@@ -712,6 +677,7 @@ class MicroserviceInstance(pulumi.CustomResource):
 
             __props__.__dict__["admin_pass"] = admin_pass
             __props__.__dict__["admin_user"] = admin_user
+            __props__.__dict__["auth_address"] = auth_address
             if connect_address is None and not opts.urn:
                 raise TypeError("Missing required property 'connect_address'")
             __props__.__dict__["connect_address"] = connect_address
@@ -741,6 +707,7 @@ class MicroserviceInstance(pulumi.CustomResource):
             opts: Optional[pulumi.ResourceOptions] = None,
             admin_pass: Optional[pulumi.Input[str]] = None,
             admin_user: Optional[pulumi.Input[str]] = None,
+            auth_address: Optional[pulumi.Input[str]] = None,
             connect_address: Optional[pulumi.Input[str]] = None,
             data_center: Optional[pulumi.Input[pulumi.InputType['MicroserviceInstanceDataCenterArgs']]] = None,
             endpoints: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
@@ -767,8 +734,13 @@ class MicroserviceInstance(pulumi.CustomResource):
                + The password can only start with a letter.
         :param pulumi.Input[str] admin_user: Specifies the account name. The initial account name is **root**.
                Required if the `auth_type` of engine is **RBAC**. Changing this will create a new microservice instance.
-        :param pulumi.Input[str] connect_address: Specifies the connection address of service registry center for the
-               specified dedicated CSE engine. Changing this will create a new microservice instance.
+        :param pulumi.Input[str] auth_address: Specifies the address that used to request the access token.  
+               Usually is the connection address of service center.
+               Changing this will create a new resource.
+        :param pulumi.Input[str] connect_address: Specifies the address that used to access engine and manages
+               microservice instance.
+               Usually is the connection address of service center.
+               Changing this will create a new resource.
         :param pulumi.Input[pulumi.InputType['MicroserviceInstanceDataCenterArgs']] data_center: Specifies the data center configuration.
                The object structure is documented below.
                Changing this will create a new microservice instance.
@@ -793,6 +765,7 @@ class MicroserviceInstance(pulumi.CustomResource):
 
         __props__.__dict__["admin_pass"] = admin_pass
         __props__.__dict__["admin_user"] = admin_user
+        __props__.__dict__["auth_address"] = auth_address
         __props__.__dict__["connect_address"] = connect_address
         __props__.__dict__["data_center"] = data_center
         __props__.__dict__["endpoints"] = endpoints
@@ -829,11 +802,23 @@ class MicroserviceInstance(pulumi.CustomResource):
         return pulumi.get(self, "admin_user")
 
     @property
+    @pulumi.getter(name="authAddress")
+    def auth_address(self) -> pulumi.Output[str]:
+        """
+        Specifies the address that used to request the access token.  
+        Usually is the connection address of service center.
+        Changing this will create a new resource.
+        """
+        return pulumi.get(self, "auth_address")
+
+    @property
     @pulumi.getter(name="connectAddress")
     def connect_address(self) -> pulumi.Output[str]:
         """
-        Specifies the connection address of service registry center for the
-        specified dedicated CSE engine. Changing this will create a new microservice instance.
+        Specifies the address that used to access engine and manages
+        microservice instance.
+        Usually is the connection address of service center.
+        Changing this will create a new resource.
         """
         return pulumi.get(self, "connect_address")
 

@@ -9,13 +9,13 @@ import * as utilities from "../utilities";
  *
  * ## Import
  *
- * Clusters can be imported by their `id`. e.g.
+ * Clusters can be imported by their `id`. e.g.bash
  *
  * ```sh
  *  $ pulumi import huaweicloud:CloudTable/cluster:Cluster test 4c2d38b6-6fb0-480c-8813-5f536b5ba6a4
  * ```
  *
- *  Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`availability_zone`, `network_id`. It is generally recommended running `terraform plan` after importing a cluster. You can then decide if changes should be applied to the cluster, or the resource definition should be updated to align with the cluster. Also you can ignore changes as below. resource "huaweicloud_cloudtable_cluster" "test" {
+ *  Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`availability_zone`, `network_id`. It is generally recommended running `terraform plan` after importing a cluster. You can then decide if changes should be applied to the cluster, or the resource definition should be updated to align with the cluster. Also you can ignore changes as below. hcl resource "huaweicloud_cloudtable_cluster" "test" {
  *
  *  ...
  *
@@ -81,8 +81,9 @@ export class Cluster extends pulumi.CustomResource {
      */
     public readonly iamAuthEnabled!: pulumi.Output<boolean>;
     /**
-     * Specifies the cluster name. The name consists of 4 to 64 characters, including
-     * lowercase letters, numbers and hyphens (-). Changing this parameter will create a new resource.
+     * Specifies the cluster name.  
+     * The name consists of `4` to `64` characters, including lowercase letters, numbers and hyphens (-).
+     * Changing this parameter will create a new resource.
      */
     public readonly name!: pulumi.Output<string>;
     /**
@@ -110,7 +111,8 @@ export class Cluster extends pulumi.CustomResource {
     public readonly region!: pulumi.Output<string>;
     /**
      * Specifies the compute nodes number of the cluster.
-     * The valid values must be greater than `2`. Defaults to `2`. Changing this parameter will create a new resource.
+     * The valid values must be at least `2`. Defaults to `2`.
+     * Changing this parameter will create a new resource.
      */
     public readonly rsNum!: pulumi.Output<number | undefined>;
     /**
@@ -250,8 +252,9 @@ export interface ClusterState {
      */
     iamAuthEnabled?: pulumi.Input<boolean>;
     /**
-     * Specifies the cluster name. The name consists of 4 to 64 characters, including
-     * lowercase letters, numbers and hyphens (-). Changing this parameter will create a new resource.
+     * Specifies the cluster name.  
+     * The name consists of `4` to `64` characters, including lowercase letters, numbers and hyphens (-).
+     * Changing this parameter will create a new resource.
      */
     name?: pulumi.Input<string>;
     /**
@@ -279,7 +282,8 @@ export interface ClusterState {
     region?: pulumi.Input<string>;
     /**
      * Specifies the compute nodes number of the cluster.
-     * The valid values must be greater than `2`. Defaults to `2`. Changing this parameter will create a new resource.
+     * The valid values must be at least `2`. Defaults to `2`.
+     * Changing this parameter will create a new resource.
      */
     rsNum?: pulumi.Input<number>;
     /**
@@ -335,8 +339,9 @@ export interface ClusterArgs {
      */
     iamAuthEnabled?: pulumi.Input<boolean>;
     /**
-     * Specifies the cluster name. The name consists of 4 to 64 characters, including
-     * lowercase letters, numbers and hyphens (-). Changing this parameter will create a new resource.
+     * Specifies the cluster name.  
+     * The name consists of `4` to `64` characters, including lowercase letters, numbers and hyphens (-).
+     * Changing this parameter will create a new resource.
      */
     name?: pulumi.Input<string>;
     /**
@@ -356,7 +361,8 @@ export interface ClusterArgs {
     region?: pulumi.Input<string>;
     /**
      * Specifies the compute nodes number of the cluster.
-     * The valid values must be greater than `2`. Defaults to `2`. Changing this parameter will create a new resource.
+     * The valid values must be at least `2`. Defaults to `2`.
+     * Changing this parameter will create a new resource.
      */
     rsNum?: pulumi.Input<number>;
     /**

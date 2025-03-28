@@ -284,7 +284,7 @@ class GetOpengaussInstanceResult:
     @pulumi.getter
     def type(self) -> str:
         """
-        Indicates the volume type.
+        Indicates the volume type. Value options: **ULTRAHIGH**, **ESSD**.
         """
         return pulumi.get(self, "type")
 

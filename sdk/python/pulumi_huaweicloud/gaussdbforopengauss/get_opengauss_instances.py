@@ -111,7 +111,7 @@ def get_opengauss_instances(name: Optional[str] = None,
                             vpc_id: Optional[str] = None,
                             opts: Optional[pulumi.InvokeOptions] = None) -> AwaitableGetOpengaussInstancesResult:
     """
-    Use this data source to get available HuaweiCloud gaussdb opengauss instances.
+    Use this data source to get available GaussDB OpenGauss instances.
 
     ## Example Usage
 
@@ -153,7 +153,7 @@ def get_opengauss_instances_output(name: Optional[pulumi.Input[Optional[str]]] =
                                    vpc_id: Optional[pulumi.Input[Optional[str]]] = None,
                                    opts: Optional[pulumi.InvokeOptions] = None) -> pulumi.Output[GetOpengaussInstancesResult]:
     """
-    Use this data source to get available HuaweiCloud gaussdb opengauss instances.
+    Use this data source to get available GaussDB OpenGauss instances.
 
     ## Example Usage
 

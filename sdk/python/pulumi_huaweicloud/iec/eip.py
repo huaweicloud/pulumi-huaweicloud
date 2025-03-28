@@ -352,7 +352,7 @@ class Eip(pulumi.CustomResource):
 
         ## Import
 
-        IEC EIPs can be imported using the `id`, e.g.
+        IEC EIPs can be imported using the `id`, e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:Iec/eip:Eip eip_test b5ad19d1-57d1-48fd-aab7-1378f9bee169
@@ -390,7 +390,7 @@ class Eip(pulumi.CustomResource):
 
         ## Import
 
-        IEC EIPs can be imported using the `id`, e.g.
+        IEC EIPs can be imported using the `id`, e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:Iec/eip:Eip eip_test b5ad19d1-57d1-48fd-aab7-1378f9bee169

@@ -22,10 +22,13 @@ class GetDependenciesResult:
     """
     A collection of values returned by getDependencies.
     """
-    def __init__(__self__, id=None, name=None, packages=None, region=None, runtime=None, type=None):
+    def __init__(__self__, id=None, is_versions_query_allowed=None, name=None, packages=None, region=None, runtime=None, type=None):
         if id and not isinstance(id, str):
             raise TypeError("Expected argument 'id' to be a str")
         pulumi.set(__self__, "id", id)
+        if is_versions_query_allowed and not isinstance(is_versions_query_allowed, bool):
+            raise TypeError("Expected argument 'is_versions_query_allowed' to be a bool")
+        pulumi.set(__self__, "is_versions_query_allowed", is_versions_query_allowed)
         if name and not isinstance(name, str):
             raise TypeError("Expected argument 'name' to be a str")
         pulumi.set(__self__, "name", name)
@@ -51,10 +54,15 @@ class GetDependenciesResult:
         return pulumi.get(self, "id")
 
     @property
+    @pulumi.getter(name="isVersionsQueryAllowed")
+    def is_versions_query_allowed(self) -> Optional[bool]:
+        return pulumi.get(self, "is_versions_query_allowed")
+
+    @property
     @pulumi.getter
     def name(self) -> Optional[str]:
         """
-        Dependent package name.
+        The name of the dependency package.
         """
         return pulumi.get(self, "name")
 
@@ -62,7 +70,8 @@ class GetDependenciesResult:
     @pulumi.getter
     def packages(self) -> Sequence['outputs.GetDependenciesPackageResult']:
         """
-        All dependent packages that match.
+        All dependency packages that match the filter parameters.
+        The packages structure is documented below.
         """
         return pulumi.get(self, "packages")
 
@@ -75,7 +84,7 @@ class GetDependenciesResult:
     @pulumi.getter
     def runtime(self) -> Optional[str]:
         """
-        Dependent package runtime.
+        The runtime of the dependency package.
         """
         return pulumi.get(self, "runtime")
 
@@ -92,6 +101,7 @@ class AwaitableGetDependenciesResult(GetDependenciesResult):
             yield self
         return GetDependenciesResult(
             id=self.id,
+            is_versions_query_allowed=self.is_versions_query_allowed,
             name=self.name,
             packages=self.packages,
             region=self.region,
@@ -99,16 +109,21 @@ class AwaitableGetDependenciesResult(GetDependenciesResult):
             type=self.type)
 
 
-def get_dependencies(name: Optional[str] = None,
+def get_dependencies(is_versions_query_allowed: Optional[bool] = None,
+                     name: Optional[str] = None,
                      region: Optional[str] = None,
                      runtime: Optional[str] = None,
                      type: Optional[str] = None,
                      opts: Optional[pulumi.InvokeOptions] = None) -> AwaitableGetDependenciesResult:
     """
-    Use this data source to filter dependent packages of FGS from HuaweiCloud.
+    Use this data source to query dependency packages within HuaweiCloud.
+
+    > Between `1.64.2` and `1.72.1`, the version list of each dependency package is queried by default.
+       <br>This will cause the query to take up a lot of time and may trigger flow control.
+       <br>There are not recommended to use.
 
     ## Example Usage
-    ### Obtain all public dependent packages
+    ### Obtain all public dependency packages
 
     ```python
     import pulumi
@@ -116,7 +131,7 @@ def get_dependencies(name: Optional[str] = None,
 
     test = huaweicloud.FunctionGraph.get_dependencies()
     ```
-    ### Obtain specific public dependent package by name
+    ### Obtain specific public dependency package by name
 
     ```python
     import pulumi
@@ -125,7 +140,7 @@ def get_dependencies(name: Optional[str] = None,
     test = huaweicloud.FunctionGraph.get_dependencies(name="obssdk-3.0.2",
         type="public")
     ```
-    ### Obtain all public Python2.7 dependent packages
+    ### Obtain all public Python2.7 dependency packages
 
     ```python
     import pulumi
@@ -136,15 +151,42 @@ def get_dependencies(name: Optional[str] = None,
     ```
 
 
-    :param str name: Specifies the dependent package runtime to match.
-    :param str region: Specifies the region in which to obtain the dependent packages. If omitted, the
-           provider-level region will be used.
-    :param str runtime: Specifies the dependent package runtime to match. Valid values: **Java8**,
-           **Node.js6.10**, **Node.js8.10**, **Node.js10.16**, **Node.js12.13**, **Python2.7**, **Python3.6**, **Go1.8**,
-           **Go1.x**, **C#(.NET Core 2.0)**, **C#(.NET Core 2.1)**, **C#(.NET Core 3.1)** and **PHP7.3**.
-    :param str type: Specifies the dependent package type to match. Valid values: **public** and **private**.
+    :param bool is_versions_query_allowed: Specifies whether to query the versions of each dependency package.
+           Defaults to **false**.
+    :param str name: Specifies the name of the dependency package.
+    :param str region: Specifies the region where the dependency packages are located.  
+           If omitted, the provider-level region will be used.
+    :param str runtime: Specifies the runtime of the dependency package.  
+           The valid values are as follows:
+           + **Java8**
+           + **Java11**
+           + **Node.js6.10**
+           + **Node.js8.10**
+           + **Node.js10.16**
+           + **Node.js12.13**
+           + **Node.js14.18**
+           + **Node.js16.17**
+           + **Node.js18.15**
+           + **Python2.7**
+           + **Python3.6**
+           + **Python3.9**
+           + **Python3.10**
+           + **Go1.x**
+           + **C#(.NET Core 2.0)**
+           + **C#(.NET Core 2.1)**
+           + **C#(.NET Core 3.1)**
+           + **Custom**
+           + **PHP7.3**
+           + **Cangjie1.0**
+           + **http**
+           + **Custom Image**
+    :param str type: Specifies the type of the dependency package.  
+           The valid values are as follows:
+           + **public**
+           + **private**
     """
     __args__ = dict()
+    __args__['isVersionsQueryAllowed'] = is_versions_query_allowed
     __args__['name'] = name
     __args__['region'] = region
     __args__['runtime'] = runtime
@@ -154,6 +196,7 @@ def get_dependencies(name: Optional[str] = None,
 
     return AwaitableGetDependenciesResult(
         id=__ret__.id,
+        is_versions_query_allowed=__ret__.is_versions_query_allowed,
         name=__ret__.name,
         packages=__ret__.packages,
         region=__ret__.region,
@@ -162,16 +205,21 @@ def get_dependencies(name: Optional[str] = None,
 
 
 @_utilities.lift_output_func(get_dependencies)
-def get_dependencies_output(name: Optional[pulumi.Input[Optional[str]]] = None,
+def get_dependencies_output(is_versions_query_allowed: Optional[pulumi.Input[Optional[bool]]] = None,
+                            name: Optional[pulumi.Input[Optional[str]]] = None,
                             region: Optional[pulumi.Input[Optional[str]]] = None,
                             runtime: Optional[pulumi.Input[Optional[str]]] = None,
                             type: Optional[pulumi.Input[Optional[str]]] = None,
                             opts: Optional[pulumi.InvokeOptions] = None) -> pulumi.Output[GetDependenciesResult]:
     """
-    Use this data source to filter dependent packages of FGS from HuaweiCloud.
+    Use this data source to query dependency packages within HuaweiCloud.
+
+    > Between `1.64.2` and `1.72.1`, the version list of each dependency package is queried by default.
+       <br>This will cause the query to take up a lot of time and may trigger flow control.
+       <br>There are not recommended to use.
 
     ## Example Usage
-    ### Obtain all public dependent packages
+    ### Obtain all public dependency packages
 
     ```python
     import pulumi
@@ -179,7 +227,7 @@ def get_dependencies_output(name: Optional[pulumi.Input[Optional[str]]] = None,
 
     test = huaweicloud.FunctionGraph.get_dependencies()
     ```
-    ### Obtain specific public dependent package by name
+    ### Obtain specific public dependency package by name
 
     ```python
     import pulumi
@@ -188,7 +236,7 @@ def get_dependencies_output(name: Optional[pulumi.Input[Optional[str]]] = None,
     test = huaweicloud.FunctionGraph.get_dependencies(name="obssdk-3.0.2",
         type="public")
     ```
-    ### Obtain all public Python2.7 dependent packages
+    ### Obtain all public Python2.7 dependency packages
 
     ```python
     import pulumi
@@ -199,12 +247,38 @@ def get_dependencies_output(name: Optional[pulumi.Input[Optional[str]]] = None,
     ```
 
 
-    :param str name: Specifies the dependent package runtime to match.
-    :param str region: Specifies the region in which to obtain the dependent packages. If omitted, the
-           provider-level region will be used.
-    :param str runtime: Specifies the dependent package runtime to match. Valid values: **Java8**,
-           **Node.js6.10**, **Node.js8.10**, **Node.js10.16**, **Node.js12.13**, **Python2.7**, **Python3.6**, **Go1.8**,
-           **Go1.x**, **C#(.NET Core 2.0)**, **C#(.NET Core 2.1)**, **C#(.NET Core 3.1)** and **PHP7.3**.
-    :param str type: Specifies the dependent package type to match. Valid values: **public** and **private**.
+    :param bool is_versions_query_allowed: Specifies whether to query the versions of each dependency package.
+           Defaults to **false**.
+    :param str name: Specifies the name of the dependency package.
+    :param str region: Specifies the region where the dependency packages are located.  
+           If omitted, the provider-level region will be used.
+    :param str runtime: Specifies the runtime of the dependency package.  
+           The valid values are as follows:
+           + **Java8**
+           + **Java11**
+           + **Node.js6.10**
+           + **Node.js8.10**
+           + **Node.js10.16**
+           + **Node.js12.13**
+           + **Node.js14.18**
+           + **Node.js16.17**
+           + **Node.js18.15**
+           + **Python2.7**
+           + **Python3.6**
+           + **Python3.9**
+           + **Python3.10**
+           + **Go1.x**
+           + **C#(.NET Core 2.0)**
+           + **C#(.NET Core 2.1)**
+           + **C#(.NET Core 3.1)**
+           + **Custom**
+           + **PHP7.3**
+           + **Cangjie1.0**
+           + **http**
+           + **Custom Image**
+    :param str type: Specifies the type of the dependency package.  
+           The valid values are as follows:
+           + **public**
+           + **private**
     """
     ...

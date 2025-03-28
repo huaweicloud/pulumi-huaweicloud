@@ -10,8 +10,356 @@ import (
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
+type QueueScalingPolicy struct {
+	// Specifies the effective time of the queue scaling policy.
+	// The value can be set only by hour.
+	ImpactStartTime string `pulumi:"impactStartTime"`
+	// Specifies the expiration time of the queue scaling policy.
+	// The value can be set only by hour.
+	ImpactStopTime string `pulumi:"impactStopTime"`
+	// Specifies the maximum number of CUs allowed by the scaling policy.
+	// The number must be a multiple of `4`.
+	MaxCu int `pulumi:"maxCu"`
+	// Specifies the minimum number of CUs allowed by the scaling policy.
+	// The number must be a multiple of `4`.
+	MinCu int `pulumi:"minCu"`
+	// Specifies the priority of the queue scaling policy.
+	// The valid value ranges from `1` to `100`. The larger value means the higher priority.
+	Priority int `pulumi:"priority"`
+}
+
+// QueueScalingPolicyInput is an input type that accepts QueueScalingPolicyArgs and QueueScalingPolicyOutput values.
+// You can construct a concrete instance of `QueueScalingPolicyInput` via:
+//
+//	QueueScalingPolicyArgs{...}
+type QueueScalingPolicyInput interface {
+	pulumi.Input
+
+	ToQueueScalingPolicyOutput() QueueScalingPolicyOutput
+	ToQueueScalingPolicyOutputWithContext(context.Context) QueueScalingPolicyOutput
+}
+
+type QueueScalingPolicyArgs struct {
+	// Specifies the effective time of the queue scaling policy.
+	// The value can be set only by hour.
+	ImpactStartTime pulumi.StringInput `pulumi:"impactStartTime"`
+	// Specifies the expiration time of the queue scaling policy.
+	// The value can be set only by hour.
+	ImpactStopTime pulumi.StringInput `pulumi:"impactStopTime"`
+	// Specifies the maximum number of CUs allowed by the scaling policy.
+	// The number must be a multiple of `4`.
+	MaxCu pulumi.IntInput `pulumi:"maxCu"`
+	// Specifies the minimum number of CUs allowed by the scaling policy.
+	// The number must be a multiple of `4`.
+	MinCu pulumi.IntInput `pulumi:"minCu"`
+	// Specifies the priority of the queue scaling policy.
+	// The valid value ranges from `1` to `100`. The larger value means the higher priority.
+	Priority pulumi.IntInput `pulumi:"priority"`
+}
+
+func (QueueScalingPolicyArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*QueueScalingPolicy)(nil)).Elem()
+}
+
+func (i QueueScalingPolicyArgs) ToQueueScalingPolicyOutput() QueueScalingPolicyOutput {
+	return i.ToQueueScalingPolicyOutputWithContext(context.Background())
+}
+
+func (i QueueScalingPolicyArgs) ToQueueScalingPolicyOutputWithContext(ctx context.Context) QueueScalingPolicyOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(QueueScalingPolicyOutput)
+}
+
+// QueueScalingPolicyArrayInput is an input type that accepts QueueScalingPolicyArray and QueueScalingPolicyArrayOutput values.
+// You can construct a concrete instance of `QueueScalingPolicyArrayInput` via:
+//
+//	QueueScalingPolicyArray{ QueueScalingPolicyArgs{...} }
+type QueueScalingPolicyArrayInput interface {
+	pulumi.Input
+
+	ToQueueScalingPolicyArrayOutput() QueueScalingPolicyArrayOutput
+	ToQueueScalingPolicyArrayOutputWithContext(context.Context) QueueScalingPolicyArrayOutput
+}
+
+type QueueScalingPolicyArray []QueueScalingPolicyInput
+
+func (QueueScalingPolicyArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]QueueScalingPolicy)(nil)).Elem()
+}
+
+func (i QueueScalingPolicyArray) ToQueueScalingPolicyArrayOutput() QueueScalingPolicyArrayOutput {
+	return i.ToQueueScalingPolicyArrayOutputWithContext(context.Background())
+}
+
+func (i QueueScalingPolicyArray) ToQueueScalingPolicyArrayOutputWithContext(ctx context.Context) QueueScalingPolicyArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(QueueScalingPolicyArrayOutput)
+}
+
+type QueueScalingPolicyOutput struct{ *pulumi.OutputState }
+
+func (QueueScalingPolicyOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*QueueScalingPolicy)(nil)).Elem()
+}
+
+func (o QueueScalingPolicyOutput) ToQueueScalingPolicyOutput() QueueScalingPolicyOutput {
+	return o
+}
+
+func (o QueueScalingPolicyOutput) ToQueueScalingPolicyOutputWithContext(ctx context.Context) QueueScalingPolicyOutput {
+	return o
+}
+
+// Specifies the effective time of the queue scaling policy.
+// The value can be set only by hour.
+func (o QueueScalingPolicyOutput) ImpactStartTime() pulumi.StringOutput {
+	return o.ApplyT(func(v QueueScalingPolicy) string { return v.ImpactStartTime }).(pulumi.StringOutput)
+}
+
+// Specifies the expiration time of the queue scaling policy.
+// The value can be set only by hour.
+func (o QueueScalingPolicyOutput) ImpactStopTime() pulumi.StringOutput {
+	return o.ApplyT(func(v QueueScalingPolicy) string { return v.ImpactStopTime }).(pulumi.StringOutput)
+}
+
+// Specifies the maximum number of CUs allowed by the scaling policy.
+// The number must be a multiple of `4`.
+func (o QueueScalingPolicyOutput) MaxCu() pulumi.IntOutput {
+	return o.ApplyT(func(v QueueScalingPolicy) int { return v.MaxCu }).(pulumi.IntOutput)
+}
+
+// Specifies the minimum number of CUs allowed by the scaling policy.
+// The number must be a multiple of `4`.
+func (o QueueScalingPolicyOutput) MinCu() pulumi.IntOutput {
+	return o.ApplyT(func(v QueueScalingPolicy) int { return v.MinCu }).(pulumi.IntOutput)
+}
+
+// Specifies the priority of the queue scaling policy.
+// The valid value ranges from `1` to `100`. The larger value means the higher priority.
+func (o QueueScalingPolicyOutput) Priority() pulumi.IntOutput {
+	return o.ApplyT(func(v QueueScalingPolicy) int { return v.Priority }).(pulumi.IntOutput)
+}
+
+type QueueScalingPolicyArrayOutput struct{ *pulumi.OutputState }
+
+func (QueueScalingPolicyArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]QueueScalingPolicy)(nil)).Elem()
+}
+
+func (o QueueScalingPolicyArrayOutput) ToQueueScalingPolicyArrayOutput() QueueScalingPolicyArrayOutput {
+	return o
+}
+
+func (o QueueScalingPolicyArrayOutput) ToQueueScalingPolicyArrayOutputWithContext(ctx context.Context) QueueScalingPolicyArrayOutput {
+	return o
+}
+
+func (o QueueScalingPolicyArrayOutput) Index(i pulumi.IntInput) QueueScalingPolicyOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) QueueScalingPolicy {
+		return vs[0].([]QueueScalingPolicy)[vs[1].(int)]
+	}).(QueueScalingPolicyOutput)
+}
+
+type QueueSparkDriver struct {
+	// Specifies the maximum number of tasks that can be concurrently executed by a spark driver.
+	// The valid value ranges from `1` to `32`.
+	MaxConcurrent *int `pulumi:"maxConcurrent"`
+	// Specifies the maximum number of spark drivers that can be started on the queue.
+	// If the `cuCount` is `16`, the value can only be `2`.
+	// If The `cuCount` is greater than `16`, the minimum value is `2`, the maximum value is the number of queue CUs
+	// divided by `16`.
+	MaxInstance *int `pulumi:"maxInstance"`
+	// Specifies the maximum number of spark drivers to be pre-started on the queue.
+	// The minimum value is `0`. If the `cuCount` is less than `32`, the maximum value is `1`.
+	// If the `cuCount` is greater than or equal to `32`, the maximum value is the number of queue CUs divided by `16`.
+	MaxPrefetchInstance *string `pulumi:"maxPrefetchInstance"`
+}
+
+// QueueSparkDriverInput is an input type that accepts QueueSparkDriverArgs and QueueSparkDriverOutput values.
+// You can construct a concrete instance of `QueueSparkDriverInput` via:
+//
+//	QueueSparkDriverArgs{...}
+type QueueSparkDriverInput interface {
+	pulumi.Input
+
+	ToQueueSparkDriverOutput() QueueSparkDriverOutput
+	ToQueueSparkDriverOutputWithContext(context.Context) QueueSparkDriverOutput
+}
+
+type QueueSparkDriverArgs struct {
+	// Specifies the maximum number of tasks that can be concurrently executed by a spark driver.
+	// The valid value ranges from `1` to `32`.
+	MaxConcurrent pulumi.IntPtrInput `pulumi:"maxConcurrent"`
+	// Specifies the maximum number of spark drivers that can be started on the queue.
+	// If the `cuCount` is `16`, the value can only be `2`.
+	// If The `cuCount` is greater than `16`, the minimum value is `2`, the maximum value is the number of queue CUs
+	// divided by `16`.
+	MaxInstance pulumi.IntPtrInput `pulumi:"maxInstance"`
+	// Specifies the maximum number of spark drivers to be pre-started on the queue.
+	// The minimum value is `0`. If the `cuCount` is less than `32`, the maximum value is `1`.
+	// If the `cuCount` is greater than or equal to `32`, the maximum value is the number of queue CUs divided by `16`.
+	MaxPrefetchInstance pulumi.StringPtrInput `pulumi:"maxPrefetchInstance"`
+}
+
+func (QueueSparkDriverArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*QueueSparkDriver)(nil)).Elem()
+}
+
+func (i QueueSparkDriverArgs) ToQueueSparkDriverOutput() QueueSparkDriverOutput {
+	return i.ToQueueSparkDriverOutputWithContext(context.Background())
+}
+
+func (i QueueSparkDriverArgs) ToQueueSparkDriverOutputWithContext(ctx context.Context) QueueSparkDriverOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(QueueSparkDriverOutput)
+}
+
+func (i QueueSparkDriverArgs) ToQueueSparkDriverPtrOutput() QueueSparkDriverPtrOutput {
+	return i.ToQueueSparkDriverPtrOutputWithContext(context.Background())
+}
+
+func (i QueueSparkDriverArgs) ToQueueSparkDriverPtrOutputWithContext(ctx context.Context) QueueSparkDriverPtrOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(QueueSparkDriverOutput).ToQueueSparkDriverPtrOutputWithContext(ctx)
+}
+
+// QueueSparkDriverPtrInput is an input type that accepts QueueSparkDriverArgs, QueueSparkDriverPtr and QueueSparkDriverPtrOutput values.
+// You can construct a concrete instance of `QueueSparkDriverPtrInput` via:
+//
+//	        QueueSparkDriverArgs{...}
+//
+//	or:
+//
+//	        nil
+type QueueSparkDriverPtrInput interface {
+	pulumi.Input
+
+	ToQueueSparkDriverPtrOutput() QueueSparkDriverPtrOutput
+	ToQueueSparkDriverPtrOutputWithContext(context.Context) QueueSparkDriverPtrOutput
+}
+
+type queueSparkDriverPtrType QueueSparkDriverArgs
+
+func QueueSparkDriverPtr(v *QueueSparkDriverArgs) QueueSparkDriverPtrInput {
+	return (*queueSparkDriverPtrType)(v)
+}
+
+func (*queueSparkDriverPtrType) ElementType() reflect.Type {
+	return reflect.TypeOf((**QueueSparkDriver)(nil)).Elem()
+}
+
+func (i *queueSparkDriverPtrType) ToQueueSparkDriverPtrOutput() QueueSparkDriverPtrOutput {
+	return i.ToQueueSparkDriverPtrOutputWithContext(context.Background())
+}
+
+func (i *queueSparkDriverPtrType) ToQueueSparkDriverPtrOutputWithContext(ctx context.Context) QueueSparkDriverPtrOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(QueueSparkDriverPtrOutput)
+}
+
+type QueueSparkDriverOutput struct{ *pulumi.OutputState }
+
+func (QueueSparkDriverOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*QueueSparkDriver)(nil)).Elem()
+}
+
+func (o QueueSparkDriverOutput) ToQueueSparkDriverOutput() QueueSparkDriverOutput {
+	return o
+}
+
+func (o QueueSparkDriverOutput) ToQueueSparkDriverOutputWithContext(ctx context.Context) QueueSparkDriverOutput {
+	return o
+}
+
+func (o QueueSparkDriverOutput) ToQueueSparkDriverPtrOutput() QueueSparkDriverPtrOutput {
+	return o.ToQueueSparkDriverPtrOutputWithContext(context.Background())
+}
+
+func (o QueueSparkDriverOutput) ToQueueSparkDriverPtrOutputWithContext(ctx context.Context) QueueSparkDriverPtrOutput {
+	return o.ApplyTWithContext(ctx, func(_ context.Context, v QueueSparkDriver) *QueueSparkDriver {
+		return &v
+	}).(QueueSparkDriverPtrOutput)
+}
+
+// Specifies the maximum number of tasks that can be concurrently executed by a spark driver.
+// The valid value ranges from `1` to `32`.
+func (o QueueSparkDriverOutput) MaxConcurrent() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v QueueSparkDriver) *int { return v.MaxConcurrent }).(pulumi.IntPtrOutput)
+}
+
+// Specifies the maximum number of spark drivers that can be started on the queue.
+// If the `cuCount` is `16`, the value can only be `2`.
+// If The `cuCount` is greater than `16`, the minimum value is `2`, the maximum value is the number of queue CUs
+// divided by `16`.
+func (o QueueSparkDriverOutput) MaxInstance() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v QueueSparkDriver) *int { return v.MaxInstance }).(pulumi.IntPtrOutput)
+}
+
+// Specifies the maximum number of spark drivers to be pre-started on the queue.
+// The minimum value is `0`. If the `cuCount` is less than `32`, the maximum value is `1`.
+// If the `cuCount` is greater than or equal to `32`, the maximum value is the number of queue CUs divided by `16`.
+func (o QueueSparkDriverOutput) MaxPrefetchInstance() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v QueueSparkDriver) *string { return v.MaxPrefetchInstance }).(pulumi.StringPtrOutput)
+}
+
+type QueueSparkDriverPtrOutput struct{ *pulumi.OutputState }
+
+func (QueueSparkDriverPtrOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((**QueueSparkDriver)(nil)).Elem()
+}
+
+func (o QueueSparkDriverPtrOutput) ToQueueSparkDriverPtrOutput() QueueSparkDriverPtrOutput {
+	return o
+}
+
+func (o QueueSparkDriverPtrOutput) ToQueueSparkDriverPtrOutputWithContext(ctx context.Context) QueueSparkDriverPtrOutput {
+	return o
+}
+
+func (o QueueSparkDriverPtrOutput) Elem() QueueSparkDriverOutput {
+	return o.ApplyT(func(v *QueueSparkDriver) QueueSparkDriver {
+		if v != nil {
+			return *v
+		}
+		var ret QueueSparkDriver
+		return ret
+	}).(QueueSparkDriverOutput)
+}
+
+// Specifies the maximum number of tasks that can be concurrently executed by a spark driver.
+// The valid value ranges from `1` to `32`.
+func (o QueueSparkDriverPtrOutput) MaxConcurrent() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v *QueueSparkDriver) *int {
+		if v == nil {
+			return nil
+		}
+		return v.MaxConcurrent
+	}).(pulumi.IntPtrOutput)
+}
+
+// Specifies the maximum number of spark drivers that can be started on the queue.
+// If the `cuCount` is `16`, the value can only be `2`.
+// If The `cuCount` is greater than `16`, the minimum value is `2`, the maximum value is the number of queue CUs
+// divided by `16`.
+func (o QueueSparkDriverPtrOutput) MaxInstance() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v *QueueSparkDriver) *int {
+		if v == nil {
+			return nil
+		}
+		return v.MaxInstance
+	}).(pulumi.IntPtrOutput)
+}
+
+// Specifies the maximum number of spark drivers to be pre-started on the queue.
+// The minimum value is `0`. If the `cuCount` is less than `32`, the maximum value is `1`.
+// If the `cuCount` is greater than or equal to `32`, the maximum value is the number of queue CUs divided by `16`.
+func (o QueueSparkDriverPtrOutput) MaxPrefetchInstance() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *QueueSparkDriver) *string {
+		if v == nil {
+			return nil
+		}
+		return v.MaxPrefetchInstance
+	}).(pulumi.StringPtrOutput)
+}
+
 type SparkJobDependentPackage struct {
-	// Specifies the user group name.
+	// Specifies the user group name.\
+	// Only letters, digits, dots (.), hyphens (-) and underscores (_) are allowed.
 	// Changing this parameter will submit a new spark job.
 	GroupName string `pulumi:"groupName"`
 	// Specifies the user group resource for details.
@@ -32,7 +380,8 @@ type SparkJobDependentPackageInput interface {
 }
 
 type SparkJobDependentPackageArgs struct {
-	// Specifies the user group name.
+	// Specifies the user group name.\
+	// Only letters, digits, dots (.), hyphens (-) and underscores (_) are allowed.
 	// Changing this parameter will submit a new spark job.
 	GroupName pulumi.StringInput `pulumi:"groupName"`
 	// Specifies the user group resource for details.
@@ -92,7 +441,8 @@ func (o SparkJobDependentPackageOutput) ToSparkJobDependentPackageOutputWithCont
 	return o
 }
 
-// Specifies the user group name.
+// Specifies the user group name.\
+// Only letters, digits, dots (.), hyphens (-) and underscores (_) are allowed.
 // Changing this parameter will submit a new spark job.
 func (o SparkJobDependentPackageOutput) GroupName() pulumi.StringOutput {
 	return o.ApplyT(func(v SparkJobDependentPackage) string { return v.GroupName }).(pulumi.StringOutput)
@@ -699,6 +1049,10 @@ func (o TableColumnArrayOutput) Index(i pulumi.IntInput) TableColumnOutput {
 }
 
 func init() {
+	pulumi.RegisterInputType(reflect.TypeOf((*QueueScalingPolicyInput)(nil)).Elem(), QueueScalingPolicyArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*QueueScalingPolicyArrayInput)(nil)).Elem(), QueueScalingPolicyArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*QueueSparkDriverInput)(nil)).Elem(), QueueSparkDriverArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*QueueSparkDriverPtrInput)(nil)).Elem(), QueueSparkDriverArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*SparkJobDependentPackageInput)(nil)).Elem(), SparkJobDependentPackageArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*SparkJobDependentPackageArrayInput)(nil)).Elem(), SparkJobDependentPackageArray{})
 	pulumi.RegisterInputType(reflect.TypeOf((*SparkJobDependentPackagePackageInput)(nil)).Elem(), SparkJobDependentPackagePackageArgs{})
@@ -707,6 +1061,10 @@ func init() {
 	pulumi.RegisterInputType(reflect.TypeOf((*SqlJobConfPtrInput)(nil)).Elem(), SqlJobConfArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*TableColumnInput)(nil)).Elem(), TableColumnArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*TableColumnArrayInput)(nil)).Elem(), TableColumnArray{})
+	pulumi.RegisterOutputType(QueueScalingPolicyOutput{})
+	pulumi.RegisterOutputType(QueueScalingPolicyArrayOutput{})
+	pulumi.RegisterOutputType(QueueSparkDriverOutput{})
+	pulumi.RegisterOutputType(QueueSparkDriverPtrOutput{})
 	pulumi.RegisterOutputType(SparkJobDependentPackageOutput{})
 	pulumi.RegisterOutputType(SparkJobDependentPackageArrayOutput{})
 	pulumi.RegisterOutputType(SparkJobDependentPackagePackageOutput{})

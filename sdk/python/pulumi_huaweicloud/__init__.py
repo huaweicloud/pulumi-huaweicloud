@@ -350,10 +350,42 @@ _utilities.register(
  },
  {
   "pkg": "huaweicloud",
+  "mod": "Cce/chart",
+  "fqn": "pulumi_huaweicloud.cce",
+  "classes": {
+   "huaweicloud:Cce/chart:Chart": "Chart"
+  }
+ },
+ {
+  "pkg": "huaweicloud",
   "mod": "Cce/cluster",
   "fqn": "pulumi_huaweicloud.cce",
   "classes": {
    "huaweicloud:Cce/cluster:Cluster": "Cluster"
+  }
+ },
+ {
+  "pkg": "huaweicloud",
+  "mod": "Cce/clusterCertificateRevoke",
+  "fqn": "pulumi_huaweicloud.cce",
+  "classes": {
+   "huaweicloud:Cce/clusterCertificateRevoke:ClusterCertificateRevoke": "ClusterCertificateRevoke"
+  }
+ },
+ {
+  "pkg": "huaweicloud",
+  "mod": "Cce/clusterLogConfig",
+  "fqn": "pulumi_huaweicloud.cce",
+  "classes": {
+   "huaweicloud:Cce/clusterLogConfig:ClusterLogConfig": "ClusterLogConfig"
+  }
+ },
+ {
+  "pkg": "huaweicloud",
+  "mod": "Cce/clusterUpgrade",
+  "fqn": "pulumi_huaweicloud.cce",
+  "classes": {
+   "huaweicloud:Cce/clusterUpgrade:ClusterUpgrade": "ClusterUpgrade"
   }
  },
  {
@@ -386,6 +418,30 @@ _utilities.register(
   "fqn": "pulumi_huaweicloud.cce",
   "classes": {
    "huaweicloud:Cce/nodePool:NodePool": "NodePool"
+  }
+ },
+ {
+  "pkg": "huaweicloud",
+  "mod": "Cce/nodePoolNodesAdd",
+  "fqn": "pulumi_huaweicloud.cce",
+  "classes": {
+   "huaweicloud:Cce/nodePoolNodesAdd:NodePoolNodesAdd": "NodePoolNodesAdd"
+  }
+ },
+ {
+  "pkg": "huaweicloud",
+  "mod": "Cce/nodePoolScale",
+  "fqn": "pulumi_huaweicloud.cce",
+  "classes": {
+   "huaweicloud:Cce/nodePoolScale:NodePoolScale": "NodePoolScale"
+  }
+ },
+ {
+  "pkg": "huaweicloud",
+  "mod": "Cce/nodeSync",
+  "fqn": "pulumi_huaweicloud.cce",
+  "classes": {
+   "huaweicloud:Cce/nodeSync:NodeSync": "NodeSync"
   }
  },
  {
@@ -686,10 +742,26 @@ _utilities.register(
  },
  {
   "pkg": "huaweicloud",
+  "mod": "DedicatedElb/activeStandbyPool",
+  "fqn": "pulumi_huaweicloud.dedicatedelb",
+  "classes": {
+   "huaweicloud:DedicatedElb/activeStandbyPool:ActiveStandbyPool": "ActiveStandbyPool"
+  }
+ },
+ {
+  "pkg": "huaweicloud",
   "mod": "DedicatedElb/certificate",
   "fqn": "pulumi_huaweicloud.dedicatedelb",
   "classes": {
    "huaweicloud:DedicatedElb/certificate:Certificate": "Certificate"
+  }
+ },
+ {
+  "pkg": "huaweicloud",
+  "mod": "DedicatedElb/certificatePrivateKeyEcho",
+  "fqn": "pulumi_huaweicloud.dedicatedelb",
+  "classes": {
+   "huaweicloud:DedicatedElb/certificatePrivateKeyEcho:CertificatePrivateKeyEcho": "CertificatePrivateKeyEcho"
   }
  },
  {
@@ -734,6 +806,22 @@ _utilities.register(
  },
  {
   "pkg": "huaweicloud",
+  "mod": "DedicatedElb/loadbalancerCopy",
+  "fqn": "pulumi_huaweicloud.dedicatedelb",
+  "classes": {
+   "huaweicloud:DedicatedElb/loadbalancerCopy:LoadbalancerCopy": "LoadbalancerCopy"
+  }
+ },
+ {
+  "pkg": "huaweicloud",
+  "mod": "DedicatedElb/logtank",
+  "fqn": "pulumi_huaweicloud.dedicatedelb",
+  "classes": {
+   "huaweicloud:DedicatedElb/logtank:Logtank": "Logtank"
+  }
+ },
+ {
+  "pkg": "huaweicloud",
   "mod": "DedicatedElb/member",
   "fqn": "pulumi_huaweicloud.dedicatedelb",
   "classes": {
@@ -754,6 +842,14 @@ _utilities.register(
   "fqn": "pulumi_huaweicloud.dedicatedelb",
   "classes": {
    "huaweicloud:DedicatedElb/pool:Pool": "Pool"
+  }
+ },
+ {
+  "pkg": "huaweicloud",
+  "mod": "DedicatedElb/securityPolicy",
+  "fqn": "pulumi_huaweicloud.dedicatedelb",
+  "classes": {
+   "huaweicloud:DedicatedElb/securityPolicy:SecurityPolicy": "SecurityPolicy"
   }
  },
  {
@@ -1206,6 +1302,30 @@ _utilities.register(
  },
  {
   "pkg": "huaweicloud",
+  "mod": "Iam/groupRoleAssignment",
+  "fqn": "pulumi_huaweicloud.iam",
+  "classes": {
+   "huaweicloud:Iam/groupRoleAssignment:GroupRoleAssignment": "GroupRoleAssignment"
+  }
+ },
+ {
+  "pkg": "huaweicloud",
+  "mod": "Iam/loginPolicy",
+  "fqn": "pulumi_huaweicloud.iam",
+  "classes": {
+   "huaweicloud:Iam/loginPolicy:LoginPolicy": "LoginPolicy"
+  }
+ },
+ {
+  "pkg": "huaweicloud",
+  "mod": "Iam/passwordPolicy",
+  "fqn": "pulumi_huaweicloud.iam",
+  "classes": {
+   "huaweicloud:Iam/passwordPolicy:PasswordPolicy": "PasswordPolicy"
+  }
+ },
+ {
+  "pkg": "huaweicloud",
   "mod": "Iam/project",
   "fqn": "pulumi_huaweicloud.iam",
   "classes": {
@@ -1214,10 +1334,26 @@ _utilities.register(
  },
  {
   "pkg": "huaweicloud",
+  "mod": "Iam/protectionPolicy",
+  "fqn": "pulumi_huaweicloud.iam",
+  "classes": {
+   "huaweicloud:Iam/protectionPolicy:ProtectionPolicy": "ProtectionPolicy"
+  }
+ },
+ {
+  "pkg": "huaweicloud",
   "mod": "Iam/provider",
   "fqn": "pulumi_huaweicloud.iam",
   "classes": {
    "huaweicloud:Iam/provider:Provider": "Provider"
+  }
+ },
+ {
+  "pkg": "huaweicloud",
+  "mod": "Iam/providerConversion",
+  "fqn": "pulumi_huaweicloud.iam",
+  "classes": {
+   "huaweicloud:Iam/providerConversion:ProviderConversion": "ProviderConversion"
   }
  },
  {
@@ -1242,6 +1378,30 @@ _utilities.register(
   "fqn": "pulumi_huaweicloud.iam",
   "classes": {
    "huaweicloud:Iam/user:User": "User"
+  }
+ },
+ {
+  "pkg": "huaweicloud",
+  "mod": "Iam/userRoleAssignment",
+  "fqn": "pulumi_huaweicloud.iam",
+  "classes": {
+   "huaweicloud:Iam/userRoleAssignment:UserRoleAssignment": "UserRoleAssignment"
+  }
+ },
+ {
+  "pkg": "huaweicloud",
+  "mod": "Iam/userToken",
+  "fqn": "pulumi_huaweicloud.iam",
+  "classes": {
+   "huaweicloud:Iam/userToken:UserToken": "UserToken"
+  }
+ },
+ {
+  "pkg": "huaweicloud",
+  "mod": "Iam/virtualMfaDevice",
+  "fqn": "pulumi_huaweicloud.iam",
+  "classes": {
+   "huaweicloud:Iam/virtualMfaDevice:VirtualMfaDevice": "VirtualMfaDevice"
   }
  },
  {
@@ -1622,10 +1782,34 @@ _utilities.register(
  },
  {
   "pkg": "huaweicloud",
+  "mod": "Rds/backup",
+  "fqn": "pulumi_huaweicloud.rds",
+  "classes": {
+   "huaweicloud:Rds/backup:Backup": "Backup"
+  }
+ },
+ {
+  "pkg": "huaweicloud",
+  "mod": "Rds/crossRegionBackupStrategy",
+  "fqn": "pulumi_huaweicloud.rds",
+  "classes": {
+   "huaweicloud:Rds/crossRegionBackupStrategy:CrossRegionBackupStrategy": "CrossRegionBackupStrategy"
+  }
+ },
+ {
+  "pkg": "huaweicloud",
   "mod": "Rds/database",
   "fqn": "pulumi_huaweicloud.rds",
   "classes": {
    "huaweicloud:Rds/database:Database": "Database"
+  }
+ },
+ {
+  "pkg": "huaweicloud",
+  "mod": "Rds/databaseLogsShrinking",
+  "fqn": "pulumi_huaweicloud.rds",
+  "classes": {
+   "huaweicloud:Rds/databaseLogsShrinking:DatabaseLogsShrinking": "DatabaseLogsShrinking"
   }
  },
  {
@@ -1638,10 +1822,98 @@ _utilities.register(
  },
  {
   "pkg": "huaweicloud",
+  "mod": "Rds/extendLogLink",
+  "fqn": "pulumi_huaweicloud.rds",
+  "classes": {
+   "huaweicloud:Rds/extendLogLink:ExtendLogLink": "ExtendLogLink"
+  }
+ },
+ {
+  "pkg": "huaweicloud",
   "mod": "Rds/instance",
   "fqn": "pulumi_huaweicloud.rds",
   "classes": {
    "huaweicloud:Rds/instance:Instance": "Instance"
+  }
+ },
+ {
+  "pkg": "huaweicloud",
+  "mod": "Rds/instanceEipAssociate",
+  "fqn": "pulumi_huaweicloud.rds",
+  "classes": {
+   "huaweicloud:Rds/instanceEipAssociate:InstanceEipAssociate": "InstanceEipAssociate"
+  }
+ },
+ {
+  "pkg": "huaweicloud",
+  "mod": "Rds/instantTaskDelete",
+  "fqn": "pulumi_huaweicloud.rds",
+  "classes": {
+   "huaweicloud:Rds/instantTaskDelete:InstantTaskDelete": "InstantTaskDelete"
+  }
+ },
+ {
+  "pkg": "huaweicloud",
+  "mod": "Rds/ltsLog",
+  "fqn": "pulumi_huaweicloud.rds",
+  "classes": {
+   "huaweicloud:Rds/ltsLog:LtsLog": "LtsLog"
+  }
+ },
+ {
+  "pkg": "huaweicloud",
+  "mod": "Rds/mysqlAccount",
+  "fqn": "pulumi_huaweicloud.rds",
+  "classes": {
+   "huaweicloud:Rds/mysqlAccount:MysqlAccount": "MysqlAccount"
+  }
+ },
+ {
+  "pkg": "huaweicloud",
+  "mod": "Rds/mysqlBinlog",
+  "fqn": "pulumi_huaweicloud.rds",
+  "classes": {
+   "huaweicloud:Rds/mysqlBinlog:MysqlBinlog": "MysqlBinlog"
+  }
+ },
+ {
+  "pkg": "huaweicloud",
+  "mod": "Rds/mysqlDatabase",
+  "fqn": "pulumi_huaweicloud.rds",
+  "classes": {
+   "huaweicloud:Rds/mysqlDatabase:MysqlDatabase": "MysqlDatabase"
+  }
+ },
+ {
+  "pkg": "huaweicloud",
+  "mod": "Rds/mysqlDatabasePrivilege",
+  "fqn": "pulumi_huaweicloud.rds",
+  "classes": {
+   "huaweicloud:Rds/mysqlDatabasePrivilege:MysqlDatabasePrivilege": "MysqlDatabasePrivilege"
+  }
+ },
+ {
+  "pkg": "huaweicloud",
+  "mod": "Rds/mysqlDatabaseTableRestore",
+  "fqn": "pulumi_huaweicloud.rds",
+  "classes": {
+   "huaweicloud:Rds/mysqlDatabaseTableRestore:MysqlDatabaseTableRestore": "MysqlDatabaseTableRestore"
+  }
+ },
+ {
+  "pkg": "huaweicloud",
+  "mod": "Rds/mysqlProxy",
+  "fqn": "pulumi_huaweicloud.rds",
+  "classes": {
+   "huaweicloud:Rds/mysqlProxy:MysqlProxy": "MysqlProxy"
+  }
+ },
+ {
+  "pkg": "huaweicloud",
+  "mod": "Rds/mysqlProxyRestart",
+  "fqn": "pulumi_huaweicloud.rds",
+  "classes": {
+   "huaweicloud:Rds/mysqlProxyRestart:MysqlProxyRestart": "MysqlProxyRestart"
   }
  },
  {
@@ -1654,10 +1926,146 @@ _utilities.register(
  },
  {
   "pkg": "huaweicloud",
+  "mod": "Rds/pgAccount",
+  "fqn": "pulumi_huaweicloud.rds",
+  "classes": {
+   "huaweicloud:Rds/pgAccount:PgAccount": "PgAccount"
+  }
+ },
+ {
+  "pkg": "huaweicloud",
+  "mod": "Rds/pgAccountPrivileges",
+  "fqn": "pulumi_huaweicloud.rds",
+  "classes": {
+   "huaweicloud:Rds/pgAccountPrivileges:PgAccountPrivileges": "PgAccountPrivileges"
+  }
+ },
+ {
+  "pkg": "huaweicloud",
+  "mod": "Rds/pgAccountRoles",
+  "fqn": "pulumi_huaweicloud.rds",
+  "classes": {
+   "huaweicloud:Rds/pgAccountRoles:PgAccountRoles": "PgAccountRoles"
+  }
+ },
+ {
+  "pkg": "huaweicloud",
+  "mod": "Rds/pgDatabase",
+  "fqn": "pulumi_huaweicloud.rds",
+  "classes": {
+   "huaweicloud:Rds/pgDatabase:PgDatabase": "PgDatabase"
+  }
+ },
+ {
+  "pkg": "huaweicloud",
+  "mod": "Rds/pgDatabasePrivilege",
+  "fqn": "pulumi_huaweicloud.rds",
+  "classes": {
+   "huaweicloud:Rds/pgDatabasePrivilege:PgDatabasePrivilege": "PgDatabasePrivilege"
+  }
+ },
+ {
+  "pkg": "huaweicloud",
+  "mod": "Rds/pgHba",
+  "fqn": "pulumi_huaweicloud.rds",
+  "classes": {
+   "huaweicloud:Rds/pgHba:PgHba": "PgHba"
+  }
+ },
+ {
+  "pkg": "huaweicloud",
+  "mod": "Rds/pgPlugin",
+  "fqn": "pulumi_huaweicloud.rds",
+  "classes": {
+   "huaweicloud:Rds/pgPlugin:PgPlugin": "PgPlugin"
+  }
+ },
+ {
+  "pkg": "huaweicloud",
+  "mod": "Rds/pgPluginParameter",
+  "fqn": "pulumi_huaweicloud.rds",
+  "classes": {
+   "huaweicloud:Rds/pgPluginParameter:PgPluginParameter": "PgPluginParameter"
+  }
+ },
+ {
+  "pkg": "huaweicloud",
+  "mod": "Rds/pgPluginUpdate",
+  "fqn": "pulumi_huaweicloud.rds",
+  "classes": {
+   "huaweicloud:Rds/pgPluginUpdate:PgPluginUpdate": "PgPluginUpdate"
+  }
+ },
+ {
+  "pkg": "huaweicloud",
+  "mod": "Rds/pgSqlLimit",
+  "fqn": "pulumi_huaweicloud.rds",
+  "classes": {
+   "huaweicloud:Rds/pgSqlLimit:PgSqlLimit": "PgSqlLimit"
+  }
+ },
+ {
+  "pkg": "huaweicloud",
+  "mod": "Rds/primaryStandbySwitch",
+  "fqn": "pulumi_huaweicloud.rds",
+  "classes": {
+   "huaweicloud:Rds/primaryStandbySwitch:PrimaryStandbySwitch": "PrimaryStandbySwitch"
+  }
+ },
+ {
+  "pkg": "huaweicloud",
   "mod": "Rds/readReplicaInstance",
   "fqn": "pulumi_huaweicloud.rds",
   "classes": {
    "huaweicloud:Rds/readReplicaInstance:ReadReplicaInstance": "ReadReplicaInstance"
+  }
+ },
+ {
+  "pkg": "huaweicloud",
+  "mod": "Rds/restore",
+  "fqn": "pulumi_huaweicloud.rds",
+  "classes": {
+   "huaweicloud:Rds/restore:Restore": "Restore"
+  }
+ },
+ {
+  "pkg": "huaweicloud",
+  "mod": "Rds/sqlAudit",
+  "fqn": "pulumi_huaweicloud.rds",
+  "classes": {
+   "huaweicloud:Rds/sqlAudit:SqlAudit": "SqlAudit"
+  }
+ },
+ {
+  "pkg": "huaweicloud",
+  "mod": "Rds/sqlserverAccount",
+  "fqn": "pulumi_huaweicloud.rds",
+  "classes": {
+   "huaweicloud:Rds/sqlserverAccount:SqlserverAccount": "SqlserverAccount"
+  }
+ },
+ {
+  "pkg": "huaweicloud",
+  "mod": "Rds/sqlserverDatabase",
+  "fqn": "pulumi_huaweicloud.rds",
+  "classes": {
+   "huaweicloud:Rds/sqlserverDatabase:SqlserverDatabase": "SqlserverDatabase"
+  }
+ },
+ {
+  "pkg": "huaweicloud",
+  "mod": "Rds/sqlserverDatabaseCopy",
+  "fqn": "pulumi_huaweicloud.rds",
+  "classes": {
+   "huaweicloud:Rds/sqlserverDatabaseCopy:SqlserverDatabaseCopy": "SqlserverDatabaseCopy"
+  }
+ },
+ {
+  "pkg": "huaweicloud",
+  "mod": "Rds/sqlserverDatabasePrivilege",
+  "fqn": "pulumi_huaweicloud.rds",
+  "classes": {
+   "huaweicloud:Rds/sqlserverDatabasePrivilege:SqlserverDatabasePrivilege": "SqlserverDatabasePrivilege"
   }
  },
  {
@@ -1894,6 +2302,30 @@ _utilities.register(
  },
  {
   "pkg": "huaweicloud",
+  "mod": "Vpc/flowLog",
+  "fqn": "pulumi_huaweicloud.vpc",
+  "classes": {
+   "huaweicloud:Vpc/flowLog:FlowLog": "FlowLog"
+  }
+ },
+ {
+  "pkg": "huaweicloud",
+  "mod": "Vpc/networkAcl",
+  "fqn": "pulumi_huaweicloud.vpc",
+  "classes": {
+   "huaweicloud:Vpc/networkAcl:NetworkAcl": "NetworkAcl"
+  }
+ },
+ {
+  "pkg": "huaweicloud",
+  "mod": "Vpc/networkInterface",
+  "fqn": "pulumi_huaweicloud.vpc",
+  "classes": {
+   "huaweicloud:Vpc/networkInterface:NetworkInterface": "NetworkInterface"
+  }
+ },
+ {
+  "pkg": "huaweicloud",
   "mod": "Vpc/peeringConnection",
   "fqn": "pulumi_huaweicloud.vpc",
   "classes": {
@@ -1950,10 +2382,50 @@ _utilities.register(
  },
  {
   "pkg": "huaweicloud",
+  "mod": "Vpc/subNetworkInterface",
+  "fqn": "pulumi_huaweicloud.vpc",
+  "classes": {
+   "huaweicloud:Vpc/subNetworkInterface:SubNetworkInterface": "SubNetworkInterface"
+  }
+ },
+ {
+  "pkg": "huaweicloud",
   "mod": "Vpc/subnet",
   "fqn": "pulumi_huaweicloud.vpc",
   "classes": {
    "huaweicloud:Vpc/subnet:Subnet": "Subnet"
+  }
+ },
+ {
+  "pkg": "huaweicloud",
+  "mod": "Vpc/subnetPrivateIp",
+  "fqn": "pulumi_huaweicloud.vpc",
+  "classes": {
+   "huaweicloud:Vpc/subnetPrivateIp:SubnetPrivateIp": "SubnetPrivateIp"
+  }
+ },
+ {
+  "pkg": "huaweicloud",
+  "mod": "Vpc/trafficMirrorFilter",
+  "fqn": "pulumi_huaweicloud.vpc",
+  "classes": {
+   "huaweicloud:Vpc/trafficMirrorFilter:TrafficMirrorFilter": "TrafficMirrorFilter"
+  }
+ },
+ {
+  "pkg": "huaweicloud",
+  "mod": "Vpc/trafficMirrorFilterRule",
+  "fqn": "pulumi_huaweicloud.vpc",
+  "classes": {
+   "huaweicloud:Vpc/trafficMirrorFilterRule:TrafficMirrorFilterRule": "TrafficMirrorFilterRule"
+  }
+ },
+ {
+  "pkg": "huaweicloud",
+  "mod": "Vpc/trafficMirrorSession",
+  "fqn": "pulumi_huaweicloud.vpc",
+  "classes": {
+   "huaweicloud:Vpc/trafficMirrorSession:TrafficMirrorSession": "TrafficMirrorSession"
   }
  },
  {

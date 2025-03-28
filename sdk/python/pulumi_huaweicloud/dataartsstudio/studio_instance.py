@@ -30,11 +30,11 @@ class StudioInstanceArgs:
         The set of arguments for constructing a StudioInstance resource.
         :param pulumi.Input[str] availability_zone: Specifies the AZ name. Changing this creates a new instance.
         :param pulumi.Input[int] period: Specifies the charging period of the DataArts Studio instance.
-               If `period_unit` is set to *month*, the value ranges from 1 to 9.
-               If `period_unit` is set to *year*, the value ranges from 1 to 3.
+               If `period_unit` is set to **month**, the value ranges from `1` to `9`.
+               If `period_unit` is set to **year**, the value ranges from `1` to `3`.
                Changing this creates a new instance.
         :param pulumi.Input[str] period_unit: Specifies the charging period unit of the instance.
-               Valid values are *month* and *year*.
+               Valid values are **month** and **year**.
                Changing this creates a new instance.
         :param pulumi.Input[str] security_group_id: Specifies the security group ID. Changing this creates a new instance.
         :param pulumi.Input[str] subnet_id: Specifies the VPC subnet ID. Changing this creates a new instance.
@@ -45,7 +45,6 @@ class StudioInstanceArgs:
         :param pulumi.Input[str] auto_renew: Specifies whether auto renew is enabled.
                Valid values are `true` and `false`, defaults to `false`. Changing this parameter will create a new resource.
         :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project id of the instance.
-               Changing this creates a new instance.
         :param pulumi.Input[str] name: Specifies the DataArts Studio instance name. Changing this creates a new instance.
         :param pulumi.Input[str] region: Specifies the region in which to manage the DataArts Studio instance.
                Changing this creates a new instance.
@@ -87,8 +86,8 @@ class StudioInstanceArgs:
     def period(self) -> pulumi.Input[int]:
         """
         Specifies the charging period of the DataArts Studio instance.
-        If `period_unit` is set to *month*, the value ranges from 1 to 9.
-        If `period_unit` is set to *year*, the value ranges from 1 to 3.
+        If `period_unit` is set to **month**, the value ranges from `1` to `9`.
+        If `period_unit` is set to **year**, the value ranges from `1` to `3`.
         Changing this creates a new instance.
         """
         return pulumi.get(self, "period")
@@ -102,7 +101,7 @@ class StudioInstanceArgs:
     def period_unit(self) -> pulumi.Input[str]:
         """
         Specifies the charging period unit of the instance.
-        Valid values are *month* and *year*.
+        Valid values are **month** and **year**.
         Changing this creates a new instance.
         """
         return pulumi.get(self, "period_unit")
@@ -179,7 +178,6 @@ class StudioInstanceArgs:
     def enterprise_project_id(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the enterprise project id of the instance.
-        Changing this creates a new instance.
         """
         return pulumi.get(self, "enterprise_project_id")
 
@@ -252,16 +250,15 @@ class _StudioInstanceState:
         :param pulumi.Input[str] availability_zone: Specifies the AZ name. Changing this creates a new instance.
         :param pulumi.Input[str] charging_mode: The charging mode. The value is `prePaid` indicates the yearly/monthly billing mode.
         :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project id of the instance.
-               Changing this creates a new instance.
         :param pulumi.Input[str] expire_days: The expire days to renew.
         :param pulumi.Input[str] name: Specifies the DataArts Studio instance name. Changing this creates a new instance.
         :param pulumi.Input[str] order_id: The order ID of this DataArts Studio instance.
         :param pulumi.Input[int] period: Specifies the charging period of the DataArts Studio instance.
-               If `period_unit` is set to *month*, the value ranges from 1 to 9.
-               If `period_unit` is set to *year*, the value ranges from 1 to 3.
+               If `period_unit` is set to **month**, the value ranges from `1` to `9`.
+               If `period_unit` is set to **year**, the value ranges from `1` to `3`.
                Changing this creates a new instance.
         :param pulumi.Input[str] period_unit: Specifies the charging period unit of the instance.
-               Valid values are *month* and *year*.
+               Valid values are **month** and **year**.
                Changing this creates a new instance.
         :param pulumi.Input[str] region: Specifies the region in which to manage the DataArts Studio instance.
                Changing this creates a new instance.
@@ -350,7 +347,6 @@ class _StudioInstanceState:
     def enterprise_project_id(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the enterprise project id of the instance.
-        Changing this creates a new instance.
         """
         return pulumi.get(self, "enterprise_project_id")
 
@@ -399,8 +395,8 @@ class _StudioInstanceState:
     def period(self) -> Optional[pulumi.Input[int]]:
         """
         Specifies the charging period of the DataArts Studio instance.
-        If `period_unit` is set to *month*, the value ranges from 1 to 9.
-        If `period_unit` is set to *year*, the value ranges from 1 to 3.
+        If `period_unit` is set to **month**, the value ranges from `1` to `9`.
+        If `period_unit` is set to **year**, the value ranges from `1` to `3`.
         Changing this creates a new instance.
         """
         return pulumi.get(self, "period")
@@ -414,7 +410,7 @@ class _StudioInstanceState:
     def period_unit(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the charging period unit of the instance.
-        Valid values are *month* and *year*.
+        Valid values are **month** and **year**.
         Changing this creates a new instance.
         """
         return pulumi.get(self, "period_unit")
@@ -570,7 +566,7 @@ class StudioInstance(pulumi.CustomResource):
          $ pulumi import huaweicloud:DataArtsStudio/studioInstance:StudioInstance instance e60361de2cfd42d7a6b673f0ae58db82
         ```
 
-         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`tags`, `period_unit`, `period`, `auto_renew`. It is generally recommended running `terraform plan` after importing an instance. You can then decide if changes should be applied to the instance, or the resource definition should be updated to align with the instance. Also you can ignore changes as below. resource "huaweicloud_dataarts_studio_instance" "instance" {
+         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`tags`, `period_unit`, `period`, `auto_renew`. It is generally recommended running `terraform plan` after importing an instance. You can then decide if changes should be applied to the instance, or the resource definition should be updated to align with the instance. Also you can ignore changes as below. hcl resource "huaweicloud_dataarts_studio_instance" "instance" {
 
          ...
 
@@ -590,14 +586,13 @@ class StudioInstance(pulumi.CustomResource):
                Valid values are `true` and `false`, defaults to `false`. Changing this parameter will create a new resource.
         :param pulumi.Input[str] availability_zone: Specifies the AZ name. Changing this creates a new instance.
         :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project id of the instance.
-               Changing this creates a new instance.
         :param pulumi.Input[str] name: Specifies the DataArts Studio instance name. Changing this creates a new instance.
         :param pulumi.Input[int] period: Specifies the charging period of the DataArts Studio instance.
-               If `period_unit` is set to *month*, the value ranges from 1 to 9.
-               If `period_unit` is set to *year*, the value ranges from 1 to 3.
+               If `period_unit` is set to **month**, the value ranges from `1` to `9`.
+               If `period_unit` is set to **year**, the value ranges from `1` to `3`.
                Changing this creates a new instance.
         :param pulumi.Input[str] period_unit: Specifies the charging period unit of the instance.
-               Valid values are *month* and *year*.
+               Valid values are **month** and **year**.
                Changing this creates a new instance.
         :param pulumi.Input[str] region: Specifies the region in which to manage the DataArts Studio instance.
                Changing this creates a new instance.
@@ -656,7 +651,7 @@ class StudioInstance(pulumi.CustomResource):
          $ pulumi import huaweicloud:DataArtsStudio/studioInstance:StudioInstance instance e60361de2cfd42d7a6b673f0ae58db82
         ```
 
-         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`tags`, `period_unit`, `period`, `auto_renew`. It is generally recommended running `terraform plan` after importing an instance. You can then decide if changes should be applied to the instance, or the resource definition should be updated to align with the instance. Also you can ignore changes as below. resource "huaweicloud_dataarts_studio_instance" "instance" {
+         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`tags`, `period_unit`, `period`, `auto_renew`. It is generally recommended running `terraform plan` after importing an instance. You can then decide if changes should be applied to the instance, or the resource definition should be updated to align with the instance. Also you can ignore changes as below. hcl resource "huaweicloud_dataarts_studio_instance" "instance" {
 
          ...
 
@@ -774,16 +769,15 @@ class StudioInstance(pulumi.CustomResource):
         :param pulumi.Input[str] availability_zone: Specifies the AZ name. Changing this creates a new instance.
         :param pulumi.Input[str] charging_mode: The charging mode. The value is `prePaid` indicates the yearly/monthly billing mode.
         :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project id of the instance.
-               Changing this creates a new instance.
         :param pulumi.Input[str] expire_days: The expire days to renew.
         :param pulumi.Input[str] name: Specifies the DataArts Studio instance name. Changing this creates a new instance.
         :param pulumi.Input[str] order_id: The order ID of this DataArts Studio instance.
         :param pulumi.Input[int] period: Specifies the charging period of the DataArts Studio instance.
-               If `period_unit` is set to *month*, the value ranges from 1 to 9.
-               If `period_unit` is set to *year*, the value ranges from 1 to 3.
+               If `period_unit` is set to **month**, the value ranges from `1` to `9`.
+               If `period_unit` is set to **year**, the value ranges from `1` to `3`.
                Changing this creates a new instance.
         :param pulumi.Input[str] period_unit: Specifies the charging period unit of the instance.
-               Valid values are *month* and *year*.
+               Valid values are **month** and **year**.
                Changing this creates a new instance.
         :param pulumi.Input[str] region: Specifies the region in which to manage the DataArts Studio instance.
                Changing this creates a new instance.
@@ -849,7 +843,6 @@ class StudioInstance(pulumi.CustomResource):
     def enterprise_project_id(self) -> pulumi.Output[str]:
         """
         Specifies the enterprise project id of the instance.
-        Changing this creates a new instance.
         """
         return pulumi.get(self, "enterprise_project_id")
 
@@ -882,8 +875,8 @@ class StudioInstance(pulumi.CustomResource):
     def period(self) -> pulumi.Output[int]:
         """
         Specifies the charging period of the DataArts Studio instance.
-        If `period_unit` is set to *month*, the value ranges from 1 to 9.
-        If `period_unit` is set to *year*, the value ranges from 1 to 3.
+        If `period_unit` is set to **month**, the value ranges from `1` to `9`.
+        If `period_unit` is set to **year**, the value ranges from `1` to `3`.
         Changing this creates a new instance.
         """
         return pulumi.get(self, "period")
@@ -893,7 +886,7 @@ class StudioInstance(pulumi.CustomResource):
     def period_unit(self) -> pulumi.Output[str]:
         """
         Specifies the charging period unit of the instance.
-        Valid values are *month* and *year*.
+        Valid values are **month** and **year**.
         Changing this creates a new instance.
         """
         return pulumi.get(self, "period_unit")

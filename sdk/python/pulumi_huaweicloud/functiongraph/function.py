@@ -25,80 +25,179 @@ class FunctionArgs:
                  code_filename: Optional[pulumi.Input[str]] = None,
                  code_type: Optional[pulumi.Input[str]] = None,
                  code_url: Optional[pulumi.Input[str]] = None,
+                 concurrency_num: Optional[pulumi.Input[int]] = None,
                  custom_image: Optional[pulumi.Input['FunctionCustomImageArgs']] = None,
                  depend_lists: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  description: Optional[pulumi.Input[str]] = None,
+                 dns_list: Optional[pulumi.Input[str]] = None,
+                 enable_auth_in_header: Optional[pulumi.Input[bool]] = None,
+                 enable_class_isolation: Optional[pulumi.Input[bool]] = None,
+                 enable_dynamic_memory: Optional[pulumi.Input[bool]] = None,
                  encrypted_user_data: Optional[pulumi.Input[str]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
+                 ephemeral_storage: Optional[pulumi.Input[int]] = None,
                  func_code: Optional[pulumi.Input[str]] = None,
                  func_mounts: Optional[pulumi.Input[Sequence[pulumi.Input['FunctionFuncMountArgs']]]] = None,
                  functiongraph_version: Optional[pulumi.Input[str]] = None,
+                 gpu_memory: Optional[pulumi.Input[int]] = None,
+                 gpu_type: Optional[pulumi.Input[str]] = None,
                  handler: Optional[pulumi.Input[str]] = None,
+                 heartbeat_handler: Optional[pulumi.Input[str]] = None,
                  initializer_handler: Optional[pulumi.Input[str]] = None,
                  initializer_timeout: Optional[pulumi.Input[int]] = None,
+                 is_stateful_function: Optional[pulumi.Input[bool]] = None,
+                 log_group_id: Optional[pulumi.Input[str]] = None,
+                 log_group_name: Optional[pulumi.Input[str]] = None,
+                 log_stream_id: Optional[pulumi.Input[str]] = None,
+                 log_stream_name: Optional[pulumi.Input[str]] = None,
                  max_instance_num: Optional[pulumi.Input[str]] = None,
                  mount_user_group_id: Optional[pulumi.Input[int]] = None,
                  mount_user_id: Optional[pulumi.Input[int]] = None,
                  name: Optional[pulumi.Input[str]] = None,
+                 network_controller: Optional[pulumi.Input['FunctionNetworkControllerArgs']] = None,
                  network_id: Optional[pulumi.Input[str]] = None,
                  package: Optional[pulumi.Input[str]] = None,
+                 peering_cidr: Optional[pulumi.Input[str]] = None,
+                 pre_stop_handler: Optional[pulumi.Input[str]] = None,
+                 pre_stop_timeout: Optional[pulumi.Input[int]] = None,
                  region: Optional[pulumi.Input[str]] = None,
+                 reserved_instances: Optional[pulumi.Input[Sequence[pulumi.Input['FunctionReservedInstanceArgs']]]] = None,
+                 restore_hook_handler: Optional[pulumi.Input[str]] = None,
+                 restore_hook_timeout: Optional[pulumi.Input[int]] = None,
                  tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  user_data: Optional[pulumi.Input[str]] = None,
+                 versions: Optional[pulumi.Input[Sequence[pulumi.Input['FunctionVersionArgs']]]] = None,
                  vpc_id: Optional[pulumi.Input[str]] = None,
                  xrole: Optional[pulumi.Input[str]] = None):
         """
         The set of arguments for constructing a Function resource.
-        :param pulumi.Input[int] memory_size: Specifies the memory size(MB) allocated to the function.
-        :param pulumi.Input[str] runtime: Specifies the environment for executing the function.
-               If the function is created using an SWR image, set this parameter to `Custom Image`.
-               Changing this will create a new resource.
-        :param pulumi.Input[int] timeout: Specifies the timeout interval of the function, ranges from 3s to 900s.
-        :param pulumi.Input[str] agency: Specifies the agency. This parameter is mandatory if the function needs to access other
-               cloud services.
+        :param pulumi.Input[int] memory_size: Specifies the memory size allocated to the function, in MByte (MB).
+        :param pulumi.Input[str] runtime: Specifies the environment for executing the function.  
+               The valid values are as follows:
+               + **Java8**
+               + **Java11**
+               + **Node.js6.10**
+               + **Node.js8.10**
+               + **Node.js10.16**
+               + **Node.js12.13**
+               + **Node.js14.18**
+               + **Node.js16.17**
+               + **Node.js18.15**
+               + **Python2.7**
+               + **Python3.6**
+               + **Python3.9**
+               + **Go1.x**
+               + **C#(.NET Core 2.1)**
+               + **C#(.NET Core 3.1)**
+               + **Custom**
+               + **PHP7.3**
+               + **http**
+               + **Custom Image**
+               + **Cangjie1.0**
+        :param pulumi.Input[int] timeout: Specifies the timeout interval of the function, in seconds.  
+               The value ranges from `3` to `259,200`.
+        :param pulumi.Input[str] agency: Specifies the agency configuration of the function.  
+               This parameter is mandatory if the function needs to access other cloud services.
         :param pulumi.Input[str] app: Specifies the group to which the function belongs.
-        :param pulumi.Input[str] app_agency: Specifies An execution agency enables you to obtain a token or an AK/SK for
+        :param pulumi.Input[str] app_agency: Specifies the execution agency enables you to obtain a token or an AK/SK for
                accessing other cloud services.
-        :param pulumi.Input[str] code_filename: Specifies the name of a function file, This field is mandatory only when coe_type
-               is set to jar or zip.
-        :param pulumi.Input[str] code_type: Specifies the function code type, which can be:
+        :param pulumi.Input[str] code_filename: Specifies the name of the function file.  
+               Required if the `code_type` is set to **jar** or **zip**.
+        :param pulumi.Input[str] code_type: Specifies the code type of the function.  
+               The valid values are as follows:
                + **inline**: inline code.
                + **zip**: ZIP file.
                + **jar**: JAR file or java functions.
                + **obs**: function code stored in an OBS bucket.
-        :param pulumi.Input[str] code_url: Specifies the code url. This parameter is mandatory when code_type is set to obs.
-        :param pulumi.Input['FunctionCustomImageArgs'] custom_image: Specifies the custom image configuration for creating function.
-               The object structure is documented below.
-        :param pulumi.Input[Sequence[pulumi.Input[str]]] depend_lists: Specifies the ID list of the dependencies.
-        :param pulumi.Input[str] description: Specifies the description of the function.
+               + **Custom-Image-Swr**: function code comes from the SWR custom image.
+        :param pulumi.Input[str] code_url: Specifies the URL where the function code is stored in OBS.  
+               Required if the `code_type` is set to **obs**.
+        :param pulumi.Input[int] concurrency_num: Specifies the number of concurrent requests of the function.  
+               The valid value is range from `1` to `1,000`, the default value is `1`.
+        :param pulumi.Input['FunctionCustomImageArgs'] custom_image: Specifies the custom image configuration of the function.  
+               The custom_image structure is documented below.
+               Required if the parameter `code_type` is **Custom-Image-Swr**.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] depend_lists: Specifies the list of the dependency version IDs.
+        :param pulumi.Input[str] description: Specifies the description of the version alias.
+        :param pulumi.Input[str] dns_list: Specifies the private DNS configuration of the function network.  
+               Private DNS list is associated to the function by a string in the following format:
+               `[{\\"id\\":\\"ff8080828a07ffea018a17184aa310f5\\","domain_name":"functiondebug.example1.com."}]`
+        :param pulumi.Input[bool] enable_auth_in_header: Specifies whether the authentication in the request header is enabled.  
+               Defaults to **false**.
+        :param pulumi.Input[bool] enable_class_isolation: Specifies whether the class isolation is enabled for the JAVA runtime
+               functions.
+               Defaults to **false**.
+        :param pulumi.Input[bool] enable_dynamic_memory: Specifies whether the dynamic memory configuration is enabled.  
+               Defaults to **false**.
         :param pulumi.Input[str] encrypted_user_data: Specifies the key/value information defined to be encrypted for the
-               function. The format is the same as `user_data`.
-        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project id of the function.
-               Changing this will create a new resource.
-        :param pulumi.Input[str] func_code: Specifies the function code. When code_type is set to inline, zip, or jar, this
-               parameter is mandatory, and the code can be encoded using Base64 or just with the text code.
-        :param pulumi.Input[Sequence[pulumi.Input['FunctionFuncMountArgs']]] func_mounts: Specifies the file system list. The `func_mounts` object structure is documented
-               below.
-        :param pulumi.Input[str] functiongraph_version: Specifies the FunctionGraph version, defaults to **v1**.
+               function.
+               The format is the same as `user_data`.
+        :param pulumi.Input[str] enterprise_project_id: Specifies the ID of the enterprise project to which the
+               function belongs.
+        :param pulumi.Input[int] ephemeral_storage: Specifies the size of the function ephemeral storage.  
+               The valid values are as follows:
+               + **512**
+               + **10240**
+        :param pulumi.Input[str] func_code: Specifies the function code.  
+               The code value can be encoded using **Base64** or just with the text code.
+               Required if the `code_type` is set to **inline**, **zip**, or **jar**.
+        :param pulumi.Input[Sequence[pulumi.Input['FunctionFuncMountArgs']]] func_mounts: Specifies the list of function mount configurations.  
+               The func_mounts structure is documented below.
+        :param pulumi.Input[str] functiongraph_version: Specifies the version of the function framework.  
+               The valid values are as follows:
                + **v1**: Hosts event-driven functions in a serverless context.
                + **v2**: Next-generation function hosting service powered by Huawei YuanRong architecture.
+        :param pulumi.Input[int] gpu_memory: Specifies the GPU memory size allocated to the function, in MByte (MB).  
+               The valid value is range form `1,024` to `16,384`, the value must be a multiple of `1,024`.
+               If not specified, the GPU function is disabled.
+        :param pulumi.Input[str] gpu_type: Specifies the GPU type of the function.  
+               Currently, only **nvidia-t4** is supported.
         :param pulumi.Input[str] handler: Specifies the entry point of the function.
+        :param pulumi.Input[str] heartbeat_handler: Specifies the heartbeat handler of the function.  
+               The rule is **xx.xx**, such as **com.huawei.demo.TriggerTests.heartBeat**, it must contain periods (.).
+               The heartbeat function entry must be in the same file as the function execution entry.
         :param pulumi.Input[str] initializer_handler: Specifies the initializer of the function.
-        :param pulumi.Input[int] initializer_timeout: Specifies the maximum duration the function can be initialized. Value range:
-               1s to 300s.
+        :param pulumi.Input[int] initializer_timeout: Specifies the maximum duration the function can be initialized, in seconds.  
+               The valid value is range from `1` to `300`.
+        :param pulumi.Input[bool] is_stateful_function: Specifies whether the function is a stateful function.  
+               Defaults to **false**.
+        :param pulumi.Input[str] log_group_id: Specifies the LTS group ID for collecting logs.
+        :param pulumi.Input[str] log_group_name: Specifies the LTS group name for collecting logs.
+        :param pulumi.Input[str] log_stream_id: Specifies the LTS stream IID for collecting logs.
+        :param pulumi.Input[str] log_stream_name: Specifies the LTS stream name for collecting logs.
         :param pulumi.Input[str] max_instance_num: Specifies the maximum number of instances of the function.  
-               The valid value ranges from `-1` to `1000`, defaults to `400`.
+               The valid value is range from `-1` to `1,000`, defaults to `400`.
                + The minimum value is `-1` and means the number of instances is unlimited.
-        :param pulumi.Input[int] mount_user_group_id: Specifies the user group ID, a non-0 integer from –1 to 65534. Default to
-               -1.
-        :param pulumi.Input[int] mount_user_id: Specifies the user ID, a non-0 integer from –1 to 65534. Default to -1.
-        :param pulumi.Input[str] name: Specifies the name of the function.
-               Changing this will create a new resource.
+        :param pulumi.Input[int] mount_user_group_id: Specifies the mount user group ID.  
+               The valid value is range from `–1` to `65,534`, except `0`.
+               Defaults to `-1`.
+        :param pulumi.Input[int] mount_user_id: Specifies the mount user ID.  
+               The valid value is range from `–1` to `65,534`, except `0`.
+               Defaults to `-1`.
+        :param pulumi.Input[str] name: Specifies the name of metric policy.  
+               The valid length is limited from `1` to `60` characters, only letters, digits, hyphens (-), and underscores (_) are
+               allowed. The name must start with a letter and ending with a letter or digit.
+        :param pulumi.Input['FunctionNetworkControllerArgs'] network_controller: Specifies the network configuration of the function.  
+               The network_controller structure is documented below.
         :param pulumi.Input[str] network_id: Specifies the network ID of subnet.
-        :param pulumi.Input[str] region: Specifies the region in which to create the Function resource. If omitted, the
-               provider-level region will be used. Changing this will create a new resource.
+        :param pulumi.Input[str] peering_cidr: Specifies the VPC cidr blocks used in the function code to detect whether it
+               conflicts with the VPC cidr blocks used by the service.
+               The cidr blocks are separated by semicolons and cannot exceed `5`.
+        :param pulumi.Input[str] pre_stop_handler: The pre-stop handler of a function.
+        :param pulumi.Input[int] pre_stop_timeout: The maximum duration that the function can be initialized.
+        :param pulumi.Input[str] region: Specifies the region where the function is located.  
+               If omitted, the provider-level region will be used. Changing this will create a new resource.
+        :param pulumi.Input[Sequence[pulumi.Input['FunctionReservedInstanceArgs']]] reserved_instances: Specifies the reserved instance policies of the function.  
+               The reserved_instances structure is documented below.
+        :param pulumi.Input[str] restore_hook_handler: Specifies the restore hook handler of the function.
+        :param pulumi.Input[int] restore_hook_timeout: Specifies the timeout of the function restore hook.  
+               The function will be forcibly stopped if the time is end.
+               The valid value is range from `1` to `300`, the unit is seconds (s).
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the function.
-        :param pulumi.Input[str] vpc_id: Specifies the ID of VPC.
+        :param pulumi.Input[str] user_data: The key/value information defined for the function.
+        :param pulumi.Input[Sequence[pulumi.Input['FunctionVersionArgs']]] versions: Specifies the versions management of the function.  
+               The versions structure is documented below.
+        :param pulumi.Input[str] vpc_id: Specifies the ID of the VPC that can trigger the function.
         """
         pulumi.set(__self__, "memory_size", memory_size)
         pulumi.set(__self__, "runtime", runtime)
@@ -115,28 +214,56 @@ class FunctionArgs:
             pulumi.set(__self__, "code_type", code_type)
         if code_url is not None:
             pulumi.set(__self__, "code_url", code_url)
+        if concurrency_num is not None:
+            pulumi.set(__self__, "concurrency_num", concurrency_num)
         if custom_image is not None:
             pulumi.set(__self__, "custom_image", custom_image)
         if depend_lists is not None:
             pulumi.set(__self__, "depend_lists", depend_lists)
         if description is not None:
             pulumi.set(__self__, "description", description)
+        if dns_list is not None:
+            pulumi.set(__self__, "dns_list", dns_list)
+        if enable_auth_in_header is not None:
+            pulumi.set(__self__, "enable_auth_in_header", enable_auth_in_header)
+        if enable_class_isolation is not None:
+            pulumi.set(__self__, "enable_class_isolation", enable_class_isolation)
+        if enable_dynamic_memory is not None:
+            pulumi.set(__self__, "enable_dynamic_memory", enable_dynamic_memory)
         if encrypted_user_data is not None:
             pulumi.set(__self__, "encrypted_user_data", encrypted_user_data)
         if enterprise_project_id is not None:
             pulumi.set(__self__, "enterprise_project_id", enterprise_project_id)
+        if ephemeral_storage is not None:
+            pulumi.set(__self__, "ephemeral_storage", ephemeral_storage)
         if func_code is not None:
             pulumi.set(__self__, "func_code", func_code)
         if func_mounts is not None:
             pulumi.set(__self__, "func_mounts", func_mounts)
         if functiongraph_version is not None:
             pulumi.set(__self__, "functiongraph_version", functiongraph_version)
+        if gpu_memory is not None:
+            pulumi.set(__self__, "gpu_memory", gpu_memory)
+        if gpu_type is not None:
+            pulumi.set(__self__, "gpu_type", gpu_type)
         if handler is not None:
             pulumi.set(__self__, "handler", handler)
+        if heartbeat_handler is not None:
+            pulumi.set(__self__, "heartbeat_handler", heartbeat_handler)
         if initializer_handler is not None:
             pulumi.set(__self__, "initializer_handler", initializer_handler)
         if initializer_timeout is not None:
             pulumi.set(__self__, "initializer_timeout", initializer_timeout)
+        if is_stateful_function is not None:
+            pulumi.set(__self__, "is_stateful_function", is_stateful_function)
+        if log_group_id is not None:
+            pulumi.set(__self__, "log_group_id", log_group_id)
+        if log_group_name is not None:
+            pulumi.set(__self__, "log_group_name", log_group_name)
+        if log_stream_id is not None:
+            pulumi.set(__self__, "log_stream_id", log_stream_id)
+        if log_stream_name is not None:
+            pulumi.set(__self__, "log_stream_name", log_stream_name)
         if max_instance_num is not None:
             pulumi.set(__self__, "max_instance_num", max_instance_num)
         if mount_user_group_id is not None:
@@ -145,6 +272,8 @@ class FunctionArgs:
             pulumi.set(__self__, "mount_user_id", mount_user_id)
         if name is not None:
             pulumi.set(__self__, "name", name)
+        if network_controller is not None:
+            pulumi.set(__self__, "network_controller", network_controller)
         if network_id is not None:
             pulumi.set(__self__, "network_id", network_id)
         if package is not None:
@@ -152,12 +281,26 @@ class FunctionArgs:
             pulumi.log.warn("""package is deprecated: use app instead""")
         if package is not None:
             pulumi.set(__self__, "package", package)
+        if peering_cidr is not None:
+            pulumi.set(__self__, "peering_cidr", peering_cidr)
+        if pre_stop_handler is not None:
+            pulumi.set(__self__, "pre_stop_handler", pre_stop_handler)
+        if pre_stop_timeout is not None:
+            pulumi.set(__self__, "pre_stop_timeout", pre_stop_timeout)
         if region is not None:
             pulumi.set(__self__, "region", region)
+        if reserved_instances is not None:
+            pulumi.set(__self__, "reserved_instances", reserved_instances)
+        if restore_hook_handler is not None:
+            pulumi.set(__self__, "restore_hook_handler", restore_hook_handler)
+        if restore_hook_timeout is not None:
+            pulumi.set(__self__, "restore_hook_timeout", restore_hook_timeout)
         if tags is not None:
             pulumi.set(__self__, "tags", tags)
         if user_data is not None:
             pulumi.set(__self__, "user_data", user_data)
+        if versions is not None:
+            pulumi.set(__self__, "versions", versions)
         if vpc_id is not None:
             pulumi.set(__self__, "vpc_id", vpc_id)
         if xrole is not None:
@@ -170,7 +313,7 @@ class FunctionArgs:
     @pulumi.getter(name="memorySize")
     def memory_size(self) -> pulumi.Input[int]:
         """
-        Specifies the memory size(MB) allocated to the function.
+        Specifies the memory size allocated to the function, in MByte (MB).
         """
         return pulumi.get(self, "memory_size")
 
@@ -182,9 +325,28 @@ class FunctionArgs:
     @pulumi.getter
     def runtime(self) -> pulumi.Input[str]:
         """
-        Specifies the environment for executing the function.
-        If the function is created using an SWR image, set this parameter to `Custom Image`.
-        Changing this will create a new resource.
+        Specifies the environment for executing the function.  
+        The valid values are as follows:
+        + **Java8**
+        + **Java11**
+        + **Node.js6.10**
+        + **Node.js8.10**
+        + **Node.js10.16**
+        + **Node.js12.13**
+        + **Node.js14.18**
+        + **Node.js16.17**
+        + **Node.js18.15**
+        + **Python2.7**
+        + **Python3.6**
+        + **Python3.9**
+        + **Go1.x**
+        + **C#(.NET Core 2.1)**
+        + **C#(.NET Core 3.1)**
+        + **Custom**
+        + **PHP7.3**
+        + **http**
+        + **Custom Image**
+        + **Cangjie1.0**
         """
         return pulumi.get(self, "runtime")
 
@@ -196,7 +358,8 @@ class FunctionArgs:
     @pulumi.getter
     def timeout(self) -> pulumi.Input[int]:
         """
-        Specifies the timeout interval of the function, ranges from 3s to 900s.
+        Specifies the timeout interval of the function, in seconds.  
+        The value ranges from `3` to `259,200`.
         """
         return pulumi.get(self, "timeout")
 
@@ -208,8 +371,8 @@ class FunctionArgs:
     @pulumi.getter
     def agency(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the agency. This parameter is mandatory if the function needs to access other
-        cloud services.
+        Specifies the agency configuration of the function.  
+        This parameter is mandatory if the function needs to access other cloud services.
         """
         return pulumi.get(self, "agency")
 
@@ -233,7 +396,7 @@ class FunctionArgs:
     @pulumi.getter(name="appAgency")
     def app_agency(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies An execution agency enables you to obtain a token or an AK/SK for
+        Specifies the execution agency enables you to obtain a token or an AK/SK for
         accessing other cloud services.
         """
         return pulumi.get(self, "app_agency")
@@ -246,8 +409,8 @@ class FunctionArgs:
     @pulumi.getter(name="codeFilename")
     def code_filename(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the name of a function file, This field is mandatory only when coe_type
-        is set to jar or zip.
+        Specifies the name of the function file.  
+        Required if the `code_type` is set to **jar** or **zip**.
         """
         return pulumi.get(self, "code_filename")
 
@@ -259,11 +422,13 @@ class FunctionArgs:
     @pulumi.getter(name="codeType")
     def code_type(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the function code type, which can be:
+        Specifies the code type of the function.  
+        The valid values are as follows:
         + **inline**: inline code.
         + **zip**: ZIP file.
         + **jar**: JAR file or java functions.
         + **obs**: function code stored in an OBS bucket.
+        + **Custom-Image-Swr**: function code comes from the SWR custom image.
         """
         return pulumi.get(self, "code_type")
 
@@ -275,7 +440,8 @@ class FunctionArgs:
     @pulumi.getter(name="codeUrl")
     def code_url(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the code url. This parameter is mandatory when code_type is set to obs.
+        Specifies the URL where the function code is stored in OBS.  
+        Required if the `code_type` is set to **obs**.
         """
         return pulumi.get(self, "code_url")
 
@@ -284,11 +450,25 @@ class FunctionArgs:
         pulumi.set(self, "code_url", value)
 
     @property
+    @pulumi.getter(name="concurrencyNum")
+    def concurrency_num(self) -> Optional[pulumi.Input[int]]:
+        """
+        Specifies the number of concurrent requests of the function.  
+        The valid value is range from `1` to `1,000`, the default value is `1`.
+        """
+        return pulumi.get(self, "concurrency_num")
+
+    @concurrency_num.setter
+    def concurrency_num(self, value: Optional[pulumi.Input[int]]):
+        pulumi.set(self, "concurrency_num", value)
+
+    @property
     @pulumi.getter(name="customImage")
     def custom_image(self) -> Optional[pulumi.Input['FunctionCustomImageArgs']]:
         """
-        Specifies the custom image configuration for creating function.
-        The object structure is documented below.
+        Specifies the custom image configuration of the function.  
+        The custom_image structure is documented below.
+        Required if the parameter `code_type` is **Custom-Image-Swr**.
         """
         return pulumi.get(self, "custom_image")
 
@@ -300,7 +480,7 @@ class FunctionArgs:
     @pulumi.getter(name="dependLists")
     def depend_lists(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]:
         """
-        Specifies the ID list of the dependencies.
+        Specifies the list of the dependency version IDs.
         """
         return pulumi.get(self, "depend_lists")
 
@@ -312,7 +492,7 @@ class FunctionArgs:
     @pulumi.getter
     def description(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the description of the function.
+        Specifies the description of the version alias.
         """
         return pulumi.get(self, "description")
 
@@ -321,11 +501,66 @@ class FunctionArgs:
         pulumi.set(self, "description", value)
 
     @property
+    @pulumi.getter(name="dnsList")
+    def dns_list(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the private DNS configuration of the function network.  
+        Private DNS list is associated to the function by a string in the following format:
+        `[{\\"id\\":\\"ff8080828a07ffea018a17184aa310f5\\","domain_name":"functiondebug.example1.com."}]`
+        """
+        return pulumi.get(self, "dns_list")
+
+    @dns_list.setter
+    def dns_list(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "dns_list", value)
+
+    @property
+    @pulumi.getter(name="enableAuthInHeader")
+    def enable_auth_in_header(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies whether the authentication in the request header is enabled.  
+        Defaults to **false**.
+        """
+        return pulumi.get(self, "enable_auth_in_header")
+
+    @enable_auth_in_header.setter
+    def enable_auth_in_header(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "enable_auth_in_header", value)
+
+    @property
+    @pulumi.getter(name="enableClassIsolation")
+    def enable_class_isolation(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies whether the class isolation is enabled for the JAVA runtime
+        functions.
+        Defaults to **false**.
+        """
+        return pulumi.get(self, "enable_class_isolation")
+
+    @enable_class_isolation.setter
+    def enable_class_isolation(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "enable_class_isolation", value)
+
+    @property
+    @pulumi.getter(name="enableDynamicMemory")
+    def enable_dynamic_memory(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies whether the dynamic memory configuration is enabled.  
+        Defaults to **false**.
+        """
+        return pulumi.get(self, "enable_dynamic_memory")
+
+    @enable_dynamic_memory.setter
+    def enable_dynamic_memory(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "enable_dynamic_memory", value)
+
+    @property
     @pulumi.getter(name="encryptedUserData")
     def encrypted_user_data(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the key/value information defined to be encrypted for the
-        function. The format is the same as `user_data`.
+        function.
+        The format is the same as `user_data`.
         """
         return pulumi.get(self, "encrypted_user_data")
 
@@ -337,8 +572,8 @@ class FunctionArgs:
     @pulumi.getter(name="enterpriseProjectId")
     def enterprise_project_id(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the enterprise project id of the function.
-        Changing this will create a new resource.
+        Specifies the ID of the enterprise project to which the
+        function belongs.
         """
         return pulumi.get(self, "enterprise_project_id")
 
@@ -347,11 +582,27 @@ class FunctionArgs:
         pulumi.set(self, "enterprise_project_id", value)
 
     @property
+    @pulumi.getter(name="ephemeralStorage")
+    def ephemeral_storage(self) -> Optional[pulumi.Input[int]]:
+        """
+        Specifies the size of the function ephemeral storage.  
+        The valid values are as follows:
+        + **512**
+        + **10240**
+        """
+        return pulumi.get(self, "ephemeral_storage")
+
+    @ephemeral_storage.setter
+    def ephemeral_storage(self, value: Optional[pulumi.Input[int]]):
+        pulumi.set(self, "ephemeral_storage", value)
+
+    @property
     @pulumi.getter(name="funcCode")
     def func_code(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the function code. When code_type is set to inline, zip, or jar, this
-        parameter is mandatory, and the code can be encoded using Base64 or just with the text code.
+        Specifies the function code.  
+        The code value can be encoded using **Base64** or just with the text code.
+        Required if the `code_type` is set to **inline**, **zip**, or **jar**.
         """
         return pulumi.get(self, "func_code")
 
@@ -363,8 +614,8 @@ class FunctionArgs:
     @pulumi.getter(name="funcMounts")
     def func_mounts(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['FunctionFuncMountArgs']]]]:
         """
-        Specifies the file system list. The `func_mounts` object structure is documented
-        below.
+        Specifies the list of function mount configurations.  
+        The func_mounts structure is documented below.
         """
         return pulumi.get(self, "func_mounts")
 
@@ -376,7 +627,8 @@ class FunctionArgs:
     @pulumi.getter(name="functiongraphVersion")
     def functiongraph_version(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the FunctionGraph version, defaults to **v1**.
+        Specifies the version of the function framework.  
+        The valid values are as follows:
         + **v1**: Hosts event-driven functions in a serverless context.
         + **v2**: Next-generation function hosting service powered by Huawei YuanRong architecture.
         """
@@ -385,6 +637,33 @@ class FunctionArgs:
     @functiongraph_version.setter
     def functiongraph_version(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "functiongraph_version", value)
+
+    @property
+    @pulumi.getter(name="gpuMemory")
+    def gpu_memory(self) -> Optional[pulumi.Input[int]]:
+        """
+        Specifies the GPU memory size allocated to the function, in MByte (MB).  
+        The valid value is range form `1,024` to `16,384`, the value must be a multiple of `1,024`.
+        If not specified, the GPU function is disabled.
+        """
+        return pulumi.get(self, "gpu_memory")
+
+    @gpu_memory.setter
+    def gpu_memory(self, value: Optional[pulumi.Input[int]]):
+        pulumi.set(self, "gpu_memory", value)
+
+    @property
+    @pulumi.getter(name="gpuType")
+    def gpu_type(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the GPU type of the function.  
+        Currently, only **nvidia-t4** is supported.
+        """
+        return pulumi.get(self, "gpu_type")
+
+    @gpu_type.setter
+    def gpu_type(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "gpu_type", value)
 
     @property
     @pulumi.getter
@@ -397,6 +676,20 @@ class FunctionArgs:
     @handler.setter
     def handler(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "handler", value)
+
+    @property
+    @pulumi.getter(name="heartbeatHandler")
+    def heartbeat_handler(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the heartbeat handler of the function.  
+        The rule is **xx.xx**, such as **com.huawei.demo.TriggerTests.heartBeat**, it must contain periods (.).
+        The heartbeat function entry must be in the same file as the function execution entry.
+        """
+        return pulumi.get(self, "heartbeat_handler")
+
+    @heartbeat_handler.setter
+    def heartbeat_handler(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "heartbeat_handler", value)
 
     @property
     @pulumi.getter(name="initializerHandler")
@@ -414,8 +707,8 @@ class FunctionArgs:
     @pulumi.getter(name="initializerTimeout")
     def initializer_timeout(self) -> Optional[pulumi.Input[int]]:
         """
-        Specifies the maximum duration the function can be initialized. Value range:
-        1s to 300s.
+        Specifies the maximum duration the function can be initialized, in seconds.  
+        The valid value is range from `1` to `300`.
         """
         return pulumi.get(self, "initializer_timeout")
 
@@ -424,11 +717,72 @@ class FunctionArgs:
         pulumi.set(self, "initializer_timeout", value)
 
     @property
+    @pulumi.getter(name="isStatefulFunction")
+    def is_stateful_function(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies whether the function is a stateful function.  
+        Defaults to **false**.
+        """
+        return pulumi.get(self, "is_stateful_function")
+
+    @is_stateful_function.setter
+    def is_stateful_function(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "is_stateful_function", value)
+
+    @property
+    @pulumi.getter(name="logGroupId")
+    def log_group_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the LTS group ID for collecting logs.
+        """
+        return pulumi.get(self, "log_group_id")
+
+    @log_group_id.setter
+    def log_group_id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "log_group_id", value)
+
+    @property
+    @pulumi.getter(name="logGroupName")
+    def log_group_name(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the LTS group name for collecting logs.
+        """
+        return pulumi.get(self, "log_group_name")
+
+    @log_group_name.setter
+    def log_group_name(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "log_group_name", value)
+
+    @property
+    @pulumi.getter(name="logStreamId")
+    def log_stream_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the LTS stream IID for collecting logs.
+        """
+        return pulumi.get(self, "log_stream_id")
+
+    @log_stream_id.setter
+    def log_stream_id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "log_stream_id", value)
+
+    @property
+    @pulumi.getter(name="logStreamName")
+    def log_stream_name(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the LTS stream name for collecting logs.
+        """
+        return pulumi.get(self, "log_stream_name")
+
+    @log_stream_name.setter
+    def log_stream_name(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "log_stream_name", value)
+
+    @property
     @pulumi.getter(name="maxInstanceNum")
     def max_instance_num(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the maximum number of instances of the function.  
-        The valid value ranges from `-1` to `1000`, defaults to `400`.
+        The valid value is range from `-1` to `1,000`, defaults to `400`.
         + The minimum value is `-1` and means the number of instances is unlimited.
         """
         return pulumi.get(self, "max_instance_num")
@@ -441,8 +795,9 @@ class FunctionArgs:
     @pulumi.getter(name="mountUserGroupId")
     def mount_user_group_id(self) -> Optional[pulumi.Input[int]]:
         """
-        Specifies the user group ID, a non-0 integer from –1 to 65534. Default to
-        -1.
+        Specifies the mount user group ID.  
+        The valid value is range from `–1` to `65,534`, except `0`.
+        Defaults to `-1`.
         """
         return pulumi.get(self, "mount_user_group_id")
 
@@ -454,7 +809,9 @@ class FunctionArgs:
     @pulumi.getter(name="mountUserId")
     def mount_user_id(self) -> Optional[pulumi.Input[int]]:
         """
-        Specifies the user ID, a non-0 integer from –1 to 65534. Default to -1.
+        Specifies the mount user ID.  
+        The valid value is range from `–1` to `65,534`, except `0`.
+        Defaults to `-1`.
         """
         return pulumi.get(self, "mount_user_id")
 
@@ -466,14 +823,28 @@ class FunctionArgs:
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the name of the function.
-        Changing this will create a new resource.
+        Specifies the name of metric policy.  
+        The valid length is limited from `1` to `60` characters, only letters, digits, hyphens (-), and underscores (_) are
+        allowed. The name must start with a letter and ending with a letter or digit.
         """
         return pulumi.get(self, "name")
 
     @name.setter
     def name(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "name", value)
+
+    @property
+    @pulumi.getter(name="networkController")
+    def network_controller(self) -> Optional[pulumi.Input['FunctionNetworkControllerArgs']]:
+        """
+        Specifies the network configuration of the function.  
+        The network_controller structure is documented below.
+        """
+        return pulumi.get(self, "network_controller")
+
+    @network_controller.setter
+    def network_controller(self, value: Optional[pulumi.Input['FunctionNetworkControllerArgs']]):
+        pulumi.set(self, "network_controller", value)
 
     @property
     @pulumi.getter(name="networkId")
@@ -497,17 +868,94 @@ class FunctionArgs:
         pulumi.set(self, "package", value)
 
     @property
+    @pulumi.getter(name="peeringCidr")
+    def peering_cidr(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the VPC cidr blocks used in the function code to detect whether it
+        conflicts with the VPC cidr blocks used by the service.
+        The cidr blocks are separated by semicolons and cannot exceed `5`.
+        """
+        return pulumi.get(self, "peering_cidr")
+
+    @peering_cidr.setter
+    def peering_cidr(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "peering_cidr", value)
+
+    @property
+    @pulumi.getter(name="preStopHandler")
+    def pre_stop_handler(self) -> Optional[pulumi.Input[str]]:
+        """
+        The pre-stop handler of a function.
+        """
+        return pulumi.get(self, "pre_stop_handler")
+
+    @pre_stop_handler.setter
+    def pre_stop_handler(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "pre_stop_handler", value)
+
+    @property
+    @pulumi.getter(name="preStopTimeout")
+    def pre_stop_timeout(self) -> Optional[pulumi.Input[int]]:
+        """
+        The maximum duration that the function can be initialized.
+        """
+        return pulumi.get(self, "pre_stop_timeout")
+
+    @pre_stop_timeout.setter
+    def pre_stop_timeout(self, value: Optional[pulumi.Input[int]]):
+        pulumi.set(self, "pre_stop_timeout", value)
+
+    @property
     @pulumi.getter
     def region(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the region in which to create the Function resource. If omitted, the
-        provider-level region will be used. Changing this will create a new resource.
+        Specifies the region where the function is located.  
+        If omitted, the provider-level region will be used. Changing this will create a new resource.
         """
         return pulumi.get(self, "region")
 
     @region.setter
     def region(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "region", value)
+
+    @property
+    @pulumi.getter(name="reservedInstances")
+    def reserved_instances(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['FunctionReservedInstanceArgs']]]]:
+        """
+        Specifies the reserved instance policies of the function.  
+        The reserved_instances structure is documented below.
+        """
+        return pulumi.get(self, "reserved_instances")
+
+    @reserved_instances.setter
+    def reserved_instances(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['FunctionReservedInstanceArgs']]]]):
+        pulumi.set(self, "reserved_instances", value)
+
+    @property
+    @pulumi.getter(name="restoreHookHandler")
+    def restore_hook_handler(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the restore hook handler of the function.
+        """
+        return pulumi.get(self, "restore_hook_handler")
+
+    @restore_hook_handler.setter
+    def restore_hook_handler(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "restore_hook_handler", value)
+
+    @property
+    @pulumi.getter(name="restoreHookTimeout")
+    def restore_hook_timeout(self) -> Optional[pulumi.Input[int]]:
+        """
+        Specifies the timeout of the function restore hook.  
+        The function will be forcibly stopped if the time is end.
+        The valid value is range from `1` to `300`, the unit is seconds (s).
+        """
+        return pulumi.get(self, "restore_hook_timeout")
+
+    @restore_hook_timeout.setter
+    def restore_hook_timeout(self, value: Optional[pulumi.Input[int]]):
+        pulumi.set(self, "restore_hook_timeout", value)
 
     @property
     @pulumi.getter
@@ -524,6 +972,9 @@ class FunctionArgs:
     @property
     @pulumi.getter(name="userData")
     def user_data(self) -> Optional[pulumi.Input[str]]:
+        """
+        The key/value information defined for the function.
+        """
         return pulumi.get(self, "user_data")
 
     @user_data.setter
@@ -531,10 +982,23 @@ class FunctionArgs:
         pulumi.set(self, "user_data", value)
 
     @property
+    @pulumi.getter
+    def versions(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['FunctionVersionArgs']]]]:
+        """
+        Specifies the versions management of the function.  
+        The versions structure is documented below.
+        """
+        return pulumi.get(self, "versions")
+
+    @versions.setter
+    def versions(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['FunctionVersionArgs']]]]):
+        pulumi.set(self, "versions", value)
+
+    @property
     @pulumi.getter(name="vpcId")
     def vpc_id(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the ID of VPC.
+        Specifies the ID of the VPC that can trigger the function.
         """
         return pulumi.get(self, "vpc_id")
 
@@ -561,87 +1025,186 @@ class _FunctionState:
                  code_filename: Optional[pulumi.Input[str]] = None,
                  code_type: Optional[pulumi.Input[str]] = None,
                  code_url: Optional[pulumi.Input[str]] = None,
+                 concurrency_num: Optional[pulumi.Input[int]] = None,
                  custom_image: Optional[pulumi.Input['FunctionCustomImageArgs']] = None,
                  depend_lists: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  description: Optional[pulumi.Input[str]] = None,
+                 dns_list: Optional[pulumi.Input[str]] = None,
+                 enable_auth_in_header: Optional[pulumi.Input[bool]] = None,
+                 enable_class_isolation: Optional[pulumi.Input[bool]] = None,
+                 enable_dynamic_memory: Optional[pulumi.Input[bool]] = None,
                  encrypted_user_data: Optional[pulumi.Input[str]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
+                 ephemeral_storage: Optional[pulumi.Input[int]] = None,
                  func_code: Optional[pulumi.Input[str]] = None,
                  func_mounts: Optional[pulumi.Input[Sequence[pulumi.Input['FunctionFuncMountArgs']]]] = None,
                  functiongraph_version: Optional[pulumi.Input[str]] = None,
+                 gpu_memory: Optional[pulumi.Input[int]] = None,
+                 gpu_type: Optional[pulumi.Input[str]] = None,
                  handler: Optional[pulumi.Input[str]] = None,
+                 heartbeat_handler: Optional[pulumi.Input[str]] = None,
                  initializer_handler: Optional[pulumi.Input[str]] = None,
                  initializer_timeout: Optional[pulumi.Input[int]] = None,
+                 is_stateful_function: Optional[pulumi.Input[bool]] = None,
+                 log_group_id: Optional[pulumi.Input[str]] = None,
+                 log_group_name: Optional[pulumi.Input[str]] = None,
+                 log_stream_id: Optional[pulumi.Input[str]] = None,
+                 log_stream_name: Optional[pulumi.Input[str]] = None,
                  max_instance_num: Optional[pulumi.Input[str]] = None,
                  memory_size: Optional[pulumi.Input[int]] = None,
                  mount_user_group_id: Optional[pulumi.Input[int]] = None,
                  mount_user_id: Optional[pulumi.Input[int]] = None,
                  name: Optional[pulumi.Input[str]] = None,
+                 network_controller: Optional[pulumi.Input['FunctionNetworkControllerArgs']] = None,
                  network_id: Optional[pulumi.Input[str]] = None,
                  package: Optional[pulumi.Input[str]] = None,
+                 peering_cidr: Optional[pulumi.Input[str]] = None,
+                 pre_stop_handler: Optional[pulumi.Input[str]] = None,
+                 pre_stop_timeout: Optional[pulumi.Input[int]] = None,
                  region: Optional[pulumi.Input[str]] = None,
+                 reserved_instances: Optional[pulumi.Input[Sequence[pulumi.Input['FunctionReservedInstanceArgs']]]] = None,
+                 restore_hook_handler: Optional[pulumi.Input[str]] = None,
+                 restore_hook_timeout: Optional[pulumi.Input[int]] = None,
                  runtime: Optional[pulumi.Input[str]] = None,
                  tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  timeout: Optional[pulumi.Input[int]] = None,
                  urn: Optional[pulumi.Input[str]] = None,
                  user_data: Optional[pulumi.Input[str]] = None,
                  version: Optional[pulumi.Input[str]] = None,
+                 versions: Optional[pulumi.Input[Sequence[pulumi.Input['FunctionVersionArgs']]]] = None,
                  vpc_id: Optional[pulumi.Input[str]] = None,
                  xrole: Optional[pulumi.Input[str]] = None):
         """
         Input properties used for looking up and filtering Function resources.
-        :param pulumi.Input[str] agency: Specifies the agency. This parameter is mandatory if the function needs to access other
-               cloud services.
+        :param pulumi.Input[str] agency: Specifies the agency configuration of the function.  
+               This parameter is mandatory if the function needs to access other cloud services.
         :param pulumi.Input[str] app: Specifies the group to which the function belongs.
-        :param pulumi.Input[str] app_agency: Specifies An execution agency enables you to obtain a token or an AK/SK for
+        :param pulumi.Input[str] app_agency: Specifies the execution agency enables you to obtain a token or an AK/SK for
                accessing other cloud services.
-        :param pulumi.Input[str] code_filename: Specifies the name of a function file, This field is mandatory only when coe_type
-               is set to jar or zip.
-        :param pulumi.Input[str] code_type: Specifies the function code type, which can be:
+        :param pulumi.Input[str] code_filename: Specifies the name of the function file.  
+               Required if the `code_type` is set to **jar** or **zip**.
+        :param pulumi.Input[str] code_type: Specifies the code type of the function.  
+               The valid values are as follows:
                + **inline**: inline code.
                + **zip**: ZIP file.
                + **jar**: JAR file or java functions.
                + **obs**: function code stored in an OBS bucket.
-        :param pulumi.Input[str] code_url: Specifies the code url. This parameter is mandatory when code_type is set to obs.
-        :param pulumi.Input['FunctionCustomImageArgs'] custom_image: Specifies the custom image configuration for creating function.
-               The object structure is documented below.
-        :param pulumi.Input[Sequence[pulumi.Input[str]]] depend_lists: Specifies the ID list of the dependencies.
-        :param pulumi.Input[str] description: Specifies the description of the function.
+               + **Custom-Image-Swr**: function code comes from the SWR custom image.
+        :param pulumi.Input[str] code_url: Specifies the URL where the function code is stored in OBS.  
+               Required if the `code_type` is set to **obs**.
+        :param pulumi.Input[int] concurrency_num: Specifies the number of concurrent requests of the function.  
+               The valid value is range from `1` to `1,000`, the default value is `1`.
+        :param pulumi.Input['FunctionCustomImageArgs'] custom_image: Specifies the custom image configuration of the function.  
+               The custom_image structure is documented below.
+               Required if the parameter `code_type` is **Custom-Image-Swr**.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] depend_lists: Specifies the list of the dependency version IDs.
+        :param pulumi.Input[str] description: Specifies the description of the version alias.
+        :param pulumi.Input[str] dns_list: Specifies the private DNS configuration of the function network.  
+               Private DNS list is associated to the function by a string in the following format:
+               `[{\\"id\\":\\"ff8080828a07ffea018a17184aa310f5\\","domain_name":"functiondebug.example1.com."}]`
+        :param pulumi.Input[bool] enable_auth_in_header: Specifies whether the authentication in the request header is enabled.  
+               Defaults to **false**.
+        :param pulumi.Input[bool] enable_class_isolation: Specifies whether the class isolation is enabled for the JAVA runtime
+               functions.
+               Defaults to **false**.
+        :param pulumi.Input[bool] enable_dynamic_memory: Specifies whether the dynamic memory configuration is enabled.  
+               Defaults to **false**.
         :param pulumi.Input[str] encrypted_user_data: Specifies the key/value information defined to be encrypted for the
-               function. The format is the same as `user_data`.
-        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project id of the function.
-               Changing this will create a new resource.
-        :param pulumi.Input[str] func_code: Specifies the function code. When code_type is set to inline, zip, or jar, this
-               parameter is mandatory, and the code can be encoded using Base64 or just with the text code.
-        :param pulumi.Input[Sequence[pulumi.Input['FunctionFuncMountArgs']]] func_mounts: Specifies the file system list. The `func_mounts` object structure is documented
-               below.
-        :param pulumi.Input[str] functiongraph_version: Specifies the FunctionGraph version, defaults to **v1**.
+               function.
+               The format is the same as `user_data`.
+        :param pulumi.Input[str] enterprise_project_id: Specifies the ID of the enterprise project to which the
+               function belongs.
+        :param pulumi.Input[int] ephemeral_storage: Specifies the size of the function ephemeral storage.  
+               The valid values are as follows:
+               + **512**
+               + **10240**
+        :param pulumi.Input[str] func_code: Specifies the function code.  
+               The code value can be encoded using **Base64** or just with the text code.
+               Required if the `code_type` is set to **inline**, **zip**, or **jar**.
+        :param pulumi.Input[Sequence[pulumi.Input['FunctionFuncMountArgs']]] func_mounts: Specifies the list of function mount configurations.  
+               The func_mounts structure is documented below.
+        :param pulumi.Input[str] functiongraph_version: Specifies the version of the function framework.  
+               The valid values are as follows:
                + **v1**: Hosts event-driven functions in a serverless context.
                + **v2**: Next-generation function hosting service powered by Huawei YuanRong architecture.
+        :param pulumi.Input[int] gpu_memory: Specifies the GPU memory size allocated to the function, in MByte (MB).  
+               The valid value is range form `1,024` to `16,384`, the value must be a multiple of `1,024`.
+               If not specified, the GPU function is disabled.
+        :param pulumi.Input[str] gpu_type: Specifies the GPU type of the function.  
+               Currently, only **nvidia-t4** is supported.
         :param pulumi.Input[str] handler: Specifies the entry point of the function.
+        :param pulumi.Input[str] heartbeat_handler: Specifies the heartbeat handler of the function.  
+               The rule is **xx.xx**, such as **com.huawei.demo.TriggerTests.heartBeat**, it must contain periods (.).
+               The heartbeat function entry must be in the same file as the function execution entry.
         :param pulumi.Input[str] initializer_handler: Specifies the initializer of the function.
-        :param pulumi.Input[int] initializer_timeout: Specifies the maximum duration the function can be initialized. Value range:
-               1s to 300s.
+        :param pulumi.Input[int] initializer_timeout: Specifies the maximum duration the function can be initialized, in seconds.  
+               The valid value is range from `1` to `300`.
+        :param pulumi.Input[bool] is_stateful_function: Specifies whether the function is a stateful function.  
+               Defaults to **false**.
+        :param pulumi.Input[str] log_group_id: Specifies the LTS group ID for collecting logs.
+        :param pulumi.Input[str] log_group_name: Specifies the LTS group name for collecting logs.
+        :param pulumi.Input[str] log_stream_id: Specifies the LTS stream IID for collecting logs.
+        :param pulumi.Input[str] log_stream_name: Specifies the LTS stream name for collecting logs.
         :param pulumi.Input[str] max_instance_num: Specifies the maximum number of instances of the function.  
-               The valid value ranges from `-1` to `1000`, defaults to `400`.
+               The valid value is range from `-1` to `1,000`, defaults to `400`.
                + The minimum value is `-1` and means the number of instances is unlimited.
-        :param pulumi.Input[int] memory_size: Specifies the memory size(MB) allocated to the function.
-        :param pulumi.Input[int] mount_user_group_id: Specifies the user group ID, a non-0 integer from –1 to 65534. Default to
-               -1.
-        :param pulumi.Input[int] mount_user_id: Specifies the user ID, a non-0 integer from –1 to 65534. Default to -1.
-        :param pulumi.Input[str] name: Specifies the name of the function.
-               Changing this will create a new resource.
+        :param pulumi.Input[int] memory_size: Specifies the memory size allocated to the function, in MByte (MB).
+        :param pulumi.Input[int] mount_user_group_id: Specifies the mount user group ID.  
+               The valid value is range from `–1` to `65,534`, except `0`.
+               Defaults to `-1`.
+        :param pulumi.Input[int] mount_user_id: Specifies the mount user ID.  
+               The valid value is range from `–1` to `65,534`, except `0`.
+               Defaults to `-1`.
+        :param pulumi.Input[str] name: Specifies the name of metric policy.  
+               The valid length is limited from `1` to `60` characters, only letters, digits, hyphens (-), and underscores (_) are
+               allowed. The name must start with a letter and ending with a letter or digit.
+        :param pulumi.Input['FunctionNetworkControllerArgs'] network_controller: Specifies the network configuration of the function.  
+               The network_controller structure is documented below.
         :param pulumi.Input[str] network_id: Specifies the network ID of subnet.
-        :param pulumi.Input[str] region: Specifies the region in which to create the Function resource. If omitted, the
-               provider-level region will be used. Changing this will create a new resource.
-        :param pulumi.Input[str] runtime: Specifies the environment for executing the function.
-               If the function is created using an SWR image, set this parameter to `Custom Image`.
-               Changing this will create a new resource.
+        :param pulumi.Input[str] peering_cidr: Specifies the VPC cidr blocks used in the function code to detect whether it
+               conflicts with the VPC cidr blocks used by the service.
+               The cidr blocks are separated by semicolons and cannot exceed `5`.
+        :param pulumi.Input[str] pre_stop_handler: The pre-stop handler of a function.
+        :param pulumi.Input[int] pre_stop_timeout: The maximum duration that the function can be initialized.
+        :param pulumi.Input[str] region: Specifies the region where the function is located.  
+               If omitted, the provider-level region will be used. Changing this will create a new resource.
+        :param pulumi.Input[Sequence[pulumi.Input['FunctionReservedInstanceArgs']]] reserved_instances: Specifies the reserved instance policies of the function.  
+               The reserved_instances structure is documented below.
+        :param pulumi.Input[str] restore_hook_handler: Specifies the restore hook handler of the function.
+        :param pulumi.Input[int] restore_hook_timeout: Specifies the timeout of the function restore hook.  
+               The function will be forcibly stopped if the time is end.
+               The valid value is range from `1` to `300`, the unit is seconds (s).
+        :param pulumi.Input[str] runtime: Specifies the environment for executing the function.  
+               The valid values are as follows:
+               + **Java8**
+               + **Java11**
+               + **Node.js6.10**
+               + **Node.js8.10**
+               + **Node.js10.16**
+               + **Node.js12.13**
+               + **Node.js14.18**
+               + **Node.js16.17**
+               + **Node.js18.15**
+               + **Python2.7**
+               + **Python3.6**
+               + **Python3.9**
+               + **Go1.x**
+               + **C#(.NET Core 2.1)**
+               + **C#(.NET Core 3.1)**
+               + **Custom**
+               + **PHP7.3**
+               + **http**
+               + **Custom Image**
+               + **Cangjie1.0**
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the function.
-        :param pulumi.Input[int] timeout: Specifies the timeout interval of the function, ranges from 3s to 900s.
-        :param pulumi.Input[str] urn: Uniform Resource Name
-        :param pulumi.Input[str] version: The version of the function
-        :param pulumi.Input[str] vpc_id: Specifies the ID of VPC.
+        :param pulumi.Input[int] timeout: Specifies the timeout interval of the function, in seconds.  
+               The value ranges from `3` to `259,200`.
+        :param pulumi.Input[str] urn: The URN (Uniform Resource Name) of the function.
+        :param pulumi.Input[str] user_data: The key/value information defined for the function.
+        :param pulumi.Input[str] version: The version of the function.
+        :param pulumi.Input[Sequence[pulumi.Input['FunctionVersionArgs']]] versions: Specifies the versions management of the function.  
+               The versions structure is documented below.
+        :param pulumi.Input[str] vpc_id: Specifies the ID of the VPC that can trigger the function.
         """
         if agency is not None:
             pulumi.set(__self__, "agency", agency)
@@ -655,28 +1218,56 @@ class _FunctionState:
             pulumi.set(__self__, "code_type", code_type)
         if code_url is not None:
             pulumi.set(__self__, "code_url", code_url)
+        if concurrency_num is not None:
+            pulumi.set(__self__, "concurrency_num", concurrency_num)
         if custom_image is not None:
             pulumi.set(__self__, "custom_image", custom_image)
         if depend_lists is not None:
             pulumi.set(__self__, "depend_lists", depend_lists)
         if description is not None:
             pulumi.set(__self__, "description", description)
+        if dns_list is not None:
+            pulumi.set(__self__, "dns_list", dns_list)
+        if enable_auth_in_header is not None:
+            pulumi.set(__self__, "enable_auth_in_header", enable_auth_in_header)
+        if enable_class_isolation is not None:
+            pulumi.set(__self__, "enable_class_isolation", enable_class_isolation)
+        if enable_dynamic_memory is not None:
+            pulumi.set(__self__, "enable_dynamic_memory", enable_dynamic_memory)
         if encrypted_user_data is not None:
             pulumi.set(__self__, "encrypted_user_data", encrypted_user_data)
         if enterprise_project_id is not None:
             pulumi.set(__self__, "enterprise_project_id", enterprise_project_id)
+        if ephemeral_storage is not None:
+            pulumi.set(__self__, "ephemeral_storage", ephemeral_storage)
         if func_code is not None:
             pulumi.set(__self__, "func_code", func_code)
         if func_mounts is not None:
             pulumi.set(__self__, "func_mounts", func_mounts)
         if functiongraph_version is not None:
             pulumi.set(__self__, "functiongraph_version", functiongraph_version)
+        if gpu_memory is not None:
+            pulumi.set(__self__, "gpu_memory", gpu_memory)
+        if gpu_type is not None:
+            pulumi.set(__self__, "gpu_type", gpu_type)
         if handler is not None:
             pulumi.set(__self__, "handler", handler)
+        if heartbeat_handler is not None:
+            pulumi.set(__self__, "heartbeat_handler", heartbeat_handler)
         if initializer_handler is not None:
             pulumi.set(__self__, "initializer_handler", initializer_handler)
         if initializer_timeout is not None:
             pulumi.set(__self__, "initializer_timeout", initializer_timeout)
+        if is_stateful_function is not None:
+            pulumi.set(__self__, "is_stateful_function", is_stateful_function)
+        if log_group_id is not None:
+            pulumi.set(__self__, "log_group_id", log_group_id)
+        if log_group_name is not None:
+            pulumi.set(__self__, "log_group_name", log_group_name)
+        if log_stream_id is not None:
+            pulumi.set(__self__, "log_stream_id", log_stream_id)
+        if log_stream_name is not None:
+            pulumi.set(__self__, "log_stream_name", log_stream_name)
         if max_instance_num is not None:
             pulumi.set(__self__, "max_instance_num", max_instance_num)
         if memory_size is not None:
@@ -687,6 +1278,8 @@ class _FunctionState:
             pulumi.set(__self__, "mount_user_id", mount_user_id)
         if name is not None:
             pulumi.set(__self__, "name", name)
+        if network_controller is not None:
+            pulumi.set(__self__, "network_controller", network_controller)
         if network_id is not None:
             pulumi.set(__self__, "network_id", network_id)
         if package is not None:
@@ -694,8 +1287,20 @@ class _FunctionState:
             pulumi.log.warn("""package is deprecated: use app instead""")
         if package is not None:
             pulumi.set(__self__, "package", package)
+        if peering_cidr is not None:
+            pulumi.set(__self__, "peering_cidr", peering_cidr)
+        if pre_stop_handler is not None:
+            pulumi.set(__self__, "pre_stop_handler", pre_stop_handler)
+        if pre_stop_timeout is not None:
+            pulumi.set(__self__, "pre_stop_timeout", pre_stop_timeout)
         if region is not None:
             pulumi.set(__self__, "region", region)
+        if reserved_instances is not None:
+            pulumi.set(__self__, "reserved_instances", reserved_instances)
+        if restore_hook_handler is not None:
+            pulumi.set(__self__, "restore_hook_handler", restore_hook_handler)
+        if restore_hook_timeout is not None:
+            pulumi.set(__self__, "restore_hook_timeout", restore_hook_timeout)
         if runtime is not None:
             pulumi.set(__self__, "runtime", runtime)
         if tags is not None:
@@ -708,6 +1313,8 @@ class _FunctionState:
             pulumi.set(__self__, "user_data", user_data)
         if version is not None:
             pulumi.set(__self__, "version", version)
+        if versions is not None:
+            pulumi.set(__self__, "versions", versions)
         if vpc_id is not None:
             pulumi.set(__self__, "vpc_id", vpc_id)
         if xrole is not None:
@@ -720,8 +1327,8 @@ class _FunctionState:
     @pulumi.getter
     def agency(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the agency. This parameter is mandatory if the function needs to access other
-        cloud services.
+        Specifies the agency configuration of the function.  
+        This parameter is mandatory if the function needs to access other cloud services.
         """
         return pulumi.get(self, "agency")
 
@@ -745,7 +1352,7 @@ class _FunctionState:
     @pulumi.getter(name="appAgency")
     def app_agency(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies An execution agency enables you to obtain a token or an AK/SK for
+        Specifies the execution agency enables you to obtain a token or an AK/SK for
         accessing other cloud services.
         """
         return pulumi.get(self, "app_agency")
@@ -758,8 +1365,8 @@ class _FunctionState:
     @pulumi.getter(name="codeFilename")
     def code_filename(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the name of a function file, This field is mandatory only when coe_type
-        is set to jar or zip.
+        Specifies the name of the function file.  
+        Required if the `code_type` is set to **jar** or **zip**.
         """
         return pulumi.get(self, "code_filename")
 
@@ -771,11 +1378,13 @@ class _FunctionState:
     @pulumi.getter(name="codeType")
     def code_type(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the function code type, which can be:
+        Specifies the code type of the function.  
+        The valid values are as follows:
         + **inline**: inline code.
         + **zip**: ZIP file.
         + **jar**: JAR file or java functions.
         + **obs**: function code stored in an OBS bucket.
+        + **Custom-Image-Swr**: function code comes from the SWR custom image.
         """
         return pulumi.get(self, "code_type")
 
@@ -787,7 +1396,8 @@ class _FunctionState:
     @pulumi.getter(name="codeUrl")
     def code_url(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the code url. This parameter is mandatory when code_type is set to obs.
+        Specifies the URL where the function code is stored in OBS.  
+        Required if the `code_type` is set to **obs**.
         """
         return pulumi.get(self, "code_url")
 
@@ -796,11 +1406,25 @@ class _FunctionState:
         pulumi.set(self, "code_url", value)
 
     @property
+    @pulumi.getter(name="concurrencyNum")
+    def concurrency_num(self) -> Optional[pulumi.Input[int]]:
+        """
+        Specifies the number of concurrent requests of the function.  
+        The valid value is range from `1` to `1,000`, the default value is `1`.
+        """
+        return pulumi.get(self, "concurrency_num")
+
+    @concurrency_num.setter
+    def concurrency_num(self, value: Optional[pulumi.Input[int]]):
+        pulumi.set(self, "concurrency_num", value)
+
+    @property
     @pulumi.getter(name="customImage")
     def custom_image(self) -> Optional[pulumi.Input['FunctionCustomImageArgs']]:
         """
-        Specifies the custom image configuration for creating function.
-        The object structure is documented below.
+        Specifies the custom image configuration of the function.  
+        The custom_image structure is documented below.
+        Required if the parameter `code_type` is **Custom-Image-Swr**.
         """
         return pulumi.get(self, "custom_image")
 
@@ -812,7 +1436,7 @@ class _FunctionState:
     @pulumi.getter(name="dependLists")
     def depend_lists(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]:
         """
-        Specifies the ID list of the dependencies.
+        Specifies the list of the dependency version IDs.
         """
         return pulumi.get(self, "depend_lists")
 
@@ -824,7 +1448,7 @@ class _FunctionState:
     @pulumi.getter
     def description(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the description of the function.
+        Specifies the description of the version alias.
         """
         return pulumi.get(self, "description")
 
@@ -833,11 +1457,66 @@ class _FunctionState:
         pulumi.set(self, "description", value)
 
     @property
+    @pulumi.getter(name="dnsList")
+    def dns_list(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the private DNS configuration of the function network.  
+        Private DNS list is associated to the function by a string in the following format:
+        `[{\\"id\\":\\"ff8080828a07ffea018a17184aa310f5\\","domain_name":"functiondebug.example1.com."}]`
+        """
+        return pulumi.get(self, "dns_list")
+
+    @dns_list.setter
+    def dns_list(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "dns_list", value)
+
+    @property
+    @pulumi.getter(name="enableAuthInHeader")
+    def enable_auth_in_header(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies whether the authentication in the request header is enabled.  
+        Defaults to **false**.
+        """
+        return pulumi.get(self, "enable_auth_in_header")
+
+    @enable_auth_in_header.setter
+    def enable_auth_in_header(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "enable_auth_in_header", value)
+
+    @property
+    @pulumi.getter(name="enableClassIsolation")
+    def enable_class_isolation(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies whether the class isolation is enabled for the JAVA runtime
+        functions.
+        Defaults to **false**.
+        """
+        return pulumi.get(self, "enable_class_isolation")
+
+    @enable_class_isolation.setter
+    def enable_class_isolation(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "enable_class_isolation", value)
+
+    @property
+    @pulumi.getter(name="enableDynamicMemory")
+    def enable_dynamic_memory(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies whether the dynamic memory configuration is enabled.  
+        Defaults to **false**.
+        """
+        return pulumi.get(self, "enable_dynamic_memory")
+
+    @enable_dynamic_memory.setter
+    def enable_dynamic_memory(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "enable_dynamic_memory", value)
+
+    @property
     @pulumi.getter(name="encryptedUserData")
     def encrypted_user_data(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the key/value information defined to be encrypted for the
-        function. The format is the same as `user_data`.
+        function.
+        The format is the same as `user_data`.
         """
         return pulumi.get(self, "encrypted_user_data")
 
@@ -849,8 +1528,8 @@ class _FunctionState:
     @pulumi.getter(name="enterpriseProjectId")
     def enterprise_project_id(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the enterprise project id of the function.
-        Changing this will create a new resource.
+        Specifies the ID of the enterprise project to which the
+        function belongs.
         """
         return pulumi.get(self, "enterprise_project_id")
 
@@ -859,11 +1538,27 @@ class _FunctionState:
         pulumi.set(self, "enterprise_project_id", value)
 
     @property
+    @pulumi.getter(name="ephemeralStorage")
+    def ephemeral_storage(self) -> Optional[pulumi.Input[int]]:
+        """
+        Specifies the size of the function ephemeral storage.  
+        The valid values are as follows:
+        + **512**
+        + **10240**
+        """
+        return pulumi.get(self, "ephemeral_storage")
+
+    @ephemeral_storage.setter
+    def ephemeral_storage(self, value: Optional[pulumi.Input[int]]):
+        pulumi.set(self, "ephemeral_storage", value)
+
+    @property
     @pulumi.getter(name="funcCode")
     def func_code(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the function code. When code_type is set to inline, zip, or jar, this
-        parameter is mandatory, and the code can be encoded using Base64 or just with the text code.
+        Specifies the function code.  
+        The code value can be encoded using **Base64** or just with the text code.
+        Required if the `code_type` is set to **inline**, **zip**, or **jar**.
         """
         return pulumi.get(self, "func_code")
 
@@ -875,8 +1570,8 @@ class _FunctionState:
     @pulumi.getter(name="funcMounts")
     def func_mounts(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['FunctionFuncMountArgs']]]]:
         """
-        Specifies the file system list. The `func_mounts` object structure is documented
-        below.
+        Specifies the list of function mount configurations.  
+        The func_mounts structure is documented below.
         """
         return pulumi.get(self, "func_mounts")
 
@@ -888,7 +1583,8 @@ class _FunctionState:
     @pulumi.getter(name="functiongraphVersion")
     def functiongraph_version(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the FunctionGraph version, defaults to **v1**.
+        Specifies the version of the function framework.  
+        The valid values are as follows:
         + **v1**: Hosts event-driven functions in a serverless context.
         + **v2**: Next-generation function hosting service powered by Huawei YuanRong architecture.
         """
@@ -897,6 +1593,33 @@ class _FunctionState:
     @functiongraph_version.setter
     def functiongraph_version(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "functiongraph_version", value)
+
+    @property
+    @pulumi.getter(name="gpuMemory")
+    def gpu_memory(self) -> Optional[pulumi.Input[int]]:
+        """
+        Specifies the GPU memory size allocated to the function, in MByte (MB).  
+        The valid value is range form `1,024` to `16,384`, the value must be a multiple of `1,024`.
+        If not specified, the GPU function is disabled.
+        """
+        return pulumi.get(self, "gpu_memory")
+
+    @gpu_memory.setter
+    def gpu_memory(self, value: Optional[pulumi.Input[int]]):
+        pulumi.set(self, "gpu_memory", value)
+
+    @property
+    @pulumi.getter(name="gpuType")
+    def gpu_type(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the GPU type of the function.  
+        Currently, only **nvidia-t4** is supported.
+        """
+        return pulumi.get(self, "gpu_type")
+
+    @gpu_type.setter
+    def gpu_type(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "gpu_type", value)
 
     @property
     @pulumi.getter
@@ -909,6 +1632,20 @@ class _FunctionState:
     @handler.setter
     def handler(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "handler", value)
+
+    @property
+    @pulumi.getter(name="heartbeatHandler")
+    def heartbeat_handler(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the heartbeat handler of the function.  
+        The rule is **xx.xx**, such as **com.huawei.demo.TriggerTests.heartBeat**, it must contain periods (.).
+        The heartbeat function entry must be in the same file as the function execution entry.
+        """
+        return pulumi.get(self, "heartbeat_handler")
+
+    @heartbeat_handler.setter
+    def heartbeat_handler(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "heartbeat_handler", value)
 
     @property
     @pulumi.getter(name="initializerHandler")
@@ -926,8 +1663,8 @@ class _FunctionState:
     @pulumi.getter(name="initializerTimeout")
     def initializer_timeout(self) -> Optional[pulumi.Input[int]]:
         """
-        Specifies the maximum duration the function can be initialized. Value range:
-        1s to 300s.
+        Specifies the maximum duration the function can be initialized, in seconds.  
+        The valid value is range from `1` to `300`.
         """
         return pulumi.get(self, "initializer_timeout")
 
@@ -936,11 +1673,72 @@ class _FunctionState:
         pulumi.set(self, "initializer_timeout", value)
 
     @property
+    @pulumi.getter(name="isStatefulFunction")
+    def is_stateful_function(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies whether the function is a stateful function.  
+        Defaults to **false**.
+        """
+        return pulumi.get(self, "is_stateful_function")
+
+    @is_stateful_function.setter
+    def is_stateful_function(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "is_stateful_function", value)
+
+    @property
+    @pulumi.getter(name="logGroupId")
+    def log_group_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the LTS group ID for collecting logs.
+        """
+        return pulumi.get(self, "log_group_id")
+
+    @log_group_id.setter
+    def log_group_id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "log_group_id", value)
+
+    @property
+    @pulumi.getter(name="logGroupName")
+    def log_group_name(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the LTS group name for collecting logs.
+        """
+        return pulumi.get(self, "log_group_name")
+
+    @log_group_name.setter
+    def log_group_name(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "log_group_name", value)
+
+    @property
+    @pulumi.getter(name="logStreamId")
+    def log_stream_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the LTS stream IID for collecting logs.
+        """
+        return pulumi.get(self, "log_stream_id")
+
+    @log_stream_id.setter
+    def log_stream_id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "log_stream_id", value)
+
+    @property
+    @pulumi.getter(name="logStreamName")
+    def log_stream_name(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the LTS stream name for collecting logs.
+        """
+        return pulumi.get(self, "log_stream_name")
+
+    @log_stream_name.setter
+    def log_stream_name(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "log_stream_name", value)
+
+    @property
     @pulumi.getter(name="maxInstanceNum")
     def max_instance_num(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the maximum number of instances of the function.  
-        The valid value ranges from `-1` to `1000`, defaults to `400`.
+        The valid value is range from `-1` to `1,000`, defaults to `400`.
         + The minimum value is `-1` and means the number of instances is unlimited.
         """
         return pulumi.get(self, "max_instance_num")
@@ -953,7 +1751,7 @@ class _FunctionState:
     @pulumi.getter(name="memorySize")
     def memory_size(self) -> Optional[pulumi.Input[int]]:
         """
-        Specifies the memory size(MB) allocated to the function.
+        Specifies the memory size allocated to the function, in MByte (MB).
         """
         return pulumi.get(self, "memory_size")
 
@@ -965,8 +1763,9 @@ class _FunctionState:
     @pulumi.getter(name="mountUserGroupId")
     def mount_user_group_id(self) -> Optional[pulumi.Input[int]]:
         """
-        Specifies the user group ID, a non-0 integer from –1 to 65534. Default to
-        -1.
+        Specifies the mount user group ID.  
+        The valid value is range from `–1` to `65,534`, except `0`.
+        Defaults to `-1`.
         """
         return pulumi.get(self, "mount_user_group_id")
 
@@ -978,7 +1777,9 @@ class _FunctionState:
     @pulumi.getter(name="mountUserId")
     def mount_user_id(self) -> Optional[pulumi.Input[int]]:
         """
-        Specifies the user ID, a non-0 integer from –1 to 65534. Default to -1.
+        Specifies the mount user ID.  
+        The valid value is range from `–1` to `65,534`, except `0`.
+        Defaults to `-1`.
         """
         return pulumi.get(self, "mount_user_id")
 
@@ -990,14 +1791,28 @@ class _FunctionState:
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the name of the function.
-        Changing this will create a new resource.
+        Specifies the name of metric policy.  
+        The valid length is limited from `1` to `60` characters, only letters, digits, hyphens (-), and underscores (_) are
+        allowed. The name must start with a letter and ending with a letter or digit.
         """
         return pulumi.get(self, "name")
 
     @name.setter
     def name(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "name", value)
+
+    @property
+    @pulumi.getter(name="networkController")
+    def network_controller(self) -> Optional[pulumi.Input['FunctionNetworkControllerArgs']]:
+        """
+        Specifies the network configuration of the function.  
+        The network_controller structure is documented below.
+        """
+        return pulumi.get(self, "network_controller")
+
+    @network_controller.setter
+    def network_controller(self, value: Optional[pulumi.Input['FunctionNetworkControllerArgs']]):
+        pulumi.set(self, "network_controller", value)
 
     @property
     @pulumi.getter(name="networkId")
@@ -1021,11 +1836,49 @@ class _FunctionState:
         pulumi.set(self, "package", value)
 
     @property
+    @pulumi.getter(name="peeringCidr")
+    def peering_cidr(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the VPC cidr blocks used in the function code to detect whether it
+        conflicts with the VPC cidr blocks used by the service.
+        The cidr blocks are separated by semicolons and cannot exceed `5`.
+        """
+        return pulumi.get(self, "peering_cidr")
+
+    @peering_cidr.setter
+    def peering_cidr(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "peering_cidr", value)
+
+    @property
+    @pulumi.getter(name="preStopHandler")
+    def pre_stop_handler(self) -> Optional[pulumi.Input[str]]:
+        """
+        The pre-stop handler of a function.
+        """
+        return pulumi.get(self, "pre_stop_handler")
+
+    @pre_stop_handler.setter
+    def pre_stop_handler(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "pre_stop_handler", value)
+
+    @property
+    @pulumi.getter(name="preStopTimeout")
+    def pre_stop_timeout(self) -> Optional[pulumi.Input[int]]:
+        """
+        The maximum duration that the function can be initialized.
+        """
+        return pulumi.get(self, "pre_stop_timeout")
+
+    @pre_stop_timeout.setter
+    def pre_stop_timeout(self, value: Optional[pulumi.Input[int]]):
+        pulumi.set(self, "pre_stop_timeout", value)
+
+    @property
     @pulumi.getter
     def region(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the region in which to create the Function resource. If omitted, the
-        provider-level region will be used. Changing this will create a new resource.
+        Specifies the region where the function is located.  
+        If omitted, the provider-level region will be used. Changing this will create a new resource.
         """
         return pulumi.get(self, "region")
 
@@ -1034,12 +1887,70 @@ class _FunctionState:
         pulumi.set(self, "region", value)
 
     @property
+    @pulumi.getter(name="reservedInstances")
+    def reserved_instances(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['FunctionReservedInstanceArgs']]]]:
+        """
+        Specifies the reserved instance policies of the function.  
+        The reserved_instances structure is documented below.
+        """
+        return pulumi.get(self, "reserved_instances")
+
+    @reserved_instances.setter
+    def reserved_instances(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['FunctionReservedInstanceArgs']]]]):
+        pulumi.set(self, "reserved_instances", value)
+
+    @property
+    @pulumi.getter(name="restoreHookHandler")
+    def restore_hook_handler(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the restore hook handler of the function.
+        """
+        return pulumi.get(self, "restore_hook_handler")
+
+    @restore_hook_handler.setter
+    def restore_hook_handler(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "restore_hook_handler", value)
+
+    @property
+    @pulumi.getter(name="restoreHookTimeout")
+    def restore_hook_timeout(self) -> Optional[pulumi.Input[int]]:
+        """
+        Specifies the timeout of the function restore hook.  
+        The function will be forcibly stopped if the time is end.
+        The valid value is range from `1` to `300`, the unit is seconds (s).
+        """
+        return pulumi.get(self, "restore_hook_timeout")
+
+    @restore_hook_timeout.setter
+    def restore_hook_timeout(self, value: Optional[pulumi.Input[int]]):
+        pulumi.set(self, "restore_hook_timeout", value)
+
+    @property
     @pulumi.getter
     def runtime(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the environment for executing the function.
-        If the function is created using an SWR image, set this parameter to `Custom Image`.
-        Changing this will create a new resource.
+        Specifies the environment for executing the function.  
+        The valid values are as follows:
+        + **Java8**
+        + **Java11**
+        + **Node.js6.10**
+        + **Node.js8.10**
+        + **Node.js10.16**
+        + **Node.js12.13**
+        + **Node.js14.18**
+        + **Node.js16.17**
+        + **Node.js18.15**
+        + **Python2.7**
+        + **Python3.6**
+        + **Python3.9**
+        + **Go1.x**
+        + **C#(.NET Core 2.1)**
+        + **C#(.NET Core 3.1)**
+        + **Custom**
+        + **PHP7.3**
+        + **http**
+        + **Custom Image**
+        + **Cangjie1.0**
         """
         return pulumi.get(self, "runtime")
 
@@ -1063,7 +1974,8 @@ class _FunctionState:
     @pulumi.getter
     def timeout(self) -> Optional[pulumi.Input[int]]:
         """
-        Specifies the timeout interval of the function, ranges from 3s to 900s.
+        Specifies the timeout interval of the function, in seconds.  
+        The value ranges from `3` to `259,200`.
         """
         return pulumi.get(self, "timeout")
 
@@ -1075,7 +1987,7 @@ class _FunctionState:
     @pulumi.getter
     def urn(self) -> Optional[pulumi.Input[str]]:
         """
-        Uniform Resource Name
+        The URN (Uniform Resource Name) of the function.
         """
         return pulumi.get(self, "urn")
 
@@ -1086,6 +1998,9 @@ class _FunctionState:
     @property
     @pulumi.getter(name="userData")
     def user_data(self) -> Optional[pulumi.Input[str]]:
+        """
+        The key/value information defined for the function.
+        """
         return pulumi.get(self, "user_data")
 
     @user_data.setter
@@ -1096,7 +2011,7 @@ class _FunctionState:
     @pulumi.getter
     def version(self) -> Optional[pulumi.Input[str]]:
         """
-        The version of the function
+        The version of the function.
         """
         return pulumi.get(self, "version")
 
@@ -1105,10 +2020,23 @@ class _FunctionState:
         pulumi.set(self, "version", value)
 
     @property
+    @pulumi.getter
+    def versions(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['FunctionVersionArgs']]]]:
+        """
+        Specifies the versions management of the function.  
+        The versions structure is documented below.
+        """
+        return pulumi.get(self, "versions")
+
+    @versions.setter
+    def versions(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['FunctionVersionArgs']]]]):
+        pulumi.set(self, "versions", value)
+
+    @property
     @pulumi.getter(name="vpcId")
     def vpc_id(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the ID of VPC.
+        Specifies the ID of the VPC that can trigger the function.
         """
         return pulumi.get(self, "vpc_id")
 
@@ -1137,64 +2065,84 @@ class Function(pulumi.CustomResource):
                  code_filename: Optional[pulumi.Input[str]] = None,
                  code_type: Optional[pulumi.Input[str]] = None,
                  code_url: Optional[pulumi.Input[str]] = None,
+                 concurrency_num: Optional[pulumi.Input[int]] = None,
                  custom_image: Optional[pulumi.Input[pulumi.InputType['FunctionCustomImageArgs']]] = None,
                  depend_lists: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  description: Optional[pulumi.Input[str]] = None,
+                 dns_list: Optional[pulumi.Input[str]] = None,
+                 enable_auth_in_header: Optional[pulumi.Input[bool]] = None,
+                 enable_class_isolation: Optional[pulumi.Input[bool]] = None,
+                 enable_dynamic_memory: Optional[pulumi.Input[bool]] = None,
                  encrypted_user_data: Optional[pulumi.Input[str]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
+                 ephemeral_storage: Optional[pulumi.Input[int]] = None,
                  func_code: Optional[pulumi.Input[str]] = None,
                  func_mounts: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['FunctionFuncMountArgs']]]]] = None,
                  functiongraph_version: Optional[pulumi.Input[str]] = None,
+                 gpu_memory: Optional[pulumi.Input[int]] = None,
+                 gpu_type: Optional[pulumi.Input[str]] = None,
                  handler: Optional[pulumi.Input[str]] = None,
+                 heartbeat_handler: Optional[pulumi.Input[str]] = None,
                  initializer_handler: Optional[pulumi.Input[str]] = None,
                  initializer_timeout: Optional[pulumi.Input[int]] = None,
+                 is_stateful_function: Optional[pulumi.Input[bool]] = None,
+                 log_group_id: Optional[pulumi.Input[str]] = None,
+                 log_group_name: Optional[pulumi.Input[str]] = None,
+                 log_stream_id: Optional[pulumi.Input[str]] = None,
+                 log_stream_name: Optional[pulumi.Input[str]] = None,
                  max_instance_num: Optional[pulumi.Input[str]] = None,
                  memory_size: Optional[pulumi.Input[int]] = None,
                  mount_user_group_id: Optional[pulumi.Input[int]] = None,
                  mount_user_id: Optional[pulumi.Input[int]] = None,
                  name: Optional[pulumi.Input[str]] = None,
+                 network_controller: Optional[pulumi.Input[pulumi.InputType['FunctionNetworkControllerArgs']]] = None,
                  network_id: Optional[pulumi.Input[str]] = None,
                  package: Optional[pulumi.Input[str]] = None,
+                 peering_cidr: Optional[pulumi.Input[str]] = None,
+                 pre_stop_handler: Optional[pulumi.Input[str]] = None,
+                 pre_stop_timeout: Optional[pulumi.Input[int]] = None,
                  region: Optional[pulumi.Input[str]] = None,
+                 reserved_instances: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['FunctionReservedInstanceArgs']]]]] = None,
+                 restore_hook_handler: Optional[pulumi.Input[str]] = None,
+                 restore_hook_timeout: Optional[pulumi.Input[int]] = None,
                  runtime: Optional[pulumi.Input[str]] = None,
                  tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  timeout: Optional[pulumi.Input[int]] = None,
                  user_data: Optional[pulumi.Input[str]] = None,
+                 versions: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['FunctionVersionArgs']]]]] = None,
                  vpc_id: Optional[pulumi.Input[str]] = None,
                  xrole: Optional[pulumi.Input[str]] = None,
                  __props__=None):
         """
-        Manages a Function resource within HuaweiCloud.
+        Manages the function resource within HuaweiCloud.
+
+        > Since version `1.73.1`, the requests of the function resource will send these parameters:<br>
+           `enable_dynamic_memory`<br>
+           `is_stateful_function`<br>
+           `network_controller`<br>
+           Since version `1.74.0`, the requests of the function resource will send these parameters:<br>
+           `enable_auth_in_header`<br>
+           `enable_class_isolation`<br>
+           For the regions that do not support this parameter, please use the lower version to deploy this resource.
 
         ## Example Usage
-        ### With base64 func code
-
-        ```python
-        import pulumi
-        import pulumi_huaweicloud as huaweicloud
-
-        f1 = huaweicloud.function_graph.Function("f1",
-            agency="test",
-            app="default",
-            code_type="inline",
-            description="fuction test",
-            func_code="aW1wb3J0IGpzb24KZGVmIGhhbmRsZXIgKGV2ZW50LCBjb250ZXh0KToKICAgIG91dHB1dCA9ICdIZWxsbyBtZXNzYWdlOiAnICsganNvbi5kdW1wcyhldmVudCkKICAgIHJldHVybiBvdXRwdXQ=",
-            handler="test.handler",
-            memory_size=128,
-            runtime="Python2.7",
-            timeout=3)
-        ```
         ### With text code
 
         ```python
         import pulumi
         import pulumi_huaweicloud as huaweicloud
 
-        f1 = huaweicloud.function_graph.Function("f1",
-            agency="test",
+        config = pulumi.Config()
+        function_name = config.require_object("functionName")
+        agency_name = config.require_object("agencyName")
+        test = huaweicloud.function_graph.Function("test",
             app="default",
+            agency=agency_name,
+            handler="test.handler",
+            memory_size=128,
+            timeout=3,
+            runtime="Python2.7",
             code_type="inline",
-            description="fuction test",
             func_code=\"\"\"# -*- coding:utf-8 -*-
         import json
         def handler (event, context):
@@ -1206,12 +2154,7 @@ class Function(pulumi.CustomResource):
                     "Content-Type": "application/json"
                 }
             }
-
-        \"\"\",
-            handler="test.handler",
-            memory_size=128,
-            runtime="Python2.7",
-            timeout=3)
+        \"\"\")
         ```
         ### Create function using SWR image
 
@@ -1228,22 +2171,47 @@ class Function(pulumi.CustomResource):
             handler="-",
             app="default",
             runtime="Custom Image",
+            code_type="Custom-Image-Swr",
             memory_size=128,
             timeout=3,
             custom_image=huaweicloud.function_graph.FunctionCustomImageArgs(
                 url=image_url,
             ))
         ```
+        ### Create function with Java runtime and corresponding configuration
+
+        ```python
+        import pulumi
+        import pulumi_huaweicloud as huaweicloud
+
+        config = pulumi.Config()
+        function_name = config.require_object("functionName")
+        agency_name = config.require_object("agencyName")
+        test = huaweicloud.function_graph.Function("test",
+            memory_size=128,
+            runtime="Java11",
+            timeout=15,
+            app="default",
+            handler="com.huawei.demo.TriggerTests.apigTest",
+            code_type="zip",
+            code_filename="java-demo.zip",
+            agency=agency_name,
+            enable_class_isolation=True,
+            ephemeral_storage=512,
+            heartbeat_handler="com.huawei.demo.TriggerTests.heartBeat",
+            restore_hook_handler="com.huawei.demo.TriggerTests.restoreHook",
+            restore_hook_timeout=10)
+        ```
 
         ## Import
 
-        Functions can be imported using the `id`, e.g.
+        Functions can be imported using the `id`, e.g. bash
 
         ```sh
-         $ pulumi import huaweicloud:FunctionGraph/function:Function my-func 7117d38e-4c8f-4624-a505-bd96b97d024c
+         $ pulumi import huaweicloud:FunctionGraph/function:Function test <id>
         ```
 
-         Note that the imported state may not be identical to your resource definition, due to the attribute missing from the API response. The missing attributes are`app`, `func_code`, `agency`, `tags"`. It is generally recommended running `terraform plan` after importing a function. You can then decide if changes should be applied to the function, or the resource definition should be updated to align with the function. Also you can ignore changes as below. hcl resource "huaweicloud_fgs_function" "test" {
+         Note that the imported state may not be identical to your resource definition, due to the attribute missing from the API response. The missing attributes are`func_code`, `encrypted_user_data`, `tags`. It is generally recommended running `terraform plan` after importing a function. You can then decide if changes should be applied to the function, or the resource definition should be updated to align with the function. Also you can ignore changes as below. hcl resource "huaweicloud_fgs_function" "test" {
 
          ...
 
@@ -1251,7 +2219,7 @@ class Function(pulumi.CustomResource):
 
          ignore_changes = [
 
-         app, func_code, agency, tags,
+         app, func_code, tags,
 
          ]
 
@@ -1259,56 +2227,133 @@ class Function(pulumi.CustomResource):
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[str] agency: Specifies the agency. This parameter is mandatory if the function needs to access other
-               cloud services.
+        :param pulumi.Input[str] agency: Specifies the agency configuration of the function.  
+               This parameter is mandatory if the function needs to access other cloud services.
         :param pulumi.Input[str] app: Specifies the group to which the function belongs.
-        :param pulumi.Input[str] app_agency: Specifies An execution agency enables you to obtain a token or an AK/SK for
+        :param pulumi.Input[str] app_agency: Specifies the execution agency enables you to obtain a token or an AK/SK for
                accessing other cloud services.
-        :param pulumi.Input[str] code_filename: Specifies the name of a function file, This field is mandatory only when coe_type
-               is set to jar or zip.
-        :param pulumi.Input[str] code_type: Specifies the function code type, which can be:
+        :param pulumi.Input[str] code_filename: Specifies the name of the function file.  
+               Required if the `code_type` is set to **jar** or **zip**.
+        :param pulumi.Input[str] code_type: Specifies the code type of the function.  
+               The valid values are as follows:
                + **inline**: inline code.
                + **zip**: ZIP file.
                + **jar**: JAR file or java functions.
                + **obs**: function code stored in an OBS bucket.
-        :param pulumi.Input[str] code_url: Specifies the code url. This parameter is mandatory when code_type is set to obs.
-        :param pulumi.Input[pulumi.InputType['FunctionCustomImageArgs']] custom_image: Specifies the custom image configuration for creating function.
-               The object structure is documented below.
-        :param pulumi.Input[Sequence[pulumi.Input[str]]] depend_lists: Specifies the ID list of the dependencies.
-        :param pulumi.Input[str] description: Specifies the description of the function.
+               + **Custom-Image-Swr**: function code comes from the SWR custom image.
+        :param pulumi.Input[str] code_url: Specifies the URL where the function code is stored in OBS.  
+               Required if the `code_type` is set to **obs**.
+        :param pulumi.Input[int] concurrency_num: Specifies the number of concurrent requests of the function.  
+               The valid value is range from `1` to `1,000`, the default value is `1`.
+        :param pulumi.Input[pulumi.InputType['FunctionCustomImageArgs']] custom_image: Specifies the custom image configuration of the function.  
+               The custom_image structure is documented below.
+               Required if the parameter `code_type` is **Custom-Image-Swr**.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] depend_lists: Specifies the list of the dependency version IDs.
+        :param pulumi.Input[str] description: Specifies the description of the version alias.
+        :param pulumi.Input[str] dns_list: Specifies the private DNS configuration of the function network.  
+               Private DNS list is associated to the function by a string in the following format:
+               `[{\\"id\\":\\"ff8080828a07ffea018a17184aa310f5\\","domain_name":"functiondebug.example1.com."}]`
+        :param pulumi.Input[bool] enable_auth_in_header: Specifies whether the authentication in the request header is enabled.  
+               Defaults to **false**.
+        :param pulumi.Input[bool] enable_class_isolation: Specifies whether the class isolation is enabled for the JAVA runtime
+               functions.
+               Defaults to **false**.
+        :param pulumi.Input[bool] enable_dynamic_memory: Specifies whether the dynamic memory configuration is enabled.  
+               Defaults to **false**.
         :param pulumi.Input[str] encrypted_user_data: Specifies the key/value information defined to be encrypted for the
-               function. The format is the same as `user_data`.
-        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project id of the function.
-               Changing this will create a new resource.
-        :param pulumi.Input[str] func_code: Specifies the function code. When code_type is set to inline, zip, or jar, this
-               parameter is mandatory, and the code can be encoded using Base64 or just with the text code.
-        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['FunctionFuncMountArgs']]]] func_mounts: Specifies the file system list. The `func_mounts` object structure is documented
-               below.
-        :param pulumi.Input[str] functiongraph_version: Specifies the FunctionGraph version, defaults to **v1**.
+               function.
+               The format is the same as `user_data`.
+        :param pulumi.Input[str] enterprise_project_id: Specifies the ID of the enterprise project to which the
+               function belongs.
+        :param pulumi.Input[int] ephemeral_storage: Specifies the size of the function ephemeral storage.  
+               The valid values are as follows:
+               + **512**
+               + **10240**
+        :param pulumi.Input[str] func_code: Specifies the function code.  
+               The code value can be encoded using **Base64** or just with the text code.
+               Required if the `code_type` is set to **inline**, **zip**, or **jar**.
+        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['FunctionFuncMountArgs']]]] func_mounts: Specifies the list of function mount configurations.  
+               The func_mounts structure is documented below.
+        :param pulumi.Input[str] functiongraph_version: Specifies the version of the function framework.  
+               The valid values are as follows:
                + **v1**: Hosts event-driven functions in a serverless context.
                + **v2**: Next-generation function hosting service powered by Huawei YuanRong architecture.
+        :param pulumi.Input[int] gpu_memory: Specifies the GPU memory size allocated to the function, in MByte (MB).  
+               The valid value is range form `1,024` to `16,384`, the value must be a multiple of `1,024`.
+               If not specified, the GPU function is disabled.
+        :param pulumi.Input[str] gpu_type: Specifies the GPU type of the function.  
+               Currently, only **nvidia-t4** is supported.
         :param pulumi.Input[str] handler: Specifies the entry point of the function.
+        :param pulumi.Input[str] heartbeat_handler: Specifies the heartbeat handler of the function.  
+               The rule is **xx.xx**, such as **com.huawei.demo.TriggerTests.heartBeat**, it must contain periods (.).
+               The heartbeat function entry must be in the same file as the function execution entry.
         :param pulumi.Input[str] initializer_handler: Specifies the initializer of the function.
-        :param pulumi.Input[int] initializer_timeout: Specifies the maximum duration the function can be initialized. Value range:
-               1s to 300s.
+        :param pulumi.Input[int] initializer_timeout: Specifies the maximum duration the function can be initialized, in seconds.  
+               The valid value is range from `1` to `300`.
+        :param pulumi.Input[bool] is_stateful_function: Specifies whether the function is a stateful function.  
+               Defaults to **false**.
+        :param pulumi.Input[str] log_group_id: Specifies the LTS group ID for collecting logs.
+        :param pulumi.Input[str] log_group_name: Specifies the LTS group name for collecting logs.
+        :param pulumi.Input[str] log_stream_id: Specifies the LTS stream IID for collecting logs.
+        :param pulumi.Input[str] log_stream_name: Specifies the LTS stream name for collecting logs.
         :param pulumi.Input[str] max_instance_num: Specifies the maximum number of instances of the function.  
-               The valid value ranges from `-1` to `1000`, defaults to `400`.
+               The valid value is range from `-1` to `1,000`, defaults to `400`.
                + The minimum value is `-1` and means the number of instances is unlimited.
-        :param pulumi.Input[int] memory_size: Specifies the memory size(MB) allocated to the function.
-        :param pulumi.Input[int] mount_user_group_id: Specifies the user group ID, a non-0 integer from –1 to 65534. Default to
-               -1.
-        :param pulumi.Input[int] mount_user_id: Specifies the user ID, a non-0 integer from –1 to 65534. Default to -1.
-        :param pulumi.Input[str] name: Specifies the name of the function.
-               Changing this will create a new resource.
+        :param pulumi.Input[int] memory_size: Specifies the memory size allocated to the function, in MByte (MB).
+        :param pulumi.Input[int] mount_user_group_id: Specifies the mount user group ID.  
+               The valid value is range from `–1` to `65,534`, except `0`.
+               Defaults to `-1`.
+        :param pulumi.Input[int] mount_user_id: Specifies the mount user ID.  
+               The valid value is range from `–1` to `65,534`, except `0`.
+               Defaults to `-1`.
+        :param pulumi.Input[str] name: Specifies the name of metric policy.  
+               The valid length is limited from `1` to `60` characters, only letters, digits, hyphens (-), and underscores (_) are
+               allowed. The name must start with a letter and ending with a letter or digit.
+        :param pulumi.Input[pulumi.InputType['FunctionNetworkControllerArgs']] network_controller: Specifies the network configuration of the function.  
+               The network_controller structure is documented below.
         :param pulumi.Input[str] network_id: Specifies the network ID of subnet.
-        :param pulumi.Input[str] region: Specifies the region in which to create the Function resource. If omitted, the
-               provider-level region will be used. Changing this will create a new resource.
-        :param pulumi.Input[str] runtime: Specifies the environment for executing the function.
-               If the function is created using an SWR image, set this parameter to `Custom Image`.
-               Changing this will create a new resource.
+        :param pulumi.Input[str] peering_cidr: Specifies the VPC cidr blocks used in the function code to detect whether it
+               conflicts with the VPC cidr blocks used by the service.
+               The cidr blocks are separated by semicolons and cannot exceed `5`.
+        :param pulumi.Input[str] pre_stop_handler: The pre-stop handler of a function.
+        :param pulumi.Input[int] pre_stop_timeout: The maximum duration that the function can be initialized.
+        :param pulumi.Input[str] region: Specifies the region where the function is located.  
+               If omitted, the provider-level region will be used. Changing this will create a new resource.
+        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['FunctionReservedInstanceArgs']]]] reserved_instances: Specifies the reserved instance policies of the function.  
+               The reserved_instances structure is documented below.
+        :param pulumi.Input[str] restore_hook_handler: Specifies the restore hook handler of the function.
+        :param pulumi.Input[int] restore_hook_timeout: Specifies the timeout of the function restore hook.  
+               The function will be forcibly stopped if the time is end.
+               The valid value is range from `1` to `300`, the unit is seconds (s).
+        :param pulumi.Input[str] runtime: Specifies the environment for executing the function.  
+               The valid values are as follows:
+               + **Java8**
+               + **Java11**
+               + **Node.js6.10**
+               + **Node.js8.10**
+               + **Node.js10.16**
+               + **Node.js12.13**
+               + **Node.js14.18**
+               + **Node.js16.17**
+               + **Node.js18.15**
+               + **Python2.7**
+               + **Python3.6**
+               + **Python3.9**
+               + **Go1.x**
+               + **C#(.NET Core 2.1)**
+               + **C#(.NET Core 3.1)**
+               + **Custom**
+               + **PHP7.3**
+               + **http**
+               + **Custom Image**
+               + **Cangjie1.0**
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the function.
-        :param pulumi.Input[int] timeout: Specifies the timeout interval of the function, ranges from 3s to 900s.
-        :param pulumi.Input[str] vpc_id: Specifies the ID of VPC.
+        :param pulumi.Input[int] timeout: Specifies the timeout interval of the function, in seconds.  
+               The value ranges from `3` to `259,200`.
+        :param pulumi.Input[str] user_data: The key/value information defined for the function.
+        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['FunctionVersionArgs']]]] versions: Specifies the versions management of the function.  
+               The versions structure is documented below.
+        :param pulumi.Input[str] vpc_id: Specifies the ID of the VPC that can trigger the function.
         """
         ...
     @overload
@@ -1317,37 +2362,35 @@ class Function(pulumi.CustomResource):
                  args: FunctionArgs,
                  opts: Optional[pulumi.ResourceOptions] = None):
         """
-        Manages a Function resource within HuaweiCloud.
+        Manages the function resource within HuaweiCloud.
+
+        > Since version `1.73.1`, the requests of the function resource will send these parameters:<br>
+           `enable_dynamic_memory`<br>
+           `is_stateful_function`<br>
+           `network_controller`<br>
+           Since version `1.74.0`, the requests of the function resource will send these parameters:<br>
+           `enable_auth_in_header`<br>
+           `enable_class_isolation`<br>
+           For the regions that do not support this parameter, please use the lower version to deploy this resource.
 
         ## Example Usage
-        ### With base64 func code
-
-        ```python
-        import pulumi
-        import pulumi_huaweicloud as huaweicloud
-
-        f1 = huaweicloud.function_graph.Function("f1",
-            agency="test",
-            app="default",
-            code_type="inline",
-            description="fuction test",
-            func_code="aW1wb3J0IGpzb24KZGVmIGhhbmRsZXIgKGV2ZW50LCBjb250ZXh0KToKICAgIG91dHB1dCA9ICdIZWxsbyBtZXNzYWdlOiAnICsganNvbi5kdW1wcyhldmVudCkKICAgIHJldHVybiBvdXRwdXQ=",
-            handler="test.handler",
-            memory_size=128,
-            runtime="Python2.7",
-            timeout=3)
-        ```
         ### With text code
 
         ```python
         import pulumi
         import pulumi_huaweicloud as huaweicloud
 
-        f1 = huaweicloud.function_graph.Function("f1",
-            agency="test",
+        config = pulumi.Config()
+        function_name = config.require_object("functionName")
+        agency_name = config.require_object("agencyName")
+        test = huaweicloud.function_graph.Function("test",
             app="default",
+            agency=agency_name,
+            handler="test.handler",
+            memory_size=128,
+            timeout=3,
+            runtime="Python2.7",
             code_type="inline",
-            description="fuction test",
             func_code=\"\"\"# -*- coding:utf-8 -*-
         import json
         def handler (event, context):
@@ -1359,12 +2402,7 @@ class Function(pulumi.CustomResource):
                     "Content-Type": "application/json"
                 }
             }
-
-        \"\"\",
-            handler="test.handler",
-            memory_size=128,
-            runtime="Python2.7",
-            timeout=3)
+        \"\"\")
         ```
         ### Create function using SWR image
 
@@ -1381,22 +2419,47 @@ class Function(pulumi.CustomResource):
             handler="-",
             app="default",
             runtime="Custom Image",
+            code_type="Custom-Image-Swr",
             memory_size=128,
             timeout=3,
             custom_image=huaweicloud.function_graph.FunctionCustomImageArgs(
                 url=image_url,
             ))
         ```
+        ### Create function with Java runtime and corresponding configuration
+
+        ```python
+        import pulumi
+        import pulumi_huaweicloud as huaweicloud
+
+        config = pulumi.Config()
+        function_name = config.require_object("functionName")
+        agency_name = config.require_object("agencyName")
+        test = huaweicloud.function_graph.Function("test",
+            memory_size=128,
+            runtime="Java11",
+            timeout=15,
+            app="default",
+            handler="com.huawei.demo.TriggerTests.apigTest",
+            code_type="zip",
+            code_filename="java-demo.zip",
+            agency=agency_name,
+            enable_class_isolation=True,
+            ephemeral_storage=512,
+            heartbeat_handler="com.huawei.demo.TriggerTests.heartBeat",
+            restore_hook_handler="com.huawei.demo.TriggerTests.restoreHook",
+            restore_hook_timeout=10)
+        ```
 
         ## Import
 
-        Functions can be imported using the `id`, e.g.
+        Functions can be imported using the `id`, e.g. bash
 
         ```sh
-         $ pulumi import huaweicloud:FunctionGraph/function:Function my-func 7117d38e-4c8f-4624-a505-bd96b97d024c
+         $ pulumi import huaweicloud:FunctionGraph/function:Function test <id>
         ```
 
-         Note that the imported state may not be identical to your resource definition, due to the attribute missing from the API response. The missing attributes are`app`, `func_code`, `agency`, `tags"`. It is generally recommended running `terraform plan` after importing a function. You can then decide if changes should be applied to the function, or the resource definition should be updated to align with the function. Also you can ignore changes as below. hcl resource "huaweicloud_fgs_function" "test" {
+         Note that the imported state may not be identical to your resource definition, due to the attribute missing from the API response. The missing attributes are`func_code`, `encrypted_user_data`, `tags`. It is generally recommended running `terraform plan` after importing a function. You can then decide if changes should be applied to the function, or the resource definition should be updated to align with the function. Also you can ignore changes as below. hcl resource "huaweicloud_fgs_function" "test" {
 
          ...
 
@@ -1404,7 +2467,7 @@ class Function(pulumi.CustomResource):
 
          ignore_changes = [
 
-         app, func_code, agency, tags,
+         app, func_code, tags,
 
          ]
 
@@ -1431,29 +2494,51 @@ class Function(pulumi.CustomResource):
                  code_filename: Optional[pulumi.Input[str]] = None,
                  code_type: Optional[pulumi.Input[str]] = None,
                  code_url: Optional[pulumi.Input[str]] = None,
+                 concurrency_num: Optional[pulumi.Input[int]] = None,
                  custom_image: Optional[pulumi.Input[pulumi.InputType['FunctionCustomImageArgs']]] = None,
                  depend_lists: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  description: Optional[pulumi.Input[str]] = None,
+                 dns_list: Optional[pulumi.Input[str]] = None,
+                 enable_auth_in_header: Optional[pulumi.Input[bool]] = None,
+                 enable_class_isolation: Optional[pulumi.Input[bool]] = None,
+                 enable_dynamic_memory: Optional[pulumi.Input[bool]] = None,
                  encrypted_user_data: Optional[pulumi.Input[str]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
+                 ephemeral_storage: Optional[pulumi.Input[int]] = None,
                  func_code: Optional[pulumi.Input[str]] = None,
                  func_mounts: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['FunctionFuncMountArgs']]]]] = None,
                  functiongraph_version: Optional[pulumi.Input[str]] = None,
+                 gpu_memory: Optional[pulumi.Input[int]] = None,
+                 gpu_type: Optional[pulumi.Input[str]] = None,
                  handler: Optional[pulumi.Input[str]] = None,
+                 heartbeat_handler: Optional[pulumi.Input[str]] = None,
                  initializer_handler: Optional[pulumi.Input[str]] = None,
                  initializer_timeout: Optional[pulumi.Input[int]] = None,
+                 is_stateful_function: Optional[pulumi.Input[bool]] = None,
+                 log_group_id: Optional[pulumi.Input[str]] = None,
+                 log_group_name: Optional[pulumi.Input[str]] = None,
+                 log_stream_id: Optional[pulumi.Input[str]] = None,
+                 log_stream_name: Optional[pulumi.Input[str]] = None,
                  max_instance_num: Optional[pulumi.Input[str]] = None,
                  memory_size: Optional[pulumi.Input[int]] = None,
                  mount_user_group_id: Optional[pulumi.Input[int]] = None,
                  mount_user_id: Optional[pulumi.Input[int]] = None,
                  name: Optional[pulumi.Input[str]] = None,
+                 network_controller: Optional[pulumi.Input[pulumi.InputType['FunctionNetworkControllerArgs']]] = None,
                  network_id: Optional[pulumi.Input[str]] = None,
                  package: Optional[pulumi.Input[str]] = None,
+                 peering_cidr: Optional[pulumi.Input[str]] = None,
+                 pre_stop_handler: Optional[pulumi.Input[str]] = None,
+                 pre_stop_timeout: Optional[pulumi.Input[int]] = None,
                  region: Optional[pulumi.Input[str]] = None,
+                 reserved_instances: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['FunctionReservedInstanceArgs']]]]] = None,
+                 restore_hook_handler: Optional[pulumi.Input[str]] = None,
+                 restore_hook_timeout: Optional[pulumi.Input[int]] = None,
                  runtime: Optional[pulumi.Input[str]] = None,
                  tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  timeout: Optional[pulumi.Input[int]] = None,
                  user_data: Optional[pulumi.Input[str]] = None,
+                 versions: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['FunctionVersionArgs']]]]] = None,
                  vpc_id: Optional[pulumi.Input[str]] = None,
                  xrole: Optional[pulumi.Input[str]] = None,
                  __props__=None):
@@ -1471,17 +2556,31 @@ class Function(pulumi.CustomResource):
             __props__.__dict__["code_filename"] = code_filename
             __props__.__dict__["code_type"] = code_type
             __props__.__dict__["code_url"] = code_url
+            __props__.__dict__["concurrency_num"] = concurrency_num
             __props__.__dict__["custom_image"] = custom_image
             __props__.__dict__["depend_lists"] = depend_lists
             __props__.__dict__["description"] = description
+            __props__.__dict__["dns_list"] = dns_list
+            __props__.__dict__["enable_auth_in_header"] = enable_auth_in_header
+            __props__.__dict__["enable_class_isolation"] = enable_class_isolation
+            __props__.__dict__["enable_dynamic_memory"] = enable_dynamic_memory
             __props__.__dict__["encrypted_user_data"] = encrypted_user_data
             __props__.__dict__["enterprise_project_id"] = enterprise_project_id
+            __props__.__dict__["ephemeral_storage"] = ephemeral_storage
             __props__.__dict__["func_code"] = func_code
             __props__.__dict__["func_mounts"] = func_mounts
             __props__.__dict__["functiongraph_version"] = functiongraph_version
+            __props__.__dict__["gpu_memory"] = gpu_memory
+            __props__.__dict__["gpu_type"] = gpu_type
             __props__.__dict__["handler"] = handler
+            __props__.__dict__["heartbeat_handler"] = heartbeat_handler
             __props__.__dict__["initializer_handler"] = initializer_handler
             __props__.__dict__["initializer_timeout"] = initializer_timeout
+            __props__.__dict__["is_stateful_function"] = is_stateful_function
+            __props__.__dict__["log_group_id"] = log_group_id
+            __props__.__dict__["log_group_name"] = log_group_name
+            __props__.__dict__["log_stream_id"] = log_stream_id
+            __props__.__dict__["log_stream_name"] = log_stream_name
             __props__.__dict__["max_instance_num"] = max_instance_num
             if memory_size is None and not opts.urn:
                 raise TypeError("Missing required property 'memory_size'")
@@ -1489,12 +2588,19 @@ class Function(pulumi.CustomResource):
             __props__.__dict__["mount_user_group_id"] = mount_user_group_id
             __props__.__dict__["mount_user_id"] = mount_user_id
             __props__.__dict__["name"] = name
+            __props__.__dict__["network_controller"] = network_controller
             __props__.__dict__["network_id"] = network_id
             if package is not None and not opts.urn:
                 warnings.warn("""use app instead""", DeprecationWarning)
                 pulumi.log.warn("""package is deprecated: use app instead""")
             __props__.__dict__["package"] = package
+            __props__.__dict__["peering_cidr"] = peering_cidr
+            __props__.__dict__["pre_stop_handler"] = pre_stop_handler
+            __props__.__dict__["pre_stop_timeout"] = pre_stop_timeout
             __props__.__dict__["region"] = region
+            __props__.__dict__["reserved_instances"] = reserved_instances
+            __props__.__dict__["restore_hook_handler"] = restore_hook_handler
+            __props__.__dict__["restore_hook_timeout"] = restore_hook_timeout
             if runtime is None and not opts.urn:
                 raise TypeError("Missing required property 'runtime'")
             __props__.__dict__["runtime"] = runtime
@@ -1503,6 +2609,7 @@ class Function(pulumi.CustomResource):
                 raise TypeError("Missing required property 'timeout'")
             __props__.__dict__["timeout"] = timeout
             __props__.__dict__["user_data"] = user_data
+            __props__.__dict__["versions"] = versions
             __props__.__dict__["vpc_id"] = vpc_id
             if xrole is not None and not opts.urn:
                 warnings.warn("""use agency instead""", DeprecationWarning)
@@ -1526,31 +2633,53 @@ class Function(pulumi.CustomResource):
             code_filename: Optional[pulumi.Input[str]] = None,
             code_type: Optional[pulumi.Input[str]] = None,
             code_url: Optional[pulumi.Input[str]] = None,
+            concurrency_num: Optional[pulumi.Input[int]] = None,
             custom_image: Optional[pulumi.Input[pulumi.InputType['FunctionCustomImageArgs']]] = None,
             depend_lists: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
             description: Optional[pulumi.Input[str]] = None,
+            dns_list: Optional[pulumi.Input[str]] = None,
+            enable_auth_in_header: Optional[pulumi.Input[bool]] = None,
+            enable_class_isolation: Optional[pulumi.Input[bool]] = None,
+            enable_dynamic_memory: Optional[pulumi.Input[bool]] = None,
             encrypted_user_data: Optional[pulumi.Input[str]] = None,
             enterprise_project_id: Optional[pulumi.Input[str]] = None,
+            ephemeral_storage: Optional[pulumi.Input[int]] = None,
             func_code: Optional[pulumi.Input[str]] = None,
             func_mounts: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['FunctionFuncMountArgs']]]]] = None,
             functiongraph_version: Optional[pulumi.Input[str]] = None,
+            gpu_memory: Optional[pulumi.Input[int]] = None,
+            gpu_type: Optional[pulumi.Input[str]] = None,
             handler: Optional[pulumi.Input[str]] = None,
+            heartbeat_handler: Optional[pulumi.Input[str]] = None,
             initializer_handler: Optional[pulumi.Input[str]] = None,
             initializer_timeout: Optional[pulumi.Input[int]] = None,
+            is_stateful_function: Optional[pulumi.Input[bool]] = None,
+            log_group_id: Optional[pulumi.Input[str]] = None,
+            log_group_name: Optional[pulumi.Input[str]] = None,
+            log_stream_id: Optional[pulumi.Input[str]] = None,
+            log_stream_name: Optional[pulumi.Input[str]] = None,
             max_instance_num: Optional[pulumi.Input[str]] = None,
             memory_size: Optional[pulumi.Input[int]] = None,
             mount_user_group_id: Optional[pulumi.Input[int]] = None,
             mount_user_id: Optional[pulumi.Input[int]] = None,
             name: Optional[pulumi.Input[str]] = None,
+            network_controller: Optional[pulumi.Input[pulumi.InputType['FunctionNetworkControllerArgs']]] = None,
             network_id: Optional[pulumi.Input[str]] = None,
             package: Optional[pulumi.Input[str]] = None,
+            peering_cidr: Optional[pulumi.Input[str]] = None,
+            pre_stop_handler: Optional[pulumi.Input[str]] = None,
+            pre_stop_timeout: Optional[pulumi.Input[int]] = None,
             region: Optional[pulumi.Input[str]] = None,
+            reserved_instances: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['FunctionReservedInstanceArgs']]]]] = None,
+            restore_hook_handler: Optional[pulumi.Input[str]] = None,
+            restore_hook_timeout: Optional[pulumi.Input[int]] = None,
             runtime: Optional[pulumi.Input[str]] = None,
             tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
             timeout: Optional[pulumi.Input[int]] = None,
             urn: Optional[pulumi.Input[str]] = None,
             user_data: Optional[pulumi.Input[str]] = None,
             version: Optional[pulumi.Input[str]] = None,
+            versions: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['FunctionVersionArgs']]]]] = None,
             vpc_id: Optional[pulumi.Input[str]] = None,
             xrole: Optional[pulumi.Input[str]] = None) -> 'Function':
         """
@@ -1560,58 +2689,135 @@ class Function(pulumi.CustomResource):
         :param str resource_name: The unique name of the resulting resource.
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[str] agency: Specifies the agency. This parameter is mandatory if the function needs to access other
-               cloud services.
+        :param pulumi.Input[str] agency: Specifies the agency configuration of the function.  
+               This parameter is mandatory if the function needs to access other cloud services.
         :param pulumi.Input[str] app: Specifies the group to which the function belongs.
-        :param pulumi.Input[str] app_agency: Specifies An execution agency enables you to obtain a token or an AK/SK for
+        :param pulumi.Input[str] app_agency: Specifies the execution agency enables you to obtain a token or an AK/SK for
                accessing other cloud services.
-        :param pulumi.Input[str] code_filename: Specifies the name of a function file, This field is mandatory only when coe_type
-               is set to jar or zip.
-        :param pulumi.Input[str] code_type: Specifies the function code type, which can be:
+        :param pulumi.Input[str] code_filename: Specifies the name of the function file.  
+               Required if the `code_type` is set to **jar** or **zip**.
+        :param pulumi.Input[str] code_type: Specifies the code type of the function.  
+               The valid values are as follows:
                + **inline**: inline code.
                + **zip**: ZIP file.
                + **jar**: JAR file or java functions.
                + **obs**: function code stored in an OBS bucket.
-        :param pulumi.Input[str] code_url: Specifies the code url. This parameter is mandatory when code_type is set to obs.
-        :param pulumi.Input[pulumi.InputType['FunctionCustomImageArgs']] custom_image: Specifies the custom image configuration for creating function.
-               The object structure is documented below.
-        :param pulumi.Input[Sequence[pulumi.Input[str]]] depend_lists: Specifies the ID list of the dependencies.
-        :param pulumi.Input[str] description: Specifies the description of the function.
+               + **Custom-Image-Swr**: function code comes from the SWR custom image.
+        :param pulumi.Input[str] code_url: Specifies the URL where the function code is stored in OBS.  
+               Required if the `code_type` is set to **obs**.
+        :param pulumi.Input[int] concurrency_num: Specifies the number of concurrent requests of the function.  
+               The valid value is range from `1` to `1,000`, the default value is `1`.
+        :param pulumi.Input[pulumi.InputType['FunctionCustomImageArgs']] custom_image: Specifies the custom image configuration of the function.  
+               The custom_image structure is documented below.
+               Required if the parameter `code_type` is **Custom-Image-Swr**.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] depend_lists: Specifies the list of the dependency version IDs.
+        :param pulumi.Input[str] description: Specifies the description of the version alias.
+        :param pulumi.Input[str] dns_list: Specifies the private DNS configuration of the function network.  
+               Private DNS list is associated to the function by a string in the following format:
+               `[{\\"id\\":\\"ff8080828a07ffea018a17184aa310f5\\","domain_name":"functiondebug.example1.com."}]`
+        :param pulumi.Input[bool] enable_auth_in_header: Specifies whether the authentication in the request header is enabled.  
+               Defaults to **false**.
+        :param pulumi.Input[bool] enable_class_isolation: Specifies whether the class isolation is enabled for the JAVA runtime
+               functions.
+               Defaults to **false**.
+        :param pulumi.Input[bool] enable_dynamic_memory: Specifies whether the dynamic memory configuration is enabled.  
+               Defaults to **false**.
         :param pulumi.Input[str] encrypted_user_data: Specifies the key/value information defined to be encrypted for the
-               function. The format is the same as `user_data`.
-        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project id of the function.
-               Changing this will create a new resource.
-        :param pulumi.Input[str] func_code: Specifies the function code. When code_type is set to inline, zip, or jar, this
-               parameter is mandatory, and the code can be encoded using Base64 or just with the text code.
-        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['FunctionFuncMountArgs']]]] func_mounts: Specifies the file system list. The `func_mounts` object structure is documented
-               below.
-        :param pulumi.Input[str] functiongraph_version: Specifies the FunctionGraph version, defaults to **v1**.
+               function.
+               The format is the same as `user_data`.
+        :param pulumi.Input[str] enterprise_project_id: Specifies the ID of the enterprise project to which the
+               function belongs.
+        :param pulumi.Input[int] ephemeral_storage: Specifies the size of the function ephemeral storage.  
+               The valid values are as follows:
+               + **512**
+               + **10240**
+        :param pulumi.Input[str] func_code: Specifies the function code.  
+               The code value can be encoded using **Base64** or just with the text code.
+               Required if the `code_type` is set to **inline**, **zip**, or **jar**.
+        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['FunctionFuncMountArgs']]]] func_mounts: Specifies the list of function mount configurations.  
+               The func_mounts structure is documented below.
+        :param pulumi.Input[str] functiongraph_version: Specifies the version of the function framework.  
+               The valid values are as follows:
                + **v1**: Hosts event-driven functions in a serverless context.
                + **v2**: Next-generation function hosting service powered by Huawei YuanRong architecture.
+        :param pulumi.Input[int] gpu_memory: Specifies the GPU memory size allocated to the function, in MByte (MB).  
+               The valid value is range form `1,024` to `16,384`, the value must be a multiple of `1,024`.
+               If not specified, the GPU function is disabled.
+        :param pulumi.Input[str] gpu_type: Specifies the GPU type of the function.  
+               Currently, only **nvidia-t4** is supported.
         :param pulumi.Input[str] handler: Specifies the entry point of the function.
+        :param pulumi.Input[str] heartbeat_handler: Specifies the heartbeat handler of the function.  
+               The rule is **xx.xx**, such as **com.huawei.demo.TriggerTests.heartBeat**, it must contain periods (.).
+               The heartbeat function entry must be in the same file as the function execution entry.
         :param pulumi.Input[str] initializer_handler: Specifies the initializer of the function.
-        :param pulumi.Input[int] initializer_timeout: Specifies the maximum duration the function can be initialized. Value range:
-               1s to 300s.
+        :param pulumi.Input[int] initializer_timeout: Specifies the maximum duration the function can be initialized, in seconds.  
+               The valid value is range from `1` to `300`.
+        :param pulumi.Input[bool] is_stateful_function: Specifies whether the function is a stateful function.  
+               Defaults to **false**.
+        :param pulumi.Input[str] log_group_id: Specifies the LTS group ID for collecting logs.
+        :param pulumi.Input[str] log_group_name: Specifies the LTS group name for collecting logs.
+        :param pulumi.Input[str] log_stream_id: Specifies the LTS stream IID for collecting logs.
+        :param pulumi.Input[str] log_stream_name: Specifies the LTS stream name for collecting logs.
         :param pulumi.Input[str] max_instance_num: Specifies the maximum number of instances of the function.  
-               The valid value ranges from `-1` to `1000`, defaults to `400`.
+               The valid value is range from `-1` to `1,000`, defaults to `400`.
                + The minimum value is `-1` and means the number of instances is unlimited.
-        :param pulumi.Input[int] memory_size: Specifies the memory size(MB) allocated to the function.
-        :param pulumi.Input[int] mount_user_group_id: Specifies the user group ID, a non-0 integer from –1 to 65534. Default to
-               -1.
-        :param pulumi.Input[int] mount_user_id: Specifies the user ID, a non-0 integer from –1 to 65534. Default to -1.
-        :param pulumi.Input[str] name: Specifies the name of the function.
-               Changing this will create a new resource.
+        :param pulumi.Input[int] memory_size: Specifies the memory size allocated to the function, in MByte (MB).
+        :param pulumi.Input[int] mount_user_group_id: Specifies the mount user group ID.  
+               The valid value is range from `–1` to `65,534`, except `0`.
+               Defaults to `-1`.
+        :param pulumi.Input[int] mount_user_id: Specifies the mount user ID.  
+               The valid value is range from `–1` to `65,534`, except `0`.
+               Defaults to `-1`.
+        :param pulumi.Input[str] name: Specifies the name of metric policy.  
+               The valid length is limited from `1` to `60` characters, only letters, digits, hyphens (-), and underscores (_) are
+               allowed. The name must start with a letter and ending with a letter or digit.
+        :param pulumi.Input[pulumi.InputType['FunctionNetworkControllerArgs']] network_controller: Specifies the network configuration of the function.  
+               The network_controller structure is documented below.
         :param pulumi.Input[str] network_id: Specifies the network ID of subnet.
-        :param pulumi.Input[str] region: Specifies the region in which to create the Function resource. If omitted, the
-               provider-level region will be used. Changing this will create a new resource.
-        :param pulumi.Input[str] runtime: Specifies the environment for executing the function.
-               If the function is created using an SWR image, set this parameter to `Custom Image`.
-               Changing this will create a new resource.
+        :param pulumi.Input[str] peering_cidr: Specifies the VPC cidr blocks used in the function code to detect whether it
+               conflicts with the VPC cidr blocks used by the service.
+               The cidr blocks are separated by semicolons and cannot exceed `5`.
+        :param pulumi.Input[str] pre_stop_handler: The pre-stop handler of a function.
+        :param pulumi.Input[int] pre_stop_timeout: The maximum duration that the function can be initialized.
+        :param pulumi.Input[str] region: Specifies the region where the function is located.  
+               If omitted, the provider-level region will be used. Changing this will create a new resource.
+        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['FunctionReservedInstanceArgs']]]] reserved_instances: Specifies the reserved instance policies of the function.  
+               The reserved_instances structure is documented below.
+        :param pulumi.Input[str] restore_hook_handler: Specifies the restore hook handler of the function.
+        :param pulumi.Input[int] restore_hook_timeout: Specifies the timeout of the function restore hook.  
+               The function will be forcibly stopped if the time is end.
+               The valid value is range from `1` to `300`, the unit is seconds (s).
+        :param pulumi.Input[str] runtime: Specifies the environment for executing the function.  
+               The valid values are as follows:
+               + **Java8**
+               + **Java11**
+               + **Node.js6.10**
+               + **Node.js8.10**
+               + **Node.js10.16**
+               + **Node.js12.13**
+               + **Node.js14.18**
+               + **Node.js16.17**
+               + **Node.js18.15**
+               + **Python2.7**
+               + **Python3.6**
+               + **Python3.9**
+               + **Go1.x**
+               + **C#(.NET Core 2.1)**
+               + **C#(.NET Core 3.1)**
+               + **Custom**
+               + **PHP7.3**
+               + **http**
+               + **Custom Image**
+               + **Cangjie1.0**
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the function.
-        :param pulumi.Input[int] timeout: Specifies the timeout interval of the function, ranges from 3s to 900s.
-        :param pulumi.Input[str] urn: Uniform Resource Name
-        :param pulumi.Input[str] version: The version of the function
-        :param pulumi.Input[str] vpc_id: Specifies the ID of VPC.
+        :param pulumi.Input[int] timeout: Specifies the timeout interval of the function, in seconds.  
+               The value ranges from `3` to `259,200`.
+        :param pulumi.Input[str] urn: The URN (Uniform Resource Name) of the function.
+        :param pulumi.Input[str] user_data: The key/value information defined for the function.
+        :param pulumi.Input[str] version: The version of the function.
+        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['FunctionVersionArgs']]]] versions: Specifies the versions management of the function.  
+               The versions structure is documented below.
+        :param pulumi.Input[str] vpc_id: Specifies the ID of the VPC that can trigger the function.
         """
         opts = pulumi.ResourceOptions.merge(opts, pulumi.ResourceOptions(id=id))
 
@@ -1623,31 +2829,53 @@ class Function(pulumi.CustomResource):
         __props__.__dict__["code_filename"] = code_filename
         __props__.__dict__["code_type"] = code_type
         __props__.__dict__["code_url"] = code_url
+        __props__.__dict__["concurrency_num"] = concurrency_num
         __props__.__dict__["custom_image"] = custom_image
         __props__.__dict__["depend_lists"] = depend_lists
         __props__.__dict__["description"] = description
+        __props__.__dict__["dns_list"] = dns_list
+        __props__.__dict__["enable_auth_in_header"] = enable_auth_in_header
+        __props__.__dict__["enable_class_isolation"] = enable_class_isolation
+        __props__.__dict__["enable_dynamic_memory"] = enable_dynamic_memory
         __props__.__dict__["encrypted_user_data"] = encrypted_user_data
         __props__.__dict__["enterprise_project_id"] = enterprise_project_id
+        __props__.__dict__["ephemeral_storage"] = ephemeral_storage
         __props__.__dict__["func_code"] = func_code
         __props__.__dict__["func_mounts"] = func_mounts
         __props__.__dict__["functiongraph_version"] = functiongraph_version
+        __props__.__dict__["gpu_memory"] = gpu_memory
+        __props__.__dict__["gpu_type"] = gpu_type
         __props__.__dict__["handler"] = handler
+        __props__.__dict__["heartbeat_handler"] = heartbeat_handler
         __props__.__dict__["initializer_handler"] = initializer_handler
         __props__.__dict__["initializer_timeout"] = initializer_timeout
+        __props__.__dict__["is_stateful_function"] = is_stateful_function
+        __props__.__dict__["log_group_id"] = log_group_id
+        __props__.__dict__["log_group_name"] = log_group_name
+        __props__.__dict__["log_stream_id"] = log_stream_id
+        __props__.__dict__["log_stream_name"] = log_stream_name
         __props__.__dict__["max_instance_num"] = max_instance_num
         __props__.__dict__["memory_size"] = memory_size
         __props__.__dict__["mount_user_group_id"] = mount_user_group_id
         __props__.__dict__["mount_user_id"] = mount_user_id
         __props__.__dict__["name"] = name
+        __props__.__dict__["network_controller"] = network_controller
         __props__.__dict__["network_id"] = network_id
         __props__.__dict__["package"] = package
+        __props__.__dict__["peering_cidr"] = peering_cidr
+        __props__.__dict__["pre_stop_handler"] = pre_stop_handler
+        __props__.__dict__["pre_stop_timeout"] = pre_stop_timeout
         __props__.__dict__["region"] = region
+        __props__.__dict__["reserved_instances"] = reserved_instances
+        __props__.__dict__["restore_hook_handler"] = restore_hook_handler
+        __props__.__dict__["restore_hook_timeout"] = restore_hook_timeout
         __props__.__dict__["runtime"] = runtime
         __props__.__dict__["tags"] = tags
         __props__.__dict__["timeout"] = timeout
         __props__.__dict__["urn"] = urn
         __props__.__dict__["user_data"] = user_data
         __props__.__dict__["version"] = version
+        __props__.__dict__["versions"] = versions
         __props__.__dict__["vpc_id"] = vpc_id
         __props__.__dict__["xrole"] = xrole
         return Function(resource_name, opts=opts, __props__=__props__)
@@ -1656,8 +2884,8 @@ class Function(pulumi.CustomResource):
     @pulumi.getter
     def agency(self) -> pulumi.Output[Optional[str]]:
         """
-        Specifies the agency. This parameter is mandatory if the function needs to access other
-        cloud services.
+        Specifies the agency configuration of the function.  
+        This parameter is mandatory if the function needs to access other cloud services.
         """
         return pulumi.get(self, "agency")
 
@@ -1673,7 +2901,7 @@ class Function(pulumi.CustomResource):
     @pulumi.getter(name="appAgency")
     def app_agency(self) -> pulumi.Output[str]:
         """
-        Specifies An execution agency enables you to obtain a token or an AK/SK for
+        Specifies the execution agency enables you to obtain a token or an AK/SK for
         accessing other cloud services.
         """
         return pulumi.get(self, "app_agency")
@@ -1682,8 +2910,8 @@ class Function(pulumi.CustomResource):
     @pulumi.getter(name="codeFilename")
     def code_filename(self) -> pulumi.Output[str]:
         """
-        Specifies the name of a function file, This field is mandatory only when coe_type
-        is set to jar or zip.
+        Specifies the name of the function file.  
+        Required if the `code_type` is set to **jar** or **zip**.
         """
         return pulumi.get(self, "code_filename")
 
@@ -1691,11 +2919,13 @@ class Function(pulumi.CustomResource):
     @pulumi.getter(name="codeType")
     def code_type(self) -> pulumi.Output[str]:
         """
-        Specifies the function code type, which can be:
+        Specifies the code type of the function.  
+        The valid values are as follows:
         + **inline**: inline code.
         + **zip**: ZIP file.
         + **jar**: JAR file or java functions.
         + **obs**: function code stored in an OBS bucket.
+        + **Custom-Image-Swr**: function code comes from the SWR custom image.
         """
         return pulumi.get(self, "code_type")
 
@@ -1703,16 +2933,27 @@ class Function(pulumi.CustomResource):
     @pulumi.getter(name="codeUrl")
     def code_url(self) -> pulumi.Output[Optional[str]]:
         """
-        Specifies the code url. This parameter is mandatory when code_type is set to obs.
+        Specifies the URL where the function code is stored in OBS.  
+        Required if the `code_type` is set to **obs**.
         """
         return pulumi.get(self, "code_url")
+
+    @property
+    @pulumi.getter(name="concurrencyNum")
+    def concurrency_num(self) -> pulumi.Output[int]:
+        """
+        Specifies the number of concurrent requests of the function.  
+        The valid value is range from `1` to `1,000`, the default value is `1`.
+        """
+        return pulumi.get(self, "concurrency_num")
 
     @property
     @pulumi.getter(name="customImage")
     def custom_image(self) -> pulumi.Output['outputs.FunctionCustomImage']:
         """
-        Specifies the custom image configuration for creating function.
-        The object structure is documented below.
+        Specifies the custom image configuration of the function.  
+        The custom_image structure is documented below.
+        Required if the parameter `code_type` is **Custom-Image-Swr**.
         """
         return pulumi.get(self, "custom_image")
 
@@ -1720,7 +2961,7 @@ class Function(pulumi.CustomResource):
     @pulumi.getter(name="dependLists")
     def depend_lists(self) -> pulumi.Output[Sequence[str]]:
         """
-        Specifies the ID list of the dependencies.
+        Specifies the list of the dependency version IDs.
         """
         return pulumi.get(self, "depend_lists")
 
@@ -1728,16 +2969,55 @@ class Function(pulumi.CustomResource):
     @pulumi.getter
     def description(self) -> pulumi.Output[Optional[str]]:
         """
-        Specifies the description of the function.
+        Specifies the description of the version alias.
         """
         return pulumi.get(self, "description")
+
+    @property
+    @pulumi.getter(name="dnsList")
+    def dns_list(self) -> pulumi.Output[str]:
+        """
+        Specifies the private DNS configuration of the function network.  
+        Private DNS list is associated to the function by a string in the following format:
+        `[{\\"id\\":\\"ff8080828a07ffea018a17184aa310f5\\","domain_name":"functiondebug.example1.com."}]`
+        """
+        return pulumi.get(self, "dns_list")
+
+    @property
+    @pulumi.getter(name="enableAuthInHeader")
+    def enable_auth_in_header(self) -> pulumi.Output[Optional[bool]]:
+        """
+        Specifies whether the authentication in the request header is enabled.  
+        Defaults to **false**.
+        """
+        return pulumi.get(self, "enable_auth_in_header")
+
+    @property
+    @pulumi.getter(name="enableClassIsolation")
+    def enable_class_isolation(self) -> pulumi.Output[Optional[bool]]:
+        """
+        Specifies whether the class isolation is enabled for the JAVA runtime
+        functions.
+        Defaults to **false**.
+        """
+        return pulumi.get(self, "enable_class_isolation")
+
+    @property
+    @pulumi.getter(name="enableDynamicMemory")
+    def enable_dynamic_memory(self) -> pulumi.Output[Optional[bool]]:
+        """
+        Specifies whether the dynamic memory configuration is enabled.  
+        Defaults to **false**.
+        """
+        return pulumi.get(self, "enable_dynamic_memory")
 
     @property
     @pulumi.getter(name="encryptedUserData")
     def encrypted_user_data(self) -> pulumi.Output[Optional[str]]:
         """
         Specifies the key/value information defined to be encrypted for the
-        function. The format is the same as `user_data`.
+        function.
+        The format is the same as `user_data`.
         """
         return pulumi.get(self, "encrypted_user_data")
 
@@ -1745,17 +3025,29 @@ class Function(pulumi.CustomResource):
     @pulumi.getter(name="enterpriseProjectId")
     def enterprise_project_id(self) -> pulumi.Output[str]:
         """
-        Specifies the enterprise project id of the function.
-        Changing this will create a new resource.
+        Specifies the ID of the enterprise project to which the
+        function belongs.
         """
         return pulumi.get(self, "enterprise_project_id")
+
+    @property
+    @pulumi.getter(name="ephemeralStorage")
+    def ephemeral_storage(self) -> pulumi.Output[int]:
+        """
+        Specifies the size of the function ephemeral storage.  
+        The valid values are as follows:
+        + **512**
+        + **10240**
+        """
+        return pulumi.get(self, "ephemeral_storage")
 
     @property
     @pulumi.getter(name="funcCode")
     def func_code(self) -> pulumi.Output[Optional[str]]:
         """
-        Specifies the function code. When code_type is set to inline, zip, or jar, this
-        parameter is mandatory, and the code can be encoded using Base64 or just with the text code.
+        Specifies the function code.  
+        The code value can be encoded using **Base64** or just with the text code.
+        Required if the `code_type` is set to **inline**, **zip**, or **jar**.
         """
         return pulumi.get(self, "func_code")
 
@@ -1763,8 +3055,8 @@ class Function(pulumi.CustomResource):
     @pulumi.getter(name="funcMounts")
     def func_mounts(self) -> pulumi.Output[Sequence['outputs.FunctionFuncMount']]:
         """
-        Specifies the file system list. The `func_mounts` object structure is documented
-        below.
+        Specifies the list of function mount configurations.  
+        The func_mounts structure is documented below.
         """
         return pulumi.get(self, "func_mounts")
 
@@ -1772,11 +3064,31 @@ class Function(pulumi.CustomResource):
     @pulumi.getter(name="functiongraphVersion")
     def functiongraph_version(self) -> pulumi.Output[str]:
         """
-        Specifies the FunctionGraph version, defaults to **v1**.
+        Specifies the version of the function framework.  
+        The valid values are as follows:
         + **v1**: Hosts event-driven functions in a serverless context.
         + **v2**: Next-generation function hosting service powered by Huawei YuanRong architecture.
         """
         return pulumi.get(self, "functiongraph_version")
+
+    @property
+    @pulumi.getter(name="gpuMemory")
+    def gpu_memory(self) -> pulumi.Output[Optional[int]]:
+        """
+        Specifies the GPU memory size allocated to the function, in MByte (MB).  
+        The valid value is range form `1,024` to `16,384`, the value must be a multiple of `1,024`.
+        If not specified, the GPU function is disabled.
+        """
+        return pulumi.get(self, "gpu_memory")
+
+    @property
+    @pulumi.getter(name="gpuType")
+    def gpu_type(self) -> pulumi.Output[Optional[str]]:
+        """
+        Specifies the GPU type of the function.  
+        Currently, only **nvidia-t4** is supported.
+        """
+        return pulumi.get(self, "gpu_type")
 
     @property
     @pulumi.getter
@@ -1785,6 +3097,16 @@ class Function(pulumi.CustomResource):
         Specifies the entry point of the function.
         """
         return pulumi.get(self, "handler")
+
+    @property
+    @pulumi.getter(name="heartbeatHandler")
+    def heartbeat_handler(self) -> pulumi.Output[Optional[str]]:
+        """
+        Specifies the heartbeat handler of the function.  
+        The rule is **xx.xx**, such as **com.huawei.demo.TriggerTests.heartBeat**, it must contain periods (.).
+        The heartbeat function entry must be in the same file as the function execution entry.
+        """
+        return pulumi.get(self, "heartbeat_handler")
 
     @property
     @pulumi.getter(name="initializerHandler")
@@ -1798,17 +3120,58 @@ class Function(pulumi.CustomResource):
     @pulumi.getter(name="initializerTimeout")
     def initializer_timeout(self) -> pulumi.Output[int]:
         """
-        Specifies the maximum duration the function can be initialized. Value range:
-        1s to 300s.
+        Specifies the maximum duration the function can be initialized, in seconds.  
+        The valid value is range from `1` to `300`.
         """
         return pulumi.get(self, "initializer_timeout")
+
+    @property
+    @pulumi.getter(name="isStatefulFunction")
+    def is_stateful_function(self) -> pulumi.Output[Optional[bool]]:
+        """
+        Specifies whether the function is a stateful function.  
+        Defaults to **false**.
+        """
+        return pulumi.get(self, "is_stateful_function")
+
+    @property
+    @pulumi.getter(name="logGroupId")
+    def log_group_id(self) -> pulumi.Output[str]:
+        """
+        Specifies the LTS group ID for collecting logs.
+        """
+        return pulumi.get(self, "log_group_id")
+
+    @property
+    @pulumi.getter(name="logGroupName")
+    def log_group_name(self) -> pulumi.Output[str]:
+        """
+        Specifies the LTS group name for collecting logs.
+        """
+        return pulumi.get(self, "log_group_name")
+
+    @property
+    @pulumi.getter(name="logStreamId")
+    def log_stream_id(self) -> pulumi.Output[str]:
+        """
+        Specifies the LTS stream IID for collecting logs.
+        """
+        return pulumi.get(self, "log_stream_id")
+
+    @property
+    @pulumi.getter(name="logStreamName")
+    def log_stream_name(self) -> pulumi.Output[str]:
+        """
+        Specifies the LTS stream name for collecting logs.
+        """
+        return pulumi.get(self, "log_stream_name")
 
     @property
     @pulumi.getter(name="maxInstanceNum")
     def max_instance_num(self) -> pulumi.Output[str]:
         """
         Specifies the maximum number of instances of the function.  
-        The valid value ranges from `-1` to `1000`, defaults to `400`.
+        The valid value is range from `-1` to `1,000`, defaults to `400`.
         + The minimum value is `-1` and means the number of instances is unlimited.
         """
         return pulumi.get(self, "max_instance_num")
@@ -1817,7 +3180,7 @@ class Function(pulumi.CustomResource):
     @pulumi.getter(name="memorySize")
     def memory_size(self) -> pulumi.Output[int]:
         """
-        Specifies the memory size(MB) allocated to the function.
+        Specifies the memory size allocated to the function, in MByte (MB).
         """
         return pulumi.get(self, "memory_size")
 
@@ -1825,8 +3188,9 @@ class Function(pulumi.CustomResource):
     @pulumi.getter(name="mountUserGroupId")
     def mount_user_group_id(self) -> pulumi.Output[int]:
         """
-        Specifies the user group ID, a non-0 integer from –1 to 65534. Default to
-        -1.
+        Specifies the mount user group ID.  
+        The valid value is range from `–1` to `65,534`, except `0`.
+        Defaults to `-1`.
         """
         return pulumi.get(self, "mount_user_group_id")
 
@@ -1834,7 +3198,9 @@ class Function(pulumi.CustomResource):
     @pulumi.getter(name="mountUserId")
     def mount_user_id(self) -> pulumi.Output[int]:
         """
-        Specifies the user ID, a non-0 integer from –1 to 65534. Default to -1.
+        Specifies the mount user ID.  
+        The valid value is range from `–1` to `65,534`, except `0`.
+        Defaults to `-1`.
         """
         return pulumi.get(self, "mount_user_id")
 
@@ -1842,10 +3208,20 @@ class Function(pulumi.CustomResource):
     @pulumi.getter
     def name(self) -> pulumi.Output[str]:
         """
-        Specifies the name of the function.
-        Changing this will create a new resource.
+        Specifies the name of metric policy.  
+        The valid length is limited from `1` to `60` characters, only letters, digits, hyphens (-), and underscores (_) are
+        allowed. The name must start with a letter and ending with a letter or digit.
         """
         return pulumi.get(self, "name")
+
+    @property
+    @pulumi.getter(name="networkController")
+    def network_controller(self) -> pulumi.Output[Optional['outputs.FunctionNetworkController']]:
+        """
+        Specifies the network configuration of the function.  
+        The network_controller structure is documented below.
+        """
+        return pulumi.get(self, "network_controller")
 
     @property
     @pulumi.getter(name="networkId")
@@ -1861,21 +3237,93 @@ class Function(pulumi.CustomResource):
         return pulumi.get(self, "package")
 
     @property
+    @pulumi.getter(name="peeringCidr")
+    def peering_cidr(self) -> pulumi.Output[Optional[str]]:
+        """
+        Specifies the VPC cidr blocks used in the function code to detect whether it
+        conflicts with the VPC cidr blocks used by the service.
+        The cidr blocks are separated by semicolons and cannot exceed `5`.
+        """
+        return pulumi.get(self, "peering_cidr")
+
+    @property
+    @pulumi.getter(name="preStopHandler")
+    def pre_stop_handler(self) -> pulumi.Output[Optional[str]]:
+        """
+        The pre-stop handler of a function.
+        """
+        return pulumi.get(self, "pre_stop_handler")
+
+    @property
+    @pulumi.getter(name="preStopTimeout")
+    def pre_stop_timeout(self) -> pulumi.Output[Optional[int]]:
+        """
+        The maximum duration that the function can be initialized.
+        """
+        return pulumi.get(self, "pre_stop_timeout")
+
+    @property
     @pulumi.getter
     def region(self) -> pulumi.Output[str]:
         """
-        Specifies the region in which to create the Function resource. If omitted, the
-        provider-level region will be used. Changing this will create a new resource.
+        Specifies the region where the function is located.  
+        If omitted, the provider-level region will be used. Changing this will create a new resource.
         """
         return pulumi.get(self, "region")
+
+    @property
+    @pulumi.getter(name="reservedInstances")
+    def reserved_instances(self) -> pulumi.Output[Optional[Sequence['outputs.FunctionReservedInstance']]]:
+        """
+        Specifies the reserved instance policies of the function.  
+        The reserved_instances structure is documented below.
+        """
+        return pulumi.get(self, "reserved_instances")
+
+    @property
+    @pulumi.getter(name="restoreHookHandler")
+    def restore_hook_handler(self) -> pulumi.Output[Optional[str]]:
+        """
+        Specifies the restore hook handler of the function.
+        """
+        return pulumi.get(self, "restore_hook_handler")
+
+    @property
+    @pulumi.getter(name="restoreHookTimeout")
+    def restore_hook_timeout(self) -> pulumi.Output[Optional[int]]:
+        """
+        Specifies the timeout of the function restore hook.  
+        The function will be forcibly stopped if the time is end.
+        The valid value is range from `1` to `300`, the unit is seconds (s).
+        """
+        return pulumi.get(self, "restore_hook_timeout")
 
     @property
     @pulumi.getter
     def runtime(self) -> pulumi.Output[str]:
         """
-        Specifies the environment for executing the function.
-        If the function is created using an SWR image, set this parameter to `Custom Image`.
-        Changing this will create a new resource.
+        Specifies the environment for executing the function.  
+        The valid values are as follows:
+        + **Java8**
+        + **Java11**
+        + **Node.js6.10**
+        + **Node.js8.10**
+        + **Node.js10.16**
+        + **Node.js12.13**
+        + **Node.js14.18**
+        + **Node.js16.17**
+        + **Node.js18.15**
+        + **Python2.7**
+        + **Python3.6**
+        + **Python3.9**
+        + **Go1.x**
+        + **C#(.NET Core 2.1)**
+        + **C#(.NET Core 3.1)**
+        + **Custom**
+        + **PHP7.3**
+        + **http**
+        + **Custom Image**
+        + **Cangjie1.0**
         """
         return pulumi.get(self, "runtime")
 
@@ -1891,7 +3339,8 @@ class Function(pulumi.CustomResource):
     @pulumi.getter
     def timeout(self) -> pulumi.Output[int]:
         """
-        Specifies the timeout interval of the function, ranges from 3s to 900s.
+        Specifies the timeout interval of the function, in seconds.  
+        The value ranges from `3` to `259,200`.
         """
         return pulumi.get(self, "timeout")
 
@@ -1899,28 +3348,40 @@ class Function(pulumi.CustomResource):
     @pulumi.getter
     def urn(self) -> pulumi.Output[str]:
         """
-        Uniform Resource Name
+        The URN (Uniform Resource Name) of the function.
         """
         return pulumi.get(self, "urn")
 
     @property
     @pulumi.getter(name="userData")
     def user_data(self) -> pulumi.Output[Optional[str]]:
+        """
+        The key/value information defined for the function.
+        """
         return pulumi.get(self, "user_data")
 
     @property
     @pulumi.getter
     def version(self) -> pulumi.Output[str]:
         """
-        The version of the function
+        The version of the function.
         """
         return pulumi.get(self, "version")
+
+    @property
+    @pulumi.getter
+    def versions(self) -> pulumi.Output[Optional[Sequence['outputs.FunctionVersion']]]:
+        """
+        Specifies the versions management of the function.  
+        The versions structure is documented below.
+        """
+        return pulumi.get(self, "versions")
 
     @property
     @pulumi.getter(name="vpcId")
     def vpc_id(self) -> pulumi.Output[Optional[str]]:
         """
-        Specifies the ID of VPC.
+        Specifies the ID of the VPC that can trigger the function.
         """
         return pulumi.get(self, "vpc_id")
 

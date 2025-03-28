@@ -8,6 +8,8 @@ import * as utilities from "../utilities";
 /**
  * Use this resource to register or unregister the Workspace service in HuaweiCloud.
  *
+ * > **NOTE:** Only one resource can be created in a region.
+ *
  * ## Example Usage
  * ### Register the Workspace service and use local authentication
  *
@@ -22,6 +24,12 @@ import * as utilities from "../utilities";
  *     accessMode: "INTERNET",
  *     vpcId: vpcId,
  *     networkIds: networkIds,
+ *     otpConfigInfo: {
+ *         enable: true,
+ *         receiveMode: "VMFA",
+ *         ruleType: "ACCESS_MODE",
+ *         rule: "PRIVATE",
+ *     },
  * });
  * ```
  * ## Appendix
@@ -55,10 +63,16 @@ import * as utilities from "../utilities";
  *
  * ## Import
  *
- * Service can be imported using the `id`, e.g.
+ * Service can be imported using the `id`, e.g. bash
  *
  * ```sh
- *  $ pulumi import huaweicloud:Workspace/service:Service test fd3f81cb-d95f-43ce-b342-81b6b5dcadda
+ *  $ pulumi import huaweicloud:Workspace/service:Service test <id>
+ * ```
+ *
+ *  'NA' or other characters can be used to instead of the `id`. bash
+ *
+ * ```sh
+ *  $ pulumi import huaweicloud:Workspace/service:Service test NA
  * ```
  */
 export class Service extends pulumi.CustomResource {
@@ -142,6 +156,25 @@ export class Service extends pulumi.CustomResource {
      */
     public readonly internetAccessPort!: pulumi.Output<number>;
     /**
+     * Whether the Workspace service is locked. The valid values are as follows:
+     * + **0**: Indicates not locked.
+     * + **1**: Indicates locked.
+     */
+    public /*out*/ readonly isLocked!: pulumi.Output<number>;
+    /**
+     * Specifies whether to allow the provider to automatically unlock locked service
+     * when it is running. The default value is **false**.
+     */
+    public readonly lockEnabled!: pulumi.Output<boolean | undefined>;
+    /**
+     * The reason of the Workspace service is locked.
+     */
+    public /*out*/ readonly lockReason!: pulumi.Output<string>;
+    /**
+     * The time of the Workspace service is locked.
+     */
+    public /*out*/ readonly lockTime!: pulumi.Output<string>;
+    /**
      * The subnet segment of the management component.
      */
     public readonly managementSubnetCidr!: pulumi.Output<string>;
@@ -151,6 +184,11 @@ export class Service extends pulumi.CustomResource {
      * These subnet segments cannot conflict with `172.16.0.0/12`.
      */
     public readonly networkIds!: pulumi.Output<string[]>;
+    /**
+     * Specifies the configuration of auxiliary authentication.
+     * The object structure is documented below.
+     */
+    public readonly otpConfigInfo!: pulumi.Output<outputs.Workspace.ServiceOtpConfigInfo | undefined>;
     /**
      * The region in which to register the Workspace service.
      * If omitted, the provider-level region will be used. Changing this will create a new resource.
@@ -188,8 +226,13 @@ export class Service extends pulumi.CustomResource {
             resourceInputs["infrastructureSecurityGroups"] = state ? state.infrastructureSecurityGroups : undefined;
             resourceInputs["internetAccessAddress"] = state ? state.internetAccessAddress : undefined;
             resourceInputs["internetAccessPort"] = state ? state.internetAccessPort : undefined;
+            resourceInputs["isLocked"] = state ? state.isLocked : undefined;
+            resourceInputs["lockEnabled"] = state ? state.lockEnabled : undefined;
+            resourceInputs["lockReason"] = state ? state.lockReason : undefined;
+            resourceInputs["lockTime"] = state ? state.lockTime : undefined;
             resourceInputs["managementSubnetCidr"] = state ? state.managementSubnetCidr : undefined;
             resourceInputs["networkIds"] = state ? state.networkIds : undefined;
+            resourceInputs["otpConfigInfo"] = state ? state.otpConfigInfo : undefined;
             resourceInputs["region"] = state ? state.region : undefined;
             resourceInputs["status"] = state ? state.status : undefined;
             resourceInputs["vpcId"] = state ? state.vpcId : undefined;
@@ -210,13 +253,18 @@ export class Service extends pulumi.CustomResource {
             resourceInputs["dedicatedSubnets"] = args ? args.dedicatedSubnets : undefined;
             resourceInputs["enterpriseId"] = args ? args.enterpriseId : undefined;
             resourceInputs["internetAccessPort"] = args ? args.internetAccessPort : undefined;
+            resourceInputs["lockEnabled"] = args ? args.lockEnabled : undefined;
             resourceInputs["managementSubnetCidr"] = args ? args.managementSubnetCidr : undefined;
             resourceInputs["networkIds"] = args ? args.networkIds : undefined;
+            resourceInputs["otpConfigInfo"] = args ? args.otpConfigInfo : undefined;
             resourceInputs["region"] = args ? args.region : undefined;
             resourceInputs["vpcId"] = args ? args.vpcId : undefined;
             resourceInputs["desktopSecurityGroups"] = undefined /*out*/;
             resourceInputs["infrastructureSecurityGroups"] = undefined /*out*/;
             resourceInputs["internetAccessAddress"] = undefined /*out*/;
+            resourceInputs["isLocked"] = undefined /*out*/;
+            resourceInputs["lockReason"] = undefined /*out*/;
+            resourceInputs["lockTime"] = undefined /*out*/;
             resourceInputs["status"] = undefined /*out*/;
         }
         opts = pulumi.mergeOptions(utilities.resourceOptsDefaults(), opts);
@@ -281,6 +329,25 @@ export interface ServiceState {
      */
     internetAccessPort?: pulumi.Input<number>;
     /**
+     * Whether the Workspace service is locked. The valid values are as follows:
+     * + **0**: Indicates not locked.
+     * + **1**: Indicates locked.
+     */
+    isLocked?: pulumi.Input<number>;
+    /**
+     * Specifies whether to allow the provider to automatically unlock locked service
+     * when it is running. The default value is **false**.
+     */
+    lockEnabled?: pulumi.Input<boolean>;
+    /**
+     * The reason of the Workspace service is locked.
+     */
+    lockReason?: pulumi.Input<string>;
+    /**
+     * The time of the Workspace service is locked.
+     */
+    lockTime?: pulumi.Input<string>;
+    /**
      * The subnet segment of the management component.
      */
     managementSubnetCidr?: pulumi.Input<string>;
@@ -290,6 +357,11 @@ export interface ServiceState {
      * These subnet segments cannot conflict with `172.16.0.0/12`.
      */
     networkIds?: pulumi.Input<pulumi.Input<string>[]>;
+    /**
+     * Specifies the configuration of auxiliary authentication.
+     * The object structure is documented below.
+     */
+    otpConfigInfo?: pulumi.Input<inputs.Workspace.ServiceOtpConfigInfo>;
     /**
      * The region in which to register the Workspace service.
      * If omitted, the provider-level region will be used. Changing this will create a new resource.
@@ -348,6 +420,11 @@ export interface ServiceArgs {
      */
     internetAccessPort?: pulumi.Input<number>;
     /**
+     * Specifies whether to allow the provider to automatically unlock locked service
+     * when it is running. The default value is **false**.
+     */
+    lockEnabled?: pulumi.Input<boolean>;
+    /**
      * The subnet segment of the management component.
      */
     managementSubnetCidr?: pulumi.Input<string>;
@@ -357,6 +434,11 @@ export interface ServiceArgs {
      * These subnet segments cannot conflict with `172.16.0.0/12`.
      */
     networkIds: pulumi.Input<pulumi.Input<string>[]>;
+    /**
+     * Specifies the configuration of auxiliary authentication.
+     * The object structure is documented below.
+     */
+    otpConfigInfo?: pulumi.Input<inputs.Workspace.ServiceOtpConfigInfo>;
     /**
      * The region in which to register the Workspace service.
      * If omitted, the provider-level region will be used. Changing this will create a new resource.

@@ -99,23 +99,23 @@ import (
 //
 // ## Import
 //
-// Conferences (only scheduled conference and progressing conference) can be imported using their `id` and authorization parameters, separated by slashes, e.g. Import a conference and authenticated by account.
+// Conferences (only scheduled conference and progressing conference) can be imported using their `id` and authorization parameters, separated by slashes, e.g. Import a conference and authenticated by account. bash
 //
 // ```sh
 //
-//	$ pulumi import huaweicloud:Meeting/conference:Conference test &ltid&gt/&ltaccount_name&gt/&ltaccount_password&gt
+//	$ pulumi import huaweicloud:Meeting/conference:Conference test <id>/<account_name>/<account_password>
 //
 // ```
 //
-//	Import a conference and authenticated by `APP ID`/`APP Key`.
+//	Import a conference and authenticated by `APP ID`/`APP Key`. bash
 //
 // ```sh
 //
-//	$ pulumi import huaweicloud:Meeting/conference:Conference test &ltid&gt/&ltapp_id&gt/&ltapp_key&gt/&ltcorp_id&gt/&ltuser_id&gt
+//	$ pulumi import huaweicloud:Meeting/conference:Conference test <id>/<app_id>/<app_key>/<corp_id>/<user_id>
 //
 // ```
 //
-//	The slashes cannot be missing even corporation ID and user ID are empty. Note that importing is not supported for expired conferences and the start time of the meeting is not imported along with it. You can ignore this change as below. resource "huaweicloud_meeting_conference" "test" {
+//	The slashes cannot be missing even corporation ID and user ID are empty. Note that importing is not supported for expired conferences and the start time of the meeting is not imported along with it. You can ignore this change as below. hcl resource "huaweicloud_meeting_conference" "test" {
 //
 //	...
 //
@@ -148,7 +148,7 @@ type Conference struct {
 	// The audience meeting link address.
 	AudienceJoinUri pulumi.StringOutput `pulumi:"audienceJoinUri"`
 	// Specifies the auxiliary streaming address, the maximum length is 255 characters.
-	// Only available if `recordType` is **2** or **3**.
+	// Only available if `recordType` is `2` or `3`.
 	AuxAddress pulumi.StringOutput `pulumi:"auxAddress"`
 	// The host meeting link address.
 	ChairJoinUri pulumi.StringOutput `pulumi:"chairJoinUri"`
@@ -170,12 +170,12 @@ type Conference struct {
 	// The object structure is documented below.
 	CycleParams ConferenceCycleParamsOutput `pulumi:"cycleParams"`
 	// Specifies the duration of the conference, in minutes.
-	// The valid value is range from `15` to `1440`, defaults to `30`.
+	// The valid value is range from `15` to `1,440`, defaults to `30`.
 	Duration pulumi.IntOutput `pulumi:"duration"`
 	// Specifies the conference media encryption mode.
-	// **0**: Adaptive encryption.
-	// **1**: Force encryption.
-	// **2**: Do not encrypt.
+	// + **0**: Adaptive encryption.
+	// + **1**: Force encryption.
+	// + **2**: Do not encrypt.
 	EncryptMode pulumi.IntOutput `pulumi:"encryptMode"`
 	// The common attendee meeting link address.
 	GuestJoinUri pulumi.StringOutput `pulumi:"guestJoinUri"`
@@ -198,7 +198,7 @@ type Conference struct {
 	// + **en-US**: US English.
 	Language pulumi.StringOutput `pulumi:"language"`
 	// Specifies the mainstream live broadcast address, with a maximum of 255 characters.
-	// Only available if `recordType` is **2** or **3**.
+	// Only available if `recordType` is `2` or `3`.
 	LiveAddress pulumi.StringOutput `pulumi:"liveAddress"`
 	// Specifies the conference media type list.
 	// It consists of one or more enumerations, and the valid values are as follows:
@@ -211,15 +211,15 @@ type Conference struct {
 	// Specifies the cloud meeting room ID.
 	MeetingRoomId pulumi.StringOutput `pulumi:"meetingRoomId"`
 	// Specifies the number of parties in the conference, the maximum number of
-	// participants in the conference. Defaults to **0** (Unlimited).
+	// participants in the conference. Defaults to `0` (Unlimited).
 	ParticipantNumber pulumi.IntPtrOutput `pulumi:"participantNumber"`
 	// Specifies the attendee list.
 	// The object structure is documented below.
 	Participants ConferenceParticipantArrayOutput `pulumi:"participants"`
 	// Specifies the recording authentication method.
-	// **0**: Viewable/downloadable via link.
-	// **1**: Enterprise users can watch/download.
-	// **2**: Attendees can watch/download.
+	// + **0**: Viewable/downloadable via link.
+	// + **1**: Enterprise users can watch/download.
+	// + **2**: Attendees can watch/download.
 	RecordAuthType pulumi.IntOutput `pulumi:"recordAuthType"`
 	// Specifies the recording type.
 	// + **0**: Disabled.
@@ -303,7 +303,7 @@ type conferenceState struct {
 	// The audience meeting link address.
 	AudienceJoinUri *string `pulumi:"audienceJoinUri"`
 	// Specifies the auxiliary streaming address, the maximum length is 255 characters.
-	// Only available if `recordType` is **2** or **3**.
+	// Only available if `recordType` is `2` or `3`.
 	AuxAddress *string `pulumi:"auxAddress"`
 	// The host meeting link address.
 	ChairJoinUri *string `pulumi:"chairJoinUri"`
@@ -325,12 +325,12 @@ type conferenceState struct {
 	// The object structure is documented below.
 	CycleParams *ConferenceCycleParams `pulumi:"cycleParams"`
 	// Specifies the duration of the conference, in minutes.
-	// The valid value is range from `15` to `1440`, defaults to `30`.
+	// The valid value is range from `15` to `1,440`, defaults to `30`.
 	Duration *int `pulumi:"duration"`
 	// Specifies the conference media encryption mode.
-	// **0**: Adaptive encryption.
-	// **1**: Force encryption.
-	// **2**: Do not encrypt.
+	// + **0**: Adaptive encryption.
+	// + **1**: Force encryption.
+	// + **2**: Do not encrypt.
 	EncryptMode *int `pulumi:"encryptMode"`
 	// The common attendee meeting link address.
 	GuestJoinUri *string `pulumi:"guestJoinUri"`
@@ -353,7 +353,7 @@ type conferenceState struct {
 	// + **en-US**: US English.
 	Language *string `pulumi:"language"`
 	// Specifies the mainstream live broadcast address, with a maximum of 255 characters.
-	// Only available if `recordType` is **2** or **3**.
+	// Only available if `recordType` is `2` or `3`.
 	LiveAddress *string `pulumi:"liveAddress"`
 	// Specifies the conference media type list.
 	// It consists of one or more enumerations, and the valid values are as follows:
@@ -366,15 +366,15 @@ type conferenceState struct {
 	// Specifies the cloud meeting room ID.
 	MeetingRoomId *string `pulumi:"meetingRoomId"`
 	// Specifies the number of parties in the conference, the maximum number of
-	// participants in the conference. Defaults to **0** (Unlimited).
+	// participants in the conference. Defaults to `0` (Unlimited).
 	ParticipantNumber *int `pulumi:"participantNumber"`
 	// Specifies the attendee list.
 	// The object structure is documented below.
 	Participants []ConferenceParticipant `pulumi:"participants"`
 	// Specifies the recording authentication method.
-	// **0**: Viewable/downloadable via link.
-	// **1**: Enterprise users can watch/download.
-	// **2**: Attendees can watch/download.
+	// + **0**: Viewable/downloadable via link.
+	// + **1**: Enterprise users can watch/download.
+	// + **2**: Attendees can watch/download.
 	RecordAuthType *int `pulumi:"recordAuthType"`
 	// Specifies the recording type.
 	// + **0**: Disabled.
@@ -420,7 +420,7 @@ type ConferenceState struct {
 	// The audience meeting link address.
 	AudienceJoinUri pulumi.StringPtrInput
 	// Specifies the auxiliary streaming address, the maximum length is 255 characters.
-	// Only available if `recordType` is **2** or **3**.
+	// Only available if `recordType` is `2` or `3`.
 	AuxAddress pulumi.StringPtrInput
 	// The host meeting link address.
 	ChairJoinUri pulumi.StringPtrInput
@@ -442,12 +442,12 @@ type ConferenceState struct {
 	// The object structure is documented below.
 	CycleParams ConferenceCycleParamsPtrInput
 	// Specifies the duration of the conference, in minutes.
-	// The valid value is range from `15` to `1440`, defaults to `30`.
+	// The valid value is range from `15` to `1,440`, defaults to `30`.
 	Duration pulumi.IntPtrInput
 	// Specifies the conference media encryption mode.
-	// **0**: Adaptive encryption.
-	// **1**: Force encryption.
-	// **2**: Do not encrypt.
+	// + **0**: Adaptive encryption.
+	// + **1**: Force encryption.
+	// + **2**: Do not encrypt.
 	EncryptMode pulumi.IntPtrInput
 	// The common attendee meeting link address.
 	GuestJoinUri pulumi.StringPtrInput
@@ -470,7 +470,7 @@ type ConferenceState struct {
 	// + **en-US**: US English.
 	Language pulumi.StringPtrInput
 	// Specifies the mainstream live broadcast address, with a maximum of 255 characters.
-	// Only available if `recordType` is **2** or **3**.
+	// Only available if `recordType` is `2` or `3`.
 	LiveAddress pulumi.StringPtrInput
 	// Specifies the conference media type list.
 	// It consists of one or more enumerations, and the valid values are as follows:
@@ -483,15 +483,15 @@ type ConferenceState struct {
 	// Specifies the cloud meeting room ID.
 	MeetingRoomId pulumi.StringPtrInput
 	// Specifies the number of parties in the conference, the maximum number of
-	// participants in the conference. Defaults to **0** (Unlimited).
+	// participants in the conference. Defaults to `0` (Unlimited).
 	ParticipantNumber pulumi.IntPtrInput
 	// Specifies the attendee list.
 	// The object structure is documented below.
 	Participants ConferenceParticipantArrayInput
 	// Specifies the recording authentication method.
-	// **0**: Viewable/downloadable via link.
-	// **1**: Enterprise users can watch/download.
-	// **2**: Attendees can watch/download.
+	// + **0**: Viewable/downloadable via link.
+	// + **1**: Enterprise users can watch/download.
+	// + **2**: Attendees can watch/download.
 	RecordAuthType pulumi.IntPtrInput
 	// Specifies the recording type.
 	// + **0**: Disabled.
@@ -537,7 +537,7 @@ type conferenceArgs struct {
 	// Required if `appId` is set. Changing this parameter will create a new resource.
 	AppKey *string `pulumi:"appKey"`
 	// Specifies the auxiliary streaming address, the maximum length is 255 characters.
-	// Only available if `recordType` is **2** or **3**.
+	// Only available if `recordType` is `2` or `3`.
 	AuxAddress *string `pulumi:"auxAddress"`
 	// Specifies the other conference configurations.
 	// The object structure is documented below.
@@ -550,12 +550,12 @@ type conferenceArgs struct {
 	// The object structure is documented below.
 	CycleParams *ConferenceCycleParams `pulumi:"cycleParams"`
 	// Specifies the duration of the conference, in minutes.
-	// The valid value is range from `15` to `1440`, defaults to `30`.
+	// The valid value is range from `15` to `1,440`, defaults to `30`.
 	Duration int `pulumi:"duration"`
 	// Specifies the conference media encryption mode.
-	// **0**: Adaptive encryption.
-	// **1**: Force encryption.
-	// **2**: Do not encrypt.
+	// + **0**: Adaptive encryption.
+	// + **1**: Force encryption.
+	// + **2**: Do not encrypt.
 	EncryptMode *int `pulumi:"encryptMode"`
 	// Specifies whether the conference automatically starts recording, it only takes
 	// effect when the recording type is:
@@ -573,7 +573,7 @@ type conferenceArgs struct {
 	// + **en-US**: US English.
 	Language *string `pulumi:"language"`
 	// Specifies the mainstream live broadcast address, with a maximum of 255 characters.
-	// Only available if `recordType` is **2** or **3**.
+	// Only available if `recordType` is `2` or `3`.
 	LiveAddress *string `pulumi:"liveAddress"`
 	// Specifies the conference media type list.
 	// It consists of one or more enumerations, and the valid values are as follows:
@@ -586,15 +586,15 @@ type conferenceArgs struct {
 	// Specifies the cloud meeting room ID.
 	MeetingRoomId string `pulumi:"meetingRoomId"`
 	// Specifies the number of parties in the conference, the maximum number of
-	// participants in the conference. Defaults to **0** (Unlimited).
+	// participants in the conference. Defaults to `0` (Unlimited).
 	ParticipantNumber *int `pulumi:"participantNumber"`
 	// Specifies the attendee list.
 	// The object structure is documented below.
 	Participants []ConferenceParticipant `pulumi:"participants"`
 	// Specifies the recording authentication method.
-	// **0**: Viewable/downloadable via link.
-	// **1**: Enterprise users can watch/download.
-	// **2**: Attendees can watch/download.
+	// + **0**: Viewable/downloadable via link.
+	// + **1**: Enterprise users can watch/download.
+	// + **2**: Attendees can watch/download.
 	RecordAuthType *int `pulumi:"recordAuthType"`
 	// Specifies the recording type.
 	// + **0**: Disabled.
@@ -630,7 +630,7 @@ type ConferenceArgs struct {
 	// Required if `appId` is set. Changing this parameter will create a new resource.
 	AppKey pulumi.StringPtrInput
 	// Specifies the auxiliary streaming address, the maximum length is 255 characters.
-	// Only available if `recordType` is **2** or **3**.
+	// Only available if `recordType` is `2` or `3`.
 	AuxAddress pulumi.StringPtrInput
 	// Specifies the other conference configurations.
 	// The object structure is documented below.
@@ -643,12 +643,12 @@ type ConferenceArgs struct {
 	// The object structure is documented below.
 	CycleParams ConferenceCycleParamsPtrInput
 	// Specifies the duration of the conference, in minutes.
-	// The valid value is range from `15` to `1440`, defaults to `30`.
+	// The valid value is range from `15` to `1,440`, defaults to `30`.
 	Duration pulumi.IntInput
 	// Specifies the conference media encryption mode.
-	// **0**: Adaptive encryption.
-	// **1**: Force encryption.
-	// **2**: Do not encrypt.
+	// + **0**: Adaptive encryption.
+	// + **1**: Force encryption.
+	// + **2**: Do not encrypt.
 	EncryptMode pulumi.IntPtrInput
 	// Specifies whether the conference automatically starts recording, it only takes
 	// effect when the recording type is:
@@ -666,7 +666,7 @@ type ConferenceArgs struct {
 	// + **en-US**: US English.
 	Language pulumi.StringPtrInput
 	// Specifies the mainstream live broadcast address, with a maximum of 255 characters.
-	// Only available if `recordType` is **2** or **3**.
+	// Only available if `recordType` is `2` or `3`.
 	LiveAddress pulumi.StringPtrInput
 	// Specifies the conference media type list.
 	// It consists of one or more enumerations, and the valid values are as follows:
@@ -679,15 +679,15 @@ type ConferenceArgs struct {
 	// Specifies the cloud meeting room ID.
 	MeetingRoomId pulumi.StringInput
 	// Specifies the number of parties in the conference, the maximum number of
-	// participants in the conference. Defaults to **0** (Unlimited).
+	// participants in the conference. Defaults to `0` (Unlimited).
 	ParticipantNumber pulumi.IntPtrInput
 	// Specifies the attendee list.
 	// The object structure is documented below.
 	Participants ConferenceParticipantArrayInput
 	// Specifies the recording authentication method.
-	// **0**: Viewable/downloadable via link.
-	// **1**: Enterprise users can watch/download.
-	// **2**: Attendees can watch/download.
+	// + **0**: Viewable/downloadable via link.
+	// + **1**: Enterprise users can watch/download.
+	// + **2**: Attendees can watch/download.
 	RecordAuthType pulumi.IntPtrInput
 	// Specifies the recording type.
 	// + **0**: Disabled.
@@ -830,7 +830,7 @@ func (o ConferenceOutput) AudienceJoinUri() pulumi.StringOutput {
 }
 
 // Specifies the auxiliary streaming address, the maximum length is 255 characters.
-// Only available if `recordType` is **2** or **3**.
+// Only available if `recordType` is `2` or `3`.
 func (o ConferenceOutput) AuxAddress() pulumi.StringOutput {
 	return o.ApplyT(func(v *Conference) pulumi.StringOutput { return v.AuxAddress }).(pulumi.StringOutput)
 }
@@ -873,15 +873,15 @@ func (o ConferenceOutput) CycleParams() ConferenceCycleParamsOutput {
 }
 
 // Specifies the duration of the conference, in minutes.
-// The valid value is range from `15` to `1440`, defaults to `30`.
+// The valid value is range from `15` to `1,440`, defaults to `30`.
 func (o ConferenceOutput) Duration() pulumi.IntOutput {
 	return o.ApplyT(func(v *Conference) pulumi.IntOutput { return v.Duration }).(pulumi.IntOutput)
 }
 
 // Specifies the conference media encryption mode.
-// **0**: Adaptive encryption.
-// **1**: Force encryption.
-// **2**: Do not encrypt.
+// + **0**: Adaptive encryption.
+// + **1**: Force encryption.
+// + **2**: Do not encrypt.
 func (o ConferenceOutput) EncryptMode() pulumi.IntOutput {
 	return o.ApplyT(func(v *Conference) pulumi.IntOutput { return v.EncryptMode }).(pulumi.IntOutput)
 }
@@ -922,7 +922,7 @@ func (o ConferenceOutput) Language() pulumi.StringOutput {
 }
 
 // Specifies the mainstream live broadcast address, with a maximum of 255 characters.
-// Only available if `recordType` is **2** or **3**.
+// Only available if `recordType` is `2` or `3`.
 func (o ConferenceOutput) LiveAddress() pulumi.StringOutput {
 	return o.ApplyT(func(v *Conference) pulumi.StringOutput { return v.LiveAddress }).(pulumi.StringOutput)
 }
@@ -944,7 +944,7 @@ func (o ConferenceOutput) MeetingRoomId() pulumi.StringOutput {
 }
 
 // Specifies the number of parties in the conference, the maximum number of
-// participants in the conference. Defaults to **0** (Unlimited).
+// participants in the conference. Defaults to `0` (Unlimited).
 func (o ConferenceOutput) ParticipantNumber() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v *Conference) pulumi.IntPtrOutput { return v.ParticipantNumber }).(pulumi.IntPtrOutput)
 }
@@ -956,9 +956,9 @@ func (o ConferenceOutput) Participants() ConferenceParticipantArrayOutput {
 }
 
 // Specifies the recording authentication method.
-// **0**: Viewable/downloadable via link.
-// **1**: Enterprise users can watch/download.
-// **2**: Attendees can watch/download.
+// + **0**: Viewable/downloadable via link.
+// + **1**: Enterprise users can watch/download.
+// + **2**: Attendees can watch/download.
 func (o ConferenceOutput) RecordAuthType() pulumi.IntOutput {
 	return o.ApplyT(func(v *Conference) pulumi.IntOutput { return v.RecordAuthType }).(pulumi.IntOutput)
 }

@@ -11,6 +11,8 @@ from .. import _utilities
 
 __all__ = [
     'InstanceBackupPolicyArgs',
+    'InstanceBandwidthInfoArgs',
+    'InstanceParameterArgs',
     'InstanceWhitelistArgs',
 ]
 
@@ -23,7 +25,7 @@ class InstanceBackupPolicyArgs:
                  period_type: Optional[pulumi.Input[str]] = None,
                  save_days: Optional[pulumi.Input[int]] = None):
         """
-        :param pulumi.Input[Sequence[pulumi.Input[int]]] backup_ats: Day in a week on which backup starts, the value ranges from 1 to 7.
+        :param pulumi.Input[Sequence[pulumi.Input[int]]] backup_ats: Day in a week on which backup starts, the value ranges from `1` to `7`.
                Where: 1 indicates Monday; 7 indicates Sunday.
         :param pulumi.Input[str] begin_at: Time at which backup starts.
                Format: `hh24:00-hh24:00`, "00:00-01:00" indicates that backup starts at 00:00:00.
@@ -32,7 +34,7 @@ class InstanceBackupPolicyArgs:
                + `manual`: manual backup.
         :param pulumi.Input[str] period_type: Interval at which backup is performed. Default value is `weekly`.
                Currently, only weekly backup is supported.
-        :param pulumi.Input[int] save_days: Retention time. Unit: day, the value ranges from 1 to 7.
+        :param pulumi.Input[int] save_days: Retention time. Unit: day, the value ranges from `1` to `7`.
                This parameter is required if the backup_type is **auto**.
         """
         pulumi.set(__self__, "backup_ats", backup_ats)
@@ -48,7 +50,7 @@ class InstanceBackupPolicyArgs:
     @pulumi.getter(name="backupAts")
     def backup_ats(self) -> pulumi.Input[Sequence[pulumi.Input[int]]]:
         """
-        Day in a week on which backup starts, the value ranges from 1 to 7.
+        Day in a week on which backup starts, the value ranges from `1` to `7`.
         Where: 1 indicates Monday; 7 indicates Sunday.
         """
         return pulumi.get(self, "backup_ats")
@@ -101,7 +103,7 @@ class InstanceBackupPolicyArgs:
     @pulumi.getter(name="saveDays")
     def save_days(self) -> Optional[pulumi.Input[int]]:
         """
-        Retention time. Unit: day, the value ranges from 1 to 7.
+        Retention time. Unit: day, the value ranges from `1` to `7`.
         This parameter is required if the backup_type is **auto**.
         """
         return pulumi.get(self, "save_days")
@@ -109,6 +111,225 @@ class InstanceBackupPolicyArgs:
     @save_days.setter
     def save_days(self, value: Optional[pulumi.Input[int]]):
         pulumi.set(self, "save_days", value)
+
+
+@pulumi.input_type
+class InstanceBandwidthInfoArgs:
+    def __init__(__self__, *,
+                 bandwidth: Optional[pulumi.Input[int]] = None,
+                 begin_time: Optional[pulumi.Input[str]] = None,
+                 current_time: Optional[pulumi.Input[str]] = None,
+                 end_time: Optional[pulumi.Input[str]] = None,
+                 expand_count: Optional[pulumi.Input[int]] = None,
+                 expand_effect_time: Optional[pulumi.Input[int]] = None,
+                 expand_interval_time: Optional[pulumi.Input[int]] = None,
+                 max_expand_count: Optional[pulumi.Input[int]] = None,
+                 next_expand_time: Optional[pulumi.Input[str]] = None,
+                 task_running: Optional[pulumi.Input[bool]] = None):
+        """
+        :param pulumi.Input[int] bandwidth: Indicates the bandwidth size, the unit is **GB**.
+        :param pulumi.Input[str] begin_time: Indicates the begin time of temporary increase.
+        :param pulumi.Input[str] current_time: Indicates the current time.
+        :param pulumi.Input[str] end_time: Indicates the end time of temporary increase.
+        :param pulumi.Input[int] expand_count: Indicates the number of increases.
+        :param pulumi.Input[int] expand_effect_time: Indicates the interval between temporary increases, the unit is **ms**.
+        :param pulumi.Input[int] expand_interval_time: Indicates the time interval to the next increase, the unit is **ms**.
+        :param pulumi.Input[int] max_expand_count: Indicates the maximum number of increases.
+        :param pulumi.Input[str] next_expand_time: Indicates the next increase time.
+        :param pulumi.Input[bool] task_running: Indicates whether the increase task is running.
+        """
+        if bandwidth is not None:
+            pulumi.set(__self__, "bandwidth", bandwidth)
+        if begin_time is not None:
+            pulumi.set(__self__, "begin_time", begin_time)
+        if current_time is not None:
+            pulumi.set(__self__, "current_time", current_time)
+        if end_time is not None:
+            pulumi.set(__self__, "end_time", end_time)
+        if expand_count is not None:
+            pulumi.set(__self__, "expand_count", expand_count)
+        if expand_effect_time is not None:
+            pulumi.set(__self__, "expand_effect_time", expand_effect_time)
+        if expand_interval_time is not None:
+            pulumi.set(__self__, "expand_interval_time", expand_interval_time)
+        if max_expand_count is not None:
+            pulumi.set(__self__, "max_expand_count", max_expand_count)
+        if next_expand_time is not None:
+            pulumi.set(__self__, "next_expand_time", next_expand_time)
+        if task_running is not None:
+            pulumi.set(__self__, "task_running", task_running)
+
+    @property
+    @pulumi.getter
+    def bandwidth(self) -> Optional[pulumi.Input[int]]:
+        """
+        Indicates the bandwidth size, the unit is **GB**.
+        """
+        return pulumi.get(self, "bandwidth")
+
+    @bandwidth.setter
+    def bandwidth(self, value: Optional[pulumi.Input[int]]):
+        pulumi.set(self, "bandwidth", value)
+
+    @property
+    @pulumi.getter(name="beginTime")
+    def begin_time(self) -> Optional[pulumi.Input[str]]:
+        """
+        Indicates the begin time of temporary increase.
+        """
+        return pulumi.get(self, "begin_time")
+
+    @begin_time.setter
+    def begin_time(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "begin_time", value)
+
+    @property
+    @pulumi.getter(name="currentTime")
+    def current_time(self) -> Optional[pulumi.Input[str]]:
+        """
+        Indicates the current time.
+        """
+        return pulumi.get(self, "current_time")
+
+    @current_time.setter
+    def current_time(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "current_time", value)
+
+    @property
+    @pulumi.getter(name="endTime")
+    def end_time(self) -> Optional[pulumi.Input[str]]:
+        """
+        Indicates the end time of temporary increase.
+        """
+        return pulumi.get(self, "end_time")
+
+    @end_time.setter
+    def end_time(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "end_time", value)
+
+    @property
+    @pulumi.getter(name="expandCount")
+    def expand_count(self) -> Optional[pulumi.Input[int]]:
+        """
+        Indicates the number of increases.
+        """
+        return pulumi.get(self, "expand_count")
+
+    @expand_count.setter
+    def expand_count(self, value: Optional[pulumi.Input[int]]):
+        pulumi.set(self, "expand_count", value)
+
+    @property
+    @pulumi.getter(name="expandEffectTime")
+    def expand_effect_time(self) -> Optional[pulumi.Input[int]]:
+        """
+        Indicates the interval between temporary increases, the unit is **ms**.
+        """
+        return pulumi.get(self, "expand_effect_time")
+
+    @expand_effect_time.setter
+    def expand_effect_time(self, value: Optional[pulumi.Input[int]]):
+        pulumi.set(self, "expand_effect_time", value)
+
+    @property
+    @pulumi.getter(name="expandIntervalTime")
+    def expand_interval_time(self) -> Optional[pulumi.Input[int]]:
+        """
+        Indicates the time interval to the next increase, the unit is **ms**.
+        """
+        return pulumi.get(self, "expand_interval_time")
+
+    @expand_interval_time.setter
+    def expand_interval_time(self, value: Optional[pulumi.Input[int]]):
+        pulumi.set(self, "expand_interval_time", value)
+
+    @property
+    @pulumi.getter(name="maxExpandCount")
+    def max_expand_count(self) -> Optional[pulumi.Input[int]]:
+        """
+        Indicates the maximum number of increases.
+        """
+        return pulumi.get(self, "max_expand_count")
+
+    @max_expand_count.setter
+    def max_expand_count(self, value: Optional[pulumi.Input[int]]):
+        pulumi.set(self, "max_expand_count", value)
+
+    @property
+    @pulumi.getter(name="nextExpandTime")
+    def next_expand_time(self) -> Optional[pulumi.Input[str]]:
+        """
+        Indicates the next increase time.
+        """
+        return pulumi.get(self, "next_expand_time")
+
+    @next_expand_time.setter
+    def next_expand_time(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "next_expand_time", value)
+
+    @property
+    @pulumi.getter(name="taskRunning")
+    def task_running(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Indicates whether the increase task is running.
+        """
+        return pulumi.get(self, "task_running")
+
+    @task_running.setter
+    def task_running(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "task_running", value)
+
+
+@pulumi.input_type
+class InstanceParameterArgs:
+    def __init__(__self__, *,
+                 id: pulumi.Input[str],
+                 name: pulumi.Input[str],
+                 value: pulumi.Input[str]):
+        """
+        :param pulumi.Input[str] id: Specifies the ID of the configuration item.
+        :param pulumi.Input[str] name: Specifies the name of the configuration item.
+        :param pulumi.Input[str] value: Specifies the value of the configuration item.
+        """
+        pulumi.set(__self__, "id", id)
+        pulumi.set(__self__, "name", name)
+        pulumi.set(__self__, "value", value)
+
+    @property
+    @pulumi.getter
+    def id(self) -> pulumi.Input[str]:
+        """
+        Specifies the ID of the configuration item.
+        """
+        return pulumi.get(self, "id")
+
+    @id.setter
+    def id(self, value: pulumi.Input[str]):
+        pulumi.set(self, "id", value)
+
+    @property
+    @pulumi.getter
+    def name(self) -> pulumi.Input[str]:
+        """
+        Specifies the name of the configuration item.
+        """
+        return pulumi.get(self, "name")
+
+    @name.setter
+    def name(self, value: pulumi.Input[str]):
+        pulumi.set(self, "name", value)
+
+    @property
+    @pulumi.getter
+    def value(self) -> pulumi.Input[str]:
+        """
+        Specifies the value of the configuration item.
+        """
+        return pulumi.get(self, "value")
+
+    @value.setter
+    def value(self, value: pulumi.Input[str]):
+        pulumi.set(self, "value", value)
 
 
 @pulumi.input_type

@@ -46,7 +46,7 @@ import (
 //
 // ## Import
 //
-// IEC EIPs can be imported using the `id`, e.g.
+// IEC EIPs can be imported using the `id`, e.g. bash
 //
 // ```sh
 //

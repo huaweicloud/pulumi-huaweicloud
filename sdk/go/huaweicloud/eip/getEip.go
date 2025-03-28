@@ -65,10 +65,14 @@ type GetEipArgs struct {
 type GetEipResult struct {
 	// The bandwidth id of the EIP.
 	BandwidthId string `pulumi:"bandwidthId"`
+	// The bandwidth name of the EIP.
+	BandwidthName string `pulumi:"bandwidthName"`
 	// The bandwidth share type of the EIP.
 	BandwidthShareType string `pulumi:"bandwidthShareType"`
 	// The bandwidth size of the EIP.
-	BandwidthSize       int    `pulumi:"bandwidthSize"`
+	BandwidthSize int `pulumi:"bandwidthSize"`
+	// The create time of the EIP.
+	CreatedAt           string `pulumi:"createdAt"`
 	EnterpriseProjectId string `pulumi:"enterpriseProjectId"`
 	// The provider-assigned unique ID for this managed resource.
 	Id string `pulumi:"id"`
@@ -76,7 +80,9 @@ type GetEipResult struct {
 	IpVersion int `pulumi:"ipVersion"`
 	// The IPv6 address of the EIP.
 	Ipv6Address string `pulumi:"ipv6Address"`
-	PortId      string `pulumi:"portId"`
+	// The name of the EIP.
+	Name   string `pulumi:"name"`
+	PortId string `pulumi:"portId"`
 	// The private ip of the EIP.
 	PrivateIp string `pulumi:"privateIp"`
 	PublicIp  string `pulumi:"publicIp"`
@@ -137,6 +143,11 @@ func (o GetEipResultOutput) BandwidthId() pulumi.StringOutput {
 	return o.ApplyT(func(v GetEipResult) string { return v.BandwidthId }).(pulumi.StringOutput)
 }
 
+// The bandwidth name of the EIP.
+func (o GetEipResultOutput) BandwidthName() pulumi.StringOutput {
+	return o.ApplyT(func(v GetEipResult) string { return v.BandwidthName }).(pulumi.StringOutput)
+}
+
 // The bandwidth share type of the EIP.
 func (o GetEipResultOutput) BandwidthShareType() pulumi.StringOutput {
 	return o.ApplyT(func(v GetEipResult) string { return v.BandwidthShareType }).(pulumi.StringOutput)
@@ -145,6 +156,11 @@ func (o GetEipResultOutput) BandwidthShareType() pulumi.StringOutput {
 // The bandwidth size of the EIP.
 func (o GetEipResultOutput) BandwidthSize() pulumi.IntOutput {
 	return o.ApplyT(func(v GetEipResult) int { return v.BandwidthSize }).(pulumi.IntOutput)
+}
+
+// The create time of the EIP.
+func (o GetEipResultOutput) CreatedAt() pulumi.StringOutput {
+	return o.ApplyT(func(v GetEipResult) string { return v.CreatedAt }).(pulumi.StringOutput)
 }
 
 func (o GetEipResultOutput) EnterpriseProjectId() pulumi.StringOutput {
@@ -164,6 +180,11 @@ func (o GetEipResultOutput) IpVersion() pulumi.IntOutput {
 // The IPv6 address of the EIP.
 func (o GetEipResultOutput) Ipv6Address() pulumi.StringOutput {
 	return o.ApplyT(func(v GetEipResult) string { return v.Ipv6Address }).(pulumi.StringOutput)
+}
+
+// The name of the EIP.
+func (o GetEipResultOutput) Name() pulumi.StringOutput {
+	return o.ApplyT(func(v GetEipResult) string { return v.Name }).(pulumi.StringOutput)
 }
 
 func (o GetEipResultOutput) PortId() pulumi.StringOutput {

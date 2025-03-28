@@ -24,12 +24,12 @@ class TaskArgs:
         The set of arguments for constructing a Task resource.
         :param pulumi.Input[int] project_id: Specifies the CPTS project ID which the task belongs to.
                Changing this parameter will create a new resource.
-        :param pulumi.Input[int] benchmark_concurrency: Specifies benchmark concurrency of the task, the value range is 0 to
-               2000000. The default value is `100`. Reference for the calculation of the number of concurrent users.
+        :param pulumi.Input[int] benchmark_concurrency: Specifies benchmark concurrency of the task, the value range is `0` to
+               `2,000,000`. The default value is `100`. Reference for the calculation of the number of concurrent users.
                `Number of concurrent users` = `benchmark concurrency` * `concurrency ratio`.
         :param pulumi.Input[int] cluster_id: Specifies a cluster ID of the CPTS resource group. If the number of concurrent users
                is less than 1000, you can use a shared resource group for testing and do not have to create a resource group.
-        :param pulumi.Input[str] name: Specifies the name of the task, which can contain a maximum of 42 characters.
+        :param pulumi.Input[str] name: Specifies the name of the task, which can contain a maximum of `42` characters.
         :param pulumi.Input[str] operation: Specifies whether to enable the task or stop the task. The options are as follows:
                + **enable**: Starting the pressure test task.
                + **stop**: Stop the pressure test tasks.
@@ -65,8 +65,8 @@ class TaskArgs:
     @pulumi.getter(name="benchmarkConcurrency")
     def benchmark_concurrency(self) -> Optional[pulumi.Input[int]]:
         """
-        Specifies benchmark concurrency of the task, the value range is 0 to
-        2000000. The default value is `100`. Reference for the calculation of the number of concurrent users.
+        Specifies benchmark concurrency of the task, the value range is `0` to
+        `2,000,000`. The default value is `100`. Reference for the calculation of the number of concurrent users.
         `Number of concurrent users` = `benchmark concurrency` * `concurrency ratio`.
         """
         return pulumi.get(self, "benchmark_concurrency")
@@ -92,7 +92,7 @@ class TaskArgs:
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the name of the task, which can contain a maximum of 42 characters.
+        Specifies the name of the task, which can contain a maximum of `42` characters.
         """
         return pulumi.get(self, "name")
 
@@ -140,12 +140,12 @@ class _TaskState:
                  status: Optional[pulumi.Input[int]] = None):
         """
         Input properties used for looking up and filtering Task resources.
-        :param pulumi.Input[int] benchmark_concurrency: Specifies benchmark concurrency of the task, the value range is 0 to
-               2000000. The default value is `100`. Reference for the calculation of the number of concurrent users.
+        :param pulumi.Input[int] benchmark_concurrency: Specifies benchmark concurrency of the task, the value range is `0` to
+               `2,000,000`. The default value is `100`. Reference for the calculation of the number of concurrent users.
                `Number of concurrent users` = `benchmark concurrency` * `concurrency ratio`.
         :param pulumi.Input[int] cluster_id: Specifies a cluster ID of the CPTS resource group. If the number of concurrent users
                is less than 1000, you can use a shared resource group for testing and do not have to create a resource group.
-        :param pulumi.Input[str] name: Specifies the name of the task, which can contain a maximum of 42 characters.
+        :param pulumi.Input[str] name: Specifies the name of the task, which can contain a maximum of `42` characters.
         :param pulumi.Input[str] operation: Specifies whether to enable the task or stop the task. The options are as follows:
                + **enable**: Starting the pressure test task.
                + **stop**: Stop the pressure test tasks.
@@ -176,8 +176,8 @@ class _TaskState:
     @pulumi.getter(name="benchmarkConcurrency")
     def benchmark_concurrency(self) -> Optional[pulumi.Input[int]]:
         """
-        Specifies benchmark concurrency of the task, the value range is 0 to
-        2000000. The default value is `100`. Reference for the calculation of the number of concurrent users.
+        Specifies benchmark concurrency of the task, the value range is `0` to
+        `2,000,000`. The default value is `100`. Reference for the calculation of the number of concurrent users.
         `Number of concurrent users` = `benchmark concurrency` * `concurrency ratio`.
         """
         return pulumi.get(self, "benchmark_concurrency")
@@ -203,7 +203,7 @@ class _TaskState:
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the name of the task, which can contain a maximum of 42 characters.
+        Specifies the name of the task, which can contain a maximum of `42` characters.
         """
         return pulumi.get(self, "name")
 
@@ -294,13 +294,13 @@ class Task(pulumi.CustomResource):
 
         ## Import
 
-        Tasks can be imported using the `id`, e.g.
+        Tasks can be imported using the `id`, e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:Cpts/task:Task test 1090
         ```
 
-         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`operation`. It is generally recommended running `terraform plan` after importing an instance. You can then decide if changes should be applied to the instance, or the resource definition should be updated to align with the instance. Also you can ignore changes as below. resource "huaweicloud_cpts_task" "test" {
+         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`operation`. It is generally recommended running `terraform plan` after importing an instance. You can then decide if changes should be applied to the instance, or the resource definition should be updated to align with the instance. Also you can ignore changes as below. hcl resource "huaweicloud_cpts_task" "test" {
 
          ...
 
@@ -316,12 +316,12 @@ class Task(pulumi.CustomResource):
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[int] benchmark_concurrency: Specifies benchmark concurrency of the task, the value range is 0 to
-               2000000. The default value is `100`. Reference for the calculation of the number of concurrent users.
+        :param pulumi.Input[int] benchmark_concurrency: Specifies benchmark concurrency of the task, the value range is `0` to
+               `2,000,000`. The default value is `100`. Reference for the calculation of the number of concurrent users.
                `Number of concurrent users` = `benchmark concurrency` * `concurrency ratio`.
         :param pulumi.Input[int] cluster_id: Specifies a cluster ID of the CPTS resource group. If the number of concurrent users
                is less than 1000, you can use a shared resource group for testing and do not have to create a resource group.
-        :param pulumi.Input[str] name: Specifies the name of the task, which can contain a maximum of 42 characters.
+        :param pulumi.Input[str] name: Specifies the name of the task, which can contain a maximum of `42` characters.
         :param pulumi.Input[str] operation: Specifies whether to enable the task or stop the task. The options are as follows:
                + **enable**: Starting the pressure test task.
                + **stop**: Stop the pressure test tasks.
@@ -352,13 +352,13 @@ class Task(pulumi.CustomResource):
 
         ## Import
 
-        Tasks can be imported using the `id`, e.g.
+        Tasks can be imported using the `id`, e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:Cpts/task:Task test 1090
         ```
 
-         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`operation`. It is generally recommended running `terraform plan` after importing an instance. You can then decide if changes should be applied to the instance, or the resource definition should be updated to align with the instance. Also you can ignore changes as below. resource "huaweicloud_cpts_task" "test" {
+         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`operation`. It is generally recommended running `terraform plan` after importing an instance. You can then decide if changes should be applied to the instance, or the resource definition should be updated to align with the instance. Also you can ignore changes as below. hcl resource "huaweicloud_cpts_task" "test" {
 
          ...
 
@@ -435,12 +435,12 @@ class Task(pulumi.CustomResource):
         :param str resource_name: The unique name of the resulting resource.
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[int] benchmark_concurrency: Specifies benchmark concurrency of the task, the value range is 0 to
-               2000000. The default value is `100`. Reference for the calculation of the number of concurrent users.
+        :param pulumi.Input[int] benchmark_concurrency: Specifies benchmark concurrency of the task, the value range is `0` to
+               `2,000,000`. The default value is `100`. Reference for the calculation of the number of concurrent users.
                `Number of concurrent users` = `benchmark concurrency` * `concurrency ratio`.
         :param pulumi.Input[int] cluster_id: Specifies a cluster ID of the CPTS resource group. If the number of concurrent users
                is less than 1000, you can use a shared resource group for testing and do not have to create a resource group.
-        :param pulumi.Input[str] name: Specifies the name of the task, which can contain a maximum of 42 characters.
+        :param pulumi.Input[str] name: Specifies the name of the task, which can contain a maximum of `42` characters.
         :param pulumi.Input[str] operation: Specifies whether to enable the task or stop the task. The options are as follows:
                + **enable**: Starting the pressure test task.
                + **stop**: Stop the pressure test tasks.
@@ -469,8 +469,8 @@ class Task(pulumi.CustomResource):
     @pulumi.getter(name="benchmarkConcurrency")
     def benchmark_concurrency(self) -> pulumi.Output[Optional[int]]:
         """
-        Specifies benchmark concurrency of the task, the value range is 0 to
-        2000000. The default value is `100`. Reference for the calculation of the number of concurrent users.
+        Specifies benchmark concurrency of the task, the value range is `0` to
+        `2,000,000`. The default value is `100`. Reference for the calculation of the number of concurrent users.
         `Number of concurrent users` = `benchmark concurrency` * `concurrency ratio`.
         """
         return pulumi.get(self, "benchmark_concurrency")
@@ -488,7 +488,7 @@ class Task(pulumi.CustomResource):
     @pulumi.getter
     def name(self) -> pulumi.Output[str]:
         """
-        Specifies the name of the task, which can contain a maximum of 42 characters.
+        Specifies the name of the task, which can contain a maximum of `42` characters.
         """
         return pulumi.get(self, "name")
 

@@ -280,10 +280,10 @@ type ServicePortMapping struct {
 	// Specifies the protocol used in port mappings. Only **TCP** is supported.
 	Protocol *string `pulumi:"protocol"`
 	// Specifies the port for accessing the VPC endpoint service. This port is provided by
-	// the backend service to provide services. The value ranges from 1 to 65535.
+	// the backend service to provide services. The value ranges from `1` to `65,535`.
 	ServicePort *int `pulumi:"servicePort"`
 	// Specifies the port for accessing the VPC endpoint. This port is provided by the VPC
-	// endpoint, allowing you to access the VPC endpoint service. The value ranges from 1 to 65535.
+	// endpoint, allowing you to access the VPC endpoint service. The value ranges from `1` to `65,535`.
 	TerminalPort *int `pulumi:"terminalPort"`
 }
 
@@ -302,10 +302,10 @@ type ServicePortMappingArgs struct {
 	// Specifies the protocol used in port mappings. Only **TCP** is supported.
 	Protocol pulumi.StringPtrInput `pulumi:"protocol"`
 	// Specifies the port for accessing the VPC endpoint service. This port is provided by
-	// the backend service to provide services. The value ranges from 1 to 65535.
+	// the backend service to provide services. The value ranges from `1` to `65,535`.
 	ServicePort pulumi.IntPtrInput `pulumi:"servicePort"`
 	// Specifies the port for accessing the VPC endpoint. This port is provided by the VPC
-	// endpoint, allowing you to access the VPC endpoint service. The value ranges from 1 to 65535.
+	// endpoint, allowing you to access the VPC endpoint service. The value ranges from `1` to `65,535`.
 	TerminalPort pulumi.IntPtrInput `pulumi:"terminalPort"`
 }
 
@@ -366,13 +366,13 @@ func (o ServicePortMappingOutput) Protocol() pulumi.StringPtrOutput {
 }
 
 // Specifies the port for accessing the VPC endpoint service. This port is provided by
-// the backend service to provide services. The value ranges from 1 to 65535.
+// the backend service to provide services. The value ranges from `1` to `65,535`.
 func (o ServicePortMappingOutput) ServicePort() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v ServicePortMapping) *int { return v.ServicePort }).(pulumi.IntPtrOutput)
 }
 
 // Specifies the port for accessing the VPC endpoint. This port is provided by the VPC
-// endpoint, allowing you to access the VPC endpoint service. The value ranges from 1 to 65535.
+// endpoint, allowing you to access the VPC endpoint service. The value ranges from `1` to `65,535`.
 func (o ServicePortMappingOutput) TerminalPort() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v ServicePortMapping) *int { return v.TerminalPort }).(pulumi.IntPtrOutput)
 }

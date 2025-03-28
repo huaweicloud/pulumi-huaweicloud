@@ -10,7 +10,7 @@ import (
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
-// Manages CTS **system** tracker resource within HuaweiCloud.
+// Manages CTS system tracker resource within HuaweiCloud.
 //
 // ## Example Usage
 //
@@ -45,35 +45,84 @@ import (
 //
 // ## Import
 //
-// CTS tracker can be imported using `name`, only **system** is available. e.g.
+// CTS tracker can be imported using `name`, only **system** is available. e.g. bash
 //
 // ```sh
 //
 //	$ pulumi import huaweicloud:Cts/tracker:Tracker tracker system
 //
 // ```
+//
+//	Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`tags`, `delete_tracker`. It is generally recommended running `terraform plan` after importing the resource. You can then decide if changes should be applied to the instance, or the resource definition should be updated to align with the resource. Also you can ignore changes as below. hcl resource "huaweicloud_cts_tracker" "test" {
+//
+//	...
+//
+//	lifecycle {
+//
+//	ignore_changes = [
+//
+//	tags, delete_tracker
+//
+//	]
+//
+//	} }
 type Tracker struct {
 	pulumi.CustomResourceState
 
+	// The cloud service delegation name.
+	AgencyName pulumi.StringOutput `pulumi:"agencyName"`
 	// Specifies the OBS bucket to which traces will be transferred.
 	BucketName pulumi.StringPtrOutput `pulumi:"bucketName"`
+	// Specifies the compression type of trace files. The value can be
+	// **gzip** or **json**. The default value is **gzip**.
+	CompressType pulumi.StringPtrOutput `pulumi:"compressType"`
+	// The creation time of the tracker.
+	CreateTime pulumi.IntOutput `pulumi:"createTime"`
+	// Specifies whether the tracker can be deleted.
+	DeleteTracker pulumi.BoolPtrOutput `pulumi:"deleteTracker"`
+	// It indicates the cause of the abnormal status.
+	Detail pulumi.StringOutput `pulumi:"detail"`
+	// The Account ID.
+	DomainId pulumi.StringOutput `pulumi:"domainId"`
 	// Specifies whether tracker is enabled.
 	Enabled pulumi.BoolPtrOutput `pulumi:"enabled"`
+	// Specifies the names of the cloud services for which traces don't need to be transferred.
+	// Currently, only **KMS** is supported.
+	ExcludeServices pulumi.StringArrayOutput `pulumi:"excludeServices"`
 	// Specifies the file name prefix to mark trace files that need to be stored
-	// in an OBS bucket. The value contains 0 to 64 characters. Only letters, numbers, hyphens (-), underscores (_),
+	// in an OBS bucket. The value contains `0` to `64` characters. Only letters, numbers, hyphens (-), underscores (_),
 	// and periods (.) are allowed.
 	FilePrefix pulumi.StringPtrOutput `pulumi:"filePrefix"`
+	// The LTS log group ID.
+	GroupId pulumi.StringOutput `pulumi:"groupId"`
+	// Whether CTS has been granted permissions to perform operations on the OBS bucket.
+	IsAuthorizedBucket pulumi.BoolOutput `pulumi:"isAuthorizedBucket"`
+	// Specifies whether to divide the path of the trace file by cloud service.
+	// The default value is **true**.
+	IsSortByService pulumi.BoolPtrOutput `pulumi:"isSortByService"`
 	// Specifies the ID of KMS key used for trace file encryption.
 	KmsId pulumi.StringPtrOutput `pulumi:"kmsId"`
+	// The name of the log group that CTS creates in LTS.
+	LogGroupName pulumi.StringOutput `pulumi:"logGroupName"`
+	// The name of the log topic that CTS creates in LTS.
+	LogTopicName pulumi.StringOutput `pulumi:"logTopicName"`
 	// Specifies whether trace analysis is enabled.
 	LtsEnabled pulumi.BoolPtrOutput `pulumi:"ltsEnabled"`
 	// The tracker name, only **system** is available.
 	Name pulumi.StringOutput `pulumi:"name"`
+	// Specifies whether to apply the tracker configuration to the organization.
+	// If the value is set to **true**, the audit logs of all members in the organization in the current region will be
+	// transferred to the OBS bucket or LTS log stream configured for the management tracker.
+	OrganizationEnabled pulumi.BoolOutput `pulumi:"organizationEnabled"`
 	// Specifies the region in which to manage the CTS system tracker resource.
 	// If omitted, the provider-level region will be used. Changing this creates a new resource.
 	Region pulumi.StringOutput `pulumi:"region"`
 	// The tracker status, the value can be **enabled**, **disabled** or **error**.
 	Status pulumi.StringOutput `pulumi:"status"`
+	// The LTS log stream ID.
+	StreamId pulumi.StringOutput `pulumi:"streamId"`
+	// Specifies the key/value pairs to associate with the CTS tracker.
+	Tags pulumi.StringMapOutput `pulumi:"tags"`
 	// Whether traces will be transferred.
 	TransferEnabled pulumi.BoolOutput `pulumi:"transferEnabled"`
 	// The tracker type, only **system** is available.
@@ -112,25 +161,60 @@ func GetTracker(ctx *pulumi.Context,
 
 // Input properties used for looking up and filtering Tracker resources.
 type trackerState struct {
+	// The cloud service delegation name.
+	AgencyName *string `pulumi:"agencyName"`
 	// Specifies the OBS bucket to which traces will be transferred.
 	BucketName *string `pulumi:"bucketName"`
+	// Specifies the compression type of trace files. The value can be
+	// **gzip** or **json**. The default value is **gzip**.
+	CompressType *string `pulumi:"compressType"`
+	// The creation time of the tracker.
+	CreateTime *int `pulumi:"createTime"`
+	// Specifies whether the tracker can be deleted.
+	DeleteTracker *bool `pulumi:"deleteTracker"`
+	// It indicates the cause of the abnormal status.
+	Detail *string `pulumi:"detail"`
+	// The Account ID.
+	DomainId *string `pulumi:"domainId"`
 	// Specifies whether tracker is enabled.
 	Enabled *bool `pulumi:"enabled"`
+	// Specifies the names of the cloud services for which traces don't need to be transferred.
+	// Currently, only **KMS** is supported.
+	ExcludeServices []string `pulumi:"excludeServices"`
 	// Specifies the file name prefix to mark trace files that need to be stored
-	// in an OBS bucket. The value contains 0 to 64 characters. Only letters, numbers, hyphens (-), underscores (_),
+	// in an OBS bucket. The value contains `0` to `64` characters. Only letters, numbers, hyphens (-), underscores (_),
 	// and periods (.) are allowed.
 	FilePrefix *string `pulumi:"filePrefix"`
+	// The LTS log group ID.
+	GroupId *string `pulumi:"groupId"`
+	// Whether CTS has been granted permissions to perform operations on the OBS bucket.
+	IsAuthorizedBucket *bool `pulumi:"isAuthorizedBucket"`
+	// Specifies whether to divide the path of the trace file by cloud service.
+	// The default value is **true**.
+	IsSortByService *bool `pulumi:"isSortByService"`
 	// Specifies the ID of KMS key used for trace file encryption.
 	KmsId *string `pulumi:"kmsId"`
+	// The name of the log group that CTS creates in LTS.
+	LogGroupName *string `pulumi:"logGroupName"`
+	// The name of the log topic that CTS creates in LTS.
+	LogTopicName *string `pulumi:"logTopicName"`
 	// Specifies whether trace analysis is enabled.
 	LtsEnabled *bool `pulumi:"ltsEnabled"`
 	// The tracker name, only **system** is available.
 	Name *string `pulumi:"name"`
+	// Specifies whether to apply the tracker configuration to the organization.
+	// If the value is set to **true**, the audit logs of all members in the organization in the current region will be
+	// transferred to the OBS bucket or LTS log stream configured for the management tracker.
+	OrganizationEnabled *bool `pulumi:"organizationEnabled"`
 	// Specifies the region in which to manage the CTS system tracker resource.
 	// If omitted, the provider-level region will be used. Changing this creates a new resource.
 	Region *string `pulumi:"region"`
 	// The tracker status, the value can be **enabled**, **disabled** or **error**.
 	Status *string `pulumi:"status"`
+	// The LTS log stream ID.
+	StreamId *string `pulumi:"streamId"`
+	// Specifies the key/value pairs to associate with the CTS tracker.
+	Tags map[string]string `pulumi:"tags"`
 	// Whether traces will be transferred.
 	TransferEnabled *bool `pulumi:"transferEnabled"`
 	// The tracker type, only **system** is available.
@@ -140,25 +224,60 @@ type trackerState struct {
 }
 
 type TrackerState struct {
+	// The cloud service delegation name.
+	AgencyName pulumi.StringPtrInput
 	// Specifies the OBS bucket to which traces will be transferred.
 	BucketName pulumi.StringPtrInput
+	// Specifies the compression type of trace files. The value can be
+	// **gzip** or **json**. The default value is **gzip**.
+	CompressType pulumi.StringPtrInput
+	// The creation time of the tracker.
+	CreateTime pulumi.IntPtrInput
+	// Specifies whether the tracker can be deleted.
+	DeleteTracker pulumi.BoolPtrInput
+	// It indicates the cause of the abnormal status.
+	Detail pulumi.StringPtrInput
+	// The Account ID.
+	DomainId pulumi.StringPtrInput
 	// Specifies whether tracker is enabled.
 	Enabled pulumi.BoolPtrInput
+	// Specifies the names of the cloud services for which traces don't need to be transferred.
+	// Currently, only **KMS** is supported.
+	ExcludeServices pulumi.StringArrayInput
 	// Specifies the file name prefix to mark trace files that need to be stored
-	// in an OBS bucket. The value contains 0 to 64 characters. Only letters, numbers, hyphens (-), underscores (_),
+	// in an OBS bucket. The value contains `0` to `64` characters. Only letters, numbers, hyphens (-), underscores (_),
 	// and periods (.) are allowed.
 	FilePrefix pulumi.StringPtrInput
+	// The LTS log group ID.
+	GroupId pulumi.StringPtrInput
+	// Whether CTS has been granted permissions to perform operations on the OBS bucket.
+	IsAuthorizedBucket pulumi.BoolPtrInput
+	// Specifies whether to divide the path of the trace file by cloud service.
+	// The default value is **true**.
+	IsSortByService pulumi.BoolPtrInput
 	// Specifies the ID of KMS key used for trace file encryption.
 	KmsId pulumi.StringPtrInput
+	// The name of the log group that CTS creates in LTS.
+	LogGroupName pulumi.StringPtrInput
+	// The name of the log topic that CTS creates in LTS.
+	LogTopicName pulumi.StringPtrInput
 	// Specifies whether trace analysis is enabled.
 	LtsEnabled pulumi.BoolPtrInput
 	// The tracker name, only **system** is available.
 	Name pulumi.StringPtrInput
+	// Specifies whether to apply the tracker configuration to the organization.
+	// If the value is set to **true**, the audit logs of all members in the organization in the current region will be
+	// transferred to the OBS bucket or LTS log stream configured for the management tracker.
+	OrganizationEnabled pulumi.BoolPtrInput
 	// Specifies the region in which to manage the CTS system tracker resource.
 	// If omitted, the provider-level region will be used. Changing this creates a new resource.
 	Region pulumi.StringPtrInput
 	// The tracker status, the value can be **enabled**, **disabled** or **error**.
 	Status pulumi.StringPtrInput
+	// The LTS log stream ID.
+	StreamId pulumi.StringPtrInput
+	// Specifies the key/value pairs to associate with the CTS tracker.
+	Tags pulumi.StringMapInput
 	// Whether traces will be transferred.
 	TransferEnabled pulumi.BoolPtrInput
 	// The tracker type, only **system** is available.
@@ -174,19 +293,36 @@ func (TrackerState) ElementType() reflect.Type {
 type trackerArgs struct {
 	// Specifies the OBS bucket to which traces will be transferred.
 	BucketName *string `pulumi:"bucketName"`
+	// Specifies the compression type of trace files. The value can be
+	// **gzip** or **json**. The default value is **gzip**.
+	CompressType *string `pulumi:"compressType"`
+	// Specifies whether the tracker can be deleted.
+	DeleteTracker *bool `pulumi:"deleteTracker"`
 	// Specifies whether tracker is enabled.
 	Enabled *bool `pulumi:"enabled"`
+	// Specifies the names of the cloud services for which traces don't need to be transferred.
+	// Currently, only **KMS** is supported.
+	ExcludeServices []string `pulumi:"excludeServices"`
 	// Specifies the file name prefix to mark trace files that need to be stored
-	// in an OBS bucket. The value contains 0 to 64 characters. Only letters, numbers, hyphens (-), underscores (_),
+	// in an OBS bucket. The value contains `0` to `64` characters. Only letters, numbers, hyphens (-), underscores (_),
 	// and periods (.) are allowed.
 	FilePrefix *string `pulumi:"filePrefix"`
+	// Specifies whether to divide the path of the trace file by cloud service.
+	// The default value is **true**.
+	IsSortByService *bool `pulumi:"isSortByService"`
 	// Specifies the ID of KMS key used for trace file encryption.
 	KmsId *string `pulumi:"kmsId"`
 	// Specifies whether trace analysis is enabled.
 	LtsEnabled *bool `pulumi:"ltsEnabled"`
+	// Specifies whether to apply the tracker configuration to the organization.
+	// If the value is set to **true**, the audit logs of all members in the organization in the current region will be
+	// transferred to the OBS bucket or LTS log stream configured for the management tracker.
+	OrganizationEnabled *bool `pulumi:"organizationEnabled"`
 	// Specifies the region in which to manage the CTS system tracker resource.
 	// If omitted, the provider-level region will be used. Changing this creates a new resource.
 	Region *string `pulumi:"region"`
+	// Specifies the key/value pairs to associate with the CTS tracker.
+	Tags map[string]string `pulumi:"tags"`
 	// Specifies whether trace file verification is enabled during trace transfer.
 	ValidateFile *bool `pulumi:"validateFile"`
 }
@@ -195,19 +331,36 @@ type trackerArgs struct {
 type TrackerArgs struct {
 	// Specifies the OBS bucket to which traces will be transferred.
 	BucketName pulumi.StringPtrInput
+	// Specifies the compression type of trace files. The value can be
+	// **gzip** or **json**. The default value is **gzip**.
+	CompressType pulumi.StringPtrInput
+	// Specifies whether the tracker can be deleted.
+	DeleteTracker pulumi.BoolPtrInput
 	// Specifies whether tracker is enabled.
 	Enabled pulumi.BoolPtrInput
+	// Specifies the names of the cloud services for which traces don't need to be transferred.
+	// Currently, only **KMS** is supported.
+	ExcludeServices pulumi.StringArrayInput
 	// Specifies the file name prefix to mark trace files that need to be stored
-	// in an OBS bucket. The value contains 0 to 64 characters. Only letters, numbers, hyphens (-), underscores (_),
+	// in an OBS bucket. The value contains `0` to `64` characters. Only letters, numbers, hyphens (-), underscores (_),
 	// and periods (.) are allowed.
 	FilePrefix pulumi.StringPtrInput
+	// Specifies whether to divide the path of the trace file by cloud service.
+	// The default value is **true**.
+	IsSortByService pulumi.BoolPtrInput
 	// Specifies the ID of KMS key used for trace file encryption.
 	KmsId pulumi.StringPtrInput
 	// Specifies whether trace analysis is enabled.
 	LtsEnabled pulumi.BoolPtrInput
+	// Specifies whether to apply the tracker configuration to the organization.
+	// If the value is set to **true**, the audit logs of all members in the organization in the current region will be
+	// transferred to the OBS bucket or LTS log stream configured for the management tracker.
+	OrganizationEnabled pulumi.BoolPtrInput
 	// Specifies the region in which to manage the CTS system tracker resource.
 	// If omitted, the provider-level region will be used. Changing this creates a new resource.
 	Region pulumi.StringPtrInput
+	// Specifies the key/value pairs to associate with the CTS tracker.
+	Tags pulumi.StringMapInput
 	// Specifies whether trace file verification is enabled during trace transfer.
 	ValidateFile pulumi.BoolPtrInput
 }
@@ -299,9 +452,40 @@ func (o TrackerOutput) ToTrackerOutputWithContext(ctx context.Context) TrackerOu
 	return o
 }
 
+// The cloud service delegation name.
+func (o TrackerOutput) AgencyName() pulumi.StringOutput {
+	return o.ApplyT(func(v *Tracker) pulumi.StringOutput { return v.AgencyName }).(pulumi.StringOutput)
+}
+
 // Specifies the OBS bucket to which traces will be transferred.
 func (o TrackerOutput) BucketName() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Tracker) pulumi.StringPtrOutput { return v.BucketName }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the compression type of trace files. The value can be
+// **gzip** or **json**. The default value is **gzip**.
+func (o TrackerOutput) CompressType() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *Tracker) pulumi.StringPtrOutput { return v.CompressType }).(pulumi.StringPtrOutput)
+}
+
+// The creation time of the tracker.
+func (o TrackerOutput) CreateTime() pulumi.IntOutput {
+	return o.ApplyT(func(v *Tracker) pulumi.IntOutput { return v.CreateTime }).(pulumi.IntOutput)
+}
+
+// Specifies whether the tracker can be deleted.
+func (o TrackerOutput) DeleteTracker() pulumi.BoolPtrOutput {
+	return o.ApplyT(func(v *Tracker) pulumi.BoolPtrOutput { return v.DeleteTracker }).(pulumi.BoolPtrOutput)
+}
+
+// It indicates the cause of the abnormal status.
+func (o TrackerOutput) Detail() pulumi.StringOutput {
+	return o.ApplyT(func(v *Tracker) pulumi.StringOutput { return v.Detail }).(pulumi.StringOutput)
+}
+
+// The Account ID.
+func (o TrackerOutput) DomainId() pulumi.StringOutput {
+	return o.ApplyT(func(v *Tracker) pulumi.StringOutput { return v.DomainId }).(pulumi.StringOutput)
 }
 
 // Specifies whether tracker is enabled.
@@ -309,16 +493,48 @@ func (o TrackerOutput) Enabled() pulumi.BoolPtrOutput {
 	return o.ApplyT(func(v *Tracker) pulumi.BoolPtrOutput { return v.Enabled }).(pulumi.BoolPtrOutput)
 }
 
+// Specifies the names of the cloud services for which traces don't need to be transferred.
+// Currently, only **KMS** is supported.
+func (o TrackerOutput) ExcludeServices() pulumi.StringArrayOutput {
+	return o.ApplyT(func(v *Tracker) pulumi.StringArrayOutput { return v.ExcludeServices }).(pulumi.StringArrayOutput)
+}
+
 // Specifies the file name prefix to mark trace files that need to be stored
-// in an OBS bucket. The value contains 0 to 64 characters. Only letters, numbers, hyphens (-), underscores (_),
+// in an OBS bucket. The value contains `0` to `64` characters. Only letters, numbers, hyphens (-), underscores (_),
 // and periods (.) are allowed.
 func (o TrackerOutput) FilePrefix() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Tracker) pulumi.StringPtrOutput { return v.FilePrefix }).(pulumi.StringPtrOutput)
 }
 
+// The LTS log group ID.
+func (o TrackerOutput) GroupId() pulumi.StringOutput {
+	return o.ApplyT(func(v *Tracker) pulumi.StringOutput { return v.GroupId }).(pulumi.StringOutput)
+}
+
+// Whether CTS has been granted permissions to perform operations on the OBS bucket.
+func (o TrackerOutput) IsAuthorizedBucket() pulumi.BoolOutput {
+	return o.ApplyT(func(v *Tracker) pulumi.BoolOutput { return v.IsAuthorizedBucket }).(pulumi.BoolOutput)
+}
+
+// Specifies whether to divide the path of the trace file by cloud service.
+// The default value is **true**.
+func (o TrackerOutput) IsSortByService() pulumi.BoolPtrOutput {
+	return o.ApplyT(func(v *Tracker) pulumi.BoolPtrOutput { return v.IsSortByService }).(pulumi.BoolPtrOutput)
+}
+
 // Specifies the ID of KMS key used for trace file encryption.
 func (o TrackerOutput) KmsId() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Tracker) pulumi.StringPtrOutput { return v.KmsId }).(pulumi.StringPtrOutput)
+}
+
+// The name of the log group that CTS creates in LTS.
+func (o TrackerOutput) LogGroupName() pulumi.StringOutput {
+	return o.ApplyT(func(v *Tracker) pulumi.StringOutput { return v.LogGroupName }).(pulumi.StringOutput)
+}
+
+// The name of the log topic that CTS creates in LTS.
+func (o TrackerOutput) LogTopicName() pulumi.StringOutput {
+	return o.ApplyT(func(v *Tracker) pulumi.StringOutput { return v.LogTopicName }).(pulumi.StringOutput)
 }
 
 // Specifies whether trace analysis is enabled.
@@ -331,6 +547,13 @@ func (o TrackerOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v *Tracker) pulumi.StringOutput { return v.Name }).(pulumi.StringOutput)
 }
 
+// Specifies whether to apply the tracker configuration to the organization.
+// If the value is set to **true**, the audit logs of all members in the organization in the current region will be
+// transferred to the OBS bucket or LTS log stream configured for the management tracker.
+func (o TrackerOutput) OrganizationEnabled() pulumi.BoolOutput {
+	return o.ApplyT(func(v *Tracker) pulumi.BoolOutput { return v.OrganizationEnabled }).(pulumi.BoolOutput)
+}
+
 // Specifies the region in which to manage the CTS system tracker resource.
 // If omitted, the provider-level region will be used. Changing this creates a new resource.
 func (o TrackerOutput) Region() pulumi.StringOutput {
@@ -340,6 +563,16 @@ func (o TrackerOutput) Region() pulumi.StringOutput {
 // The tracker status, the value can be **enabled**, **disabled** or **error**.
 func (o TrackerOutput) Status() pulumi.StringOutput {
 	return o.ApplyT(func(v *Tracker) pulumi.StringOutput { return v.Status }).(pulumi.StringOutput)
+}
+
+// The LTS log stream ID.
+func (o TrackerOutput) StreamId() pulumi.StringOutput {
+	return o.ApplyT(func(v *Tracker) pulumi.StringOutput { return v.StreamId }).(pulumi.StringOutput)
+}
+
+// Specifies the key/value pairs to associate with the CTS tracker.
+func (o TrackerOutput) Tags() pulumi.StringMapOutput {
+	return o.ApplyT(func(v *Tracker) pulumi.StringMapOutput { return v.Tags }).(pulumi.StringMapOutput)
 }
 
 // Whether traces will be transferred.

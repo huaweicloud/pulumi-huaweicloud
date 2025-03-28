@@ -15,18 +15,18 @@ import (
 //
 // ## Import
 //
-// Rule can be imported using the `id` (combination of `instance_id`, `ip`, `forward_protocol` and `forward_port`), separated by slashes (/), e.g.
+// Rule can be imported using the `id` (combination of `instance_id`, `ip`, `forward_protocol` and `forward_port`), separated by slashes (/), e.g. bash
 //
 // ```sh
 //
-//	$ pulumi import huaweicloud:AdvancedAntiDDos/forwardRule:ForwardRule test &ltinstance_id&gt/&ltip&gt/&ltforward_protocol&gt/&ltforward_port&gt
+//	$ pulumi import huaweicloud:AdvancedAntiDDos/forwardRule:ForwardRule test <instance_id>/<ip>/<forward_protocol>/<forward_port>
 //
 // ```
 type ForwardRule struct {
 	pulumi.CustomResourceState
 
 	// Specifies the forward port.
-	// The valid value is range from **1** to **65535**.
+	// The valid value is range from `1` to `65,535`.
 	ForwardPort pulumi.IntOutput `pulumi:"forwardPort"`
 	// Specifies the forward protocol.
 	// The valid values are **tcp** and **udp**.
@@ -34,7 +34,7 @@ type ForwardRule struct {
 	// Specifies the ID of advanced Anti-DDoS instance.
 	// Changing this will create a new rule resource.
 	InstanceId pulumi.StringOutput `pulumi:"instanceId"`
-	// Specifies the public IP addresss to which Advanced Anti-DDoS instance
+	// Specifies the public IP address to which Advanced Anti-DDoS instance
 	// belongs. Changing this will create a new rule resource.
 	Ip pulumi.StringOutput `pulumi:"ip"`
 	// The LVS forward policy.
@@ -44,7 +44,7 @@ type ForwardRule struct {
 	// Specifies the source IP addresses, separated by commas (,).
 	SourceIp pulumi.StringOutput `pulumi:"sourceIp"`
 	// Specifies the source port.
-	// The valid value is range from **1** to **65535**.
+	// The valid value is range from `1` to `65,535`.
 	SourcePort pulumi.IntOutput `pulumi:"sourcePort"`
 	// The status of forward rule.
 	Status pulumi.IntOutput `pulumi:"status"`
@@ -99,7 +99,7 @@ func GetForwardRule(ctx *pulumi.Context,
 // Input properties used for looking up and filtering ForwardRule resources.
 type forwardRuleState struct {
 	// Specifies the forward port.
-	// The valid value is range from **1** to **65535**.
+	// The valid value is range from `1` to `65,535`.
 	ForwardPort *int `pulumi:"forwardPort"`
 	// Specifies the forward protocol.
 	// The valid values are **tcp** and **udp**.
@@ -107,7 +107,7 @@ type forwardRuleState struct {
 	// Specifies the ID of advanced Anti-DDoS instance.
 	// Changing this will create a new rule resource.
 	InstanceId *string `pulumi:"instanceId"`
-	// Specifies the public IP addresss to which Advanced Anti-DDoS instance
+	// Specifies the public IP address to which Advanced Anti-DDoS instance
 	// belongs. Changing this will create a new rule resource.
 	Ip *string `pulumi:"ip"`
 	// The LVS forward policy.
@@ -117,7 +117,7 @@ type forwardRuleState struct {
 	// Specifies the source IP addresses, separated by commas (,).
 	SourceIp *string `pulumi:"sourceIp"`
 	// Specifies the source port.
-	// The valid value is range from **1** to **65535**.
+	// The valid value is range from `1` to `65,535`.
 	SourcePort *int `pulumi:"sourcePort"`
 	// The status of forward rule.
 	Status *int `pulumi:"status"`
@@ -125,7 +125,7 @@ type forwardRuleState struct {
 
 type ForwardRuleState struct {
 	// Specifies the forward port.
-	// The valid value is range from **1** to **65535**.
+	// The valid value is range from `1` to `65,535`.
 	ForwardPort pulumi.IntPtrInput
 	// Specifies the forward protocol.
 	// The valid values are **tcp** and **udp**.
@@ -133,7 +133,7 @@ type ForwardRuleState struct {
 	// Specifies the ID of advanced Anti-DDoS instance.
 	// Changing this will create a new rule resource.
 	InstanceId pulumi.StringPtrInput
-	// Specifies the public IP addresss to which Advanced Anti-DDoS instance
+	// Specifies the public IP address to which Advanced Anti-DDoS instance
 	// belongs. Changing this will create a new rule resource.
 	Ip pulumi.StringPtrInput
 	// The LVS forward policy.
@@ -143,7 +143,7 @@ type ForwardRuleState struct {
 	// Specifies the source IP addresses, separated by commas (,).
 	SourceIp pulumi.StringPtrInput
 	// Specifies the source port.
-	// The valid value is range from **1** to **65535**.
+	// The valid value is range from `1` to `65,535`.
 	SourcePort pulumi.IntPtrInput
 	// The status of forward rule.
 	Status pulumi.IntPtrInput
@@ -155,7 +155,7 @@ func (ForwardRuleState) ElementType() reflect.Type {
 
 type forwardRuleArgs struct {
 	// Specifies the forward port.
-	// The valid value is range from **1** to **65535**.
+	// The valid value is range from `1` to `65,535`.
 	ForwardPort int `pulumi:"forwardPort"`
 	// Specifies the forward protocol.
 	// The valid values are **tcp** and **udp**.
@@ -163,20 +163,20 @@ type forwardRuleArgs struct {
 	// Specifies the ID of advanced Anti-DDoS instance.
 	// Changing this will create a new rule resource.
 	InstanceId string `pulumi:"instanceId"`
-	// Specifies the public IP addresss to which Advanced Anti-DDoS instance
+	// Specifies the public IP address to which Advanced Anti-DDoS instance
 	// belongs. Changing this will create a new rule resource.
 	Ip string `pulumi:"ip"`
 	// Specifies the source IP addresses, separated by commas (,).
 	SourceIp string `pulumi:"sourceIp"`
 	// Specifies the source port.
-	// The valid value is range from **1** to **65535**.
+	// The valid value is range from `1` to `65,535`.
 	SourcePort int `pulumi:"sourcePort"`
 }
 
 // The set of arguments for constructing a ForwardRule resource.
 type ForwardRuleArgs struct {
 	// Specifies the forward port.
-	// The valid value is range from **1** to **65535**.
+	// The valid value is range from `1` to `65,535`.
 	ForwardPort pulumi.IntInput
 	// Specifies the forward protocol.
 	// The valid values are **tcp** and **udp**.
@@ -184,13 +184,13 @@ type ForwardRuleArgs struct {
 	// Specifies the ID of advanced Anti-DDoS instance.
 	// Changing this will create a new rule resource.
 	InstanceId pulumi.StringInput
-	// Specifies the public IP addresss to which Advanced Anti-DDoS instance
+	// Specifies the public IP address to which Advanced Anti-DDoS instance
 	// belongs. Changing this will create a new rule resource.
 	Ip pulumi.StringInput
 	// Specifies the source IP addresses, separated by commas (,).
 	SourceIp pulumi.StringInput
 	// Specifies the source port.
-	// The valid value is range from **1** to **65535**.
+	// The valid value is range from `1` to `65,535`.
 	SourcePort pulumi.IntInput
 }
 
@@ -282,7 +282,7 @@ func (o ForwardRuleOutput) ToForwardRuleOutputWithContext(ctx context.Context) F
 }
 
 // Specifies the forward port.
-// The valid value is range from **1** to **65535**.
+// The valid value is range from `1` to `65,535`.
 func (o ForwardRuleOutput) ForwardPort() pulumi.IntOutput {
 	return o.ApplyT(func(v *ForwardRule) pulumi.IntOutput { return v.ForwardPort }).(pulumi.IntOutput)
 }
@@ -299,7 +299,7 @@ func (o ForwardRuleOutput) InstanceId() pulumi.StringOutput {
 	return o.ApplyT(func(v *ForwardRule) pulumi.StringOutput { return v.InstanceId }).(pulumi.StringOutput)
 }
 
-// Specifies the public IP addresss to which Advanced Anti-DDoS instance
+// Specifies the public IP address to which Advanced Anti-DDoS instance
 // belongs. Changing this will create a new rule resource.
 func (o ForwardRuleOutput) Ip() pulumi.StringOutput {
 	return o.ApplyT(func(v *ForwardRule) pulumi.StringOutput { return v.Ip }).(pulumi.StringOutput)
@@ -321,7 +321,7 @@ func (o ForwardRuleOutput) SourceIp() pulumi.StringOutput {
 }
 
 // Specifies the source port.
-// The valid value is range from **1** to **65535**.
+// The valid value is range from `1` to `65,535`.
 func (o ForwardRuleOutput) SourcePort() pulumi.IntOutput {
 	return o.ApplyT(func(v *ForwardRule) pulumi.IntOutput { return v.SourcePort }).(pulumi.IntOutput)
 }

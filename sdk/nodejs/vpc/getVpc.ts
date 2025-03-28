@@ -88,6 +88,10 @@ export interface GetVpcResult {
      * @deprecated use huaweicloud_vpc_route_table data source to get all routes
      */
     readonly routes: outputs.Vpc.GetVpcRoute[];
+    /**
+     * The secondary CIDR blocks of the VPC.
+     */
+    readonly secondaryCidrs: string[];
     readonly status: string;
     /**
      * The key/value pairs to associate with the VPC.

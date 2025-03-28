@@ -8,9 +8,24 @@ import * as utilities from "../utilities";
  * This resource is used for the ServiceStage service to establish the authorization relationship through personal access
  * token with various types of the Open-Source repository.
  *
+ * ## Example Usage
+ *
+ * ```typescript
+ * import * as pulumi from "@pulumi/pulumi";
+ * import * as pulumi from "@huaweicloudos/pulumi";
+ *
+ * const config = new pulumi.Config();
+ * const authorizationName = config.requireObject("authorizationName");
+ * const personalAccessToken = config.requireObject("personalAccessToken");
+ * const test = new huaweicloud.servicestage.RepoTokenAuthorization("test", {
+ *     type: "github",
+ *     token: personalAccessToken,
+ * });
+ * ```
+ *
  * ## Import
  *
- * Authorizations can be imported using their `id` or `name`, e.g.
+ * Authorizations can be imported using their `id` or `name`, e.g.bash
  *
  * ```sh
  *  $ pulumi import huaweicloud:ServiceStage/repoTokenAuthorization:RepoTokenAuthorization test terraform-test
@@ -45,14 +60,15 @@ export class RepoTokenAuthorization extends pulumi.CustomResource {
     }
 
     /**
-     * Specified the host name of the repository.
+     * Specified the host name of the repository, e.g. **https://api.github.com**.
      * Changing this parameter will create a new authorization.
+     * <!-- markdownlint-enable MD034 -->
      */
-    public readonly host!: pulumi.Output<string>;
+    public readonly host!: pulumi.Output<string | undefined>;
     /**
-     * Specified the authorization name. The name can contain of 4 to 63 characters,
-     * only letters, digits, underscores (_), hyphens (-) and dots (.) are allowed.
-     * Changing this parameter will create a new authorization.
+     * Specified the authorization name.  
+     * The name can contain of `4` to `63` characters, only letters, digits, underscores (_), hyphens (-) and dots (.) are
+     * allowed. Changing this parameter will create a new authorization.
      */
     public readonly name!: pulumi.Output<string>;
     /**
@@ -93,9 +109,6 @@ export class RepoTokenAuthorization extends pulumi.CustomResource {
             resourceInputs["type"] = state ? state.type : undefined;
         } else {
             const args = argsOrState as RepoTokenAuthorizationArgs | undefined;
-            if ((!args || args.host === undefined) && !opts.urn) {
-                throw new Error("Missing required property 'host'");
-            }
             if ((!args || args.token === undefined) && !opts.urn) {
                 throw new Error("Missing required property 'token'");
             }
@@ -118,14 +131,15 @@ export class RepoTokenAuthorization extends pulumi.CustomResource {
  */
 export interface RepoTokenAuthorizationState {
     /**
-     * Specified the host name of the repository.
+     * Specified the host name of the repository, e.g. **https://api.github.com**.
      * Changing this parameter will create a new authorization.
+     * <!-- markdownlint-enable MD034 -->
      */
     host?: pulumi.Input<string>;
     /**
-     * Specified the authorization name. The name can contain of 4 to 63 characters,
-     * only letters, digits, underscores (_), hyphens (-) and dots (.) are allowed.
-     * Changing this parameter will create a new authorization.
+     * Specified the authorization name.  
+     * The name can contain of `4` to `63` characters, only letters, digits, underscores (_), hyphens (-) and dots (.) are
+     * allowed. Changing this parameter will create a new authorization.
      */
     name?: pulumi.Input<string>;
     /**
@@ -152,14 +166,15 @@ export interface RepoTokenAuthorizationState {
  */
 export interface RepoTokenAuthorizationArgs {
     /**
-     * Specified the host name of the repository.
+     * Specified the host name of the repository, e.g. **https://api.github.com**.
      * Changing this parameter will create a new authorization.
+     * <!-- markdownlint-enable MD034 -->
      */
-    host: pulumi.Input<string>;
+    host?: pulumi.Input<string>;
     /**
-     * Specified the authorization name. The name can contain of 4 to 63 characters,
-     * only letters, digits, underscores (_), hyphens (-) and dots (.) are allowed.
-     * Changing this parameter will create a new authorization.
+     * Specified the authorization name.  
+     * The name can contain of `4` to `63` characters, only letters, digits, underscores (_), hyphens (-) and dots (.) are
+     * allowed. Changing this parameter will create a new authorization.
      */
     name?: pulumi.Input<string>;
     /**

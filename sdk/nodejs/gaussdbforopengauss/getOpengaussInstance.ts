@@ -148,7 +148,7 @@ export interface GetOpengaussInstanceResult {
      */
     readonly timeZone: string;
     /**
-     * Indicates the volume type.
+     * Indicates the volume type. Value options: **ULTRAHIGH**, **ESSD**.
      */
     readonly type: string;
     /**

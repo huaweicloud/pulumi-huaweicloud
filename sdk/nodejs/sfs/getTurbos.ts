@@ -6,7 +6,7 @@ import { input as inputs, output as outputs } from "../types";
 import * as utilities from "../utilities";
 
 /**
- * Use this data source to get the list of the available SFS turbos.
+ * Use this data source to get the list of the SFS turbos.
  *
  * ## Example Usage
  *

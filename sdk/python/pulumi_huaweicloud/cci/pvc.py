@@ -27,16 +27,16 @@ class PvcArgs:
         :param pulumi.Input[str] volume_id: Specifies the ID of the storage bound to the CCI Namespace. Changing this
                will create a new PVC resource.
         :param pulumi.Input[str] device_mount_path: Specifies the share path of the SFS storage bound to the CCI
-               Namespace. Required if `volume_type` is *nfs-rw*, *efs-standard* or *efs-performance*. Changing this will create a new
-               PVC resource.
+               Namespace. Required if `volume_type` is **nfs-rw**, **efs-standard** or **efs-performance**.
+               Changing this will create a new PVC resource.
         :param pulumi.Input[str] name: Specifies the unique name of the PVC resource. This parameter can contain a
                maximum of 63 characters, which may consist of lowercase letters, digits and hyphens, and must start and end with
                lowercase letters and digits. Changing this will create a new PVC resource.
         :param pulumi.Input[str] region: Specifies the region in which to create the PVC resource. If omitted, the
                provider-level region will be used. Changing this will create a new PVC resource.
         :param pulumi.Input[str] volume_type: Specifies the type of the storage bound to the CCI Namespace. The valid
-               values are *sas*, *ssd*, *sata*, *obs*, *nfs-rw*, *efs-standard* and *efs-performance*, Defalut to *sas*. Changing
-               this will create a new PVC resource.
+               values are **sas**, **ssd**, **sata**, **obs**, **nfs-rw**, **efs-standard** and **efs-performance**,
+               Default to **sas**. Changing this will create a new PVC resource.
         """
         pulumi.set(__self__, "namespace", namespace)
         pulumi.set(__self__, "volume_id", volume_id)
@@ -80,8 +80,8 @@ class PvcArgs:
     def device_mount_path(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the share path of the SFS storage bound to the CCI
-        Namespace. Required if `volume_type` is *nfs-rw*, *efs-standard* or *efs-performance*. Changing this will create a new
-        PVC resource.
+        Namespace. Required if `volume_type` is **nfs-rw**, **efs-standard** or **efs-performance**.
+        Changing this will create a new PVC resource.
         """
         return pulumi.get(self, "device_mount_path")
 
@@ -121,8 +121,8 @@ class PvcArgs:
     def volume_type(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the type of the storage bound to the CCI Namespace. The valid
-        values are *sas*, *ssd*, *sata*, *obs*, *nfs-rw*, *efs-standard* and *efs-performance*, Defalut to *sas*. Changing
-        this will create a new PVC resource.
+        values are **sas**, **ssd**, **sata**, **obs**, **nfs-rw**, **efs-standard** and **efs-performance**,
+        Default to **sas**. Changing this will create a new PVC resource.
         """
         return pulumi.get(self, "volume_type")
 
@@ -149,8 +149,8 @@ class _PvcState:
         :param pulumi.Input[Sequence[pulumi.Input[str]]] access_modes: The access mode the volume should have.
         :param pulumi.Input[str] creation_timestamp: The server time when PVC was created.
         :param pulumi.Input[str] device_mount_path: Specifies the share path of the SFS storage bound to the CCI
-               Namespace. Required if `volume_type` is *nfs-rw*, *efs-standard* or *efs-performance*. Changing this will create a new
-               PVC resource.
+               Namespace. Required if `volume_type` is **nfs-rw**, **efs-standard** or **efs-performance**.
+               Changing this will create a new PVC resource.
         :param pulumi.Input[bool] enable: Whether the PVC is available.
         :param pulumi.Input[str] name: Specifies the unique name of the PVC resource. This parameter can contain a
                maximum of 63 characters, which may consist of lowercase letters, digits and hyphens, and must start and end with
@@ -163,8 +163,8 @@ class _PvcState:
         :param pulumi.Input[str] volume_id: Specifies the ID of the storage bound to the CCI Namespace. Changing this
                will create a new PVC resource.
         :param pulumi.Input[str] volume_type: Specifies the type of the storage bound to the CCI Namespace. The valid
-               values are *sas*, *ssd*, *sata*, *obs*, *nfs-rw*, *efs-standard* and *efs-performance*, Defalut to *sas*. Changing
-               this will create a new PVC resource.
+               values are **sas**, **ssd**, **sata**, **obs**, **nfs-rw**, **efs-standard** and **efs-performance**,
+               Default to **sas**. Changing this will create a new PVC resource.
         """
         if access_modes is not None:
             pulumi.set(__self__, "access_modes", access_modes)
@@ -216,8 +216,8 @@ class _PvcState:
     def device_mount_path(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the share path of the SFS storage bound to the CCI
-        Namespace. Required if `volume_type` is *nfs-rw*, *efs-standard* or *efs-performance*. Changing this will create a new
-        PVC resource.
+        Namespace. Required if `volume_type` is **nfs-rw**, **efs-standard** or **efs-performance**.
+        Changing this will create a new PVC resource.
         """
         return pulumi.get(self, "device_mount_path")
 
@@ -307,8 +307,8 @@ class _PvcState:
     def volume_type(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the type of the storage bound to the CCI Namespace. The valid
-        values are *sas*, *ssd*, *sata*, *obs*, *nfs-rw*, *efs-standard* and *efs-performance*, Defalut to *sas*. Changing
-        this will create a new PVC resource.
+        values are **sas**, **ssd**, **sata**, **obs**, **nfs-rw**, **efs-standard** and **efs-performance**,
+        Default to **sas**. Changing this will create a new PVC resource.
         """
         return pulumi.get(self, "volume_type")
 
@@ -400,7 +400,7 @@ class Pvc(pulumi.CustomResource):
 
         ## Import
 
-        PVCs can be imported using the `namespace`, `volume_type` and `id`, e.g.
+        PVCs can be imported using the `namespace`, `volume_type` and `id`, e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:Cci/pvc:Pvc test <namespace>/<volume_type>/<id>
@@ -409,8 +409,8 @@ class Pvc(pulumi.CustomResource):
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[str] device_mount_path: Specifies the share path of the SFS storage bound to the CCI
-               Namespace. Required if `volume_type` is *nfs-rw*, *efs-standard* or *efs-performance*. Changing this will create a new
-               PVC resource.
+               Namespace. Required if `volume_type` is **nfs-rw**, **efs-standard** or **efs-performance**.
+               Changing this will create a new PVC resource.
         :param pulumi.Input[str] name: Specifies the unique name of the PVC resource. This parameter can contain a
                maximum of 63 characters, which may consist of lowercase letters, digits and hyphens, and must start and end with
                lowercase letters and digits. Changing this will create a new PVC resource.
@@ -421,8 +421,8 @@ class Pvc(pulumi.CustomResource):
         :param pulumi.Input[str] volume_id: Specifies the ID of the storage bound to the CCI Namespace. Changing this
                will create a new PVC resource.
         :param pulumi.Input[str] volume_type: Specifies the type of the storage bound to the CCI Namespace. The valid
-               values are *sas*, *ssd*, *sata*, *obs*, *nfs-rw*, *efs-standard* and *efs-performance*, Defalut to *sas*. Changing
-               this will create a new PVC resource.
+               values are **sas**, **ssd**, **sata**, **obs**, **nfs-rw**, **efs-standard** and **efs-performance**,
+               Default to **sas**. Changing this will create a new PVC resource.
         """
         ...
     @overload
@@ -501,7 +501,7 @@ class Pvc(pulumi.CustomResource):
 
         ## Import
 
-        PVCs can be imported using the `namespace`, `volume_type` and `id`, e.g.
+        PVCs can be imported using the `namespace`, `volume_type` and `id`, e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:Cci/pvc:Pvc test <namespace>/<volume_type>/<id>
@@ -581,8 +581,8 @@ class Pvc(pulumi.CustomResource):
         :param pulumi.Input[Sequence[pulumi.Input[str]]] access_modes: The access mode the volume should have.
         :param pulumi.Input[str] creation_timestamp: The server time when PVC was created.
         :param pulumi.Input[str] device_mount_path: Specifies the share path of the SFS storage bound to the CCI
-               Namespace. Required if `volume_type` is *nfs-rw*, *efs-standard* or *efs-performance*. Changing this will create a new
-               PVC resource.
+               Namespace. Required if `volume_type` is **nfs-rw**, **efs-standard** or **efs-performance**.
+               Changing this will create a new PVC resource.
         :param pulumi.Input[bool] enable: Whether the PVC is available.
         :param pulumi.Input[str] name: Specifies the unique name of the PVC resource. This parameter can contain a
                maximum of 63 characters, which may consist of lowercase letters, digits and hyphens, and must start and end with
@@ -595,8 +595,8 @@ class Pvc(pulumi.CustomResource):
         :param pulumi.Input[str] volume_id: Specifies the ID of the storage bound to the CCI Namespace. Changing this
                will create a new PVC resource.
         :param pulumi.Input[str] volume_type: Specifies the type of the storage bound to the CCI Namespace. The valid
-               values are *sas*, *ssd*, *sata*, *obs*, *nfs-rw*, *efs-standard* and *efs-performance*, Defalut to *sas*. Changing
-               this will create a new PVC resource.
+               values are **sas**, **ssd**, **sata**, **obs**, **nfs-rw**, **efs-standard** and **efs-performance**,
+               Default to **sas**. Changing this will create a new PVC resource.
         """
         opts = pulumi.ResourceOptions.merge(opts, pulumi.ResourceOptions(id=id))
 
@@ -635,8 +635,8 @@ class Pvc(pulumi.CustomResource):
     def device_mount_path(self) -> pulumi.Output[str]:
         """
         Specifies the share path of the SFS storage bound to the CCI
-        Namespace. Required if `volume_type` is *nfs-rw*, *efs-standard* or *efs-performance*. Changing this will create a new
-        PVC resource.
+        Namespace. Required if `volume_type` is **nfs-rw**, **efs-standard** or **efs-performance**.
+        Changing this will create a new PVC resource.
         """
         return pulumi.get(self, "device_mount_path")
 
@@ -698,8 +698,8 @@ class Pvc(pulumi.CustomResource):
     def volume_type(self) -> pulumi.Output[Optional[str]]:
         """
         Specifies the type of the storage bound to the CCI Namespace. The valid
-        values are *sas*, *ssd*, *sata*, *obs*, *nfs-rw*, *efs-standard* and *efs-performance*, Defalut to *sas*. Changing
-        this will create a new PVC resource.
+        values are **sas**, **ssd**, **sata**, **obs**, **nfs-rw**, **efs-standard** and **efs-performance**,
+        Default to **sas**. Changing this will create a new PVC resource.
         """
         return pulumi.get(self, "volume_type")
 

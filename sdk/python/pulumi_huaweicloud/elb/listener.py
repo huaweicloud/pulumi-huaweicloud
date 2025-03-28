@@ -542,7 +542,7 @@ class Listener(pulumi.CustomResource):
 
         ## Import
 
-        ELB listener can be imported using the listener ID, e.g.
+        ELB listener can be imported using the listener ID, e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:Elb/listener:Listener listener_1 5c20fdad-7288-11eb-b817-0255ac10158b
@@ -599,7 +599,7 @@ class Listener(pulumi.CustomResource):
 
         ## Import
 
-        ELB listener can be imported using the listener ID, e.g.
+        ELB listener can be imported using the listener ID, e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:Elb/listener:Listener listener_1 5c20fdad-7288-11eb-b817-0255ac10158b

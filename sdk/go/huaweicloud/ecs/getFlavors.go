@@ -79,20 +79,30 @@ type GetFlavorsArgs struct {
 	// The region in which to obtain the flavors.
 	// If omitted, the provider-level region will be used.
 	Region *string `pulumi:"region"`
+	// Specifies the storage type.
+	StorageType *string `pulumi:"storageType"`
 }
 
 // A collection of values returned by getFlavors.
 type GetFlavorsResult struct {
 	AvailabilityZone *string `pulumi:"availabilityZone"`
-	CpuCoreCount     *int    `pulumi:"cpuCoreCount"`
-	Generation       *string `pulumi:"generation"`
+	// The number of vCPUs.
+	CpuCoreCount *int `pulumi:"cpuCoreCount"`
+	// List of ECS flavors details. The object structure of each flavor is documented below.
+	Flavors []GetFlavorsFlavor `pulumi:"flavors"`
+	// The generation of the flavor.
+	Generation *string `pulumi:"generation"`
 	// The provider-assigned unique ID for this managed resource.
 	Id string `pulumi:"id"`
 	// A list of flavor IDs.
-	Ids             []string `pulumi:"ids"`
-	MemorySize      *int     `pulumi:"memorySize"`
-	PerformanceType *string  `pulumi:"performanceType"`
-	Region          string   `pulumi:"region"`
+	Ids []string `pulumi:"ids"`
+	// The memory size in GB.
+	MemorySize *int `pulumi:"memorySize"`
+	// The performance type of the flavor.
+	PerformanceType *string `pulumi:"performanceType"`
+	Region          string  `pulumi:"region"`
+	// The storage type of the flavor.
+	StorageType *string `pulumi:"storageType"`
 }
 
 func GetFlavorsOutput(ctx *pulumi.Context, args GetFlavorsOutputArgs, opts ...pulumi.InvokeOption) GetFlavorsResultOutput {
@@ -130,6 +140,8 @@ type GetFlavorsOutputArgs struct {
 	// The region in which to obtain the flavors.
 	// If omitted, the provider-level region will be used.
 	Region pulumi.StringPtrInput `pulumi:"region"`
+	// Specifies the storage type.
+	StorageType pulumi.StringPtrInput `pulumi:"storageType"`
 }
 
 func (GetFlavorsOutputArgs) ElementType() reflect.Type {
@@ -155,10 +167,17 @@ func (o GetFlavorsResultOutput) AvailabilityZone() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v GetFlavorsResult) *string { return v.AvailabilityZone }).(pulumi.StringPtrOutput)
 }
 
+// The number of vCPUs.
 func (o GetFlavorsResultOutput) CpuCoreCount() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v GetFlavorsResult) *int { return v.CpuCoreCount }).(pulumi.IntPtrOutput)
 }
 
+// List of ECS flavors details. The object structure of each flavor is documented below.
+func (o GetFlavorsResultOutput) Flavors() GetFlavorsFlavorArrayOutput {
+	return o.ApplyT(func(v GetFlavorsResult) []GetFlavorsFlavor { return v.Flavors }).(GetFlavorsFlavorArrayOutput)
+}
+
+// The generation of the flavor.
 func (o GetFlavorsResultOutput) Generation() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v GetFlavorsResult) *string { return v.Generation }).(pulumi.StringPtrOutput)
 }
@@ -173,16 +192,23 @@ func (o GetFlavorsResultOutput) Ids() pulumi.StringArrayOutput {
 	return o.ApplyT(func(v GetFlavorsResult) []string { return v.Ids }).(pulumi.StringArrayOutput)
 }
 
+// The memory size in GB.
 func (o GetFlavorsResultOutput) MemorySize() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v GetFlavorsResult) *int { return v.MemorySize }).(pulumi.IntPtrOutput)
 }
 
+// The performance type of the flavor.
 func (o GetFlavorsResultOutput) PerformanceType() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v GetFlavorsResult) *string { return v.PerformanceType }).(pulumi.StringPtrOutput)
 }
 
 func (o GetFlavorsResultOutput) Region() pulumi.StringOutput {
 	return o.ApplyT(func(v GetFlavorsResult) string { return v.Region }).(pulumi.StringOutput)
+}
+
+// The storage type of the flavor.
+func (o GetFlavorsResultOutput) StorageType() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v GetFlavorsResult) *string { return v.StorageType }).(pulumi.StringPtrOutput)
 }
 
 func init() {

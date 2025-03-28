@@ -107,6 +107,10 @@ export class Provider extends pulumi.ProviderResource {
      */
     public readonly sharedConfigFile!: pulumi.Output<string | undefined>;
     /**
+     * The signing algorithm for authentication
+     */
+    public readonly signingAlgorithm!: pulumi.Output<string | undefined>;
+    /**
      * The ID of the Tenant (Identity v2) to login with.
      */
     public readonly tenantId!: pulumi.Output<string | undefined>;
@@ -149,6 +153,7 @@ export class Provider extends pulumi.ProviderResource {
             resourceInputs["delegatedProject"] = args ? args.delegatedProject : undefined;
             resourceInputs["domainId"] = args ? args.domainId : undefined;
             resourceInputs["domainName"] = args ? args.domainName : undefined;
+            resourceInputs["enableForceNew"] = pulumi.output(args ? args.enableForceNew : undefined).apply(JSON.stringify);
             resourceInputs["endpoints"] = pulumi.output(args ? args.endpoints : undefined).apply(JSON.stringify);
             resourceInputs["enterpriseProjectId"] = args ? args.enterpriseProjectId : undefined;
             resourceInputs["insecure"] = pulumi.output(args ? args.insecure : undefined).apply(JSON.stringify);
@@ -163,6 +168,9 @@ export class Provider extends pulumi.ProviderResource {
             resourceInputs["secretKey"] = args ? args.secretKey : undefined;
             resourceInputs["securityToken"] = args ? args.securityToken : undefined;
             resourceInputs["sharedConfigFile"] = args ? args.sharedConfigFile : undefined;
+            resourceInputs["signingAlgorithm"] = args ? args.signingAlgorithm : undefined;
+            resourceInputs["skipCheckUpgrade"] = pulumi.output(args ? args.skipCheckUpgrade : undefined).apply(JSON.stringify);
+            resourceInputs["skipCheckWebsiteType"] = pulumi.output(args ? args.skipCheckWebsiteType : undefined).apply(JSON.stringify);
             resourceInputs["tenantId"] = args ? args.tenantId : undefined;
             resourceInputs["tenantName"] = args ? args.tenantName : undefined;
             resourceInputs["token"] = args ? args.token : undefined;
@@ -220,6 +228,10 @@ export interface ProviderArgs {
      */
     domainName?: pulumi.Input<string>;
     /**
+     * Whether to enable ForceNew
+     */
+    enableForceNew?: pulumi.Input<boolean>;
+    /**
      * The custom endpoints used to override the default endpoint URL.
      */
     endpoints?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
@@ -275,6 +287,18 @@ export interface ProviderArgs {
      * The path to the shared config file. If not set, the default is ~/.hcloud/config.json.
      */
     sharedConfigFile?: pulumi.Input<string>;
+    /**
+     * The signing algorithm for authentication
+     */
+    signingAlgorithm?: pulumi.Input<string>;
+    /**
+     * Whether to skip upgrade check
+     */
+    skipCheckUpgrade?: pulumi.Input<boolean>;
+    /**
+     * Whether to skip website type check
+     */
+    skipCheckWebsiteType?: pulumi.Input<boolean>;
     /**
      * The ID of the Tenant (Identity v2) to login with.
      */

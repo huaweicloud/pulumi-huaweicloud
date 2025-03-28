@@ -57,6 +57,11 @@ func GetNodes(ctx *pulumi.Context, args *GetNodesArgs, opts ...pulumi.InvokeOpti
 type GetNodesArgs struct {
 	// Specifies the ID of CCE cluster.
 	ClusterId string `pulumi:"clusterId"`
+	// Specifies which detail information of the nodes to ignore.
+	// You can use this parameter to ignore some information you don't care about and make the query faster.
+	// The value can be:
+	// + **tags**: ignore the tags of the nodes.
+	IgnoreDetails *string `pulumi:"ignoreDetails"`
 	// Specifies the of the node.
 	Name *string `pulumi:"name"`
 	// Specifies the ID of the node.
@@ -74,7 +79,8 @@ type GetNodesResult struct {
 	// The provider-assigned unique ID for this managed resource.
 	Id string `pulumi:"id"`
 	// Indicates a list of IDs of all CCE nodes found.
-	Ids []string `pulumi:"ids"`
+	Ids           []string `pulumi:"ids"`
+	IgnoreDetails *string  `pulumi:"ignoreDetails"`
 	// The name of the node.
 	Name   *string `pulumi:"name"`
 	NodeId *string `pulumi:"nodeId"`
@@ -102,6 +108,11 @@ func GetNodesOutput(ctx *pulumi.Context, args GetNodesOutputArgs, opts ...pulumi
 type GetNodesOutputArgs struct {
 	// Specifies the ID of CCE cluster.
 	ClusterId pulumi.StringInput `pulumi:"clusterId"`
+	// Specifies which detail information of the nodes to ignore.
+	// You can use this parameter to ignore some information you don't care about and make the query faster.
+	// The value can be:
+	// + **tags**: ignore the tags of the nodes.
+	IgnoreDetails pulumi.StringPtrInput `pulumi:"ignoreDetails"`
 	// Specifies the of the node.
 	Name pulumi.StringPtrInput `pulumi:"name"`
 	// Specifies the ID of the node.
@@ -144,6 +155,10 @@ func (o GetNodesResultOutput) Id() pulumi.StringOutput {
 // Indicates a list of IDs of all CCE nodes found.
 func (o GetNodesResultOutput) Ids() pulumi.StringArrayOutput {
 	return o.ApplyT(func(v GetNodesResult) []string { return v.Ids }).(pulumi.StringArrayOutput)
+}
+
+func (o GetNodesResultOutput) IgnoreDetails() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v GetNodesResult) *string { return v.IgnoreDetails }).(pulumi.StringPtrOutput)
 }
 
 // The name of the node.

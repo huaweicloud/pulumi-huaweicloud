@@ -6,22 +6,125 @@ import * as utilities from "../utilities";
 
 // Export members:
 export * from "./account";
+export * from "./backup";
+export * from "./crossRegionBackupStrategy";
 export * from "./database";
+export * from "./databaseLogsShrinking";
 export * from "./database_privilege";
+export * from "./extendLogLink";
+export * from "./getAvailableFlavors";
+export * from "./getBackupFiles";
+export * from "./getBackups";
+export * from "./getCrossRegionBackupInstances";
+export * from "./getCrossRegionBackups";
 export * from "./getEngineVersions";
+export * from "./getErrorLogLink";
+export * from "./getErrorLogs";
+export * from "./getExtendLogFiles";
+export * from "./getExtendLogLinks";
 export * from "./getFlavors";
 export * from "./getInstances";
+export * from "./getMysqlAccounts";
+export * from "./getMysqlBinlog";
+export * from "./getMysqlDatabasePrivileges";
+export * from "./getMysqlDatabases";
+export * from "./getMysqlProxies";
+export * from "./getMysqlProxyFlavors";
+export * from "./getParametergroups";
+export * from "./getPgAccounts";
+export * from "./getPgDatabases";
+export * from "./getPgPluginParameterValueRange";
+export * from "./getPgPluginParameterValues";
+export * from "./getPgPlugins";
+export * from "./getPgRoles";
+export * from "./getPgSqlLimits";
+export * from "./getPredefinedTags";
+export * from "./getQuotas";
+export * from "./getRecyclingInstances";
+export * from "./getRestoreTimeRanges";
+export * from "./getRestoredDatabases";
+export * from "./getRestoredTables";
+export * from "./getSlowLogFiles";
+export * from "./getSlowLogLink";
+export * from "./getSlowLogs";
+export * from "./getSqlAuditLogLinks";
+export * from "./getSqlAuditLogs";
+export * from "./getSqlAuditOperations";
+export * from "./getSqlserverAccounts";
+export * from "./getSqlserverCollations";
+export * from "./getSqlserverDatabasePrivileges";
+export * from "./getSqlserverDatabases";
+export * from "./getStorageTypes";
+export * from "./getTags";
 export * from "./instance";
+export * from "./instanceEipAssociate";
+export * from "./instantTaskDelete";
+export * from "./ltsLog";
+export * from "./mysqlAccount";
+export * from "./mysqlBinlog";
+export * from "./mysqlDatabase";
+export * from "./mysqlDatabasePrivilege";
+export * from "./mysqlDatabaseTableRestore";
+export * from "./mysqlProxy";
+export * from "./mysqlProxyRestart";
 export * from "./parametergroup";
+export * from "./pgAccount";
+export * from "./pgAccountPrivileges";
+export * from "./pgAccountRoles";
+export * from "./pgDatabase";
+export * from "./pgDatabasePrivilege";
+export * from "./pgHba";
+export * from "./pgPlugin";
+export * from "./pgPluginParameter";
+export * from "./pgPluginUpdate";
+export * from "./pgSqlLimit";
+export * from "./primaryStandbySwitch";
 export * from "./readReplicaInstance";
+export * from "./restore";
+export * from "./sqlAudit";
+export * from "./sqlserverAccount";
+export * from "./sqlserverDatabase";
+export * from "./sqlserverDatabaseCopy";
+export * from "./sqlserverDatabasePrivilege";
 
 // Import resources to register:
 import { Account } from "./account";
+import { Backup } from "./backup";
+import { CrossRegionBackupStrategy } from "./crossRegionBackupStrategy";
 import { Database } from "./database";
+import { DatabaseLogsShrinking } from "./databaseLogsShrinking";
 import { Database_privilege } from "./database_privilege";
+import { ExtendLogLink } from "./extendLogLink";
 import { Instance } from "./instance";
+import { InstanceEipAssociate } from "./instanceEipAssociate";
+import { InstantTaskDelete } from "./instantTaskDelete";
+import { LtsLog } from "./ltsLog";
+import { MysqlAccount } from "./mysqlAccount";
+import { MysqlBinlog } from "./mysqlBinlog";
+import { MysqlDatabase } from "./mysqlDatabase";
+import { MysqlDatabasePrivilege } from "./mysqlDatabasePrivilege";
+import { MysqlDatabaseTableRestore } from "./mysqlDatabaseTableRestore";
+import { MysqlProxy } from "./mysqlProxy";
+import { MysqlProxyRestart } from "./mysqlProxyRestart";
 import { Parametergroup } from "./parametergroup";
+import { PgAccount } from "./pgAccount";
+import { PgAccountPrivileges } from "./pgAccountPrivileges";
+import { PgAccountRoles } from "./pgAccountRoles";
+import { PgDatabase } from "./pgDatabase";
+import { PgDatabasePrivilege } from "./pgDatabasePrivilege";
+import { PgHba } from "./pgHba";
+import { PgPlugin } from "./pgPlugin";
+import { PgPluginParameter } from "./pgPluginParameter";
+import { PgPluginUpdate } from "./pgPluginUpdate";
+import { PgSqlLimit } from "./pgSqlLimit";
+import { PrimaryStandbySwitch } from "./primaryStandbySwitch";
 import { ReadReplicaInstance } from "./readReplicaInstance";
+import { Restore } from "./restore";
+import { SqlAudit } from "./sqlAudit";
+import { SqlserverAccount } from "./sqlserverAccount";
+import { SqlserverDatabase } from "./sqlserverDatabase";
+import { SqlserverDatabaseCopy } from "./sqlserverDatabaseCopy";
+import { SqlserverDatabasePrivilege } from "./sqlserverDatabasePrivilege";
 
 const _module = {
     version: utilities.getVersion(),
@@ -29,24 +132,117 @@ const _module = {
         switch (type) {
             case "huaweicloud:Rds/account:Account":
                 return new Account(name, <any>undefined, { urn })
+            case "huaweicloud:Rds/backup:Backup":
+                return new Backup(name, <any>undefined, { urn })
+            case "huaweicloud:Rds/crossRegionBackupStrategy:CrossRegionBackupStrategy":
+                return new CrossRegionBackupStrategy(name, <any>undefined, { urn })
             case "huaweicloud:Rds/database:Database":
                 return new Database(name, <any>undefined, { urn })
+            case "huaweicloud:Rds/databaseLogsShrinking:DatabaseLogsShrinking":
+                return new DatabaseLogsShrinking(name, <any>undefined, { urn })
             case "huaweicloud:Rds/database_privilege:Database_privilege":
                 return new Database_privilege(name, <any>undefined, { urn })
+            case "huaweicloud:Rds/extendLogLink:ExtendLogLink":
+                return new ExtendLogLink(name, <any>undefined, { urn })
             case "huaweicloud:Rds/instance:Instance":
                 return new Instance(name, <any>undefined, { urn })
+            case "huaweicloud:Rds/instanceEipAssociate:InstanceEipAssociate":
+                return new InstanceEipAssociate(name, <any>undefined, { urn })
+            case "huaweicloud:Rds/instantTaskDelete:InstantTaskDelete":
+                return new InstantTaskDelete(name, <any>undefined, { urn })
+            case "huaweicloud:Rds/ltsLog:LtsLog":
+                return new LtsLog(name, <any>undefined, { urn })
+            case "huaweicloud:Rds/mysqlAccount:MysqlAccount":
+                return new MysqlAccount(name, <any>undefined, { urn })
+            case "huaweicloud:Rds/mysqlBinlog:MysqlBinlog":
+                return new MysqlBinlog(name, <any>undefined, { urn })
+            case "huaweicloud:Rds/mysqlDatabase:MysqlDatabase":
+                return new MysqlDatabase(name, <any>undefined, { urn })
+            case "huaweicloud:Rds/mysqlDatabasePrivilege:MysqlDatabasePrivilege":
+                return new MysqlDatabasePrivilege(name, <any>undefined, { urn })
+            case "huaweicloud:Rds/mysqlDatabaseTableRestore:MysqlDatabaseTableRestore":
+                return new MysqlDatabaseTableRestore(name, <any>undefined, { urn })
+            case "huaweicloud:Rds/mysqlProxy:MysqlProxy":
+                return new MysqlProxy(name, <any>undefined, { urn })
+            case "huaweicloud:Rds/mysqlProxyRestart:MysqlProxyRestart":
+                return new MysqlProxyRestart(name, <any>undefined, { urn })
             case "huaweicloud:Rds/parametergroup:Parametergroup":
                 return new Parametergroup(name, <any>undefined, { urn })
+            case "huaweicloud:Rds/pgAccount:PgAccount":
+                return new PgAccount(name, <any>undefined, { urn })
+            case "huaweicloud:Rds/pgAccountPrivileges:PgAccountPrivileges":
+                return new PgAccountPrivileges(name, <any>undefined, { urn })
+            case "huaweicloud:Rds/pgAccountRoles:PgAccountRoles":
+                return new PgAccountRoles(name, <any>undefined, { urn })
+            case "huaweicloud:Rds/pgDatabase:PgDatabase":
+                return new PgDatabase(name, <any>undefined, { urn })
+            case "huaweicloud:Rds/pgDatabasePrivilege:PgDatabasePrivilege":
+                return new PgDatabasePrivilege(name, <any>undefined, { urn })
+            case "huaweicloud:Rds/pgHba:PgHba":
+                return new PgHba(name, <any>undefined, { urn })
+            case "huaweicloud:Rds/pgPlugin:PgPlugin":
+                return new PgPlugin(name, <any>undefined, { urn })
+            case "huaweicloud:Rds/pgPluginParameter:PgPluginParameter":
+                return new PgPluginParameter(name, <any>undefined, { urn })
+            case "huaweicloud:Rds/pgPluginUpdate:PgPluginUpdate":
+                return new PgPluginUpdate(name, <any>undefined, { urn })
+            case "huaweicloud:Rds/pgSqlLimit:PgSqlLimit":
+                return new PgSqlLimit(name, <any>undefined, { urn })
+            case "huaweicloud:Rds/primaryStandbySwitch:PrimaryStandbySwitch":
+                return new PrimaryStandbySwitch(name, <any>undefined, { urn })
             case "huaweicloud:Rds/readReplicaInstance:ReadReplicaInstance":
                 return new ReadReplicaInstance(name, <any>undefined, { urn })
+            case "huaweicloud:Rds/restore:Restore":
+                return new Restore(name, <any>undefined, { urn })
+            case "huaweicloud:Rds/sqlAudit:SqlAudit":
+                return new SqlAudit(name, <any>undefined, { urn })
+            case "huaweicloud:Rds/sqlserverAccount:SqlserverAccount":
+                return new SqlserverAccount(name, <any>undefined, { urn })
+            case "huaweicloud:Rds/sqlserverDatabase:SqlserverDatabase":
+                return new SqlserverDatabase(name, <any>undefined, { urn })
+            case "huaweicloud:Rds/sqlserverDatabaseCopy:SqlserverDatabaseCopy":
+                return new SqlserverDatabaseCopy(name, <any>undefined, { urn })
+            case "huaweicloud:Rds/sqlserverDatabasePrivilege:SqlserverDatabasePrivilege":
+                return new SqlserverDatabasePrivilege(name, <any>undefined, { urn })
             default:
                 throw new Error(`unknown resource type ${type}`);
         }
     },
 };
 pulumi.runtime.registerResourceModule("huaweicloud", "Rds/account", _module)
+pulumi.runtime.registerResourceModule("huaweicloud", "Rds/backup", _module)
+pulumi.runtime.registerResourceModule("huaweicloud", "Rds/crossRegionBackupStrategy", _module)
 pulumi.runtime.registerResourceModule("huaweicloud", "Rds/database", _module)
+pulumi.runtime.registerResourceModule("huaweicloud", "Rds/databaseLogsShrinking", _module)
 pulumi.runtime.registerResourceModule("huaweicloud", "Rds/database_privilege", _module)
+pulumi.runtime.registerResourceModule("huaweicloud", "Rds/extendLogLink", _module)
 pulumi.runtime.registerResourceModule("huaweicloud", "Rds/instance", _module)
+pulumi.runtime.registerResourceModule("huaweicloud", "Rds/instanceEipAssociate", _module)
+pulumi.runtime.registerResourceModule("huaweicloud", "Rds/instantTaskDelete", _module)
+pulumi.runtime.registerResourceModule("huaweicloud", "Rds/ltsLog", _module)
+pulumi.runtime.registerResourceModule("huaweicloud", "Rds/mysqlAccount", _module)
+pulumi.runtime.registerResourceModule("huaweicloud", "Rds/mysqlBinlog", _module)
+pulumi.runtime.registerResourceModule("huaweicloud", "Rds/mysqlDatabase", _module)
+pulumi.runtime.registerResourceModule("huaweicloud", "Rds/mysqlDatabasePrivilege", _module)
+pulumi.runtime.registerResourceModule("huaweicloud", "Rds/mysqlDatabaseTableRestore", _module)
+pulumi.runtime.registerResourceModule("huaweicloud", "Rds/mysqlProxy", _module)
+pulumi.runtime.registerResourceModule("huaweicloud", "Rds/mysqlProxyRestart", _module)
 pulumi.runtime.registerResourceModule("huaweicloud", "Rds/parametergroup", _module)
+pulumi.runtime.registerResourceModule("huaweicloud", "Rds/pgAccount", _module)
+pulumi.runtime.registerResourceModule("huaweicloud", "Rds/pgAccountPrivileges", _module)
+pulumi.runtime.registerResourceModule("huaweicloud", "Rds/pgAccountRoles", _module)
+pulumi.runtime.registerResourceModule("huaweicloud", "Rds/pgDatabase", _module)
+pulumi.runtime.registerResourceModule("huaweicloud", "Rds/pgDatabasePrivilege", _module)
+pulumi.runtime.registerResourceModule("huaweicloud", "Rds/pgHba", _module)
+pulumi.runtime.registerResourceModule("huaweicloud", "Rds/pgPlugin", _module)
+pulumi.runtime.registerResourceModule("huaweicloud", "Rds/pgPluginParameter", _module)
+pulumi.runtime.registerResourceModule("huaweicloud", "Rds/pgPluginUpdate", _module)
+pulumi.runtime.registerResourceModule("huaweicloud", "Rds/pgSqlLimit", _module)
+pulumi.runtime.registerResourceModule("huaweicloud", "Rds/primaryStandbySwitch", _module)
 pulumi.runtime.registerResourceModule("huaweicloud", "Rds/readReplicaInstance", _module)
+pulumi.runtime.registerResourceModule("huaweicloud", "Rds/restore", _module)
+pulumi.runtime.registerResourceModule("huaweicloud", "Rds/sqlAudit", _module)
+pulumi.runtime.registerResourceModule("huaweicloud", "Rds/sqlserverAccount", _module)
+pulumi.runtime.registerResourceModule("huaweicloud", "Rds/sqlserverDatabase", _module)
+pulumi.runtime.registerResourceModule("huaweicloud", "Rds/sqlserverDatabaseCopy", _module)
+pulumi.runtime.registerResourceModule("huaweicloud", "Rds/sqlserverDatabasePrivilege", _module)

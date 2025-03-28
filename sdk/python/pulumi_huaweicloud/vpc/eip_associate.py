@@ -114,6 +114,7 @@ class _EipAssociateState:
                  network_id: Optional[pulumi.Input[str]] = None,
                  port_id: Optional[pulumi.Input[str]] = None,
                  public_ip: Optional[pulumi.Input[str]] = None,
+                 public_ipv6: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
                  status: Optional[pulumi.Input[str]] = None):
         """
@@ -126,6 +127,7 @@ class _EipAssociateState:
         :param pulumi.Input[str] port_id: Specifies an existing port ID to associate with the EIP.
                This parameter and `fixed_ip` are alternative. Changing this creates a new resource.
         :param pulumi.Input[str] public_ip: Specifies the EIP address to associate. Changing this creates a new resource.
+        :param pulumi.Input[str] public_ipv6: The IPv6 address of the private IP.
         :param pulumi.Input[str] region: Specifies the region in which to associate the EIP. If omitted, the provider-level
                region will be used. Changing this creates a new resource.
         :param pulumi.Input[str] status: The status of EIP, should be **BOUND**.
@@ -140,6 +142,8 @@ class _EipAssociateState:
             pulumi.set(__self__, "port_id", port_id)
         if public_ip is not None:
             pulumi.set(__self__, "public_ip", public_ip)
+        if public_ipv6 is not None:
+            pulumi.set(__self__, "public_ipv6", public_ipv6)
         if region is not None:
             pulumi.set(__self__, "region", region)
         if status is not None:
@@ -207,6 +211,18 @@ class _EipAssociateState:
     @public_ip.setter
     def public_ip(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "public_ip", value)
+
+    @property
+    @pulumi.getter(name="publicIpv6")
+    def public_ipv6(self) -> Optional[pulumi.Input[str]]:
+        """
+        The IPv6 address of the private IP.
+        """
+        return pulumi.get(self, "public_ipv6")
+
+    @public_ipv6.setter
+    def public_ipv6(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "public_ipv6", value)
 
     @property
     @pulumi.getter
@@ -290,7 +306,7 @@ class EipAssociate(pulumi.CustomResource):
 
         ## Import
 
-        EIP associations can be imported using the `id` of the EIP, e.g.
+        EIP associations can be imported using the `id` of the EIP, e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:Vpc/eipAssociate:EipAssociate eip 2c7f39f3-702b-48d1-940c-b50384177ee1
@@ -359,7 +375,7 @@ class EipAssociate(pulumi.CustomResource):
 
         ## Import
 
-        EIP associations can be imported using the `id` of the EIP, e.g.
+        EIP associations can be imported using the `id` of the EIP, e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:Vpc/eipAssociate:EipAssociate eip 2c7f39f3-702b-48d1-940c-b50384177ee1
@@ -402,6 +418,7 @@ class EipAssociate(pulumi.CustomResource):
             __props__.__dict__["public_ip"] = public_ip
             __props__.__dict__["region"] = region
             __props__.__dict__["mac_address"] = None
+            __props__.__dict__["public_ipv6"] = None
             __props__.__dict__["status"] = None
         super(EipAssociate, __self__).__init__(
             'huaweicloud:Vpc/eipAssociate:EipAssociate',
@@ -418,6 +435,7 @@ class EipAssociate(pulumi.CustomResource):
             network_id: Optional[pulumi.Input[str]] = None,
             port_id: Optional[pulumi.Input[str]] = None,
             public_ip: Optional[pulumi.Input[str]] = None,
+            public_ipv6: Optional[pulumi.Input[str]] = None,
             region: Optional[pulumi.Input[str]] = None,
             status: Optional[pulumi.Input[str]] = None) -> 'EipAssociate':
         """
@@ -435,6 +453,7 @@ class EipAssociate(pulumi.CustomResource):
         :param pulumi.Input[str] port_id: Specifies an existing port ID to associate with the EIP.
                This parameter and `fixed_ip` are alternative. Changing this creates a new resource.
         :param pulumi.Input[str] public_ip: Specifies the EIP address to associate. Changing this creates a new resource.
+        :param pulumi.Input[str] public_ipv6: The IPv6 address of the private IP.
         :param pulumi.Input[str] region: Specifies the region in which to associate the EIP. If omitted, the provider-level
                region will be used. Changing this creates a new resource.
         :param pulumi.Input[str] status: The status of EIP, should be **BOUND**.
@@ -448,6 +467,7 @@ class EipAssociate(pulumi.CustomResource):
         __props__.__dict__["network_id"] = network_id
         __props__.__dict__["port_id"] = port_id
         __props__.__dict__["public_ip"] = public_ip
+        __props__.__dict__["public_ipv6"] = public_ipv6
         __props__.__dict__["region"] = region
         __props__.__dict__["status"] = status
         return EipAssociate(resource_name, opts=opts, __props__=__props__)
@@ -494,6 +514,14 @@ class EipAssociate(pulumi.CustomResource):
         Specifies the EIP address to associate. Changing this creates a new resource.
         """
         return pulumi.get(self, "public_ip")
+
+    @property
+    @pulumi.getter(name="publicIpv6")
+    def public_ipv6(self) -> pulumi.Output[str]:
+        """
+        The IPv6 address of the private IP.
+        """
+        return pulumi.get(self, "public_ipv6")
 
     @property
     @pulumi.getter

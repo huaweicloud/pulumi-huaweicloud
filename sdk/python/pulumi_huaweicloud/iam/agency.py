@@ -360,7 +360,9 @@ class Agency(pulumi.CustomResource):
                  project_roles: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['AgencyProjectRoleArgs']]]]] = None,
                  __props__=None):
         """
-        Manages an agency resource within huawei cloud.
+        Manages an agency resource within HuaweiCloud.
+
+        > **NOTE:** You *must* have admin privileges to use this resource.
 
         ## Example Usage
         ### Delegate another HUAWEI CLOUD account to perform operations on your resources
@@ -382,7 +384,7 @@ class Agency(pulumi.CustomResource):
 
         ## Import
 
-        Agencies can be imported using the `id`, e.g.
+        Agencies can be imported using the `id`, e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:Iam/agency:Agency agency 0b97661f9900f23f4fc2c00971ea4dc0
@@ -423,7 +425,9 @@ class Agency(pulumi.CustomResource):
                  args: Optional[AgencyArgs] = None,
                  opts: Optional[pulumi.ResourceOptions] = None):
         """
-        Manages an agency resource within huawei cloud.
+        Manages an agency resource within HuaweiCloud.
+
+        > **NOTE:** You *must* have admin privileges to use this resource.
 
         ## Example Usage
         ### Delegate another HUAWEI CLOUD account to perform operations on your resources
@@ -445,7 +449,7 @@ class Agency(pulumi.CustomResource):
 
         ## Import
 
-        Agencies can be imported using the `id`, e.g.
+        Agencies can be imported using the `id`, e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:Iam/agency:Agency agency 0b97661f9900f23f4fc2c00971ea4dc0

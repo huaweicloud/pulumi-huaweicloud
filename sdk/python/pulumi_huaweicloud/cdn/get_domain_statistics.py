@@ -194,12 +194,12 @@ def get_domain_statistics(action: Optional[str] = None,
            Domain names are separated by commas (,), for example, `www.test1.com,www.test2.com`.
            The value all indicates that all domain names under your account are queried.
     :param int end_time: Specifies the end timestamp of the query.
-           The timestamp must be set to a multiple of 5 minutes.
-           + If the value of interval is 300, set this parameter to a multiple of 5 minutes,
+           The timestamp must be set to a multiple of `5` minutes.
+           + If the value of interval is `300`, set this parameter to a multiple of `5` minutes,
            for example, 1631243700000, which means 2021-09-10 11:15:00.
-           + If the value of interval is 3600, set this parameter to a multiple of 1 hour,
+           + If the value of interval is `3,600`, set this parameter to a multiple of `1` hour,
            for example, 1631325600000, which means 2021-09-11 10:00:00.
-           + If the value of interval is 86400, set this parameter to 00:00:00 (GMT+08:00),
+           + If the value of interval is `86,400`, set this parameter to 00:00:00 (GMT+08:00),
            for example, 1631376000000, which means 2021-09-12 00:00:00.
     :param str enterprise_project_id: Specifies the enterprise project that the resource belongs to.
            This parameter is valid only when the enterprise project function is enabled.
@@ -218,11 +218,11 @@ def get_domain_statistics(action: Optional[str] = None,
            See the [areas](https://support.huaweicloud.com/intl/en-us/api-cdn/cdn_02_0074.html) for values.
     :param int start_time: Specifies the start timestamp of the query.
            The timestamp must be set to a multiple of 5 minutes.
-           + If the value of interval is **300**, set this parameter to a multiple of 5 minutes,
+           + If the value of interval is `300`, set this parameter to a multiple of `5` minutes,
            for example, 1631240100000, which means 2021-09-10 10:15:00.
-           + If the value of interval is **3600**, set this parameter to a multiple of 1 hour,
+           + If the value of interval is `3,600`, set this parameter to a multiple of `1` hour,
            for example, 1631239200000, which means 2021-09-10 10:00:00.
-           + If the value of interval is **86400**, set this parameter to 00:00:00 (GMT+08:00),
+           + If the value of interval is `86,400`, set this parameter to 00:00:00 (GMT+08:00),
            for example, 1631203200000, which means 2021-09-10 00:00:00.
     :param str stat_type: The statistic type.
     """
@@ -297,12 +297,12 @@ def get_domain_statistics_output(action: Optional[pulumi.Input[str]] = None,
            Domain names are separated by commas (,), for example, `www.test1.com,www.test2.com`.
            The value all indicates that all domain names under your account are queried.
     :param int end_time: Specifies the end timestamp of the query.
-           The timestamp must be set to a multiple of 5 minutes.
-           + If the value of interval is 300, set this parameter to a multiple of 5 minutes,
+           The timestamp must be set to a multiple of `5` minutes.
+           + If the value of interval is `300`, set this parameter to a multiple of `5` minutes,
            for example, 1631243700000, which means 2021-09-10 11:15:00.
-           + If the value of interval is 3600, set this parameter to a multiple of 1 hour,
+           + If the value of interval is `3,600`, set this parameter to a multiple of `1` hour,
            for example, 1631325600000, which means 2021-09-11 10:00:00.
-           + If the value of interval is 86400, set this parameter to 00:00:00 (GMT+08:00),
+           + If the value of interval is `86,400`, set this parameter to 00:00:00 (GMT+08:00),
            for example, 1631376000000, which means 2021-09-12 00:00:00.
     :param str enterprise_project_id: Specifies the enterprise project that the resource belongs to.
            This parameter is valid only when the enterprise project function is enabled.
@@ -321,11 +321,11 @@ def get_domain_statistics_output(action: Optional[pulumi.Input[str]] = None,
            See the [areas](https://support.huaweicloud.com/intl/en-us/api-cdn/cdn_02_0074.html) for values.
     :param int start_time: Specifies the start timestamp of the query.
            The timestamp must be set to a multiple of 5 minutes.
-           + If the value of interval is **300**, set this parameter to a multiple of 5 minutes,
+           + If the value of interval is `300`, set this parameter to a multiple of `5` minutes,
            for example, 1631240100000, which means 2021-09-10 10:15:00.
-           + If the value of interval is **3600**, set this parameter to a multiple of 1 hour,
+           + If the value of interval is `3,600`, set this parameter to a multiple of `1` hour,
            for example, 1631239200000, which means 2021-09-10 10:00:00.
-           + If the value of interval is **86400**, set this parameter to 00:00:00 (GMT+08:00),
+           + If the value of interval is `86,400`, set this parameter to 00:00:00 (GMT+08:00),
            for example, 1631203200000, which means 2021-09-10 00:00:00.
     :param str stat_type: The statistic type.
     """

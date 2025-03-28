@@ -22,7 +22,7 @@ class GetVolumesResult:
     """
     A collection of values returned by getVolumes.
     """
-    def __init__(__self__, availability_zone=None, enterprise_project_id=None, id=None, region=None, server_id=None, shareable=None, status=None, tags=None, volumes=None):
+    def __init__(__self__, availability_zone=None, enterprise_project_id=None, id=None, name=None, region=None, server_id=None, shareable=None, status=None, tags=None, volume_id=None, volume_type_id=None, volumes=None):
         if availability_zone and not isinstance(availability_zone, str):
             raise TypeError("Expected argument 'availability_zone' to be a str")
         pulumi.set(__self__, "availability_zone", availability_zone)
@@ -32,6 +32,9 @@ class GetVolumesResult:
         if id and not isinstance(id, str):
             raise TypeError("Expected argument 'id' to be a str")
         pulumi.set(__self__, "id", id)
+        if name and not isinstance(name, str):
+            raise TypeError("Expected argument 'name' to be a str")
+        pulumi.set(__self__, "name", name)
         if region and not isinstance(region, str):
             raise TypeError("Expected argument 'region' to be a str")
         pulumi.set(__self__, "region", region)
@@ -47,6 +50,12 @@ class GetVolumesResult:
         if tags and not isinstance(tags, dict):
             raise TypeError("Expected argument 'tags' to be a dict")
         pulumi.set(__self__, "tags", tags)
+        if volume_id and not isinstance(volume_id, str):
+            raise TypeError("Expected argument 'volume_id' to be a str")
+        pulumi.set(__self__, "volume_id", volume_id)
+        if volume_type_id and not isinstance(volume_type_id, str):
+            raise TypeError("Expected argument 'volume_type_id' to be a str")
+        pulumi.set(__self__, "volume_type_id", volume_type_id)
         if volumes and not isinstance(volumes, list):
             raise TypeError("Expected argument 'volumes' to be a list")
         pulumi.set(__self__, "volumes", volumes)
@@ -74,6 +83,14 @@ class GetVolumesResult:
         The provider-assigned unique ID for this managed resource.
         """
         return pulumi.get(self, "id")
+
+    @property
+    @pulumi.getter
+    def name(self) -> Optional[str]:
+        """
+        The disk name.
+        """
+        return pulumi.get(self, "name")
 
     @property
     @pulumi.getter
@@ -113,6 +130,16 @@ class GetVolumesResult:
         return pulumi.get(self, "tags")
 
     @property
+    @pulumi.getter(name="volumeId")
+    def volume_id(self) -> Optional[str]:
+        return pulumi.get(self, "volume_id")
+
+    @property
+    @pulumi.getter(name="volumeTypeId")
+    def volume_type_id(self) -> Optional[str]:
+        return pulumi.get(self, "volume_type_id")
+
+    @property
     @pulumi.getter
     def volumes(self) -> Sequence['outputs.GetVolumesVolumeResult']:
         """
@@ -130,21 +157,27 @@ class AwaitableGetVolumesResult(GetVolumesResult):
             availability_zone=self.availability_zone,
             enterprise_project_id=self.enterprise_project_id,
             id=self.id,
+            name=self.name,
             region=self.region,
             server_id=self.server_id,
             shareable=self.shareable,
             status=self.status,
             tags=self.tags,
+            volume_id=self.volume_id,
+            volume_type_id=self.volume_type_id,
             volumes=self.volumes)
 
 
 def get_volumes(availability_zone: Optional[str] = None,
                 enterprise_project_id: Optional[str] = None,
+                name: Optional[str] = None,
                 region: Optional[str] = None,
                 server_id: Optional[str] = None,
                 shareable: Optional[bool] = None,
                 status: Optional[str] = None,
                 tags: Optional[Mapping[str, str]] = None,
+                volume_id: Optional[str] = None,
+                volume_type_id: Optional[str] = None,
                 opts: Optional[pulumi.InvokeOptions] = None) -> AwaitableGetVolumesResult:
     """
     Use this data source to query the detailed information list of the EVS disks within HuaweiCloud.
@@ -163,6 +196,8 @@ def get_volumes(availability_zone: Optional[str] = None,
 
     :param str availability_zone: Specifies the availability zone for the disks.
     :param str enterprise_project_id: Specifies the enterprise project ID for filtering.
+    :param str name: Specifies the name for the disks. This field will undergo a fuzzy matching query, the
+           query result is for all disks whose names contain this value.
     :param str region: Specifies the region in which to query the disk list.
            If omitted, the provider-level region will be used.
     :param str server_id: Specifies the server ID to which the disks are attached.
@@ -182,15 +217,20 @@ def get_volumes(availability_zone: Optional[str] = None,
            + **ERROR**
            + **VPN**
     :param Mapping[str, str] tags: Specifies the included key/value pairs which associated with the desired disk.
+    :param str volume_id: Specifies the ID for the disk.
+    :param str volume_type_id: Specifies the type ID for the disks.
     """
     __args__ = dict()
     __args__['availabilityZone'] = availability_zone
     __args__['enterpriseProjectId'] = enterprise_project_id
+    __args__['name'] = name
     __args__['region'] = region
     __args__['serverId'] = server_id
     __args__['shareable'] = shareable
     __args__['status'] = status
     __args__['tags'] = tags
+    __args__['volumeId'] = volume_id
+    __args__['volumeTypeId'] = volume_type_id
     opts = pulumi.InvokeOptions.merge(_utilities.get_invoke_opts_defaults(), opts)
     __ret__ = pulumi.runtime.invoke('huaweicloud:Evs/getVolumes:getVolumes', __args__, opts=opts, typ=GetVolumesResult).value
 
@@ -198,22 +238,28 @@ def get_volumes(availability_zone: Optional[str] = None,
         availability_zone=__ret__.availability_zone,
         enterprise_project_id=__ret__.enterprise_project_id,
         id=__ret__.id,
+        name=__ret__.name,
         region=__ret__.region,
         server_id=__ret__.server_id,
         shareable=__ret__.shareable,
         status=__ret__.status,
         tags=__ret__.tags,
+        volume_id=__ret__.volume_id,
+        volume_type_id=__ret__.volume_type_id,
         volumes=__ret__.volumes)
 
 
 @_utilities.lift_output_func(get_volumes)
 def get_volumes_output(availability_zone: Optional[pulumi.Input[Optional[str]]] = None,
                        enterprise_project_id: Optional[pulumi.Input[Optional[str]]] = None,
+                       name: Optional[pulumi.Input[Optional[str]]] = None,
                        region: Optional[pulumi.Input[Optional[str]]] = None,
                        server_id: Optional[pulumi.Input[Optional[str]]] = None,
                        shareable: Optional[pulumi.Input[Optional[bool]]] = None,
                        status: Optional[pulumi.Input[Optional[str]]] = None,
                        tags: Optional[pulumi.Input[Optional[Mapping[str, str]]]] = None,
+                       volume_id: Optional[pulumi.Input[Optional[str]]] = None,
+                       volume_type_id: Optional[pulumi.Input[Optional[str]]] = None,
                        opts: Optional[pulumi.InvokeOptions] = None) -> pulumi.Output[GetVolumesResult]:
     """
     Use this data source to query the detailed information list of the EVS disks within HuaweiCloud.
@@ -232,6 +278,8 @@ def get_volumes_output(availability_zone: Optional[pulumi.Input[Optional[str]]] 
 
     :param str availability_zone: Specifies the availability zone for the disks.
     :param str enterprise_project_id: Specifies the enterprise project ID for filtering.
+    :param str name: Specifies the name for the disks. This field will undergo a fuzzy matching query, the
+           query result is for all disks whose names contain this value.
     :param str region: Specifies the region in which to query the disk list.
            If omitted, the provider-level region will be used.
     :param str server_id: Specifies the server ID to which the disks are attached.
@@ -251,5 +299,7 @@ def get_volumes_output(availability_zone: Optional[pulumi.Input[Optional[str]]] 
            + **ERROR**
            + **VPN**
     :param Mapping[str, str] tags: Specifies the included key/value pairs which associated with the desired disk.
+    :param str volume_id: Specifies the ID for the disk.
+    :param str volume_type_id: Specifies the type ID for the disks.
     """
     ...

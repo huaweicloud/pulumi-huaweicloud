@@ -17,18 +17,20 @@ class ConnectionArgs:
                  description: Optional[pulumi.Input[str]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
-                 region: Optional[pulumi.Input[str]] = None):
+                 region: Optional[pulumi.Input[str]] = None,
+                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None):
         """
         The set of arguments for constructing a Connection resource.
         :param pulumi.Input[str] description: The Description about the cloud connection.  
-               The description can contain a maximum of 255 characters.
+               The description contain a maximum of `255` characters, and the angle brackets (< and >) are not allowed.
         :param pulumi.Input[str] enterprise_project_id: The enterprise project id of the cloud connection.  
                Value 0 indicates the default enterprise project.
         :param pulumi.Input[str] name: The cloud connection name.  
-               The name can contain 1 to 64 characters, only letters, Chinese characters, digits, hyphens (-),
-               underscores (_) and dots (.).
+               The name can contain `1` to `64` characters, only English letters, Chinese characters, digits, hyphens (-),
+               underscores (_) and dots (.) are allowed.
         :param pulumi.Input[str] region: Specifies the region in which to create the resource.
                If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the cloud connection.
         """
         if description is not None:
             pulumi.set(__self__, "description", description)
@@ -38,13 +40,15 @@ class ConnectionArgs:
             pulumi.set(__self__, "name", name)
         if region is not None:
             pulumi.set(__self__, "region", region)
+        if tags is not None:
+            pulumi.set(__self__, "tags", tags)
 
     @property
     @pulumi.getter
     def description(self) -> Optional[pulumi.Input[str]]:
         """
         The Description about the cloud connection.  
-        The description can contain a maximum of 255 characters.
+        The description contain a maximum of `255` characters, and the angle brackets (< and >) are not allowed.
         """
         return pulumi.get(self, "description")
 
@@ -70,8 +74,8 @@ class ConnectionArgs:
     def name(self) -> Optional[pulumi.Input[str]]:
         """
         The cloud connection name.  
-        The name can contain 1 to 64 characters, only letters, Chinese characters, digits, hyphens (-),
-        underscores (_) and dots (.).
+        The name can contain `1` to `64` characters, only English letters, Chinese characters, digits, hyphens (-),
+        underscores (_) and dots (.) are allowed.
         """
         return pulumi.get(self, "name")
 
@@ -92,6 +96,18 @@ class ConnectionArgs:
     def region(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "region", value)
 
+    @property
+    @pulumi.getter
+    def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]:
+        """
+        Specifies the key/value pairs to associate with the cloud connection.
+        """
+        return pulumi.get(self, "tags")
+
+    @tags.setter
+    def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]):
+        pulumi.set(self, "tags", value)
+
 
 @pulumi.input_type
 class _ConnectionState:
@@ -105,25 +121,27 @@ class _ConnectionState:
                  network_instance_number: Optional[pulumi.Input[int]] = None,
                  region: Optional[pulumi.Input[str]] = None,
                  status: Optional[pulumi.Input[str]] = None,
+                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  used_scene: Optional[pulumi.Input[str]] = None):
         """
         Input properties used for looking up and filtering Connection resources.
         :param pulumi.Input[int] bandwidth_package_number: The number of bandwidth packages associated with the cloud connection instance.
         :param pulumi.Input[str] description: The Description about the cloud connection.  
-               The description can contain a maximum of 255 characters.
+               The description contain a maximum of `255` characters, and the angle brackets (< and >) are not allowed.
         :param pulumi.Input[str] domain_id: The Domain ID.
         :param pulumi.Input[str] enterprise_project_id: The enterprise project id of the cloud connection.  
                Value 0 indicates the default enterprise project.
         :param pulumi.Input[int] inter_region_bandwidth_number: The number of inter-domain bandwidths associated with the cloud connection instance.
         :param pulumi.Input[str] name: The cloud connection name.  
-               The name can contain 1 to 64 characters, only letters, Chinese characters, digits, hyphens (-),
-               underscores (_) and dots (.).
+               The name can contain `1` to `64` characters, only English letters, Chinese characters, digits, hyphens (-),
+               underscores (_) and dots (.) are allowed.
         :param pulumi.Input[int] network_instance_number: The number of network instances associated with the cloud connection instance.
         :param pulumi.Input[str] region: Specifies the region in which to create the resource.
                If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
         :param pulumi.Input[str] status: The status of the cloud connection.  
                The options are as follows:
                + **ACTIVE**: Device deleted.
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the cloud connection.
         :param pulumi.Input[str] used_scene: The Scenario.  
                The options are as follows:
                + **vpc**: VPCs or virtual gateways can use this cloud connection.
@@ -146,6 +164,8 @@ class _ConnectionState:
             pulumi.set(__self__, "region", region)
         if status is not None:
             pulumi.set(__self__, "status", status)
+        if tags is not None:
+            pulumi.set(__self__, "tags", tags)
         if used_scene is not None:
             pulumi.set(__self__, "used_scene", used_scene)
 
@@ -166,7 +186,7 @@ class _ConnectionState:
     def description(self) -> Optional[pulumi.Input[str]]:
         """
         The Description about the cloud connection.  
-        The description can contain a maximum of 255 characters.
+        The description contain a maximum of `255` characters, and the angle brackets (< and >) are not allowed.
         """
         return pulumi.get(self, "description")
 
@@ -216,8 +236,8 @@ class _ConnectionState:
     def name(self) -> Optional[pulumi.Input[str]]:
         """
         The cloud connection name.  
-        The name can contain 1 to 64 characters, only letters, Chinese characters, digits, hyphens (-),
-        underscores (_) and dots (.).
+        The name can contain `1` to `64` characters, only English letters, Chinese characters, digits, hyphens (-),
+        underscores (_) and dots (.) are allowed.
         """
         return pulumi.get(self, "name")
 
@@ -265,6 +285,18 @@ class _ConnectionState:
         pulumi.set(self, "status", value)
 
     @property
+    @pulumi.getter
+    def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]:
+        """
+        Specifies the key/value pairs to associate with the cloud connection.
+        """
+        return pulumi.get(self, "tags")
+
+    @tags.setter
+    def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]):
+        pulumi.set(self, "tags", value)
+
+    @property
     @pulumi.getter(name="usedScene")
     def used_scene(self) -> Optional[pulumi.Input[str]]:
         """
@@ -288,6 +320,7 @@ class Connection(pulumi.CustomResource):
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
+                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  __props__=None):
         """
         Manages a Cloud Connection resource within HuaweiCloud.
@@ -306,7 +339,7 @@ class Connection(pulumi.CustomResource):
 
         ## Import
 
-        The cloud connection can be imported using the `id`, e.g.
+        The cloud connection can be imported using the `id`, e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:Cc/connection:Connection test 0ce123456a00f2591fabc00385ff1234
@@ -315,14 +348,15 @@ class Connection(pulumi.CustomResource):
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[str] description: The Description about the cloud connection.  
-               The description can contain a maximum of 255 characters.
+               The description contain a maximum of `255` characters, and the angle brackets (< and >) are not allowed.
         :param pulumi.Input[str] enterprise_project_id: The enterprise project id of the cloud connection.  
                Value 0 indicates the default enterprise project.
         :param pulumi.Input[str] name: The cloud connection name.  
-               The name can contain 1 to 64 characters, only letters, Chinese characters, digits, hyphens (-),
-               underscores (_) and dots (.).
+               The name can contain `1` to `64` characters, only English letters, Chinese characters, digits, hyphens (-),
+               underscores (_) and dots (.) are allowed.
         :param pulumi.Input[str] region: Specifies the region in which to create the resource.
                If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the cloud connection.
         """
         ...
     @overload
@@ -347,7 +381,7 @@ class Connection(pulumi.CustomResource):
 
         ## Import
 
-        The cloud connection can be imported using the `id`, e.g.
+        The cloud connection can be imported using the `id`, e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:Cc/connection:Connection test 0ce123456a00f2591fabc00385ff1234
@@ -372,6 +406,7 @@ class Connection(pulumi.CustomResource):
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
+                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -385,6 +420,7 @@ class Connection(pulumi.CustomResource):
             __props__.__dict__["enterprise_project_id"] = enterprise_project_id
             __props__.__dict__["name"] = name
             __props__.__dict__["region"] = region
+            __props__.__dict__["tags"] = tags
             __props__.__dict__["bandwidth_package_number"] = None
             __props__.__dict__["domain_id"] = None
             __props__.__dict__["inter_region_bandwidth_number"] = None
@@ -410,6 +446,7 @@ class Connection(pulumi.CustomResource):
             network_instance_number: Optional[pulumi.Input[int]] = None,
             region: Optional[pulumi.Input[str]] = None,
             status: Optional[pulumi.Input[str]] = None,
+            tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
             used_scene: Optional[pulumi.Input[str]] = None) -> 'Connection':
         """
         Get an existing Connection resource's state with the given name, id, and optional extra
@@ -420,20 +457,21 @@ class Connection(pulumi.CustomResource):
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[int] bandwidth_package_number: The number of bandwidth packages associated with the cloud connection instance.
         :param pulumi.Input[str] description: The Description about the cloud connection.  
-               The description can contain a maximum of 255 characters.
+               The description contain a maximum of `255` characters, and the angle brackets (< and >) are not allowed.
         :param pulumi.Input[str] domain_id: The Domain ID.
         :param pulumi.Input[str] enterprise_project_id: The enterprise project id of the cloud connection.  
                Value 0 indicates the default enterprise project.
         :param pulumi.Input[int] inter_region_bandwidth_number: The number of inter-domain bandwidths associated with the cloud connection instance.
         :param pulumi.Input[str] name: The cloud connection name.  
-               The name can contain 1 to 64 characters, only letters, Chinese characters, digits, hyphens (-),
-               underscores (_) and dots (.).
+               The name can contain `1` to `64` characters, only English letters, Chinese characters, digits, hyphens (-),
+               underscores (_) and dots (.) are allowed.
         :param pulumi.Input[int] network_instance_number: The number of network instances associated with the cloud connection instance.
         :param pulumi.Input[str] region: Specifies the region in which to create the resource.
                If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
         :param pulumi.Input[str] status: The status of the cloud connection.  
                The options are as follows:
                + **ACTIVE**: Device deleted.
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the cloud connection.
         :param pulumi.Input[str] used_scene: The Scenario.  
                The options are as follows:
                + **vpc**: VPCs or virtual gateways can use this cloud connection.
@@ -451,6 +489,7 @@ class Connection(pulumi.CustomResource):
         __props__.__dict__["network_instance_number"] = network_instance_number
         __props__.__dict__["region"] = region
         __props__.__dict__["status"] = status
+        __props__.__dict__["tags"] = tags
         __props__.__dict__["used_scene"] = used_scene
         return Connection(resource_name, opts=opts, __props__=__props__)
 
@@ -467,7 +506,7 @@ class Connection(pulumi.CustomResource):
     def description(self) -> pulumi.Output[str]:
         """
         The Description about the cloud connection.  
-        The description can contain a maximum of 255 characters.
+        The description contain a maximum of `255` characters, and the angle brackets (< and >) are not allowed.
         """
         return pulumi.get(self, "description")
 
@@ -501,8 +540,8 @@ class Connection(pulumi.CustomResource):
     def name(self) -> pulumi.Output[str]:
         """
         The cloud connection name.  
-        The name can contain 1 to 64 characters, only letters, Chinese characters, digits, hyphens (-),
-        underscores (_) and dots (.).
+        The name can contain `1` to `64` characters, only English letters, Chinese characters, digits, hyphens (-),
+        underscores (_) and dots (.) are allowed.
         """
         return pulumi.get(self, "name")
 
@@ -532,6 +571,14 @@ class Connection(pulumi.CustomResource):
         + **ACTIVE**: Device deleted.
         """
         return pulumi.get(self, "status")
+
+    @property
+    @pulumi.getter
+    def tags(self) -> pulumi.Output[Optional[Mapping[str, str]]]:
+        """
+        Specifies the key/value pairs to associate with the cloud connection.
+        """
+        return pulumi.get(self, "tags")
 
     @property
     @pulumi.getter(name="usedScene")

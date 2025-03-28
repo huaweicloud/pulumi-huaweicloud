@@ -17,6 +17,9 @@ type DataforwardingRuleTarget struct {
 	// Specifies the detail of the DIS forwards. It is required when type
 	// is `DIS_FORWARDING`. The disForwarding structure is documented below.
 	DisForwarding *DataforwardingRuleTargetDisForwarding `pulumi:"disForwarding"`
+	// Specifies the detail of the FunctionGraph forwards. It is required when
+	// type is **FUNCTIONGRAPH_FORWARDING**. The fgsForwarding structure is documented below.
+	FgsForwarding *DataforwardingRuleTargetFgsForwarding `pulumi:"fgsForwarding"`
 	// Specifies the detail of the HTTP forwards. It is required when type
 	// is `HTTP_FORWARDING`. The httpForwarding structure is documented below.
 	HttpForwarding *DataforwardingRuleTargetHttpForwarding `pulumi:"httpForwarding"`
@@ -41,6 +44,10 @@ type DataforwardingRuleTarget struct {
 	// + **DMS_KAFKA_FORWARDING**: Distributed Message Service (DMS) for Kafka features high throughput, concurrency, and
 	//   scalability. It is suitable for real-time data transmission, stream data processing, system decoupling,
 	//   and traffic balancing.
+	// + **FUNCTIONGRAPH_FORWARDING**: By forwarding data to FunctionGraph service, you only need to write your business
+	//   function code and set the conditions for execution in FunctionGraph. There is no need to configure and manage
+	//   servers or other infrastructure. Functions will run in an elastic, maintenance-free, and highly reliable manner.
+	//   Currently, only standard and enterprise edition IoTDA instances are supported.
 	Type string `pulumi:"type"`
 }
 
@@ -62,6 +69,9 @@ type DataforwardingRuleTargetArgs struct {
 	// Specifies the detail of the DIS forwards. It is required when type
 	// is `DIS_FORWARDING`. The disForwarding structure is documented below.
 	DisForwarding DataforwardingRuleTargetDisForwardingPtrInput `pulumi:"disForwarding"`
+	// Specifies the detail of the FunctionGraph forwards. It is required when
+	// type is **FUNCTIONGRAPH_FORWARDING**. The fgsForwarding structure is documented below.
+	FgsForwarding DataforwardingRuleTargetFgsForwardingPtrInput `pulumi:"fgsForwarding"`
 	// Specifies the detail of the HTTP forwards. It is required when type
 	// is `HTTP_FORWARDING`. The httpForwarding structure is documented below.
 	HttpForwarding DataforwardingRuleTargetHttpForwardingPtrInput `pulumi:"httpForwarding"`
@@ -86,6 +96,10 @@ type DataforwardingRuleTargetArgs struct {
 	// + **DMS_KAFKA_FORWARDING**: Distributed Message Service (DMS) for Kafka features high throughput, concurrency, and
 	//   scalability. It is suitable for real-time data transmission, stream data processing, system decoupling,
 	//   and traffic balancing.
+	// + **FUNCTIONGRAPH_FORWARDING**: By forwarding data to FunctionGraph service, you only need to write your business
+	//   function code and set the conditions for execution in FunctionGraph. There is no need to configure and manage
+	//   servers or other infrastructure. Functions will run in an elastic, maintenance-free, and highly reliable manner.
+	//   Currently, only standard and enterprise edition IoTDA instances are supported.
 	Type pulumi.StringInput `pulumi:"type"`
 }
 
@@ -152,6 +166,12 @@ func (o DataforwardingRuleTargetOutput) DisForwarding() DataforwardingRuleTarget
 	return o.ApplyT(func(v DataforwardingRuleTarget) *DataforwardingRuleTargetDisForwarding { return v.DisForwarding }).(DataforwardingRuleTargetDisForwardingPtrOutput)
 }
 
+// Specifies the detail of the FunctionGraph forwards. It is required when
+// type is **FUNCTIONGRAPH_FORWARDING**. The fgsForwarding structure is documented below.
+func (o DataforwardingRuleTargetOutput) FgsForwarding() DataforwardingRuleTargetFgsForwardingPtrOutput {
+	return o.ApplyT(func(v DataforwardingRuleTarget) *DataforwardingRuleTargetFgsForwarding { return v.FgsForwarding }).(DataforwardingRuleTargetFgsForwardingPtrOutput)
+}
+
 // Specifies the detail of the HTTP forwards. It is required when type
 // is `HTTP_FORWARDING`. The httpForwarding structure is documented below.
 func (o DataforwardingRuleTargetOutput) HttpForwarding() DataforwardingRuleTargetHttpForwardingPtrOutput {
@@ -188,6 +208,10 @@ func (o DataforwardingRuleTargetOutput) ObsForwarding() DataforwardingRuleTarget
 //   - **DMS_KAFKA_FORWARDING**: Distributed Message Service (DMS) for Kafka features high throughput, concurrency, and
 //     scalability. It is suitable for real-time data transmission, stream data processing, system decoupling,
 //     and traffic balancing.
+//   - **FUNCTIONGRAPH_FORWARDING**: By forwarding data to FunctionGraph service, you only need to write your business
+//     function code and set the conditions for execution in FunctionGraph. There is no need to configure and manage
+//     servers or other infrastructure. Functions will run in an elastic, maintenance-free, and highly reliable manner.
+//     Currently, only standard and enterprise edition IoTDA instances are supported.
 func (o DataforwardingRuleTargetOutput) Type() pulumi.StringOutput {
 	return o.ApplyT(func(v DataforwardingRuleTarget) string { return v.Type }).(pulumi.StringOutput)
 }
@@ -525,6 +549,162 @@ func (o DataforwardingRuleTargetDisForwardingPtrOutput) StreamId() pulumi.String
 			return nil
 		}
 		return &v.StreamId
+	}).(pulumi.StringPtrOutput)
+}
+
+type DataforwardingRuleTargetFgsForwarding struct {
+	// Specifies the function name.
+	FuncName string `pulumi:"funcName"`
+	// Specifies the function URN.
+	FuncUrn string `pulumi:"funcUrn"`
+}
+
+// DataforwardingRuleTargetFgsForwardingInput is an input type that accepts DataforwardingRuleTargetFgsForwardingArgs and DataforwardingRuleTargetFgsForwardingOutput values.
+// You can construct a concrete instance of `DataforwardingRuleTargetFgsForwardingInput` via:
+//
+//	DataforwardingRuleTargetFgsForwardingArgs{...}
+type DataforwardingRuleTargetFgsForwardingInput interface {
+	pulumi.Input
+
+	ToDataforwardingRuleTargetFgsForwardingOutput() DataforwardingRuleTargetFgsForwardingOutput
+	ToDataforwardingRuleTargetFgsForwardingOutputWithContext(context.Context) DataforwardingRuleTargetFgsForwardingOutput
+}
+
+type DataforwardingRuleTargetFgsForwardingArgs struct {
+	// Specifies the function name.
+	FuncName pulumi.StringInput `pulumi:"funcName"`
+	// Specifies the function URN.
+	FuncUrn pulumi.StringInput `pulumi:"funcUrn"`
+}
+
+func (DataforwardingRuleTargetFgsForwardingArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*DataforwardingRuleTargetFgsForwarding)(nil)).Elem()
+}
+
+func (i DataforwardingRuleTargetFgsForwardingArgs) ToDataforwardingRuleTargetFgsForwardingOutput() DataforwardingRuleTargetFgsForwardingOutput {
+	return i.ToDataforwardingRuleTargetFgsForwardingOutputWithContext(context.Background())
+}
+
+func (i DataforwardingRuleTargetFgsForwardingArgs) ToDataforwardingRuleTargetFgsForwardingOutputWithContext(ctx context.Context) DataforwardingRuleTargetFgsForwardingOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(DataforwardingRuleTargetFgsForwardingOutput)
+}
+
+func (i DataforwardingRuleTargetFgsForwardingArgs) ToDataforwardingRuleTargetFgsForwardingPtrOutput() DataforwardingRuleTargetFgsForwardingPtrOutput {
+	return i.ToDataforwardingRuleTargetFgsForwardingPtrOutputWithContext(context.Background())
+}
+
+func (i DataforwardingRuleTargetFgsForwardingArgs) ToDataforwardingRuleTargetFgsForwardingPtrOutputWithContext(ctx context.Context) DataforwardingRuleTargetFgsForwardingPtrOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(DataforwardingRuleTargetFgsForwardingOutput).ToDataforwardingRuleTargetFgsForwardingPtrOutputWithContext(ctx)
+}
+
+// DataforwardingRuleTargetFgsForwardingPtrInput is an input type that accepts DataforwardingRuleTargetFgsForwardingArgs, DataforwardingRuleTargetFgsForwardingPtr and DataforwardingRuleTargetFgsForwardingPtrOutput values.
+// You can construct a concrete instance of `DataforwardingRuleTargetFgsForwardingPtrInput` via:
+//
+//	        DataforwardingRuleTargetFgsForwardingArgs{...}
+//
+//	or:
+//
+//	        nil
+type DataforwardingRuleTargetFgsForwardingPtrInput interface {
+	pulumi.Input
+
+	ToDataforwardingRuleTargetFgsForwardingPtrOutput() DataforwardingRuleTargetFgsForwardingPtrOutput
+	ToDataforwardingRuleTargetFgsForwardingPtrOutputWithContext(context.Context) DataforwardingRuleTargetFgsForwardingPtrOutput
+}
+
+type dataforwardingRuleTargetFgsForwardingPtrType DataforwardingRuleTargetFgsForwardingArgs
+
+func DataforwardingRuleTargetFgsForwardingPtr(v *DataforwardingRuleTargetFgsForwardingArgs) DataforwardingRuleTargetFgsForwardingPtrInput {
+	return (*dataforwardingRuleTargetFgsForwardingPtrType)(v)
+}
+
+func (*dataforwardingRuleTargetFgsForwardingPtrType) ElementType() reflect.Type {
+	return reflect.TypeOf((**DataforwardingRuleTargetFgsForwarding)(nil)).Elem()
+}
+
+func (i *dataforwardingRuleTargetFgsForwardingPtrType) ToDataforwardingRuleTargetFgsForwardingPtrOutput() DataforwardingRuleTargetFgsForwardingPtrOutput {
+	return i.ToDataforwardingRuleTargetFgsForwardingPtrOutputWithContext(context.Background())
+}
+
+func (i *dataforwardingRuleTargetFgsForwardingPtrType) ToDataforwardingRuleTargetFgsForwardingPtrOutputWithContext(ctx context.Context) DataforwardingRuleTargetFgsForwardingPtrOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(DataforwardingRuleTargetFgsForwardingPtrOutput)
+}
+
+type DataforwardingRuleTargetFgsForwardingOutput struct{ *pulumi.OutputState }
+
+func (DataforwardingRuleTargetFgsForwardingOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*DataforwardingRuleTargetFgsForwarding)(nil)).Elem()
+}
+
+func (o DataforwardingRuleTargetFgsForwardingOutput) ToDataforwardingRuleTargetFgsForwardingOutput() DataforwardingRuleTargetFgsForwardingOutput {
+	return o
+}
+
+func (o DataforwardingRuleTargetFgsForwardingOutput) ToDataforwardingRuleTargetFgsForwardingOutputWithContext(ctx context.Context) DataforwardingRuleTargetFgsForwardingOutput {
+	return o
+}
+
+func (o DataforwardingRuleTargetFgsForwardingOutput) ToDataforwardingRuleTargetFgsForwardingPtrOutput() DataforwardingRuleTargetFgsForwardingPtrOutput {
+	return o.ToDataforwardingRuleTargetFgsForwardingPtrOutputWithContext(context.Background())
+}
+
+func (o DataforwardingRuleTargetFgsForwardingOutput) ToDataforwardingRuleTargetFgsForwardingPtrOutputWithContext(ctx context.Context) DataforwardingRuleTargetFgsForwardingPtrOutput {
+	return o.ApplyTWithContext(ctx, func(_ context.Context, v DataforwardingRuleTargetFgsForwarding) *DataforwardingRuleTargetFgsForwarding {
+		return &v
+	}).(DataforwardingRuleTargetFgsForwardingPtrOutput)
+}
+
+// Specifies the function name.
+func (o DataforwardingRuleTargetFgsForwardingOutput) FuncName() pulumi.StringOutput {
+	return o.ApplyT(func(v DataforwardingRuleTargetFgsForwarding) string { return v.FuncName }).(pulumi.StringOutput)
+}
+
+// Specifies the function URN.
+func (o DataforwardingRuleTargetFgsForwardingOutput) FuncUrn() pulumi.StringOutput {
+	return o.ApplyT(func(v DataforwardingRuleTargetFgsForwarding) string { return v.FuncUrn }).(pulumi.StringOutput)
+}
+
+type DataforwardingRuleTargetFgsForwardingPtrOutput struct{ *pulumi.OutputState }
+
+func (DataforwardingRuleTargetFgsForwardingPtrOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((**DataforwardingRuleTargetFgsForwarding)(nil)).Elem()
+}
+
+func (o DataforwardingRuleTargetFgsForwardingPtrOutput) ToDataforwardingRuleTargetFgsForwardingPtrOutput() DataforwardingRuleTargetFgsForwardingPtrOutput {
+	return o
+}
+
+func (o DataforwardingRuleTargetFgsForwardingPtrOutput) ToDataforwardingRuleTargetFgsForwardingPtrOutputWithContext(ctx context.Context) DataforwardingRuleTargetFgsForwardingPtrOutput {
+	return o
+}
+
+func (o DataforwardingRuleTargetFgsForwardingPtrOutput) Elem() DataforwardingRuleTargetFgsForwardingOutput {
+	return o.ApplyT(func(v *DataforwardingRuleTargetFgsForwarding) DataforwardingRuleTargetFgsForwarding {
+		if v != nil {
+			return *v
+		}
+		var ret DataforwardingRuleTargetFgsForwarding
+		return ret
+	}).(DataforwardingRuleTargetFgsForwardingOutput)
+}
+
+// Specifies the function name.
+func (o DataforwardingRuleTargetFgsForwardingPtrOutput) FuncName() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *DataforwardingRuleTargetFgsForwarding) *string {
+		if v == nil {
+			return nil
+		}
+		return &v.FuncName
+	}).(pulumi.StringPtrOutput)
+}
+
+// Specifies the function URN.
+func (o DataforwardingRuleTargetFgsForwardingPtrOutput) FuncUrn() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *DataforwardingRuleTargetFgsForwarding) *string {
+		if v == nil {
+			return nil
+		}
+		return &v.FuncUrn
 	}).(pulumi.StringPtrOutput)
 }
 
@@ -1032,7 +1212,7 @@ type DataforwardingRuleTargetObsForwarding struct {
 	// Specifies the OBS Bucket.
 	Bucket string `pulumi:"bucket"`
 	// Specifies the custom directory for storing channel files. The ID contains a
-	// maximum of 256 characters. Multi-level directories can be separated by (/), and cannot start or end with a slash (/),
+	// maximum of `256` characters. Multi-level directories can be separated by (/), and cannot start or end with a slash (/),
 	// and cannot contain more than two adjacent slashes (/). Only letters, digits, hyphens (-), underscores (_), slash (/)
 	// and braces ({}) are allowed. Braces can be used only for the time template parameters. For example, if the custom
 	// directory is in the format of {YYYY}/{MM}/{DD}/{HH}, data is generated in the directory based on the current
@@ -1060,7 +1240,7 @@ type DataforwardingRuleTargetObsForwardingArgs struct {
 	// Specifies the OBS Bucket.
 	Bucket pulumi.StringInput `pulumi:"bucket"`
 	// Specifies the custom directory for storing channel files. The ID contains a
-	// maximum of 256 characters. Multi-level directories can be separated by (/), and cannot start or end with a slash (/),
+	// maximum of `256` characters. Multi-level directories can be separated by (/), and cannot start or end with a slash (/),
 	// and cannot contain more than two adjacent slashes (/). Only letters, digits, hyphens (-), underscores (_), slash (/)
 	// and braces ({}) are allowed. Braces can be used only for the time template parameters. For example, if the custom
 	// directory is in the format of {YYYY}/{MM}/{DD}/{HH}, data is generated in the directory based on the current
@@ -1156,7 +1336,7 @@ func (o DataforwardingRuleTargetObsForwardingOutput) Bucket() pulumi.StringOutpu
 }
 
 // Specifies the custom directory for storing channel files. The ID contains a
-// maximum of 256 characters. Multi-level directories can be separated by (/), and cannot start or end with a slash (/),
+// maximum of `256` characters. Multi-level directories can be separated by (/), and cannot start or end with a slash (/),
 // and cannot contain more than two adjacent slashes (/). Only letters, digits, hyphens (-), underscores (_), slash (/)
 // and braces ({}) are allowed. Braces can be used only for the time template parameters. For example, if the custom
 // directory is in the format of {YYYY}/{MM}/{DD}/{HH}, data is generated in the directory based on the current
@@ -1211,7 +1391,7 @@ func (o DataforwardingRuleTargetObsForwardingPtrOutput) Bucket() pulumi.StringPt
 }
 
 // Specifies the custom directory for storing channel files. The ID contains a
-// maximum of 256 characters. Multi-level directories can be separated by (/), and cannot start or end with a slash (/),
+// maximum of `256` characters. Multi-level directories can be separated by (/), and cannot start or end with a slash (/),
 // and cannot contain more than two adjacent slashes (/). Only letters, digits, hyphens (-), underscores (_), slash (/)
 // and braces ({}) are allowed. Braces can be used only for the time template parameters. For example, if the custom
 // directory is in the format of {YYYY}/{MM}/{DD}/{HH}, data is generated in the directory based on the current
@@ -1386,8 +1566,15 @@ func (o DeviceLinkageRuleActionArrayOutput) Index(i pulumi.IntInput) DeviceLinka
 }
 
 type DeviceLinkageRuleActionDeviceAlarm struct {
-	// Specifies the description of the alarm.
+	// Specifies the description of the alarm.\
+	// The value can contain a maximum of `256` characters.
 	Description *string `pulumi:"description"`
+	// Specifies the dimension of the alarm. Combine the alarm name and alarm level to
+	// jointly identify an alarm.
+	// The valid values are as follows:
+	// + **device**: Device dimension
+	// + **app**: Resource space dimension.
+	Dimension *string `pulumi:"dimension"`
 	// Specifies the name of the alarm.
 	Name string `pulumi:"name"`
 	// Specifies the severity level of the alarm.
@@ -1411,8 +1598,15 @@ type DeviceLinkageRuleActionDeviceAlarmInput interface {
 }
 
 type DeviceLinkageRuleActionDeviceAlarmArgs struct {
-	// Specifies the description of the alarm.
+	// Specifies the description of the alarm.\
+	// The value can contain a maximum of `256` characters.
 	Description pulumi.StringPtrInput `pulumi:"description"`
+	// Specifies the dimension of the alarm. Combine the alarm name and alarm level to
+	// jointly identify an alarm.
+	// The valid values are as follows:
+	// + **device**: Device dimension
+	// + **app**: Resource space dimension.
+	Dimension pulumi.StringPtrInput `pulumi:"dimension"`
 	// Specifies the name of the alarm.
 	Name pulumi.StringInput `pulumi:"name"`
 	// Specifies the severity level of the alarm.
@@ -1501,9 +1695,19 @@ func (o DeviceLinkageRuleActionDeviceAlarmOutput) ToDeviceLinkageRuleActionDevic
 	}).(DeviceLinkageRuleActionDeviceAlarmPtrOutput)
 }
 
-// Specifies the description of the alarm.
+// Specifies the description of the alarm.\
+// The value can contain a maximum of `256` characters.
 func (o DeviceLinkageRuleActionDeviceAlarmOutput) Description() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v DeviceLinkageRuleActionDeviceAlarm) *string { return v.Description }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the dimension of the alarm. Combine the alarm name and alarm level to
+// jointly identify an alarm.
+// The valid values are as follows:
+// + **device**: Device dimension
+// + **app**: Resource space dimension.
+func (o DeviceLinkageRuleActionDeviceAlarmOutput) Dimension() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v DeviceLinkageRuleActionDeviceAlarm) *string { return v.Dimension }).(pulumi.StringPtrOutput)
 }
 
 // Specifies the name of the alarm.
@@ -1548,13 +1752,28 @@ func (o DeviceLinkageRuleActionDeviceAlarmPtrOutput) Elem() DeviceLinkageRuleAct
 	}).(DeviceLinkageRuleActionDeviceAlarmOutput)
 }
 
-// Specifies the description of the alarm.
+// Specifies the description of the alarm.\
+// The value can contain a maximum of `256` characters.
 func (o DeviceLinkageRuleActionDeviceAlarmPtrOutput) Description() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *DeviceLinkageRuleActionDeviceAlarm) *string {
 		if v == nil {
 			return nil
 		}
 		return v.Description
+	}).(pulumi.StringPtrOutput)
+}
+
+// Specifies the dimension of the alarm. Combine the alarm name and alarm level to
+// jointly identify an alarm.
+// The valid values are as follows:
+// + **device**: Device dimension
+// + **app**: Resource space dimension.
+func (o DeviceLinkageRuleActionDeviceAlarmPtrOutput) Dimension() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *DeviceLinkageRuleActionDeviceAlarm) *string {
+		if v == nil {
+			return nil
+		}
+		return v.Dimension
 	}).(pulumi.StringPtrOutput)
 }
 
@@ -1592,6 +1811,11 @@ func (o DeviceLinkageRuleActionDeviceAlarmPtrOutput) Type() pulumi.StringPtrOutp
 }
 
 type DeviceLinkageRuleActionDeviceCommand struct {
+	// Specifies the cache time of device commands, in seconds. Representing the effective
+	// time for the IoT platform to cache commands before issuing them to the device. After this time, the commands will no
+	// longer be issued. The default value is `172,800` seconds (`48` hours). If set to `0`, the command will be immediately
+	// issued to the device regardless of the command issuance mode set on the IoT platform.
+	BufferTimeout *int `pulumi:"bufferTimeout"`
 	// Specifies the command parameters, in json format.
 	// + Example of device command using LWM2M protocol: `{"value":"1"}`, there are key-value pairs, each key is the
 	//   parameter name of the command in the product model.
@@ -1611,8 +1835,20 @@ type DeviceLinkageRuleActionDeviceCommand struct {
 	CommandBody string `pulumi:"commandBody"`
 	// Specifies the command name.
 	CommandName string `pulumi:"commandName"`
-	// Specifies the device id which excutes the command.
+	// Specifies the device id which executes the command.
 	DeviceId string `pulumi:"deviceId"`
+	// Specifies the issuance mode of device commands, which is only valid when the value of
+	// `bufferTimeout` is greater than `0`.
+	// The valid values are as follows:
+	// + **ACTIVE**: Active mode, the IoT platform actively issues commands to devices.
+	// + **PASSIVE**: Passive mode, after the IoT platform creates device commands, it will directly cache the commands.
+	//   Wait until the device goes online again or reports the execution result of the previous command before issuing the
+	//   command.
+	Mode *string `pulumi:"mode"`
+	// Specifies the effective time of the command response, in seconds. Indicating that
+	// the device responds effectively within the `responseTimeout` time after receiving the command. If no response is
+	// received after this time, the command response is considered to have timed out. The default value is `1,800` seconds.
+	ResponseTimeout *int `pulumi:"responseTimeout"`
 	// Specifies the service id to which the command belongs.
 	ServiceId string `pulumi:"serviceId"`
 }
@@ -1629,6 +1865,11 @@ type DeviceLinkageRuleActionDeviceCommandInput interface {
 }
 
 type DeviceLinkageRuleActionDeviceCommandArgs struct {
+	// Specifies the cache time of device commands, in seconds. Representing the effective
+	// time for the IoT platform to cache commands before issuing them to the device. After this time, the commands will no
+	// longer be issued. The default value is `172,800` seconds (`48` hours). If set to `0`, the command will be immediately
+	// issued to the device regardless of the command issuance mode set on the IoT platform.
+	BufferTimeout pulumi.IntPtrInput `pulumi:"bufferTimeout"`
 	// Specifies the command parameters, in json format.
 	// + Example of device command using LWM2M protocol: `{"value":"1"}`, there are key-value pairs, each key is the
 	//   parameter name of the command in the product model.
@@ -1648,8 +1889,20 @@ type DeviceLinkageRuleActionDeviceCommandArgs struct {
 	CommandBody pulumi.StringInput `pulumi:"commandBody"`
 	// Specifies the command name.
 	CommandName pulumi.StringInput `pulumi:"commandName"`
-	// Specifies the device id which excutes the command.
+	// Specifies the device id which executes the command.
 	DeviceId pulumi.StringInput `pulumi:"deviceId"`
+	// Specifies the issuance mode of device commands, which is only valid when the value of
+	// `bufferTimeout` is greater than `0`.
+	// The valid values are as follows:
+	// + **ACTIVE**: Active mode, the IoT platform actively issues commands to devices.
+	// + **PASSIVE**: Passive mode, after the IoT platform creates device commands, it will directly cache the commands.
+	//   Wait until the device goes online again or reports the execution result of the previous command before issuing the
+	//   command.
+	Mode pulumi.StringPtrInput `pulumi:"mode"`
+	// Specifies the effective time of the command response, in seconds. Indicating that
+	// the device responds effectively within the `responseTimeout` time after receiving the command. If no response is
+	// received after this time, the command response is considered to have timed out. The default value is `1,800` seconds.
+	ResponseTimeout pulumi.IntPtrInput `pulumi:"responseTimeout"`
 	// Specifies the service id to which the command belongs.
 	ServiceId pulumi.StringInput `pulumi:"serviceId"`
 }
@@ -1731,6 +1984,14 @@ func (o DeviceLinkageRuleActionDeviceCommandOutput) ToDeviceLinkageRuleActionDev
 	}).(DeviceLinkageRuleActionDeviceCommandPtrOutput)
 }
 
+// Specifies the cache time of device commands, in seconds. Representing the effective
+// time for the IoT platform to cache commands before issuing them to the device. After this time, the commands will no
+// longer be issued. The default value is `172,800` seconds (`48` hours). If set to `0`, the command will be immediately
+// issued to the device regardless of the command issuance mode set on the IoT platform.
+func (o DeviceLinkageRuleActionDeviceCommandOutput) BufferTimeout() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v DeviceLinkageRuleActionDeviceCommand) *int { return v.BufferTimeout }).(pulumi.IntPtrOutput)
+}
+
 // Specifies the command parameters, in json format.
 //   - Example of device command using LWM2M protocol: `{"value":"1"}`, there are key-value pairs, each key is the
 //     parameter name of the command in the product model.
@@ -1756,9 +2017,27 @@ func (o DeviceLinkageRuleActionDeviceCommandOutput) CommandName() pulumi.StringO
 	return o.ApplyT(func(v DeviceLinkageRuleActionDeviceCommand) string { return v.CommandName }).(pulumi.StringOutput)
 }
 
-// Specifies the device id which excutes the command.
+// Specifies the device id which executes the command.
 func (o DeviceLinkageRuleActionDeviceCommandOutput) DeviceId() pulumi.StringOutput {
 	return o.ApplyT(func(v DeviceLinkageRuleActionDeviceCommand) string { return v.DeviceId }).(pulumi.StringOutput)
+}
+
+// Specifies the issuance mode of device commands, which is only valid when the value of
+// `bufferTimeout` is greater than `0`.
+// The valid values are as follows:
+//   - **ACTIVE**: Active mode, the IoT platform actively issues commands to devices.
+//   - **PASSIVE**: Passive mode, after the IoT platform creates device commands, it will directly cache the commands.
+//     Wait until the device goes online again or reports the execution result of the previous command before issuing the
+//     command.
+func (o DeviceLinkageRuleActionDeviceCommandOutput) Mode() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v DeviceLinkageRuleActionDeviceCommand) *string { return v.Mode }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the effective time of the command response, in seconds. Indicating that
+// the device responds effectively within the `responseTimeout` time after receiving the command. If no response is
+// received after this time, the command response is considered to have timed out. The default value is `1,800` seconds.
+func (o DeviceLinkageRuleActionDeviceCommandOutput) ResponseTimeout() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v DeviceLinkageRuleActionDeviceCommand) *int { return v.ResponseTimeout }).(pulumi.IntPtrOutput)
 }
 
 // Specifies the service id to which the command belongs.
@@ -1788,6 +2067,19 @@ func (o DeviceLinkageRuleActionDeviceCommandPtrOutput) Elem() DeviceLinkageRuleA
 		var ret DeviceLinkageRuleActionDeviceCommand
 		return ret
 	}).(DeviceLinkageRuleActionDeviceCommandOutput)
+}
+
+// Specifies the cache time of device commands, in seconds. Representing the effective
+// time for the IoT platform to cache commands before issuing them to the device. After this time, the commands will no
+// longer be issued. The default value is `172,800` seconds (`48` hours). If set to `0`, the command will be immediately
+// issued to the device regardless of the command issuance mode set on the IoT platform.
+func (o DeviceLinkageRuleActionDeviceCommandPtrOutput) BufferTimeout() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v *DeviceLinkageRuleActionDeviceCommand) *int {
+		if v == nil {
+			return nil
+		}
+		return v.BufferTimeout
+	}).(pulumi.IntPtrOutput)
 }
 
 // Specifies the command parameters, in json format.
@@ -1825,7 +2117,7 @@ func (o DeviceLinkageRuleActionDeviceCommandPtrOutput) CommandName() pulumi.Stri
 	}).(pulumi.StringPtrOutput)
 }
 
-// Specifies the device id which excutes the command.
+// Specifies the device id which executes the command.
 func (o DeviceLinkageRuleActionDeviceCommandPtrOutput) DeviceId() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *DeviceLinkageRuleActionDeviceCommand) *string {
 		if v == nil {
@@ -1833,6 +2125,34 @@ func (o DeviceLinkageRuleActionDeviceCommandPtrOutput) DeviceId() pulumi.StringP
 		}
 		return &v.DeviceId
 	}).(pulumi.StringPtrOutput)
+}
+
+// Specifies the issuance mode of device commands, which is only valid when the value of
+// `bufferTimeout` is greater than `0`.
+// The valid values are as follows:
+//   - **ACTIVE**: Active mode, the IoT platform actively issues commands to devices.
+//   - **PASSIVE**: Passive mode, after the IoT platform creates device commands, it will directly cache the commands.
+//     Wait until the device goes online again or reports the execution result of the previous command before issuing the
+//     command.
+func (o DeviceLinkageRuleActionDeviceCommandPtrOutput) Mode() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *DeviceLinkageRuleActionDeviceCommand) *string {
+		if v == nil {
+			return nil
+		}
+		return v.Mode
+	}).(pulumi.StringPtrOutput)
+}
+
+// Specifies the effective time of the command response, in seconds. Indicating that
+// the device responds effectively within the `responseTimeout` time after receiving the command. If no response is
+// received after this time, the command response is considered to have timed out. The default value is `1,800` seconds.
+func (o DeviceLinkageRuleActionDeviceCommandPtrOutput) ResponseTimeout() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v *DeviceLinkageRuleActionDeviceCommand) *int {
+		if v == nil {
+			return nil
+		}
+		return v.ResponseTimeout
+	}).(pulumi.IntPtrOutput)
 }
 
 // Specifies the service id to which the command belongs.
@@ -1847,7 +2167,9 @@ func (o DeviceLinkageRuleActionDeviceCommandPtrOutput) ServiceId() pulumi.String
 
 type DeviceLinkageRuleActionSmnForwarding struct {
 	// Specifies the message content.
-	MessageContent string `pulumi:"messageContent"`
+	MessageContent *string `pulumi:"messageContent"`
+	// Specifies the template name corresponding to the SMN service.
+	MessageTemplateName *string `pulumi:"messageTemplateName"`
 	// Specifies the message title.
 	MessageTitle string `pulumi:"messageTitle"`
 	// Specifies the project ID to which the SMN belongs.
@@ -1874,7 +2196,9 @@ type DeviceLinkageRuleActionSmnForwardingInput interface {
 
 type DeviceLinkageRuleActionSmnForwardingArgs struct {
 	// Specifies the message content.
-	MessageContent pulumi.StringInput `pulumi:"messageContent"`
+	MessageContent pulumi.StringPtrInput `pulumi:"messageContent"`
+	// Specifies the template name corresponding to the SMN service.
+	MessageTemplateName pulumi.StringPtrInput `pulumi:"messageTemplateName"`
 	// Specifies the message title.
 	MessageTitle pulumi.StringInput `pulumi:"messageTitle"`
 	// Specifies the project ID to which the SMN belongs.
@@ -1966,8 +2290,13 @@ func (o DeviceLinkageRuleActionSmnForwardingOutput) ToDeviceLinkageRuleActionSmn
 }
 
 // Specifies the message content.
-func (o DeviceLinkageRuleActionSmnForwardingOutput) MessageContent() pulumi.StringOutput {
-	return o.ApplyT(func(v DeviceLinkageRuleActionSmnForwarding) string { return v.MessageContent }).(pulumi.StringOutput)
+func (o DeviceLinkageRuleActionSmnForwardingOutput) MessageContent() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v DeviceLinkageRuleActionSmnForwarding) *string { return v.MessageContent }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the template name corresponding to the SMN service.
+func (o DeviceLinkageRuleActionSmnForwardingOutput) MessageTemplateName() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v DeviceLinkageRuleActionSmnForwarding) *string { return v.MessageTemplateName }).(pulumi.StringPtrOutput)
 }
 
 // Specifies the message title.
@@ -2026,7 +2355,17 @@ func (o DeviceLinkageRuleActionSmnForwardingPtrOutput) MessageContent() pulumi.S
 		if v == nil {
 			return nil
 		}
-		return &v.MessageContent
+		return v.MessageContent
+	}).(pulumi.StringPtrOutput)
+}
+
+// Specifies the template name corresponding to the SMN service.
+func (o DeviceLinkageRuleActionSmnForwardingPtrOutput) MessageTemplateName() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *DeviceLinkageRuleActionSmnForwarding) *string {
+		if v == nil {
+			return nil
+		}
+		return v.MessageTemplateName
 	}).(pulumi.StringPtrOutput)
 }
 
@@ -2270,15 +2609,20 @@ func (o DeviceLinkageRuleEffectivePeriodPtrOutput) StartTime() pulumi.StringPtrO
 
 type DeviceLinkageRuleTrigger struct {
 	// Specifies the condition triggered at specified time every day. It is
-	// required when type is `DAILY_TIMER`. The dailyTimerCondition structure is
-	// documented below.
+	// required when `type` is **DAILY_TIMER**.
+	// The dailyTimerCondition structure is documented below.
 	DailyTimerCondition *DeviceLinkageRuleTriggerDailyTimerCondition `pulumi:"dailyTimerCondition"`
 	// Specifies the condition triggered upon the property of device. It is
-	// required when type is `DEVICE_DATA`. The deviceDataCondition structure is
-	// documented below.
+	// required when `type` is **DEVICE_DATA**.
+	// The deviceDataCondition structure is documented below.
 	DeviceDataCondition *DeviceLinkageRuleTriggerDeviceDataCondition `pulumi:"deviceDataCondition"`
-	// Specifies the condition triggered by policy. It is required when type
-	// is `SIMPLE_TIMER`. The simpleTimerCondition structure is documented below.
+	// Specifies the condition triggered by device status. It is
+	// required when `type` is **DEVICE_LINKAGE_STATUS**.
+	// The deviceLinkageStatusCondition structure is documented below.
+	DeviceLinkageStatusCondition *DeviceLinkageRuleTriggerDeviceLinkageStatusCondition `pulumi:"deviceLinkageStatusCondition"`
+	// Specifies the condition triggered by policy. It is required when `type`
+	// is **SIMPLE_TIMER**.
+	// The simpleTimerCondition structure is documented below.
 	SimpleTimerCondition *DeviceLinkageRuleTriggerSimpleTimerCondition `pulumi:"simpleTimerCondition"`
 	// Specifies the type of the alarm. The options are as follows:
 	// + **fault**: Report alarms.
@@ -2299,15 +2643,20 @@ type DeviceLinkageRuleTriggerInput interface {
 
 type DeviceLinkageRuleTriggerArgs struct {
 	// Specifies the condition triggered at specified time every day. It is
-	// required when type is `DAILY_TIMER`. The dailyTimerCondition structure is
-	// documented below.
+	// required when `type` is **DAILY_TIMER**.
+	// The dailyTimerCondition structure is documented below.
 	DailyTimerCondition DeviceLinkageRuleTriggerDailyTimerConditionPtrInput `pulumi:"dailyTimerCondition"`
 	// Specifies the condition triggered upon the property of device. It is
-	// required when type is `DEVICE_DATA`. The deviceDataCondition structure is
-	// documented below.
+	// required when `type` is **DEVICE_DATA**.
+	// The deviceDataCondition structure is documented below.
 	DeviceDataCondition DeviceLinkageRuleTriggerDeviceDataConditionPtrInput `pulumi:"deviceDataCondition"`
-	// Specifies the condition triggered by policy. It is required when type
-	// is `SIMPLE_TIMER`. The simpleTimerCondition structure is documented below.
+	// Specifies the condition triggered by device status. It is
+	// required when `type` is **DEVICE_LINKAGE_STATUS**.
+	// The deviceLinkageStatusCondition structure is documented below.
+	DeviceLinkageStatusCondition DeviceLinkageRuleTriggerDeviceLinkageStatusConditionPtrInput `pulumi:"deviceLinkageStatusCondition"`
+	// Specifies the condition triggered by policy. It is required when `type`
+	// is **SIMPLE_TIMER**.
+	// The simpleTimerCondition structure is documented below.
 	SimpleTimerCondition DeviceLinkageRuleTriggerSimpleTimerConditionPtrInput `pulumi:"simpleTimerCondition"`
 	// Specifies the type of the alarm. The options are as follows:
 	// + **fault**: Report alarms.
@@ -2367,8 +2716,8 @@ func (o DeviceLinkageRuleTriggerOutput) ToDeviceLinkageRuleTriggerOutputWithCont
 }
 
 // Specifies the condition triggered at specified time every day. It is
-// required when type is `DAILY_TIMER`. The dailyTimerCondition structure is
-// documented below.
+// required when `type` is **DAILY_TIMER**.
+// The dailyTimerCondition structure is documented below.
 func (o DeviceLinkageRuleTriggerOutput) DailyTimerCondition() DeviceLinkageRuleTriggerDailyTimerConditionPtrOutput {
 	return o.ApplyT(func(v DeviceLinkageRuleTrigger) *DeviceLinkageRuleTriggerDailyTimerCondition {
 		return v.DailyTimerCondition
@@ -2376,16 +2725,26 @@ func (o DeviceLinkageRuleTriggerOutput) DailyTimerCondition() DeviceLinkageRuleT
 }
 
 // Specifies the condition triggered upon the property of device. It is
-// required when type is `DEVICE_DATA`. The deviceDataCondition structure is
-// documented below.
+// required when `type` is **DEVICE_DATA**.
+// The deviceDataCondition structure is documented below.
 func (o DeviceLinkageRuleTriggerOutput) DeviceDataCondition() DeviceLinkageRuleTriggerDeviceDataConditionPtrOutput {
 	return o.ApplyT(func(v DeviceLinkageRuleTrigger) *DeviceLinkageRuleTriggerDeviceDataCondition {
 		return v.DeviceDataCondition
 	}).(DeviceLinkageRuleTriggerDeviceDataConditionPtrOutput)
 }
 
-// Specifies the condition triggered by policy. It is required when type
-// is `SIMPLE_TIMER`. The simpleTimerCondition structure is documented below.
+// Specifies the condition triggered by device status. It is
+// required when `type` is **DEVICE_LINKAGE_STATUS**.
+// The deviceLinkageStatusCondition structure is documented below.
+func (o DeviceLinkageRuleTriggerOutput) DeviceLinkageStatusCondition() DeviceLinkageRuleTriggerDeviceLinkageStatusConditionPtrOutput {
+	return o.ApplyT(func(v DeviceLinkageRuleTrigger) *DeviceLinkageRuleTriggerDeviceLinkageStatusCondition {
+		return v.DeviceLinkageStatusCondition
+	}).(DeviceLinkageRuleTriggerDeviceLinkageStatusConditionPtrOutput)
+}
+
+// Specifies the condition triggered by policy. It is required when `type`
+// is **SIMPLE_TIMER**.
+// The simpleTimerCondition structure is documented below.
 func (o DeviceLinkageRuleTriggerOutput) SimpleTimerCondition() DeviceLinkageRuleTriggerSimpleTimerConditionPtrOutput {
 	return o.ApplyT(func(v DeviceLinkageRuleTrigger) *DeviceLinkageRuleTriggerSimpleTimerCondition {
 		return v.SimpleTimerCondition
@@ -2586,17 +2945,21 @@ func (o DeviceLinkageRuleTriggerDailyTimerConditionPtrOutput) StartTime() pulumi
 type DeviceLinkageRuleTriggerDeviceDataCondition struct {
 	// Specifies data validity period, Unit is `seconds`. Defaults to `300`.
 	// For example, if Data Validity Period is set to 30 minutes, a device generates data at 19:00, and the platform receives
-	// the data at 20:00, the action is nottriggered regardless of whether the conditions are met.
+	// the data at 20:00, the action is not triggered regardless of whether the conditions are met.
 	DataValidatiyPeriod *int `pulumi:"dataValidatiyPeriod"`
-	// Specifies the device id which excutes the command.
+	// Specifies the device id which executes the command.
 	DeviceId *string `pulumi:"deviceId"`
+	// Specifies the Rvalue of a data comparison expression. Only when the `operator` is
+	// **in**, this field is valid and required, with a maximum of `20` characters, represents matching within the specified
+	// values, e.g. **20,30,40**,
+	InValues []string `pulumi:"inValues"`
 	// Specifies the data comparison operator. The valid values are: **>**, **<**,
-	// **>=**, **<=**, **=** and **between**.
+	// **>=**, **<=**, **=**, **in** and **between**.
 	Operator string `pulumi:"operator"`
 	// Specifies the path of the device property, in the format: **service_id/DataProperty**.
 	Path string `pulumi:"path"`
-	// Specifies the product id, all devices belonging to this product will trigger
-	// the rule. Exactly one of `deviceId` or `productId` must be provided.
+	// Specifies the product ID. If this field is set and the `deviceId` is empty, the
+	// device attribute will trigger the matching of all devices under this product.
 	ProductId *string `pulumi:"productId"`
 	// Specifies the trigger strategy. The options are as follows:
 	// + **pulse**: When the data reported by the device meets the conditions, the rule can be triggered.
@@ -2604,10 +2967,10 @@ type DeviceLinkageRuleTriggerDeviceDataCondition struct {
 	//   is lower than 20%, the alarm will be triggered once the battery initially drops below 20% but will not be triggered
 	//   again each time the battery drops to a lower level.
 	TriggerStrategy *string `pulumi:"triggerStrategy"`
-	// Specifies the Rvalue of a data comparison expression. When the `operator` is `between`,
-	// the Rvalue represents the minimum and maximum values, separated by commas, such as "20,30",
-	// which means greater than or equal to 20 and less than 30.
-	Value string `pulumi:"value"`
+	// Specifies the Rvalue of a data comparison expression. When the `operator` is **between**,
+	// the Rvalue represents the minimum and maximum values, separated by commas, such as **20,30**,
+	// which means greater than or equal to `20` and less than `30`.
+	Value *string `pulumi:"value"`
 }
 
 // DeviceLinkageRuleTriggerDeviceDataConditionInput is an input type that accepts DeviceLinkageRuleTriggerDeviceDataConditionArgs and DeviceLinkageRuleTriggerDeviceDataConditionOutput values.
@@ -2624,17 +2987,21 @@ type DeviceLinkageRuleTriggerDeviceDataConditionInput interface {
 type DeviceLinkageRuleTriggerDeviceDataConditionArgs struct {
 	// Specifies data validity period, Unit is `seconds`. Defaults to `300`.
 	// For example, if Data Validity Period is set to 30 minutes, a device generates data at 19:00, and the platform receives
-	// the data at 20:00, the action is nottriggered regardless of whether the conditions are met.
+	// the data at 20:00, the action is not triggered regardless of whether the conditions are met.
 	DataValidatiyPeriod pulumi.IntPtrInput `pulumi:"dataValidatiyPeriod"`
-	// Specifies the device id which excutes the command.
+	// Specifies the device id which executes the command.
 	DeviceId pulumi.StringPtrInput `pulumi:"deviceId"`
+	// Specifies the Rvalue of a data comparison expression. Only when the `operator` is
+	// **in**, this field is valid and required, with a maximum of `20` characters, represents matching within the specified
+	// values, e.g. **20,30,40**,
+	InValues pulumi.StringArrayInput `pulumi:"inValues"`
 	// Specifies the data comparison operator. The valid values are: **>**, **<**,
-	// **>=**, **<=**, **=** and **between**.
+	// **>=**, **<=**, **=**, **in** and **between**.
 	Operator pulumi.StringInput `pulumi:"operator"`
 	// Specifies the path of the device property, in the format: **service_id/DataProperty**.
 	Path pulumi.StringInput `pulumi:"path"`
-	// Specifies the product id, all devices belonging to this product will trigger
-	// the rule. Exactly one of `deviceId` or `productId` must be provided.
+	// Specifies the product ID. If this field is set and the `deviceId` is empty, the
+	// device attribute will trigger the matching of all devices under this product.
 	ProductId pulumi.StringPtrInput `pulumi:"productId"`
 	// Specifies the trigger strategy. The options are as follows:
 	// + **pulse**: When the data reported by the device meets the conditions, the rule can be triggered.
@@ -2642,10 +3009,10 @@ type DeviceLinkageRuleTriggerDeviceDataConditionArgs struct {
 	//   is lower than 20%, the alarm will be triggered once the battery initially drops below 20% but will not be triggered
 	//   again each time the battery drops to a lower level.
 	TriggerStrategy pulumi.StringPtrInput `pulumi:"triggerStrategy"`
-	// Specifies the Rvalue of a data comparison expression. When the `operator` is `between`,
-	// the Rvalue represents the minimum and maximum values, separated by commas, such as "20,30",
-	// which means greater than or equal to 20 and less than 30.
-	Value pulumi.StringInput `pulumi:"value"`
+	// Specifies the Rvalue of a data comparison expression. When the `operator` is **between**,
+	// the Rvalue represents the minimum and maximum values, separated by commas, such as **20,30**,
+	// which means greater than or equal to `20` and less than `30`.
+	Value pulumi.StringPtrInput `pulumi:"value"`
 }
 
 func (DeviceLinkageRuleTriggerDeviceDataConditionArgs) ElementType() reflect.Type {
@@ -2727,18 +3094,25 @@ func (o DeviceLinkageRuleTriggerDeviceDataConditionOutput) ToDeviceLinkageRuleTr
 
 // Specifies data validity period, Unit is `seconds`. Defaults to `300`.
 // For example, if Data Validity Period is set to 30 minutes, a device generates data at 19:00, and the platform receives
-// the data at 20:00, the action is nottriggered regardless of whether the conditions are met.
+// the data at 20:00, the action is not triggered regardless of whether the conditions are met.
 func (o DeviceLinkageRuleTriggerDeviceDataConditionOutput) DataValidatiyPeriod() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v DeviceLinkageRuleTriggerDeviceDataCondition) *int { return v.DataValidatiyPeriod }).(pulumi.IntPtrOutput)
 }
 
-// Specifies the device id which excutes the command.
+// Specifies the device id which executes the command.
 func (o DeviceLinkageRuleTriggerDeviceDataConditionOutput) DeviceId() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v DeviceLinkageRuleTriggerDeviceDataCondition) *string { return v.DeviceId }).(pulumi.StringPtrOutput)
 }
 
+// Specifies the Rvalue of a data comparison expression. Only when the `operator` is
+// **in**, this field is valid and required, with a maximum of `20` characters, represents matching within the specified
+// values, e.g. **20,30,40**,
+func (o DeviceLinkageRuleTriggerDeviceDataConditionOutput) InValues() pulumi.StringArrayOutput {
+	return o.ApplyT(func(v DeviceLinkageRuleTriggerDeviceDataCondition) []string { return v.InValues }).(pulumi.StringArrayOutput)
+}
+
 // Specifies the data comparison operator. The valid values are: **>**, **<**,
-// **>=**, **<=**, **=** and **between**.
+// **>=**, **<=**, **=**, **in** and **between**.
 func (o DeviceLinkageRuleTriggerDeviceDataConditionOutput) Operator() pulumi.StringOutput {
 	return o.ApplyT(func(v DeviceLinkageRuleTriggerDeviceDataCondition) string { return v.Operator }).(pulumi.StringOutput)
 }
@@ -2748,8 +3122,8 @@ func (o DeviceLinkageRuleTriggerDeviceDataConditionOutput) Path() pulumi.StringO
 	return o.ApplyT(func(v DeviceLinkageRuleTriggerDeviceDataCondition) string { return v.Path }).(pulumi.StringOutput)
 }
 
-// Specifies the product id, all devices belonging to this product will trigger
-// the rule. Exactly one of `deviceId` or `productId` must be provided.
+// Specifies the product ID. If this field is set and the `deviceId` is empty, the
+// device attribute will trigger the matching of all devices under this product.
 func (o DeviceLinkageRuleTriggerDeviceDataConditionOutput) ProductId() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v DeviceLinkageRuleTriggerDeviceDataCondition) *string { return v.ProductId }).(pulumi.StringPtrOutput)
 }
@@ -2763,11 +3137,11 @@ func (o DeviceLinkageRuleTriggerDeviceDataConditionOutput) TriggerStrategy() pul
 	return o.ApplyT(func(v DeviceLinkageRuleTriggerDeviceDataCondition) *string { return v.TriggerStrategy }).(pulumi.StringPtrOutput)
 }
 
-// Specifies the Rvalue of a data comparison expression. When the `operator` is `between`,
-// the Rvalue represents the minimum and maximum values, separated by commas, such as "20,30",
-// which means greater than or equal to 20 and less than 30.
-func (o DeviceLinkageRuleTriggerDeviceDataConditionOutput) Value() pulumi.StringOutput {
-	return o.ApplyT(func(v DeviceLinkageRuleTriggerDeviceDataCondition) string { return v.Value }).(pulumi.StringOutput)
+// Specifies the Rvalue of a data comparison expression. When the `operator` is **between**,
+// the Rvalue represents the minimum and maximum values, separated by commas, such as **20,30**,
+// which means greater than or equal to `20` and less than `30`.
+func (o DeviceLinkageRuleTriggerDeviceDataConditionOutput) Value() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v DeviceLinkageRuleTriggerDeviceDataCondition) *string { return v.Value }).(pulumi.StringPtrOutput)
 }
 
 type DeviceLinkageRuleTriggerDeviceDataConditionPtrOutput struct{ *pulumi.OutputState }
@@ -2796,7 +3170,7 @@ func (o DeviceLinkageRuleTriggerDeviceDataConditionPtrOutput) Elem() DeviceLinka
 
 // Specifies data validity period, Unit is `seconds`. Defaults to `300`.
 // For example, if Data Validity Period is set to 30 minutes, a device generates data at 19:00, and the platform receives
-// the data at 20:00, the action is nottriggered regardless of whether the conditions are met.
+// the data at 20:00, the action is not triggered regardless of whether the conditions are met.
 func (o DeviceLinkageRuleTriggerDeviceDataConditionPtrOutput) DataValidatiyPeriod() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v *DeviceLinkageRuleTriggerDeviceDataCondition) *int {
 		if v == nil {
@@ -2806,7 +3180,7 @@ func (o DeviceLinkageRuleTriggerDeviceDataConditionPtrOutput) DataValidatiyPerio
 	}).(pulumi.IntPtrOutput)
 }
 
-// Specifies the device id which excutes the command.
+// Specifies the device id which executes the command.
 func (o DeviceLinkageRuleTriggerDeviceDataConditionPtrOutput) DeviceId() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *DeviceLinkageRuleTriggerDeviceDataCondition) *string {
 		if v == nil {
@@ -2816,8 +3190,20 @@ func (o DeviceLinkageRuleTriggerDeviceDataConditionPtrOutput) DeviceId() pulumi.
 	}).(pulumi.StringPtrOutput)
 }
 
+// Specifies the Rvalue of a data comparison expression. Only when the `operator` is
+// **in**, this field is valid and required, with a maximum of `20` characters, represents matching within the specified
+// values, e.g. **20,30,40**,
+func (o DeviceLinkageRuleTriggerDeviceDataConditionPtrOutput) InValues() pulumi.StringArrayOutput {
+	return o.ApplyT(func(v *DeviceLinkageRuleTriggerDeviceDataCondition) []string {
+		if v == nil {
+			return nil
+		}
+		return v.InValues
+	}).(pulumi.StringArrayOutput)
+}
+
 // Specifies the data comparison operator. The valid values are: **>**, **<**,
-// **>=**, **<=**, **=** and **between**.
+// **>=**, **<=**, **=**, **in** and **between**.
 func (o DeviceLinkageRuleTriggerDeviceDataConditionPtrOutput) Operator() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *DeviceLinkageRuleTriggerDeviceDataCondition) *string {
 		if v == nil {
@@ -2837,8 +3223,8 @@ func (o DeviceLinkageRuleTriggerDeviceDataConditionPtrOutput) Path() pulumi.Stri
 	}).(pulumi.StringPtrOutput)
 }
 
-// Specifies the product id, all devices belonging to this product will trigger
-// the rule. Exactly one of `deviceId` or `productId` must be provided.
+// Specifies the product ID. If this field is set and the `deviceId` is empty, the
+// device attribute will trigger the matching of all devices under this product.
 func (o DeviceLinkageRuleTriggerDeviceDataConditionPtrOutput) ProductId() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *DeviceLinkageRuleTriggerDeviceDataCondition) *string {
 		if v == nil {
@@ -2862,16 +3248,230 @@ func (o DeviceLinkageRuleTriggerDeviceDataConditionPtrOutput) TriggerStrategy() 
 	}).(pulumi.StringPtrOutput)
 }
 
-// Specifies the Rvalue of a data comparison expression. When the `operator` is `between`,
-// the Rvalue represents the minimum and maximum values, separated by commas, such as "20,30",
-// which means greater than or equal to 20 and less than 30.
+// Specifies the Rvalue of a data comparison expression. When the `operator` is **between**,
+// the Rvalue represents the minimum and maximum values, separated by commas, such as **20,30**,
+// which means greater than or equal to `20` and less than `30`.
 func (o DeviceLinkageRuleTriggerDeviceDataConditionPtrOutput) Value() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *DeviceLinkageRuleTriggerDeviceDataCondition) *string {
 		if v == nil {
 			return nil
 		}
-		return &v.Value
+		return v.Value
 	}).(pulumi.StringPtrOutput)
+}
+
+type DeviceLinkageRuleTriggerDeviceLinkageStatusCondition struct {
+	// Specifies the device id which executes the command.
+	DeviceId *string `pulumi:"deviceId"`
+	// Specifies the duration of device status. The valid value ranges from `0` to `60` minutes.
+	Duration *int `pulumi:"duration"`
+	// Specifies the product ID. If this field is set and the `deviceId` is empty, the
+	// device attribute will trigger the matching of all devices under this product.
+	ProductId *string `pulumi:"productId"`
+	// Specifies device status list, separate multiple status with commas.
+	// e.g. **ONLINE**, **OFFLINE**.
+	// The valid device status values are as follows:
+	// + **ONLINE**: Device online.
+	// + **OFFLINE**: Device offline.
+	StatusLists []string `pulumi:"statusLists"`
+}
+
+// DeviceLinkageRuleTriggerDeviceLinkageStatusConditionInput is an input type that accepts DeviceLinkageRuleTriggerDeviceLinkageStatusConditionArgs and DeviceLinkageRuleTriggerDeviceLinkageStatusConditionOutput values.
+// You can construct a concrete instance of `DeviceLinkageRuleTriggerDeviceLinkageStatusConditionInput` via:
+//
+//	DeviceLinkageRuleTriggerDeviceLinkageStatusConditionArgs{...}
+type DeviceLinkageRuleTriggerDeviceLinkageStatusConditionInput interface {
+	pulumi.Input
+
+	ToDeviceLinkageRuleTriggerDeviceLinkageStatusConditionOutput() DeviceLinkageRuleTriggerDeviceLinkageStatusConditionOutput
+	ToDeviceLinkageRuleTriggerDeviceLinkageStatusConditionOutputWithContext(context.Context) DeviceLinkageRuleTriggerDeviceLinkageStatusConditionOutput
+}
+
+type DeviceLinkageRuleTriggerDeviceLinkageStatusConditionArgs struct {
+	// Specifies the device id which executes the command.
+	DeviceId pulumi.StringPtrInput `pulumi:"deviceId"`
+	// Specifies the duration of device status. The valid value ranges from `0` to `60` minutes.
+	Duration pulumi.IntPtrInput `pulumi:"duration"`
+	// Specifies the product ID. If this field is set and the `deviceId` is empty, the
+	// device attribute will trigger the matching of all devices under this product.
+	ProductId pulumi.StringPtrInput `pulumi:"productId"`
+	// Specifies device status list, separate multiple status with commas.
+	// e.g. **ONLINE**, **OFFLINE**.
+	// The valid device status values are as follows:
+	// + **ONLINE**: Device online.
+	// + **OFFLINE**: Device offline.
+	StatusLists pulumi.StringArrayInput `pulumi:"statusLists"`
+}
+
+func (DeviceLinkageRuleTriggerDeviceLinkageStatusConditionArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*DeviceLinkageRuleTriggerDeviceLinkageStatusCondition)(nil)).Elem()
+}
+
+func (i DeviceLinkageRuleTriggerDeviceLinkageStatusConditionArgs) ToDeviceLinkageRuleTriggerDeviceLinkageStatusConditionOutput() DeviceLinkageRuleTriggerDeviceLinkageStatusConditionOutput {
+	return i.ToDeviceLinkageRuleTriggerDeviceLinkageStatusConditionOutputWithContext(context.Background())
+}
+
+func (i DeviceLinkageRuleTriggerDeviceLinkageStatusConditionArgs) ToDeviceLinkageRuleTriggerDeviceLinkageStatusConditionOutputWithContext(ctx context.Context) DeviceLinkageRuleTriggerDeviceLinkageStatusConditionOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(DeviceLinkageRuleTriggerDeviceLinkageStatusConditionOutput)
+}
+
+func (i DeviceLinkageRuleTriggerDeviceLinkageStatusConditionArgs) ToDeviceLinkageRuleTriggerDeviceLinkageStatusConditionPtrOutput() DeviceLinkageRuleTriggerDeviceLinkageStatusConditionPtrOutput {
+	return i.ToDeviceLinkageRuleTriggerDeviceLinkageStatusConditionPtrOutputWithContext(context.Background())
+}
+
+func (i DeviceLinkageRuleTriggerDeviceLinkageStatusConditionArgs) ToDeviceLinkageRuleTriggerDeviceLinkageStatusConditionPtrOutputWithContext(ctx context.Context) DeviceLinkageRuleTriggerDeviceLinkageStatusConditionPtrOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(DeviceLinkageRuleTriggerDeviceLinkageStatusConditionOutput).ToDeviceLinkageRuleTriggerDeviceLinkageStatusConditionPtrOutputWithContext(ctx)
+}
+
+// DeviceLinkageRuleTriggerDeviceLinkageStatusConditionPtrInput is an input type that accepts DeviceLinkageRuleTriggerDeviceLinkageStatusConditionArgs, DeviceLinkageRuleTriggerDeviceLinkageStatusConditionPtr and DeviceLinkageRuleTriggerDeviceLinkageStatusConditionPtrOutput values.
+// You can construct a concrete instance of `DeviceLinkageRuleTriggerDeviceLinkageStatusConditionPtrInput` via:
+//
+//	        DeviceLinkageRuleTriggerDeviceLinkageStatusConditionArgs{...}
+//
+//	or:
+//
+//	        nil
+type DeviceLinkageRuleTriggerDeviceLinkageStatusConditionPtrInput interface {
+	pulumi.Input
+
+	ToDeviceLinkageRuleTriggerDeviceLinkageStatusConditionPtrOutput() DeviceLinkageRuleTriggerDeviceLinkageStatusConditionPtrOutput
+	ToDeviceLinkageRuleTriggerDeviceLinkageStatusConditionPtrOutputWithContext(context.Context) DeviceLinkageRuleTriggerDeviceLinkageStatusConditionPtrOutput
+}
+
+type deviceLinkageRuleTriggerDeviceLinkageStatusConditionPtrType DeviceLinkageRuleTriggerDeviceLinkageStatusConditionArgs
+
+func DeviceLinkageRuleTriggerDeviceLinkageStatusConditionPtr(v *DeviceLinkageRuleTriggerDeviceLinkageStatusConditionArgs) DeviceLinkageRuleTriggerDeviceLinkageStatusConditionPtrInput {
+	return (*deviceLinkageRuleTriggerDeviceLinkageStatusConditionPtrType)(v)
+}
+
+func (*deviceLinkageRuleTriggerDeviceLinkageStatusConditionPtrType) ElementType() reflect.Type {
+	return reflect.TypeOf((**DeviceLinkageRuleTriggerDeviceLinkageStatusCondition)(nil)).Elem()
+}
+
+func (i *deviceLinkageRuleTriggerDeviceLinkageStatusConditionPtrType) ToDeviceLinkageRuleTriggerDeviceLinkageStatusConditionPtrOutput() DeviceLinkageRuleTriggerDeviceLinkageStatusConditionPtrOutput {
+	return i.ToDeviceLinkageRuleTriggerDeviceLinkageStatusConditionPtrOutputWithContext(context.Background())
+}
+
+func (i *deviceLinkageRuleTriggerDeviceLinkageStatusConditionPtrType) ToDeviceLinkageRuleTriggerDeviceLinkageStatusConditionPtrOutputWithContext(ctx context.Context) DeviceLinkageRuleTriggerDeviceLinkageStatusConditionPtrOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(DeviceLinkageRuleTriggerDeviceLinkageStatusConditionPtrOutput)
+}
+
+type DeviceLinkageRuleTriggerDeviceLinkageStatusConditionOutput struct{ *pulumi.OutputState }
+
+func (DeviceLinkageRuleTriggerDeviceLinkageStatusConditionOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*DeviceLinkageRuleTriggerDeviceLinkageStatusCondition)(nil)).Elem()
+}
+
+func (o DeviceLinkageRuleTriggerDeviceLinkageStatusConditionOutput) ToDeviceLinkageRuleTriggerDeviceLinkageStatusConditionOutput() DeviceLinkageRuleTriggerDeviceLinkageStatusConditionOutput {
+	return o
+}
+
+func (o DeviceLinkageRuleTriggerDeviceLinkageStatusConditionOutput) ToDeviceLinkageRuleTriggerDeviceLinkageStatusConditionOutputWithContext(ctx context.Context) DeviceLinkageRuleTriggerDeviceLinkageStatusConditionOutput {
+	return o
+}
+
+func (o DeviceLinkageRuleTriggerDeviceLinkageStatusConditionOutput) ToDeviceLinkageRuleTriggerDeviceLinkageStatusConditionPtrOutput() DeviceLinkageRuleTriggerDeviceLinkageStatusConditionPtrOutput {
+	return o.ToDeviceLinkageRuleTriggerDeviceLinkageStatusConditionPtrOutputWithContext(context.Background())
+}
+
+func (o DeviceLinkageRuleTriggerDeviceLinkageStatusConditionOutput) ToDeviceLinkageRuleTriggerDeviceLinkageStatusConditionPtrOutputWithContext(ctx context.Context) DeviceLinkageRuleTriggerDeviceLinkageStatusConditionPtrOutput {
+	return o.ApplyTWithContext(ctx, func(_ context.Context, v DeviceLinkageRuleTriggerDeviceLinkageStatusCondition) *DeviceLinkageRuleTriggerDeviceLinkageStatusCondition {
+		return &v
+	}).(DeviceLinkageRuleTriggerDeviceLinkageStatusConditionPtrOutput)
+}
+
+// Specifies the device id which executes the command.
+func (o DeviceLinkageRuleTriggerDeviceLinkageStatusConditionOutput) DeviceId() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v DeviceLinkageRuleTriggerDeviceLinkageStatusCondition) *string { return v.DeviceId }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the duration of device status. The valid value ranges from `0` to `60` minutes.
+func (o DeviceLinkageRuleTriggerDeviceLinkageStatusConditionOutput) Duration() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v DeviceLinkageRuleTriggerDeviceLinkageStatusCondition) *int { return v.Duration }).(pulumi.IntPtrOutput)
+}
+
+// Specifies the product ID. If this field is set and the `deviceId` is empty, the
+// device attribute will trigger the matching of all devices under this product.
+func (o DeviceLinkageRuleTriggerDeviceLinkageStatusConditionOutput) ProductId() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v DeviceLinkageRuleTriggerDeviceLinkageStatusCondition) *string { return v.ProductId }).(pulumi.StringPtrOutput)
+}
+
+// Specifies device status list, separate multiple status with commas.
+// e.g. **ONLINE**, **OFFLINE**.
+// The valid device status values are as follows:
+// + **ONLINE**: Device online.
+// + **OFFLINE**: Device offline.
+func (o DeviceLinkageRuleTriggerDeviceLinkageStatusConditionOutput) StatusLists() pulumi.StringArrayOutput {
+	return o.ApplyT(func(v DeviceLinkageRuleTriggerDeviceLinkageStatusCondition) []string { return v.StatusLists }).(pulumi.StringArrayOutput)
+}
+
+type DeviceLinkageRuleTriggerDeviceLinkageStatusConditionPtrOutput struct{ *pulumi.OutputState }
+
+func (DeviceLinkageRuleTriggerDeviceLinkageStatusConditionPtrOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((**DeviceLinkageRuleTriggerDeviceLinkageStatusCondition)(nil)).Elem()
+}
+
+func (o DeviceLinkageRuleTriggerDeviceLinkageStatusConditionPtrOutput) ToDeviceLinkageRuleTriggerDeviceLinkageStatusConditionPtrOutput() DeviceLinkageRuleTriggerDeviceLinkageStatusConditionPtrOutput {
+	return o
+}
+
+func (o DeviceLinkageRuleTriggerDeviceLinkageStatusConditionPtrOutput) ToDeviceLinkageRuleTriggerDeviceLinkageStatusConditionPtrOutputWithContext(ctx context.Context) DeviceLinkageRuleTriggerDeviceLinkageStatusConditionPtrOutput {
+	return o
+}
+
+func (o DeviceLinkageRuleTriggerDeviceLinkageStatusConditionPtrOutput) Elem() DeviceLinkageRuleTriggerDeviceLinkageStatusConditionOutput {
+	return o.ApplyT(func(v *DeviceLinkageRuleTriggerDeviceLinkageStatusCondition) DeviceLinkageRuleTriggerDeviceLinkageStatusCondition {
+		if v != nil {
+			return *v
+		}
+		var ret DeviceLinkageRuleTriggerDeviceLinkageStatusCondition
+		return ret
+	}).(DeviceLinkageRuleTriggerDeviceLinkageStatusConditionOutput)
+}
+
+// Specifies the device id which executes the command.
+func (o DeviceLinkageRuleTriggerDeviceLinkageStatusConditionPtrOutput) DeviceId() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *DeviceLinkageRuleTriggerDeviceLinkageStatusCondition) *string {
+		if v == nil {
+			return nil
+		}
+		return v.DeviceId
+	}).(pulumi.StringPtrOutput)
+}
+
+// Specifies the duration of device status. The valid value ranges from `0` to `60` minutes.
+func (o DeviceLinkageRuleTriggerDeviceLinkageStatusConditionPtrOutput) Duration() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v *DeviceLinkageRuleTriggerDeviceLinkageStatusCondition) *int {
+		if v == nil {
+			return nil
+		}
+		return v.Duration
+	}).(pulumi.IntPtrOutput)
+}
+
+// Specifies the product ID. If this field is set and the `deviceId` is empty, the
+// device attribute will trigger the matching of all devices under this product.
+func (o DeviceLinkageRuleTriggerDeviceLinkageStatusConditionPtrOutput) ProductId() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *DeviceLinkageRuleTriggerDeviceLinkageStatusCondition) *string {
+		if v == nil {
+			return nil
+		}
+		return v.ProductId
+	}).(pulumi.StringPtrOutput)
+}
+
+// Specifies device status list, separate multiple status with commas.
+// e.g. **ONLINE**, **OFFLINE**.
+// The valid device status values are as follows:
+// + **ONLINE**: Device online.
+// + **OFFLINE**: Device offline.
+func (o DeviceLinkageRuleTriggerDeviceLinkageStatusConditionPtrOutput) StatusLists() pulumi.StringArrayOutput {
+	return o.ApplyT(func(v *DeviceLinkageRuleTriggerDeviceLinkageStatusCondition) []string {
+		if v == nil {
+			return nil
+		}
+		return v.StatusLists
+	}).(pulumi.StringArrayOutput)
 }
 
 type DeviceLinkageRuleTriggerSimpleTimerCondition struct {
@@ -3053,17 +3653,139 @@ func (o DeviceLinkageRuleTriggerSimpleTimerConditionPtrOutput) StartTime() pulum
 	}).(pulumi.StringPtrOutput)
 }
 
+type DeviceShadow struct {
+	// Specifies the initial properties data of the device.
+	// The each key is a parameter name of a property in the product model.
+	// If you want to delete the entire `desired`, please enter an empty Map. e.g. **desired = {}**.
+	Desired map[string]string `pulumi:"desired"`
+	// Specifies the service ID of the device.
+	// Which is defined in the product model associated with the device.
+	ServiceId string `pulumi:"serviceId"`
+}
+
+// DeviceShadowInput is an input type that accepts DeviceShadowArgs and DeviceShadowOutput values.
+// You can construct a concrete instance of `DeviceShadowInput` via:
+//
+//	DeviceShadowArgs{...}
+type DeviceShadowInput interface {
+	pulumi.Input
+
+	ToDeviceShadowOutput() DeviceShadowOutput
+	ToDeviceShadowOutputWithContext(context.Context) DeviceShadowOutput
+}
+
+type DeviceShadowArgs struct {
+	// Specifies the initial properties data of the device.
+	// The each key is a parameter name of a property in the product model.
+	// If you want to delete the entire `desired`, please enter an empty Map. e.g. **desired = {}**.
+	Desired pulumi.StringMapInput `pulumi:"desired"`
+	// Specifies the service ID of the device.
+	// Which is defined in the product model associated with the device.
+	ServiceId pulumi.StringInput `pulumi:"serviceId"`
+}
+
+func (DeviceShadowArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*DeviceShadow)(nil)).Elem()
+}
+
+func (i DeviceShadowArgs) ToDeviceShadowOutput() DeviceShadowOutput {
+	return i.ToDeviceShadowOutputWithContext(context.Background())
+}
+
+func (i DeviceShadowArgs) ToDeviceShadowOutputWithContext(ctx context.Context) DeviceShadowOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(DeviceShadowOutput)
+}
+
+// DeviceShadowArrayInput is an input type that accepts DeviceShadowArray and DeviceShadowArrayOutput values.
+// You can construct a concrete instance of `DeviceShadowArrayInput` via:
+//
+//	DeviceShadowArray{ DeviceShadowArgs{...} }
+type DeviceShadowArrayInput interface {
+	pulumi.Input
+
+	ToDeviceShadowArrayOutput() DeviceShadowArrayOutput
+	ToDeviceShadowArrayOutputWithContext(context.Context) DeviceShadowArrayOutput
+}
+
+type DeviceShadowArray []DeviceShadowInput
+
+func (DeviceShadowArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]DeviceShadow)(nil)).Elem()
+}
+
+func (i DeviceShadowArray) ToDeviceShadowArrayOutput() DeviceShadowArrayOutput {
+	return i.ToDeviceShadowArrayOutputWithContext(context.Background())
+}
+
+func (i DeviceShadowArray) ToDeviceShadowArrayOutputWithContext(ctx context.Context) DeviceShadowArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(DeviceShadowArrayOutput)
+}
+
+type DeviceShadowOutput struct{ *pulumi.OutputState }
+
+func (DeviceShadowOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*DeviceShadow)(nil)).Elem()
+}
+
+func (o DeviceShadowOutput) ToDeviceShadowOutput() DeviceShadowOutput {
+	return o
+}
+
+func (o DeviceShadowOutput) ToDeviceShadowOutputWithContext(ctx context.Context) DeviceShadowOutput {
+	return o
+}
+
+// Specifies the initial properties data of the device.
+// The each key is a parameter name of a property in the product model.
+// If you want to delete the entire `desired`, please enter an empty Map. e.g. **desired = {}**.
+func (o DeviceShadowOutput) Desired() pulumi.StringMapOutput {
+	return o.ApplyT(func(v DeviceShadow) map[string]string { return v.Desired }).(pulumi.StringMapOutput)
+}
+
+// Specifies the service ID of the device.
+// Which is defined in the product model associated with the device.
+func (o DeviceShadowOutput) ServiceId() pulumi.StringOutput {
+	return o.ApplyT(func(v DeviceShadow) string { return v.ServiceId }).(pulumi.StringOutput)
+}
+
+type DeviceShadowArrayOutput struct{ *pulumi.OutputState }
+
+func (DeviceShadowArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]DeviceShadow)(nil)).Elem()
+}
+
+func (o DeviceShadowArrayOutput) ToDeviceShadowArrayOutput() DeviceShadowArrayOutput {
+	return o
+}
+
+func (o DeviceShadowArrayOutput) ToDeviceShadowArrayOutputWithContext(ctx context.Context) DeviceShadowArrayOutput {
+	return o
+}
+
+func (o DeviceShadowArrayOutput) Index(i pulumi.IntInput) DeviceShadowOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) DeviceShadow {
+		return vs[0].([]DeviceShadow)[vs[1].(int)]
+	}).(DeviceShadowOutput)
+}
+
 type ProductService struct {
 	// Specifies the list of commands for the service.
 	// The commands structure is documented below.
 	Commands []ProductServiceCommand `pulumi:"commands"`
 	// Specifies the description of the parameter. The description contains a maximum of
-	// 128 characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special
+	// `128` characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special
 	// characters are allowed: `?'#().,&%@!`.
 	Description *string `pulumi:"description"`
-	// Specifies the service ID. The ID contains a maximum of 64 characters. Only letters,
+	// Specifies the service ID. The ID contains a maximum of `64` characters. Only letters,
 	// Chinese characters, digits, hyphens (-), underscores (_) and the following special characters are allowed: `?'#().,&%@!`.
 	Id string `pulumi:"id"`
+	// Specifies whether the device service is mandatory.
+	// Currently, this field is not a functional field and is used only for identification.
+	// The valid values are as follows:
+	// + **Master**: The master service.
+	// + **Mandatory**: The mandatory service.
+	// + **Optional**:  The optional service.
+	Option *string `pulumi:"option"`
 	// Specifies the list of properties for the service.
 	// The properties structure is documented below.
 	Properties []ProductServiceProperty `pulumi:"properties"`
@@ -3088,12 +3810,19 @@ type ProductServiceArgs struct {
 	// The commands structure is documented below.
 	Commands ProductServiceCommandArrayInput `pulumi:"commands"`
 	// Specifies the description of the parameter. The description contains a maximum of
-	// 128 characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special
+	// `128` characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special
 	// characters are allowed: `?'#().,&%@!`.
 	Description pulumi.StringPtrInput `pulumi:"description"`
-	// Specifies the service ID. The ID contains a maximum of 64 characters. Only letters,
+	// Specifies the service ID. The ID contains a maximum of `64` characters. Only letters,
 	// Chinese characters, digits, hyphens (-), underscores (_) and the following special characters are allowed: `?'#().,&%@!`.
 	Id pulumi.StringInput `pulumi:"id"`
+	// Specifies whether the device service is mandatory.
+	// Currently, this field is not a functional field and is used only for identification.
+	// The valid values are as follows:
+	// + **Master**: The master service.
+	// + **Mandatory**: The mandatory service.
+	// + **Optional**:  The optional service.
+	Option pulumi.StringPtrInput `pulumi:"option"`
 	// Specifies the list of properties for the service.
 	// The properties structure is documented below.
 	Properties ProductServicePropertyArrayInput `pulumi:"properties"`
@@ -3160,16 +3889,26 @@ func (o ProductServiceOutput) Commands() ProductServiceCommandArrayOutput {
 }
 
 // Specifies the description of the parameter. The description contains a maximum of
-// 128 characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special
+// `128` characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special
 // characters are allowed: `?'#().,&%@!`.
 func (o ProductServiceOutput) Description() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v ProductService) *string { return v.Description }).(pulumi.StringPtrOutput)
 }
 
-// Specifies the service ID. The ID contains a maximum of 64 characters. Only letters,
+// Specifies the service ID. The ID contains a maximum of `64` characters. Only letters,
 // Chinese characters, digits, hyphens (-), underscores (_) and the following special characters are allowed: `?'#().,&%@!`.
 func (o ProductServiceOutput) Id() pulumi.StringOutput {
 	return o.ApplyT(func(v ProductService) string { return v.Id }).(pulumi.StringOutput)
+}
+
+// Specifies whether the device service is mandatory.
+// Currently, this field is not a functional field and is used only for identification.
+// The valid values are as follows:
+// + **Master**: The master service.
+// + **Mandatory**: The mandatory service.
+// + **Optional**:  The optional service.
+func (o ProductServiceOutput) Option() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v ProductService) *string { return v.Option }).(pulumi.StringPtrOutput)
 }
 
 // Specifies the list of properties for the service.
@@ -3205,7 +3944,7 @@ func (o ProductServiceArrayOutput) Index(i pulumi.IntInput) ProductServiceOutput
 }
 
 type ProductServiceCommand struct {
-	// Specifies the name of the parameter. The name contains a maximum of 64 characters.
+	// Specifies the name of the parameter. The name contains a maximum of `64` characters.
 	// Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special characters are
 	// allowed: `?'#().,&%@!`.
 	Name string `pulumi:"name"`
@@ -3229,7 +3968,7 @@ type ProductServiceCommandInput interface {
 }
 
 type ProductServiceCommandArgs struct {
-	// Specifies the name of the parameter. The name contains a maximum of 64 characters.
+	// Specifies the name of the parameter. The name contains a maximum of `64` characters.
 	// Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special characters are
 	// allowed: `?'#().,&%@!`.
 	Name pulumi.StringInput `pulumi:"name"`
@@ -3292,7 +4031,7 @@ func (o ProductServiceCommandOutput) ToProductServiceCommandOutputWithContext(ct
 	return o
 }
 
-// Specifies the name of the parameter. The name contains a maximum of 64 characters.
+// Specifies the name of the parameter. The name contains a maximum of `64` characters.
 // Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special characters are
 // allowed: `?'#().,&%@!`.
 func (o ProductServiceCommandOutput) Name() pulumi.StringOutput {
@@ -3332,8 +4071,13 @@ func (o ProductServiceCommandArrayOutput) Index(i pulumi.IntInput) ProductServic
 }
 
 type ProductServiceCommandPara struct {
+	// Specifies the default value of the device property.
+	// This parameter allowed value is a JSON string. e.g. **{\"foo\":\"bar\"}**
+	// If this parameter is set value, the value will be written to the desired data of the device shadow when
+	// the product is used to create a device. When the device goes online, the value will be delivered to the device.
+	DefaultValue *string `pulumi:"defaultValue"`
 	// Specifies the description of the parameter. The description contains a maximum of
-	// 128 characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special
+	// `128` characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special
 	// characters are allowed: `?'#().,&%@!`.
 	Description *string `pulumi:"description"`
 	// Specifies the list of enumerated values of the parameter.
@@ -3342,17 +4086,20 @@ type ProductServiceCommandPara struct {
 	// Value range: -2147483647 ~ 2147483647. Defaults to **"65535"**.
 	Max *string `pulumi:"max"`
 	// Specifies the max length of the parameter when the `type` is **string**, **DateTime**,
-	// **jsonObject** or **string list**. Value range: 0 ~ 2147483647. Defaults to **0**.
+	// **jsonObject** or **string list**. Value range: `0` ~ `2,147,483,647`. Defaults to `0`.
 	MaxLength *int `pulumi:"maxLength"`
 	// Specifies the min value of the parameter when the `type` is **int** or **decimal**.
 	// Value range: -2147483647 ~ 2147483647. Defaults to **"0"**.
 	Min *string `pulumi:"min"`
-	// Specifies the name of the parameter. The name contains a maximum of 64 characters.
+	// Specifies the name of the parameter. The name contains a maximum of `64` characters.
 	// Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special characters are
 	// allowed: `?'#().,&%@!`.
 	Name string `pulumi:"name"`
+	// Specifies the parameter is mandatory or not.
+	// The default value is **false**.
+	Required *bool `pulumi:"required"`
 	// Specifies the step of the parameter when the `type` is **int** or **decimal**.
-	// Value range: 0 ~ 2147483647. Defaults to **0**.
+	// Value range: `0` ~ `2,147,483,647`. Defaults to `0`.
 	Step *float64 `pulumi:"step"`
 	// Specifies the type of the parameter.
 	// The valid values are **int**, **decimal**, **string**, **DateTime**, **jsonObject** and **string list**.
@@ -3374,8 +4121,13 @@ type ProductServiceCommandParaInput interface {
 }
 
 type ProductServiceCommandParaArgs struct {
+	// Specifies the default value of the device property.
+	// This parameter allowed value is a JSON string. e.g. **{\"foo\":\"bar\"}**
+	// If this parameter is set value, the value will be written to the desired data of the device shadow when
+	// the product is used to create a device. When the device goes online, the value will be delivered to the device.
+	DefaultValue pulumi.StringPtrInput `pulumi:"defaultValue"`
 	// Specifies the description of the parameter. The description contains a maximum of
-	// 128 characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special
+	// `128` characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special
 	// characters are allowed: `?'#().,&%@!`.
 	Description pulumi.StringPtrInput `pulumi:"description"`
 	// Specifies the list of enumerated values of the parameter.
@@ -3384,17 +4136,20 @@ type ProductServiceCommandParaArgs struct {
 	// Value range: -2147483647 ~ 2147483647. Defaults to **"65535"**.
 	Max pulumi.StringPtrInput `pulumi:"max"`
 	// Specifies the max length of the parameter when the `type` is **string**, **DateTime**,
-	// **jsonObject** or **string list**. Value range: 0 ~ 2147483647. Defaults to **0**.
+	// **jsonObject** or **string list**. Value range: `0` ~ `2,147,483,647`. Defaults to `0`.
 	MaxLength pulumi.IntPtrInput `pulumi:"maxLength"`
 	// Specifies the min value of the parameter when the `type` is **int** or **decimal**.
 	// Value range: -2147483647 ~ 2147483647. Defaults to **"0"**.
 	Min pulumi.StringPtrInput `pulumi:"min"`
-	// Specifies the name of the parameter. The name contains a maximum of 64 characters.
+	// Specifies the name of the parameter. The name contains a maximum of `64` characters.
 	// Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special characters are
 	// allowed: `?'#().,&%@!`.
 	Name pulumi.StringInput `pulumi:"name"`
+	// Specifies the parameter is mandatory or not.
+	// The default value is **false**.
+	Required pulumi.BoolPtrInput `pulumi:"required"`
 	// Specifies the step of the parameter when the `type` is **int** or **decimal**.
-	// Value range: 0 ~ 2147483647. Defaults to **0**.
+	// Value range: `0` ~ `2,147,483,647`. Defaults to `0`.
 	Step pulumi.Float64PtrInput `pulumi:"step"`
 	// Specifies the type of the parameter.
 	// The valid values are **int**, **decimal**, **string**, **DateTime**, **jsonObject** and **string list**.
@@ -3455,8 +4210,16 @@ func (o ProductServiceCommandParaOutput) ToProductServiceCommandParaOutputWithCo
 	return o
 }
 
+// Specifies the default value of the device property.
+// This parameter allowed value is a JSON string. e.g. **{\"foo\":\"bar\"}**
+// If this parameter is set value, the value will be written to the desired data of the device shadow when
+// the product is used to create a device. When the device goes online, the value will be delivered to the device.
+func (o ProductServiceCommandParaOutput) DefaultValue() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v ProductServiceCommandPara) *string { return v.DefaultValue }).(pulumi.StringPtrOutput)
+}
+
 // Specifies the description of the parameter. The description contains a maximum of
-// 128 characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special
+// `128` characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special
 // characters are allowed: `?'#().,&%@!`.
 func (o ProductServiceCommandParaOutput) Description() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v ProductServiceCommandPara) *string { return v.Description }).(pulumi.StringPtrOutput)
@@ -3474,7 +4237,7 @@ func (o ProductServiceCommandParaOutput) Max() pulumi.StringPtrOutput {
 }
 
 // Specifies the max length of the parameter when the `type` is **string**, **DateTime**,
-// **jsonObject** or **string list**. Value range: 0 ~ 2147483647. Defaults to **0**.
+// **jsonObject** or **string list**. Value range: `0` ~ `2,147,483,647`. Defaults to `0`.
 func (o ProductServiceCommandParaOutput) MaxLength() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v ProductServiceCommandPara) *int { return v.MaxLength }).(pulumi.IntPtrOutput)
 }
@@ -3485,15 +4248,21 @@ func (o ProductServiceCommandParaOutput) Min() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v ProductServiceCommandPara) *string { return v.Min }).(pulumi.StringPtrOutput)
 }
 
-// Specifies the name of the parameter. The name contains a maximum of 64 characters.
+// Specifies the name of the parameter. The name contains a maximum of `64` characters.
 // Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special characters are
 // allowed: `?'#().,&%@!`.
 func (o ProductServiceCommandParaOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v ProductServiceCommandPara) string { return v.Name }).(pulumi.StringOutput)
 }
 
+// Specifies the parameter is mandatory or not.
+// The default value is **false**.
+func (o ProductServiceCommandParaOutput) Required() pulumi.BoolPtrOutput {
+	return o.ApplyT(func(v ProductServiceCommandPara) *bool { return v.Required }).(pulumi.BoolPtrOutput)
+}
+
 // Specifies the step of the parameter when the `type` is **int** or **decimal**.
-// Value range: 0 ~ 2147483647. Defaults to **0**.
+// Value range: `0` ~ `2,147,483,647`. Defaults to `0`.
 func (o ProductServiceCommandParaOutput) Step() pulumi.Float64PtrOutput {
 	return o.ApplyT(func(v ProductServiceCommandPara) *float64 { return v.Step }).(pulumi.Float64PtrOutput)
 }
@@ -3531,8 +4300,13 @@ func (o ProductServiceCommandParaArrayOutput) Index(i pulumi.IntInput) ProductSe
 }
 
 type ProductServiceCommandResponse struct {
+	// Specifies the default value of the device property.
+	// This parameter allowed value is a JSON string. e.g. **{\"foo\":\"bar\"}**
+	// If this parameter is set value, the value will be written to the desired data of the device shadow when
+	// the product is used to create a device. When the device goes online, the value will be delivered to the device.
+	DefaultValue *string `pulumi:"defaultValue"`
 	// Specifies the description of the parameter. The description contains a maximum of
-	// 128 characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special
+	// `128` characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special
 	// characters are allowed: `?'#().,&%@!`.
 	Description *string `pulumi:"description"`
 	// Specifies the list of enumerated values of the parameter.
@@ -3541,17 +4315,20 @@ type ProductServiceCommandResponse struct {
 	// Value range: -2147483647 ~ 2147483647. Defaults to **"65535"**.
 	Max *string `pulumi:"max"`
 	// Specifies the max length of the parameter when the `type` is **string**, **DateTime**,
-	// **jsonObject** or **string list**. Value range: 0 ~ 2147483647. Defaults to **0**.
+	// **jsonObject** or **string list**. Value range: `0` ~ `2,147,483,647`. Defaults to `0`.
 	MaxLength *int `pulumi:"maxLength"`
 	// Specifies the min value of the parameter when the `type` is **int** or **decimal**.
 	// Value range: -2147483647 ~ 2147483647. Defaults to **"0"**.
 	Min *string `pulumi:"min"`
-	// Specifies the name of the parameter. The name contains a maximum of 64 characters.
+	// Specifies the name of the parameter. The name contains a maximum of `64` characters.
 	// Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special characters are
 	// allowed: `?'#().,&%@!`.
 	Name string `pulumi:"name"`
+	// Specifies the parameter is mandatory or not.
+	// The default value is **false**.
+	Required *bool `pulumi:"required"`
 	// Specifies the step of the parameter when the `type` is **int** or **decimal**.
-	// Value range: 0 ~ 2147483647. Defaults to **0**.
+	// Value range: `0` ~ `2,147,483,647`. Defaults to `0`.
 	Step *float64 `pulumi:"step"`
 	// Specifies the type of the parameter.
 	// The valid values are **int**, **decimal**, **string**, **DateTime**, **jsonObject** and **string list**.
@@ -3573,8 +4350,13 @@ type ProductServiceCommandResponseInput interface {
 }
 
 type ProductServiceCommandResponseArgs struct {
+	// Specifies the default value of the device property.
+	// This parameter allowed value is a JSON string. e.g. **{\"foo\":\"bar\"}**
+	// If this parameter is set value, the value will be written to the desired data of the device shadow when
+	// the product is used to create a device. When the device goes online, the value will be delivered to the device.
+	DefaultValue pulumi.StringPtrInput `pulumi:"defaultValue"`
 	// Specifies the description of the parameter. The description contains a maximum of
-	// 128 characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special
+	// `128` characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special
 	// characters are allowed: `?'#().,&%@!`.
 	Description pulumi.StringPtrInput `pulumi:"description"`
 	// Specifies the list of enumerated values of the parameter.
@@ -3583,17 +4365,20 @@ type ProductServiceCommandResponseArgs struct {
 	// Value range: -2147483647 ~ 2147483647. Defaults to **"65535"**.
 	Max pulumi.StringPtrInput `pulumi:"max"`
 	// Specifies the max length of the parameter when the `type` is **string**, **DateTime**,
-	// **jsonObject** or **string list**. Value range: 0 ~ 2147483647. Defaults to **0**.
+	// **jsonObject** or **string list**. Value range: `0` ~ `2,147,483,647`. Defaults to `0`.
 	MaxLength pulumi.IntPtrInput `pulumi:"maxLength"`
 	// Specifies the min value of the parameter when the `type` is **int** or **decimal**.
 	// Value range: -2147483647 ~ 2147483647. Defaults to **"0"**.
 	Min pulumi.StringPtrInput `pulumi:"min"`
-	// Specifies the name of the parameter. The name contains a maximum of 64 characters.
+	// Specifies the name of the parameter. The name contains a maximum of `64` characters.
 	// Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special characters are
 	// allowed: `?'#().,&%@!`.
 	Name pulumi.StringInput `pulumi:"name"`
+	// Specifies the parameter is mandatory or not.
+	// The default value is **false**.
+	Required pulumi.BoolPtrInput `pulumi:"required"`
 	// Specifies the step of the parameter when the `type` is **int** or **decimal**.
-	// Value range: 0 ~ 2147483647. Defaults to **0**.
+	// Value range: `0` ~ `2,147,483,647`. Defaults to `0`.
 	Step pulumi.Float64PtrInput `pulumi:"step"`
 	// Specifies the type of the parameter.
 	// The valid values are **int**, **decimal**, **string**, **DateTime**, **jsonObject** and **string list**.
@@ -3654,8 +4439,16 @@ func (o ProductServiceCommandResponseOutput) ToProductServiceCommandResponseOutp
 	return o
 }
 
+// Specifies the default value of the device property.
+// This parameter allowed value is a JSON string. e.g. **{\"foo\":\"bar\"}**
+// If this parameter is set value, the value will be written to the desired data of the device shadow when
+// the product is used to create a device. When the device goes online, the value will be delivered to the device.
+func (o ProductServiceCommandResponseOutput) DefaultValue() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v ProductServiceCommandResponse) *string { return v.DefaultValue }).(pulumi.StringPtrOutput)
+}
+
 // Specifies the description of the parameter. The description contains a maximum of
-// 128 characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special
+// `128` characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special
 // characters are allowed: `?'#().,&%@!`.
 func (o ProductServiceCommandResponseOutput) Description() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v ProductServiceCommandResponse) *string { return v.Description }).(pulumi.StringPtrOutput)
@@ -3673,7 +4466,7 @@ func (o ProductServiceCommandResponseOutput) Max() pulumi.StringPtrOutput {
 }
 
 // Specifies the max length of the parameter when the `type` is **string**, **DateTime**,
-// **jsonObject** or **string list**. Value range: 0 ~ 2147483647. Defaults to **0**.
+// **jsonObject** or **string list**. Value range: `0` ~ `2,147,483,647`. Defaults to `0`.
 func (o ProductServiceCommandResponseOutput) MaxLength() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v ProductServiceCommandResponse) *int { return v.MaxLength }).(pulumi.IntPtrOutput)
 }
@@ -3684,15 +4477,21 @@ func (o ProductServiceCommandResponseOutput) Min() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v ProductServiceCommandResponse) *string { return v.Min }).(pulumi.StringPtrOutput)
 }
 
-// Specifies the name of the parameter. The name contains a maximum of 64 characters.
+// Specifies the name of the parameter. The name contains a maximum of `64` characters.
 // Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special characters are
 // allowed: `?'#().,&%@!`.
 func (o ProductServiceCommandResponseOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v ProductServiceCommandResponse) string { return v.Name }).(pulumi.StringOutput)
 }
 
+// Specifies the parameter is mandatory or not.
+// The default value is **false**.
+func (o ProductServiceCommandResponseOutput) Required() pulumi.BoolPtrOutput {
+	return o.ApplyT(func(v ProductServiceCommandResponse) *bool { return v.Required }).(pulumi.BoolPtrOutput)
+}
+
 // Specifies the step of the parameter when the `type` is **int** or **decimal**.
-// Value range: 0 ~ 2147483647. Defaults to **0**.
+// Value range: `0` ~ `2,147,483,647`. Defaults to `0`.
 func (o ProductServiceCommandResponseOutput) Step() pulumi.Float64PtrOutput {
 	return o.ApplyT(func(v ProductServiceCommandResponse) *float64 { return v.Step }).(pulumi.Float64PtrOutput)
 }
@@ -3730,8 +4529,13 @@ func (o ProductServiceCommandResponseArrayOutput) Index(i pulumi.IntInput) Produ
 }
 
 type ProductServiceProperty struct {
+	// Specifies the default value of the device property.
+	// This parameter allowed value is a JSON string. e.g. **{\"foo\":\"bar\"}**
+	// If this parameter is set value, the value will be written to the desired data of the device shadow when
+	// the product is used to create a device. When the device goes online, the value will be delivered to the device.
+	DefaultValue *string `pulumi:"defaultValue"`
 	// Specifies the description of the parameter. The description contains a maximum of
-	// 128 characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special
+	// `128` characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special
 	// characters are allowed: `?'#().,&%@!`.
 	Description *string `pulumi:"description"`
 	// Specifies the list of enumerated values of the parameter.
@@ -3740,20 +4544,24 @@ type ProductServiceProperty struct {
 	// Value range: -2147483647 ~ 2147483647. Defaults to **"65535"**.
 	Max *string `pulumi:"max"`
 	// Specifies the max length of the parameter when the `type` is **string**, **DateTime**,
-	// **jsonObject** or **string list**. Value range: 0 ~ 2147483647. Defaults to **0**.
+	// **jsonObject** or **string list**. Value range: `0` ~ `2,147,483,647`. Defaults to `0`.
 	MaxLength *int `pulumi:"maxLength"`
 	// Specifies the access mode of the device property.
-	// Options: **RW**, **W**, **R**.
+	// The value can be **RWE**, **RW**, **RE**, **WE**, **R** (the property value can be read),
+	// **W** (the property value can be written) or **E** (the property value can be subscribed to).
 	Method string `pulumi:"method"`
 	// Specifies the min value of the parameter when the `type` is **int** or **decimal**.
 	// Value range: -2147483647 ~ 2147483647. Defaults to **"0"**.
 	Min *string `pulumi:"min"`
-	// Specifies the name of the parameter. The name contains a maximum of 64 characters.
+	// Specifies the name of the parameter. The name contains a maximum of `64` characters.
 	// Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special characters are
 	// allowed: `?'#().,&%@!`.
 	Name string `pulumi:"name"`
+	// Specifies the parameter is mandatory or not.
+	// The default value is **false**.
+	Required *bool `pulumi:"required"`
 	// Specifies the step of the parameter when the `type` is **int** or **decimal**.
-	// Value range: 0 ~ 2147483647. Defaults to **0**.
+	// Value range: `0` ~ `2,147,483,647`. Defaults to `0`.
 	Step *float64 `pulumi:"step"`
 	// Specifies the type of the parameter.
 	// The valid values are **int**, **decimal**, **string**, **DateTime**, **jsonObject** and **string list**.
@@ -3775,8 +4583,13 @@ type ProductServicePropertyInput interface {
 }
 
 type ProductServicePropertyArgs struct {
+	// Specifies the default value of the device property.
+	// This parameter allowed value is a JSON string. e.g. **{\"foo\":\"bar\"}**
+	// If this parameter is set value, the value will be written to the desired data of the device shadow when
+	// the product is used to create a device. When the device goes online, the value will be delivered to the device.
+	DefaultValue pulumi.StringPtrInput `pulumi:"defaultValue"`
 	// Specifies the description of the parameter. The description contains a maximum of
-	// 128 characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special
+	// `128` characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special
 	// characters are allowed: `?'#().,&%@!`.
 	Description pulumi.StringPtrInput `pulumi:"description"`
 	// Specifies the list of enumerated values of the parameter.
@@ -3785,20 +4598,24 @@ type ProductServicePropertyArgs struct {
 	// Value range: -2147483647 ~ 2147483647. Defaults to **"65535"**.
 	Max pulumi.StringPtrInput `pulumi:"max"`
 	// Specifies the max length of the parameter when the `type` is **string**, **DateTime**,
-	// **jsonObject** or **string list**. Value range: 0 ~ 2147483647. Defaults to **0**.
+	// **jsonObject** or **string list**. Value range: `0` ~ `2,147,483,647`. Defaults to `0`.
 	MaxLength pulumi.IntPtrInput `pulumi:"maxLength"`
 	// Specifies the access mode of the device property.
-	// Options: **RW**, **W**, **R**.
+	// The value can be **RWE**, **RW**, **RE**, **WE**, **R** (the property value can be read),
+	// **W** (the property value can be written) or **E** (the property value can be subscribed to).
 	Method pulumi.StringInput `pulumi:"method"`
 	// Specifies the min value of the parameter when the `type` is **int** or **decimal**.
 	// Value range: -2147483647 ~ 2147483647. Defaults to **"0"**.
 	Min pulumi.StringPtrInput `pulumi:"min"`
-	// Specifies the name of the parameter. The name contains a maximum of 64 characters.
+	// Specifies the name of the parameter. The name contains a maximum of `64` characters.
 	// Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special characters are
 	// allowed: `?'#().,&%@!`.
 	Name pulumi.StringInput `pulumi:"name"`
+	// Specifies the parameter is mandatory or not.
+	// The default value is **false**.
+	Required pulumi.BoolPtrInput `pulumi:"required"`
 	// Specifies the step of the parameter when the `type` is **int** or **decimal**.
-	// Value range: 0 ~ 2147483647. Defaults to **0**.
+	// Value range: `0` ~ `2,147,483,647`. Defaults to `0`.
 	Step pulumi.Float64PtrInput `pulumi:"step"`
 	// Specifies the type of the parameter.
 	// The valid values are **int**, **decimal**, **string**, **DateTime**, **jsonObject** and **string list**.
@@ -3859,8 +4676,16 @@ func (o ProductServicePropertyOutput) ToProductServicePropertyOutputWithContext(
 	return o
 }
 
+// Specifies the default value of the device property.
+// This parameter allowed value is a JSON string. e.g. **{\"foo\":\"bar\"}**
+// If this parameter is set value, the value will be written to the desired data of the device shadow when
+// the product is used to create a device. When the device goes online, the value will be delivered to the device.
+func (o ProductServicePropertyOutput) DefaultValue() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v ProductServiceProperty) *string { return v.DefaultValue }).(pulumi.StringPtrOutput)
+}
+
 // Specifies the description of the parameter. The description contains a maximum of
-// 128 characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special
+// `128` characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special
 // characters are allowed: `?'#().,&%@!`.
 func (o ProductServicePropertyOutput) Description() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v ProductServiceProperty) *string { return v.Description }).(pulumi.StringPtrOutput)
@@ -3878,13 +4703,14 @@ func (o ProductServicePropertyOutput) Max() pulumi.StringPtrOutput {
 }
 
 // Specifies the max length of the parameter when the `type` is **string**, **DateTime**,
-// **jsonObject** or **string list**. Value range: 0 ~ 2147483647. Defaults to **0**.
+// **jsonObject** or **string list**. Value range: `0` ~ `2,147,483,647`. Defaults to `0`.
 func (o ProductServicePropertyOutput) MaxLength() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v ProductServiceProperty) *int { return v.MaxLength }).(pulumi.IntPtrOutput)
 }
 
 // Specifies the access mode of the device property.
-// Options: **RW**, **W**, **R**.
+// The value can be **RWE**, **RW**, **RE**, **WE**, **R** (the property value can be read),
+// **W** (the property value can be written) or **E** (the property value can be subscribed to).
 func (o ProductServicePropertyOutput) Method() pulumi.StringOutput {
 	return o.ApplyT(func(v ProductServiceProperty) string { return v.Method }).(pulumi.StringOutput)
 }
@@ -3895,15 +4721,21 @@ func (o ProductServicePropertyOutput) Min() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v ProductServiceProperty) *string { return v.Min }).(pulumi.StringPtrOutput)
 }
 
-// Specifies the name of the parameter. The name contains a maximum of 64 characters.
+// Specifies the name of the parameter. The name contains a maximum of `64` characters.
 // Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special characters are
 // allowed: `?'#().,&%@!`.
 func (o ProductServicePropertyOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v ProductServiceProperty) string { return v.Name }).(pulumi.StringOutput)
 }
 
+// Specifies the parameter is mandatory or not.
+// The default value is **false**.
+func (o ProductServicePropertyOutput) Required() pulumi.BoolPtrOutput {
+	return o.ApplyT(func(v ProductServiceProperty) *bool { return v.Required }).(pulumi.BoolPtrOutput)
+}
+
 // Specifies the step of the parameter when the `type` is **int** or **decimal**.
-// Value range: 0 ~ 2147483647. Defaults to **0**.
+// Value range: `0` ~ `2,147,483,647`. Defaults to `0`.
 func (o ProductServicePropertyOutput) Step() pulumi.Float64PtrOutput {
 	return o.ApplyT(func(v ProductServiceProperty) *float64 { return v.Step }).(pulumi.Float64PtrOutput)
 }
@@ -3947,6 +4779,8 @@ func init() {
 	pulumi.RegisterInputType(reflect.TypeOf((*DataforwardingRuleTargetAmqpForwardingPtrInput)(nil)).Elem(), DataforwardingRuleTargetAmqpForwardingArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*DataforwardingRuleTargetDisForwardingInput)(nil)).Elem(), DataforwardingRuleTargetDisForwardingArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*DataforwardingRuleTargetDisForwardingPtrInput)(nil)).Elem(), DataforwardingRuleTargetDisForwardingArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*DataforwardingRuleTargetFgsForwardingInput)(nil)).Elem(), DataforwardingRuleTargetFgsForwardingArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*DataforwardingRuleTargetFgsForwardingPtrInput)(nil)).Elem(), DataforwardingRuleTargetFgsForwardingArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*DataforwardingRuleTargetHttpForwardingInput)(nil)).Elem(), DataforwardingRuleTargetHttpForwardingArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*DataforwardingRuleTargetHttpForwardingPtrInput)(nil)).Elem(), DataforwardingRuleTargetHttpForwardingArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*DataforwardingRuleTargetKafkaForwardingInput)(nil)).Elem(), DataforwardingRuleTargetKafkaForwardingArgs{})
@@ -3971,8 +4805,12 @@ func init() {
 	pulumi.RegisterInputType(reflect.TypeOf((*DeviceLinkageRuleTriggerDailyTimerConditionPtrInput)(nil)).Elem(), DeviceLinkageRuleTriggerDailyTimerConditionArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*DeviceLinkageRuleTriggerDeviceDataConditionInput)(nil)).Elem(), DeviceLinkageRuleTriggerDeviceDataConditionArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*DeviceLinkageRuleTriggerDeviceDataConditionPtrInput)(nil)).Elem(), DeviceLinkageRuleTriggerDeviceDataConditionArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*DeviceLinkageRuleTriggerDeviceLinkageStatusConditionInput)(nil)).Elem(), DeviceLinkageRuleTriggerDeviceLinkageStatusConditionArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*DeviceLinkageRuleTriggerDeviceLinkageStatusConditionPtrInput)(nil)).Elem(), DeviceLinkageRuleTriggerDeviceLinkageStatusConditionArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*DeviceLinkageRuleTriggerSimpleTimerConditionInput)(nil)).Elem(), DeviceLinkageRuleTriggerSimpleTimerConditionArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*DeviceLinkageRuleTriggerSimpleTimerConditionPtrInput)(nil)).Elem(), DeviceLinkageRuleTriggerSimpleTimerConditionArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*DeviceShadowInput)(nil)).Elem(), DeviceShadowArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*DeviceShadowArrayInput)(nil)).Elem(), DeviceShadowArray{})
 	pulumi.RegisterInputType(reflect.TypeOf((*ProductServiceInput)(nil)).Elem(), ProductServiceArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*ProductServiceArrayInput)(nil)).Elem(), ProductServiceArray{})
 	pulumi.RegisterInputType(reflect.TypeOf((*ProductServiceCommandInput)(nil)).Elem(), ProductServiceCommandArgs{})
@@ -3989,6 +4827,8 @@ func init() {
 	pulumi.RegisterOutputType(DataforwardingRuleTargetAmqpForwardingPtrOutput{})
 	pulumi.RegisterOutputType(DataforwardingRuleTargetDisForwardingOutput{})
 	pulumi.RegisterOutputType(DataforwardingRuleTargetDisForwardingPtrOutput{})
+	pulumi.RegisterOutputType(DataforwardingRuleTargetFgsForwardingOutput{})
+	pulumi.RegisterOutputType(DataforwardingRuleTargetFgsForwardingPtrOutput{})
 	pulumi.RegisterOutputType(DataforwardingRuleTargetHttpForwardingOutput{})
 	pulumi.RegisterOutputType(DataforwardingRuleTargetHttpForwardingPtrOutput{})
 	pulumi.RegisterOutputType(DataforwardingRuleTargetKafkaForwardingOutput{})
@@ -4013,8 +4853,12 @@ func init() {
 	pulumi.RegisterOutputType(DeviceLinkageRuleTriggerDailyTimerConditionPtrOutput{})
 	pulumi.RegisterOutputType(DeviceLinkageRuleTriggerDeviceDataConditionOutput{})
 	pulumi.RegisterOutputType(DeviceLinkageRuleTriggerDeviceDataConditionPtrOutput{})
+	pulumi.RegisterOutputType(DeviceLinkageRuleTriggerDeviceLinkageStatusConditionOutput{})
+	pulumi.RegisterOutputType(DeviceLinkageRuleTriggerDeviceLinkageStatusConditionPtrOutput{})
 	pulumi.RegisterOutputType(DeviceLinkageRuleTriggerSimpleTimerConditionOutput{})
 	pulumi.RegisterOutputType(DeviceLinkageRuleTriggerSimpleTimerConditionPtrOutput{})
+	pulumi.RegisterOutputType(DeviceShadowOutput{})
+	pulumi.RegisterOutputType(DeviceShadowArrayOutput{})
 	pulumi.RegisterOutputType(ProductServiceOutput{})
 	pulumi.RegisterOutputType(ProductServiceArrayOutput{})
 	pulumi.RegisterOutputType(ProductServiceCommandOutput{})

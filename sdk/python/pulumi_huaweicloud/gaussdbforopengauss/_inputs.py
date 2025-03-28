@@ -10,12 +10,51 @@ from typing import Any, Mapping, Optional, Sequence, Union, overload
 from .. import _utilities
 
 __all__ = [
+    'OpengaussInstanceAdvanceFeatureArgs',
     'OpengaussInstanceBackupStrategyArgs',
     'OpengaussInstanceDatastoreArgs',
     'OpengaussInstanceHaArgs',
     'OpengaussInstanceNodeArgs',
+    'OpengaussInstanceParameterArgs',
     'OpengaussInstanceVolumeArgs',
 ]
+
+@pulumi.input_type
+class OpengaussInstanceAdvanceFeatureArgs:
+    def __init__(__self__, *,
+                 name: pulumi.Input[str],
+                 value: pulumi.Input[str]):
+        """
+        :param pulumi.Input[str] name: Specifies the name of the advance feature.
+        :param pulumi.Input[str] value: Specifies the value of the advance feature.
+        """
+        pulumi.set(__self__, "name", name)
+        pulumi.set(__self__, "value", value)
+
+    @property
+    @pulumi.getter
+    def name(self) -> pulumi.Input[str]:
+        """
+        Specifies the name of the advance feature.
+        """
+        return pulumi.get(self, "name")
+
+    @name.setter
+    def name(self, value: pulumi.Input[str]):
+        pulumi.set(self, "name", value)
+
+    @property
+    @pulumi.getter
+    def value(self) -> pulumi.Input[str]:
+        """
+        Specifies the value of the advance feature.
+        """
+        return pulumi.get(self, "value")
+
+    @value.setter
+    def value(self, value: pulumi.Input[str]):
+        pulumi.set(self, "value", value)
+
 
 @pulumi.input_type
 class OpengaussInstanceBackupStrategyArgs:
@@ -112,27 +151,34 @@ class OpengaussInstanceHaArgs:
     def __init__(__self__, *,
                  mode: pulumi.Input[str],
                  replication_mode: pulumi.Input[str],
-                 consistency: Optional[pulumi.Input[str]] = None):
+                 consistency: Optional[pulumi.Input[str]] = None,
+                 instance_mode: Optional[pulumi.Input[str]] = None):
         """
-        :param pulumi.Input[str] mode: Specifies the database mode.
+        :param pulumi.Input[str] mode: Specifies the deployment model.
                The valid values are **enterprise** and **centralization_standard**.
                Changing this parameter will create a new resource.
         :param pulumi.Input[str] replication_mode: Specifies the database replication mode.
                Only **sync** is supported now. Changing this parameter will create a new resource.
         :param pulumi.Input[str] consistency: Specifies the database consistency mode.
-               The valid values are **strong** and **eventual**, not case sensitive.
+               The valid values are **strong** and **eventual**, not case-sensitive.
                Changing this parameter will create a new resource.
+        :param pulumi.Input[str] instance_mode: Specifies the product type of the instance. Value options:
+               + **enterprise**: The instance of the enterprise edition will be created.
+               + **basic**: The instance of the basic edition will be created.
+               + **ecology**: The instance of the ecosystem edition will be created.
         """
         pulumi.set(__self__, "mode", mode)
         pulumi.set(__self__, "replication_mode", replication_mode)
         if consistency is not None:
             pulumi.set(__self__, "consistency", consistency)
+        if instance_mode is not None:
+            pulumi.set(__self__, "instance_mode", instance_mode)
 
     @property
     @pulumi.getter
     def mode(self) -> pulumi.Input[str]:
         """
-        Specifies the database mode.
+        Specifies the deployment model.
         The valid values are **enterprise** and **centralization_standard**.
         Changing this parameter will create a new resource.
         """
@@ -160,7 +206,7 @@ class OpengaussInstanceHaArgs:
     def consistency(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the database consistency mode.
-        The valid values are **strong** and **eventual**, not case sensitive.
+        The valid values are **strong** and **eventual**, not case-sensitive.
         Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "consistency")
@@ -169,6 +215,21 @@ class OpengaussInstanceHaArgs:
     def consistency(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "consistency", value)
 
+    @property
+    @pulumi.getter(name="instanceMode")
+    def instance_mode(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the product type of the instance. Value options:
+        + **enterprise**: The instance of the enterprise edition will be created.
+        + **basic**: The instance of the basic edition will be created.
+        + **ecology**: The instance of the ecosystem edition will be created.
+        """
+        return pulumi.get(self, "instance_mode")
+
+    @instance_mode.setter
+    def instance_mode(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "instance_mode", value)
+
 
 @pulumi.input_type
 class OpengaussInstanceNodeArgs:
@@ -176,15 +237,17 @@ class OpengaussInstanceNodeArgs:
                  availability_zone: Optional[pulumi.Input[str]] = None,
                  id: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
+                 private_ip: Optional[pulumi.Input[str]] = None,
+                 public_ip: Optional[pulumi.Input[str]] = None,
                  role: Optional[pulumi.Input[str]] = None,
                  status: Optional[pulumi.Input[str]] = None):
         """
         :param pulumi.Input[str] availability_zone: Specifies the availability zone information, can be three same or
                different az like **cn-north-4a,cn-north-4a,cn-north-4a**. Changing this parameter will create a new resource.
         :param pulumi.Input[str] id: Indicates the node ID.
-        :param pulumi.Input[str] name: Specifies the instance name, which can be the same as an existing instance name.
-               The value must be `4` to `64` characters in length and start with a letter. It is case-sensitive and can contain only
-               letters, digits, hyphens (-), and underscores (_).
+        :param pulumi.Input[str] name: Specifies the name of the advance feature.
+        :param pulumi.Input[str] private_ip: Indicates the private IP address of the node.
+        :param pulumi.Input[str] public_ip: Indicates the EIP that has been bound.
         :param pulumi.Input[str] role: Indicates the node role.
                + **master**.
                + **slave**.
@@ -196,6 +259,10 @@ class OpengaussInstanceNodeArgs:
             pulumi.set(__self__, "id", id)
         if name is not None:
             pulumi.set(__self__, "name", name)
+        if private_ip is not None:
+            pulumi.set(__self__, "private_ip", private_ip)
+        if public_ip is not None:
+            pulumi.set(__self__, "public_ip", public_ip)
         if role is not None:
             pulumi.set(__self__, "role", role)
         if status is not None:
@@ -230,15 +297,37 @@ class OpengaussInstanceNodeArgs:
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the instance name, which can be the same as an existing instance name.
-        The value must be `4` to `64` characters in length and start with a letter. It is case-sensitive and can contain only
-        letters, digits, hyphens (-), and underscores (_).
+        Specifies the name of the advance feature.
         """
         return pulumi.get(self, "name")
 
     @name.setter
     def name(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "name", value)
+
+    @property
+    @pulumi.getter(name="privateIp")
+    def private_ip(self) -> Optional[pulumi.Input[str]]:
+        """
+        Indicates the private IP address of the node.
+        """
+        return pulumi.get(self, "private_ip")
+
+    @private_ip.setter
+    def private_ip(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "private_ip", value)
+
+    @property
+    @pulumi.getter(name="publicIp")
+    def public_ip(self) -> Optional[pulumi.Input[str]]:
+        """
+        Indicates the EIP that has been bound.
+        """
+        return pulumi.get(self, "public_ip")
+
+    @public_ip.setter
+    def public_ip(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "public_ip", value)
 
     @property
     @pulumi.getter
@@ -265,6 +354,43 @@ class OpengaussInstanceNodeArgs:
     @status.setter
     def status(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "status", value)
+
+
+@pulumi.input_type
+class OpengaussInstanceParameterArgs:
+    def __init__(__self__, *,
+                 name: pulumi.Input[str],
+                 value: pulumi.Input[str]):
+        """
+        :param pulumi.Input[str] name: Specifies the name of the advance feature.
+        :param pulumi.Input[str] value: Specifies the value of the advance feature.
+        """
+        pulumi.set(__self__, "name", name)
+        pulumi.set(__self__, "value", value)
+
+    @property
+    @pulumi.getter
+    def name(self) -> pulumi.Input[str]:
+        """
+        Specifies the name of the advance feature.
+        """
+        return pulumi.get(self, "name")
+
+    @name.setter
+    def name(self, value: pulumi.Input[str]):
+        pulumi.set(self, "name", value)
+
+    @property
+    @pulumi.getter
+    def value(self) -> pulumi.Input[str]:
+        """
+        Specifies the value of the advance feature.
+        """
+        return pulumi.get(self, "value")
+
+    @value.setter
+    def value(self, value: pulumi.Input[str]):
+        pulumi.set(self, "value", value)
 
 
 @pulumi.input_type

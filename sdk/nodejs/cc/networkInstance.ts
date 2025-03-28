@@ -12,9 +12,31 @@ import * as utilities from "../utilities";
  *
  * Each network instance can be loaded onto only one cloud connection.
  *
+ * ## Example Usage
+ *
+ * ```typescript
+ * import * as pulumi from "@pulumi/pulumi";
+ * import * as pulumi from "@huaweicloudos/pulumi";
+ *
+ * const config = new pulumi.Config();
+ * const cloudConnectionId = config.requireObject("cloudConnectionId");
+ * const vpcInstanceId = config.requireObject("vpcInstanceId");
+ * const vpcProjectId = config.requireObject("vpcProjectId");
+ * const vpcRegionId = config.requireObject("vpcRegionId");
+ * const cidr = config.requireObject("cidr");
+ * const test = new huaweicloud.cc.NetworkInstance("test", {
+ *     type: "vpc",
+ *     cloudConnectionId: cloudConnectionId,
+ *     instanceId: vpcInstanceId,
+ *     projectId: vpcProjectId,
+ *     regionId: vpcRegionId,
+ *     cidrs: [cidr],
+ * });
+ * ```
+ *
  * ## Import
  *
- * The network instance can be imported using the `id`, e.g.
+ * The network instance can be imported using the `id`, e.g. bash
  *
  * ```sh
  *  $ pulumi import huaweicloud:Cc/networkInstance:NetworkInstance test 0ce123456a00f2591fabc00385ff1234
@@ -58,7 +80,7 @@ export class NetworkInstance extends pulumi.CustomResource {
     public readonly cloudConnectionId!: pulumi.Output<string>;
     /**
      * The description about the network instance.  
-     * The description can contain a maximum of 255 characters.
+     * The description contain a maximum of `255` characters, and the angle brackets (< and >) are not allowed.
      */
     public readonly description!: pulumi.Output<string | undefined>;
     /**
@@ -75,7 +97,7 @@ export class NetworkInstance extends pulumi.CustomResource {
     public readonly instanceId!: pulumi.Output<string>;
     /**
      * The network instance name.  
-     * The name can contain 1 to 64 characters, only letters, Chinese characters, digits, hyphens (-),
+     * The name can contain `1` to `64` characters, only English letters, Chinese characters, digits, hyphens (-),
      * underscores (_) and dots (.).
      */
     public readonly name!: pulumi.Output<string>;
@@ -183,7 +205,7 @@ export interface NetworkInstanceState {
     cloudConnectionId?: pulumi.Input<string>;
     /**
      * The description about the network instance.  
-     * The description can contain a maximum of 255 characters.
+     * The description contain a maximum of `255` characters, and the angle brackets (< and >) are not allowed.
      */
     description?: pulumi.Input<string>;
     /**
@@ -200,7 +222,7 @@ export interface NetworkInstanceState {
     instanceId?: pulumi.Input<string>;
     /**
      * The network instance name.  
-     * The name can contain 1 to 64 characters, only letters, Chinese characters, digits, hyphens (-),
+     * The name can contain `1` to `64` characters, only English letters, Chinese characters, digits, hyphens (-),
      * underscores (_) and dots (.).
      */
     name?: pulumi.Input<string>;
@@ -246,7 +268,7 @@ export interface NetworkInstanceArgs {
     cloudConnectionId: pulumi.Input<string>;
     /**
      * The description about the network instance.  
-     * The description can contain a maximum of 255 characters.
+     * The description contain a maximum of `255` characters, and the angle brackets (< and >) are not allowed.
      */
     description?: pulumi.Input<string>;
     /**
@@ -259,7 +281,7 @@ export interface NetworkInstanceArgs {
     instanceId: pulumi.Input<string>;
     /**
      * The network instance name.  
-     * The name can contain 1 to 64 characters, only letters, Chinese characters, digits, hyphens (-),
+     * The name can contain `1` to `64` characters, only English letters, Chinese characters, digits, hyphens (-),
      * underscores (_) and dots (.).
      */
     name?: pulumi.Input<string>;

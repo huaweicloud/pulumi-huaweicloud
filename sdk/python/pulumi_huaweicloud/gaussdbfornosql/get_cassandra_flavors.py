@@ -108,7 +108,7 @@ def get_cassandra_flavors(memory: Optional[str] = None,
                           version: Optional[str] = None,
                           opts: Optional[pulumi.InvokeOptions] = None) -> AwaitableGetCassandraFlavorsResult:
     """
-    Use this data source to get available HuaweiCloud gaussdb cassandra flavors.
+    Use this data source to get available HuaweiCloud GeminiDB Cassandra flavors.
 
     ## Example Usage
 
@@ -150,7 +150,7 @@ def get_cassandra_flavors_output(memory: Optional[pulumi.Input[Optional[str]]] =
                                  version: Optional[pulumi.Input[Optional[str]]] = None,
                                  opts: Optional[pulumi.InvokeOptions] = None) -> pulumi.Output[GetCassandraFlavorsResult]:
     """
-    Use this data source to get available HuaweiCloud gaussdb cassandra flavors.
+    Use this data source to get available HuaweiCloud GeminiDB Cassandra flavors.
 
     ## Example Usage
 

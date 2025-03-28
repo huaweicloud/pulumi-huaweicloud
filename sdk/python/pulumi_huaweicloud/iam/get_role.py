@@ -125,9 +125,9 @@ def get_role(display_name: Optional[str] = None,
 
 
     :param str display_name: Specifies the display name of the role displayed on the console.
-           Required if `name` is empty.
+           It is recommended to use this parameter instead of `name` and required if `name` is not specified.
     :param str name: Specifies the name of the role for internal use.
-           Required if `display_name` is empty.
+           It's required if `display_name` is not specified.
     """
     __args__ = dict()
     __args__['displayName'] = display_name
@@ -161,8 +161,8 @@ def get_role_output(display_name: Optional[pulumi.Input[Optional[str]]] = None,
 
 
     :param str display_name: Specifies the display name of the role displayed on the console.
-           Required if `name` is empty.
+           It is recommended to use this parameter instead of `name` and required if `name` is not specified.
     :param str name: Specifies the name of the role for internal use.
-           Required if `display_name` is empty.
+           It's required if `display_name` is not specified.
     """
     ...

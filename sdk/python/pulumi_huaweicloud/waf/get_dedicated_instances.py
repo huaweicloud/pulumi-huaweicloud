@@ -56,7 +56,7 @@ class GetDedicatedInstancesResult:
     @pulumi.getter
     def instances(self) -> Sequence['outputs.GetDedicatedInstancesInstanceResult']:
         """
-        An array of available WAF dedicated instances.
+        The WAF dedicated instances list.
         """
         return pulumi.get(self, "instances")
 
@@ -103,14 +103,15 @@ def get_dedicated_instances(enterprise_project_id: Optional[str] = None,
 
     config = pulumi.Config()
     instance_name = config.require_object("instanceName")
-    instances = huaweicloud.Waf.get_dedicated_instances(name=instance_name)
+    test = huaweicloud.Waf.get_dedicated_instances(name=instance_name)
     ```
 
 
-    :param str enterprise_project_id: The enterprise project ID of WAF dedicated instance.
-    :param str id: The id of WAF dedicated instance.
-    :param str name: The name of WAF dedicated instance.
-    :param str region: The region in which to query the WAF dedicated instance.
+    :param str enterprise_project_id: Specifies the enterprise project ID of WAF dedicated instance.
+           For enterprise users, if omitted, default enterprise project will be used.
+    :param str id: Specifies the ID of WAF dedicated instance.
+    :param str name: Specifies the name of WAF dedicated instance.
+    :param str region: Specifies the region in which to query the WAF dedicated instance.
            If omitted, the provider-level region will be used.
     """
     __args__ = dict()
@@ -146,14 +147,15 @@ def get_dedicated_instances_output(enterprise_project_id: Optional[pulumi.Input[
 
     config = pulumi.Config()
     instance_name = config.require_object("instanceName")
-    instances = huaweicloud.Waf.get_dedicated_instances(name=instance_name)
+    test = huaweicloud.Waf.get_dedicated_instances(name=instance_name)
     ```
 
 
-    :param str enterprise_project_id: The enterprise project ID of WAF dedicated instance.
-    :param str id: The id of WAF dedicated instance.
-    :param str name: The name of WAF dedicated instance.
-    :param str region: The region in which to query the WAF dedicated instance.
+    :param str enterprise_project_id: Specifies the enterprise project ID of WAF dedicated instance.
+           For enterprise users, if omitted, default enterprise project will be used.
+    :param str id: Specifies the ID of WAF dedicated instance.
+    :param str name: Specifies the name of WAF dedicated instance.
+    :param str region: Specifies the region in which to query the WAF dedicated instance.
            If omitted, the provider-level region will be used.
     """
     ...

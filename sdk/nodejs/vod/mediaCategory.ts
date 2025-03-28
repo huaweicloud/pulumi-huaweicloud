@@ -18,13 +18,13 @@ import * as utilities from "../utilities";
  *
  * ## Import
  *
- * The category can be imported using the `id`, e.g.
+ * The category can be imported using the `id`, e.g. bash
  *
  * ```sh
  *  $ pulumi import huaweicloud:Vod/mediaCategory:MediaCategory test 132945
  * ```
  *
- *  Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`parent_id`. It is generally recommended running `terraform plan` after importing a media category. You can then decide if changes should be applied to the media category, or the resource definition should be updated to align with the media category. Also you can ignore changes as below. resource "huaweicloud_vod_media_category" "test" {
+ *  Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`parent_id`. It is generally recommended running `terraform plan` after importing a media category. You can then decide if changes should be applied to the media category, or the resource definition should be updated to align with the media category. Also you can ignore changes as below. hcl resource "huaweicloud_vod_media_category" "test" {
  *
  *  ...
  *
@@ -67,12 +67,12 @@ export class MediaCategory extends pulumi.CustomResource {
     }
 
     /**
-     * The json string of subcategory information. It supports up to 3 levels of categories,
+     * The json string of subcategory information. It supports up to `3` levels of categories,
      * and each category supports up to 128 subcategories.
      */
     public /*out*/ readonly children!: pulumi.Output<string>;
     /**
-     * Specifies the category name, which contains a maximum of 64 characters.
+     * Specifies the category name, which contains a maximum of `64` characters.
      */
     public readonly name!: pulumi.Output<string>;
     /**
@@ -120,12 +120,12 @@ export class MediaCategory extends pulumi.CustomResource {
  */
 export interface MediaCategoryState {
     /**
-     * The json string of subcategory information. It supports up to 3 levels of categories,
+     * The json string of subcategory information. It supports up to `3` levels of categories,
      * and each category supports up to 128 subcategories.
      */
     children?: pulumi.Input<string>;
     /**
-     * Specifies the category name, which contains a maximum of 64 characters.
+     * Specifies the category name, which contains a maximum of `64` characters.
      */
     name?: pulumi.Input<string>;
     /**
@@ -145,7 +145,7 @@ export interface MediaCategoryState {
  */
 export interface MediaCategoryArgs {
     /**
-     * Specifies the category name, which contains a maximum of 64 characters.
+     * Specifies the category name, which contains a maximum of `64` characters.
      */
     name?: pulumi.Input<string>;
     /**

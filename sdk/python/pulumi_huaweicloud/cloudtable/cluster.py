@@ -41,14 +41,16 @@ class ClusterArgs:
                Changing this parameter will create a new resource.
         :param pulumi.Input[bool] iam_auth_enabled: Specifies whether IAM authorization is enabled.
                Changing this parameter will create a new resource.
-        :param pulumi.Input[str] name: Specifies the cluster name. The name consists of 4 to 64 characters, including
-               lowercase letters, numbers and hyphens (-). Changing this parameter will create a new resource.
+        :param pulumi.Input[str] name: Specifies the cluster name.  
+               The name consists of `4` to `64` characters, including lowercase letters, numbers and hyphens (-).
+               Changing this parameter will create a new resource.
         :param pulumi.Input[int] opentsdb_num: Specifies the TSD nodes number of the cluster.
                Changing this parameter will create a new resource.
         :param pulumi.Input[str] region: Specifies the region in which to create the cluster.
                If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
         :param pulumi.Input[int] rs_num: Specifies the compute nodes number of the cluster.
-               The valid values must be greater than `2`. Defaults to `2`. Changing this parameter will create a new resource.
+               The valid values must be at least `2`. Defaults to `2`.
+               Changing this parameter will create a new resource.
         """
         pulumi.set(__self__, "availability_zone", availability_zone)
         pulumi.set(__self__, "hbase_version", hbase_version)
@@ -162,8 +164,9 @@ class ClusterArgs:
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the cluster name. The name consists of 4 to 64 characters, including
-        lowercase letters, numbers and hyphens (-). Changing this parameter will create a new resource.
+        Specifies the cluster name.  
+        The name consists of `4` to `64` characters, including lowercase letters, numbers and hyphens (-).
+        Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "name")
 
@@ -202,7 +205,8 @@ class ClusterArgs:
     def rs_num(self) -> Optional[pulumi.Input[int]]:
         """
         Specifies the compute nodes number of the cluster.
-        The valid values must be greater than `2`. Defaults to `2`. Changing this parameter will create a new resource.
+        The valid values must be at least `2`. Defaults to `2`.
+        Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "rs_num")
 
@@ -243,8 +247,9 @@ class _ClusterState:
         :param pulumi.Input[str] hbase_version: Specifies the version of HBase datastore.
         :param pulumi.Input[bool] iam_auth_enabled: Specifies whether IAM authorization is enabled.
                Changing this parameter will create a new resource.
-        :param pulumi.Input[str] name: Specifies the cluster name. The name consists of 4 to 64 characters, including
-               lowercase letters, numbers and hyphens (-). Changing this parameter will create a new resource.
+        :param pulumi.Input[str] name: Specifies the cluster name.  
+               The name consists of `4` to `64` characters, including lowercase letters, numbers and hyphens (-).
+               Changing this parameter will create a new resource.
         :param pulumi.Input[str] network_id: Specifies the ID of the network to which the cluster belongs.
                Changing this parameter will create a new resource.
         :param pulumi.Input[str] open_tsdb_link: The intranet OpenTSDB connection access address.
@@ -254,7 +259,8 @@ class _ClusterState:
         :param pulumi.Input[str] region: Specifies the region in which to create the cluster.
                If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
         :param pulumi.Input[int] rs_num: Specifies the compute nodes number of the cluster.
-               The valid values must be greater than `2`. Defaults to `2`. Changing this parameter will create a new resource.
+               The valid values must be at least `2`. Defaults to `2`.
+               Changing this parameter will create a new resource.
         :param pulumi.Input[str] security_group_id: Specifies the security group ID of the cluster.
                Changing this parameter will create a new resource.
         :param pulumi.Input[str] status: The cluster status.
@@ -372,8 +378,9 @@ class _ClusterState:
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the cluster name. The name consists of 4 to 64 characters, including
-        lowercase letters, numbers and hyphens (-). Changing this parameter will create a new resource.
+        Specifies the cluster name.  
+        The name consists of `4` to `64` characters, including lowercase letters, numbers and hyphens (-).
+        Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "name")
 
@@ -449,7 +456,8 @@ class _ClusterState:
     def rs_num(self) -> Optional[pulumi.Input[int]]:
         """
         Specifies the compute nodes number of the cluster.
-        The valid values must be greater than `2`. Defaults to `2`. Changing this parameter will create a new resource.
+        The valid values must be at least `2`. Defaults to `2`.
+        Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "rs_num")
 
@@ -567,13 +575,13 @@ class Cluster(pulumi.CustomResource):
 
         ## Import
 
-        Clusters can be imported by their `id`. e.g.
+        Clusters can be imported by their `id`. e.g.bash
 
         ```sh
          $ pulumi import huaweicloud:CloudTable/cluster:Cluster test 4c2d38b6-6fb0-480c-8813-5f536b5ba6a4
         ```
 
-         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`availability_zone`, `network_id`. It is generally recommended running `terraform plan` after importing a cluster. You can then decide if changes should be applied to the cluster, or the resource definition should be updated to align with the cluster. Also you can ignore changes as below. resource "huaweicloud_cloudtable_cluster" "test" {
+         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`availability_zone`, `network_id`. It is generally recommended running `terraform plan` after importing a cluster. You can then decide if changes should be applied to the cluster, or the resource definition should be updated to align with the cluster. Also you can ignore changes as below. hcl resource "huaweicloud_cloudtable_cluster" "test" {
 
          ...
 
@@ -595,8 +603,9 @@ class Cluster(pulumi.CustomResource):
         :param pulumi.Input[str] hbase_version: Specifies the version of HBase datastore.
         :param pulumi.Input[bool] iam_auth_enabled: Specifies whether IAM authorization is enabled.
                Changing this parameter will create a new resource.
-        :param pulumi.Input[str] name: Specifies the cluster name. The name consists of 4 to 64 characters, including
-               lowercase letters, numbers and hyphens (-). Changing this parameter will create a new resource.
+        :param pulumi.Input[str] name: Specifies the cluster name.  
+               The name consists of `4` to `64` characters, including lowercase letters, numbers and hyphens (-).
+               Changing this parameter will create a new resource.
         :param pulumi.Input[str] network_id: Specifies the ID of the network to which the cluster belongs.
                Changing this parameter will create a new resource.
         :param pulumi.Input[int] opentsdb_num: Specifies the TSD nodes number of the cluster.
@@ -604,7 +613,8 @@ class Cluster(pulumi.CustomResource):
         :param pulumi.Input[str] region: Specifies the region in which to create the cluster.
                If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
         :param pulumi.Input[int] rs_num: Specifies the compute nodes number of the cluster.
-               The valid values must be greater than `2`. Defaults to `2`. Changing this parameter will create a new resource.
+               The valid values must be at least `2`. Defaults to `2`.
+               Changing this parameter will create a new resource.
         :param pulumi.Input[str] security_group_id: Specifies the security group ID of the cluster.
                Changing this parameter will create a new resource.
         :param pulumi.Input[str] storage_type: Specifies the storage type.
@@ -623,13 +633,13 @@ class Cluster(pulumi.CustomResource):
 
         ## Import
 
-        Clusters can be imported by their `id`. e.g.
+        Clusters can be imported by their `id`. e.g.bash
 
         ```sh
          $ pulumi import huaweicloud:CloudTable/cluster:Cluster test 4c2d38b6-6fb0-480c-8813-5f536b5ba6a4
         ```
 
-         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`availability_zone`, `network_id`. It is generally recommended running `terraform plan` after importing a cluster. You can then decide if changes should be applied to the cluster, or the resource definition should be updated to align with the cluster. Also you can ignore changes as below. resource "huaweicloud_cloudtable_cluster" "test" {
+         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`availability_zone`, `network_id`. It is generally recommended running `terraform plan` after importing a cluster. You can then decide if changes should be applied to the cluster, or the resource definition should be updated to align with the cluster. Also you can ignore changes as below. hcl resource "huaweicloud_cloudtable_cluster" "test" {
 
          ...
 
@@ -753,8 +763,9 @@ class Cluster(pulumi.CustomResource):
         :param pulumi.Input[str] hbase_version: Specifies the version of HBase datastore.
         :param pulumi.Input[bool] iam_auth_enabled: Specifies whether IAM authorization is enabled.
                Changing this parameter will create a new resource.
-        :param pulumi.Input[str] name: Specifies the cluster name. The name consists of 4 to 64 characters, including
-               lowercase letters, numbers and hyphens (-). Changing this parameter will create a new resource.
+        :param pulumi.Input[str] name: Specifies the cluster name.  
+               The name consists of `4` to `64` characters, including lowercase letters, numbers and hyphens (-).
+               Changing this parameter will create a new resource.
         :param pulumi.Input[str] network_id: Specifies the ID of the network to which the cluster belongs.
                Changing this parameter will create a new resource.
         :param pulumi.Input[str] open_tsdb_link: The intranet OpenTSDB connection access address.
@@ -764,7 +775,8 @@ class Cluster(pulumi.CustomResource):
         :param pulumi.Input[str] region: Specifies the region in which to create the cluster.
                If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
         :param pulumi.Input[int] rs_num: Specifies the compute nodes number of the cluster.
-               The valid values must be greater than `2`. Defaults to `2`. Changing this parameter will create a new resource.
+               The valid values must be at least `2`. Defaults to `2`.
+               Changing this parameter will create a new resource.
         :param pulumi.Input[str] security_group_id: Specifies the security group ID of the cluster.
                Changing this parameter will create a new resource.
         :param pulumi.Input[str] status: The cluster status.
@@ -848,8 +860,9 @@ class Cluster(pulumi.CustomResource):
     @pulumi.getter
     def name(self) -> pulumi.Output[str]:
         """
-        Specifies the cluster name. The name consists of 4 to 64 characters, including
-        lowercase letters, numbers and hyphens (-). Changing this parameter will create a new resource.
+        Specifies the cluster name.  
+        The name consists of `4` to `64` characters, including lowercase letters, numbers and hyphens (-).
+        Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "name")
 
@@ -901,7 +914,8 @@ class Cluster(pulumi.CustomResource):
     def rs_num(self) -> pulumi.Output[Optional[int]]:
         """
         Specifies the compute nodes number of the cluster.
-        The valid values must be greater than `2`. Defaults to `2`. Changing this parameter will create a new resource.
+        The valid values must be at least `2`. Defaults to `2`.
+        Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "rs_num")
 

@@ -98,18 +98,21 @@ export class Cluster extends pulumi.CustomResource {
     public /*out*/ readonly created!: pulumi.Output<string>;
     /**
      * Specifies email address for receiving notifications when a table/file migration
-     * job fails or an EIP exception occurs. The max number is 5. Changing this parameter will create a new resource.
+     * job fails or an EIP exception occurs. The max number is 20.
      */
     public readonly emails!: pulumi.Output<string[] | undefined>;
     /**
      * Specifies the enterprise project id.
-     * Changing this parameter will create a new resource.
      */
-    public readonly enterpriseProjectId!: pulumi.Output<string | undefined>;
+    public readonly enterpriseProjectId!: pulumi.Output<string>;
     /**
      * Specifies flavor id. Changing this parameter will create a new resource.
      */
     public readonly flavorId!: pulumi.Output<string>;
+    /**
+     * The flavor name. Format is `cdm.<flavor_type>`
+     */
+    public /*out*/ readonly flavorName!: pulumi.Output<string>;
     /**
      * Instance list. Structure is documented below.
      */
@@ -127,7 +130,7 @@ export class Cluster extends pulumi.CustomResource {
     public readonly name!: pulumi.Output<string>;
     /**
      * Specifies phone number for receiving notifications when a table/file
-     * migration job fails or an EIP exception occurs. The max number is 5. Changing this parameter will create a new resource.
+     * migration job fails or an EIP exception occurs. The max number is 20.
      */
     public readonly phoneNums!: pulumi.Output<string[] | undefined>;
     /**
@@ -196,6 +199,7 @@ export class Cluster extends pulumi.CustomResource {
             resourceInputs["emails"] = state ? state.emails : undefined;
             resourceInputs["enterpriseProjectId"] = state ? state.enterpriseProjectId : undefined;
             resourceInputs["flavorId"] = state ? state.flavorId : undefined;
+            resourceInputs["flavorName"] = state ? state.flavorName : undefined;
             resourceInputs["instances"] = state ? state.instances : undefined;
             resourceInputs["isAutoOff"] = state ? state.isAutoOff : undefined;
             resourceInputs["name"] = state ? state.name : undefined;
@@ -242,6 +246,7 @@ export class Cluster extends pulumi.CustomResource {
             resourceInputs["version"] = args ? args.version : undefined;
             resourceInputs["vpcId"] = args ? args.vpcId : undefined;
             resourceInputs["created"] = undefined /*out*/;
+            resourceInputs["flavorName"] = undefined /*out*/;
             resourceInputs["instances"] = undefined /*out*/;
             resourceInputs["publicEndpoint"] = undefined /*out*/;
             resourceInputs["publicIp"] = undefined /*out*/;
@@ -267,18 +272,21 @@ export interface ClusterState {
     created?: pulumi.Input<string>;
     /**
      * Specifies email address for receiving notifications when a table/file migration
-     * job fails or an EIP exception occurs. The max number is 5. Changing this parameter will create a new resource.
+     * job fails or an EIP exception occurs. The max number is 20.
      */
     emails?: pulumi.Input<pulumi.Input<string>[]>;
     /**
      * Specifies the enterprise project id.
-     * Changing this parameter will create a new resource.
      */
     enterpriseProjectId?: pulumi.Input<string>;
     /**
      * Specifies flavor id. Changing this parameter will create a new resource.
      */
     flavorId?: pulumi.Input<string>;
+    /**
+     * The flavor name. Format is `cdm.<flavor_type>`
+     */
+    flavorName?: pulumi.Input<string>;
     /**
      * Instance list. Structure is documented below.
      */
@@ -296,7 +304,7 @@ export interface ClusterState {
     name?: pulumi.Input<string>;
     /**
      * Specifies phone number for receiving notifications when a table/file
-     * migration job fails or an EIP exception occurs. The max number is 5. Changing this parameter will create a new resource.
+     * migration job fails or an EIP exception occurs. The max number is 20.
      */
     phoneNums?: pulumi.Input<pulumi.Input<string>[]>;
     /**
@@ -359,12 +367,11 @@ export interface ClusterArgs {
     availabilityZone: pulumi.Input<string>;
     /**
      * Specifies email address for receiving notifications when a table/file migration
-     * job fails or an EIP exception occurs. The max number is 5. Changing this parameter will create a new resource.
+     * job fails or an EIP exception occurs. The max number is 20.
      */
     emails?: pulumi.Input<pulumi.Input<string>[]>;
     /**
      * Specifies the enterprise project id.
-     * Changing this parameter will create a new resource.
      */
     enterpriseProjectId?: pulumi.Input<string>;
     /**
@@ -384,7 +391,7 @@ export interface ClusterArgs {
     name?: pulumi.Input<string>;
     /**
      * Specifies phone number for receiving notifications when a table/file
-     * migration job fails or an EIP exception occurs. The max number is 5. Changing this parameter will create a new resource.
+     * migration job fails or an EIP exception occurs. The max number is 20.
      */
     phoneNums?: pulumi.Input<pulumi.Input<string>[]>;
     /**

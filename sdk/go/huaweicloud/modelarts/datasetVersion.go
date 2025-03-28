@@ -45,7 +45,7 @@ import (
 //
 // ## Import
 //
-// The dataset versions can be imported by dataset ID and version ID, separated by a slash, e.g.
+// The dataset versions can be imported by dataset ID and version ID, separated by a slash, e.g. bash
 //
 // ```sh
 //
@@ -53,7 +53,7 @@ import (
 //
 // ```
 //
-//	Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`hard_example`. It is generally recommended running `terraform plan` after importing a dataset. You can then decide if changes should be applied to the dataset, or the resource definition should be updated to align with the dataset. Also you can ignore changes as below. resource "huaweicloud_modelarts_dataset_version" "test" {
+//	Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`hard_example`. It is generally recommended running `terraform plan` after importing a dataset. You can then decide if changes should be applied to the dataset, or the resource definition should be updated to align with the dataset. Also you can ignore changes as below. hcl resource "huaweicloud_modelarts_dataset_version" "test" {
 //
 //	...
 //
@@ -75,7 +75,7 @@ type DatasetVersion struct {
 	// Changing this parameter will create a new resource.
 	DatasetId pulumi.StringOutput `pulumi:"datasetId"`
 	// Specifies the description of dataset version. It contains a maximum of
-	// 256 characters and cannot contain special characters `!<>=&"'`. Changing this parameter will create a new resource.
+	// `256` characters and cannot contain special characters `!<>=&"'`. Changing this parameter will create a new resource.
 	Description pulumi.StringPtrOutput `pulumi:"description"`
 	// The total number of samples.
 	Files pulumi.IntOutput `pulumi:"files"`
@@ -91,7 +91,7 @@ type DatasetVersion struct {
 	// + **single**: Indicates that all samples are single-label.
 	// + **unlabeled**: Indicates that all samples are unlabeled.
 	LabelingType pulumi.StringOutput `pulumi:"labelingType"`
-	// Specifies the name of the dataset version. The name consists of 1 to 32
+	// Specifies the name of the dataset version. The name consists of `1` to `32`
 	// characters. Only letters, Chinese characters, digits underscores (_) and hyphens (-) are allowed.
 	// Changing this parameter will create a new resource.
 	Name pulumi.StringOutput `pulumi:"name"`
@@ -157,7 +157,7 @@ type datasetVersionState struct {
 	// Changing this parameter will create a new resource.
 	DatasetId *string `pulumi:"datasetId"`
 	// Specifies the description of dataset version. It contains a maximum of
-	// 256 characters and cannot contain special characters `!<>=&"'`. Changing this parameter will create a new resource.
+	// `256` characters and cannot contain special characters `!<>=&"'`. Changing this parameter will create a new resource.
 	Description *string `pulumi:"description"`
 	// The total number of samples.
 	Files *int `pulumi:"files"`
@@ -173,7 +173,7 @@ type datasetVersionState struct {
 	// + **single**: Indicates that all samples are single-label.
 	// + **unlabeled**: Indicates that all samples are unlabeled.
 	LabelingType *string `pulumi:"labelingType"`
-	// Specifies the name of the dataset version. The name consists of 1 to 32
+	// Specifies the name of the dataset version. The name consists of `1` to `32`
 	// characters. Only letters, Chinese characters, digits underscores (_) and hyphens (-) are allowed.
 	// Changing this parameter will create a new resource.
 	Name *string `pulumi:"name"`
@@ -207,7 +207,7 @@ type DatasetVersionState struct {
 	// Changing this parameter will create a new resource.
 	DatasetId pulumi.StringPtrInput
 	// Specifies the description of dataset version. It contains a maximum of
-	// 256 characters and cannot contain special characters `!<>=&"'`. Changing this parameter will create a new resource.
+	// `256` characters and cannot contain special characters `!<>=&"'`. Changing this parameter will create a new resource.
 	Description pulumi.StringPtrInput
 	// The total number of samples.
 	Files pulumi.IntPtrInput
@@ -223,7 +223,7 @@ type DatasetVersionState struct {
 	// + **single**: Indicates that all samples are single-label.
 	// + **unlabeled**: Indicates that all samples are unlabeled.
 	LabelingType pulumi.StringPtrInput
-	// Specifies the name of the dataset version. The name consists of 1 to 32
+	// Specifies the name of the dataset version. The name consists of `1` to `32`
 	// characters. Only letters, Chinese characters, digits underscores (_) and hyphens (-) are allowed.
 	// Changing this parameter will create a new resource.
 	Name pulumi.StringPtrInput
@@ -259,14 +259,14 @@ type datasetVersionArgs struct {
 	// Changing this parameter will create a new resource.
 	DatasetId string `pulumi:"datasetId"`
 	// Specifies the description of dataset version. It contains a maximum of
-	// 256 characters and cannot contain special characters `!<>=&"'`. Changing this parameter will create a new resource.
+	// `256` characters and cannot contain special characters `!<>=&"'`. Changing this parameter will create a new resource.
 	Description *string `pulumi:"description"`
 	// Specifies whether to enable ModelArts to write the hard example
 	// attributes (difficult, hard-coefficient, and hard-reasons) into the XML and manifest labeling files. ModelArts will
 	// use these attributes to optimize hard example filtering. Default value is `false`.
 	// Changing this parameter will create a new resource.
 	HardExample *bool `pulumi:"hardExample"`
-	// Specifies the name of the dataset version. The name consists of 1 to 32
+	// Specifies the name of the dataset version. The name consists of `1` to `32`
 	// characters. Only letters, Chinese characters, digits underscores (_) and hyphens (-) are allowed.
 	// Changing this parameter will create a new resource.
 	Name *string `pulumi:"name"`
@@ -284,14 +284,14 @@ type DatasetVersionArgs struct {
 	// Changing this parameter will create a new resource.
 	DatasetId pulumi.StringInput
 	// Specifies the description of dataset version. It contains a maximum of
-	// 256 characters and cannot contain special characters `!<>=&"'`. Changing this parameter will create a new resource.
+	// `256` characters and cannot contain special characters `!<>=&"'`. Changing this parameter will create a new resource.
 	Description pulumi.StringPtrInput
 	// Specifies whether to enable ModelArts to write the hard example
 	// attributes (difficult, hard-coefficient, and hard-reasons) into the XML and manifest labeling files. ModelArts will
 	// use these attributes to optimize hard example filtering. Default value is `false`.
 	// Changing this parameter will create a new resource.
 	HardExample pulumi.BoolPtrInput
-	// Specifies the name of the dataset version. The name consists of 1 to 32
+	// Specifies the name of the dataset version. The name consists of `1` to `32`
 	// characters. Only letters, Chinese characters, digits underscores (_) and hyphens (-) are allowed.
 	// Changing this parameter will create a new resource.
 	Name pulumi.StringPtrInput
@@ -402,7 +402,7 @@ func (o DatasetVersionOutput) DatasetId() pulumi.StringOutput {
 }
 
 // Specifies the description of dataset version. It contains a maximum of
-// 256 characters and cannot contain special characters `!<>=&"'`. Changing this parameter will create a new resource.
+// `256` characters and cannot contain special characters `!<>=&"'`. Changing this parameter will create a new resource.
 func (o DatasetVersionOutput) Description() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *DatasetVersion) pulumi.StringPtrOutput { return v.Description }).(pulumi.StringPtrOutput)
 }
@@ -433,7 +433,7 @@ func (o DatasetVersionOutput) LabelingType() pulumi.StringOutput {
 	return o.ApplyT(func(v *DatasetVersion) pulumi.StringOutput { return v.LabelingType }).(pulumi.StringOutput)
 }
 
-// Specifies the name of the dataset version. The name consists of 1 to 32
+// Specifies the name of the dataset version. The name consists of `1` to `32`
 // characters. Only letters, Chinese characters, digits underscores (_) and hyphens (-) are allowed.
 // Changing this parameter will create a new resource.
 func (o DatasetVersionOutput) Name() pulumi.StringOutput {

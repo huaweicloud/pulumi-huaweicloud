@@ -11,71 +11,19 @@ import (
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
-// Manages WAF instance groups within HuaweiCloud. The groups are used to bind the ELB instance to the ELB mode WAF.
-//
-// ## Example Usage
-//
-// ```go
-// package main
-//
-// import (
-//
-//	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud/Waf"
-//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
-//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi/config"
-//
-// )
-//
-//	func main() {
-//		pulumi.Run(func(ctx *pulumi.Context) error {
-//			cfg := config.New(ctx, "")
-//			vpcId := cfg.RequireObject("vpcId")
-//			_, err := Waf.NewInstanceGroup(ctx, "group1", &Waf.InstanceGroupArgs{
-//				VpcId: pulumi.Any(vpcId),
-//			})
-//			if err != nil {
-//				return err
-//			}
-//			return nil
-//		})
-//	}
-//
-// ```
-//
-// ## Import
-//
-// The instance group can be imported using the ID, e.g.
-//
-// ```sh
-//
-//	$ pulumi import huaweicloud:Waf/instanceGroup:InstanceGroup group_1 0be1e69d-1987-4d9c-9dc5-fc7eed592398
-//
-// ```
 type InstanceGroup struct {
 	pulumi.CustomResourceState
 
-	// The body limit of the forwarding policy.
-	BodyLimit pulumi.IntOutput `pulumi:"bodyLimit"`
-	// The time for connection timeout in the forwarding policy.
-	ConnectionTimeout pulumi.IntOutput `pulumi:"connectionTimeout"`
-	// Specifies the description of the instance group.
-	Description pulumi.StringPtrOutput `pulumi:"description"`
-	// The header limit of the forwarding policy.
-	HeaderLimit pulumi.IntOutput `pulumi:"headerLimit"`
-	// The IDs of the ELB instances that has been bound to the instance group.
-	LoadBalancers pulumi.StringArrayOutput `pulumi:"loadBalancers"`
-	// Specifies the instance group name.
-	// The maximum length is 64 characters. Only letters, digits and underscores (_) are allowed.
-	Name pulumi.StringOutput `pulumi:"name"`
-	// The time for reading timeout in the forwarding policy.
-	ReadTimeout pulumi.IntOutput `pulumi:"readTimeout"`
-	// The region in which to create the instance group.
-	// If omitted, the provider-level region will be used. Changing this setting will create a new resource.
-	Region pulumi.StringOutput `pulumi:"region"`
-	// Specifies the id of the VPC that the WAF dedicated instances belongs to.
-	VpcId pulumi.StringOutput `pulumi:"vpcId"`
-	// The time for writing timeout in the forwarding policy.
-	WriteTimeout pulumi.IntOutput `pulumi:"writeTimeout"`
+	BodyLimit         pulumi.IntOutput         `pulumi:"bodyLimit"`
+	ConnectionTimeout pulumi.IntOutput         `pulumi:"connectionTimeout"`
+	Description       pulumi.StringPtrOutput   `pulumi:"description"`
+	HeaderLimit       pulumi.IntOutput         `pulumi:"headerLimit"`
+	LoadBalancers     pulumi.StringArrayOutput `pulumi:"loadBalancers"`
+	Name              pulumi.StringOutput      `pulumi:"name"`
+	ReadTimeout       pulumi.IntOutput         `pulumi:"readTimeout"`
+	Region            pulumi.StringOutput      `pulumi:"region"`
+	VpcId             pulumi.StringOutput      `pulumi:"vpcId"`
+	WriteTimeout      pulumi.IntOutput         `pulumi:"writeTimeout"`
 }
 
 // NewInstanceGroup registers a new resource with the given unique name, arguments, and options.
@@ -111,53 +59,29 @@ func GetInstanceGroup(ctx *pulumi.Context,
 
 // Input properties used for looking up and filtering InstanceGroup resources.
 type instanceGroupState struct {
-	// The body limit of the forwarding policy.
-	BodyLimit *int `pulumi:"bodyLimit"`
-	// The time for connection timeout in the forwarding policy.
-	ConnectionTimeout *int `pulumi:"connectionTimeout"`
-	// Specifies the description of the instance group.
-	Description *string `pulumi:"description"`
-	// The header limit of the forwarding policy.
-	HeaderLimit *int `pulumi:"headerLimit"`
-	// The IDs of the ELB instances that has been bound to the instance group.
-	LoadBalancers []string `pulumi:"loadBalancers"`
-	// Specifies the instance group name.
-	// The maximum length is 64 characters. Only letters, digits and underscores (_) are allowed.
-	Name *string `pulumi:"name"`
-	// The time for reading timeout in the forwarding policy.
-	ReadTimeout *int `pulumi:"readTimeout"`
-	// The region in which to create the instance group.
-	// If omitted, the provider-level region will be used. Changing this setting will create a new resource.
-	Region *string `pulumi:"region"`
-	// Specifies the id of the VPC that the WAF dedicated instances belongs to.
-	VpcId *string `pulumi:"vpcId"`
-	// The time for writing timeout in the forwarding policy.
-	WriteTimeout *int `pulumi:"writeTimeout"`
+	BodyLimit         *int     `pulumi:"bodyLimit"`
+	ConnectionTimeout *int     `pulumi:"connectionTimeout"`
+	Description       *string  `pulumi:"description"`
+	HeaderLimit       *int     `pulumi:"headerLimit"`
+	LoadBalancers     []string `pulumi:"loadBalancers"`
+	Name              *string  `pulumi:"name"`
+	ReadTimeout       *int     `pulumi:"readTimeout"`
+	Region            *string  `pulumi:"region"`
+	VpcId             *string  `pulumi:"vpcId"`
+	WriteTimeout      *int     `pulumi:"writeTimeout"`
 }
 
 type InstanceGroupState struct {
-	// The body limit of the forwarding policy.
-	BodyLimit pulumi.IntPtrInput
-	// The time for connection timeout in the forwarding policy.
+	BodyLimit         pulumi.IntPtrInput
 	ConnectionTimeout pulumi.IntPtrInput
-	// Specifies the description of the instance group.
-	Description pulumi.StringPtrInput
-	// The header limit of the forwarding policy.
-	HeaderLimit pulumi.IntPtrInput
-	// The IDs of the ELB instances that has been bound to the instance group.
-	LoadBalancers pulumi.StringArrayInput
-	// Specifies the instance group name.
-	// The maximum length is 64 characters. Only letters, digits and underscores (_) are allowed.
-	Name pulumi.StringPtrInput
-	// The time for reading timeout in the forwarding policy.
-	ReadTimeout pulumi.IntPtrInput
-	// The region in which to create the instance group.
-	// If omitted, the provider-level region will be used. Changing this setting will create a new resource.
-	Region pulumi.StringPtrInput
-	// Specifies the id of the VPC that the WAF dedicated instances belongs to.
-	VpcId pulumi.StringPtrInput
-	// The time for writing timeout in the forwarding policy.
-	WriteTimeout pulumi.IntPtrInput
+	Description       pulumi.StringPtrInput
+	HeaderLimit       pulumi.IntPtrInput
+	LoadBalancers     pulumi.StringArrayInput
+	Name              pulumi.StringPtrInput
+	ReadTimeout       pulumi.IntPtrInput
+	Region            pulumi.StringPtrInput
+	VpcId             pulumi.StringPtrInput
+	WriteTimeout      pulumi.IntPtrInput
 }
 
 func (InstanceGroupState) ElementType() reflect.Type {
@@ -165,30 +89,18 @@ func (InstanceGroupState) ElementType() reflect.Type {
 }
 
 type instanceGroupArgs struct {
-	// Specifies the description of the instance group.
 	Description *string `pulumi:"description"`
-	// Specifies the instance group name.
-	// The maximum length is 64 characters. Only letters, digits and underscores (_) are allowed.
-	Name *string `pulumi:"name"`
-	// The region in which to create the instance group.
-	// If omitted, the provider-level region will be used. Changing this setting will create a new resource.
-	Region *string `pulumi:"region"`
-	// Specifies the id of the VPC that the WAF dedicated instances belongs to.
-	VpcId string `pulumi:"vpcId"`
+	Name        *string `pulumi:"name"`
+	Region      *string `pulumi:"region"`
+	VpcId       string  `pulumi:"vpcId"`
 }
 
 // The set of arguments for constructing a InstanceGroup resource.
 type InstanceGroupArgs struct {
-	// Specifies the description of the instance group.
 	Description pulumi.StringPtrInput
-	// Specifies the instance group name.
-	// The maximum length is 64 characters. Only letters, digits and underscores (_) are allowed.
-	Name pulumi.StringPtrInput
-	// The region in which to create the instance group.
-	// If omitted, the provider-level region will be used. Changing this setting will create a new resource.
-	Region pulumi.StringPtrInput
-	// Specifies the id of the VPC that the WAF dedicated instances belongs to.
-	VpcId pulumi.StringInput
+	Name        pulumi.StringPtrInput
+	Region      pulumi.StringPtrInput
+	VpcId       pulumi.StringInput
 }
 
 func (InstanceGroupArgs) ElementType() reflect.Type {
@@ -278,54 +190,42 @@ func (o InstanceGroupOutput) ToInstanceGroupOutputWithContext(ctx context.Contex
 	return o
 }
 
-// The body limit of the forwarding policy.
 func (o InstanceGroupOutput) BodyLimit() pulumi.IntOutput {
 	return o.ApplyT(func(v *InstanceGroup) pulumi.IntOutput { return v.BodyLimit }).(pulumi.IntOutput)
 }
 
-// The time for connection timeout in the forwarding policy.
 func (o InstanceGroupOutput) ConnectionTimeout() pulumi.IntOutput {
 	return o.ApplyT(func(v *InstanceGroup) pulumi.IntOutput { return v.ConnectionTimeout }).(pulumi.IntOutput)
 }
 
-// Specifies the description of the instance group.
 func (o InstanceGroupOutput) Description() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *InstanceGroup) pulumi.StringPtrOutput { return v.Description }).(pulumi.StringPtrOutput)
 }
 
-// The header limit of the forwarding policy.
 func (o InstanceGroupOutput) HeaderLimit() pulumi.IntOutput {
 	return o.ApplyT(func(v *InstanceGroup) pulumi.IntOutput { return v.HeaderLimit }).(pulumi.IntOutput)
 }
 
-// The IDs of the ELB instances that has been bound to the instance group.
 func (o InstanceGroupOutput) LoadBalancers() pulumi.StringArrayOutput {
 	return o.ApplyT(func(v *InstanceGroup) pulumi.StringArrayOutput { return v.LoadBalancers }).(pulumi.StringArrayOutput)
 }
 
-// Specifies the instance group name.
-// The maximum length is 64 characters. Only letters, digits and underscores (_) are allowed.
 func (o InstanceGroupOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v *InstanceGroup) pulumi.StringOutput { return v.Name }).(pulumi.StringOutput)
 }
 
-// The time for reading timeout in the forwarding policy.
 func (o InstanceGroupOutput) ReadTimeout() pulumi.IntOutput {
 	return o.ApplyT(func(v *InstanceGroup) pulumi.IntOutput { return v.ReadTimeout }).(pulumi.IntOutput)
 }
 
-// The region in which to create the instance group.
-// If omitted, the provider-level region will be used. Changing this setting will create a new resource.
 func (o InstanceGroupOutput) Region() pulumi.StringOutput {
 	return o.ApplyT(func(v *InstanceGroup) pulumi.StringOutput { return v.Region }).(pulumi.StringOutput)
 }
 
-// Specifies the id of the VPC that the WAF dedicated instances belongs to.
 func (o InstanceGroupOutput) VpcId() pulumi.StringOutput {
 	return o.ApplyT(func(v *InstanceGroup) pulumi.StringOutput { return v.VpcId }).(pulumi.StringOutput)
 }
 
-// The time for writing timeout in the forwarding policy.
 func (o InstanceGroupOutput) WriteTimeout() pulumi.IntOutput {
 	return o.ApplyT(func(v *InstanceGroup) pulumi.IntOutput { return v.WriteTimeout }).(pulumi.IntOutput)
 }

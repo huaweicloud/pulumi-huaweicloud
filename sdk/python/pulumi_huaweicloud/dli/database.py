@@ -18,20 +18,24 @@ class DatabaseArgs:
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  owner: Optional[pulumi.Input[str]] = None,
-                 region: Optional[pulumi.Input[str]] = None):
+                 region: Optional[pulumi.Input[str]] = None,
+                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None):
         """
         The set of arguments for constructing a Database resource.
         :param pulumi.Input[str] description: Specifies the description of a queue.
                Changing this parameter will create a new database resource.
         :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID.
                The value 0 indicates the default enterprise project. Changing this parameter will create a new database resource.
-        :param pulumi.Input[str] name: Specifies the database name. The name consists of 1 to 128 characters, starting
-               with a letter or digit. Only letters, digits and underscores (_) are allowed and the name cannot be all digits.
+        :param pulumi.Input[str] name: Specifies the database name.  
+               The name consists of `1` to `128` characters, starting with a letter or digit.
+               Only letters, digits and underscores (_) are allowed and the name cannot be all digits.
                Changing this parameter will create a new database resource.
         :param pulumi.Input[str] owner: Specifies the name of the SQL database owner.
                The owner must be IAM user.
         :param pulumi.Input[str] region: Specifies the region in which to create the DLI database resource.
                If omitted, the provider-level region will be used. Changing this parameter will create a new database resource.
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the database.  
+               Changing this parameter will create a new resource.
         """
         if description is not None:
             pulumi.set(__self__, "description", description)
@@ -43,6 +47,8 @@ class DatabaseArgs:
             pulumi.set(__self__, "owner", owner)
         if region is not None:
             pulumi.set(__self__, "region", region)
+        if tags is not None:
+            pulumi.set(__self__, "tags", tags)
 
     @property
     @pulumi.getter
@@ -74,8 +80,9 @@ class DatabaseArgs:
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the database name. The name consists of 1 to 128 characters, starting
-        with a letter or digit. Only letters, digits and underscores (_) are allowed and the name cannot be all digits.
+        Specifies the database name.  
+        The name consists of `1` to `128` characters, starting with a letter or digit.
+        Only letters, digits and underscores (_) are allowed and the name cannot be all digits.
         Changing this parameter will create a new database resource.
         """
         return pulumi.get(self, "name")
@@ -109,6 +116,19 @@ class DatabaseArgs:
     @region.setter
     def region(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "region", value)
+
+    @property
+    @pulumi.getter
+    def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]:
+        """
+        Specifies the key/value pairs to associate with the database.  
+        Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "tags")
+
+    @tags.setter
+    def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]):
+        pulumi.set(self, "tags", value)
 
 
 @pulumi.input_type
@@ -118,20 +138,24 @@ class _DatabaseState:
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  owner: Optional[pulumi.Input[str]] = None,
-                 region: Optional[pulumi.Input[str]] = None):
+                 region: Optional[pulumi.Input[str]] = None,
+                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None):
         """
         Input properties used for looking up and filtering Database resources.
         :param pulumi.Input[str] description: Specifies the description of a queue.
                Changing this parameter will create a new database resource.
         :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID.
                The value 0 indicates the default enterprise project. Changing this parameter will create a new database resource.
-        :param pulumi.Input[str] name: Specifies the database name. The name consists of 1 to 128 characters, starting
-               with a letter or digit. Only letters, digits and underscores (_) are allowed and the name cannot be all digits.
+        :param pulumi.Input[str] name: Specifies the database name.  
+               The name consists of `1` to `128` characters, starting with a letter or digit.
+               Only letters, digits and underscores (_) are allowed and the name cannot be all digits.
                Changing this parameter will create a new database resource.
         :param pulumi.Input[str] owner: Specifies the name of the SQL database owner.
                The owner must be IAM user.
         :param pulumi.Input[str] region: Specifies the region in which to create the DLI database resource.
                If omitted, the provider-level region will be used. Changing this parameter will create a new database resource.
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the database.  
+               Changing this parameter will create a new resource.
         """
         if description is not None:
             pulumi.set(__self__, "description", description)
@@ -143,6 +167,8 @@ class _DatabaseState:
             pulumi.set(__self__, "owner", owner)
         if region is not None:
             pulumi.set(__self__, "region", region)
+        if tags is not None:
+            pulumi.set(__self__, "tags", tags)
 
     @property
     @pulumi.getter
@@ -174,8 +200,9 @@ class _DatabaseState:
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the database name. The name consists of 1 to 128 characters, starting
-        with a letter or digit. Only letters, digits and underscores (_) are allowed and the name cannot be all digits.
+        Specifies the database name.  
+        The name consists of `1` to `128` characters, starting with a letter or digit.
+        Only letters, digits and underscores (_) are allowed and the name cannot be all digits.
         Changing this parameter will create a new database resource.
         """
         return pulumi.get(self, "name")
@@ -209,6 +236,19 @@ class _DatabaseState:
     @region.setter
     def region(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "region", value)
+
+    @property
+    @pulumi.getter
+    def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]:
+        """
+        Specifies the key/value pairs to associate with the database.  
+        Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "tags")
+
+    @tags.setter
+    def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]):
+        pulumi.set(self, "tags", value)
 
 
 class Database(pulumi.CustomResource):
@@ -221,6 +261,7 @@ class Database(pulumi.CustomResource):
                  name: Optional[pulumi.Input[str]] = None,
                  owner: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
+                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  __props__=None):
         """
         Manages DLI SQL database resource within HuaweiCloud.
@@ -239,11 +280,25 @@ class Database(pulumi.CustomResource):
 
         ## Import
 
-        DLI SQL databases can be imported by their `name`, e.g.
+        DLI SQL databases can be imported by their `name`, e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:Dli/database:Database test terraform_test
         ```
+
+         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`tags`. It is generally recommended running `terraform plan` after importing a resource. You can then decide if changes should be applied to the resource, or the resource definition should be updated to align with the resource. Also you can ignore changes as below. hcl resource "huaweicloud_dataarts_factory_script" "test" {
+
+         ...
+
+         lifecycle {
+
+         ignore_changes = [
+
+         tags,
+
+         ]
+
+         } }
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -251,13 +306,16 @@ class Database(pulumi.CustomResource):
                Changing this parameter will create a new database resource.
         :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID.
                The value 0 indicates the default enterprise project. Changing this parameter will create a new database resource.
-        :param pulumi.Input[str] name: Specifies the database name. The name consists of 1 to 128 characters, starting
-               with a letter or digit. Only letters, digits and underscores (_) are allowed and the name cannot be all digits.
+        :param pulumi.Input[str] name: Specifies the database name.  
+               The name consists of `1` to `128` characters, starting with a letter or digit.
+               Only letters, digits and underscores (_) are allowed and the name cannot be all digits.
                Changing this parameter will create a new database resource.
         :param pulumi.Input[str] owner: Specifies the name of the SQL database owner.
                The owner must be IAM user.
         :param pulumi.Input[str] region: Specifies the region in which to create the DLI database resource.
                If omitted, the provider-level region will be used. Changing this parameter will create a new database resource.
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the database.  
+               Changing this parameter will create a new resource.
         """
         ...
     @overload
@@ -282,11 +340,25 @@ class Database(pulumi.CustomResource):
 
         ## Import
 
-        DLI SQL databases can be imported by their `name`, e.g.
+        DLI SQL databases can be imported by their `name`, e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:Dli/database:Database test terraform_test
         ```
+
+         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`tags`. It is generally recommended running `terraform plan` after importing a resource. You can then decide if changes should be applied to the resource, or the resource definition should be updated to align with the resource. Also you can ignore changes as below. hcl resource "huaweicloud_dataarts_factory_script" "test" {
+
+         ...
+
+         lifecycle {
+
+         ignore_changes = [
+
+         tags,
+
+         ]
+
+         } }
 
         :param str resource_name: The name of the resource.
         :param DatabaseArgs args: The arguments to use to populate this resource's properties.
@@ -308,6 +380,7 @@ class Database(pulumi.CustomResource):
                  name: Optional[pulumi.Input[str]] = None,
                  owner: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
+                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -322,6 +395,7 @@ class Database(pulumi.CustomResource):
             __props__.__dict__["name"] = name
             __props__.__dict__["owner"] = owner
             __props__.__dict__["region"] = region
+            __props__.__dict__["tags"] = tags
         super(Database, __self__).__init__(
             'huaweicloud:Dli/database:Database',
             resource_name,
@@ -336,7 +410,8 @@ class Database(pulumi.CustomResource):
             enterprise_project_id: Optional[pulumi.Input[str]] = None,
             name: Optional[pulumi.Input[str]] = None,
             owner: Optional[pulumi.Input[str]] = None,
-            region: Optional[pulumi.Input[str]] = None) -> 'Database':
+            region: Optional[pulumi.Input[str]] = None,
+            tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None) -> 'Database':
         """
         Get an existing Database resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.
@@ -348,13 +423,16 @@ class Database(pulumi.CustomResource):
                Changing this parameter will create a new database resource.
         :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID.
                The value 0 indicates the default enterprise project. Changing this parameter will create a new database resource.
-        :param pulumi.Input[str] name: Specifies the database name. The name consists of 1 to 128 characters, starting
-               with a letter or digit. Only letters, digits and underscores (_) are allowed and the name cannot be all digits.
+        :param pulumi.Input[str] name: Specifies the database name.  
+               The name consists of `1` to `128` characters, starting with a letter or digit.
+               Only letters, digits and underscores (_) are allowed and the name cannot be all digits.
                Changing this parameter will create a new database resource.
         :param pulumi.Input[str] owner: Specifies the name of the SQL database owner.
                The owner must be IAM user.
         :param pulumi.Input[str] region: Specifies the region in which to create the DLI database resource.
                If omitted, the provider-level region will be used. Changing this parameter will create a new database resource.
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the database.  
+               Changing this parameter will create a new resource.
         """
         opts = pulumi.ResourceOptions.merge(opts, pulumi.ResourceOptions(id=id))
 
@@ -365,6 +443,7 @@ class Database(pulumi.CustomResource):
         __props__.__dict__["name"] = name
         __props__.__dict__["owner"] = owner
         __props__.__dict__["region"] = region
+        __props__.__dict__["tags"] = tags
         return Database(resource_name, opts=opts, __props__=__props__)
 
     @property
@@ -389,8 +468,9 @@ class Database(pulumi.CustomResource):
     @pulumi.getter
     def name(self) -> pulumi.Output[str]:
         """
-        Specifies the database name. The name consists of 1 to 128 characters, starting
-        with a letter or digit. Only letters, digits and underscores (_) are allowed and the name cannot be all digits.
+        Specifies the database name.  
+        The name consists of `1` to `128` characters, starting with a letter or digit.
+        Only letters, digits and underscores (_) are allowed and the name cannot be all digits.
         Changing this parameter will create a new database resource.
         """
         return pulumi.get(self, "name")
@@ -412,4 +492,13 @@ class Database(pulumi.CustomResource):
         If omitted, the provider-level region will be used. Changing this parameter will create a new database resource.
         """
         return pulumi.get(self, "region")
+
+    @property
+    @pulumi.getter
+    def tags(self) -> pulumi.Output[Optional[Mapping[str, str]]]:
+        """
+        Specifies the key/value pairs to associate with the database.  
+        Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "tags")
 

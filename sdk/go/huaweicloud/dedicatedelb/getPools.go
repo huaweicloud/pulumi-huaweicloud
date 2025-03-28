@@ -57,8 +57,8 @@ type GetPoolsArgs struct {
 	Description *string `pulumi:"description"`
 	// Specifies the health monitor ID of the ELB pool.
 	HealthmonitorId *string `pulumi:"healthmonitorId"`
-	// Specifies the method of the ELB pool. Must be one of ROUND_ROBIN, LEAST_CONNECTIONS,
-	// or SOURCE_IP.
+	// Specifies the method of the ELB pool. Value options: **ROUND_ROBIN**,
+	// **LEAST_CONNECTIONS**, **SOURCE_IP** or **QUIC_CID**.
 	LbMethod *string `pulumi:"lbMethod"`
 	// Specifies the listener ID of the ELB pool.
 	ListenerId *string `pulumi:"listenerId"`
@@ -68,11 +68,19 @@ type GetPoolsArgs struct {
 	Name *string `pulumi:"name"`
 	// Specifies the ID of the ELB pool.
 	PoolId *string `pulumi:"poolId"`
-	// Specifies the protocol of the ELB pool. This can either be TCP, UDP or HTTP.
+	// Specifies the protection status for update.
+	// Value options: **nonProtection**, **consoleProtection**.
+	ProtectionStatus *string `pulumi:"protectionStatus"`
+	// Specifies the protocol of the ELB pool. Value options: **TCP**, **UDP**, **HTTP**,
+	// **HTTPS**, **QUIC**, **GRPC** or **TLS**.
 	Protocol *string `pulumi:"protocol"`
 	// Specifies the region in which to query the data source.
 	// If omitted, the provider-level region will be used.
 	Region *string `pulumi:"region"`
+	// Specifies the type of the backend server group. Value options: **instance**, **ip**.
+	Type *string `pulumi:"type"`
+	// Specifies the ID of the VPC where the backend server group works.
+	VpcId *string `pulumi:"vpcId"`
 }
 
 // A collection of values returned by getPools.
@@ -93,9 +101,15 @@ type GetPoolsResult struct {
 	// Pool list. For details, see data structure of the pool field.
 	// The object structure is documented below.
 	Pools []GetPoolsPool `pulumi:"pools"`
+	// The protection status for update.
+	ProtectionStatus *string `pulumi:"protectionStatus"`
 	// The protocol of pool.
 	Protocol *string `pulumi:"protocol"`
 	Region   string  `pulumi:"region"`
+	// The type of persistence mode.
+	Type *string `pulumi:"type"`
+	// The ID of the VPC where the backend server group works.
+	VpcId *string `pulumi:"vpcId"`
 }
 
 func GetPoolsOutput(ctx *pulumi.Context, args GetPoolsOutputArgs, opts ...pulumi.InvokeOption) GetPoolsResultOutput {
@@ -117,8 +131,8 @@ type GetPoolsOutputArgs struct {
 	Description pulumi.StringPtrInput `pulumi:"description"`
 	// Specifies the health monitor ID of the ELB pool.
 	HealthmonitorId pulumi.StringPtrInput `pulumi:"healthmonitorId"`
-	// Specifies the method of the ELB pool. Must be one of ROUND_ROBIN, LEAST_CONNECTIONS,
-	// or SOURCE_IP.
+	// Specifies the method of the ELB pool. Value options: **ROUND_ROBIN**,
+	// **LEAST_CONNECTIONS**, **SOURCE_IP** or **QUIC_CID**.
 	LbMethod pulumi.StringPtrInput `pulumi:"lbMethod"`
 	// Specifies the listener ID of the ELB pool.
 	ListenerId pulumi.StringPtrInput `pulumi:"listenerId"`
@@ -128,11 +142,19 @@ type GetPoolsOutputArgs struct {
 	Name pulumi.StringPtrInput `pulumi:"name"`
 	// Specifies the ID of the ELB pool.
 	PoolId pulumi.StringPtrInput `pulumi:"poolId"`
-	// Specifies the protocol of the ELB pool. This can either be TCP, UDP or HTTP.
+	// Specifies the protection status for update.
+	// Value options: **nonProtection**, **consoleProtection**.
+	ProtectionStatus pulumi.StringPtrInput `pulumi:"protectionStatus"`
+	// Specifies the protocol of the ELB pool. Value options: **TCP**, **UDP**, **HTTP**,
+	// **HTTPS**, **QUIC**, **GRPC** or **TLS**.
 	Protocol pulumi.StringPtrInput `pulumi:"protocol"`
 	// Specifies the region in which to query the data source.
 	// If omitted, the provider-level region will be used.
 	Region pulumi.StringPtrInput `pulumi:"region"`
+	// Specifies the type of the backend server group. Value options: **instance**, **ip**.
+	Type pulumi.StringPtrInput `pulumi:"type"`
+	// Specifies the ID of the VPC where the backend server group works.
+	VpcId pulumi.StringPtrInput `pulumi:"vpcId"`
 }
 
 func (GetPoolsOutputArgs) ElementType() reflect.Type {
@@ -197,6 +219,11 @@ func (o GetPoolsResultOutput) Pools() GetPoolsPoolArrayOutput {
 	return o.ApplyT(func(v GetPoolsResult) []GetPoolsPool { return v.Pools }).(GetPoolsPoolArrayOutput)
 }
 
+// The protection status for update.
+func (o GetPoolsResultOutput) ProtectionStatus() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v GetPoolsResult) *string { return v.ProtectionStatus }).(pulumi.StringPtrOutput)
+}
+
 // The protocol of pool.
 func (o GetPoolsResultOutput) Protocol() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v GetPoolsResult) *string { return v.Protocol }).(pulumi.StringPtrOutput)
@@ -204,6 +231,16 @@ func (o GetPoolsResultOutput) Protocol() pulumi.StringPtrOutput {
 
 func (o GetPoolsResultOutput) Region() pulumi.StringOutput {
 	return o.ApplyT(func(v GetPoolsResult) string { return v.Region }).(pulumi.StringOutput)
+}
+
+// The type of persistence mode.
+func (o GetPoolsResultOutput) Type() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v GetPoolsResult) *string { return v.Type }).(pulumi.StringPtrOutput)
+}
+
+// The ID of the VPC where the backend server group works.
+func (o GetPoolsResultOutput) VpcId() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v GetPoolsResult) *string { return v.VpcId }).(pulumi.StringPtrOutput)
 }
 
 func init() {

@@ -11,7 +11,7 @@ import (
 )
 
 type InstanceBackupPolicy struct {
-	// Day in a week on which backup starts, the value ranges from 1 to 7.
+	// Day in a week on which backup starts, the value ranges from `1` to `7`.
 	// Where: 1 indicates Monday; 7 indicates Sunday.
 	BackupAts []int `pulumi:"backupAts"`
 	// Backup type. Default value is `auto`. The valid values are as follows:
@@ -24,7 +24,7 @@ type InstanceBackupPolicy struct {
 	// Interval at which backup is performed. Default value is `weekly`.
 	// Currently, only weekly backup is supported.
 	PeriodType *string `pulumi:"periodType"`
-	// Retention time. Unit: day, the value ranges from 1 to 7.
+	// Retention time. Unit: day, the value ranges from `1` to `7`.
 	// This parameter is required if the backupType is **auto**.
 	SaveDays *int `pulumi:"saveDays"`
 }
@@ -41,7 +41,7 @@ type InstanceBackupPolicyInput interface {
 }
 
 type InstanceBackupPolicyArgs struct {
-	// Day in a week on which backup starts, the value ranges from 1 to 7.
+	// Day in a week on which backup starts, the value ranges from `1` to `7`.
 	// Where: 1 indicates Monday; 7 indicates Sunday.
 	BackupAts pulumi.IntArrayInput `pulumi:"backupAts"`
 	// Backup type. Default value is `auto`. The valid values are as follows:
@@ -54,7 +54,7 @@ type InstanceBackupPolicyArgs struct {
 	// Interval at which backup is performed. Default value is `weekly`.
 	// Currently, only weekly backup is supported.
 	PeriodType pulumi.StringPtrInput `pulumi:"periodType"`
-	// Retention time. Unit: day, the value ranges from 1 to 7.
+	// Retention time. Unit: day, the value ranges from `1` to `7`.
 	// This parameter is required if the backupType is **auto**.
 	SaveDays pulumi.IntPtrInput `pulumi:"saveDays"`
 }
@@ -136,7 +136,7 @@ func (o InstanceBackupPolicyOutput) ToInstanceBackupPolicyPtrOutputWithContext(c
 	}).(InstanceBackupPolicyPtrOutput)
 }
 
-// Day in a week on which backup starts, the value ranges from 1 to 7.
+// Day in a week on which backup starts, the value ranges from `1` to `7`.
 // Where: 1 indicates Monday; 7 indicates Sunday.
 func (o InstanceBackupPolicyOutput) BackupAts() pulumi.IntArrayOutput {
 	return o.ApplyT(func(v InstanceBackupPolicy) []int { return v.BackupAts }).(pulumi.IntArrayOutput)
@@ -161,7 +161,7 @@ func (o InstanceBackupPolicyOutput) PeriodType() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v InstanceBackupPolicy) *string { return v.PeriodType }).(pulumi.StringPtrOutput)
 }
 
-// Retention time. Unit: day, the value ranges from 1 to 7.
+// Retention time. Unit: day, the value ranges from `1` to `7`.
 // This parameter is required if the backupType is **auto**.
 func (o InstanceBackupPolicyOutput) SaveDays() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v InstanceBackupPolicy) *int { return v.SaveDays }).(pulumi.IntPtrOutput)
@@ -191,7 +191,7 @@ func (o InstanceBackupPolicyPtrOutput) Elem() InstanceBackupPolicyOutput {
 	}).(InstanceBackupPolicyOutput)
 }
 
-// Day in a week on which backup starts, the value ranges from 1 to 7.
+// Day in a week on which backup starts, the value ranges from `1` to `7`.
 // Where: 1 indicates Monday; 7 indicates Sunday.
 func (o InstanceBackupPolicyPtrOutput) BackupAts() pulumi.IntArrayOutput {
 	return o.ApplyT(func(v *InstanceBackupPolicy) []int {
@@ -236,7 +236,7 @@ func (o InstanceBackupPolicyPtrOutput) PeriodType() pulumi.StringPtrOutput {
 	}).(pulumi.StringPtrOutput)
 }
 
-// Retention time. Unit: day, the value ranges from 1 to 7.
+// Retention time. Unit: day, the value ranges from `1` to `7`.
 // This parameter is required if the backupType is **auto**.
 func (o InstanceBackupPolicyPtrOutput) SaveDays() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v *InstanceBackupPolicy) *int {
@@ -245,6 +245,299 @@ func (o InstanceBackupPolicyPtrOutput) SaveDays() pulumi.IntPtrOutput {
 		}
 		return v.SaveDays
 	}).(pulumi.IntPtrOutput)
+}
+
+type InstanceBandwidthInfo struct {
+	// Indicates the bandwidth size, the unit is **GB**.
+	Bandwidth *int `pulumi:"bandwidth"`
+	// Indicates the begin time of temporary increase.
+	BeginTime *string `pulumi:"beginTime"`
+	// Indicates the current time.
+	CurrentTime *string `pulumi:"currentTime"`
+	// Indicates the end time of temporary increase.
+	EndTime *string `pulumi:"endTime"`
+	// Indicates the number of increases.
+	ExpandCount *int `pulumi:"expandCount"`
+	// Indicates the interval between temporary increases, the unit is **ms**.
+	ExpandEffectTime *int `pulumi:"expandEffectTime"`
+	// Indicates the time interval to the next increase, the unit is **ms**.
+	ExpandIntervalTime *int `pulumi:"expandIntervalTime"`
+	// Indicates the maximum number of increases.
+	MaxExpandCount *int `pulumi:"maxExpandCount"`
+	// Indicates the next increase time.
+	NextExpandTime *string `pulumi:"nextExpandTime"`
+	// Indicates whether the increase task is running.
+	TaskRunning *bool `pulumi:"taskRunning"`
+}
+
+// InstanceBandwidthInfoInput is an input type that accepts InstanceBandwidthInfoArgs and InstanceBandwidthInfoOutput values.
+// You can construct a concrete instance of `InstanceBandwidthInfoInput` via:
+//
+//	InstanceBandwidthInfoArgs{...}
+type InstanceBandwidthInfoInput interface {
+	pulumi.Input
+
+	ToInstanceBandwidthInfoOutput() InstanceBandwidthInfoOutput
+	ToInstanceBandwidthInfoOutputWithContext(context.Context) InstanceBandwidthInfoOutput
+}
+
+type InstanceBandwidthInfoArgs struct {
+	// Indicates the bandwidth size, the unit is **GB**.
+	Bandwidth pulumi.IntPtrInput `pulumi:"bandwidth"`
+	// Indicates the begin time of temporary increase.
+	BeginTime pulumi.StringPtrInput `pulumi:"beginTime"`
+	// Indicates the current time.
+	CurrentTime pulumi.StringPtrInput `pulumi:"currentTime"`
+	// Indicates the end time of temporary increase.
+	EndTime pulumi.StringPtrInput `pulumi:"endTime"`
+	// Indicates the number of increases.
+	ExpandCount pulumi.IntPtrInput `pulumi:"expandCount"`
+	// Indicates the interval between temporary increases, the unit is **ms**.
+	ExpandEffectTime pulumi.IntPtrInput `pulumi:"expandEffectTime"`
+	// Indicates the time interval to the next increase, the unit is **ms**.
+	ExpandIntervalTime pulumi.IntPtrInput `pulumi:"expandIntervalTime"`
+	// Indicates the maximum number of increases.
+	MaxExpandCount pulumi.IntPtrInput `pulumi:"maxExpandCount"`
+	// Indicates the next increase time.
+	NextExpandTime pulumi.StringPtrInput `pulumi:"nextExpandTime"`
+	// Indicates whether the increase task is running.
+	TaskRunning pulumi.BoolPtrInput `pulumi:"taskRunning"`
+}
+
+func (InstanceBandwidthInfoArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*InstanceBandwidthInfo)(nil)).Elem()
+}
+
+func (i InstanceBandwidthInfoArgs) ToInstanceBandwidthInfoOutput() InstanceBandwidthInfoOutput {
+	return i.ToInstanceBandwidthInfoOutputWithContext(context.Background())
+}
+
+func (i InstanceBandwidthInfoArgs) ToInstanceBandwidthInfoOutputWithContext(ctx context.Context) InstanceBandwidthInfoOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(InstanceBandwidthInfoOutput)
+}
+
+// InstanceBandwidthInfoArrayInput is an input type that accepts InstanceBandwidthInfoArray and InstanceBandwidthInfoArrayOutput values.
+// You can construct a concrete instance of `InstanceBandwidthInfoArrayInput` via:
+//
+//	InstanceBandwidthInfoArray{ InstanceBandwidthInfoArgs{...} }
+type InstanceBandwidthInfoArrayInput interface {
+	pulumi.Input
+
+	ToInstanceBandwidthInfoArrayOutput() InstanceBandwidthInfoArrayOutput
+	ToInstanceBandwidthInfoArrayOutputWithContext(context.Context) InstanceBandwidthInfoArrayOutput
+}
+
+type InstanceBandwidthInfoArray []InstanceBandwidthInfoInput
+
+func (InstanceBandwidthInfoArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]InstanceBandwidthInfo)(nil)).Elem()
+}
+
+func (i InstanceBandwidthInfoArray) ToInstanceBandwidthInfoArrayOutput() InstanceBandwidthInfoArrayOutput {
+	return i.ToInstanceBandwidthInfoArrayOutputWithContext(context.Background())
+}
+
+func (i InstanceBandwidthInfoArray) ToInstanceBandwidthInfoArrayOutputWithContext(ctx context.Context) InstanceBandwidthInfoArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(InstanceBandwidthInfoArrayOutput)
+}
+
+type InstanceBandwidthInfoOutput struct{ *pulumi.OutputState }
+
+func (InstanceBandwidthInfoOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*InstanceBandwidthInfo)(nil)).Elem()
+}
+
+func (o InstanceBandwidthInfoOutput) ToInstanceBandwidthInfoOutput() InstanceBandwidthInfoOutput {
+	return o
+}
+
+func (o InstanceBandwidthInfoOutput) ToInstanceBandwidthInfoOutputWithContext(ctx context.Context) InstanceBandwidthInfoOutput {
+	return o
+}
+
+// Indicates the bandwidth size, the unit is **GB**.
+func (o InstanceBandwidthInfoOutput) Bandwidth() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v InstanceBandwidthInfo) *int { return v.Bandwidth }).(pulumi.IntPtrOutput)
+}
+
+// Indicates the begin time of temporary increase.
+func (o InstanceBandwidthInfoOutput) BeginTime() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v InstanceBandwidthInfo) *string { return v.BeginTime }).(pulumi.StringPtrOutput)
+}
+
+// Indicates the current time.
+func (o InstanceBandwidthInfoOutput) CurrentTime() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v InstanceBandwidthInfo) *string { return v.CurrentTime }).(pulumi.StringPtrOutput)
+}
+
+// Indicates the end time of temporary increase.
+func (o InstanceBandwidthInfoOutput) EndTime() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v InstanceBandwidthInfo) *string { return v.EndTime }).(pulumi.StringPtrOutput)
+}
+
+// Indicates the number of increases.
+func (o InstanceBandwidthInfoOutput) ExpandCount() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v InstanceBandwidthInfo) *int { return v.ExpandCount }).(pulumi.IntPtrOutput)
+}
+
+// Indicates the interval between temporary increases, the unit is **ms**.
+func (o InstanceBandwidthInfoOutput) ExpandEffectTime() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v InstanceBandwidthInfo) *int { return v.ExpandEffectTime }).(pulumi.IntPtrOutput)
+}
+
+// Indicates the time interval to the next increase, the unit is **ms**.
+func (o InstanceBandwidthInfoOutput) ExpandIntervalTime() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v InstanceBandwidthInfo) *int { return v.ExpandIntervalTime }).(pulumi.IntPtrOutput)
+}
+
+// Indicates the maximum number of increases.
+func (o InstanceBandwidthInfoOutput) MaxExpandCount() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v InstanceBandwidthInfo) *int { return v.MaxExpandCount }).(pulumi.IntPtrOutput)
+}
+
+// Indicates the next increase time.
+func (o InstanceBandwidthInfoOutput) NextExpandTime() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v InstanceBandwidthInfo) *string { return v.NextExpandTime }).(pulumi.StringPtrOutput)
+}
+
+// Indicates whether the increase task is running.
+func (o InstanceBandwidthInfoOutput) TaskRunning() pulumi.BoolPtrOutput {
+	return o.ApplyT(func(v InstanceBandwidthInfo) *bool { return v.TaskRunning }).(pulumi.BoolPtrOutput)
+}
+
+type InstanceBandwidthInfoArrayOutput struct{ *pulumi.OutputState }
+
+func (InstanceBandwidthInfoArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]InstanceBandwidthInfo)(nil)).Elem()
+}
+
+func (o InstanceBandwidthInfoArrayOutput) ToInstanceBandwidthInfoArrayOutput() InstanceBandwidthInfoArrayOutput {
+	return o
+}
+
+func (o InstanceBandwidthInfoArrayOutput) ToInstanceBandwidthInfoArrayOutputWithContext(ctx context.Context) InstanceBandwidthInfoArrayOutput {
+	return o
+}
+
+func (o InstanceBandwidthInfoArrayOutput) Index(i pulumi.IntInput) InstanceBandwidthInfoOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) InstanceBandwidthInfo {
+		return vs[0].([]InstanceBandwidthInfo)[vs[1].(int)]
+	}).(InstanceBandwidthInfoOutput)
+}
+
+type InstanceParameter struct {
+	// Specifies the ID of the configuration item.
+	Id string `pulumi:"id"`
+	// Specifies the name of the configuration item.
+	Name string `pulumi:"name"`
+	// Specifies the value of the configuration item.
+	Value string `pulumi:"value"`
+}
+
+// InstanceParameterInput is an input type that accepts InstanceParameterArgs and InstanceParameterOutput values.
+// You can construct a concrete instance of `InstanceParameterInput` via:
+//
+//	InstanceParameterArgs{...}
+type InstanceParameterInput interface {
+	pulumi.Input
+
+	ToInstanceParameterOutput() InstanceParameterOutput
+	ToInstanceParameterOutputWithContext(context.Context) InstanceParameterOutput
+}
+
+type InstanceParameterArgs struct {
+	// Specifies the ID of the configuration item.
+	Id pulumi.StringInput `pulumi:"id"`
+	// Specifies the name of the configuration item.
+	Name pulumi.StringInput `pulumi:"name"`
+	// Specifies the value of the configuration item.
+	Value pulumi.StringInput `pulumi:"value"`
+}
+
+func (InstanceParameterArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*InstanceParameter)(nil)).Elem()
+}
+
+func (i InstanceParameterArgs) ToInstanceParameterOutput() InstanceParameterOutput {
+	return i.ToInstanceParameterOutputWithContext(context.Background())
+}
+
+func (i InstanceParameterArgs) ToInstanceParameterOutputWithContext(ctx context.Context) InstanceParameterOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(InstanceParameterOutput)
+}
+
+// InstanceParameterArrayInput is an input type that accepts InstanceParameterArray and InstanceParameterArrayOutput values.
+// You can construct a concrete instance of `InstanceParameterArrayInput` via:
+//
+//	InstanceParameterArray{ InstanceParameterArgs{...} }
+type InstanceParameterArrayInput interface {
+	pulumi.Input
+
+	ToInstanceParameterArrayOutput() InstanceParameterArrayOutput
+	ToInstanceParameterArrayOutputWithContext(context.Context) InstanceParameterArrayOutput
+}
+
+type InstanceParameterArray []InstanceParameterInput
+
+func (InstanceParameterArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]InstanceParameter)(nil)).Elem()
+}
+
+func (i InstanceParameterArray) ToInstanceParameterArrayOutput() InstanceParameterArrayOutput {
+	return i.ToInstanceParameterArrayOutputWithContext(context.Background())
+}
+
+func (i InstanceParameterArray) ToInstanceParameterArrayOutputWithContext(ctx context.Context) InstanceParameterArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(InstanceParameterArrayOutput)
+}
+
+type InstanceParameterOutput struct{ *pulumi.OutputState }
+
+func (InstanceParameterOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*InstanceParameter)(nil)).Elem()
+}
+
+func (o InstanceParameterOutput) ToInstanceParameterOutput() InstanceParameterOutput {
+	return o
+}
+
+func (o InstanceParameterOutput) ToInstanceParameterOutputWithContext(ctx context.Context) InstanceParameterOutput {
+	return o
+}
+
+// Specifies the ID of the configuration item.
+func (o InstanceParameterOutput) Id() pulumi.StringOutput {
+	return o.ApplyT(func(v InstanceParameter) string { return v.Id }).(pulumi.StringOutput)
+}
+
+// Specifies the name of the configuration item.
+func (o InstanceParameterOutput) Name() pulumi.StringOutput {
+	return o.ApplyT(func(v InstanceParameter) string { return v.Name }).(pulumi.StringOutput)
+}
+
+// Specifies the value of the configuration item.
+func (o InstanceParameterOutput) Value() pulumi.StringOutput {
+	return o.ApplyT(func(v InstanceParameter) string { return v.Value }).(pulumi.StringOutput)
+}
+
+type InstanceParameterArrayOutput struct{ *pulumi.OutputState }
+
+func (InstanceParameterArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]InstanceParameter)(nil)).Elem()
+}
+
+func (o InstanceParameterArrayOutput) ToInstanceParameterArrayOutput() InstanceParameterArrayOutput {
+	return o
+}
+
+func (o InstanceParameterArrayOutput) ToInstanceParameterArrayOutputWithContext(ctx context.Context) InstanceParameterArrayOutput {
+	return o
+}
+
+func (o InstanceParameterArrayOutput) Index(i pulumi.IntInput) InstanceParameterOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) InstanceParameter {
+		return vs[0].([]InstanceParameter)[vs[1].(int)]
+	}).(InstanceParameterOutput)
 }
 
 type InstanceWhitelist struct {
@@ -555,12 +848,20 @@ func (o GetFlavorsFlavorArrayOutput) Index(i pulumi.IntInput) GetFlavorsFlavorOu
 func init() {
 	pulumi.RegisterInputType(reflect.TypeOf((*InstanceBackupPolicyInput)(nil)).Elem(), InstanceBackupPolicyArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*InstanceBackupPolicyPtrInput)(nil)).Elem(), InstanceBackupPolicyArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*InstanceBandwidthInfoInput)(nil)).Elem(), InstanceBandwidthInfoArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*InstanceBandwidthInfoArrayInput)(nil)).Elem(), InstanceBandwidthInfoArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*InstanceParameterInput)(nil)).Elem(), InstanceParameterArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*InstanceParameterArrayInput)(nil)).Elem(), InstanceParameterArray{})
 	pulumi.RegisterInputType(reflect.TypeOf((*InstanceWhitelistInput)(nil)).Elem(), InstanceWhitelistArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*InstanceWhitelistArrayInput)(nil)).Elem(), InstanceWhitelistArray{})
 	pulumi.RegisterInputType(reflect.TypeOf((*GetFlavorsFlavorInput)(nil)).Elem(), GetFlavorsFlavorArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*GetFlavorsFlavorArrayInput)(nil)).Elem(), GetFlavorsFlavorArray{})
 	pulumi.RegisterOutputType(InstanceBackupPolicyOutput{})
 	pulumi.RegisterOutputType(InstanceBackupPolicyPtrOutput{})
+	pulumi.RegisterOutputType(InstanceBandwidthInfoOutput{})
+	pulumi.RegisterOutputType(InstanceBandwidthInfoArrayOutput{})
+	pulumi.RegisterOutputType(InstanceParameterOutput{})
+	pulumi.RegisterOutputType(InstanceParameterArrayOutput{})
 	pulumi.RegisterOutputType(InstanceWhitelistOutput{})
 	pulumi.RegisterOutputType(InstanceWhitelistArrayOutput{})
 	pulumi.RegisterOutputType(GetFlavorsFlavorOutput{})

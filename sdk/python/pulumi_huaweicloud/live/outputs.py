@@ -45,14 +45,14 @@ class RecordingFlv(dict):
                  file_naming: Optional[str] = None,
                  max_stream_pause_length: Optional[int] = None):
         """
-        :param int recording_length: Specifies the recording length. Value range: 15 ~ 180, unit: `minute`.
+        :param int recording_length: Specifies the recording length. Value range: `15` ~ `180`, unit: `minute`.
                A stream exceeding the recording length will generate a new recording.
         :param str file_naming: Specifies the path and file name prefix of a recording file. The default value is
                `Record/{publish_domain}/{app}/{record_type}/{record_format}/{stream}_{file_start_time}/{file_start_time}`.
         :param int max_stream_pause_length: Specifies the interval threshold for combining recording chunks. If the
                stream pause length exceeds the value of this parameter, a new recording is generated.
-               Value range: 0 ~ 300, unit: `second`.
-               If the value is set to `0`, a new file will be generated once the stream is interrupted. Defaults to `0`.
+               Value range: `0` ~ `300`, unit: `second`. Defaults to `0`.
+               If the value is set to `0`, a new file will be generated once the stream is interrupted.
         """
         pulumi.set(__self__, "recording_length", recording_length)
         if file_naming is not None:
@@ -64,7 +64,7 @@ class RecordingFlv(dict):
     @pulumi.getter(name="recordingLength")
     def recording_length(self) -> int:
         """
-        Specifies the recording length. Value range: 15 ~ 180, unit: `minute`.
+        Specifies the recording length. Value range: `15` ~ `180`, unit: `minute`.
         A stream exceeding the recording length will generate a new recording.
         """
         return pulumi.get(self, "recording_length")
@@ -84,8 +84,8 @@ class RecordingFlv(dict):
         """
         Specifies the interval threshold for combining recording chunks. If the
         stream pause length exceeds the value of this parameter, a new recording is generated.
-        Value range: 0 ~ 300, unit: `second`.
-        If the value is set to `0`, a new file will be generated once the stream is interrupted. Defaults to `0`.
+        Value range: `0` ~ `300`, unit: `second`. Defaults to `0`.
+        If the value is set to `0`, a new file will be generated once the stream is interrupted.
         """
         return pulumi.get(self, "max_stream_pause_length")
 
@@ -101,6 +101,8 @@ class RecordingHls(dict):
             suggest = "file_naming"
         elif key == "maxStreamPauseLength":
             suggest = "max_stream_pause_length"
+        elif key == "recordSliceDuration":
+            suggest = "record_slice_duration"
         elif key == "tsFileNaming":
             suggest = "ts_file_naming"
 
@@ -119,16 +121,19 @@ class RecordingHls(dict):
                  recording_length: int,
                  file_naming: Optional[str] = None,
                  max_stream_pause_length: Optional[int] = None,
+                 record_slice_duration: Optional[int] = None,
                  ts_file_naming: Optional[str] = None):
         """
-        :param int recording_length: Specifies the recording length. Value range: 15 ~ 180, unit: `minute`.
+        :param int recording_length: Specifies the recording length. Value range: `15` ~ `180`, unit: `minute`.
                A stream exceeding the recording length will generate a new recording.
         :param str file_naming: Specifies the path and file name prefix of a recording file. The default value is
                `Record/{publish_domain}/{app}/{record_type}/{record_format}/{stream}_{file_start_time}/{file_start_time}`.
         :param int max_stream_pause_length: Specifies the interval threshold for combining recording chunks. If the
                stream pause length exceeds the value of this parameter, a new recording is generated.
-               Value range: 0 ~ 300, unit: `second`.
-               If the value is set to `0`, a new file will be generated once the stream is interrupted. Defaults to `0`.
+               Value range: `0` ~ `300`, unit: `second`. Defaults to `0`.
+               If the value is set to `0`, a new file will be generated once the stream is interrupted.
+        :param int record_slice_duration: Specifies the TS slice duration for HLS recording.
+               Value range: `2` ~ `60`, unit: `second`. Defaults to `10`.
         :param str ts_file_naming: Specifies TS file name prefix.
                The default value is `{file_start_time_unix}_{file_end_time_unix}_{ts_sequence_number}`.
         """
@@ -137,6 +142,8 @@ class RecordingHls(dict):
             pulumi.set(__self__, "file_naming", file_naming)
         if max_stream_pause_length is not None:
             pulumi.set(__self__, "max_stream_pause_length", max_stream_pause_length)
+        if record_slice_duration is not None:
+            pulumi.set(__self__, "record_slice_duration", record_slice_duration)
         if ts_file_naming is not None:
             pulumi.set(__self__, "ts_file_naming", ts_file_naming)
 
@@ -144,7 +151,7 @@ class RecordingHls(dict):
     @pulumi.getter(name="recordingLength")
     def recording_length(self) -> int:
         """
-        Specifies the recording length. Value range: 15 ~ 180, unit: `minute`.
+        Specifies the recording length. Value range: `15` ~ `180`, unit: `minute`.
         A stream exceeding the recording length will generate a new recording.
         """
         return pulumi.get(self, "recording_length")
@@ -164,10 +171,19 @@ class RecordingHls(dict):
         """
         Specifies the interval threshold for combining recording chunks. If the
         stream pause length exceeds the value of this parameter, a new recording is generated.
-        Value range: 0 ~ 300, unit: `second`.
-        If the value is set to `0`, a new file will be generated once the stream is interrupted. Defaults to `0`.
+        Value range: `0` ~ `300`, unit: `second`. Defaults to `0`.
+        If the value is set to `0`, a new file will be generated once the stream is interrupted.
         """
         return pulumi.get(self, "max_stream_pause_length")
+
+    @property
+    @pulumi.getter(name="recordSliceDuration")
+    def record_slice_duration(self) -> Optional[int]:
+        """
+        Specifies the TS slice duration for HLS recording.
+        Value range: `2` ~ `60`, unit: `second`. Defaults to `10`.
+        """
+        return pulumi.get(self, "record_slice_duration")
 
     @property
     @pulumi.getter(name="tsFileNaming")
@@ -207,14 +223,14 @@ class RecordingMp4(dict):
                  file_naming: Optional[str] = None,
                  max_stream_pause_length: Optional[int] = None):
         """
-        :param int recording_length: Specifies the recording length. Value range: 15 ~ 180, unit: `minute`.
+        :param int recording_length: Specifies the recording length. Value range: `15` ~ `180`, unit: `minute`.
                A stream exceeding the recording length will generate a new recording.
         :param str file_naming: Specifies the path and file name prefix of a recording file. The default value is
                `Record/{publish_domain}/{app}/{record_type}/{record_format}/{stream}_{file_start_time}/{file_start_time}`.
         :param int max_stream_pause_length: Specifies the interval threshold for combining recording chunks. If the
                stream pause length exceeds the value of this parameter, a new recording is generated.
-               Value range: 0 ~ 300, unit: `second`.
-               If the value is set to `0`, a new file will be generated once the stream is interrupted. Defaults to `0`.
+               Value range: `0` ~ `300`, unit: `second`. Defaults to `0`.
+               If the value is set to `0`, a new file will be generated once the stream is interrupted.
         """
         pulumi.set(__self__, "recording_length", recording_length)
         if file_naming is not None:
@@ -226,7 +242,7 @@ class RecordingMp4(dict):
     @pulumi.getter(name="recordingLength")
     def recording_length(self) -> int:
         """
-        Specifies the recording length. Value range: 15 ~ 180, unit: `minute`.
+        Specifies the recording length. Value range: `15` ~ `180`, unit: `minute`.
         A stream exceeding the recording length will generate a new recording.
         """
         return pulumi.get(self, "recording_length")
@@ -246,8 +262,8 @@ class RecordingMp4(dict):
         """
         Specifies the interval threshold for combining recording chunks. If the
         stream pause length exceeds the value of this parameter, a new recording is generated.
-        Value range: 0 ~ 300, unit: `second`.
-        If the value is set to `0`, a new file will be generated once the stream is interrupted. Defaults to `0`.
+        Value range: `0` ~ `300`, unit: `second`. Defaults to `0`.
+        If the value is set to `0`, a new file will be generated once the stream is interrupted.
         """
         return pulumi.get(self, "max_stream_pause_length")
 
@@ -298,8 +314,14 @@ class TranscodingTemplate(dict):
     @staticmethod
     def __key_warning(key: str):
         suggest = None
-        if key == "frameRate":
+        if key == "bitrateAdaptive":
+            suggest = "bitrate_adaptive"
+        elif key == "frameRate":
             suggest = "frame_rate"
+        elif key == "iFrameInterval":
+            suggest = "i_frame_interval"
+        elif key == "iFramePolicy":
+            suggest = "i_frame_policy"
 
         if suggest:
             pulumi.log.warn(f"Key '{key}' not found in TranscodingTemplate. Access the value via the '{suggest}' property getter instead.")
@@ -317,32 +339,63 @@ class TranscodingTemplate(dict):
                  height: int,
                  name: str,
                  width: int,
-                 frame_rate: Optional[int] = None):
+                 bitrate_adaptive: Optional[str] = None,
+                 frame_rate: Optional[int] = None,
+                 gop: Optional[str] = None,
+                 i_frame_interval: Optional[str] = None,
+                 i_frame_policy: Optional[str] = None,
+                 protocol: Optional[str] = None):
         """
-        :param int bitrate: Specifies the bitrate of a transcoded video, in kbit/s. Value range: 40 ~ 30000.
+        :param int bitrate: Specifies the bitrate of a transcoded video, in kbit/s. Value range: `40` ~ `30,000`.
         :param int height: Specifies video height (unit: pixel).
-               + **When the video encoding is H264**, value range: 32 ~ 2160 and must be a multiple of 2.
-               + **When the video encoding is H265**, value range: 240 ~ 2160 and must be a multiple of 4.
+               + **When the video encoding is H264**, value range: `32` ~ `2,160` and must be a multiple of `2`.
+               + **When the video encoding is H265**, value range: `240` ~ `2,160` and must be a multiple of `4`.
         :param str name: Specifies the template name. The name can contain a maximum of 64 characters, and only
                contains letters, digits and hyphens (-).
         :param int width: Specifies video width (unit: pixel).
-               + **When the video encoding is H264**, value range: 32 ~ 3840 and must be a multiple of 2.
-               + **When the video encoding is H265**, value range: 320 ~ 3840 and must be a multiple of 4.
-        :param int frame_rate: Specifies the frame rate of the transcoded video, in fps. Value range: 0 ~ 30.
-               Value 0 indicates that the frame rate remains unchanged.
+               + **When the video encoding is H264**, value range: `32` ~ `3,840` and must be a multiple of `2`.
+               + **When the video encoding is H265**, value range: `320` ~ `3,840` and must be a multiple of `4`.
+        :param str bitrate_adaptive: Specifies the adaptive bitrate.
+               The valid values are as follows:
+               + **off**: Disable rate adaptation and output the target rate according to the set rate.
+               + **minimum**: Output the target bitrate based on the minimum value of the set bitrate and source file bitrate.
+               + **adaptive**: Adaptive output of target bitrate based on source file bitrate.
+        :param int frame_rate: Specifies the frame rate of the transcoded video, in fps. Value range: `0` ~ `30`.
+               Value `0` indicates that the frame rate remains unchanged.
+        :param str gop: Specifies the interval time for I-frames, in seconds.
+               The value ranges from `0` to `10`, includes `0` and `10`. Defaults to `2`.
+        :param str i_frame_interval: Specifies the maximum I-frame interval in frames.
+               The value ranges from `0` to `500`, includes `0` and `500`. Defaults to `50`.
+        :param str i_frame_policy: Specifies the encoding output I-frame strategy.
+               The valid values are as follows:
+               + **auto**: I-frame output according to the set `gop` duration.
+               + **strictSync**: The encoded output I-frame is completely consistent with the source, and the `gop` parameter is
+               invalid after setting this value.
+        :param str protocol: Specifies the protocol type supported for transcoding output.
+               The valid value is **RTMP**. Defaults to **RTMP**.
         """
         pulumi.set(__self__, "bitrate", bitrate)
         pulumi.set(__self__, "height", height)
         pulumi.set(__self__, "name", name)
         pulumi.set(__self__, "width", width)
+        if bitrate_adaptive is not None:
+            pulumi.set(__self__, "bitrate_adaptive", bitrate_adaptive)
         if frame_rate is not None:
             pulumi.set(__self__, "frame_rate", frame_rate)
+        if gop is not None:
+            pulumi.set(__self__, "gop", gop)
+        if i_frame_interval is not None:
+            pulumi.set(__self__, "i_frame_interval", i_frame_interval)
+        if i_frame_policy is not None:
+            pulumi.set(__self__, "i_frame_policy", i_frame_policy)
+        if protocol is not None:
+            pulumi.set(__self__, "protocol", protocol)
 
     @property
     @pulumi.getter
     def bitrate(self) -> int:
         """
-        Specifies the bitrate of a transcoded video, in kbit/s. Value range: 40 ~ 30000.
+        Specifies the bitrate of a transcoded video, in kbit/s. Value range: `40` ~ `30,000`.
         """
         return pulumi.get(self, "bitrate")
 
@@ -351,8 +404,8 @@ class TranscodingTemplate(dict):
     def height(self) -> int:
         """
         Specifies video height (unit: pixel).
-        + **When the video encoding is H264**, value range: 32 ~ 2160 and must be a multiple of 2.
-        + **When the video encoding is H265**, value range: 240 ~ 2160 and must be a multiple of 4.
+        + **When the video encoding is H264**, value range: `32` ~ `2,160` and must be a multiple of `2`.
+        + **When the video encoding is H265**, value range: `240` ~ `2,160` and must be a multiple of `4`.
         """
         return pulumi.get(self, "height")
 
@@ -370,18 +423,69 @@ class TranscodingTemplate(dict):
     def width(self) -> int:
         """
         Specifies video width (unit: pixel).
-        + **When the video encoding is H264**, value range: 32 ~ 3840 and must be a multiple of 2.
-        + **When the video encoding is H265**, value range: 320 ~ 3840 and must be a multiple of 4.
+        + **When the video encoding is H264**, value range: `32` ~ `3,840` and must be a multiple of `2`.
+        + **When the video encoding is H265**, value range: `320` ~ `3,840` and must be a multiple of `4`.
         """
         return pulumi.get(self, "width")
+
+    @property
+    @pulumi.getter(name="bitrateAdaptive")
+    def bitrate_adaptive(self) -> Optional[str]:
+        """
+        Specifies the adaptive bitrate.
+        The valid values are as follows:
+        + **off**: Disable rate adaptation and output the target rate according to the set rate.
+        + **minimum**: Output the target bitrate based on the minimum value of the set bitrate and source file bitrate.
+        + **adaptive**: Adaptive output of target bitrate based on source file bitrate.
+        """
+        return pulumi.get(self, "bitrate_adaptive")
 
     @property
     @pulumi.getter(name="frameRate")
     def frame_rate(self) -> Optional[int]:
         """
-        Specifies the frame rate of the transcoded video, in fps. Value range: 0 ~ 30.
-        Value 0 indicates that the frame rate remains unchanged.
+        Specifies the frame rate of the transcoded video, in fps. Value range: `0` ~ `30`.
+        Value `0` indicates that the frame rate remains unchanged.
         """
         return pulumi.get(self, "frame_rate")
+
+    @property
+    @pulumi.getter
+    def gop(self) -> Optional[str]:
+        """
+        Specifies the interval time for I-frames, in seconds.
+        The value ranges from `0` to `10`, includes `0` and `10`. Defaults to `2`.
+        """
+        return pulumi.get(self, "gop")
+
+    @property
+    @pulumi.getter(name="iFrameInterval")
+    def i_frame_interval(self) -> Optional[str]:
+        """
+        Specifies the maximum I-frame interval in frames.
+        The value ranges from `0` to `500`, includes `0` and `500`. Defaults to `50`.
+        """
+        return pulumi.get(self, "i_frame_interval")
+
+    @property
+    @pulumi.getter(name="iFramePolicy")
+    def i_frame_policy(self) -> Optional[str]:
+        """
+        Specifies the encoding output I-frame strategy.
+        The valid values are as follows:
+        + **auto**: I-frame output according to the set `gop` duration.
+        + **strictSync**: The encoded output I-frame is completely consistent with the source, and the `gop` parameter is
+        invalid after setting this value.
+        """
+        return pulumi.get(self, "i_frame_policy")
+
+    @property
+    @pulumi.getter
+    def protocol(self) -> Optional[str]:
+        """
+        Specifies the protocol type supported for transcoding output.
+        The valid value is **RTMP**. Defaults to **RTMP**.
+        """
+        return pulumi.get(self, "protocol")
 
 

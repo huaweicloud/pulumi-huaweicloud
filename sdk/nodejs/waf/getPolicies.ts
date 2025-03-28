@@ -17,7 +17,7 @@ import * as utilities from "../utilities";
  * const config = new pulumi.Config();
  * const policyName = config.requireObject("policyName");
  * const enterpriseProjectId = config.requireObject("enterpriseProjectId");
- * const policies = huaweicloud.Waf.getPolicies({
+ * const test = huaweicloud.Waf.getPolicies({
  *     name: policyName,
  *     enterpriseProjectId: enterpriseProjectId,
  * });
@@ -43,15 +43,17 @@ export function getPolicies(args?: GetPoliciesArgs, opts?: pulumi.InvokeOptions)
 export interface GetPoliciesArgs {
     /**
      * Specifies the enterprise project ID of WAF policies.
+     * For enterprise users, if omitted, default enterprise project will be used.
      */
     enterpriseProjectId?: string;
     /**
-     * Policy name used for matching. The value is case sensitive and supports fuzzy matching.
+     * Specifies the policy name used for matching. The value is case-sensitive and supports
+     * fuzzy matching.
      */
     name?: string;
     /**
-     * The region in which to obtain the WAF policies. If omitted, the provider-level region
-     * will be used.
+     * Specifies the region in which to obtain the WAF policies. If omitted,
+     * the provider-level region will be used.
      */
     region?: string;
 }
@@ -86,15 +88,17 @@ export function getPoliciesOutput(args?: GetPoliciesOutputArgs, opts?: pulumi.In
 export interface GetPoliciesOutputArgs {
     /**
      * Specifies the enterprise project ID of WAF policies.
+     * For enterprise users, if omitted, default enterprise project will be used.
      */
     enterpriseProjectId?: pulumi.Input<string>;
     /**
-     * Policy name used for matching. The value is case sensitive and supports fuzzy matching.
+     * Specifies the policy name used for matching. The value is case-sensitive and supports
+     * fuzzy matching.
      */
     name?: pulumi.Input<string>;
     /**
-     * The region in which to obtain the WAF policies. If omitted, the provider-level region
-     * will be used.
+     * Specifies the region in which to obtain the WAF policies. If omitted,
+     * the provider-level region will be used.
      */
     region?: pulumi.Input<string>;
 }

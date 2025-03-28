@@ -11,10 +11,10 @@ import (
 )
 
 type DomainCacheSettings struct {
-	// Specifies whether to enable origin cache control.
+	// Specifies whether to enable origin cache control. Defaults to **false**.
 	FollowOrigin *bool `pulumi:"followOrigin"`
 	// Specifies the cache rules, which overwrite the previous rule configurations.
-	// Blank rules are reset to default rules. The object structure is documented below.
+	// Blank rules are reset to default rules. The rules structure is documented below.
 	Rules []DomainCacheSettingsRule `pulumi:"rules"`
 }
 
@@ -30,10 +30,10 @@ type DomainCacheSettingsInput interface {
 }
 
 type DomainCacheSettingsArgs struct {
-	// Specifies whether to enable origin cache control.
+	// Specifies whether to enable origin cache control. Defaults to **false**.
 	FollowOrigin pulumi.BoolPtrInput `pulumi:"followOrigin"`
 	// Specifies the cache rules, which overwrite the previous rule configurations.
-	// Blank rules are reset to default rules. The object structure is documented below.
+	// Blank rules are reset to default rules. The rules structure is documented below.
 	Rules DomainCacheSettingsRuleArrayInput `pulumi:"rules"`
 }
 
@@ -114,13 +114,13 @@ func (o DomainCacheSettingsOutput) ToDomainCacheSettingsPtrOutputWithContext(ctx
 	}).(DomainCacheSettingsPtrOutput)
 }
 
-// Specifies whether to enable origin cache control.
+// Specifies whether to enable origin cache control. Defaults to **false**.
 func (o DomainCacheSettingsOutput) FollowOrigin() pulumi.BoolPtrOutput {
 	return o.ApplyT(func(v DomainCacheSettings) *bool { return v.FollowOrigin }).(pulumi.BoolPtrOutput)
 }
 
 // Specifies the cache rules, which overwrite the previous rule configurations.
-// Blank rules are reset to default rules. The object structure is documented below.
+// Blank rules are reset to default rules. The rules structure is documented below.
 func (o DomainCacheSettingsOutput) Rules() DomainCacheSettingsRuleArrayOutput {
 	return o.ApplyT(func(v DomainCacheSettings) []DomainCacheSettingsRule { return v.Rules }).(DomainCacheSettingsRuleArrayOutput)
 }
@@ -149,7 +149,7 @@ func (o DomainCacheSettingsPtrOutput) Elem() DomainCacheSettingsOutput {
 	}).(DomainCacheSettingsOutput)
 }
 
-// Specifies whether to enable origin cache control.
+// Specifies whether to enable origin cache control. Defaults to **false**.
 func (o DomainCacheSettingsPtrOutput) FollowOrigin() pulumi.BoolPtrOutput {
 	return o.ApplyT(func(v *DomainCacheSettings) *bool {
 		if v == nil {
@@ -160,7 +160,7 @@ func (o DomainCacheSettingsPtrOutput) FollowOrigin() pulumi.BoolPtrOutput {
 }
 
 // Specifies the cache rules, which overwrite the previous rule configurations.
-// Blank rules are reset to default rules. The object structure is documented below.
+// Blank rules are reset to default rules. The rules structure is documented below.
 func (o DomainCacheSettingsPtrOutput) Rules() DomainCacheSettingsRuleArrayOutput {
 	return o.ApplyT(func(v *DomainCacheSettings) []DomainCacheSettingsRule {
 		if v == nil {
@@ -171,27 +171,46 @@ func (o DomainCacheSettingsPtrOutput) Rules() DomainCacheSettingsRuleArrayOutput
 }
 
 type DomainCacheSettingsRule struct {
-	// Specifies the content that matches `ruleType`. If `ruleType` is set to **0**,
-	// this parameter is empty. If `ruleType` is set to **1**, the value of this parameter is a list of file name
-	// extensions. A file name extension starts with a period (.). File name extensions are separated by semicolons (;),
-	// for example, .jpg;.zip;.exe. If `ruleType` is set to **2**, the value of this parameter is a list of directories.
-	// A directory starts with a slash (/). Directories are separated by semicolons (;), for example,
-	// /test/folder01;/test/folder02.
+	// Specifies the content that matches `ruleType`.
+	// + If `ruleType` is set to **all** or **home_page**, keep this parameter empty.
+	// + If `ruleType` is set to **file_extension**, the value of this parameter is a list of file name
+	//   extensions. A file name extension starts with a period (.). File name extensions are separated by semicolons (;),
+	//   for example, `.jpg;.zip;.exe`. Up to 20 file types are supported.
+	// + If `ruleType` is set to **catalog**, the value of this parameter is a list of directories. A directory starts with
+	//   a slash (/). Directories are separated by semicolons (;), for example, `/test/folder01;/test/folder02`.
+	//   Up to 20 directories are supported.
+	// + If `ruleType` is set to **full_path**, the value must start with a slash (/) and cannot end with an asterisk.
+	//   Example: `/test/index.html` or `/test/*.jpg`
 	Content *string `pulumi:"content"`
 	// Specifies the priority weight of this rule. The default value is 1.
 	// A larger value indicates a higher priority. The value ranges from 1 to 100. The weight values must be unique.
 	Priority *int `pulumi:"priority"`
 	// Specifies the rule type. Possible value are:
-	// **0**: All types of files are matched. It is the default value.
-	// **1**: Files are matched based on their suffixes.
-	// **2**: Files are matched based on their directories.
-	// **3**: Files are matched based on their full paths.
-	RuleType int `pulumi:"ruleType"`
+	// + **all**: All types of files are matched. It is the default value. The cloud will create a cache rule with **all**
+	//   rule type by default.
+	// + **file_extension**: Files are matched based on their suffixes.
+	// + **catalog**: Files are matched based on their directories.
+	// + **full_path**: Files are matched based on their full paths.
+	// + **home_page**: Files are matched based on their homepage.
+	RuleType string `pulumi:"ruleType"`
 	// Specifies the cache age. The maximum cache age is 365 days.
 	Ttl *int `pulumi:"ttl"`
-	// Specifies the unit of the cache age. Possible values: **1** (second), **2** (minute),
-	// **3** (hour), and **4** (day).
-	TtlType *int `pulumi:"ttlType"`
+	// Specifies the unit of the cache age. Possible values:
+	// + **s**: Second
+	// + **m**: Minute
+	// + **h**: Hour
+	// + **d**: Day
+	TtlType *string `pulumi:"ttlType"`
+	// Specifies the URL parameter types. Valid values are as follows:
+	// + **del_params**: Ignore specific URL parameters.
+	// + **reserve_params**: Retain specific URL parameters.
+	// + **ignore_url_params**: Ignore all URL parameters.
+	// + **full_url**: Retain all URL parameters.
+	UrlParameterType *string `pulumi:"urlParameterType"`
+	// Specifies the URL parameter values, which are separated by commas (,).
+	// Up to 10 parameters can be set.
+	// This parameter is mandatory when `urlParameterType` is set to **del_params** or **reserve_params**.
+	UrlParameterValue *string `pulumi:"urlParameterValue"`
 }
 
 // DomainCacheSettingsRuleInput is an input type that accepts DomainCacheSettingsRuleArgs and DomainCacheSettingsRuleOutput values.
@@ -206,27 +225,46 @@ type DomainCacheSettingsRuleInput interface {
 }
 
 type DomainCacheSettingsRuleArgs struct {
-	// Specifies the content that matches `ruleType`. If `ruleType` is set to **0**,
-	// this parameter is empty. If `ruleType` is set to **1**, the value of this parameter is a list of file name
-	// extensions. A file name extension starts with a period (.). File name extensions are separated by semicolons (;),
-	// for example, .jpg;.zip;.exe. If `ruleType` is set to **2**, the value of this parameter is a list of directories.
-	// A directory starts with a slash (/). Directories are separated by semicolons (;), for example,
-	// /test/folder01;/test/folder02.
+	// Specifies the content that matches `ruleType`.
+	// + If `ruleType` is set to **all** or **home_page**, keep this parameter empty.
+	// + If `ruleType` is set to **file_extension**, the value of this parameter is a list of file name
+	//   extensions. A file name extension starts with a period (.). File name extensions are separated by semicolons (;),
+	//   for example, `.jpg;.zip;.exe`. Up to 20 file types are supported.
+	// + If `ruleType` is set to **catalog**, the value of this parameter is a list of directories. A directory starts with
+	//   a slash (/). Directories are separated by semicolons (;), for example, `/test/folder01;/test/folder02`.
+	//   Up to 20 directories are supported.
+	// + If `ruleType` is set to **full_path**, the value must start with a slash (/) and cannot end with an asterisk.
+	//   Example: `/test/index.html` or `/test/*.jpg`
 	Content pulumi.StringPtrInput `pulumi:"content"`
 	// Specifies the priority weight of this rule. The default value is 1.
 	// A larger value indicates a higher priority. The value ranges from 1 to 100. The weight values must be unique.
 	Priority pulumi.IntPtrInput `pulumi:"priority"`
 	// Specifies the rule type. Possible value are:
-	// **0**: All types of files are matched. It is the default value.
-	// **1**: Files are matched based on their suffixes.
-	// **2**: Files are matched based on their directories.
-	// **3**: Files are matched based on their full paths.
-	RuleType pulumi.IntInput `pulumi:"ruleType"`
+	// + **all**: All types of files are matched. It is the default value. The cloud will create a cache rule with **all**
+	//   rule type by default.
+	// + **file_extension**: Files are matched based on their suffixes.
+	// + **catalog**: Files are matched based on their directories.
+	// + **full_path**: Files are matched based on their full paths.
+	// + **home_page**: Files are matched based on their homepage.
+	RuleType pulumi.StringInput `pulumi:"ruleType"`
 	// Specifies the cache age. The maximum cache age is 365 days.
 	Ttl pulumi.IntPtrInput `pulumi:"ttl"`
-	// Specifies the unit of the cache age. Possible values: **1** (second), **2** (minute),
-	// **3** (hour), and **4** (day).
-	TtlType pulumi.IntPtrInput `pulumi:"ttlType"`
+	// Specifies the unit of the cache age. Possible values:
+	// + **s**: Second
+	// + **m**: Minute
+	// + **h**: Hour
+	// + **d**: Day
+	TtlType pulumi.StringPtrInput `pulumi:"ttlType"`
+	// Specifies the URL parameter types. Valid values are as follows:
+	// + **del_params**: Ignore specific URL parameters.
+	// + **reserve_params**: Retain specific URL parameters.
+	// + **ignore_url_params**: Ignore all URL parameters.
+	// + **full_url**: Retain all URL parameters.
+	UrlParameterType pulumi.StringPtrInput `pulumi:"urlParameterType"`
+	// Specifies the URL parameter values, which are separated by commas (,).
+	// Up to 10 parameters can be set.
+	// This parameter is mandatory when `urlParameterType` is set to **del_params** or **reserve_params**.
+	UrlParameterValue pulumi.StringPtrInput `pulumi:"urlParameterValue"`
 }
 
 func (DomainCacheSettingsRuleArgs) ElementType() reflect.Type {
@@ -280,12 +318,16 @@ func (o DomainCacheSettingsRuleOutput) ToDomainCacheSettingsRuleOutputWithContex
 	return o
 }
 
-// Specifies the content that matches `ruleType`. If `ruleType` is set to **0**,
-// this parameter is empty. If `ruleType` is set to **1**, the value of this parameter is a list of file name
-// extensions. A file name extension starts with a period (.). File name extensions are separated by semicolons (;),
-// for example, .jpg;.zip;.exe. If `ruleType` is set to **2**, the value of this parameter is a list of directories.
-// A directory starts with a slash (/). Directories are separated by semicolons (;), for example,
-// /test/folder01;/test/folder02.
+// Specifies the content that matches `ruleType`.
+//   - If `ruleType` is set to **all** or **home_page**, keep this parameter empty.
+//   - If `ruleType` is set to **file_extension**, the value of this parameter is a list of file name
+//     extensions. A file name extension starts with a period (.). File name extensions are separated by semicolons (;),
+//     for example, `.jpg;.zip;.exe`. Up to 20 file types are supported.
+//   - If `ruleType` is set to **catalog**, the value of this parameter is a list of directories. A directory starts with
+//     a slash (/). Directories are separated by semicolons (;), for example, `/test/folder01;/test/folder02`.
+//     Up to 20 directories are supported.
+//   - If `ruleType` is set to **full_path**, the value must start with a slash (/) and cannot end with an asterisk.
+//     Example: `/test/index.html` or `/test/*.jpg`
 func (o DomainCacheSettingsRuleOutput) Content() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v DomainCacheSettingsRule) *string { return v.Content }).(pulumi.StringPtrOutput)
 }
@@ -297,12 +339,14 @@ func (o DomainCacheSettingsRuleOutput) Priority() pulumi.IntPtrOutput {
 }
 
 // Specifies the rule type. Possible value are:
-// **0**: All types of files are matched. It is the default value.
-// **1**: Files are matched based on their suffixes.
-// **2**: Files are matched based on their directories.
-// **3**: Files are matched based on their full paths.
-func (o DomainCacheSettingsRuleOutput) RuleType() pulumi.IntOutput {
-	return o.ApplyT(func(v DomainCacheSettingsRule) int { return v.RuleType }).(pulumi.IntOutput)
+//   - **all**: All types of files are matched. It is the default value. The cloud will create a cache rule with **all**
+//     rule type by default.
+//   - **file_extension**: Files are matched based on their suffixes.
+//   - **catalog**: Files are matched based on their directories.
+//   - **full_path**: Files are matched based on their full paths.
+//   - **home_page**: Files are matched based on their homepage.
+func (o DomainCacheSettingsRuleOutput) RuleType() pulumi.StringOutput {
+	return o.ApplyT(func(v DomainCacheSettingsRule) string { return v.RuleType }).(pulumi.StringOutput)
 }
 
 // Specifies the cache age. The maximum cache age is 365 days.
@@ -310,10 +354,29 @@ func (o DomainCacheSettingsRuleOutput) Ttl() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v DomainCacheSettingsRule) *int { return v.Ttl }).(pulumi.IntPtrOutput)
 }
 
-// Specifies the unit of the cache age. Possible values: **1** (second), **2** (minute),
-// **3** (hour), and **4** (day).
-func (o DomainCacheSettingsRuleOutput) TtlType() pulumi.IntPtrOutput {
-	return o.ApplyT(func(v DomainCacheSettingsRule) *int { return v.TtlType }).(pulumi.IntPtrOutput)
+// Specifies the unit of the cache age. Possible values:
+// + **s**: Second
+// + **m**: Minute
+// + **h**: Hour
+// + **d**: Day
+func (o DomainCacheSettingsRuleOutput) TtlType() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v DomainCacheSettingsRule) *string { return v.TtlType }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the URL parameter types. Valid values are as follows:
+// + **del_params**: Ignore specific URL parameters.
+// + **reserve_params**: Retain specific URL parameters.
+// + **ignore_url_params**: Ignore all URL parameters.
+// + **full_url**: Retain all URL parameters.
+func (o DomainCacheSettingsRuleOutput) UrlParameterType() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v DomainCacheSettingsRule) *string { return v.UrlParameterType }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the URL parameter values, which are separated by commas (,).
+// Up to 10 parameters can be set.
+// This parameter is mandatory when `urlParameterType` is set to **del_params** or **reserve_params**.
+func (o DomainCacheSettingsRuleOutput) UrlParameterValue() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v DomainCacheSettingsRule) *string { return v.UrlParameterValue }).(pulumi.StringPtrOutput)
 }
 
 type DomainCacheSettingsRuleArrayOutput struct{ *pulumi.OutputState }
@@ -337,36 +400,106 @@ func (o DomainCacheSettingsRuleArrayOutput) Index(i pulumi.IntInput) DomainCache
 }
 
 type DomainConfigs struct {
-	// Specifies the settings for caching URL parameters.
-	// The object structure is documented below.
+	// Specifies the geographic access control rules.
+	// The accessAreaFilter structure is documented below.
+	AccessAreaFilters []DomainConfigsAccessAreaFilter `pulumi:"accessAreaFilters"`
+	// Specifies the browser cache expiration settings.
+	// The browserCacheRules structure is documented below.
+	BrowserCacheRules       []DomainConfigsBrowserCacheRule       `pulumi:"browserCacheRules"`
 	CacheUrlParameterFilter *DomainConfigsCacheUrlParameterFilter `pulumi:"cacheUrlParameterFilter"`
-	// Specifies the smart compression. The object structure
+	// Specifies the client certificate configuration.
+	// The clientCert structure is documented below.
+	ClientCert *DomainConfigsClientCert `pulumi:"clientCert"`
+	// Specifies the smart compression. The compress structure
 	// is documented below.
 	Compress *DomainConfigsCompress `pulumi:"compress"`
+	// Specifies the description of the domain. The value contains up to `200` characters.
+	Description *string `pulumi:"description"`
+	// Specifies the status code cache TTL.
+	// The errorCodeCache structure is documented below.
+	ErrorCodeCaches []DomainConfigsErrorCodeCach `pulumi:"errorCodeCaches"`
+	// Specifies the custom error pages.
+	// The errorCodeRedirectRules structure is documented below.
+	ErrorCodeRedirectRules []DomainConfigsErrorCodeRedirectRule `pulumi:"errorCodeRedirectRules"`
+	// Specifies the advanced origin rules.
+	// The flexibleOrigin structure is documented below.
+	FlexibleOrigins []DomainConfigsFlexibleOrigin `pulumi:"flexibleOrigins"`
 	// Specifies the force redirect.
-	// The object structure is documented below.
+	// The forceRedirect structure is documented below.
 	ForceRedirect *DomainConfigsForceRedirect `pulumi:"forceRedirect"`
+	// Specifies the HSTS settings. HSTS forces clients (such as browsers) to use HTTPS to access
+	// your server, improving access security. The hsts structure is documented below.
+	Hsts *DomainConfigsHsts `pulumi:"hsts"`
 	// Specifies the HTTP response header settings.
-	// The object structure is documented below.
+	// The httpResponseHeader structure is documented below.
 	HttpResponseHeaders []DomainConfigsHttpResponseHeader `pulumi:"httpResponseHeaders"`
-	// Specifies the certificate configuration. The object
+	// Specifies the certificate configuration. The httpsSettings
 	// structure is documented below.
 	HttpsSettings *DomainConfigsHttpsSettings `pulumi:"httpsSettings"`
+	// Specifies the IP address blacklist or whitelist.
+	// The ipFilter structure is documented below.
+	IpFilter *DomainConfigsIpFilter `pulumi:"ipFilter"`
+	// Specifies the IP access frequency limit.
+	// The ipFrequencyLimit structure is documented below.
+	IpFrequencyLimit *DomainConfigsIpFrequencyLimit `pulumi:"ipFrequencyLimit"`
 	// Specifies whether to enable IPv6.
 	Ipv6Enable *bool `pulumi:"ipv6Enable"`
+	// Specifies whether to enable redirection from the origin.
+	// Valid values are as follows:
+	// + **on**: Enable.
+	// + **off**: Disable.
+	OriginFollow302Status *string `pulumi:"originFollow302Status"`
 	// Specifies the content retrieval protocol. Possible values:
-	// + **follow**: same as user requests.
+	// + **follow**: Same as user requests.
 	// + **http**: HTTP, which is the default value.
 	// + **https**: HTTPS.
 	OriginProtocol *string `pulumi:"originProtocol"`
+	// Specifies the origin response timeout.
+	// The value ranges from `5` to `60`, in seconds. Defaults to `30`.
+	OriginReceiveTimeout *int `pulumi:"originReceiveTimeout"`
+	// Specifies the rules of rewriting origin request URLs.
+	// The originRequestUrlRewrite structure is documented below.
+	OriginRequestUrlRewrites []DomainConfigsOriginRequestUrlRewrite `pulumi:"originRequestUrlRewrites"`
+	// Specifies the QUIC protocol. The quic structure is documented below.
+	Quic *DomainConfigsQuic `pulumi:"quic"`
 	// Specifies whether to enable range-based retrieval.
 	RangeBasedRetrievalEnabled *bool `pulumi:"rangeBasedRetrievalEnabled"`
+	// Specifies the referer validation. The referer structure is documented below.
+	Referer *DomainConfigsReferer `pulumi:"referer"`
+	// Specifies the remote authentication settings.
+	// The remoteAuth structure is documented below.
+	RemoteAuth *DomainConfigsRemoteAuth `pulumi:"remoteAuth"`
+	// Specifies the request rate limiting rules.
+	// The requestLimitRules structure is documented below.
+	RequestLimitRules []DomainConfigsRequestLimitRule `pulumi:"requestLimitRules"`
+	// Specifies the request url rewrite settings. Set access URL rewrite rules to
+	// redirect user requests to the URLs of cached resources.
+	// The requestUrlRewrite structure is documented below.
+	RequestUrlRewrites []DomainConfigsRequestUrlRewrite `pulumi:"requestUrlRewrites"`
 	// Specifies the retrieval request header settings.
-	// The object structure is documented below.
+	// The retrievalRequestHeader structure is documented below.
 	RetrievalRequestHeaders []DomainConfigsRetrievalRequestHeader `pulumi:"retrievalRequestHeaders"`
+	// Specifies whether ETag is verified during origin pull.
+	// Valid values are as follows:
+	// + **on**: Enable.
+	// + **off**: Disable.
+	SliceEtagStatus *string `pulumi:"sliceEtagStatus"`
+	// Specifies the origin SNI settings. If your origin server is bound to multiple domains and
+	// CDN visits the origin server using HTTPS, set the Server Name Indication (SNI) to specify the domain to be accessed.
+	// The sni structure is documented below.
+	Sni *DomainConfigsSni `pulumi:"sni"`
 	// Specifies the URL signing.
-	// The object structure is documented below.
+	// The urlSigning structure is documented below.
 	UrlSigning *DomainConfigsUrlSigning `pulumi:"urlSigning"`
+	// Specifies the User-Agent blacklist or whitelist settings.
+	// The userAgentFilter structure is documented below.
+	UserAgentFilter *DomainConfigsUserAgentFilter `pulumi:"userAgentFilter"`
+	// Specifies the video seek settings. The videoSeek structure
+	// is documented below.
+	VideoSeek *DomainConfigsVideoSeek `pulumi:"videoSeek"`
+	// Specifies the websocket settings. This field can only be configured if `type` is
+	// set to **wholeSite**. The websocket structure is documented below.
+	Websocket *DomainConfigsWebsocket `pulumi:"websocket"`
 }
 
 // DomainConfigsInput is an input type that accepts DomainConfigsArgs and DomainConfigsOutput values.
@@ -381,36 +514,106 @@ type DomainConfigsInput interface {
 }
 
 type DomainConfigsArgs struct {
-	// Specifies the settings for caching URL parameters.
-	// The object structure is documented below.
+	// Specifies the geographic access control rules.
+	// The accessAreaFilter structure is documented below.
+	AccessAreaFilters DomainConfigsAccessAreaFilterArrayInput `pulumi:"accessAreaFilters"`
+	// Specifies the browser cache expiration settings.
+	// The browserCacheRules structure is documented below.
+	BrowserCacheRules       DomainConfigsBrowserCacheRuleArrayInput      `pulumi:"browserCacheRules"`
 	CacheUrlParameterFilter DomainConfigsCacheUrlParameterFilterPtrInput `pulumi:"cacheUrlParameterFilter"`
-	// Specifies the smart compression. The object structure
+	// Specifies the client certificate configuration.
+	// The clientCert structure is documented below.
+	ClientCert DomainConfigsClientCertPtrInput `pulumi:"clientCert"`
+	// Specifies the smart compression. The compress structure
 	// is documented below.
 	Compress DomainConfigsCompressPtrInput `pulumi:"compress"`
+	// Specifies the description of the domain. The value contains up to `200` characters.
+	Description pulumi.StringPtrInput `pulumi:"description"`
+	// Specifies the status code cache TTL.
+	// The errorCodeCache structure is documented below.
+	ErrorCodeCaches DomainConfigsErrorCodeCachArrayInput `pulumi:"errorCodeCaches"`
+	// Specifies the custom error pages.
+	// The errorCodeRedirectRules structure is documented below.
+	ErrorCodeRedirectRules DomainConfigsErrorCodeRedirectRuleArrayInput `pulumi:"errorCodeRedirectRules"`
+	// Specifies the advanced origin rules.
+	// The flexibleOrigin structure is documented below.
+	FlexibleOrigins DomainConfigsFlexibleOriginArrayInput `pulumi:"flexibleOrigins"`
 	// Specifies the force redirect.
-	// The object structure is documented below.
+	// The forceRedirect structure is documented below.
 	ForceRedirect DomainConfigsForceRedirectPtrInput `pulumi:"forceRedirect"`
+	// Specifies the HSTS settings. HSTS forces clients (such as browsers) to use HTTPS to access
+	// your server, improving access security. The hsts structure is documented below.
+	Hsts DomainConfigsHstsPtrInput `pulumi:"hsts"`
 	// Specifies the HTTP response header settings.
-	// The object structure is documented below.
+	// The httpResponseHeader structure is documented below.
 	HttpResponseHeaders DomainConfigsHttpResponseHeaderArrayInput `pulumi:"httpResponseHeaders"`
-	// Specifies the certificate configuration. The object
+	// Specifies the certificate configuration. The httpsSettings
 	// structure is documented below.
 	HttpsSettings DomainConfigsHttpsSettingsPtrInput `pulumi:"httpsSettings"`
+	// Specifies the IP address blacklist or whitelist.
+	// The ipFilter structure is documented below.
+	IpFilter DomainConfigsIpFilterPtrInput `pulumi:"ipFilter"`
+	// Specifies the IP access frequency limit.
+	// The ipFrequencyLimit structure is documented below.
+	IpFrequencyLimit DomainConfigsIpFrequencyLimitPtrInput `pulumi:"ipFrequencyLimit"`
 	// Specifies whether to enable IPv6.
 	Ipv6Enable pulumi.BoolPtrInput `pulumi:"ipv6Enable"`
+	// Specifies whether to enable redirection from the origin.
+	// Valid values are as follows:
+	// + **on**: Enable.
+	// + **off**: Disable.
+	OriginFollow302Status pulumi.StringPtrInput `pulumi:"originFollow302Status"`
 	// Specifies the content retrieval protocol. Possible values:
-	// + **follow**: same as user requests.
+	// + **follow**: Same as user requests.
 	// + **http**: HTTP, which is the default value.
 	// + **https**: HTTPS.
 	OriginProtocol pulumi.StringPtrInput `pulumi:"originProtocol"`
+	// Specifies the origin response timeout.
+	// The value ranges from `5` to `60`, in seconds. Defaults to `30`.
+	OriginReceiveTimeout pulumi.IntPtrInput `pulumi:"originReceiveTimeout"`
+	// Specifies the rules of rewriting origin request URLs.
+	// The originRequestUrlRewrite structure is documented below.
+	OriginRequestUrlRewrites DomainConfigsOriginRequestUrlRewriteArrayInput `pulumi:"originRequestUrlRewrites"`
+	// Specifies the QUIC protocol. The quic structure is documented below.
+	Quic DomainConfigsQuicPtrInput `pulumi:"quic"`
 	// Specifies whether to enable range-based retrieval.
 	RangeBasedRetrievalEnabled pulumi.BoolPtrInput `pulumi:"rangeBasedRetrievalEnabled"`
+	// Specifies the referer validation. The referer structure is documented below.
+	Referer DomainConfigsRefererPtrInput `pulumi:"referer"`
+	// Specifies the remote authentication settings.
+	// The remoteAuth structure is documented below.
+	RemoteAuth DomainConfigsRemoteAuthPtrInput `pulumi:"remoteAuth"`
+	// Specifies the request rate limiting rules.
+	// The requestLimitRules structure is documented below.
+	RequestLimitRules DomainConfigsRequestLimitRuleArrayInput `pulumi:"requestLimitRules"`
+	// Specifies the request url rewrite settings. Set access URL rewrite rules to
+	// redirect user requests to the URLs of cached resources.
+	// The requestUrlRewrite structure is documented below.
+	RequestUrlRewrites DomainConfigsRequestUrlRewriteArrayInput `pulumi:"requestUrlRewrites"`
 	// Specifies the retrieval request header settings.
-	// The object structure is documented below.
+	// The retrievalRequestHeader structure is documented below.
 	RetrievalRequestHeaders DomainConfigsRetrievalRequestHeaderArrayInput `pulumi:"retrievalRequestHeaders"`
+	// Specifies whether ETag is verified during origin pull.
+	// Valid values are as follows:
+	// + **on**: Enable.
+	// + **off**: Disable.
+	SliceEtagStatus pulumi.StringPtrInput `pulumi:"sliceEtagStatus"`
+	// Specifies the origin SNI settings. If your origin server is bound to multiple domains and
+	// CDN visits the origin server using HTTPS, set the Server Name Indication (SNI) to specify the domain to be accessed.
+	// The sni structure is documented below.
+	Sni DomainConfigsSniPtrInput `pulumi:"sni"`
 	// Specifies the URL signing.
-	// The object structure is documented below.
+	// The urlSigning structure is documented below.
 	UrlSigning DomainConfigsUrlSigningPtrInput `pulumi:"urlSigning"`
+	// Specifies the User-Agent blacklist or whitelist settings.
+	// The userAgentFilter structure is documented below.
+	UserAgentFilter DomainConfigsUserAgentFilterPtrInput `pulumi:"userAgentFilter"`
+	// Specifies the video seek settings. The videoSeek structure
+	// is documented below.
+	VideoSeek DomainConfigsVideoSeekPtrInput `pulumi:"videoSeek"`
+	// Specifies the websocket settings. This field can only be configured if `type` is
+	// set to **wholeSite**. The websocket structure is documented below.
+	Websocket DomainConfigsWebsocketPtrInput `pulumi:"websocket"`
 }
 
 func (DomainConfigsArgs) ElementType() reflect.Type {
@@ -490,34 +693,91 @@ func (o DomainConfigsOutput) ToDomainConfigsPtrOutputWithContext(ctx context.Con
 	}).(DomainConfigsPtrOutput)
 }
 
-// Specifies the settings for caching URL parameters.
-// The object structure is documented below.
+// Specifies the geographic access control rules.
+// The accessAreaFilter structure is documented below.
+func (o DomainConfigsOutput) AccessAreaFilters() DomainConfigsAccessAreaFilterArrayOutput {
+	return o.ApplyT(func(v DomainConfigs) []DomainConfigsAccessAreaFilter { return v.AccessAreaFilters }).(DomainConfigsAccessAreaFilterArrayOutput)
+}
+
+// Specifies the browser cache expiration settings.
+// The browserCacheRules structure is documented below.
+func (o DomainConfigsOutput) BrowserCacheRules() DomainConfigsBrowserCacheRuleArrayOutput {
+	return o.ApplyT(func(v DomainConfigs) []DomainConfigsBrowserCacheRule { return v.BrowserCacheRules }).(DomainConfigsBrowserCacheRuleArrayOutput)
+}
+
 func (o DomainConfigsOutput) CacheUrlParameterFilter() DomainConfigsCacheUrlParameterFilterPtrOutput {
 	return o.ApplyT(func(v DomainConfigs) *DomainConfigsCacheUrlParameterFilter { return v.CacheUrlParameterFilter }).(DomainConfigsCacheUrlParameterFilterPtrOutput)
 }
 
-// Specifies the smart compression. The object structure
+// Specifies the client certificate configuration.
+// The clientCert structure is documented below.
+func (o DomainConfigsOutput) ClientCert() DomainConfigsClientCertPtrOutput {
+	return o.ApplyT(func(v DomainConfigs) *DomainConfigsClientCert { return v.ClientCert }).(DomainConfigsClientCertPtrOutput)
+}
+
+// Specifies the smart compression. The compress structure
 // is documented below.
 func (o DomainConfigsOutput) Compress() DomainConfigsCompressPtrOutput {
 	return o.ApplyT(func(v DomainConfigs) *DomainConfigsCompress { return v.Compress }).(DomainConfigsCompressPtrOutput)
 }
 
+// Specifies the description of the domain. The value contains up to `200` characters.
+func (o DomainConfigsOutput) Description() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v DomainConfigs) *string { return v.Description }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the status code cache TTL.
+// The errorCodeCache structure is documented below.
+func (o DomainConfigsOutput) ErrorCodeCaches() DomainConfigsErrorCodeCachArrayOutput {
+	return o.ApplyT(func(v DomainConfigs) []DomainConfigsErrorCodeCach { return v.ErrorCodeCaches }).(DomainConfigsErrorCodeCachArrayOutput)
+}
+
+// Specifies the custom error pages.
+// The errorCodeRedirectRules structure is documented below.
+func (o DomainConfigsOutput) ErrorCodeRedirectRules() DomainConfigsErrorCodeRedirectRuleArrayOutput {
+	return o.ApplyT(func(v DomainConfigs) []DomainConfigsErrorCodeRedirectRule { return v.ErrorCodeRedirectRules }).(DomainConfigsErrorCodeRedirectRuleArrayOutput)
+}
+
+// Specifies the advanced origin rules.
+// The flexibleOrigin structure is documented below.
+func (o DomainConfigsOutput) FlexibleOrigins() DomainConfigsFlexibleOriginArrayOutput {
+	return o.ApplyT(func(v DomainConfigs) []DomainConfigsFlexibleOrigin { return v.FlexibleOrigins }).(DomainConfigsFlexibleOriginArrayOutput)
+}
+
 // Specifies the force redirect.
-// The object structure is documented below.
+// The forceRedirect structure is documented below.
 func (o DomainConfigsOutput) ForceRedirect() DomainConfigsForceRedirectPtrOutput {
 	return o.ApplyT(func(v DomainConfigs) *DomainConfigsForceRedirect { return v.ForceRedirect }).(DomainConfigsForceRedirectPtrOutput)
 }
 
+// Specifies the HSTS settings. HSTS forces clients (such as browsers) to use HTTPS to access
+// your server, improving access security. The hsts structure is documented below.
+func (o DomainConfigsOutput) Hsts() DomainConfigsHstsPtrOutput {
+	return o.ApplyT(func(v DomainConfigs) *DomainConfigsHsts { return v.Hsts }).(DomainConfigsHstsPtrOutput)
+}
+
 // Specifies the HTTP response header settings.
-// The object structure is documented below.
+// The httpResponseHeader structure is documented below.
 func (o DomainConfigsOutput) HttpResponseHeaders() DomainConfigsHttpResponseHeaderArrayOutput {
 	return o.ApplyT(func(v DomainConfigs) []DomainConfigsHttpResponseHeader { return v.HttpResponseHeaders }).(DomainConfigsHttpResponseHeaderArrayOutput)
 }
 
-// Specifies the certificate configuration. The object
+// Specifies the certificate configuration. The httpsSettings
 // structure is documented below.
 func (o DomainConfigsOutput) HttpsSettings() DomainConfigsHttpsSettingsPtrOutput {
 	return o.ApplyT(func(v DomainConfigs) *DomainConfigsHttpsSettings { return v.HttpsSettings }).(DomainConfigsHttpsSettingsPtrOutput)
+}
+
+// Specifies the IP address blacklist or whitelist.
+// The ipFilter structure is documented below.
+func (o DomainConfigsOutput) IpFilter() DomainConfigsIpFilterPtrOutput {
+	return o.ApplyT(func(v DomainConfigs) *DomainConfigsIpFilter { return v.IpFilter }).(DomainConfigsIpFilterPtrOutput)
+}
+
+// Specifies the IP access frequency limit.
+// The ipFrequencyLimit structure is documented below.
+func (o DomainConfigsOutput) IpFrequencyLimit() DomainConfigsIpFrequencyLimitPtrOutput {
+	return o.ApplyT(func(v DomainConfigs) *DomainConfigsIpFrequencyLimit { return v.IpFrequencyLimit }).(DomainConfigsIpFrequencyLimitPtrOutput)
 }
 
 // Specifies whether to enable IPv6.
@@ -525,12 +785,37 @@ func (o DomainConfigsOutput) Ipv6Enable() pulumi.BoolPtrOutput {
 	return o.ApplyT(func(v DomainConfigs) *bool { return v.Ipv6Enable }).(pulumi.BoolPtrOutput)
 }
 
+// Specifies whether to enable redirection from the origin.
+// Valid values are as follows:
+// + **on**: Enable.
+// + **off**: Disable.
+func (o DomainConfigsOutput) OriginFollow302Status() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v DomainConfigs) *string { return v.OriginFollow302Status }).(pulumi.StringPtrOutput)
+}
+
 // Specifies the content retrieval protocol. Possible values:
-// + **follow**: same as user requests.
+// + **follow**: Same as user requests.
 // + **http**: HTTP, which is the default value.
 // + **https**: HTTPS.
 func (o DomainConfigsOutput) OriginProtocol() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v DomainConfigs) *string { return v.OriginProtocol }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the origin response timeout.
+// The value ranges from `5` to `60`, in seconds. Defaults to `30`.
+func (o DomainConfigsOutput) OriginReceiveTimeout() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v DomainConfigs) *int { return v.OriginReceiveTimeout }).(pulumi.IntPtrOutput)
+}
+
+// Specifies the rules of rewriting origin request URLs.
+// The originRequestUrlRewrite structure is documented below.
+func (o DomainConfigsOutput) OriginRequestUrlRewrites() DomainConfigsOriginRequestUrlRewriteArrayOutput {
+	return o.ApplyT(func(v DomainConfigs) []DomainConfigsOriginRequestUrlRewrite { return v.OriginRequestUrlRewrites }).(DomainConfigsOriginRequestUrlRewriteArrayOutput)
+}
+
+// Specifies the QUIC protocol. The quic structure is documented below.
+func (o DomainConfigsOutput) Quic() DomainConfigsQuicPtrOutput {
+	return o.ApplyT(func(v DomainConfigs) *DomainConfigsQuic { return v.Quic }).(DomainConfigsQuicPtrOutput)
 }
 
 // Specifies whether to enable range-based retrieval.
@@ -538,16 +823,73 @@ func (o DomainConfigsOutput) RangeBasedRetrievalEnabled() pulumi.BoolPtrOutput {
 	return o.ApplyT(func(v DomainConfigs) *bool { return v.RangeBasedRetrievalEnabled }).(pulumi.BoolPtrOutput)
 }
 
+// Specifies the referer validation. The referer structure is documented below.
+func (o DomainConfigsOutput) Referer() DomainConfigsRefererPtrOutput {
+	return o.ApplyT(func(v DomainConfigs) *DomainConfigsReferer { return v.Referer }).(DomainConfigsRefererPtrOutput)
+}
+
+// Specifies the remote authentication settings.
+// The remoteAuth structure is documented below.
+func (o DomainConfigsOutput) RemoteAuth() DomainConfigsRemoteAuthPtrOutput {
+	return o.ApplyT(func(v DomainConfigs) *DomainConfigsRemoteAuth { return v.RemoteAuth }).(DomainConfigsRemoteAuthPtrOutput)
+}
+
+// Specifies the request rate limiting rules.
+// The requestLimitRules structure is documented below.
+func (o DomainConfigsOutput) RequestLimitRules() DomainConfigsRequestLimitRuleArrayOutput {
+	return o.ApplyT(func(v DomainConfigs) []DomainConfigsRequestLimitRule { return v.RequestLimitRules }).(DomainConfigsRequestLimitRuleArrayOutput)
+}
+
+// Specifies the request url rewrite settings. Set access URL rewrite rules to
+// redirect user requests to the URLs of cached resources.
+// The requestUrlRewrite structure is documented below.
+func (o DomainConfigsOutput) RequestUrlRewrites() DomainConfigsRequestUrlRewriteArrayOutput {
+	return o.ApplyT(func(v DomainConfigs) []DomainConfigsRequestUrlRewrite { return v.RequestUrlRewrites }).(DomainConfigsRequestUrlRewriteArrayOutput)
+}
+
 // Specifies the retrieval request header settings.
-// The object structure is documented below.
+// The retrievalRequestHeader structure is documented below.
 func (o DomainConfigsOutput) RetrievalRequestHeaders() DomainConfigsRetrievalRequestHeaderArrayOutput {
 	return o.ApplyT(func(v DomainConfigs) []DomainConfigsRetrievalRequestHeader { return v.RetrievalRequestHeaders }).(DomainConfigsRetrievalRequestHeaderArrayOutput)
 }
 
+// Specifies whether ETag is verified during origin pull.
+// Valid values are as follows:
+// + **on**: Enable.
+// + **off**: Disable.
+func (o DomainConfigsOutput) SliceEtagStatus() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v DomainConfigs) *string { return v.SliceEtagStatus }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the origin SNI settings. If your origin server is bound to multiple domains and
+// CDN visits the origin server using HTTPS, set the Server Name Indication (SNI) to specify the domain to be accessed.
+// The sni structure is documented below.
+func (o DomainConfigsOutput) Sni() DomainConfigsSniPtrOutput {
+	return o.ApplyT(func(v DomainConfigs) *DomainConfigsSni { return v.Sni }).(DomainConfigsSniPtrOutput)
+}
+
 // Specifies the URL signing.
-// The object structure is documented below.
+// The urlSigning structure is documented below.
 func (o DomainConfigsOutput) UrlSigning() DomainConfigsUrlSigningPtrOutput {
 	return o.ApplyT(func(v DomainConfigs) *DomainConfigsUrlSigning { return v.UrlSigning }).(DomainConfigsUrlSigningPtrOutput)
+}
+
+// Specifies the User-Agent blacklist or whitelist settings.
+// The userAgentFilter structure is documented below.
+func (o DomainConfigsOutput) UserAgentFilter() DomainConfigsUserAgentFilterPtrOutput {
+	return o.ApplyT(func(v DomainConfigs) *DomainConfigsUserAgentFilter { return v.UserAgentFilter }).(DomainConfigsUserAgentFilterPtrOutput)
+}
+
+// Specifies the video seek settings. The videoSeek structure
+// is documented below.
+func (o DomainConfigsOutput) VideoSeek() DomainConfigsVideoSeekPtrOutput {
+	return o.ApplyT(func(v DomainConfigs) *DomainConfigsVideoSeek { return v.VideoSeek }).(DomainConfigsVideoSeekPtrOutput)
+}
+
+// Specifies the websocket settings. This field can only be configured if `type` is
+// set to **wholeSite**. The websocket structure is documented below.
+func (o DomainConfigsOutput) Websocket() DomainConfigsWebsocketPtrOutput {
+	return o.ApplyT(func(v DomainConfigs) *DomainConfigsWebsocket { return v.Websocket }).(DomainConfigsWebsocketPtrOutput)
 }
 
 type DomainConfigsPtrOutput struct{ *pulumi.OutputState }
@@ -574,8 +916,28 @@ func (o DomainConfigsPtrOutput) Elem() DomainConfigsOutput {
 	}).(DomainConfigsOutput)
 }
 
-// Specifies the settings for caching URL parameters.
-// The object structure is documented below.
+// Specifies the geographic access control rules.
+// The accessAreaFilter structure is documented below.
+func (o DomainConfigsPtrOutput) AccessAreaFilters() DomainConfigsAccessAreaFilterArrayOutput {
+	return o.ApplyT(func(v *DomainConfigs) []DomainConfigsAccessAreaFilter {
+		if v == nil {
+			return nil
+		}
+		return v.AccessAreaFilters
+	}).(DomainConfigsAccessAreaFilterArrayOutput)
+}
+
+// Specifies the browser cache expiration settings.
+// The browserCacheRules structure is documented below.
+func (o DomainConfigsPtrOutput) BrowserCacheRules() DomainConfigsBrowserCacheRuleArrayOutput {
+	return o.ApplyT(func(v *DomainConfigs) []DomainConfigsBrowserCacheRule {
+		if v == nil {
+			return nil
+		}
+		return v.BrowserCacheRules
+	}).(DomainConfigsBrowserCacheRuleArrayOutput)
+}
+
 func (o DomainConfigsPtrOutput) CacheUrlParameterFilter() DomainConfigsCacheUrlParameterFilterPtrOutput {
 	return o.ApplyT(func(v *DomainConfigs) *DomainConfigsCacheUrlParameterFilter {
 		if v == nil {
@@ -585,7 +947,18 @@ func (o DomainConfigsPtrOutput) CacheUrlParameterFilter() DomainConfigsCacheUrlP
 	}).(DomainConfigsCacheUrlParameterFilterPtrOutput)
 }
 
-// Specifies the smart compression. The object structure
+// Specifies the client certificate configuration.
+// The clientCert structure is documented below.
+func (o DomainConfigsPtrOutput) ClientCert() DomainConfigsClientCertPtrOutput {
+	return o.ApplyT(func(v *DomainConfigs) *DomainConfigsClientCert {
+		if v == nil {
+			return nil
+		}
+		return v.ClientCert
+	}).(DomainConfigsClientCertPtrOutput)
+}
+
+// Specifies the smart compression. The compress structure
 // is documented below.
 func (o DomainConfigsPtrOutput) Compress() DomainConfigsCompressPtrOutput {
 	return o.ApplyT(func(v *DomainConfigs) *DomainConfigsCompress {
@@ -596,8 +969,51 @@ func (o DomainConfigsPtrOutput) Compress() DomainConfigsCompressPtrOutput {
 	}).(DomainConfigsCompressPtrOutput)
 }
 
+// Specifies the description of the domain. The value contains up to `200` characters.
+func (o DomainConfigsPtrOutput) Description() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *DomainConfigs) *string {
+		if v == nil {
+			return nil
+		}
+		return v.Description
+	}).(pulumi.StringPtrOutput)
+}
+
+// Specifies the status code cache TTL.
+// The errorCodeCache structure is documented below.
+func (o DomainConfigsPtrOutput) ErrorCodeCaches() DomainConfigsErrorCodeCachArrayOutput {
+	return o.ApplyT(func(v *DomainConfigs) []DomainConfigsErrorCodeCach {
+		if v == nil {
+			return nil
+		}
+		return v.ErrorCodeCaches
+	}).(DomainConfigsErrorCodeCachArrayOutput)
+}
+
+// Specifies the custom error pages.
+// The errorCodeRedirectRules structure is documented below.
+func (o DomainConfigsPtrOutput) ErrorCodeRedirectRules() DomainConfigsErrorCodeRedirectRuleArrayOutput {
+	return o.ApplyT(func(v *DomainConfigs) []DomainConfigsErrorCodeRedirectRule {
+		if v == nil {
+			return nil
+		}
+		return v.ErrorCodeRedirectRules
+	}).(DomainConfigsErrorCodeRedirectRuleArrayOutput)
+}
+
+// Specifies the advanced origin rules.
+// The flexibleOrigin structure is documented below.
+func (o DomainConfigsPtrOutput) FlexibleOrigins() DomainConfigsFlexibleOriginArrayOutput {
+	return o.ApplyT(func(v *DomainConfigs) []DomainConfigsFlexibleOrigin {
+		if v == nil {
+			return nil
+		}
+		return v.FlexibleOrigins
+	}).(DomainConfigsFlexibleOriginArrayOutput)
+}
+
 // Specifies the force redirect.
-// The object structure is documented below.
+// The forceRedirect structure is documented below.
 func (o DomainConfigsPtrOutput) ForceRedirect() DomainConfigsForceRedirectPtrOutput {
 	return o.ApplyT(func(v *DomainConfigs) *DomainConfigsForceRedirect {
 		if v == nil {
@@ -607,8 +1023,19 @@ func (o DomainConfigsPtrOutput) ForceRedirect() DomainConfigsForceRedirectPtrOut
 	}).(DomainConfigsForceRedirectPtrOutput)
 }
 
+// Specifies the HSTS settings. HSTS forces clients (such as browsers) to use HTTPS to access
+// your server, improving access security. The hsts structure is documented below.
+func (o DomainConfigsPtrOutput) Hsts() DomainConfigsHstsPtrOutput {
+	return o.ApplyT(func(v *DomainConfigs) *DomainConfigsHsts {
+		if v == nil {
+			return nil
+		}
+		return v.Hsts
+	}).(DomainConfigsHstsPtrOutput)
+}
+
 // Specifies the HTTP response header settings.
-// The object structure is documented below.
+// The httpResponseHeader structure is documented below.
 func (o DomainConfigsPtrOutput) HttpResponseHeaders() DomainConfigsHttpResponseHeaderArrayOutput {
 	return o.ApplyT(func(v *DomainConfigs) []DomainConfigsHttpResponseHeader {
 		if v == nil {
@@ -618,7 +1045,7 @@ func (o DomainConfigsPtrOutput) HttpResponseHeaders() DomainConfigsHttpResponseH
 	}).(DomainConfigsHttpResponseHeaderArrayOutput)
 }
 
-// Specifies the certificate configuration. The object
+// Specifies the certificate configuration. The httpsSettings
 // structure is documented below.
 func (o DomainConfigsPtrOutput) HttpsSettings() DomainConfigsHttpsSettingsPtrOutput {
 	return o.ApplyT(func(v *DomainConfigs) *DomainConfigsHttpsSettings {
@@ -627,6 +1054,28 @@ func (o DomainConfigsPtrOutput) HttpsSettings() DomainConfigsHttpsSettingsPtrOut
 		}
 		return v.HttpsSettings
 	}).(DomainConfigsHttpsSettingsPtrOutput)
+}
+
+// Specifies the IP address blacklist or whitelist.
+// The ipFilter structure is documented below.
+func (o DomainConfigsPtrOutput) IpFilter() DomainConfigsIpFilterPtrOutput {
+	return o.ApplyT(func(v *DomainConfigs) *DomainConfigsIpFilter {
+		if v == nil {
+			return nil
+		}
+		return v.IpFilter
+	}).(DomainConfigsIpFilterPtrOutput)
+}
+
+// Specifies the IP access frequency limit.
+// The ipFrequencyLimit structure is documented below.
+func (o DomainConfigsPtrOutput) IpFrequencyLimit() DomainConfigsIpFrequencyLimitPtrOutput {
+	return o.ApplyT(func(v *DomainConfigs) *DomainConfigsIpFrequencyLimit {
+		if v == nil {
+			return nil
+		}
+		return v.IpFrequencyLimit
+	}).(DomainConfigsIpFrequencyLimitPtrOutput)
 }
 
 // Specifies whether to enable IPv6.
@@ -639,8 +1088,21 @@ func (o DomainConfigsPtrOutput) Ipv6Enable() pulumi.BoolPtrOutput {
 	}).(pulumi.BoolPtrOutput)
 }
 
+// Specifies whether to enable redirection from the origin.
+// Valid values are as follows:
+// + **on**: Enable.
+// + **off**: Disable.
+func (o DomainConfigsPtrOutput) OriginFollow302Status() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *DomainConfigs) *string {
+		if v == nil {
+			return nil
+		}
+		return v.OriginFollow302Status
+	}).(pulumi.StringPtrOutput)
+}
+
 // Specifies the content retrieval protocol. Possible values:
-// + **follow**: same as user requests.
+// + **follow**: Same as user requests.
 // + **http**: HTTP, which is the default value.
 // + **https**: HTTPS.
 func (o DomainConfigsPtrOutput) OriginProtocol() pulumi.StringPtrOutput {
@@ -650,6 +1112,38 @@ func (o DomainConfigsPtrOutput) OriginProtocol() pulumi.StringPtrOutput {
 		}
 		return v.OriginProtocol
 	}).(pulumi.StringPtrOutput)
+}
+
+// Specifies the origin response timeout.
+// The value ranges from `5` to `60`, in seconds. Defaults to `30`.
+func (o DomainConfigsPtrOutput) OriginReceiveTimeout() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v *DomainConfigs) *int {
+		if v == nil {
+			return nil
+		}
+		return v.OriginReceiveTimeout
+	}).(pulumi.IntPtrOutput)
+}
+
+// Specifies the rules of rewriting origin request URLs.
+// The originRequestUrlRewrite structure is documented below.
+func (o DomainConfigsPtrOutput) OriginRequestUrlRewrites() DomainConfigsOriginRequestUrlRewriteArrayOutput {
+	return o.ApplyT(func(v *DomainConfigs) []DomainConfigsOriginRequestUrlRewrite {
+		if v == nil {
+			return nil
+		}
+		return v.OriginRequestUrlRewrites
+	}).(DomainConfigsOriginRequestUrlRewriteArrayOutput)
+}
+
+// Specifies the QUIC protocol. The quic structure is documented below.
+func (o DomainConfigsPtrOutput) Quic() DomainConfigsQuicPtrOutput {
+	return o.ApplyT(func(v *DomainConfigs) *DomainConfigsQuic {
+		if v == nil {
+			return nil
+		}
+		return v.Quic
+	}).(DomainConfigsQuicPtrOutput)
 }
 
 // Specifies whether to enable range-based retrieval.
@@ -662,8 +1156,52 @@ func (o DomainConfigsPtrOutput) RangeBasedRetrievalEnabled() pulumi.BoolPtrOutpu
 	}).(pulumi.BoolPtrOutput)
 }
 
+// Specifies the referer validation. The referer structure is documented below.
+func (o DomainConfigsPtrOutput) Referer() DomainConfigsRefererPtrOutput {
+	return o.ApplyT(func(v *DomainConfigs) *DomainConfigsReferer {
+		if v == nil {
+			return nil
+		}
+		return v.Referer
+	}).(DomainConfigsRefererPtrOutput)
+}
+
+// Specifies the remote authentication settings.
+// The remoteAuth structure is documented below.
+func (o DomainConfigsPtrOutput) RemoteAuth() DomainConfigsRemoteAuthPtrOutput {
+	return o.ApplyT(func(v *DomainConfigs) *DomainConfigsRemoteAuth {
+		if v == nil {
+			return nil
+		}
+		return v.RemoteAuth
+	}).(DomainConfigsRemoteAuthPtrOutput)
+}
+
+// Specifies the request rate limiting rules.
+// The requestLimitRules structure is documented below.
+func (o DomainConfigsPtrOutput) RequestLimitRules() DomainConfigsRequestLimitRuleArrayOutput {
+	return o.ApplyT(func(v *DomainConfigs) []DomainConfigsRequestLimitRule {
+		if v == nil {
+			return nil
+		}
+		return v.RequestLimitRules
+	}).(DomainConfigsRequestLimitRuleArrayOutput)
+}
+
+// Specifies the request url rewrite settings. Set access URL rewrite rules to
+// redirect user requests to the URLs of cached resources.
+// The requestUrlRewrite structure is documented below.
+func (o DomainConfigsPtrOutput) RequestUrlRewrites() DomainConfigsRequestUrlRewriteArrayOutput {
+	return o.ApplyT(func(v *DomainConfigs) []DomainConfigsRequestUrlRewrite {
+		if v == nil {
+			return nil
+		}
+		return v.RequestUrlRewrites
+	}).(DomainConfigsRequestUrlRewriteArrayOutput)
+}
+
 // Specifies the retrieval request header settings.
-// The object structure is documented below.
+// The retrievalRequestHeader structure is documented below.
 func (o DomainConfigsPtrOutput) RetrievalRequestHeaders() DomainConfigsRetrievalRequestHeaderArrayOutput {
 	return o.ApplyT(func(v *DomainConfigs) []DomainConfigsRetrievalRequestHeader {
 		if v == nil {
@@ -673,8 +1211,33 @@ func (o DomainConfigsPtrOutput) RetrievalRequestHeaders() DomainConfigsRetrieval
 	}).(DomainConfigsRetrievalRequestHeaderArrayOutput)
 }
 
+// Specifies whether ETag is verified during origin pull.
+// Valid values are as follows:
+// + **on**: Enable.
+// + **off**: Disable.
+func (o DomainConfigsPtrOutput) SliceEtagStatus() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *DomainConfigs) *string {
+		if v == nil {
+			return nil
+		}
+		return v.SliceEtagStatus
+	}).(pulumi.StringPtrOutput)
+}
+
+// Specifies the origin SNI settings. If your origin server is bound to multiple domains and
+// CDN visits the origin server using HTTPS, set the Server Name Indication (SNI) to specify the domain to be accessed.
+// The sni structure is documented below.
+func (o DomainConfigsPtrOutput) Sni() DomainConfigsSniPtrOutput {
+	return o.ApplyT(func(v *DomainConfigs) *DomainConfigsSni {
+		if v == nil {
+			return nil
+		}
+		return v.Sni
+	}).(DomainConfigsSniPtrOutput)
+}
+
 // Specifies the URL signing.
-// The object structure is documented below.
+// The urlSigning structure is documented below.
 func (o DomainConfigsPtrOutput) UrlSigning() DomainConfigsUrlSigningPtrOutput {
 	return o.ApplyT(func(v *DomainConfigs) *DomainConfigsUrlSigning {
 		if v == nil {
@@ -684,14 +1247,497 @@ func (o DomainConfigsPtrOutput) UrlSigning() DomainConfigsUrlSigningPtrOutput {
 	}).(DomainConfigsUrlSigningPtrOutput)
 }
 
+// Specifies the User-Agent blacklist or whitelist settings.
+// The userAgentFilter structure is documented below.
+func (o DomainConfigsPtrOutput) UserAgentFilter() DomainConfigsUserAgentFilterPtrOutput {
+	return o.ApplyT(func(v *DomainConfigs) *DomainConfigsUserAgentFilter {
+		if v == nil {
+			return nil
+		}
+		return v.UserAgentFilter
+	}).(DomainConfigsUserAgentFilterPtrOutput)
+}
+
+// Specifies the video seek settings. The videoSeek structure
+// is documented below.
+func (o DomainConfigsPtrOutput) VideoSeek() DomainConfigsVideoSeekPtrOutput {
+	return o.ApplyT(func(v *DomainConfigs) *DomainConfigsVideoSeek {
+		if v == nil {
+			return nil
+		}
+		return v.VideoSeek
+	}).(DomainConfigsVideoSeekPtrOutput)
+}
+
+// Specifies the websocket settings. This field can only be configured if `type` is
+// set to **wholeSite**. The websocket structure is documented below.
+func (o DomainConfigsPtrOutput) Websocket() DomainConfigsWebsocketPtrOutput {
+	return o.ApplyT(func(v *DomainConfigs) *DomainConfigsWebsocket {
+		if v == nil {
+			return nil
+		}
+		return v.Websocket
+	}).(DomainConfigsWebsocketPtrOutput)
+}
+
+type DomainConfigsAccessAreaFilter struct {
+	// Specifies the areas, separated by commas.
+	// Please refer to [Geographical Location Codes](https://support.huaweicloud.com/intl/en-us/api-cdn/cdn_02_0090.html).
+	Area string `pulumi:"area"`
+	// Specifies the content type. Valid values are:
+	// + **all**: The rule takes effect for all files.
+	// + **file_directory**: The rule takes effect for resources in the specified directory.
+	// + **file_path**: The rule takes effect for resources corresponding to the path.
+	ContentType string `pulumi:"contentType"`
+	// Specifies the content value. The use of this field has the following restrictions:
+	// + When `contentType` is set to **all**, make this parameter is empty or not passed.
+	// + When `contentType` is set to **file_directory**, the value must start with a slash (/) and multiple directories
+	//   are separated by commas (,), for example, **/test/folder01,/test/folder02**. Up to `100` directories can be entered.
+	// + When `contentType` is set to **file_path**, the value must start with a slash (/) or wildcard (\*). Up to two
+	//   wildcards (\*) are allowed and they cannot be consecutive. Multiple paths are separated by commas (,),
+	//   for example, **/test/a.txt,/test/b.txt**. Up to `100` paths can be entered.
+	ContentValue *string `pulumi:"contentValue"`
+	// Specifies the IP addresses exception in access control, separated by commas.
+	ExceptionIp *string `pulumi:"exceptionIp"`
+	// Specifies the blacklist and whitelist rule type. Valid values are:
+	// + **black**: Blacklist. Users in regions specified in the blacklist cannot access resources and status code `403` is
+	//   returned.
+	// + **white**: Whitelist. Only users in regions specified in the whitelist can access resources. Status code `403` is
+	//   returned for other users.
+	Type string `pulumi:"type"`
+}
+
+// DomainConfigsAccessAreaFilterInput is an input type that accepts DomainConfigsAccessAreaFilterArgs and DomainConfigsAccessAreaFilterOutput values.
+// You can construct a concrete instance of `DomainConfigsAccessAreaFilterInput` via:
+//
+//	DomainConfigsAccessAreaFilterArgs{...}
+type DomainConfigsAccessAreaFilterInput interface {
+	pulumi.Input
+
+	ToDomainConfigsAccessAreaFilterOutput() DomainConfigsAccessAreaFilterOutput
+	ToDomainConfigsAccessAreaFilterOutputWithContext(context.Context) DomainConfigsAccessAreaFilterOutput
+}
+
+type DomainConfigsAccessAreaFilterArgs struct {
+	// Specifies the areas, separated by commas.
+	// Please refer to [Geographical Location Codes](https://support.huaweicloud.com/intl/en-us/api-cdn/cdn_02_0090.html).
+	Area pulumi.StringInput `pulumi:"area"`
+	// Specifies the content type. Valid values are:
+	// + **all**: The rule takes effect for all files.
+	// + **file_directory**: The rule takes effect for resources in the specified directory.
+	// + **file_path**: The rule takes effect for resources corresponding to the path.
+	ContentType pulumi.StringInput `pulumi:"contentType"`
+	// Specifies the content value. The use of this field has the following restrictions:
+	// + When `contentType` is set to **all**, make this parameter is empty or not passed.
+	// + When `contentType` is set to **file_directory**, the value must start with a slash (/) and multiple directories
+	//   are separated by commas (,), for example, **/test/folder01,/test/folder02**. Up to `100` directories can be entered.
+	// + When `contentType` is set to **file_path**, the value must start with a slash (/) or wildcard (\*). Up to two
+	//   wildcards (\*) are allowed and they cannot be consecutive. Multiple paths are separated by commas (,),
+	//   for example, **/test/a.txt,/test/b.txt**. Up to `100` paths can be entered.
+	ContentValue pulumi.StringPtrInput `pulumi:"contentValue"`
+	// Specifies the IP addresses exception in access control, separated by commas.
+	ExceptionIp pulumi.StringPtrInput `pulumi:"exceptionIp"`
+	// Specifies the blacklist and whitelist rule type. Valid values are:
+	// + **black**: Blacklist. Users in regions specified in the blacklist cannot access resources and status code `403` is
+	//   returned.
+	// + **white**: Whitelist. Only users in regions specified in the whitelist can access resources. Status code `403` is
+	//   returned for other users.
+	Type pulumi.StringInput `pulumi:"type"`
+}
+
+func (DomainConfigsAccessAreaFilterArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*DomainConfigsAccessAreaFilter)(nil)).Elem()
+}
+
+func (i DomainConfigsAccessAreaFilterArgs) ToDomainConfigsAccessAreaFilterOutput() DomainConfigsAccessAreaFilterOutput {
+	return i.ToDomainConfigsAccessAreaFilterOutputWithContext(context.Background())
+}
+
+func (i DomainConfigsAccessAreaFilterArgs) ToDomainConfigsAccessAreaFilterOutputWithContext(ctx context.Context) DomainConfigsAccessAreaFilterOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(DomainConfigsAccessAreaFilterOutput)
+}
+
+// DomainConfigsAccessAreaFilterArrayInput is an input type that accepts DomainConfigsAccessAreaFilterArray and DomainConfigsAccessAreaFilterArrayOutput values.
+// You can construct a concrete instance of `DomainConfigsAccessAreaFilterArrayInput` via:
+//
+//	DomainConfigsAccessAreaFilterArray{ DomainConfigsAccessAreaFilterArgs{...} }
+type DomainConfigsAccessAreaFilterArrayInput interface {
+	pulumi.Input
+
+	ToDomainConfigsAccessAreaFilterArrayOutput() DomainConfigsAccessAreaFilterArrayOutput
+	ToDomainConfigsAccessAreaFilterArrayOutputWithContext(context.Context) DomainConfigsAccessAreaFilterArrayOutput
+}
+
+type DomainConfigsAccessAreaFilterArray []DomainConfigsAccessAreaFilterInput
+
+func (DomainConfigsAccessAreaFilterArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]DomainConfigsAccessAreaFilter)(nil)).Elem()
+}
+
+func (i DomainConfigsAccessAreaFilterArray) ToDomainConfigsAccessAreaFilterArrayOutput() DomainConfigsAccessAreaFilterArrayOutput {
+	return i.ToDomainConfigsAccessAreaFilterArrayOutputWithContext(context.Background())
+}
+
+func (i DomainConfigsAccessAreaFilterArray) ToDomainConfigsAccessAreaFilterArrayOutputWithContext(ctx context.Context) DomainConfigsAccessAreaFilterArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(DomainConfigsAccessAreaFilterArrayOutput)
+}
+
+type DomainConfigsAccessAreaFilterOutput struct{ *pulumi.OutputState }
+
+func (DomainConfigsAccessAreaFilterOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*DomainConfigsAccessAreaFilter)(nil)).Elem()
+}
+
+func (o DomainConfigsAccessAreaFilterOutput) ToDomainConfigsAccessAreaFilterOutput() DomainConfigsAccessAreaFilterOutput {
+	return o
+}
+
+func (o DomainConfigsAccessAreaFilterOutput) ToDomainConfigsAccessAreaFilterOutputWithContext(ctx context.Context) DomainConfigsAccessAreaFilterOutput {
+	return o
+}
+
+// Specifies the areas, separated by commas.
+// Please refer to [Geographical Location Codes](https://support.huaweicloud.com/intl/en-us/api-cdn/cdn_02_0090.html).
+func (o DomainConfigsAccessAreaFilterOutput) Area() pulumi.StringOutput {
+	return o.ApplyT(func(v DomainConfigsAccessAreaFilter) string { return v.Area }).(pulumi.StringOutput)
+}
+
+// Specifies the content type. Valid values are:
+// + **all**: The rule takes effect for all files.
+// + **file_directory**: The rule takes effect for resources in the specified directory.
+// + **file_path**: The rule takes effect for resources corresponding to the path.
+func (o DomainConfigsAccessAreaFilterOutput) ContentType() pulumi.StringOutput {
+	return o.ApplyT(func(v DomainConfigsAccessAreaFilter) string { return v.ContentType }).(pulumi.StringOutput)
+}
+
+// Specifies the content value. The use of this field has the following restrictions:
+//   - When `contentType` is set to **all**, make this parameter is empty or not passed.
+//   - When `contentType` is set to **file_directory**, the value must start with a slash (/) and multiple directories
+//     are separated by commas (,), for example, **/test/folder01,/test/folder02**. Up to `100` directories can be entered.
+//   - When `contentType` is set to **file_path**, the value must start with a slash (/) or wildcard (\*). Up to two
+//     wildcards (\*) are allowed and they cannot be consecutive. Multiple paths are separated by commas (,),
+//     for example, **/test/a.txt,/test/b.txt**. Up to `100` paths can be entered.
+func (o DomainConfigsAccessAreaFilterOutput) ContentValue() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v DomainConfigsAccessAreaFilter) *string { return v.ContentValue }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the IP addresses exception in access control, separated by commas.
+func (o DomainConfigsAccessAreaFilterOutput) ExceptionIp() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v DomainConfigsAccessAreaFilter) *string { return v.ExceptionIp }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the blacklist and whitelist rule type. Valid values are:
+//   - **black**: Blacklist. Users in regions specified in the blacklist cannot access resources and status code `403` is
+//     returned.
+//   - **white**: Whitelist. Only users in regions specified in the whitelist can access resources. Status code `403` is
+//     returned for other users.
+func (o DomainConfigsAccessAreaFilterOutput) Type() pulumi.StringOutput {
+	return o.ApplyT(func(v DomainConfigsAccessAreaFilter) string { return v.Type }).(pulumi.StringOutput)
+}
+
+type DomainConfigsAccessAreaFilterArrayOutput struct{ *pulumi.OutputState }
+
+func (DomainConfigsAccessAreaFilterArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]DomainConfigsAccessAreaFilter)(nil)).Elem()
+}
+
+func (o DomainConfigsAccessAreaFilterArrayOutput) ToDomainConfigsAccessAreaFilterArrayOutput() DomainConfigsAccessAreaFilterArrayOutput {
+	return o
+}
+
+func (o DomainConfigsAccessAreaFilterArrayOutput) ToDomainConfigsAccessAreaFilterArrayOutputWithContext(ctx context.Context) DomainConfigsAccessAreaFilterArrayOutput {
+	return o
+}
+
+func (o DomainConfigsAccessAreaFilterArrayOutput) Index(i pulumi.IntInput) DomainConfigsAccessAreaFilterOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) DomainConfigsAccessAreaFilter {
+		return vs[0].([]DomainConfigsAccessAreaFilter)[vs[1].(int)]
+	}).(DomainConfigsAccessAreaFilterOutput)
+}
+
+type DomainConfigsBrowserCacheRule struct {
+	// Specifies the cache validation type. Valid values are:
+	// + **follow_origin**: Follow the origin site's cache policy, i.e. the Cache-Control header settings.
+	// + **ttl**: The browser cache follows the expiration time set by the current rules.
+	// + **never**: The browser does not cache resources.
+	CacheType string `pulumi:"cacheType"`
+	// Specifies matching condition.
+	// The condition structure is documented below.
+	Condition DomainConfigsBrowserCacheRuleCondition `pulumi:"condition"`
+	// Specifies the cache age. The maximum cache age is 365 days.
+	Ttl *int `pulumi:"ttl"`
+	// Specifies the cache expiration time unit. Valid values are:
+	// + **s**: seconds.
+	// + **m**: minutes.
+	// + **h**: hours.
+	// + **d**: days.
+	TtlUnit *string `pulumi:"ttlUnit"`
+}
+
+// DomainConfigsBrowserCacheRuleInput is an input type that accepts DomainConfigsBrowserCacheRuleArgs and DomainConfigsBrowserCacheRuleOutput values.
+// You can construct a concrete instance of `DomainConfigsBrowserCacheRuleInput` via:
+//
+//	DomainConfigsBrowserCacheRuleArgs{...}
+type DomainConfigsBrowserCacheRuleInput interface {
+	pulumi.Input
+
+	ToDomainConfigsBrowserCacheRuleOutput() DomainConfigsBrowserCacheRuleOutput
+	ToDomainConfigsBrowserCacheRuleOutputWithContext(context.Context) DomainConfigsBrowserCacheRuleOutput
+}
+
+type DomainConfigsBrowserCacheRuleArgs struct {
+	// Specifies the cache validation type. Valid values are:
+	// + **follow_origin**: Follow the origin site's cache policy, i.e. the Cache-Control header settings.
+	// + **ttl**: The browser cache follows the expiration time set by the current rules.
+	// + **never**: The browser does not cache resources.
+	CacheType pulumi.StringInput `pulumi:"cacheType"`
+	// Specifies matching condition.
+	// The condition structure is documented below.
+	Condition DomainConfigsBrowserCacheRuleConditionInput `pulumi:"condition"`
+	// Specifies the cache age. The maximum cache age is 365 days.
+	Ttl pulumi.IntPtrInput `pulumi:"ttl"`
+	// Specifies the cache expiration time unit. Valid values are:
+	// + **s**: seconds.
+	// + **m**: minutes.
+	// + **h**: hours.
+	// + **d**: days.
+	TtlUnit pulumi.StringPtrInput `pulumi:"ttlUnit"`
+}
+
+func (DomainConfigsBrowserCacheRuleArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*DomainConfigsBrowserCacheRule)(nil)).Elem()
+}
+
+func (i DomainConfigsBrowserCacheRuleArgs) ToDomainConfigsBrowserCacheRuleOutput() DomainConfigsBrowserCacheRuleOutput {
+	return i.ToDomainConfigsBrowserCacheRuleOutputWithContext(context.Background())
+}
+
+func (i DomainConfigsBrowserCacheRuleArgs) ToDomainConfigsBrowserCacheRuleOutputWithContext(ctx context.Context) DomainConfigsBrowserCacheRuleOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(DomainConfigsBrowserCacheRuleOutput)
+}
+
+// DomainConfigsBrowserCacheRuleArrayInput is an input type that accepts DomainConfigsBrowserCacheRuleArray and DomainConfigsBrowserCacheRuleArrayOutput values.
+// You can construct a concrete instance of `DomainConfigsBrowserCacheRuleArrayInput` via:
+//
+//	DomainConfigsBrowserCacheRuleArray{ DomainConfigsBrowserCacheRuleArgs{...} }
+type DomainConfigsBrowserCacheRuleArrayInput interface {
+	pulumi.Input
+
+	ToDomainConfigsBrowserCacheRuleArrayOutput() DomainConfigsBrowserCacheRuleArrayOutput
+	ToDomainConfigsBrowserCacheRuleArrayOutputWithContext(context.Context) DomainConfigsBrowserCacheRuleArrayOutput
+}
+
+type DomainConfigsBrowserCacheRuleArray []DomainConfigsBrowserCacheRuleInput
+
+func (DomainConfigsBrowserCacheRuleArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]DomainConfigsBrowserCacheRule)(nil)).Elem()
+}
+
+func (i DomainConfigsBrowserCacheRuleArray) ToDomainConfigsBrowserCacheRuleArrayOutput() DomainConfigsBrowserCacheRuleArrayOutput {
+	return i.ToDomainConfigsBrowserCacheRuleArrayOutputWithContext(context.Background())
+}
+
+func (i DomainConfigsBrowserCacheRuleArray) ToDomainConfigsBrowserCacheRuleArrayOutputWithContext(ctx context.Context) DomainConfigsBrowserCacheRuleArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(DomainConfigsBrowserCacheRuleArrayOutput)
+}
+
+type DomainConfigsBrowserCacheRuleOutput struct{ *pulumi.OutputState }
+
+func (DomainConfigsBrowserCacheRuleOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*DomainConfigsBrowserCacheRule)(nil)).Elem()
+}
+
+func (o DomainConfigsBrowserCacheRuleOutput) ToDomainConfigsBrowserCacheRuleOutput() DomainConfigsBrowserCacheRuleOutput {
+	return o
+}
+
+func (o DomainConfigsBrowserCacheRuleOutput) ToDomainConfigsBrowserCacheRuleOutputWithContext(ctx context.Context) DomainConfigsBrowserCacheRuleOutput {
+	return o
+}
+
+// Specifies the cache validation type. Valid values are:
+// + **follow_origin**: Follow the origin site's cache policy, i.e. the Cache-Control header settings.
+// + **ttl**: The browser cache follows the expiration time set by the current rules.
+// + **never**: The browser does not cache resources.
+func (o DomainConfigsBrowserCacheRuleOutput) CacheType() pulumi.StringOutput {
+	return o.ApplyT(func(v DomainConfigsBrowserCacheRule) string { return v.CacheType }).(pulumi.StringOutput)
+}
+
+// Specifies matching condition.
+// The condition structure is documented below.
+func (o DomainConfigsBrowserCacheRuleOutput) Condition() DomainConfigsBrowserCacheRuleConditionOutput {
+	return o.ApplyT(func(v DomainConfigsBrowserCacheRule) DomainConfigsBrowserCacheRuleCondition { return v.Condition }).(DomainConfigsBrowserCacheRuleConditionOutput)
+}
+
+// Specifies the cache age. The maximum cache age is 365 days.
+func (o DomainConfigsBrowserCacheRuleOutput) Ttl() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v DomainConfigsBrowserCacheRule) *int { return v.Ttl }).(pulumi.IntPtrOutput)
+}
+
+// Specifies the cache expiration time unit. Valid values are:
+// + **s**: seconds.
+// + **m**: minutes.
+// + **h**: hours.
+// + **d**: days.
+func (o DomainConfigsBrowserCacheRuleOutput) TtlUnit() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v DomainConfigsBrowserCacheRule) *string { return v.TtlUnit }).(pulumi.StringPtrOutput)
+}
+
+type DomainConfigsBrowserCacheRuleArrayOutput struct{ *pulumi.OutputState }
+
+func (DomainConfigsBrowserCacheRuleArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]DomainConfigsBrowserCacheRule)(nil)).Elem()
+}
+
+func (o DomainConfigsBrowserCacheRuleArrayOutput) ToDomainConfigsBrowserCacheRuleArrayOutput() DomainConfigsBrowserCacheRuleArrayOutput {
+	return o
+}
+
+func (o DomainConfigsBrowserCacheRuleArrayOutput) ToDomainConfigsBrowserCacheRuleArrayOutputWithContext(ctx context.Context) DomainConfigsBrowserCacheRuleArrayOutput {
+	return o
+}
+
+func (o DomainConfigsBrowserCacheRuleArrayOutput) Index(i pulumi.IntInput) DomainConfigsBrowserCacheRuleOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) DomainConfigsBrowserCacheRule {
+		return vs[0].([]DomainConfigsBrowserCacheRule)[vs[1].(int)]
+	}).(DomainConfigsBrowserCacheRuleOutput)
+}
+
+type DomainConfigsBrowserCacheRuleCondition struct {
+	// Specifies the match type. Valid values are:
+	// + **all**: Match all files.
+	// + **file_extension**: Match by file suffix.
+	// + **catalog**: Match by directory.
+	// + **full_path**: Full path matching.
+	// + **home_page**: Match by homepage.
+	MatchType string `pulumi:"matchType"`
+	// Specifies the cache match settings.
+	// + When `matchType` is set to **all**, this field does not need to be configured.
+	// + When `matchType` is set to **file_extension**, this field value is the file suffix. The first character of the
+	//   value is "." and separated by "," such as **.jpg,.zip,.exe**. The total number of file name suffixes entered should
+	//   not exceed `20`.
+	// + When `matchType` is set to **catalog**, the value of this field is a directory. The value must start with "/" and
+	//   be separated by "," such as **/test/folder01,/test/folder02**. The total number of directory paths entered must not
+	//   exceed `20`.
+	// + When `matchType` is set to **full_path**, the value of this field is a full path. The value must start with "/".
+	//   It supports matching specific files in the specified directory or files with a wildcard "*".
+	//   The position of "*" must be after the last "/" and cannot end with "*". Only one full path can be configured in a
+	//   single full path cache rule, such as **/test/index.html** or ***/test/*.jpg**.
+	// + When `matchType` is set to **home_page**, this field does not need to be configured.
+	MatchValue *string `pulumi:"matchValue"`
+	// Specifies the priority weight of this rule. The default value is 1.
+	// A larger value indicates a higher priority. The value ranges from 1 to 100. The weight values must be unique.
+	Priority int `pulumi:"priority"`
+}
+
+// DomainConfigsBrowserCacheRuleConditionInput is an input type that accepts DomainConfigsBrowserCacheRuleConditionArgs and DomainConfigsBrowserCacheRuleConditionOutput values.
+// You can construct a concrete instance of `DomainConfigsBrowserCacheRuleConditionInput` via:
+//
+//	DomainConfigsBrowserCacheRuleConditionArgs{...}
+type DomainConfigsBrowserCacheRuleConditionInput interface {
+	pulumi.Input
+
+	ToDomainConfigsBrowserCacheRuleConditionOutput() DomainConfigsBrowserCacheRuleConditionOutput
+	ToDomainConfigsBrowserCacheRuleConditionOutputWithContext(context.Context) DomainConfigsBrowserCacheRuleConditionOutput
+}
+
+type DomainConfigsBrowserCacheRuleConditionArgs struct {
+	// Specifies the match type. Valid values are:
+	// + **all**: Match all files.
+	// + **file_extension**: Match by file suffix.
+	// + **catalog**: Match by directory.
+	// + **full_path**: Full path matching.
+	// + **home_page**: Match by homepage.
+	MatchType pulumi.StringInput `pulumi:"matchType"`
+	// Specifies the cache match settings.
+	// + When `matchType` is set to **all**, this field does not need to be configured.
+	// + When `matchType` is set to **file_extension**, this field value is the file suffix. The first character of the
+	//   value is "." and separated by "," such as **.jpg,.zip,.exe**. The total number of file name suffixes entered should
+	//   not exceed `20`.
+	// + When `matchType` is set to **catalog**, the value of this field is a directory. The value must start with "/" and
+	//   be separated by "," such as **/test/folder01,/test/folder02**. The total number of directory paths entered must not
+	//   exceed `20`.
+	// + When `matchType` is set to **full_path**, the value of this field is a full path. The value must start with "/".
+	//   It supports matching specific files in the specified directory or files with a wildcard "*".
+	//   The position of "*" must be after the last "/" and cannot end with "*". Only one full path can be configured in a
+	//   single full path cache rule, such as **/test/index.html** or ***/test/*.jpg**.
+	// + When `matchType` is set to **home_page**, this field does not need to be configured.
+	MatchValue pulumi.StringPtrInput `pulumi:"matchValue"`
+	// Specifies the priority weight of this rule. The default value is 1.
+	// A larger value indicates a higher priority. The value ranges from 1 to 100. The weight values must be unique.
+	Priority pulumi.IntInput `pulumi:"priority"`
+}
+
+func (DomainConfigsBrowserCacheRuleConditionArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*DomainConfigsBrowserCacheRuleCondition)(nil)).Elem()
+}
+
+func (i DomainConfigsBrowserCacheRuleConditionArgs) ToDomainConfigsBrowserCacheRuleConditionOutput() DomainConfigsBrowserCacheRuleConditionOutput {
+	return i.ToDomainConfigsBrowserCacheRuleConditionOutputWithContext(context.Background())
+}
+
+func (i DomainConfigsBrowserCacheRuleConditionArgs) ToDomainConfigsBrowserCacheRuleConditionOutputWithContext(ctx context.Context) DomainConfigsBrowserCacheRuleConditionOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(DomainConfigsBrowserCacheRuleConditionOutput)
+}
+
+type DomainConfigsBrowserCacheRuleConditionOutput struct{ *pulumi.OutputState }
+
+func (DomainConfigsBrowserCacheRuleConditionOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*DomainConfigsBrowserCacheRuleCondition)(nil)).Elem()
+}
+
+func (o DomainConfigsBrowserCacheRuleConditionOutput) ToDomainConfigsBrowserCacheRuleConditionOutput() DomainConfigsBrowserCacheRuleConditionOutput {
+	return o
+}
+
+func (o DomainConfigsBrowserCacheRuleConditionOutput) ToDomainConfigsBrowserCacheRuleConditionOutputWithContext(ctx context.Context) DomainConfigsBrowserCacheRuleConditionOutput {
+	return o
+}
+
+// Specifies the match type. Valid values are:
+// + **all**: Match all files.
+// + **file_extension**: Match by file suffix.
+// + **catalog**: Match by directory.
+// + **full_path**: Full path matching.
+// + **home_page**: Match by homepage.
+func (o DomainConfigsBrowserCacheRuleConditionOutput) MatchType() pulumi.StringOutput {
+	return o.ApplyT(func(v DomainConfigsBrowserCacheRuleCondition) string { return v.MatchType }).(pulumi.StringOutput)
+}
+
+// Specifies the cache match settings.
+//   - When `matchType` is set to **all**, this field does not need to be configured.
+//   - When `matchType` is set to **file_extension**, this field value is the file suffix. The first character of the
+//     value is "." and separated by "," such as **.jpg,.zip,.exe**. The total number of file name suffixes entered should
+//     not exceed `20`.
+//   - When `matchType` is set to **catalog**, the value of this field is a directory. The value must start with "/" and
+//     be separated by "," such as **/test/folder01,/test/folder02**. The total number of directory paths entered must not
+//     exceed `20`.
+//   - When `matchType` is set to **full_path**, the value of this field is a full path. The value must start with "/".
+//     It supports matching specific files in the specified directory or files with a wildcard "*".
+//     The position of "*" must be after the last "/" and cannot end with "*". Only one full path can be configured in a
+//     single full path cache rule, such as **/test/index.html** or ***/test/*.jpg**.
+//   - When `matchType` is set to **home_page**, this field does not need to be configured.
+func (o DomainConfigsBrowserCacheRuleConditionOutput) MatchValue() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v DomainConfigsBrowserCacheRuleCondition) *string { return v.MatchValue }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the priority weight of this rule. The default value is 1.
+// A larger value indicates a higher priority. The value ranges from 1 to 100. The weight values must be unique.
+func (o DomainConfigsBrowserCacheRuleConditionOutput) Priority() pulumi.IntOutput {
+	return o.ApplyT(func(v DomainConfigsBrowserCacheRuleCondition) int { return v.Priority }).(pulumi.IntOutput)
+}
+
 type DomainConfigsCacheUrlParameterFilter struct {
-	// Specifies the operation type for caching URL parameters. Posiible values are:
-	// **full_url**: cache all parameters
-	// **ignore_url_params**: ignore all parameters
-	// **del_args**: ignore specific URL parameters
-	// **reserve_args**: reserve specified URL parameters
+	// Specifies the blacklist and whitelist rule type. Valid values are:
+	// + **black**: Blacklist. Users in regions specified in the blacklist cannot access resources and status code `403` is
+	//   returned.
+	// + **white**: Whitelist. Only users in regions specified in the whitelist can access resources. Status code `403` is
+	//   returned for other users.
 	Type *string `pulumi:"type"`
-	// Specifies the parameter values. Multiple values are separated by semicolons (;).
+	// Specifies the IP address blacklist or whitelist. This field is required when `type` is
+	// set to **black** or **white**. A list contains up to `500` IP addresses and IP address segments, which are separated
+	// by commas (,). IPv6 addresses are supported. Duplicate IP addresses and IP address segments will be removed.
+	// Addresses with wildcard characters are not supported, for example, `192.168.0.*`.
 	Value *string `pulumi:"value"`
 }
 
@@ -707,13 +1753,16 @@ type DomainConfigsCacheUrlParameterFilterInput interface {
 }
 
 type DomainConfigsCacheUrlParameterFilterArgs struct {
-	// Specifies the operation type for caching URL parameters. Posiible values are:
-	// **full_url**: cache all parameters
-	// **ignore_url_params**: ignore all parameters
-	// **del_args**: ignore specific URL parameters
-	// **reserve_args**: reserve specified URL parameters
+	// Specifies the blacklist and whitelist rule type. Valid values are:
+	// + **black**: Blacklist. Users in regions specified in the blacklist cannot access resources and status code `403` is
+	//   returned.
+	// + **white**: Whitelist. Only users in regions specified in the whitelist can access resources. Status code `403` is
+	//   returned for other users.
 	Type pulumi.StringPtrInput `pulumi:"type"`
-	// Specifies the parameter values. Multiple values are separated by semicolons (;).
+	// Specifies the IP address blacklist or whitelist. This field is required when `type` is
+	// set to **black** or **white**. A list contains up to `500` IP addresses and IP address segments, which are separated
+	// by commas (,). IPv6 addresses are supported. Duplicate IP addresses and IP address segments will be removed.
+	// Addresses with wildcard characters are not supported, for example, `192.168.0.*`.
 	Value pulumi.StringPtrInput `pulumi:"value"`
 }
 
@@ -794,16 +1843,19 @@ func (o DomainConfigsCacheUrlParameterFilterOutput) ToDomainConfigsCacheUrlParam
 	}).(DomainConfigsCacheUrlParameterFilterPtrOutput)
 }
 
-// Specifies the operation type for caching URL parameters. Posiible values are:
-// **full_url**: cache all parameters
-// **ignore_url_params**: ignore all parameters
-// **del_args**: ignore specific URL parameters
-// **reserve_args**: reserve specified URL parameters
+// Specifies the blacklist and whitelist rule type. Valid values are:
+//   - **black**: Blacklist. Users in regions specified in the blacklist cannot access resources and status code `403` is
+//     returned.
+//   - **white**: Whitelist. Only users in regions specified in the whitelist can access resources. Status code `403` is
+//     returned for other users.
 func (o DomainConfigsCacheUrlParameterFilterOutput) Type() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v DomainConfigsCacheUrlParameterFilter) *string { return v.Type }).(pulumi.StringPtrOutput)
 }
 
-// Specifies the parameter values. Multiple values are separated by semicolons (;).
+// Specifies the IP address blacklist or whitelist. This field is required when `type` is
+// set to **black** or **white**. A list contains up to `500` IP addresses and IP address segments, which are separated
+// by commas (,). IPv6 addresses are supported. Duplicate IP addresses and IP address segments will be removed.
+// Addresses with wildcard characters are not supported, for example, `192.168.0.*`.
 func (o DomainConfigsCacheUrlParameterFilterOutput) Value() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v DomainConfigsCacheUrlParameterFilter) *string { return v.Value }).(pulumi.StringPtrOutput)
 }
@@ -832,11 +1884,11 @@ func (o DomainConfigsCacheUrlParameterFilterPtrOutput) Elem() DomainConfigsCache
 	}).(DomainConfigsCacheUrlParameterFilterOutput)
 }
 
-// Specifies the operation type for caching URL parameters. Posiible values are:
-// **full_url**: cache all parameters
-// **ignore_url_params**: ignore all parameters
-// **del_args**: ignore specific URL parameters
-// **reserve_args**: reserve specified URL parameters
+// Specifies the blacklist and whitelist rule type. Valid values are:
+//   - **black**: Blacklist. Users in regions specified in the blacklist cannot access resources and status code `403` is
+//     returned.
+//   - **white**: Whitelist. Only users in regions specified in the whitelist can access resources. Status code `403` is
+//     returned for other users.
 func (o DomainConfigsCacheUrlParameterFilterPtrOutput) Type() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *DomainConfigsCacheUrlParameterFilter) *string {
 		if v == nil {
@@ -846,7 +1898,10 @@ func (o DomainConfigsCacheUrlParameterFilterPtrOutput) Type() pulumi.StringPtrOu
 	}).(pulumi.StringPtrOutput)
 }
 
-// Specifies the parameter values. Multiple values are separated by semicolons (;).
+// Specifies the IP address blacklist or whitelist. This field is required when `type` is
+// set to **black** or **white**. A list contains up to `500` IP addresses and IP address segments, which are separated
+// by commas (,). IPv6 addresses are supported. Duplicate IP addresses and IP address segments will be removed.
+// Addresses with wildcard characters are not supported, for example, `192.168.0.*`.
 func (o DomainConfigsCacheUrlParameterFilterPtrOutput) Value() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *DomainConfigsCacheUrlParameterFilter) *string {
 		if v == nil {
@@ -856,15 +1911,209 @@ func (o DomainConfigsCacheUrlParameterFilterPtrOutput) Value() pulumi.StringPtrO
 	}).(pulumi.StringPtrOutput)
 }
 
+type DomainConfigsClientCert struct {
+	// Specifies whether to enable client cert settings.
+	Enabled bool `pulumi:"enabled"`
+	// Specifies the domain name specified in the client CA certificate.
+	Hosts  *string `pulumi:"hosts"`
+	Status *string `pulumi:"status"`
+	// Specifies the client CA certificate content, only supports PEM format.
+	TrustedCert *string `pulumi:"trustedCert"`
+}
+
+// DomainConfigsClientCertInput is an input type that accepts DomainConfigsClientCertArgs and DomainConfigsClientCertOutput values.
+// You can construct a concrete instance of `DomainConfigsClientCertInput` via:
+//
+//	DomainConfigsClientCertArgs{...}
+type DomainConfigsClientCertInput interface {
+	pulumi.Input
+
+	ToDomainConfigsClientCertOutput() DomainConfigsClientCertOutput
+	ToDomainConfigsClientCertOutputWithContext(context.Context) DomainConfigsClientCertOutput
+}
+
+type DomainConfigsClientCertArgs struct {
+	// Specifies whether to enable client cert settings.
+	Enabled pulumi.BoolInput `pulumi:"enabled"`
+	// Specifies the domain name specified in the client CA certificate.
+	Hosts  pulumi.StringPtrInput `pulumi:"hosts"`
+	Status pulumi.StringPtrInput `pulumi:"status"`
+	// Specifies the client CA certificate content, only supports PEM format.
+	TrustedCert pulumi.StringPtrInput `pulumi:"trustedCert"`
+}
+
+func (DomainConfigsClientCertArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*DomainConfigsClientCert)(nil)).Elem()
+}
+
+func (i DomainConfigsClientCertArgs) ToDomainConfigsClientCertOutput() DomainConfigsClientCertOutput {
+	return i.ToDomainConfigsClientCertOutputWithContext(context.Background())
+}
+
+func (i DomainConfigsClientCertArgs) ToDomainConfigsClientCertOutputWithContext(ctx context.Context) DomainConfigsClientCertOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(DomainConfigsClientCertOutput)
+}
+
+func (i DomainConfigsClientCertArgs) ToDomainConfigsClientCertPtrOutput() DomainConfigsClientCertPtrOutput {
+	return i.ToDomainConfigsClientCertPtrOutputWithContext(context.Background())
+}
+
+func (i DomainConfigsClientCertArgs) ToDomainConfigsClientCertPtrOutputWithContext(ctx context.Context) DomainConfigsClientCertPtrOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(DomainConfigsClientCertOutput).ToDomainConfigsClientCertPtrOutputWithContext(ctx)
+}
+
+// DomainConfigsClientCertPtrInput is an input type that accepts DomainConfigsClientCertArgs, DomainConfigsClientCertPtr and DomainConfigsClientCertPtrOutput values.
+// You can construct a concrete instance of `DomainConfigsClientCertPtrInput` via:
+//
+//	        DomainConfigsClientCertArgs{...}
+//
+//	or:
+//
+//	        nil
+type DomainConfigsClientCertPtrInput interface {
+	pulumi.Input
+
+	ToDomainConfigsClientCertPtrOutput() DomainConfigsClientCertPtrOutput
+	ToDomainConfigsClientCertPtrOutputWithContext(context.Context) DomainConfigsClientCertPtrOutput
+}
+
+type domainConfigsClientCertPtrType DomainConfigsClientCertArgs
+
+func DomainConfigsClientCertPtr(v *DomainConfigsClientCertArgs) DomainConfigsClientCertPtrInput {
+	return (*domainConfigsClientCertPtrType)(v)
+}
+
+func (*domainConfigsClientCertPtrType) ElementType() reflect.Type {
+	return reflect.TypeOf((**DomainConfigsClientCert)(nil)).Elem()
+}
+
+func (i *domainConfigsClientCertPtrType) ToDomainConfigsClientCertPtrOutput() DomainConfigsClientCertPtrOutput {
+	return i.ToDomainConfigsClientCertPtrOutputWithContext(context.Background())
+}
+
+func (i *domainConfigsClientCertPtrType) ToDomainConfigsClientCertPtrOutputWithContext(ctx context.Context) DomainConfigsClientCertPtrOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(DomainConfigsClientCertPtrOutput)
+}
+
+type DomainConfigsClientCertOutput struct{ *pulumi.OutputState }
+
+func (DomainConfigsClientCertOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*DomainConfigsClientCert)(nil)).Elem()
+}
+
+func (o DomainConfigsClientCertOutput) ToDomainConfigsClientCertOutput() DomainConfigsClientCertOutput {
+	return o
+}
+
+func (o DomainConfigsClientCertOutput) ToDomainConfigsClientCertOutputWithContext(ctx context.Context) DomainConfigsClientCertOutput {
+	return o
+}
+
+func (o DomainConfigsClientCertOutput) ToDomainConfigsClientCertPtrOutput() DomainConfigsClientCertPtrOutput {
+	return o.ToDomainConfigsClientCertPtrOutputWithContext(context.Background())
+}
+
+func (o DomainConfigsClientCertOutput) ToDomainConfigsClientCertPtrOutputWithContext(ctx context.Context) DomainConfigsClientCertPtrOutput {
+	return o.ApplyTWithContext(ctx, func(_ context.Context, v DomainConfigsClientCert) *DomainConfigsClientCert {
+		return &v
+	}).(DomainConfigsClientCertPtrOutput)
+}
+
+// Specifies whether to enable client cert settings.
+func (o DomainConfigsClientCertOutput) Enabled() pulumi.BoolOutput {
+	return o.ApplyT(func(v DomainConfigsClientCert) bool { return v.Enabled }).(pulumi.BoolOutput)
+}
+
+// Specifies the domain name specified in the client CA certificate.
+func (o DomainConfigsClientCertOutput) Hosts() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v DomainConfigsClientCert) *string { return v.Hosts }).(pulumi.StringPtrOutput)
+}
+
+func (o DomainConfigsClientCertOutput) Status() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v DomainConfigsClientCert) *string { return v.Status }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the client CA certificate content, only supports PEM format.
+func (o DomainConfigsClientCertOutput) TrustedCert() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v DomainConfigsClientCert) *string { return v.TrustedCert }).(pulumi.StringPtrOutput)
+}
+
+type DomainConfigsClientCertPtrOutput struct{ *pulumi.OutputState }
+
+func (DomainConfigsClientCertPtrOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((**DomainConfigsClientCert)(nil)).Elem()
+}
+
+func (o DomainConfigsClientCertPtrOutput) ToDomainConfigsClientCertPtrOutput() DomainConfigsClientCertPtrOutput {
+	return o
+}
+
+func (o DomainConfigsClientCertPtrOutput) ToDomainConfigsClientCertPtrOutputWithContext(ctx context.Context) DomainConfigsClientCertPtrOutput {
+	return o
+}
+
+func (o DomainConfigsClientCertPtrOutput) Elem() DomainConfigsClientCertOutput {
+	return o.ApplyT(func(v *DomainConfigsClientCert) DomainConfigsClientCert {
+		if v != nil {
+			return *v
+		}
+		var ret DomainConfigsClientCert
+		return ret
+	}).(DomainConfigsClientCertOutput)
+}
+
+// Specifies whether to enable client cert settings.
+func (o DomainConfigsClientCertPtrOutput) Enabled() pulumi.BoolPtrOutput {
+	return o.ApplyT(func(v *DomainConfigsClientCert) *bool {
+		if v == nil {
+			return nil
+		}
+		return &v.Enabled
+	}).(pulumi.BoolPtrOutput)
+}
+
+// Specifies the domain name specified in the client CA certificate.
+func (o DomainConfigsClientCertPtrOutput) Hosts() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *DomainConfigsClientCert) *string {
+		if v == nil {
+			return nil
+		}
+		return v.Hosts
+	}).(pulumi.StringPtrOutput)
+}
+
+func (o DomainConfigsClientCertPtrOutput) Status() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *DomainConfigsClientCert) *string {
+		if v == nil {
+			return nil
+		}
+		return v.Status
+	}).(pulumi.StringPtrOutput)
+}
+
+// Specifies the client CA certificate content, only supports PEM format.
+func (o DomainConfigsClientCertPtrOutput) TrustedCert() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *DomainConfigsClientCert) *string {
+		if v == nil {
+			return nil
+		}
+		return v.TrustedCert
+	}).(pulumi.StringPtrOutput)
+}
+
 type DomainConfigsCompress struct {
-	// Specifies the whether to enable force redirect or smart compression.
-	Enabled bool    `pulumi:"enabled"`
-	Status  *string `pulumi:"status"`
-	// Specifies the operation type for caching URL parameters. Posiible values are:
-	// **full_url**: cache all parameters
-	// **ignore_url_params**: ignore all parameters
-	// **del_args**: ignore specific URL parameters
-	// **reserve_args**: reserve specified URL parameters
+	// Specifies whether to enable client cert settings.
+	Enabled bool `pulumi:"enabled"`
+	// Specifies the formats of files to be compressed. Enter up to 200 characters.
+	// Multiple formats are separated by commas (,). Each format contains up to 50 characters.
+	// Defaults to **.js,.html,.css,.xml,.json,.shtml,.htm**.
+	FileType *string `pulumi:"fileType"`
+	Status   *string `pulumi:"status"`
+	// Specifies the blacklist and whitelist rule type. Valid values are:
+	// + **black**: Blacklist. Users in regions specified in the blacklist cannot access resources and status code `403` is
+	//   returned.
+	// + **white**: Whitelist. Only users in regions specified in the whitelist can access resources. Status code `403` is
+	//   returned for other users.
 	Type *string `pulumi:"type"`
 }
 
@@ -880,14 +2129,18 @@ type DomainConfigsCompressInput interface {
 }
 
 type DomainConfigsCompressArgs struct {
-	// Specifies the whether to enable force redirect or smart compression.
-	Enabled pulumi.BoolInput      `pulumi:"enabled"`
-	Status  pulumi.StringPtrInput `pulumi:"status"`
-	// Specifies the operation type for caching URL parameters. Posiible values are:
-	// **full_url**: cache all parameters
-	// **ignore_url_params**: ignore all parameters
-	// **del_args**: ignore specific URL parameters
-	// **reserve_args**: reserve specified URL parameters
+	// Specifies whether to enable client cert settings.
+	Enabled pulumi.BoolInput `pulumi:"enabled"`
+	// Specifies the formats of files to be compressed. Enter up to 200 characters.
+	// Multiple formats are separated by commas (,). Each format contains up to 50 characters.
+	// Defaults to **.js,.html,.css,.xml,.json,.shtml,.htm**.
+	FileType pulumi.StringPtrInput `pulumi:"fileType"`
+	Status   pulumi.StringPtrInput `pulumi:"status"`
+	// Specifies the blacklist and whitelist rule type. Valid values are:
+	// + **black**: Blacklist. Users in regions specified in the blacklist cannot access resources and status code `403` is
+	//   returned.
+	// + **white**: Whitelist. Only users in regions specified in the whitelist can access resources. Status code `403` is
+	//   returned for other users.
 	Type pulumi.StringPtrInput `pulumi:"type"`
 }
 
@@ -968,20 +2221,27 @@ func (o DomainConfigsCompressOutput) ToDomainConfigsCompressPtrOutputWithContext
 	}).(DomainConfigsCompressPtrOutput)
 }
 
-// Specifies the whether to enable force redirect or smart compression.
+// Specifies whether to enable client cert settings.
 func (o DomainConfigsCompressOutput) Enabled() pulumi.BoolOutput {
 	return o.ApplyT(func(v DomainConfigsCompress) bool { return v.Enabled }).(pulumi.BoolOutput)
+}
+
+// Specifies the formats of files to be compressed. Enter up to 200 characters.
+// Multiple formats are separated by commas (,). Each format contains up to 50 characters.
+// Defaults to **.js,.html,.css,.xml,.json,.shtml,.htm**.
+func (o DomainConfigsCompressOutput) FileType() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v DomainConfigsCompress) *string { return v.FileType }).(pulumi.StringPtrOutput)
 }
 
 func (o DomainConfigsCompressOutput) Status() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v DomainConfigsCompress) *string { return v.Status }).(pulumi.StringPtrOutput)
 }
 
-// Specifies the operation type for caching URL parameters. Posiible values are:
-// **full_url**: cache all parameters
-// **ignore_url_params**: ignore all parameters
-// **del_args**: ignore specific URL parameters
-// **reserve_args**: reserve specified URL parameters
+// Specifies the blacklist and whitelist rule type. Valid values are:
+//   - **black**: Blacklist. Users in regions specified in the blacklist cannot access resources and status code `403` is
+//     returned.
+//   - **white**: Whitelist. Only users in regions specified in the whitelist can access resources. Status code `403` is
+//     returned for other users.
 func (o DomainConfigsCompressOutput) Type() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v DomainConfigsCompress) *string { return v.Type }).(pulumi.StringPtrOutput)
 }
@@ -1010,7 +2270,7 @@ func (o DomainConfigsCompressPtrOutput) Elem() DomainConfigsCompressOutput {
 	}).(DomainConfigsCompressOutput)
 }
 
-// Specifies the whether to enable force redirect or smart compression.
+// Specifies whether to enable client cert settings.
 func (o DomainConfigsCompressPtrOutput) Enabled() pulumi.BoolPtrOutput {
 	return o.ApplyT(func(v *DomainConfigsCompress) *bool {
 		if v == nil {
@@ -1018,6 +2278,18 @@ func (o DomainConfigsCompressPtrOutput) Enabled() pulumi.BoolPtrOutput {
 		}
 		return &v.Enabled
 	}).(pulumi.BoolPtrOutput)
+}
+
+// Specifies the formats of files to be compressed. Enter up to 200 characters.
+// Multiple formats are separated by commas (,). Each format contains up to 50 characters.
+// Defaults to **.js,.html,.css,.xml,.json,.shtml,.htm**.
+func (o DomainConfigsCompressPtrOutput) FileType() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *DomainConfigsCompress) *string {
+		if v == nil {
+			return nil
+		}
+		return v.FileType
+	}).(pulumi.StringPtrOutput)
 }
 
 func (o DomainConfigsCompressPtrOutput) Status() pulumi.StringPtrOutput {
@@ -1029,11 +2301,11 @@ func (o DomainConfigsCompressPtrOutput) Status() pulumi.StringPtrOutput {
 	}).(pulumi.StringPtrOutput)
 }
 
-// Specifies the operation type for caching URL parameters. Posiible values are:
-// **full_url**: cache all parameters
-// **ignore_url_params**: ignore all parameters
-// **del_args**: ignore specific URL parameters
-// **reserve_args**: reserve specified URL parameters
+// Specifies the blacklist and whitelist rule type. Valid values are:
+//   - **black**: Blacklist. Users in regions specified in the blacklist cannot access resources and status code `403` is
+//     returned.
+//   - **white**: Whitelist. Only users in regions specified in the whitelist can access resources. Status code `403` is
+//     returned for other users.
 func (o DomainConfigsCompressPtrOutput) Type() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *DomainConfigsCompress) *string {
 		if v == nil {
@@ -1043,15 +2315,520 @@ func (o DomainConfigsCompressPtrOutput) Type() pulumi.StringPtrOutput {
 	}).(pulumi.StringPtrOutput)
 }
 
+type DomainConfigsErrorCodeCach struct {
+	// Specifies the error code. Valid values are: **301**, **302**, **400**, **403**, **404**,
+	// **405**, **414**, **500**, **501**, **502**, **503**, and **504**.
+	Code int `pulumi:"code"`
+	// Specifies the cache age. The maximum cache age is 365 days.
+	Ttl int `pulumi:"ttl"`
+}
+
+// DomainConfigsErrorCodeCachInput is an input type that accepts DomainConfigsErrorCodeCachArgs and DomainConfigsErrorCodeCachOutput values.
+// You can construct a concrete instance of `DomainConfigsErrorCodeCachInput` via:
+//
+//	DomainConfigsErrorCodeCachArgs{...}
+type DomainConfigsErrorCodeCachInput interface {
+	pulumi.Input
+
+	ToDomainConfigsErrorCodeCachOutput() DomainConfigsErrorCodeCachOutput
+	ToDomainConfigsErrorCodeCachOutputWithContext(context.Context) DomainConfigsErrorCodeCachOutput
+}
+
+type DomainConfigsErrorCodeCachArgs struct {
+	// Specifies the error code. Valid values are: **301**, **302**, **400**, **403**, **404**,
+	// **405**, **414**, **500**, **501**, **502**, **503**, and **504**.
+	Code pulumi.IntInput `pulumi:"code"`
+	// Specifies the cache age. The maximum cache age is 365 days.
+	Ttl pulumi.IntInput `pulumi:"ttl"`
+}
+
+func (DomainConfigsErrorCodeCachArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*DomainConfigsErrorCodeCach)(nil)).Elem()
+}
+
+func (i DomainConfigsErrorCodeCachArgs) ToDomainConfigsErrorCodeCachOutput() DomainConfigsErrorCodeCachOutput {
+	return i.ToDomainConfigsErrorCodeCachOutputWithContext(context.Background())
+}
+
+func (i DomainConfigsErrorCodeCachArgs) ToDomainConfigsErrorCodeCachOutputWithContext(ctx context.Context) DomainConfigsErrorCodeCachOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(DomainConfigsErrorCodeCachOutput)
+}
+
+// DomainConfigsErrorCodeCachArrayInput is an input type that accepts DomainConfigsErrorCodeCachArray and DomainConfigsErrorCodeCachArrayOutput values.
+// You can construct a concrete instance of `DomainConfigsErrorCodeCachArrayInput` via:
+//
+//	DomainConfigsErrorCodeCachArray{ DomainConfigsErrorCodeCachArgs{...} }
+type DomainConfigsErrorCodeCachArrayInput interface {
+	pulumi.Input
+
+	ToDomainConfigsErrorCodeCachArrayOutput() DomainConfigsErrorCodeCachArrayOutput
+	ToDomainConfigsErrorCodeCachArrayOutputWithContext(context.Context) DomainConfigsErrorCodeCachArrayOutput
+}
+
+type DomainConfigsErrorCodeCachArray []DomainConfigsErrorCodeCachInput
+
+func (DomainConfigsErrorCodeCachArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]DomainConfigsErrorCodeCach)(nil)).Elem()
+}
+
+func (i DomainConfigsErrorCodeCachArray) ToDomainConfigsErrorCodeCachArrayOutput() DomainConfigsErrorCodeCachArrayOutput {
+	return i.ToDomainConfigsErrorCodeCachArrayOutputWithContext(context.Background())
+}
+
+func (i DomainConfigsErrorCodeCachArray) ToDomainConfigsErrorCodeCachArrayOutputWithContext(ctx context.Context) DomainConfigsErrorCodeCachArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(DomainConfigsErrorCodeCachArrayOutput)
+}
+
+type DomainConfigsErrorCodeCachOutput struct{ *pulumi.OutputState }
+
+func (DomainConfigsErrorCodeCachOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*DomainConfigsErrorCodeCach)(nil)).Elem()
+}
+
+func (o DomainConfigsErrorCodeCachOutput) ToDomainConfigsErrorCodeCachOutput() DomainConfigsErrorCodeCachOutput {
+	return o
+}
+
+func (o DomainConfigsErrorCodeCachOutput) ToDomainConfigsErrorCodeCachOutputWithContext(ctx context.Context) DomainConfigsErrorCodeCachOutput {
+	return o
+}
+
+// Specifies the error code. Valid values are: **301**, **302**, **400**, **403**, **404**,
+// **405**, **414**, **500**, **501**, **502**, **503**, and **504**.
+func (o DomainConfigsErrorCodeCachOutput) Code() pulumi.IntOutput {
+	return o.ApplyT(func(v DomainConfigsErrorCodeCach) int { return v.Code }).(pulumi.IntOutput)
+}
+
+// Specifies the cache age. The maximum cache age is 365 days.
+func (o DomainConfigsErrorCodeCachOutput) Ttl() pulumi.IntOutput {
+	return o.ApplyT(func(v DomainConfigsErrorCodeCach) int { return v.Ttl }).(pulumi.IntOutput)
+}
+
+type DomainConfigsErrorCodeCachArrayOutput struct{ *pulumi.OutputState }
+
+func (DomainConfigsErrorCodeCachArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]DomainConfigsErrorCodeCach)(nil)).Elem()
+}
+
+func (o DomainConfigsErrorCodeCachArrayOutput) ToDomainConfigsErrorCodeCachArrayOutput() DomainConfigsErrorCodeCachArrayOutput {
+	return o
+}
+
+func (o DomainConfigsErrorCodeCachArrayOutput) ToDomainConfigsErrorCodeCachArrayOutputWithContext(ctx context.Context) DomainConfigsErrorCodeCachArrayOutput {
+	return o
+}
+
+func (o DomainConfigsErrorCodeCachArrayOutput) Index(i pulumi.IntInput) DomainConfigsErrorCodeCachOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) DomainConfigsErrorCodeCach {
+		return vs[0].([]DomainConfigsErrorCodeCach)[vs[1].(int)]
+	}).(DomainConfigsErrorCodeCachOutput)
+}
+
+type DomainConfigsErrorCodeRedirectRule struct {
+	// Specifies the redirect unique error code. Valid values are: **400**, **403**, **404**,
+	// **405**, **414**, **416**, **451**, **500**, **501**, **502**, **503**, and **504**.
+	ErrorCode int `pulumi:"errorCode"`
+	// Specifies the redirect status code. The value can be **301** or **302**.
+	TargetCode int `pulumi:"targetCode"`
+	// Specifies the destination URL. The value must start with **http://** or **https://**.
+	// For example: `http://www.example.com`.
+	TargetLink string `pulumi:"targetLink"`
+}
+
+// DomainConfigsErrorCodeRedirectRuleInput is an input type that accepts DomainConfigsErrorCodeRedirectRuleArgs and DomainConfigsErrorCodeRedirectRuleOutput values.
+// You can construct a concrete instance of `DomainConfigsErrorCodeRedirectRuleInput` via:
+//
+//	DomainConfigsErrorCodeRedirectRuleArgs{...}
+type DomainConfigsErrorCodeRedirectRuleInput interface {
+	pulumi.Input
+
+	ToDomainConfigsErrorCodeRedirectRuleOutput() DomainConfigsErrorCodeRedirectRuleOutput
+	ToDomainConfigsErrorCodeRedirectRuleOutputWithContext(context.Context) DomainConfigsErrorCodeRedirectRuleOutput
+}
+
+type DomainConfigsErrorCodeRedirectRuleArgs struct {
+	// Specifies the redirect unique error code. Valid values are: **400**, **403**, **404**,
+	// **405**, **414**, **416**, **451**, **500**, **501**, **502**, **503**, and **504**.
+	ErrorCode pulumi.IntInput `pulumi:"errorCode"`
+	// Specifies the redirect status code. The value can be **301** or **302**.
+	TargetCode pulumi.IntInput `pulumi:"targetCode"`
+	// Specifies the destination URL. The value must start with **http://** or **https://**.
+	// For example: `http://www.example.com`.
+	TargetLink pulumi.StringInput `pulumi:"targetLink"`
+}
+
+func (DomainConfigsErrorCodeRedirectRuleArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*DomainConfigsErrorCodeRedirectRule)(nil)).Elem()
+}
+
+func (i DomainConfigsErrorCodeRedirectRuleArgs) ToDomainConfigsErrorCodeRedirectRuleOutput() DomainConfigsErrorCodeRedirectRuleOutput {
+	return i.ToDomainConfigsErrorCodeRedirectRuleOutputWithContext(context.Background())
+}
+
+func (i DomainConfigsErrorCodeRedirectRuleArgs) ToDomainConfigsErrorCodeRedirectRuleOutputWithContext(ctx context.Context) DomainConfigsErrorCodeRedirectRuleOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(DomainConfigsErrorCodeRedirectRuleOutput)
+}
+
+// DomainConfigsErrorCodeRedirectRuleArrayInput is an input type that accepts DomainConfigsErrorCodeRedirectRuleArray and DomainConfigsErrorCodeRedirectRuleArrayOutput values.
+// You can construct a concrete instance of `DomainConfigsErrorCodeRedirectRuleArrayInput` via:
+//
+//	DomainConfigsErrorCodeRedirectRuleArray{ DomainConfigsErrorCodeRedirectRuleArgs{...} }
+type DomainConfigsErrorCodeRedirectRuleArrayInput interface {
+	pulumi.Input
+
+	ToDomainConfigsErrorCodeRedirectRuleArrayOutput() DomainConfigsErrorCodeRedirectRuleArrayOutput
+	ToDomainConfigsErrorCodeRedirectRuleArrayOutputWithContext(context.Context) DomainConfigsErrorCodeRedirectRuleArrayOutput
+}
+
+type DomainConfigsErrorCodeRedirectRuleArray []DomainConfigsErrorCodeRedirectRuleInput
+
+func (DomainConfigsErrorCodeRedirectRuleArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]DomainConfigsErrorCodeRedirectRule)(nil)).Elem()
+}
+
+func (i DomainConfigsErrorCodeRedirectRuleArray) ToDomainConfigsErrorCodeRedirectRuleArrayOutput() DomainConfigsErrorCodeRedirectRuleArrayOutput {
+	return i.ToDomainConfigsErrorCodeRedirectRuleArrayOutputWithContext(context.Background())
+}
+
+func (i DomainConfigsErrorCodeRedirectRuleArray) ToDomainConfigsErrorCodeRedirectRuleArrayOutputWithContext(ctx context.Context) DomainConfigsErrorCodeRedirectRuleArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(DomainConfigsErrorCodeRedirectRuleArrayOutput)
+}
+
+type DomainConfigsErrorCodeRedirectRuleOutput struct{ *pulumi.OutputState }
+
+func (DomainConfigsErrorCodeRedirectRuleOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*DomainConfigsErrorCodeRedirectRule)(nil)).Elem()
+}
+
+func (o DomainConfigsErrorCodeRedirectRuleOutput) ToDomainConfigsErrorCodeRedirectRuleOutput() DomainConfigsErrorCodeRedirectRuleOutput {
+	return o
+}
+
+func (o DomainConfigsErrorCodeRedirectRuleOutput) ToDomainConfigsErrorCodeRedirectRuleOutputWithContext(ctx context.Context) DomainConfigsErrorCodeRedirectRuleOutput {
+	return o
+}
+
+// Specifies the redirect unique error code. Valid values are: **400**, **403**, **404**,
+// **405**, **414**, **416**, **451**, **500**, **501**, **502**, **503**, and **504**.
+func (o DomainConfigsErrorCodeRedirectRuleOutput) ErrorCode() pulumi.IntOutput {
+	return o.ApplyT(func(v DomainConfigsErrorCodeRedirectRule) int { return v.ErrorCode }).(pulumi.IntOutput)
+}
+
+// Specifies the redirect status code. The value can be **301** or **302**.
+func (o DomainConfigsErrorCodeRedirectRuleOutput) TargetCode() pulumi.IntOutput {
+	return o.ApplyT(func(v DomainConfigsErrorCodeRedirectRule) int { return v.TargetCode }).(pulumi.IntOutput)
+}
+
+// Specifies the destination URL. The value must start with **http://** or **https://**.
+// For example: `http://www.example.com`.
+func (o DomainConfigsErrorCodeRedirectRuleOutput) TargetLink() pulumi.StringOutput {
+	return o.ApplyT(func(v DomainConfigsErrorCodeRedirectRule) string { return v.TargetLink }).(pulumi.StringOutput)
+}
+
+type DomainConfigsErrorCodeRedirectRuleArrayOutput struct{ *pulumi.OutputState }
+
+func (DomainConfigsErrorCodeRedirectRuleArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]DomainConfigsErrorCodeRedirectRule)(nil)).Elem()
+}
+
+func (o DomainConfigsErrorCodeRedirectRuleArrayOutput) ToDomainConfigsErrorCodeRedirectRuleArrayOutput() DomainConfigsErrorCodeRedirectRuleArrayOutput {
+	return o
+}
+
+func (o DomainConfigsErrorCodeRedirectRuleArrayOutput) ToDomainConfigsErrorCodeRedirectRuleArrayOutputWithContext(ctx context.Context) DomainConfigsErrorCodeRedirectRuleArrayOutput {
+	return o
+}
+
+func (o DomainConfigsErrorCodeRedirectRuleArrayOutput) Index(i pulumi.IntInput) DomainConfigsErrorCodeRedirectRuleOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) DomainConfigsErrorCodeRedirectRule {
+		return vs[0].([]DomainConfigsErrorCodeRedirectRule)[vs[1].(int)]
+	}).(DomainConfigsErrorCodeRedirectRuleOutput)
+}
+
+type DomainConfigsFlexibleOrigin struct {
+	// Specifies the back source information. The length of this array field cannot exceed `1`.
+	// The backSources structure is documented below.
+	BackSources DomainConfigsFlexibleOriginBackSources `pulumi:"backSources"`
+	// Specifies the URI match rule. The usage rules are as follows:
+	// + When `matchType` is set to **all**, set this field to empty.
+	// + When `matchType` is set to **file_extension**, the value of this field should start with a period (.).
+	//   Enter up to 20 file name extensions and use semicolons (;) to separate them. Example: **.jpg;.zip;.exe**.
+	// + When `matchType` is set to **file_path**, the value of this field should start with a slash (/).
+	//   Enter up to 20 paths and use semicolons (;) to separate them. Example: **/test/folder01;/test/folder02**.
+	MatchPattern *string `pulumi:"matchPattern"`
+	// Specifies the match type. Valid values are:
+	// + **all**: Match all files.
+	// + **file_extension**: Match by file suffix.
+	// + **catalog**: Match by directory.
+	// + **full_path**: Full path matching.
+	// + **home_page**: Match by homepage.
+	MatchType string `pulumi:"matchType"`
+	// Specifies the priority weight of this rule. The default value is 1.
+	// A larger value indicates a higher priority. The value ranges from 1 to 100. The weight values must be unique.
+	Priority int `pulumi:"priority"`
+}
+
+// DomainConfigsFlexibleOriginInput is an input type that accepts DomainConfigsFlexibleOriginArgs and DomainConfigsFlexibleOriginOutput values.
+// You can construct a concrete instance of `DomainConfigsFlexibleOriginInput` via:
+//
+//	DomainConfigsFlexibleOriginArgs{...}
+type DomainConfigsFlexibleOriginInput interface {
+	pulumi.Input
+
+	ToDomainConfigsFlexibleOriginOutput() DomainConfigsFlexibleOriginOutput
+	ToDomainConfigsFlexibleOriginOutputWithContext(context.Context) DomainConfigsFlexibleOriginOutput
+}
+
+type DomainConfigsFlexibleOriginArgs struct {
+	// Specifies the back source information. The length of this array field cannot exceed `1`.
+	// The backSources structure is documented below.
+	BackSources DomainConfigsFlexibleOriginBackSourcesInput `pulumi:"backSources"`
+	// Specifies the URI match rule. The usage rules are as follows:
+	// + When `matchType` is set to **all**, set this field to empty.
+	// + When `matchType` is set to **file_extension**, the value of this field should start with a period (.).
+	//   Enter up to 20 file name extensions and use semicolons (;) to separate them. Example: **.jpg;.zip;.exe**.
+	// + When `matchType` is set to **file_path**, the value of this field should start with a slash (/).
+	//   Enter up to 20 paths and use semicolons (;) to separate them. Example: **/test/folder01;/test/folder02**.
+	MatchPattern pulumi.StringPtrInput `pulumi:"matchPattern"`
+	// Specifies the match type. Valid values are:
+	// + **all**: Match all files.
+	// + **file_extension**: Match by file suffix.
+	// + **catalog**: Match by directory.
+	// + **full_path**: Full path matching.
+	// + **home_page**: Match by homepage.
+	MatchType pulumi.StringInput `pulumi:"matchType"`
+	// Specifies the priority weight of this rule. The default value is 1.
+	// A larger value indicates a higher priority. The value ranges from 1 to 100. The weight values must be unique.
+	Priority pulumi.IntInput `pulumi:"priority"`
+}
+
+func (DomainConfigsFlexibleOriginArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*DomainConfigsFlexibleOrigin)(nil)).Elem()
+}
+
+func (i DomainConfigsFlexibleOriginArgs) ToDomainConfigsFlexibleOriginOutput() DomainConfigsFlexibleOriginOutput {
+	return i.ToDomainConfigsFlexibleOriginOutputWithContext(context.Background())
+}
+
+func (i DomainConfigsFlexibleOriginArgs) ToDomainConfigsFlexibleOriginOutputWithContext(ctx context.Context) DomainConfigsFlexibleOriginOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(DomainConfigsFlexibleOriginOutput)
+}
+
+// DomainConfigsFlexibleOriginArrayInput is an input type that accepts DomainConfigsFlexibleOriginArray and DomainConfigsFlexibleOriginArrayOutput values.
+// You can construct a concrete instance of `DomainConfigsFlexibleOriginArrayInput` via:
+//
+//	DomainConfigsFlexibleOriginArray{ DomainConfigsFlexibleOriginArgs{...} }
+type DomainConfigsFlexibleOriginArrayInput interface {
+	pulumi.Input
+
+	ToDomainConfigsFlexibleOriginArrayOutput() DomainConfigsFlexibleOriginArrayOutput
+	ToDomainConfigsFlexibleOriginArrayOutputWithContext(context.Context) DomainConfigsFlexibleOriginArrayOutput
+}
+
+type DomainConfigsFlexibleOriginArray []DomainConfigsFlexibleOriginInput
+
+func (DomainConfigsFlexibleOriginArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]DomainConfigsFlexibleOrigin)(nil)).Elem()
+}
+
+func (i DomainConfigsFlexibleOriginArray) ToDomainConfigsFlexibleOriginArrayOutput() DomainConfigsFlexibleOriginArrayOutput {
+	return i.ToDomainConfigsFlexibleOriginArrayOutputWithContext(context.Background())
+}
+
+func (i DomainConfigsFlexibleOriginArray) ToDomainConfigsFlexibleOriginArrayOutputWithContext(ctx context.Context) DomainConfigsFlexibleOriginArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(DomainConfigsFlexibleOriginArrayOutput)
+}
+
+type DomainConfigsFlexibleOriginOutput struct{ *pulumi.OutputState }
+
+func (DomainConfigsFlexibleOriginOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*DomainConfigsFlexibleOrigin)(nil)).Elem()
+}
+
+func (o DomainConfigsFlexibleOriginOutput) ToDomainConfigsFlexibleOriginOutput() DomainConfigsFlexibleOriginOutput {
+	return o
+}
+
+func (o DomainConfigsFlexibleOriginOutput) ToDomainConfigsFlexibleOriginOutputWithContext(ctx context.Context) DomainConfigsFlexibleOriginOutput {
+	return o
+}
+
+// Specifies the back source information. The length of this array field cannot exceed `1`.
+// The backSources structure is documented below.
+func (o DomainConfigsFlexibleOriginOutput) BackSources() DomainConfigsFlexibleOriginBackSourcesOutput {
+	return o.ApplyT(func(v DomainConfigsFlexibleOrigin) DomainConfigsFlexibleOriginBackSources { return v.BackSources }).(DomainConfigsFlexibleOriginBackSourcesOutput)
+}
+
+// Specifies the URI match rule. The usage rules are as follows:
+//   - When `matchType` is set to **all**, set this field to empty.
+//   - When `matchType` is set to **file_extension**, the value of this field should start with a period (.).
+//     Enter up to 20 file name extensions and use semicolons (;) to separate them. Example: **.jpg;.zip;.exe**.
+//   - When `matchType` is set to **file_path**, the value of this field should start with a slash (/).
+//     Enter up to 20 paths and use semicolons (;) to separate them. Example: **/test/folder01;/test/folder02**.
+func (o DomainConfigsFlexibleOriginOutput) MatchPattern() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v DomainConfigsFlexibleOrigin) *string { return v.MatchPattern }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the match type. Valid values are:
+// + **all**: Match all files.
+// + **file_extension**: Match by file suffix.
+// + **catalog**: Match by directory.
+// + **full_path**: Full path matching.
+// + **home_page**: Match by homepage.
+func (o DomainConfigsFlexibleOriginOutput) MatchType() pulumi.StringOutput {
+	return o.ApplyT(func(v DomainConfigsFlexibleOrigin) string { return v.MatchType }).(pulumi.StringOutput)
+}
+
+// Specifies the priority weight of this rule. The default value is 1.
+// A larger value indicates a higher priority. The value ranges from 1 to 100. The weight values must be unique.
+func (o DomainConfigsFlexibleOriginOutput) Priority() pulumi.IntOutput {
+	return o.ApplyT(func(v DomainConfigsFlexibleOrigin) int { return v.Priority }).(pulumi.IntOutput)
+}
+
+type DomainConfigsFlexibleOriginArrayOutput struct{ *pulumi.OutputState }
+
+func (DomainConfigsFlexibleOriginArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]DomainConfigsFlexibleOrigin)(nil)).Elem()
+}
+
+func (o DomainConfigsFlexibleOriginArrayOutput) ToDomainConfigsFlexibleOriginArrayOutput() DomainConfigsFlexibleOriginArrayOutput {
+	return o
+}
+
+func (o DomainConfigsFlexibleOriginArrayOutput) ToDomainConfigsFlexibleOriginArrayOutputWithContext(ctx context.Context) DomainConfigsFlexibleOriginArrayOutput {
+	return o
+}
+
+func (o DomainConfigsFlexibleOriginArrayOutput) Index(i pulumi.IntInput) DomainConfigsFlexibleOriginOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) DomainConfigsFlexibleOrigin {
+		return vs[0].([]DomainConfigsFlexibleOrigin)[vs[1].(int)]
+	}).(DomainConfigsFlexibleOriginOutput)
+}
+
+type DomainConfigsFlexibleOriginBackSources struct {
+	// Specifies the HTTP port, ranging from `1` to `65,535`. Defaults to **80**.
+	HttpPort *int `pulumi:"httpPort"`
+	// Specifies the HTTPS port, ranging from `1` to `65,535`. Defaults to **443**.
+	HttpsPort *int `pulumi:"httpsPort"`
+	// Specifies the IP address or domain name of the origin server.
+	// + When `sourcesType` is set to **ipaddr**, the value of this field can only be set to a valid IPv4 or Ipv6 address.
+	// + When `sourcesType` is set to **domain**, the value of this field can only be set to a domain name.
+	// + When `sourcesType` is set to **obs_bucket**, the value of this field can only be set to an OBS bucket access
+	//   domain name.
+	IpOrDomain string `pulumi:"ipOrDomain"`
+	// Specifies the OBS bucket type. Valid values are **private** and **public**.
+	// This field is required when `sourcesType` is set to **obs_bucket**.
+	ObsBucketType *string `pulumi:"obsBucketType"`
+	// Specifies the origin server type. Valid values are as follows:
+	// + **ipaddr**: IP address.
+	// + **domain**: Domain name.
+	// + **obs_bucket**: OBS bucket.
+	SourcesType string `pulumi:"sourcesType"`
+}
+
+// DomainConfigsFlexibleOriginBackSourcesInput is an input type that accepts DomainConfigsFlexibleOriginBackSourcesArgs and DomainConfigsFlexibleOriginBackSourcesOutput values.
+// You can construct a concrete instance of `DomainConfigsFlexibleOriginBackSourcesInput` via:
+//
+//	DomainConfigsFlexibleOriginBackSourcesArgs{...}
+type DomainConfigsFlexibleOriginBackSourcesInput interface {
+	pulumi.Input
+
+	ToDomainConfigsFlexibleOriginBackSourcesOutput() DomainConfigsFlexibleOriginBackSourcesOutput
+	ToDomainConfigsFlexibleOriginBackSourcesOutputWithContext(context.Context) DomainConfigsFlexibleOriginBackSourcesOutput
+}
+
+type DomainConfigsFlexibleOriginBackSourcesArgs struct {
+	// Specifies the HTTP port, ranging from `1` to `65,535`. Defaults to **80**.
+	HttpPort pulumi.IntPtrInput `pulumi:"httpPort"`
+	// Specifies the HTTPS port, ranging from `1` to `65,535`. Defaults to **443**.
+	HttpsPort pulumi.IntPtrInput `pulumi:"httpsPort"`
+	// Specifies the IP address or domain name of the origin server.
+	// + When `sourcesType` is set to **ipaddr**, the value of this field can only be set to a valid IPv4 or Ipv6 address.
+	// + When `sourcesType` is set to **domain**, the value of this field can only be set to a domain name.
+	// + When `sourcesType` is set to **obs_bucket**, the value of this field can only be set to an OBS bucket access
+	//   domain name.
+	IpOrDomain pulumi.StringInput `pulumi:"ipOrDomain"`
+	// Specifies the OBS bucket type. Valid values are **private** and **public**.
+	// This field is required when `sourcesType` is set to **obs_bucket**.
+	ObsBucketType pulumi.StringPtrInput `pulumi:"obsBucketType"`
+	// Specifies the origin server type. Valid values are as follows:
+	// + **ipaddr**: IP address.
+	// + **domain**: Domain name.
+	// + **obs_bucket**: OBS bucket.
+	SourcesType pulumi.StringInput `pulumi:"sourcesType"`
+}
+
+func (DomainConfigsFlexibleOriginBackSourcesArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*DomainConfigsFlexibleOriginBackSources)(nil)).Elem()
+}
+
+func (i DomainConfigsFlexibleOriginBackSourcesArgs) ToDomainConfigsFlexibleOriginBackSourcesOutput() DomainConfigsFlexibleOriginBackSourcesOutput {
+	return i.ToDomainConfigsFlexibleOriginBackSourcesOutputWithContext(context.Background())
+}
+
+func (i DomainConfigsFlexibleOriginBackSourcesArgs) ToDomainConfigsFlexibleOriginBackSourcesOutputWithContext(ctx context.Context) DomainConfigsFlexibleOriginBackSourcesOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(DomainConfigsFlexibleOriginBackSourcesOutput)
+}
+
+type DomainConfigsFlexibleOriginBackSourcesOutput struct{ *pulumi.OutputState }
+
+func (DomainConfigsFlexibleOriginBackSourcesOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*DomainConfigsFlexibleOriginBackSources)(nil)).Elem()
+}
+
+func (o DomainConfigsFlexibleOriginBackSourcesOutput) ToDomainConfigsFlexibleOriginBackSourcesOutput() DomainConfigsFlexibleOriginBackSourcesOutput {
+	return o
+}
+
+func (o DomainConfigsFlexibleOriginBackSourcesOutput) ToDomainConfigsFlexibleOriginBackSourcesOutputWithContext(ctx context.Context) DomainConfigsFlexibleOriginBackSourcesOutput {
+	return o
+}
+
+// Specifies the HTTP port, ranging from `1` to `65,535`. Defaults to **80**.
+func (o DomainConfigsFlexibleOriginBackSourcesOutput) HttpPort() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v DomainConfigsFlexibleOriginBackSources) *int { return v.HttpPort }).(pulumi.IntPtrOutput)
+}
+
+// Specifies the HTTPS port, ranging from `1` to `65,535`. Defaults to **443**.
+func (o DomainConfigsFlexibleOriginBackSourcesOutput) HttpsPort() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v DomainConfigsFlexibleOriginBackSources) *int { return v.HttpsPort }).(pulumi.IntPtrOutput)
+}
+
+// Specifies the IP address or domain name of the origin server.
+//   - When `sourcesType` is set to **ipaddr**, the value of this field can only be set to a valid IPv4 or Ipv6 address.
+//   - When `sourcesType` is set to **domain**, the value of this field can only be set to a domain name.
+//   - When `sourcesType` is set to **obs_bucket**, the value of this field can only be set to an OBS bucket access
+//     domain name.
+func (o DomainConfigsFlexibleOriginBackSourcesOutput) IpOrDomain() pulumi.StringOutput {
+	return o.ApplyT(func(v DomainConfigsFlexibleOriginBackSources) string { return v.IpOrDomain }).(pulumi.StringOutput)
+}
+
+// Specifies the OBS bucket type. Valid values are **private** and **public**.
+// This field is required when `sourcesType` is set to **obs_bucket**.
+func (o DomainConfigsFlexibleOriginBackSourcesOutput) ObsBucketType() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v DomainConfigsFlexibleOriginBackSources) *string { return v.ObsBucketType }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the origin server type. Valid values are as follows:
+// + **ipaddr**: IP address.
+// + **domain**: Domain name.
+// + **obs_bucket**: OBS bucket.
+func (o DomainConfigsFlexibleOriginBackSourcesOutput) SourcesType() pulumi.StringOutput {
+	return o.ApplyT(func(v DomainConfigsFlexibleOriginBackSources) string { return v.SourcesType }).(pulumi.StringOutput)
+}
+
 type DomainConfigsForceRedirect struct {
-	// Specifies the whether to enable force redirect or smart compression.
-	Enabled bool    `pulumi:"enabled"`
-	Status  *string `pulumi:"status"`
-	// Specifies the operation type for caching URL parameters. Posiible values are:
-	// **full_url**: cache all parameters
-	// **ignore_url_params**: ignore all parameters
-	// **del_args**: ignore specific URL parameters
-	// **reserve_args**: reserve specified URL parameters
+	// Specifies whether to enable client cert settings.
+	Enabled bool `pulumi:"enabled"`
+	// Specifies the force redirect status code. Valid values are: **301** and **302**.
+	// Defaults to **302**.
+	RedirectCode *int    `pulumi:"redirectCode"`
+	Status       *string `pulumi:"status"`
+	// Specifies the blacklist and whitelist rule type. Valid values are:
+	// + **black**: Blacklist. Users in regions specified in the blacklist cannot access resources and status code `403` is
+	//   returned.
+	// + **white**: Whitelist. Only users in regions specified in the whitelist can access resources. Status code `403` is
+	//   returned for other users.
 	Type *string `pulumi:"type"`
 }
 
@@ -1067,14 +2844,17 @@ type DomainConfigsForceRedirectInput interface {
 }
 
 type DomainConfigsForceRedirectArgs struct {
-	// Specifies the whether to enable force redirect or smart compression.
-	Enabled pulumi.BoolInput      `pulumi:"enabled"`
-	Status  pulumi.StringPtrInput `pulumi:"status"`
-	// Specifies the operation type for caching URL parameters. Posiible values are:
-	// **full_url**: cache all parameters
-	// **ignore_url_params**: ignore all parameters
-	// **del_args**: ignore specific URL parameters
-	// **reserve_args**: reserve specified URL parameters
+	// Specifies whether to enable client cert settings.
+	Enabled pulumi.BoolInput `pulumi:"enabled"`
+	// Specifies the force redirect status code. Valid values are: **301** and **302**.
+	// Defaults to **302**.
+	RedirectCode pulumi.IntPtrInput    `pulumi:"redirectCode"`
+	Status       pulumi.StringPtrInput `pulumi:"status"`
+	// Specifies the blacklist and whitelist rule type. Valid values are:
+	// + **black**: Blacklist. Users in regions specified in the blacklist cannot access resources and status code `403` is
+	//   returned.
+	// + **white**: Whitelist. Only users in regions specified in the whitelist can access resources. Status code `403` is
+	//   returned for other users.
 	Type pulumi.StringPtrInput `pulumi:"type"`
 }
 
@@ -1155,20 +2935,26 @@ func (o DomainConfigsForceRedirectOutput) ToDomainConfigsForceRedirectPtrOutputW
 	}).(DomainConfigsForceRedirectPtrOutput)
 }
 
-// Specifies the whether to enable force redirect or smart compression.
+// Specifies whether to enable client cert settings.
 func (o DomainConfigsForceRedirectOutput) Enabled() pulumi.BoolOutput {
 	return o.ApplyT(func(v DomainConfigsForceRedirect) bool { return v.Enabled }).(pulumi.BoolOutput)
+}
+
+// Specifies the force redirect status code. Valid values are: **301** and **302**.
+// Defaults to **302**.
+func (o DomainConfigsForceRedirectOutput) RedirectCode() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v DomainConfigsForceRedirect) *int { return v.RedirectCode }).(pulumi.IntPtrOutput)
 }
 
 func (o DomainConfigsForceRedirectOutput) Status() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v DomainConfigsForceRedirect) *string { return v.Status }).(pulumi.StringPtrOutput)
 }
 
-// Specifies the operation type for caching URL parameters. Posiible values are:
-// **full_url**: cache all parameters
-// **ignore_url_params**: ignore all parameters
-// **del_args**: ignore specific URL parameters
-// **reserve_args**: reserve specified URL parameters
+// Specifies the blacklist and whitelist rule type. Valid values are:
+//   - **black**: Blacklist. Users in regions specified in the blacklist cannot access resources and status code `403` is
+//     returned.
+//   - **white**: Whitelist. Only users in regions specified in the whitelist can access resources. Status code `403` is
+//     returned for other users.
 func (o DomainConfigsForceRedirectOutput) Type() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v DomainConfigsForceRedirect) *string { return v.Type }).(pulumi.StringPtrOutput)
 }
@@ -1197,7 +2983,7 @@ func (o DomainConfigsForceRedirectPtrOutput) Elem() DomainConfigsForceRedirectOu
 	}).(DomainConfigsForceRedirectOutput)
 }
 
-// Specifies the whether to enable force redirect or smart compression.
+// Specifies whether to enable client cert settings.
 func (o DomainConfigsForceRedirectPtrOutput) Enabled() pulumi.BoolPtrOutput {
 	return o.ApplyT(func(v *DomainConfigsForceRedirect) *bool {
 		if v == nil {
@@ -1205,6 +2991,17 @@ func (o DomainConfigsForceRedirectPtrOutput) Enabled() pulumi.BoolPtrOutput {
 		}
 		return &v.Enabled
 	}).(pulumi.BoolPtrOutput)
+}
+
+// Specifies the force redirect status code. Valid values are: **301** and **302**.
+// Defaults to **302**.
+func (o DomainConfigsForceRedirectPtrOutput) RedirectCode() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v *DomainConfigsForceRedirect) *int {
+		if v == nil {
+			return nil
+		}
+		return v.RedirectCode
+	}).(pulumi.IntPtrOutput)
 }
 
 func (o DomainConfigsForceRedirectPtrOutput) Status() pulumi.StringPtrOutput {
@@ -1216,11 +3013,11 @@ func (o DomainConfigsForceRedirectPtrOutput) Status() pulumi.StringPtrOutput {
 	}).(pulumi.StringPtrOutput)
 }
 
-// Specifies the operation type for caching URL parameters. Posiible values are:
-// **full_url**: cache all parameters
-// **ignore_url_params**: ignore all parameters
-// **del_args**: ignore specific URL parameters
-// **reserve_args**: reserve specified URL parameters
+// Specifies the blacklist and whitelist rule type. Valid values are:
+//   - **black**: Blacklist. Users in regions specified in the blacklist cannot access resources and status code `403` is
+//     returned.
+//   - **white**: Whitelist. Only users in regions specified in the whitelist can access resources. Status code `403` is
+//     returned for other users.
 func (o DomainConfigsForceRedirectPtrOutput) Type() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *DomainConfigsForceRedirect) *string {
 		if v == nil {
@@ -1230,12 +3027,205 @@ func (o DomainConfigsForceRedirectPtrOutput) Type() pulumi.StringPtrOutput {
 	}).(pulumi.StringPtrOutput)
 }
 
+type DomainConfigsHsts struct {
+	// Specifies whether to enable client cert settings.
+	Enabled bool `pulumi:"enabled"`
+	// Specifies whether subdomain names are included.
+	// The options are **on** (included) and **off** (not included). This field is required when enable HSTS settings.
+	IncludeSubdomains *string `pulumi:"includeSubdomains"`
+	// Specifies the expiration time, which means the TTL of the response header
+	// `Strict-Transport-Security` on the client. The value ranges from `0` to `63,072,000`. The unit is second.
+	// This field is required when enable HSTS settings.
+	MaxAge *int `pulumi:"maxAge"`
+}
+
+// DomainConfigsHstsInput is an input type that accepts DomainConfigsHstsArgs and DomainConfigsHstsOutput values.
+// You can construct a concrete instance of `DomainConfigsHstsInput` via:
+//
+//	DomainConfigsHstsArgs{...}
+type DomainConfigsHstsInput interface {
+	pulumi.Input
+
+	ToDomainConfigsHstsOutput() DomainConfigsHstsOutput
+	ToDomainConfigsHstsOutputWithContext(context.Context) DomainConfigsHstsOutput
+}
+
+type DomainConfigsHstsArgs struct {
+	// Specifies whether to enable client cert settings.
+	Enabled pulumi.BoolInput `pulumi:"enabled"`
+	// Specifies whether subdomain names are included.
+	// The options are **on** (included) and **off** (not included). This field is required when enable HSTS settings.
+	IncludeSubdomains pulumi.StringPtrInput `pulumi:"includeSubdomains"`
+	// Specifies the expiration time, which means the TTL of the response header
+	// `Strict-Transport-Security` on the client. The value ranges from `0` to `63,072,000`. The unit is second.
+	// This field is required when enable HSTS settings.
+	MaxAge pulumi.IntPtrInput `pulumi:"maxAge"`
+}
+
+func (DomainConfigsHstsArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*DomainConfigsHsts)(nil)).Elem()
+}
+
+func (i DomainConfigsHstsArgs) ToDomainConfigsHstsOutput() DomainConfigsHstsOutput {
+	return i.ToDomainConfigsHstsOutputWithContext(context.Background())
+}
+
+func (i DomainConfigsHstsArgs) ToDomainConfigsHstsOutputWithContext(ctx context.Context) DomainConfigsHstsOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(DomainConfigsHstsOutput)
+}
+
+func (i DomainConfigsHstsArgs) ToDomainConfigsHstsPtrOutput() DomainConfigsHstsPtrOutput {
+	return i.ToDomainConfigsHstsPtrOutputWithContext(context.Background())
+}
+
+func (i DomainConfigsHstsArgs) ToDomainConfigsHstsPtrOutputWithContext(ctx context.Context) DomainConfigsHstsPtrOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(DomainConfigsHstsOutput).ToDomainConfigsHstsPtrOutputWithContext(ctx)
+}
+
+// DomainConfigsHstsPtrInput is an input type that accepts DomainConfigsHstsArgs, DomainConfigsHstsPtr and DomainConfigsHstsPtrOutput values.
+// You can construct a concrete instance of `DomainConfigsHstsPtrInput` via:
+//
+//	        DomainConfigsHstsArgs{...}
+//
+//	or:
+//
+//	        nil
+type DomainConfigsHstsPtrInput interface {
+	pulumi.Input
+
+	ToDomainConfigsHstsPtrOutput() DomainConfigsHstsPtrOutput
+	ToDomainConfigsHstsPtrOutputWithContext(context.Context) DomainConfigsHstsPtrOutput
+}
+
+type domainConfigsHstsPtrType DomainConfigsHstsArgs
+
+func DomainConfigsHstsPtr(v *DomainConfigsHstsArgs) DomainConfigsHstsPtrInput {
+	return (*domainConfigsHstsPtrType)(v)
+}
+
+func (*domainConfigsHstsPtrType) ElementType() reflect.Type {
+	return reflect.TypeOf((**DomainConfigsHsts)(nil)).Elem()
+}
+
+func (i *domainConfigsHstsPtrType) ToDomainConfigsHstsPtrOutput() DomainConfigsHstsPtrOutput {
+	return i.ToDomainConfigsHstsPtrOutputWithContext(context.Background())
+}
+
+func (i *domainConfigsHstsPtrType) ToDomainConfigsHstsPtrOutputWithContext(ctx context.Context) DomainConfigsHstsPtrOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(DomainConfigsHstsPtrOutput)
+}
+
+type DomainConfigsHstsOutput struct{ *pulumi.OutputState }
+
+func (DomainConfigsHstsOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*DomainConfigsHsts)(nil)).Elem()
+}
+
+func (o DomainConfigsHstsOutput) ToDomainConfigsHstsOutput() DomainConfigsHstsOutput {
+	return o
+}
+
+func (o DomainConfigsHstsOutput) ToDomainConfigsHstsOutputWithContext(ctx context.Context) DomainConfigsHstsOutput {
+	return o
+}
+
+func (o DomainConfigsHstsOutput) ToDomainConfigsHstsPtrOutput() DomainConfigsHstsPtrOutput {
+	return o.ToDomainConfigsHstsPtrOutputWithContext(context.Background())
+}
+
+func (o DomainConfigsHstsOutput) ToDomainConfigsHstsPtrOutputWithContext(ctx context.Context) DomainConfigsHstsPtrOutput {
+	return o.ApplyTWithContext(ctx, func(_ context.Context, v DomainConfigsHsts) *DomainConfigsHsts {
+		return &v
+	}).(DomainConfigsHstsPtrOutput)
+}
+
+// Specifies whether to enable client cert settings.
+func (o DomainConfigsHstsOutput) Enabled() pulumi.BoolOutput {
+	return o.ApplyT(func(v DomainConfigsHsts) bool { return v.Enabled }).(pulumi.BoolOutput)
+}
+
+// Specifies whether subdomain names are included.
+// The options are **on** (included) and **off** (not included). This field is required when enable HSTS settings.
+func (o DomainConfigsHstsOutput) IncludeSubdomains() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v DomainConfigsHsts) *string { return v.IncludeSubdomains }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the expiration time, which means the TTL of the response header
+// `Strict-Transport-Security` on the client. The value ranges from `0` to `63,072,000`. The unit is second.
+// This field is required when enable HSTS settings.
+func (o DomainConfigsHstsOutput) MaxAge() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v DomainConfigsHsts) *int { return v.MaxAge }).(pulumi.IntPtrOutput)
+}
+
+type DomainConfigsHstsPtrOutput struct{ *pulumi.OutputState }
+
+func (DomainConfigsHstsPtrOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((**DomainConfigsHsts)(nil)).Elem()
+}
+
+func (o DomainConfigsHstsPtrOutput) ToDomainConfigsHstsPtrOutput() DomainConfigsHstsPtrOutput {
+	return o
+}
+
+func (o DomainConfigsHstsPtrOutput) ToDomainConfigsHstsPtrOutputWithContext(ctx context.Context) DomainConfigsHstsPtrOutput {
+	return o
+}
+
+func (o DomainConfigsHstsPtrOutput) Elem() DomainConfigsHstsOutput {
+	return o.ApplyT(func(v *DomainConfigsHsts) DomainConfigsHsts {
+		if v != nil {
+			return *v
+		}
+		var ret DomainConfigsHsts
+		return ret
+	}).(DomainConfigsHstsOutput)
+}
+
+// Specifies whether to enable client cert settings.
+func (o DomainConfigsHstsPtrOutput) Enabled() pulumi.BoolPtrOutput {
+	return o.ApplyT(func(v *DomainConfigsHsts) *bool {
+		if v == nil {
+			return nil
+		}
+		return &v.Enabled
+	}).(pulumi.BoolPtrOutput)
+}
+
+// Specifies whether subdomain names are included.
+// The options are **on** (included) and **off** (not included). This field is required when enable HSTS settings.
+func (o DomainConfigsHstsPtrOutput) IncludeSubdomains() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *DomainConfigsHsts) *string {
+		if v == nil {
+			return nil
+		}
+		return v.IncludeSubdomains
+	}).(pulumi.StringPtrOutput)
+}
+
+// Specifies the expiration time, which means the TTL of the response header
+// `Strict-Transport-Security` on the client. The value ranges from `0` to `63,072,000`. The unit is second.
+// This field is required when enable HSTS settings.
+func (o DomainConfigsHstsPtrOutput) MaxAge() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v *DomainConfigsHsts) *int {
+		if v == nil {
+			return nil
+		}
+		return v.MaxAge
+	}).(pulumi.IntPtrOutput)
+}
+
 type DomainConfigsHttpResponseHeader struct {
-	// Specifies the operation type of request or response
+	// Specifies the operation type of the HTTP response header. The value can be **set** or **delete**.
 	Action string `pulumi:"action"`
-	// Specifies the request or response header.
+	// Specifies the HTTP response header. Valid values are **Content-Disposition**, **Content-Language**,
+	// **Access-Control-Allow-Origin**, **Access-Control-Allow-Methods**, **Access-Control-Max-Age**, **Access-Control-Expose-Headers**,
+	// **Access-Control-Allow-Headers** or custom headers. A header contains `1` to `100` characters, including letters, digits,
+	// and hyphens (-), and starts with a letter.
 	Name string `pulumi:"name"`
-	// Specifies the parameter values. Multiple values are separated by semicolons (;).
+	// Specifies the IP address blacklist or whitelist. This field is required when `type` is
+	// set to **black** or **white**. A list contains up to `500` IP addresses and IP address segments, which are separated
+	// by commas (,). IPv6 addresses are supported. Duplicate IP addresses and IP address segments will be removed.
+	// Addresses with wildcard characters are not supported, for example, `192.168.0.*`.
 	Value *string `pulumi:"value"`
 }
 
@@ -1251,11 +3241,17 @@ type DomainConfigsHttpResponseHeaderInput interface {
 }
 
 type DomainConfigsHttpResponseHeaderArgs struct {
-	// Specifies the operation type of request or response
+	// Specifies the operation type of the HTTP response header. The value can be **set** or **delete**.
 	Action pulumi.StringInput `pulumi:"action"`
-	// Specifies the request or response header.
+	// Specifies the HTTP response header. Valid values are **Content-Disposition**, **Content-Language**,
+	// **Access-Control-Allow-Origin**, **Access-Control-Allow-Methods**, **Access-Control-Max-Age**, **Access-Control-Expose-Headers**,
+	// **Access-Control-Allow-Headers** or custom headers. A header contains `1` to `100` characters, including letters, digits,
+	// and hyphens (-), and starts with a letter.
 	Name pulumi.StringInput `pulumi:"name"`
-	// Specifies the parameter values. Multiple values are separated by semicolons (;).
+	// Specifies the IP address blacklist or whitelist. This field is required when `type` is
+	// set to **black** or **white**. A list contains up to `500` IP addresses and IP address segments, which are separated
+	// by commas (,). IPv6 addresses are supported. Duplicate IP addresses and IP address segments will be removed.
+	// Addresses with wildcard characters are not supported, for example, `192.168.0.*`.
 	Value pulumi.StringPtrInput `pulumi:"value"`
 }
 
@@ -1310,17 +3306,23 @@ func (o DomainConfigsHttpResponseHeaderOutput) ToDomainConfigsHttpResponseHeader
 	return o
 }
 
-// Specifies the operation type of request or response
+// Specifies the operation type of the HTTP response header. The value can be **set** or **delete**.
 func (o DomainConfigsHttpResponseHeaderOutput) Action() pulumi.StringOutput {
 	return o.ApplyT(func(v DomainConfigsHttpResponseHeader) string { return v.Action }).(pulumi.StringOutput)
 }
 
-// Specifies the request or response header.
+// Specifies the HTTP response header. Valid values are **Content-Disposition**, **Content-Language**,
+// **Access-Control-Allow-Origin**, **Access-Control-Allow-Methods**, **Access-Control-Max-Age**, **Access-Control-Expose-Headers**,
+// **Access-Control-Allow-Headers** or custom headers. A header contains `1` to `100` characters, including letters, digits,
+// and hyphens (-), and starts with a letter.
 func (o DomainConfigsHttpResponseHeaderOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v DomainConfigsHttpResponseHeader) string { return v.Name }).(pulumi.StringOutput)
 }
 
-// Specifies the parameter values. Multiple values are separated by semicolons (;).
+// Specifies the IP address blacklist or whitelist. This field is required when `type` is
+// set to **black** or **white**. A list contains up to `500` IP addresses and IP address segments, which are separated
+// by commas (,). IPv6 addresses are supported. Duplicate IP addresses and IP address segments will be removed.
+// Addresses with wildcard characters are not supported, for example, `192.168.0.*`.
 func (o DomainConfigsHttpResponseHeaderOutput) Value() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v DomainConfigsHttpResponseHeader) *string { return v.Value }).(pulumi.StringPtrOutput)
 }
@@ -1348,27 +3350,41 @@ func (o DomainConfigsHttpResponseHeaderArrayOutput) Index(i pulumi.IntInput) Dom
 type DomainConfigsHttpsSettings struct {
 	// Specifies the content of the certificate used by the HTTPS protocol.
 	// This parameter is mandatory when a certificate is configured. The value is in PEM format.
+	// This field is required when `certificateSource` is set to `0`.
 	CertificateBody *string `pulumi:"certificateBody"`
-	// Specifies the certificate name. The value contains 3 to 32 characters.
+	// Specifies the certificate name. The value contains `3` to `32` characters.
 	// This parameter is mandatory when a certificate is configured.
 	CertificateName *string `pulumi:"certificateName"`
-	// Specifies the certificate type. Possible values are:
-	// + **1**: Huawei-managed certificate.
-	// + **0**: your own certificate.
+	// Specifies the certificate source. Valid values are:
+	// + `0`: Your own certificate.
+	// + `2`: SCM certificate. Please enable SCM delegation authorization to access SCM service.
 	CertificateSource *int `pulumi:"certificateSource"`
-	// Specifies whether HTTP/2 is used.
+	// Specifies the certificate type. Currently, only **server** is supported, which
+	// means international certificate. Defaults to **server**.
+	CertificateType *string `pulumi:"certificateType"`
+	// Specifies whether HTTP/2 is used. Defaults to **false**.
+	// When `httpsEnabled` is set to **false**, this parameter does not take effect.
 	Http2Enabled *bool   `pulumi:"http2Enabled"`
 	Http2Status  *string `pulumi:"http2Status"`
-	// Specifies whether to enable HTTPS.
+	// Specifies whether to enable HTTPS. Defaults to **false**.
 	HttpsEnabled *bool   `pulumi:"httpsEnabled"`
 	HttpsStatus  *string `pulumi:"httpsStatus"`
+	// Specifies whether online certificate status protocol (OCSP) stapling is enabled.
+	// Valid values are as follows:
+	// + **on**: Enable.
+	// + **off**: Disable.
+	OcspStaplingStatus *string `pulumi:"ocspStaplingStatus"`
 	// Specifies the private key used by the HTTPS protocol. This parameter is mandatory
 	// when a certificate is configured. The value is in PEM format.
+	// This field is required when `certificateSource` is set to `0`.
 	PrivateKey *string `pulumi:"privateKey"`
+	// Specifies the SCM certificate ID.
+	// This field is required when `certificateSource` is set to `2`.
+	ScmCertificateId *string `pulumi:"scmCertificateId"`
 	// Specifies the transport Layer Security (TLS). Currently, **TLSv1.0**,
-	// **TLSv1.1**, **TLSv1.2**, and **TLSv1.3** are supported. By default, all versions are enabled. You can enable
-	// a single version or consecutive versions. To enable multiple versions, use commas (,) to separate versions,
-	// for example, **TLSv1.1,TLSv1.2**.
+	// **TLSv1.1**, **TLSv1.2**, and **TLSv1.3** are supported. By default, **TLSv1.1**, **TLSv1.2**, and **TLSv1.3** are
+	// enabled. You can enable a single version or consecutive versions. To enable multiple versions, use commas (,) to
+	// separate versions, for example, **TLSv1.1,TLSv1.2**.
 	TlsVersion *string `pulumi:"tlsVersion"`
 }
 
@@ -1386,27 +3402,41 @@ type DomainConfigsHttpsSettingsInput interface {
 type DomainConfigsHttpsSettingsArgs struct {
 	// Specifies the content of the certificate used by the HTTPS protocol.
 	// This parameter is mandatory when a certificate is configured. The value is in PEM format.
+	// This field is required when `certificateSource` is set to `0`.
 	CertificateBody pulumi.StringPtrInput `pulumi:"certificateBody"`
-	// Specifies the certificate name. The value contains 3 to 32 characters.
+	// Specifies the certificate name. The value contains `3` to `32` characters.
 	// This parameter is mandatory when a certificate is configured.
 	CertificateName pulumi.StringPtrInput `pulumi:"certificateName"`
-	// Specifies the certificate type. Possible values are:
-	// + **1**: Huawei-managed certificate.
-	// + **0**: your own certificate.
+	// Specifies the certificate source. Valid values are:
+	// + `0`: Your own certificate.
+	// + `2`: SCM certificate. Please enable SCM delegation authorization to access SCM service.
 	CertificateSource pulumi.IntPtrInput `pulumi:"certificateSource"`
-	// Specifies whether HTTP/2 is used.
+	// Specifies the certificate type. Currently, only **server** is supported, which
+	// means international certificate. Defaults to **server**.
+	CertificateType pulumi.StringPtrInput `pulumi:"certificateType"`
+	// Specifies whether HTTP/2 is used. Defaults to **false**.
+	// When `httpsEnabled` is set to **false**, this parameter does not take effect.
 	Http2Enabled pulumi.BoolPtrInput   `pulumi:"http2Enabled"`
 	Http2Status  pulumi.StringPtrInput `pulumi:"http2Status"`
-	// Specifies whether to enable HTTPS.
+	// Specifies whether to enable HTTPS. Defaults to **false**.
 	HttpsEnabled pulumi.BoolPtrInput   `pulumi:"httpsEnabled"`
 	HttpsStatus  pulumi.StringPtrInput `pulumi:"httpsStatus"`
+	// Specifies whether online certificate status protocol (OCSP) stapling is enabled.
+	// Valid values are as follows:
+	// + **on**: Enable.
+	// + **off**: Disable.
+	OcspStaplingStatus pulumi.StringPtrInput `pulumi:"ocspStaplingStatus"`
 	// Specifies the private key used by the HTTPS protocol. This parameter is mandatory
 	// when a certificate is configured. The value is in PEM format.
+	// This field is required when `certificateSource` is set to `0`.
 	PrivateKey pulumi.StringPtrInput `pulumi:"privateKey"`
+	// Specifies the SCM certificate ID.
+	// This field is required when `certificateSource` is set to `2`.
+	ScmCertificateId pulumi.StringPtrInput `pulumi:"scmCertificateId"`
 	// Specifies the transport Layer Security (TLS). Currently, **TLSv1.0**,
-	// **TLSv1.1**, **TLSv1.2**, and **TLSv1.3** are supported. By default, all versions are enabled. You can enable
-	// a single version or consecutive versions. To enable multiple versions, use commas (,) to separate versions,
-	// for example, **TLSv1.1,TLSv1.2**.
+	// **TLSv1.1**, **TLSv1.2**, and **TLSv1.3** are supported. By default, **TLSv1.1**, **TLSv1.2**, and **TLSv1.3** are
+	// enabled. You can enable a single version or consecutive versions. To enable multiple versions, use commas (,) to
+	// separate versions, for example, **TLSv1.1,TLSv1.2**.
 	TlsVersion pulumi.StringPtrInput `pulumi:"tlsVersion"`
 }
 
@@ -1489,24 +3519,32 @@ func (o DomainConfigsHttpsSettingsOutput) ToDomainConfigsHttpsSettingsPtrOutputW
 
 // Specifies the content of the certificate used by the HTTPS protocol.
 // This parameter is mandatory when a certificate is configured. The value is in PEM format.
+// This field is required when `certificateSource` is set to `0`.
 func (o DomainConfigsHttpsSettingsOutput) CertificateBody() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v DomainConfigsHttpsSettings) *string { return v.CertificateBody }).(pulumi.StringPtrOutput)
 }
 
-// Specifies the certificate name. The value contains 3 to 32 characters.
+// Specifies the certificate name. The value contains `3` to `32` characters.
 // This parameter is mandatory when a certificate is configured.
 func (o DomainConfigsHttpsSettingsOutput) CertificateName() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v DomainConfigsHttpsSettings) *string { return v.CertificateName }).(pulumi.StringPtrOutput)
 }
 
-// Specifies the certificate type. Possible values are:
-// + **1**: Huawei-managed certificate.
-// + **0**: your own certificate.
+// Specifies the certificate source. Valid values are:
+// + `0`: Your own certificate.
+// + `2`: SCM certificate. Please enable SCM delegation authorization to access SCM service.
 func (o DomainConfigsHttpsSettingsOutput) CertificateSource() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v DomainConfigsHttpsSettings) *int { return v.CertificateSource }).(pulumi.IntPtrOutput)
 }
 
-// Specifies whether HTTP/2 is used.
+// Specifies the certificate type. Currently, only **server** is supported, which
+// means international certificate. Defaults to **server**.
+func (o DomainConfigsHttpsSettingsOutput) CertificateType() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v DomainConfigsHttpsSettings) *string { return v.CertificateType }).(pulumi.StringPtrOutput)
+}
+
+// Specifies whether HTTP/2 is used. Defaults to **false**.
+// When `httpsEnabled` is set to **false**, this parameter does not take effect.
 func (o DomainConfigsHttpsSettingsOutput) Http2Enabled() pulumi.BoolPtrOutput {
 	return o.ApplyT(func(v DomainConfigsHttpsSettings) *bool { return v.Http2Enabled }).(pulumi.BoolPtrOutput)
 }
@@ -1515,7 +3553,7 @@ func (o DomainConfigsHttpsSettingsOutput) Http2Status() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v DomainConfigsHttpsSettings) *string { return v.Http2Status }).(pulumi.StringPtrOutput)
 }
 
-// Specifies whether to enable HTTPS.
+// Specifies whether to enable HTTPS. Defaults to **false**.
 func (o DomainConfigsHttpsSettingsOutput) HttpsEnabled() pulumi.BoolPtrOutput {
 	return o.ApplyT(func(v DomainConfigsHttpsSettings) *bool { return v.HttpsEnabled }).(pulumi.BoolPtrOutput)
 }
@@ -1524,16 +3562,31 @@ func (o DomainConfigsHttpsSettingsOutput) HttpsStatus() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v DomainConfigsHttpsSettings) *string { return v.HttpsStatus }).(pulumi.StringPtrOutput)
 }
 
+// Specifies whether online certificate status protocol (OCSP) stapling is enabled.
+// Valid values are as follows:
+// + **on**: Enable.
+// + **off**: Disable.
+func (o DomainConfigsHttpsSettingsOutput) OcspStaplingStatus() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v DomainConfigsHttpsSettings) *string { return v.OcspStaplingStatus }).(pulumi.StringPtrOutput)
+}
+
 // Specifies the private key used by the HTTPS protocol. This parameter is mandatory
 // when a certificate is configured. The value is in PEM format.
+// This field is required when `certificateSource` is set to `0`.
 func (o DomainConfigsHttpsSettingsOutput) PrivateKey() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v DomainConfigsHttpsSettings) *string { return v.PrivateKey }).(pulumi.StringPtrOutput)
 }
 
+// Specifies the SCM certificate ID.
+// This field is required when `certificateSource` is set to `2`.
+func (o DomainConfigsHttpsSettingsOutput) ScmCertificateId() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v DomainConfigsHttpsSettings) *string { return v.ScmCertificateId }).(pulumi.StringPtrOutput)
+}
+
 // Specifies the transport Layer Security (TLS). Currently, **TLSv1.0**,
-// **TLSv1.1**, **TLSv1.2**, and **TLSv1.3** are supported. By default, all versions are enabled. You can enable
-// a single version or consecutive versions. To enable multiple versions, use commas (,) to separate versions,
-// for example, **TLSv1.1,TLSv1.2**.
+// **TLSv1.1**, **TLSv1.2**, and **TLSv1.3** are supported. By default, **TLSv1.1**, **TLSv1.2**, and **TLSv1.3** are
+// enabled. You can enable a single version or consecutive versions. To enable multiple versions, use commas (,) to
+// separate versions, for example, **TLSv1.1,TLSv1.2**.
 func (o DomainConfigsHttpsSettingsOutput) TlsVersion() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v DomainConfigsHttpsSettings) *string { return v.TlsVersion }).(pulumi.StringPtrOutput)
 }
@@ -1564,6 +3617,7 @@ func (o DomainConfigsHttpsSettingsPtrOutput) Elem() DomainConfigsHttpsSettingsOu
 
 // Specifies the content of the certificate used by the HTTPS protocol.
 // This parameter is mandatory when a certificate is configured. The value is in PEM format.
+// This field is required when `certificateSource` is set to `0`.
 func (o DomainConfigsHttpsSettingsPtrOutput) CertificateBody() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *DomainConfigsHttpsSettings) *string {
 		if v == nil {
@@ -1573,7 +3627,7 @@ func (o DomainConfigsHttpsSettingsPtrOutput) CertificateBody() pulumi.StringPtrO
 	}).(pulumi.StringPtrOutput)
 }
 
-// Specifies the certificate name. The value contains 3 to 32 characters.
+// Specifies the certificate name. The value contains `3` to `32` characters.
 // This parameter is mandatory when a certificate is configured.
 func (o DomainConfigsHttpsSettingsPtrOutput) CertificateName() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *DomainConfigsHttpsSettings) *string {
@@ -1584,9 +3638,9 @@ func (o DomainConfigsHttpsSettingsPtrOutput) CertificateName() pulumi.StringPtrO
 	}).(pulumi.StringPtrOutput)
 }
 
-// Specifies the certificate type. Possible values are:
-// + **1**: Huawei-managed certificate.
-// + **0**: your own certificate.
+// Specifies the certificate source. Valid values are:
+// + `0`: Your own certificate.
+// + `2`: SCM certificate. Please enable SCM delegation authorization to access SCM service.
 func (o DomainConfigsHttpsSettingsPtrOutput) CertificateSource() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v *DomainConfigsHttpsSettings) *int {
 		if v == nil {
@@ -1596,7 +3650,19 @@ func (o DomainConfigsHttpsSettingsPtrOutput) CertificateSource() pulumi.IntPtrOu
 	}).(pulumi.IntPtrOutput)
 }
 
-// Specifies whether HTTP/2 is used.
+// Specifies the certificate type. Currently, only **server** is supported, which
+// means international certificate. Defaults to **server**.
+func (o DomainConfigsHttpsSettingsPtrOutput) CertificateType() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *DomainConfigsHttpsSettings) *string {
+		if v == nil {
+			return nil
+		}
+		return v.CertificateType
+	}).(pulumi.StringPtrOutput)
+}
+
+// Specifies whether HTTP/2 is used. Defaults to **false**.
+// When `httpsEnabled` is set to **false**, this parameter does not take effect.
 func (o DomainConfigsHttpsSettingsPtrOutput) Http2Enabled() pulumi.BoolPtrOutput {
 	return o.ApplyT(func(v *DomainConfigsHttpsSettings) *bool {
 		if v == nil {
@@ -1615,7 +3681,7 @@ func (o DomainConfigsHttpsSettingsPtrOutput) Http2Status() pulumi.StringPtrOutpu
 	}).(pulumi.StringPtrOutput)
 }
 
-// Specifies whether to enable HTTPS.
+// Specifies whether to enable HTTPS. Defaults to **false**.
 func (o DomainConfigsHttpsSettingsPtrOutput) HttpsEnabled() pulumi.BoolPtrOutput {
 	return o.ApplyT(func(v *DomainConfigsHttpsSettings) *bool {
 		if v == nil {
@@ -1634,8 +3700,22 @@ func (o DomainConfigsHttpsSettingsPtrOutput) HttpsStatus() pulumi.StringPtrOutpu
 	}).(pulumi.StringPtrOutput)
 }
 
+// Specifies whether online certificate status protocol (OCSP) stapling is enabled.
+// Valid values are as follows:
+// + **on**: Enable.
+// + **off**: Disable.
+func (o DomainConfigsHttpsSettingsPtrOutput) OcspStaplingStatus() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *DomainConfigsHttpsSettings) *string {
+		if v == nil {
+			return nil
+		}
+		return v.OcspStaplingStatus
+	}).(pulumi.StringPtrOutput)
+}
+
 // Specifies the private key used by the HTTPS protocol. This parameter is mandatory
 // when a certificate is configured. The value is in PEM format.
+// This field is required when `certificateSource` is set to `0`.
 func (o DomainConfigsHttpsSettingsPtrOutput) PrivateKey() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *DomainConfigsHttpsSettings) *string {
 		if v == nil {
@@ -1645,10 +3725,21 @@ func (o DomainConfigsHttpsSettingsPtrOutput) PrivateKey() pulumi.StringPtrOutput
 	}).(pulumi.StringPtrOutput)
 }
 
+// Specifies the SCM certificate ID.
+// This field is required when `certificateSource` is set to `2`.
+func (o DomainConfigsHttpsSettingsPtrOutput) ScmCertificateId() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *DomainConfigsHttpsSettings) *string {
+		if v == nil {
+			return nil
+		}
+		return v.ScmCertificateId
+	}).(pulumi.StringPtrOutput)
+}
+
 // Specifies the transport Layer Security (TLS). Currently, **TLSv1.0**,
-// **TLSv1.1**, **TLSv1.2**, and **TLSv1.3** are supported. By default, all versions are enabled. You can enable
-// a single version or consecutive versions. To enable multiple versions, use commas (,) to separate versions,
-// for example, **TLSv1.1,TLSv1.2**.
+// **TLSv1.1**, **TLSv1.2**, and **TLSv1.3** are supported. By default, **TLSv1.1**, **TLSv1.2**, and **TLSv1.3** are
+// enabled. You can enable a single version or consecutive versions. To enable multiple versions, use commas (,) to
+// separate versions, for example, **TLSv1.1,TLSv1.2**.
 func (o DomainConfigsHttpsSettingsPtrOutput) TlsVersion() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *DomainConfigsHttpsSettings) *string {
 		if v == nil {
@@ -1658,12 +3749,2333 @@ func (o DomainConfigsHttpsSettingsPtrOutput) TlsVersion() pulumi.StringPtrOutput
 	}).(pulumi.StringPtrOutput)
 }
 
+type DomainConfigsIpFilter struct {
+	// Specifies the blacklist and whitelist rule type. Valid values are:
+	// + **black**: Blacklist. Users in regions specified in the blacklist cannot access resources and status code `403` is
+	//   returned.
+	// + **white**: Whitelist. Only users in regions specified in the whitelist can access resources. Status code `403` is
+	//   returned for other users.
+	Type string `pulumi:"type"`
+	// Specifies the IP address blacklist or whitelist. This field is required when `type` is
+	// set to **black** or **white**. A list contains up to `500` IP addresses and IP address segments, which are separated
+	// by commas (,). IPv6 addresses are supported. Duplicate IP addresses and IP address segments will be removed.
+	// Addresses with wildcard characters are not supported, for example, `192.168.0.*`.
+	Value *string `pulumi:"value"`
+}
+
+// DomainConfigsIpFilterInput is an input type that accepts DomainConfigsIpFilterArgs and DomainConfigsIpFilterOutput values.
+// You can construct a concrete instance of `DomainConfigsIpFilterInput` via:
+//
+//	DomainConfigsIpFilterArgs{...}
+type DomainConfigsIpFilterInput interface {
+	pulumi.Input
+
+	ToDomainConfigsIpFilterOutput() DomainConfigsIpFilterOutput
+	ToDomainConfigsIpFilterOutputWithContext(context.Context) DomainConfigsIpFilterOutput
+}
+
+type DomainConfigsIpFilterArgs struct {
+	// Specifies the blacklist and whitelist rule type. Valid values are:
+	// + **black**: Blacklist. Users in regions specified in the blacklist cannot access resources and status code `403` is
+	//   returned.
+	// + **white**: Whitelist. Only users in regions specified in the whitelist can access resources. Status code `403` is
+	//   returned for other users.
+	Type pulumi.StringInput `pulumi:"type"`
+	// Specifies the IP address blacklist or whitelist. This field is required when `type` is
+	// set to **black** or **white**. A list contains up to `500` IP addresses and IP address segments, which are separated
+	// by commas (,). IPv6 addresses are supported. Duplicate IP addresses and IP address segments will be removed.
+	// Addresses with wildcard characters are not supported, for example, `192.168.0.*`.
+	Value pulumi.StringPtrInput `pulumi:"value"`
+}
+
+func (DomainConfigsIpFilterArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*DomainConfigsIpFilter)(nil)).Elem()
+}
+
+func (i DomainConfigsIpFilterArgs) ToDomainConfigsIpFilterOutput() DomainConfigsIpFilterOutput {
+	return i.ToDomainConfigsIpFilterOutputWithContext(context.Background())
+}
+
+func (i DomainConfigsIpFilterArgs) ToDomainConfigsIpFilterOutputWithContext(ctx context.Context) DomainConfigsIpFilterOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(DomainConfigsIpFilterOutput)
+}
+
+func (i DomainConfigsIpFilterArgs) ToDomainConfigsIpFilterPtrOutput() DomainConfigsIpFilterPtrOutput {
+	return i.ToDomainConfigsIpFilterPtrOutputWithContext(context.Background())
+}
+
+func (i DomainConfigsIpFilterArgs) ToDomainConfigsIpFilterPtrOutputWithContext(ctx context.Context) DomainConfigsIpFilterPtrOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(DomainConfigsIpFilterOutput).ToDomainConfigsIpFilterPtrOutputWithContext(ctx)
+}
+
+// DomainConfigsIpFilterPtrInput is an input type that accepts DomainConfigsIpFilterArgs, DomainConfigsIpFilterPtr and DomainConfigsIpFilterPtrOutput values.
+// You can construct a concrete instance of `DomainConfigsIpFilterPtrInput` via:
+//
+//	        DomainConfigsIpFilterArgs{...}
+//
+//	or:
+//
+//	        nil
+type DomainConfigsIpFilterPtrInput interface {
+	pulumi.Input
+
+	ToDomainConfigsIpFilterPtrOutput() DomainConfigsIpFilterPtrOutput
+	ToDomainConfigsIpFilterPtrOutputWithContext(context.Context) DomainConfigsIpFilterPtrOutput
+}
+
+type domainConfigsIpFilterPtrType DomainConfigsIpFilterArgs
+
+func DomainConfigsIpFilterPtr(v *DomainConfigsIpFilterArgs) DomainConfigsIpFilterPtrInput {
+	return (*domainConfigsIpFilterPtrType)(v)
+}
+
+func (*domainConfigsIpFilterPtrType) ElementType() reflect.Type {
+	return reflect.TypeOf((**DomainConfigsIpFilter)(nil)).Elem()
+}
+
+func (i *domainConfigsIpFilterPtrType) ToDomainConfigsIpFilterPtrOutput() DomainConfigsIpFilterPtrOutput {
+	return i.ToDomainConfigsIpFilterPtrOutputWithContext(context.Background())
+}
+
+func (i *domainConfigsIpFilterPtrType) ToDomainConfigsIpFilterPtrOutputWithContext(ctx context.Context) DomainConfigsIpFilterPtrOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(DomainConfigsIpFilterPtrOutput)
+}
+
+type DomainConfigsIpFilterOutput struct{ *pulumi.OutputState }
+
+func (DomainConfigsIpFilterOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*DomainConfigsIpFilter)(nil)).Elem()
+}
+
+func (o DomainConfigsIpFilterOutput) ToDomainConfigsIpFilterOutput() DomainConfigsIpFilterOutput {
+	return o
+}
+
+func (o DomainConfigsIpFilterOutput) ToDomainConfigsIpFilterOutputWithContext(ctx context.Context) DomainConfigsIpFilterOutput {
+	return o
+}
+
+func (o DomainConfigsIpFilterOutput) ToDomainConfigsIpFilterPtrOutput() DomainConfigsIpFilterPtrOutput {
+	return o.ToDomainConfigsIpFilterPtrOutputWithContext(context.Background())
+}
+
+func (o DomainConfigsIpFilterOutput) ToDomainConfigsIpFilterPtrOutputWithContext(ctx context.Context) DomainConfigsIpFilterPtrOutput {
+	return o.ApplyTWithContext(ctx, func(_ context.Context, v DomainConfigsIpFilter) *DomainConfigsIpFilter {
+		return &v
+	}).(DomainConfigsIpFilterPtrOutput)
+}
+
+// Specifies the blacklist and whitelist rule type. Valid values are:
+//   - **black**: Blacklist. Users in regions specified in the blacklist cannot access resources and status code `403` is
+//     returned.
+//   - **white**: Whitelist. Only users in regions specified in the whitelist can access resources. Status code `403` is
+//     returned for other users.
+func (o DomainConfigsIpFilterOutput) Type() pulumi.StringOutput {
+	return o.ApplyT(func(v DomainConfigsIpFilter) string { return v.Type }).(pulumi.StringOutput)
+}
+
+// Specifies the IP address blacklist or whitelist. This field is required when `type` is
+// set to **black** or **white**. A list contains up to `500` IP addresses and IP address segments, which are separated
+// by commas (,). IPv6 addresses are supported. Duplicate IP addresses and IP address segments will be removed.
+// Addresses with wildcard characters are not supported, for example, `192.168.0.*`.
+func (o DomainConfigsIpFilterOutput) Value() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v DomainConfigsIpFilter) *string { return v.Value }).(pulumi.StringPtrOutput)
+}
+
+type DomainConfigsIpFilterPtrOutput struct{ *pulumi.OutputState }
+
+func (DomainConfigsIpFilterPtrOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((**DomainConfigsIpFilter)(nil)).Elem()
+}
+
+func (o DomainConfigsIpFilterPtrOutput) ToDomainConfigsIpFilterPtrOutput() DomainConfigsIpFilterPtrOutput {
+	return o
+}
+
+func (o DomainConfigsIpFilterPtrOutput) ToDomainConfigsIpFilterPtrOutputWithContext(ctx context.Context) DomainConfigsIpFilterPtrOutput {
+	return o
+}
+
+func (o DomainConfigsIpFilterPtrOutput) Elem() DomainConfigsIpFilterOutput {
+	return o.ApplyT(func(v *DomainConfigsIpFilter) DomainConfigsIpFilter {
+		if v != nil {
+			return *v
+		}
+		var ret DomainConfigsIpFilter
+		return ret
+	}).(DomainConfigsIpFilterOutput)
+}
+
+// Specifies the blacklist and whitelist rule type. Valid values are:
+//   - **black**: Blacklist. Users in regions specified in the blacklist cannot access resources and status code `403` is
+//     returned.
+//   - **white**: Whitelist. Only users in regions specified in the whitelist can access resources. Status code `403` is
+//     returned for other users.
+func (o DomainConfigsIpFilterPtrOutput) Type() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *DomainConfigsIpFilter) *string {
+		if v == nil {
+			return nil
+		}
+		return &v.Type
+	}).(pulumi.StringPtrOutput)
+}
+
+// Specifies the IP address blacklist or whitelist. This field is required when `type` is
+// set to **black** or **white**. A list contains up to `500` IP addresses and IP address segments, which are separated
+// by commas (,). IPv6 addresses are supported. Duplicate IP addresses and IP address segments will be removed.
+// Addresses with wildcard characters are not supported, for example, `192.168.0.*`.
+func (o DomainConfigsIpFilterPtrOutput) Value() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *DomainConfigsIpFilter) *string {
+		if v == nil {
+			return nil
+		}
+		return v.Value
+	}).(pulumi.StringPtrOutput)
+}
+
+type DomainConfigsIpFrequencyLimit struct {
+	// Specifies whether to enable client cert settings.
+	Enabled bool `pulumi:"enabled"`
+	// Specifies the access threshold, in times/second. The value ranges from `1` to `100,000`.
+	// This field is required when enable IP access frequency.
+	Qps *int `pulumi:"qps"`
+}
+
+// DomainConfigsIpFrequencyLimitInput is an input type that accepts DomainConfigsIpFrequencyLimitArgs and DomainConfigsIpFrequencyLimitOutput values.
+// You can construct a concrete instance of `DomainConfigsIpFrequencyLimitInput` via:
+//
+//	DomainConfigsIpFrequencyLimitArgs{...}
+type DomainConfigsIpFrequencyLimitInput interface {
+	pulumi.Input
+
+	ToDomainConfigsIpFrequencyLimitOutput() DomainConfigsIpFrequencyLimitOutput
+	ToDomainConfigsIpFrequencyLimitOutputWithContext(context.Context) DomainConfigsIpFrequencyLimitOutput
+}
+
+type DomainConfigsIpFrequencyLimitArgs struct {
+	// Specifies whether to enable client cert settings.
+	Enabled pulumi.BoolInput `pulumi:"enabled"`
+	// Specifies the access threshold, in times/second. The value ranges from `1` to `100,000`.
+	// This field is required when enable IP access frequency.
+	Qps pulumi.IntPtrInput `pulumi:"qps"`
+}
+
+func (DomainConfigsIpFrequencyLimitArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*DomainConfigsIpFrequencyLimit)(nil)).Elem()
+}
+
+func (i DomainConfigsIpFrequencyLimitArgs) ToDomainConfigsIpFrequencyLimitOutput() DomainConfigsIpFrequencyLimitOutput {
+	return i.ToDomainConfigsIpFrequencyLimitOutputWithContext(context.Background())
+}
+
+func (i DomainConfigsIpFrequencyLimitArgs) ToDomainConfigsIpFrequencyLimitOutputWithContext(ctx context.Context) DomainConfigsIpFrequencyLimitOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(DomainConfigsIpFrequencyLimitOutput)
+}
+
+func (i DomainConfigsIpFrequencyLimitArgs) ToDomainConfigsIpFrequencyLimitPtrOutput() DomainConfigsIpFrequencyLimitPtrOutput {
+	return i.ToDomainConfigsIpFrequencyLimitPtrOutputWithContext(context.Background())
+}
+
+func (i DomainConfigsIpFrequencyLimitArgs) ToDomainConfigsIpFrequencyLimitPtrOutputWithContext(ctx context.Context) DomainConfigsIpFrequencyLimitPtrOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(DomainConfigsIpFrequencyLimitOutput).ToDomainConfigsIpFrequencyLimitPtrOutputWithContext(ctx)
+}
+
+// DomainConfigsIpFrequencyLimitPtrInput is an input type that accepts DomainConfigsIpFrequencyLimitArgs, DomainConfigsIpFrequencyLimitPtr and DomainConfigsIpFrequencyLimitPtrOutput values.
+// You can construct a concrete instance of `DomainConfigsIpFrequencyLimitPtrInput` via:
+//
+//	        DomainConfigsIpFrequencyLimitArgs{...}
+//
+//	or:
+//
+//	        nil
+type DomainConfigsIpFrequencyLimitPtrInput interface {
+	pulumi.Input
+
+	ToDomainConfigsIpFrequencyLimitPtrOutput() DomainConfigsIpFrequencyLimitPtrOutput
+	ToDomainConfigsIpFrequencyLimitPtrOutputWithContext(context.Context) DomainConfigsIpFrequencyLimitPtrOutput
+}
+
+type domainConfigsIpFrequencyLimitPtrType DomainConfigsIpFrequencyLimitArgs
+
+func DomainConfigsIpFrequencyLimitPtr(v *DomainConfigsIpFrequencyLimitArgs) DomainConfigsIpFrequencyLimitPtrInput {
+	return (*domainConfigsIpFrequencyLimitPtrType)(v)
+}
+
+func (*domainConfigsIpFrequencyLimitPtrType) ElementType() reflect.Type {
+	return reflect.TypeOf((**DomainConfigsIpFrequencyLimit)(nil)).Elem()
+}
+
+func (i *domainConfigsIpFrequencyLimitPtrType) ToDomainConfigsIpFrequencyLimitPtrOutput() DomainConfigsIpFrequencyLimitPtrOutput {
+	return i.ToDomainConfigsIpFrequencyLimitPtrOutputWithContext(context.Background())
+}
+
+func (i *domainConfigsIpFrequencyLimitPtrType) ToDomainConfigsIpFrequencyLimitPtrOutputWithContext(ctx context.Context) DomainConfigsIpFrequencyLimitPtrOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(DomainConfigsIpFrequencyLimitPtrOutput)
+}
+
+type DomainConfigsIpFrequencyLimitOutput struct{ *pulumi.OutputState }
+
+func (DomainConfigsIpFrequencyLimitOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*DomainConfigsIpFrequencyLimit)(nil)).Elem()
+}
+
+func (o DomainConfigsIpFrequencyLimitOutput) ToDomainConfigsIpFrequencyLimitOutput() DomainConfigsIpFrequencyLimitOutput {
+	return o
+}
+
+func (o DomainConfigsIpFrequencyLimitOutput) ToDomainConfigsIpFrequencyLimitOutputWithContext(ctx context.Context) DomainConfigsIpFrequencyLimitOutput {
+	return o
+}
+
+func (o DomainConfigsIpFrequencyLimitOutput) ToDomainConfigsIpFrequencyLimitPtrOutput() DomainConfigsIpFrequencyLimitPtrOutput {
+	return o.ToDomainConfigsIpFrequencyLimitPtrOutputWithContext(context.Background())
+}
+
+func (o DomainConfigsIpFrequencyLimitOutput) ToDomainConfigsIpFrequencyLimitPtrOutputWithContext(ctx context.Context) DomainConfigsIpFrequencyLimitPtrOutput {
+	return o.ApplyTWithContext(ctx, func(_ context.Context, v DomainConfigsIpFrequencyLimit) *DomainConfigsIpFrequencyLimit {
+		return &v
+	}).(DomainConfigsIpFrequencyLimitPtrOutput)
+}
+
+// Specifies whether to enable client cert settings.
+func (o DomainConfigsIpFrequencyLimitOutput) Enabled() pulumi.BoolOutput {
+	return o.ApplyT(func(v DomainConfigsIpFrequencyLimit) bool { return v.Enabled }).(pulumi.BoolOutput)
+}
+
+// Specifies the access threshold, in times/second. The value ranges from `1` to `100,000`.
+// This field is required when enable IP access frequency.
+func (o DomainConfigsIpFrequencyLimitOutput) Qps() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v DomainConfigsIpFrequencyLimit) *int { return v.Qps }).(pulumi.IntPtrOutput)
+}
+
+type DomainConfigsIpFrequencyLimitPtrOutput struct{ *pulumi.OutputState }
+
+func (DomainConfigsIpFrequencyLimitPtrOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((**DomainConfigsIpFrequencyLimit)(nil)).Elem()
+}
+
+func (o DomainConfigsIpFrequencyLimitPtrOutput) ToDomainConfigsIpFrequencyLimitPtrOutput() DomainConfigsIpFrequencyLimitPtrOutput {
+	return o
+}
+
+func (o DomainConfigsIpFrequencyLimitPtrOutput) ToDomainConfigsIpFrequencyLimitPtrOutputWithContext(ctx context.Context) DomainConfigsIpFrequencyLimitPtrOutput {
+	return o
+}
+
+func (o DomainConfigsIpFrequencyLimitPtrOutput) Elem() DomainConfigsIpFrequencyLimitOutput {
+	return o.ApplyT(func(v *DomainConfigsIpFrequencyLimit) DomainConfigsIpFrequencyLimit {
+		if v != nil {
+			return *v
+		}
+		var ret DomainConfigsIpFrequencyLimit
+		return ret
+	}).(DomainConfigsIpFrequencyLimitOutput)
+}
+
+// Specifies whether to enable client cert settings.
+func (o DomainConfigsIpFrequencyLimitPtrOutput) Enabled() pulumi.BoolPtrOutput {
+	return o.ApplyT(func(v *DomainConfigsIpFrequencyLimit) *bool {
+		if v == nil {
+			return nil
+		}
+		return &v.Enabled
+	}).(pulumi.BoolPtrOutput)
+}
+
+// Specifies the access threshold, in times/second. The value ranges from `1` to `100,000`.
+// This field is required when enable IP access frequency.
+func (o DomainConfigsIpFrequencyLimitPtrOutput) Qps() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v *DomainConfigsIpFrequencyLimit) *int {
+		if v == nil {
+			return nil
+		}
+		return v.Qps
+	}).(pulumi.IntPtrOutput)
+}
+
+type DomainConfigsOriginRequestUrlRewrite struct {
+	// Specifies the match type. Valid values are:
+	// + **all**: Match all files.
+	// + **file_extension**: Match by file suffix.
+	// + **catalog**: Match by directory.
+	// + **full_path**: Full path matching.
+	// + **home_page**: Match by homepage.
+	MatchType string `pulumi:"matchType"`
+	// Specifies the priority weight of this rule. The default value is 1.
+	// A larger value indicates a higher priority. The value ranges from 1 to 100. The weight values must be unique.
+	Priority int `pulumi:"priority"`
+	// Specifies the URI to be rewritten. The URI starts with a slash (/) and does not
+	// contain `http://`, `https://`, or the domain name. The value contains up to `512` characters.
+	// Wildcards (*) are supported, for example, `/test/*/*.mp4`. This field is invalid when `matchType` is set to **all**.
+	SourceUrl *string `pulumi:"sourceUrl"`
+	// Specifies a URI starts with a slash (/) and does not contain `http://`, `https://`,
+	// or the domain name. The value contains up to `256` characters. The nth wildcard (*) field can be substituted with
+	// `$n`, where n = 1, 2, 3..., for example, `/newtest/$1/$2.jpg`.
+	TargetUrl string `pulumi:"targetUrl"`
+}
+
+// DomainConfigsOriginRequestUrlRewriteInput is an input type that accepts DomainConfigsOriginRequestUrlRewriteArgs and DomainConfigsOriginRequestUrlRewriteOutput values.
+// You can construct a concrete instance of `DomainConfigsOriginRequestUrlRewriteInput` via:
+//
+//	DomainConfigsOriginRequestUrlRewriteArgs{...}
+type DomainConfigsOriginRequestUrlRewriteInput interface {
+	pulumi.Input
+
+	ToDomainConfigsOriginRequestUrlRewriteOutput() DomainConfigsOriginRequestUrlRewriteOutput
+	ToDomainConfigsOriginRequestUrlRewriteOutputWithContext(context.Context) DomainConfigsOriginRequestUrlRewriteOutput
+}
+
+type DomainConfigsOriginRequestUrlRewriteArgs struct {
+	// Specifies the match type. Valid values are:
+	// + **all**: Match all files.
+	// + **file_extension**: Match by file suffix.
+	// + **catalog**: Match by directory.
+	// + **full_path**: Full path matching.
+	// + **home_page**: Match by homepage.
+	MatchType pulumi.StringInput `pulumi:"matchType"`
+	// Specifies the priority weight of this rule. The default value is 1.
+	// A larger value indicates a higher priority. The value ranges from 1 to 100. The weight values must be unique.
+	Priority pulumi.IntInput `pulumi:"priority"`
+	// Specifies the URI to be rewritten. The URI starts with a slash (/) and does not
+	// contain `http://`, `https://`, or the domain name. The value contains up to `512` characters.
+	// Wildcards (*) are supported, for example, `/test/*/*.mp4`. This field is invalid when `matchType` is set to **all**.
+	SourceUrl pulumi.StringPtrInput `pulumi:"sourceUrl"`
+	// Specifies a URI starts with a slash (/) and does not contain `http://`, `https://`,
+	// or the domain name. The value contains up to `256` characters. The nth wildcard (*) field can be substituted with
+	// `$n`, where n = 1, 2, 3..., for example, `/newtest/$1/$2.jpg`.
+	TargetUrl pulumi.StringInput `pulumi:"targetUrl"`
+}
+
+func (DomainConfigsOriginRequestUrlRewriteArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*DomainConfigsOriginRequestUrlRewrite)(nil)).Elem()
+}
+
+func (i DomainConfigsOriginRequestUrlRewriteArgs) ToDomainConfigsOriginRequestUrlRewriteOutput() DomainConfigsOriginRequestUrlRewriteOutput {
+	return i.ToDomainConfigsOriginRequestUrlRewriteOutputWithContext(context.Background())
+}
+
+func (i DomainConfigsOriginRequestUrlRewriteArgs) ToDomainConfigsOriginRequestUrlRewriteOutputWithContext(ctx context.Context) DomainConfigsOriginRequestUrlRewriteOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(DomainConfigsOriginRequestUrlRewriteOutput)
+}
+
+// DomainConfigsOriginRequestUrlRewriteArrayInput is an input type that accepts DomainConfigsOriginRequestUrlRewriteArray and DomainConfigsOriginRequestUrlRewriteArrayOutput values.
+// You can construct a concrete instance of `DomainConfigsOriginRequestUrlRewriteArrayInput` via:
+//
+//	DomainConfigsOriginRequestUrlRewriteArray{ DomainConfigsOriginRequestUrlRewriteArgs{...} }
+type DomainConfigsOriginRequestUrlRewriteArrayInput interface {
+	pulumi.Input
+
+	ToDomainConfigsOriginRequestUrlRewriteArrayOutput() DomainConfigsOriginRequestUrlRewriteArrayOutput
+	ToDomainConfigsOriginRequestUrlRewriteArrayOutputWithContext(context.Context) DomainConfigsOriginRequestUrlRewriteArrayOutput
+}
+
+type DomainConfigsOriginRequestUrlRewriteArray []DomainConfigsOriginRequestUrlRewriteInput
+
+func (DomainConfigsOriginRequestUrlRewriteArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]DomainConfigsOriginRequestUrlRewrite)(nil)).Elem()
+}
+
+func (i DomainConfigsOriginRequestUrlRewriteArray) ToDomainConfigsOriginRequestUrlRewriteArrayOutput() DomainConfigsOriginRequestUrlRewriteArrayOutput {
+	return i.ToDomainConfigsOriginRequestUrlRewriteArrayOutputWithContext(context.Background())
+}
+
+func (i DomainConfigsOriginRequestUrlRewriteArray) ToDomainConfigsOriginRequestUrlRewriteArrayOutputWithContext(ctx context.Context) DomainConfigsOriginRequestUrlRewriteArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(DomainConfigsOriginRequestUrlRewriteArrayOutput)
+}
+
+type DomainConfigsOriginRequestUrlRewriteOutput struct{ *pulumi.OutputState }
+
+func (DomainConfigsOriginRequestUrlRewriteOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*DomainConfigsOriginRequestUrlRewrite)(nil)).Elem()
+}
+
+func (o DomainConfigsOriginRequestUrlRewriteOutput) ToDomainConfigsOriginRequestUrlRewriteOutput() DomainConfigsOriginRequestUrlRewriteOutput {
+	return o
+}
+
+func (o DomainConfigsOriginRequestUrlRewriteOutput) ToDomainConfigsOriginRequestUrlRewriteOutputWithContext(ctx context.Context) DomainConfigsOriginRequestUrlRewriteOutput {
+	return o
+}
+
+// Specifies the match type. Valid values are:
+// + **all**: Match all files.
+// + **file_extension**: Match by file suffix.
+// + **catalog**: Match by directory.
+// + **full_path**: Full path matching.
+// + **home_page**: Match by homepage.
+func (o DomainConfigsOriginRequestUrlRewriteOutput) MatchType() pulumi.StringOutput {
+	return o.ApplyT(func(v DomainConfigsOriginRequestUrlRewrite) string { return v.MatchType }).(pulumi.StringOutput)
+}
+
+// Specifies the priority weight of this rule. The default value is 1.
+// A larger value indicates a higher priority. The value ranges from 1 to 100. The weight values must be unique.
+func (o DomainConfigsOriginRequestUrlRewriteOutput) Priority() pulumi.IntOutput {
+	return o.ApplyT(func(v DomainConfigsOriginRequestUrlRewrite) int { return v.Priority }).(pulumi.IntOutput)
+}
+
+// Specifies the URI to be rewritten. The URI starts with a slash (/) and does not
+// contain `http://`, `https://`, or the domain name. The value contains up to `512` characters.
+// Wildcards (*) are supported, for example, `/test/*/*.mp4`. This field is invalid when `matchType` is set to **all**.
+func (o DomainConfigsOriginRequestUrlRewriteOutput) SourceUrl() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v DomainConfigsOriginRequestUrlRewrite) *string { return v.SourceUrl }).(pulumi.StringPtrOutput)
+}
+
+// Specifies a URI starts with a slash (/) and does not contain `http://`, `https://`,
+// or the domain name. The value contains up to `256` characters. The nth wildcard (*) field can be substituted with
+// `$n`, where n = 1, 2, 3..., for example, `/newtest/$1/$2.jpg`.
+func (o DomainConfigsOriginRequestUrlRewriteOutput) TargetUrl() pulumi.StringOutput {
+	return o.ApplyT(func(v DomainConfigsOriginRequestUrlRewrite) string { return v.TargetUrl }).(pulumi.StringOutput)
+}
+
+type DomainConfigsOriginRequestUrlRewriteArrayOutput struct{ *pulumi.OutputState }
+
+func (DomainConfigsOriginRequestUrlRewriteArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]DomainConfigsOriginRequestUrlRewrite)(nil)).Elem()
+}
+
+func (o DomainConfigsOriginRequestUrlRewriteArrayOutput) ToDomainConfigsOriginRequestUrlRewriteArrayOutput() DomainConfigsOriginRequestUrlRewriteArrayOutput {
+	return o
+}
+
+func (o DomainConfigsOriginRequestUrlRewriteArrayOutput) ToDomainConfigsOriginRequestUrlRewriteArrayOutputWithContext(ctx context.Context) DomainConfigsOriginRequestUrlRewriteArrayOutput {
+	return o
+}
+
+func (o DomainConfigsOriginRequestUrlRewriteArrayOutput) Index(i pulumi.IntInput) DomainConfigsOriginRequestUrlRewriteOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) DomainConfigsOriginRequestUrlRewrite {
+		return vs[0].([]DomainConfigsOriginRequestUrlRewrite)[vs[1].(int)]
+	}).(DomainConfigsOriginRequestUrlRewriteOutput)
+}
+
+type DomainConfigsQuic struct {
+	// Specifies whether to enable client cert settings.
+	Enabled bool `pulumi:"enabled"`
+}
+
+// DomainConfigsQuicInput is an input type that accepts DomainConfigsQuicArgs and DomainConfigsQuicOutput values.
+// You can construct a concrete instance of `DomainConfigsQuicInput` via:
+//
+//	DomainConfigsQuicArgs{...}
+type DomainConfigsQuicInput interface {
+	pulumi.Input
+
+	ToDomainConfigsQuicOutput() DomainConfigsQuicOutput
+	ToDomainConfigsQuicOutputWithContext(context.Context) DomainConfigsQuicOutput
+}
+
+type DomainConfigsQuicArgs struct {
+	// Specifies whether to enable client cert settings.
+	Enabled pulumi.BoolInput `pulumi:"enabled"`
+}
+
+func (DomainConfigsQuicArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*DomainConfigsQuic)(nil)).Elem()
+}
+
+func (i DomainConfigsQuicArgs) ToDomainConfigsQuicOutput() DomainConfigsQuicOutput {
+	return i.ToDomainConfigsQuicOutputWithContext(context.Background())
+}
+
+func (i DomainConfigsQuicArgs) ToDomainConfigsQuicOutputWithContext(ctx context.Context) DomainConfigsQuicOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(DomainConfigsQuicOutput)
+}
+
+func (i DomainConfigsQuicArgs) ToDomainConfigsQuicPtrOutput() DomainConfigsQuicPtrOutput {
+	return i.ToDomainConfigsQuicPtrOutputWithContext(context.Background())
+}
+
+func (i DomainConfigsQuicArgs) ToDomainConfigsQuicPtrOutputWithContext(ctx context.Context) DomainConfigsQuicPtrOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(DomainConfigsQuicOutput).ToDomainConfigsQuicPtrOutputWithContext(ctx)
+}
+
+// DomainConfigsQuicPtrInput is an input type that accepts DomainConfigsQuicArgs, DomainConfigsQuicPtr and DomainConfigsQuicPtrOutput values.
+// You can construct a concrete instance of `DomainConfigsQuicPtrInput` via:
+//
+//	        DomainConfigsQuicArgs{...}
+//
+//	or:
+//
+//	        nil
+type DomainConfigsQuicPtrInput interface {
+	pulumi.Input
+
+	ToDomainConfigsQuicPtrOutput() DomainConfigsQuicPtrOutput
+	ToDomainConfigsQuicPtrOutputWithContext(context.Context) DomainConfigsQuicPtrOutput
+}
+
+type domainConfigsQuicPtrType DomainConfigsQuicArgs
+
+func DomainConfigsQuicPtr(v *DomainConfigsQuicArgs) DomainConfigsQuicPtrInput {
+	return (*domainConfigsQuicPtrType)(v)
+}
+
+func (*domainConfigsQuicPtrType) ElementType() reflect.Type {
+	return reflect.TypeOf((**DomainConfigsQuic)(nil)).Elem()
+}
+
+func (i *domainConfigsQuicPtrType) ToDomainConfigsQuicPtrOutput() DomainConfigsQuicPtrOutput {
+	return i.ToDomainConfigsQuicPtrOutputWithContext(context.Background())
+}
+
+func (i *domainConfigsQuicPtrType) ToDomainConfigsQuicPtrOutputWithContext(ctx context.Context) DomainConfigsQuicPtrOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(DomainConfigsQuicPtrOutput)
+}
+
+type DomainConfigsQuicOutput struct{ *pulumi.OutputState }
+
+func (DomainConfigsQuicOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*DomainConfigsQuic)(nil)).Elem()
+}
+
+func (o DomainConfigsQuicOutput) ToDomainConfigsQuicOutput() DomainConfigsQuicOutput {
+	return o
+}
+
+func (o DomainConfigsQuicOutput) ToDomainConfigsQuicOutputWithContext(ctx context.Context) DomainConfigsQuicOutput {
+	return o
+}
+
+func (o DomainConfigsQuicOutput) ToDomainConfigsQuicPtrOutput() DomainConfigsQuicPtrOutput {
+	return o.ToDomainConfigsQuicPtrOutputWithContext(context.Background())
+}
+
+func (o DomainConfigsQuicOutput) ToDomainConfigsQuicPtrOutputWithContext(ctx context.Context) DomainConfigsQuicPtrOutput {
+	return o.ApplyTWithContext(ctx, func(_ context.Context, v DomainConfigsQuic) *DomainConfigsQuic {
+		return &v
+	}).(DomainConfigsQuicPtrOutput)
+}
+
+// Specifies whether to enable client cert settings.
+func (o DomainConfigsQuicOutput) Enabled() pulumi.BoolOutput {
+	return o.ApplyT(func(v DomainConfigsQuic) bool { return v.Enabled }).(pulumi.BoolOutput)
+}
+
+type DomainConfigsQuicPtrOutput struct{ *pulumi.OutputState }
+
+func (DomainConfigsQuicPtrOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((**DomainConfigsQuic)(nil)).Elem()
+}
+
+func (o DomainConfigsQuicPtrOutput) ToDomainConfigsQuicPtrOutput() DomainConfigsQuicPtrOutput {
+	return o
+}
+
+func (o DomainConfigsQuicPtrOutput) ToDomainConfigsQuicPtrOutputWithContext(ctx context.Context) DomainConfigsQuicPtrOutput {
+	return o
+}
+
+func (o DomainConfigsQuicPtrOutput) Elem() DomainConfigsQuicOutput {
+	return o.ApplyT(func(v *DomainConfigsQuic) DomainConfigsQuic {
+		if v != nil {
+			return *v
+		}
+		var ret DomainConfigsQuic
+		return ret
+	}).(DomainConfigsQuicOutput)
+}
+
+// Specifies whether to enable client cert settings.
+func (o DomainConfigsQuicPtrOutput) Enabled() pulumi.BoolPtrOutput {
+	return o.ApplyT(func(v *DomainConfigsQuic) *bool {
+		if v == nil {
+			return nil
+		}
+		return &v.Enabled
+	}).(pulumi.BoolPtrOutput)
+}
+
+type DomainConfigsReferer struct {
+	// Specifies whether empty user agents are included.
+	// A User-Agent blacklist including empty user agents indicates that requests without a user agent are rejected.
+	// A User-Agent whitelist including empty user agents indicates that requests without a user agent are accepted.
+	// Possible values: **true** (included) and **false** (excluded).
+	// The default value is **false** for a blacklist and **true** for a whitelist.
+	IncludeEmpty *bool `pulumi:"includeEmpty"`
+	// Specifies the blacklist and whitelist rule type. Valid values are:
+	// + **black**: Blacklist. Users in regions specified in the blacklist cannot access resources and status code `403` is
+	//   returned.
+	// + **white**: Whitelist. Only users in regions specified in the whitelist can access resources. Status code `403` is
+	//   returned for other users.
+	Type string `pulumi:"type"`
+	// Specifies the IP address blacklist or whitelist. This field is required when `type` is
+	// set to **black** or **white**. A list contains up to `500` IP addresses and IP address segments, which are separated
+	// by commas (,). IPv6 addresses are supported. Duplicate IP addresses and IP address segments will be removed.
+	// Addresses with wildcard characters are not supported, for example, `192.168.0.*`.
+	Value *string `pulumi:"value"`
+}
+
+// DomainConfigsRefererInput is an input type that accepts DomainConfigsRefererArgs and DomainConfigsRefererOutput values.
+// You can construct a concrete instance of `DomainConfigsRefererInput` via:
+//
+//	DomainConfigsRefererArgs{...}
+type DomainConfigsRefererInput interface {
+	pulumi.Input
+
+	ToDomainConfigsRefererOutput() DomainConfigsRefererOutput
+	ToDomainConfigsRefererOutputWithContext(context.Context) DomainConfigsRefererOutput
+}
+
+type DomainConfigsRefererArgs struct {
+	// Specifies whether empty user agents are included.
+	// A User-Agent blacklist including empty user agents indicates that requests without a user agent are rejected.
+	// A User-Agent whitelist including empty user agents indicates that requests without a user agent are accepted.
+	// Possible values: **true** (included) and **false** (excluded).
+	// The default value is **false** for a blacklist and **true** for a whitelist.
+	IncludeEmpty pulumi.BoolPtrInput `pulumi:"includeEmpty"`
+	// Specifies the blacklist and whitelist rule type. Valid values are:
+	// + **black**: Blacklist. Users in regions specified in the blacklist cannot access resources and status code `403` is
+	//   returned.
+	// + **white**: Whitelist. Only users in regions specified in the whitelist can access resources. Status code `403` is
+	//   returned for other users.
+	Type pulumi.StringInput `pulumi:"type"`
+	// Specifies the IP address blacklist or whitelist. This field is required when `type` is
+	// set to **black** or **white**. A list contains up to `500` IP addresses and IP address segments, which are separated
+	// by commas (,). IPv6 addresses are supported. Duplicate IP addresses and IP address segments will be removed.
+	// Addresses with wildcard characters are not supported, for example, `192.168.0.*`.
+	Value pulumi.StringPtrInput `pulumi:"value"`
+}
+
+func (DomainConfigsRefererArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*DomainConfigsReferer)(nil)).Elem()
+}
+
+func (i DomainConfigsRefererArgs) ToDomainConfigsRefererOutput() DomainConfigsRefererOutput {
+	return i.ToDomainConfigsRefererOutputWithContext(context.Background())
+}
+
+func (i DomainConfigsRefererArgs) ToDomainConfigsRefererOutputWithContext(ctx context.Context) DomainConfigsRefererOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(DomainConfigsRefererOutput)
+}
+
+func (i DomainConfigsRefererArgs) ToDomainConfigsRefererPtrOutput() DomainConfigsRefererPtrOutput {
+	return i.ToDomainConfigsRefererPtrOutputWithContext(context.Background())
+}
+
+func (i DomainConfigsRefererArgs) ToDomainConfigsRefererPtrOutputWithContext(ctx context.Context) DomainConfigsRefererPtrOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(DomainConfigsRefererOutput).ToDomainConfigsRefererPtrOutputWithContext(ctx)
+}
+
+// DomainConfigsRefererPtrInput is an input type that accepts DomainConfigsRefererArgs, DomainConfigsRefererPtr and DomainConfigsRefererPtrOutput values.
+// You can construct a concrete instance of `DomainConfigsRefererPtrInput` via:
+//
+//	        DomainConfigsRefererArgs{...}
+//
+//	or:
+//
+//	        nil
+type DomainConfigsRefererPtrInput interface {
+	pulumi.Input
+
+	ToDomainConfigsRefererPtrOutput() DomainConfigsRefererPtrOutput
+	ToDomainConfigsRefererPtrOutputWithContext(context.Context) DomainConfigsRefererPtrOutput
+}
+
+type domainConfigsRefererPtrType DomainConfigsRefererArgs
+
+func DomainConfigsRefererPtr(v *DomainConfigsRefererArgs) DomainConfigsRefererPtrInput {
+	return (*domainConfigsRefererPtrType)(v)
+}
+
+func (*domainConfigsRefererPtrType) ElementType() reflect.Type {
+	return reflect.TypeOf((**DomainConfigsReferer)(nil)).Elem()
+}
+
+func (i *domainConfigsRefererPtrType) ToDomainConfigsRefererPtrOutput() DomainConfigsRefererPtrOutput {
+	return i.ToDomainConfigsRefererPtrOutputWithContext(context.Background())
+}
+
+func (i *domainConfigsRefererPtrType) ToDomainConfigsRefererPtrOutputWithContext(ctx context.Context) DomainConfigsRefererPtrOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(DomainConfigsRefererPtrOutput)
+}
+
+type DomainConfigsRefererOutput struct{ *pulumi.OutputState }
+
+func (DomainConfigsRefererOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*DomainConfigsReferer)(nil)).Elem()
+}
+
+func (o DomainConfigsRefererOutput) ToDomainConfigsRefererOutput() DomainConfigsRefererOutput {
+	return o
+}
+
+func (o DomainConfigsRefererOutput) ToDomainConfigsRefererOutputWithContext(ctx context.Context) DomainConfigsRefererOutput {
+	return o
+}
+
+func (o DomainConfigsRefererOutput) ToDomainConfigsRefererPtrOutput() DomainConfigsRefererPtrOutput {
+	return o.ToDomainConfigsRefererPtrOutputWithContext(context.Background())
+}
+
+func (o DomainConfigsRefererOutput) ToDomainConfigsRefererPtrOutputWithContext(ctx context.Context) DomainConfigsRefererPtrOutput {
+	return o.ApplyTWithContext(ctx, func(_ context.Context, v DomainConfigsReferer) *DomainConfigsReferer {
+		return &v
+	}).(DomainConfigsRefererPtrOutput)
+}
+
+// Specifies whether empty user agents are included.
+// A User-Agent blacklist including empty user agents indicates that requests without a user agent are rejected.
+// A User-Agent whitelist including empty user agents indicates that requests without a user agent are accepted.
+// Possible values: **true** (included) and **false** (excluded).
+// The default value is **false** for a blacklist and **true** for a whitelist.
+func (o DomainConfigsRefererOutput) IncludeEmpty() pulumi.BoolPtrOutput {
+	return o.ApplyT(func(v DomainConfigsReferer) *bool { return v.IncludeEmpty }).(pulumi.BoolPtrOutput)
+}
+
+// Specifies the blacklist and whitelist rule type. Valid values are:
+//   - **black**: Blacklist. Users in regions specified in the blacklist cannot access resources and status code `403` is
+//     returned.
+//   - **white**: Whitelist. Only users in regions specified in the whitelist can access resources. Status code `403` is
+//     returned for other users.
+func (o DomainConfigsRefererOutput) Type() pulumi.StringOutput {
+	return o.ApplyT(func(v DomainConfigsReferer) string { return v.Type }).(pulumi.StringOutput)
+}
+
+// Specifies the IP address blacklist or whitelist. This field is required when `type` is
+// set to **black** or **white**. A list contains up to `500` IP addresses and IP address segments, which are separated
+// by commas (,). IPv6 addresses are supported. Duplicate IP addresses and IP address segments will be removed.
+// Addresses with wildcard characters are not supported, for example, `192.168.0.*`.
+func (o DomainConfigsRefererOutput) Value() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v DomainConfigsReferer) *string { return v.Value }).(pulumi.StringPtrOutput)
+}
+
+type DomainConfigsRefererPtrOutput struct{ *pulumi.OutputState }
+
+func (DomainConfigsRefererPtrOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((**DomainConfigsReferer)(nil)).Elem()
+}
+
+func (o DomainConfigsRefererPtrOutput) ToDomainConfigsRefererPtrOutput() DomainConfigsRefererPtrOutput {
+	return o
+}
+
+func (o DomainConfigsRefererPtrOutput) ToDomainConfigsRefererPtrOutputWithContext(ctx context.Context) DomainConfigsRefererPtrOutput {
+	return o
+}
+
+func (o DomainConfigsRefererPtrOutput) Elem() DomainConfigsRefererOutput {
+	return o.ApplyT(func(v *DomainConfigsReferer) DomainConfigsReferer {
+		if v != nil {
+			return *v
+		}
+		var ret DomainConfigsReferer
+		return ret
+	}).(DomainConfigsRefererOutput)
+}
+
+// Specifies whether empty user agents are included.
+// A User-Agent blacklist including empty user agents indicates that requests without a user agent are rejected.
+// A User-Agent whitelist including empty user agents indicates that requests without a user agent are accepted.
+// Possible values: **true** (included) and **false** (excluded).
+// The default value is **false** for a blacklist and **true** for a whitelist.
+func (o DomainConfigsRefererPtrOutput) IncludeEmpty() pulumi.BoolPtrOutput {
+	return o.ApplyT(func(v *DomainConfigsReferer) *bool {
+		if v == nil {
+			return nil
+		}
+		return v.IncludeEmpty
+	}).(pulumi.BoolPtrOutput)
+}
+
+// Specifies the blacklist and whitelist rule type. Valid values are:
+//   - **black**: Blacklist. Users in regions specified in the blacklist cannot access resources and status code `403` is
+//     returned.
+//   - **white**: Whitelist. Only users in regions specified in the whitelist can access resources. Status code `403` is
+//     returned for other users.
+func (o DomainConfigsRefererPtrOutput) Type() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *DomainConfigsReferer) *string {
+		if v == nil {
+			return nil
+		}
+		return &v.Type
+	}).(pulumi.StringPtrOutput)
+}
+
+// Specifies the IP address blacklist or whitelist. This field is required when `type` is
+// set to **black** or **white**. A list contains up to `500` IP addresses and IP address segments, which are separated
+// by commas (,). IPv6 addresses are supported. Duplicate IP addresses and IP address segments will be removed.
+// Addresses with wildcard characters are not supported, for example, `192.168.0.*`.
+func (o DomainConfigsRefererPtrOutput) Value() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *DomainConfigsReferer) *string {
+		if v == nil {
+			return nil
+		}
+		return v.Value
+	}).(pulumi.StringPtrOutput)
+}
+
+type DomainConfigsRemoteAuth struct {
+	// Specifies whether to enable client cert settings.
+	Enabled bool `pulumi:"enabled"`
+	// Specifies the remote authentication settings. The length of this array field
+	// cannot exceed `1`. The remoteAuthRules structure is documented below.
+	RemoteAuthRules *DomainConfigsRemoteAuthRemoteAuthRules `pulumi:"remoteAuthRules"`
+}
+
+// DomainConfigsRemoteAuthInput is an input type that accepts DomainConfigsRemoteAuthArgs and DomainConfigsRemoteAuthOutput values.
+// You can construct a concrete instance of `DomainConfigsRemoteAuthInput` via:
+//
+//	DomainConfigsRemoteAuthArgs{...}
+type DomainConfigsRemoteAuthInput interface {
+	pulumi.Input
+
+	ToDomainConfigsRemoteAuthOutput() DomainConfigsRemoteAuthOutput
+	ToDomainConfigsRemoteAuthOutputWithContext(context.Context) DomainConfigsRemoteAuthOutput
+}
+
+type DomainConfigsRemoteAuthArgs struct {
+	// Specifies whether to enable client cert settings.
+	Enabled pulumi.BoolInput `pulumi:"enabled"`
+	// Specifies the remote authentication settings. The length of this array field
+	// cannot exceed `1`. The remoteAuthRules structure is documented below.
+	RemoteAuthRules DomainConfigsRemoteAuthRemoteAuthRulesPtrInput `pulumi:"remoteAuthRules"`
+}
+
+func (DomainConfigsRemoteAuthArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*DomainConfigsRemoteAuth)(nil)).Elem()
+}
+
+func (i DomainConfigsRemoteAuthArgs) ToDomainConfigsRemoteAuthOutput() DomainConfigsRemoteAuthOutput {
+	return i.ToDomainConfigsRemoteAuthOutputWithContext(context.Background())
+}
+
+func (i DomainConfigsRemoteAuthArgs) ToDomainConfigsRemoteAuthOutputWithContext(ctx context.Context) DomainConfigsRemoteAuthOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(DomainConfigsRemoteAuthOutput)
+}
+
+func (i DomainConfigsRemoteAuthArgs) ToDomainConfigsRemoteAuthPtrOutput() DomainConfigsRemoteAuthPtrOutput {
+	return i.ToDomainConfigsRemoteAuthPtrOutputWithContext(context.Background())
+}
+
+func (i DomainConfigsRemoteAuthArgs) ToDomainConfigsRemoteAuthPtrOutputWithContext(ctx context.Context) DomainConfigsRemoteAuthPtrOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(DomainConfigsRemoteAuthOutput).ToDomainConfigsRemoteAuthPtrOutputWithContext(ctx)
+}
+
+// DomainConfigsRemoteAuthPtrInput is an input type that accepts DomainConfigsRemoteAuthArgs, DomainConfigsRemoteAuthPtr and DomainConfigsRemoteAuthPtrOutput values.
+// You can construct a concrete instance of `DomainConfigsRemoteAuthPtrInput` via:
+//
+//	        DomainConfigsRemoteAuthArgs{...}
+//
+//	or:
+//
+//	        nil
+type DomainConfigsRemoteAuthPtrInput interface {
+	pulumi.Input
+
+	ToDomainConfigsRemoteAuthPtrOutput() DomainConfigsRemoteAuthPtrOutput
+	ToDomainConfigsRemoteAuthPtrOutputWithContext(context.Context) DomainConfigsRemoteAuthPtrOutput
+}
+
+type domainConfigsRemoteAuthPtrType DomainConfigsRemoteAuthArgs
+
+func DomainConfigsRemoteAuthPtr(v *DomainConfigsRemoteAuthArgs) DomainConfigsRemoteAuthPtrInput {
+	return (*domainConfigsRemoteAuthPtrType)(v)
+}
+
+func (*domainConfigsRemoteAuthPtrType) ElementType() reflect.Type {
+	return reflect.TypeOf((**DomainConfigsRemoteAuth)(nil)).Elem()
+}
+
+func (i *domainConfigsRemoteAuthPtrType) ToDomainConfigsRemoteAuthPtrOutput() DomainConfigsRemoteAuthPtrOutput {
+	return i.ToDomainConfigsRemoteAuthPtrOutputWithContext(context.Background())
+}
+
+func (i *domainConfigsRemoteAuthPtrType) ToDomainConfigsRemoteAuthPtrOutputWithContext(ctx context.Context) DomainConfigsRemoteAuthPtrOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(DomainConfigsRemoteAuthPtrOutput)
+}
+
+type DomainConfigsRemoteAuthOutput struct{ *pulumi.OutputState }
+
+func (DomainConfigsRemoteAuthOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*DomainConfigsRemoteAuth)(nil)).Elem()
+}
+
+func (o DomainConfigsRemoteAuthOutput) ToDomainConfigsRemoteAuthOutput() DomainConfigsRemoteAuthOutput {
+	return o
+}
+
+func (o DomainConfigsRemoteAuthOutput) ToDomainConfigsRemoteAuthOutputWithContext(ctx context.Context) DomainConfigsRemoteAuthOutput {
+	return o
+}
+
+func (o DomainConfigsRemoteAuthOutput) ToDomainConfigsRemoteAuthPtrOutput() DomainConfigsRemoteAuthPtrOutput {
+	return o.ToDomainConfigsRemoteAuthPtrOutputWithContext(context.Background())
+}
+
+func (o DomainConfigsRemoteAuthOutput) ToDomainConfigsRemoteAuthPtrOutputWithContext(ctx context.Context) DomainConfigsRemoteAuthPtrOutput {
+	return o.ApplyTWithContext(ctx, func(_ context.Context, v DomainConfigsRemoteAuth) *DomainConfigsRemoteAuth {
+		return &v
+	}).(DomainConfigsRemoteAuthPtrOutput)
+}
+
+// Specifies whether to enable client cert settings.
+func (o DomainConfigsRemoteAuthOutput) Enabled() pulumi.BoolOutput {
+	return o.ApplyT(func(v DomainConfigsRemoteAuth) bool { return v.Enabled }).(pulumi.BoolOutput)
+}
+
+// Specifies the remote authentication settings. The length of this array field
+// cannot exceed `1`. The remoteAuthRules structure is documented below.
+func (o DomainConfigsRemoteAuthOutput) RemoteAuthRules() DomainConfigsRemoteAuthRemoteAuthRulesPtrOutput {
+	return o.ApplyT(func(v DomainConfigsRemoteAuth) *DomainConfigsRemoteAuthRemoteAuthRules { return v.RemoteAuthRules }).(DomainConfigsRemoteAuthRemoteAuthRulesPtrOutput)
+}
+
+type DomainConfigsRemoteAuthPtrOutput struct{ *pulumi.OutputState }
+
+func (DomainConfigsRemoteAuthPtrOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((**DomainConfigsRemoteAuth)(nil)).Elem()
+}
+
+func (o DomainConfigsRemoteAuthPtrOutput) ToDomainConfigsRemoteAuthPtrOutput() DomainConfigsRemoteAuthPtrOutput {
+	return o
+}
+
+func (o DomainConfigsRemoteAuthPtrOutput) ToDomainConfigsRemoteAuthPtrOutputWithContext(ctx context.Context) DomainConfigsRemoteAuthPtrOutput {
+	return o
+}
+
+func (o DomainConfigsRemoteAuthPtrOutput) Elem() DomainConfigsRemoteAuthOutput {
+	return o.ApplyT(func(v *DomainConfigsRemoteAuth) DomainConfigsRemoteAuth {
+		if v != nil {
+			return *v
+		}
+		var ret DomainConfigsRemoteAuth
+		return ret
+	}).(DomainConfigsRemoteAuthOutput)
+}
+
+// Specifies whether to enable client cert settings.
+func (o DomainConfigsRemoteAuthPtrOutput) Enabled() pulumi.BoolPtrOutput {
+	return o.ApplyT(func(v *DomainConfigsRemoteAuth) *bool {
+		if v == nil {
+			return nil
+		}
+		return &v.Enabled
+	}).(pulumi.BoolPtrOutput)
+}
+
+// Specifies the remote authentication settings. The length of this array field
+// cannot exceed `1`. The remoteAuthRules structure is documented below.
+func (o DomainConfigsRemoteAuthPtrOutput) RemoteAuthRules() DomainConfigsRemoteAuthRemoteAuthRulesPtrOutput {
+	return o.ApplyT(func(v *DomainConfigsRemoteAuth) *DomainConfigsRemoteAuthRemoteAuthRules {
+		if v == nil {
+			return nil
+		}
+		return v.RemoteAuthRules
+	}).(DomainConfigsRemoteAuthRemoteAuthRulesPtrOutput)
+}
+
+type DomainConfigsRemoteAuthRemoteAuthRules struct {
+	// Specifies the URL validation parameters.
+	// The addCustomArgsRules structure is documented below.
+	AddCustomArgsRules []DomainConfigsRemoteAuthRemoteAuthRulesAddCustomArgsRule `pulumi:"addCustomArgsRules"`
+	// Specifies the request header authentication parameters.
+	// The addCustomHeadersRules structure is documented below.
+	AddCustomHeadersRules []DomainConfigsRemoteAuthRemoteAuthRulesAddCustomHeadersRule `pulumi:"addCustomHeadersRules"`
+	// Specifies the status code returned by the remote authentication server
+	// to CDN nodes when authentication is failed. Value range: **4xx** and **5xx**.
+	AuthFailedStatus string `pulumi:"authFailedStatus"`
+	// Specifies the address of a reachable server. The address must include **http://** or
+	// **https://**. The address cannot be a local address such as **localhost** or **127.0.0.1**. The address cannot be an
+	// acceleration domain name added on CDN.
+	AuthServer string `pulumi:"authServer"`
+	// Specifies the status code returned by the remote authentication server
+	// to CDN nodes when authentication is successful. Value range: **2xx** and **3xx**.
+	AuthSuccessStatus string `pulumi:"authSuccessStatus"`
+	// Specifies the authentication file type settings. Valid values are:
+	// + **all**: Requests for all files are authenticated.
+	// + **specific_file**: Requests for files of specific types are authenticated.
+	FileTypeSetting string `pulumi:"fileTypeSetting"`
+	// Specifies the request method supported by the authentication server. Valid values
+	// are **GET**, **POST**, and **HEAD**.
+	RequestMethod string `pulumi:"requestMethod"`
+	// Specifies the reserve args. Multiple args are separated by vertical bars (|).
+	// For example: **key1|key2**. This parameter is mandatory when `reserveArgsSetting` is set to **reserve_specific_args**.
+	// In other cases, this parameter is left blank.
+	ReserveArgs *string `pulumi:"reserveArgs"`
+	// Specifies the parameters that need to be authenticated in user requests.
+	// Valid values are as follows:
+	// + **reserve_all_args**: Retain all URL parameters.
+	// + **reserve_specific_args**: Retain specified URL parameters.
+	// + **ignore_all_args**: Ignore all URL parameters.
+	ReserveArgsSetting string `pulumi:"reserveArgsSetting"`
+	// Specifies the reserve headers. Multiple headers are separated by vertical bars (|).
+	// For example: **key1|key2**. This parameter is mandatory when `reserveHeadersSetting` is set to **reserve_specific_headers**.
+	// In other cases, this parameter is left blank.
+	ReserveHeaders *string `pulumi:"reserveHeaders"`
+	// Specifies the headers to be authenticated in user requests.
+	// Valid values are as follows:
+	// + **reserve_all_headers**: Retain all request headers.
+	// + **reserve_specific_headers**: Retain specified request headers.
+	// + **ignore_all_headers**: Ignore all request headers.
+	ReserveHeadersSetting string `pulumi:"reserveHeadersSetting"`
+	// Specifies the status code returned by CDN nodes to users when authentication
+	// is failed. Value range: **2xx**, **3xx**, **4xx**, and **5xx**.
+	ResponseStatus string `pulumi:"responseStatus"`
+	// Specifies the specific file types. The value contains letters and digits.
+	// The value contains up to `512` characters. File types are not case-sensitive, and multiple file types are separated
+	// by vertical bars (|). For example: **jpg|MP4**. This parameter is mandatory when `fileTypeSetting` is set to
+	// **specific_file**. In other cases, this parameter is left blank.
+	SpecifiedFileType *string `pulumi:"specifiedFileType"`
+	// Specifies the duration from the time when a CDN node forwards an authentication request
+	// to the time when the CDN node receives the result returned by the remote authentication server. Enter `0` or a value
+	// ranging from `50` to `3,000`. The unit is millisecond.
+	Timeout int `pulumi:"timeout"`
+	// Specifies the action of the CDN nodes to process user requests after the
+	// authentication timeout. Valid values are as follows:
+	// + **pass**: The user request is allowed and the corresponding resource is returned after the authentication times out.
+	// + **forbid**: The user request is rejected after the authentication times out and the configured status code is
+	//   returned to the user.
+	TimeoutAction string `pulumi:"timeoutAction"`
+}
+
+// DomainConfigsRemoteAuthRemoteAuthRulesInput is an input type that accepts DomainConfigsRemoteAuthRemoteAuthRulesArgs and DomainConfigsRemoteAuthRemoteAuthRulesOutput values.
+// You can construct a concrete instance of `DomainConfigsRemoteAuthRemoteAuthRulesInput` via:
+//
+//	DomainConfigsRemoteAuthRemoteAuthRulesArgs{...}
+type DomainConfigsRemoteAuthRemoteAuthRulesInput interface {
+	pulumi.Input
+
+	ToDomainConfigsRemoteAuthRemoteAuthRulesOutput() DomainConfigsRemoteAuthRemoteAuthRulesOutput
+	ToDomainConfigsRemoteAuthRemoteAuthRulesOutputWithContext(context.Context) DomainConfigsRemoteAuthRemoteAuthRulesOutput
+}
+
+type DomainConfigsRemoteAuthRemoteAuthRulesArgs struct {
+	// Specifies the URL validation parameters.
+	// The addCustomArgsRules structure is documented below.
+	AddCustomArgsRules DomainConfigsRemoteAuthRemoteAuthRulesAddCustomArgsRuleArrayInput `pulumi:"addCustomArgsRules"`
+	// Specifies the request header authentication parameters.
+	// The addCustomHeadersRules structure is documented below.
+	AddCustomHeadersRules DomainConfigsRemoteAuthRemoteAuthRulesAddCustomHeadersRuleArrayInput `pulumi:"addCustomHeadersRules"`
+	// Specifies the status code returned by the remote authentication server
+	// to CDN nodes when authentication is failed. Value range: **4xx** and **5xx**.
+	AuthFailedStatus pulumi.StringInput `pulumi:"authFailedStatus"`
+	// Specifies the address of a reachable server. The address must include **http://** or
+	// **https://**. The address cannot be a local address such as **localhost** or **127.0.0.1**. The address cannot be an
+	// acceleration domain name added on CDN.
+	AuthServer pulumi.StringInput `pulumi:"authServer"`
+	// Specifies the status code returned by the remote authentication server
+	// to CDN nodes when authentication is successful. Value range: **2xx** and **3xx**.
+	AuthSuccessStatus pulumi.StringInput `pulumi:"authSuccessStatus"`
+	// Specifies the authentication file type settings. Valid values are:
+	// + **all**: Requests for all files are authenticated.
+	// + **specific_file**: Requests for files of specific types are authenticated.
+	FileTypeSetting pulumi.StringInput `pulumi:"fileTypeSetting"`
+	// Specifies the request method supported by the authentication server. Valid values
+	// are **GET**, **POST**, and **HEAD**.
+	RequestMethod pulumi.StringInput `pulumi:"requestMethod"`
+	// Specifies the reserve args. Multiple args are separated by vertical bars (|).
+	// For example: **key1|key2**. This parameter is mandatory when `reserveArgsSetting` is set to **reserve_specific_args**.
+	// In other cases, this parameter is left blank.
+	ReserveArgs pulumi.StringPtrInput `pulumi:"reserveArgs"`
+	// Specifies the parameters that need to be authenticated in user requests.
+	// Valid values are as follows:
+	// + **reserve_all_args**: Retain all URL parameters.
+	// + **reserve_specific_args**: Retain specified URL parameters.
+	// + **ignore_all_args**: Ignore all URL parameters.
+	ReserveArgsSetting pulumi.StringInput `pulumi:"reserveArgsSetting"`
+	// Specifies the reserve headers. Multiple headers are separated by vertical bars (|).
+	// For example: **key1|key2**. This parameter is mandatory when `reserveHeadersSetting` is set to **reserve_specific_headers**.
+	// In other cases, this parameter is left blank.
+	ReserveHeaders pulumi.StringPtrInput `pulumi:"reserveHeaders"`
+	// Specifies the headers to be authenticated in user requests.
+	// Valid values are as follows:
+	// + **reserve_all_headers**: Retain all request headers.
+	// + **reserve_specific_headers**: Retain specified request headers.
+	// + **ignore_all_headers**: Ignore all request headers.
+	ReserveHeadersSetting pulumi.StringInput `pulumi:"reserveHeadersSetting"`
+	// Specifies the status code returned by CDN nodes to users when authentication
+	// is failed. Value range: **2xx**, **3xx**, **4xx**, and **5xx**.
+	ResponseStatus pulumi.StringInput `pulumi:"responseStatus"`
+	// Specifies the specific file types. The value contains letters and digits.
+	// The value contains up to `512` characters. File types are not case-sensitive, and multiple file types are separated
+	// by vertical bars (|). For example: **jpg|MP4**. This parameter is mandatory when `fileTypeSetting` is set to
+	// **specific_file**. In other cases, this parameter is left blank.
+	SpecifiedFileType pulumi.StringPtrInput `pulumi:"specifiedFileType"`
+	// Specifies the duration from the time when a CDN node forwards an authentication request
+	// to the time when the CDN node receives the result returned by the remote authentication server. Enter `0` or a value
+	// ranging from `50` to `3,000`. The unit is millisecond.
+	Timeout pulumi.IntInput `pulumi:"timeout"`
+	// Specifies the action of the CDN nodes to process user requests after the
+	// authentication timeout. Valid values are as follows:
+	// + **pass**: The user request is allowed and the corresponding resource is returned after the authentication times out.
+	// + **forbid**: The user request is rejected after the authentication times out and the configured status code is
+	//   returned to the user.
+	TimeoutAction pulumi.StringInput `pulumi:"timeoutAction"`
+}
+
+func (DomainConfigsRemoteAuthRemoteAuthRulesArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*DomainConfigsRemoteAuthRemoteAuthRules)(nil)).Elem()
+}
+
+func (i DomainConfigsRemoteAuthRemoteAuthRulesArgs) ToDomainConfigsRemoteAuthRemoteAuthRulesOutput() DomainConfigsRemoteAuthRemoteAuthRulesOutput {
+	return i.ToDomainConfigsRemoteAuthRemoteAuthRulesOutputWithContext(context.Background())
+}
+
+func (i DomainConfigsRemoteAuthRemoteAuthRulesArgs) ToDomainConfigsRemoteAuthRemoteAuthRulesOutputWithContext(ctx context.Context) DomainConfigsRemoteAuthRemoteAuthRulesOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(DomainConfigsRemoteAuthRemoteAuthRulesOutput)
+}
+
+func (i DomainConfigsRemoteAuthRemoteAuthRulesArgs) ToDomainConfigsRemoteAuthRemoteAuthRulesPtrOutput() DomainConfigsRemoteAuthRemoteAuthRulesPtrOutput {
+	return i.ToDomainConfigsRemoteAuthRemoteAuthRulesPtrOutputWithContext(context.Background())
+}
+
+func (i DomainConfigsRemoteAuthRemoteAuthRulesArgs) ToDomainConfigsRemoteAuthRemoteAuthRulesPtrOutputWithContext(ctx context.Context) DomainConfigsRemoteAuthRemoteAuthRulesPtrOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(DomainConfigsRemoteAuthRemoteAuthRulesOutput).ToDomainConfigsRemoteAuthRemoteAuthRulesPtrOutputWithContext(ctx)
+}
+
+// DomainConfigsRemoteAuthRemoteAuthRulesPtrInput is an input type that accepts DomainConfigsRemoteAuthRemoteAuthRulesArgs, DomainConfigsRemoteAuthRemoteAuthRulesPtr and DomainConfigsRemoteAuthRemoteAuthRulesPtrOutput values.
+// You can construct a concrete instance of `DomainConfigsRemoteAuthRemoteAuthRulesPtrInput` via:
+//
+//	        DomainConfigsRemoteAuthRemoteAuthRulesArgs{...}
+//
+//	or:
+//
+//	        nil
+type DomainConfigsRemoteAuthRemoteAuthRulesPtrInput interface {
+	pulumi.Input
+
+	ToDomainConfigsRemoteAuthRemoteAuthRulesPtrOutput() DomainConfigsRemoteAuthRemoteAuthRulesPtrOutput
+	ToDomainConfigsRemoteAuthRemoteAuthRulesPtrOutputWithContext(context.Context) DomainConfigsRemoteAuthRemoteAuthRulesPtrOutput
+}
+
+type domainConfigsRemoteAuthRemoteAuthRulesPtrType DomainConfigsRemoteAuthRemoteAuthRulesArgs
+
+func DomainConfigsRemoteAuthRemoteAuthRulesPtr(v *DomainConfigsRemoteAuthRemoteAuthRulesArgs) DomainConfigsRemoteAuthRemoteAuthRulesPtrInput {
+	return (*domainConfigsRemoteAuthRemoteAuthRulesPtrType)(v)
+}
+
+func (*domainConfigsRemoteAuthRemoteAuthRulesPtrType) ElementType() reflect.Type {
+	return reflect.TypeOf((**DomainConfigsRemoteAuthRemoteAuthRules)(nil)).Elem()
+}
+
+func (i *domainConfigsRemoteAuthRemoteAuthRulesPtrType) ToDomainConfigsRemoteAuthRemoteAuthRulesPtrOutput() DomainConfigsRemoteAuthRemoteAuthRulesPtrOutput {
+	return i.ToDomainConfigsRemoteAuthRemoteAuthRulesPtrOutputWithContext(context.Background())
+}
+
+func (i *domainConfigsRemoteAuthRemoteAuthRulesPtrType) ToDomainConfigsRemoteAuthRemoteAuthRulesPtrOutputWithContext(ctx context.Context) DomainConfigsRemoteAuthRemoteAuthRulesPtrOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(DomainConfigsRemoteAuthRemoteAuthRulesPtrOutput)
+}
+
+type DomainConfigsRemoteAuthRemoteAuthRulesOutput struct{ *pulumi.OutputState }
+
+func (DomainConfigsRemoteAuthRemoteAuthRulesOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*DomainConfigsRemoteAuthRemoteAuthRules)(nil)).Elem()
+}
+
+func (o DomainConfigsRemoteAuthRemoteAuthRulesOutput) ToDomainConfigsRemoteAuthRemoteAuthRulesOutput() DomainConfigsRemoteAuthRemoteAuthRulesOutput {
+	return o
+}
+
+func (o DomainConfigsRemoteAuthRemoteAuthRulesOutput) ToDomainConfigsRemoteAuthRemoteAuthRulesOutputWithContext(ctx context.Context) DomainConfigsRemoteAuthRemoteAuthRulesOutput {
+	return o
+}
+
+func (o DomainConfigsRemoteAuthRemoteAuthRulesOutput) ToDomainConfigsRemoteAuthRemoteAuthRulesPtrOutput() DomainConfigsRemoteAuthRemoteAuthRulesPtrOutput {
+	return o.ToDomainConfigsRemoteAuthRemoteAuthRulesPtrOutputWithContext(context.Background())
+}
+
+func (o DomainConfigsRemoteAuthRemoteAuthRulesOutput) ToDomainConfigsRemoteAuthRemoteAuthRulesPtrOutputWithContext(ctx context.Context) DomainConfigsRemoteAuthRemoteAuthRulesPtrOutput {
+	return o.ApplyTWithContext(ctx, func(_ context.Context, v DomainConfigsRemoteAuthRemoteAuthRules) *DomainConfigsRemoteAuthRemoteAuthRules {
+		return &v
+	}).(DomainConfigsRemoteAuthRemoteAuthRulesPtrOutput)
+}
+
+// Specifies the URL validation parameters.
+// The addCustomArgsRules structure is documented below.
+func (o DomainConfigsRemoteAuthRemoteAuthRulesOutput) AddCustomArgsRules() DomainConfigsRemoteAuthRemoteAuthRulesAddCustomArgsRuleArrayOutput {
+	return o.ApplyT(func(v DomainConfigsRemoteAuthRemoteAuthRules) []DomainConfigsRemoteAuthRemoteAuthRulesAddCustomArgsRule {
+		return v.AddCustomArgsRules
+	}).(DomainConfigsRemoteAuthRemoteAuthRulesAddCustomArgsRuleArrayOutput)
+}
+
+// Specifies the request header authentication parameters.
+// The addCustomHeadersRules structure is documented below.
+func (o DomainConfigsRemoteAuthRemoteAuthRulesOutput) AddCustomHeadersRules() DomainConfigsRemoteAuthRemoteAuthRulesAddCustomHeadersRuleArrayOutput {
+	return o.ApplyT(func(v DomainConfigsRemoteAuthRemoteAuthRules) []DomainConfigsRemoteAuthRemoteAuthRulesAddCustomHeadersRule {
+		return v.AddCustomHeadersRules
+	}).(DomainConfigsRemoteAuthRemoteAuthRulesAddCustomHeadersRuleArrayOutput)
+}
+
+// Specifies the status code returned by the remote authentication server
+// to CDN nodes when authentication is failed. Value range: **4xx** and **5xx**.
+func (o DomainConfigsRemoteAuthRemoteAuthRulesOutput) AuthFailedStatus() pulumi.StringOutput {
+	return o.ApplyT(func(v DomainConfigsRemoteAuthRemoteAuthRules) string { return v.AuthFailedStatus }).(pulumi.StringOutput)
+}
+
+// Specifies the address of a reachable server. The address must include **http://** or
+// **https://**. The address cannot be a local address such as **localhost** or **127.0.0.1**. The address cannot be an
+// acceleration domain name added on CDN.
+func (o DomainConfigsRemoteAuthRemoteAuthRulesOutput) AuthServer() pulumi.StringOutput {
+	return o.ApplyT(func(v DomainConfigsRemoteAuthRemoteAuthRules) string { return v.AuthServer }).(pulumi.StringOutput)
+}
+
+// Specifies the status code returned by the remote authentication server
+// to CDN nodes when authentication is successful. Value range: **2xx** and **3xx**.
+func (o DomainConfigsRemoteAuthRemoteAuthRulesOutput) AuthSuccessStatus() pulumi.StringOutput {
+	return o.ApplyT(func(v DomainConfigsRemoteAuthRemoteAuthRules) string { return v.AuthSuccessStatus }).(pulumi.StringOutput)
+}
+
+// Specifies the authentication file type settings. Valid values are:
+// + **all**: Requests for all files are authenticated.
+// + **specific_file**: Requests for files of specific types are authenticated.
+func (o DomainConfigsRemoteAuthRemoteAuthRulesOutput) FileTypeSetting() pulumi.StringOutput {
+	return o.ApplyT(func(v DomainConfigsRemoteAuthRemoteAuthRules) string { return v.FileTypeSetting }).(pulumi.StringOutput)
+}
+
+// Specifies the request method supported by the authentication server. Valid values
+// are **GET**, **POST**, and **HEAD**.
+func (o DomainConfigsRemoteAuthRemoteAuthRulesOutput) RequestMethod() pulumi.StringOutput {
+	return o.ApplyT(func(v DomainConfigsRemoteAuthRemoteAuthRules) string { return v.RequestMethod }).(pulumi.StringOutput)
+}
+
+// Specifies the reserve args. Multiple args are separated by vertical bars (|).
+// For example: **key1|key2**. This parameter is mandatory when `reserveArgsSetting` is set to **reserve_specific_args**.
+// In other cases, this parameter is left blank.
+func (o DomainConfigsRemoteAuthRemoteAuthRulesOutput) ReserveArgs() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v DomainConfigsRemoteAuthRemoteAuthRules) *string { return v.ReserveArgs }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the parameters that need to be authenticated in user requests.
+// Valid values are as follows:
+// + **reserve_all_args**: Retain all URL parameters.
+// + **reserve_specific_args**: Retain specified URL parameters.
+// + **ignore_all_args**: Ignore all URL parameters.
+func (o DomainConfigsRemoteAuthRemoteAuthRulesOutput) ReserveArgsSetting() pulumi.StringOutput {
+	return o.ApplyT(func(v DomainConfigsRemoteAuthRemoteAuthRules) string { return v.ReserveArgsSetting }).(pulumi.StringOutput)
+}
+
+// Specifies the reserve headers. Multiple headers are separated by vertical bars (|).
+// For example: **key1|key2**. This parameter is mandatory when `reserveHeadersSetting` is set to **reserve_specific_headers**.
+// In other cases, this parameter is left blank.
+func (o DomainConfigsRemoteAuthRemoteAuthRulesOutput) ReserveHeaders() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v DomainConfigsRemoteAuthRemoteAuthRules) *string { return v.ReserveHeaders }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the headers to be authenticated in user requests.
+// Valid values are as follows:
+// + **reserve_all_headers**: Retain all request headers.
+// + **reserve_specific_headers**: Retain specified request headers.
+// + **ignore_all_headers**: Ignore all request headers.
+func (o DomainConfigsRemoteAuthRemoteAuthRulesOutput) ReserveHeadersSetting() pulumi.StringOutput {
+	return o.ApplyT(func(v DomainConfigsRemoteAuthRemoteAuthRules) string { return v.ReserveHeadersSetting }).(pulumi.StringOutput)
+}
+
+// Specifies the status code returned by CDN nodes to users when authentication
+// is failed. Value range: **2xx**, **3xx**, **4xx**, and **5xx**.
+func (o DomainConfigsRemoteAuthRemoteAuthRulesOutput) ResponseStatus() pulumi.StringOutput {
+	return o.ApplyT(func(v DomainConfigsRemoteAuthRemoteAuthRules) string { return v.ResponseStatus }).(pulumi.StringOutput)
+}
+
+// Specifies the specific file types. The value contains letters and digits.
+// The value contains up to `512` characters. File types are not case-sensitive, and multiple file types are separated
+// by vertical bars (|). For example: **jpg|MP4**. This parameter is mandatory when `fileTypeSetting` is set to
+// **specific_file**. In other cases, this parameter is left blank.
+func (o DomainConfigsRemoteAuthRemoteAuthRulesOutput) SpecifiedFileType() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v DomainConfigsRemoteAuthRemoteAuthRules) *string { return v.SpecifiedFileType }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the duration from the time when a CDN node forwards an authentication request
+// to the time when the CDN node receives the result returned by the remote authentication server. Enter `0` or a value
+// ranging from `50` to `3,000`. The unit is millisecond.
+func (o DomainConfigsRemoteAuthRemoteAuthRulesOutput) Timeout() pulumi.IntOutput {
+	return o.ApplyT(func(v DomainConfigsRemoteAuthRemoteAuthRules) int { return v.Timeout }).(pulumi.IntOutput)
+}
+
+// Specifies the action of the CDN nodes to process user requests after the
+// authentication timeout. Valid values are as follows:
+//   - **pass**: The user request is allowed and the corresponding resource is returned after the authentication times out.
+//   - **forbid**: The user request is rejected after the authentication times out and the configured status code is
+//     returned to the user.
+func (o DomainConfigsRemoteAuthRemoteAuthRulesOutput) TimeoutAction() pulumi.StringOutput {
+	return o.ApplyT(func(v DomainConfigsRemoteAuthRemoteAuthRules) string { return v.TimeoutAction }).(pulumi.StringOutput)
+}
+
+type DomainConfigsRemoteAuthRemoteAuthRulesPtrOutput struct{ *pulumi.OutputState }
+
+func (DomainConfigsRemoteAuthRemoteAuthRulesPtrOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((**DomainConfigsRemoteAuthRemoteAuthRules)(nil)).Elem()
+}
+
+func (o DomainConfigsRemoteAuthRemoteAuthRulesPtrOutput) ToDomainConfigsRemoteAuthRemoteAuthRulesPtrOutput() DomainConfigsRemoteAuthRemoteAuthRulesPtrOutput {
+	return o
+}
+
+func (o DomainConfigsRemoteAuthRemoteAuthRulesPtrOutput) ToDomainConfigsRemoteAuthRemoteAuthRulesPtrOutputWithContext(ctx context.Context) DomainConfigsRemoteAuthRemoteAuthRulesPtrOutput {
+	return o
+}
+
+func (o DomainConfigsRemoteAuthRemoteAuthRulesPtrOutput) Elem() DomainConfigsRemoteAuthRemoteAuthRulesOutput {
+	return o.ApplyT(func(v *DomainConfigsRemoteAuthRemoteAuthRules) DomainConfigsRemoteAuthRemoteAuthRules {
+		if v != nil {
+			return *v
+		}
+		var ret DomainConfigsRemoteAuthRemoteAuthRules
+		return ret
+	}).(DomainConfigsRemoteAuthRemoteAuthRulesOutput)
+}
+
+// Specifies the URL validation parameters.
+// The addCustomArgsRules structure is documented below.
+func (o DomainConfigsRemoteAuthRemoteAuthRulesPtrOutput) AddCustomArgsRules() DomainConfigsRemoteAuthRemoteAuthRulesAddCustomArgsRuleArrayOutput {
+	return o.ApplyT(func(v *DomainConfigsRemoteAuthRemoteAuthRules) []DomainConfigsRemoteAuthRemoteAuthRulesAddCustomArgsRule {
+		if v == nil {
+			return nil
+		}
+		return v.AddCustomArgsRules
+	}).(DomainConfigsRemoteAuthRemoteAuthRulesAddCustomArgsRuleArrayOutput)
+}
+
+// Specifies the request header authentication parameters.
+// The addCustomHeadersRules structure is documented below.
+func (o DomainConfigsRemoteAuthRemoteAuthRulesPtrOutput) AddCustomHeadersRules() DomainConfigsRemoteAuthRemoteAuthRulesAddCustomHeadersRuleArrayOutput {
+	return o.ApplyT(func(v *DomainConfigsRemoteAuthRemoteAuthRules) []DomainConfigsRemoteAuthRemoteAuthRulesAddCustomHeadersRule {
+		if v == nil {
+			return nil
+		}
+		return v.AddCustomHeadersRules
+	}).(DomainConfigsRemoteAuthRemoteAuthRulesAddCustomHeadersRuleArrayOutput)
+}
+
+// Specifies the status code returned by the remote authentication server
+// to CDN nodes when authentication is failed. Value range: **4xx** and **5xx**.
+func (o DomainConfigsRemoteAuthRemoteAuthRulesPtrOutput) AuthFailedStatus() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *DomainConfigsRemoteAuthRemoteAuthRules) *string {
+		if v == nil {
+			return nil
+		}
+		return &v.AuthFailedStatus
+	}).(pulumi.StringPtrOutput)
+}
+
+// Specifies the address of a reachable server. The address must include **http://** or
+// **https://**. The address cannot be a local address such as **localhost** or **127.0.0.1**. The address cannot be an
+// acceleration domain name added on CDN.
+func (o DomainConfigsRemoteAuthRemoteAuthRulesPtrOutput) AuthServer() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *DomainConfigsRemoteAuthRemoteAuthRules) *string {
+		if v == nil {
+			return nil
+		}
+		return &v.AuthServer
+	}).(pulumi.StringPtrOutput)
+}
+
+// Specifies the status code returned by the remote authentication server
+// to CDN nodes when authentication is successful. Value range: **2xx** and **3xx**.
+func (o DomainConfigsRemoteAuthRemoteAuthRulesPtrOutput) AuthSuccessStatus() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *DomainConfigsRemoteAuthRemoteAuthRules) *string {
+		if v == nil {
+			return nil
+		}
+		return &v.AuthSuccessStatus
+	}).(pulumi.StringPtrOutput)
+}
+
+// Specifies the authentication file type settings. Valid values are:
+// + **all**: Requests for all files are authenticated.
+// + **specific_file**: Requests for files of specific types are authenticated.
+func (o DomainConfigsRemoteAuthRemoteAuthRulesPtrOutput) FileTypeSetting() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *DomainConfigsRemoteAuthRemoteAuthRules) *string {
+		if v == nil {
+			return nil
+		}
+		return &v.FileTypeSetting
+	}).(pulumi.StringPtrOutput)
+}
+
+// Specifies the request method supported by the authentication server. Valid values
+// are **GET**, **POST**, and **HEAD**.
+func (o DomainConfigsRemoteAuthRemoteAuthRulesPtrOutput) RequestMethod() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *DomainConfigsRemoteAuthRemoteAuthRules) *string {
+		if v == nil {
+			return nil
+		}
+		return &v.RequestMethod
+	}).(pulumi.StringPtrOutput)
+}
+
+// Specifies the reserve args. Multiple args are separated by vertical bars (|).
+// For example: **key1|key2**. This parameter is mandatory when `reserveArgsSetting` is set to **reserve_specific_args**.
+// In other cases, this parameter is left blank.
+func (o DomainConfigsRemoteAuthRemoteAuthRulesPtrOutput) ReserveArgs() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *DomainConfigsRemoteAuthRemoteAuthRules) *string {
+		if v == nil {
+			return nil
+		}
+		return v.ReserveArgs
+	}).(pulumi.StringPtrOutput)
+}
+
+// Specifies the parameters that need to be authenticated in user requests.
+// Valid values are as follows:
+// + **reserve_all_args**: Retain all URL parameters.
+// + **reserve_specific_args**: Retain specified URL parameters.
+// + **ignore_all_args**: Ignore all URL parameters.
+func (o DomainConfigsRemoteAuthRemoteAuthRulesPtrOutput) ReserveArgsSetting() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *DomainConfigsRemoteAuthRemoteAuthRules) *string {
+		if v == nil {
+			return nil
+		}
+		return &v.ReserveArgsSetting
+	}).(pulumi.StringPtrOutput)
+}
+
+// Specifies the reserve headers. Multiple headers are separated by vertical bars (|).
+// For example: **key1|key2**. This parameter is mandatory when `reserveHeadersSetting` is set to **reserve_specific_headers**.
+// In other cases, this parameter is left blank.
+func (o DomainConfigsRemoteAuthRemoteAuthRulesPtrOutput) ReserveHeaders() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *DomainConfigsRemoteAuthRemoteAuthRules) *string {
+		if v == nil {
+			return nil
+		}
+		return v.ReserveHeaders
+	}).(pulumi.StringPtrOutput)
+}
+
+// Specifies the headers to be authenticated in user requests.
+// Valid values are as follows:
+// + **reserve_all_headers**: Retain all request headers.
+// + **reserve_specific_headers**: Retain specified request headers.
+// + **ignore_all_headers**: Ignore all request headers.
+func (o DomainConfigsRemoteAuthRemoteAuthRulesPtrOutput) ReserveHeadersSetting() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *DomainConfigsRemoteAuthRemoteAuthRules) *string {
+		if v == nil {
+			return nil
+		}
+		return &v.ReserveHeadersSetting
+	}).(pulumi.StringPtrOutput)
+}
+
+// Specifies the status code returned by CDN nodes to users when authentication
+// is failed. Value range: **2xx**, **3xx**, **4xx**, and **5xx**.
+func (o DomainConfigsRemoteAuthRemoteAuthRulesPtrOutput) ResponseStatus() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *DomainConfigsRemoteAuthRemoteAuthRules) *string {
+		if v == nil {
+			return nil
+		}
+		return &v.ResponseStatus
+	}).(pulumi.StringPtrOutput)
+}
+
+// Specifies the specific file types. The value contains letters and digits.
+// The value contains up to `512` characters. File types are not case-sensitive, and multiple file types are separated
+// by vertical bars (|). For example: **jpg|MP4**. This parameter is mandatory when `fileTypeSetting` is set to
+// **specific_file**. In other cases, this parameter is left blank.
+func (o DomainConfigsRemoteAuthRemoteAuthRulesPtrOutput) SpecifiedFileType() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *DomainConfigsRemoteAuthRemoteAuthRules) *string {
+		if v == nil {
+			return nil
+		}
+		return v.SpecifiedFileType
+	}).(pulumi.StringPtrOutput)
+}
+
+// Specifies the duration from the time when a CDN node forwards an authentication request
+// to the time when the CDN node receives the result returned by the remote authentication server. Enter `0` or a value
+// ranging from `50` to `3,000`. The unit is millisecond.
+func (o DomainConfigsRemoteAuthRemoteAuthRulesPtrOutput) Timeout() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v *DomainConfigsRemoteAuthRemoteAuthRules) *int {
+		if v == nil {
+			return nil
+		}
+		return &v.Timeout
+	}).(pulumi.IntPtrOutput)
+}
+
+// Specifies the action of the CDN nodes to process user requests after the
+// authentication timeout. Valid values are as follows:
+//   - **pass**: The user request is allowed and the corresponding resource is returned after the authentication times out.
+//   - **forbid**: The user request is rejected after the authentication times out and the configured status code is
+//     returned to the user.
+func (o DomainConfigsRemoteAuthRemoteAuthRulesPtrOutput) TimeoutAction() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *DomainConfigsRemoteAuthRemoteAuthRules) *string {
+		if v == nil {
+			return nil
+		}
+		return &v.TimeoutAction
+	}).(pulumi.StringPtrOutput)
+}
+
+type DomainConfigsRemoteAuthRemoteAuthRulesAddCustomArgsRule struct {
+	// Specifies the parameter key. The value contains up to `256` characters. The value can be
+	// composed of digits, uppercase letters, lowercase letters, and special characters (._-*#%|+^@?=).
+	Key string `pulumi:"key"`
+	// Specifies the blacklist and whitelist rule type. Valid values are:
+	// + **black**: Blacklist. Users in regions specified in the blacklist cannot access resources and status code `403` is
+	//   returned.
+	// + **white**: Whitelist. Only users in regions specified in the whitelist can access resources. Status code `403` is
+	//   returned for other users.
+	Type string `pulumi:"type"`
+	// Specifies the IP address blacklist or whitelist. This field is required when `type` is
+	// set to **black** or **white**. A list contains up to `500` IP addresses and IP address segments, which are separated
+	// by commas (,). IPv6 addresses are supported. Duplicate IP addresses and IP address segments will be removed.
+	// Addresses with wildcard characters are not supported, for example, `192.168.0.*`.
+	Value string `pulumi:"value"`
+}
+
+// DomainConfigsRemoteAuthRemoteAuthRulesAddCustomArgsRuleInput is an input type that accepts DomainConfigsRemoteAuthRemoteAuthRulesAddCustomArgsRuleArgs and DomainConfigsRemoteAuthRemoteAuthRulesAddCustomArgsRuleOutput values.
+// You can construct a concrete instance of `DomainConfigsRemoteAuthRemoteAuthRulesAddCustomArgsRuleInput` via:
+//
+//	DomainConfigsRemoteAuthRemoteAuthRulesAddCustomArgsRuleArgs{...}
+type DomainConfigsRemoteAuthRemoteAuthRulesAddCustomArgsRuleInput interface {
+	pulumi.Input
+
+	ToDomainConfigsRemoteAuthRemoteAuthRulesAddCustomArgsRuleOutput() DomainConfigsRemoteAuthRemoteAuthRulesAddCustomArgsRuleOutput
+	ToDomainConfigsRemoteAuthRemoteAuthRulesAddCustomArgsRuleOutputWithContext(context.Context) DomainConfigsRemoteAuthRemoteAuthRulesAddCustomArgsRuleOutput
+}
+
+type DomainConfigsRemoteAuthRemoteAuthRulesAddCustomArgsRuleArgs struct {
+	// Specifies the parameter key. The value contains up to `256` characters. The value can be
+	// composed of digits, uppercase letters, lowercase letters, and special characters (._-*#%|+^@?=).
+	Key pulumi.StringInput `pulumi:"key"`
+	// Specifies the blacklist and whitelist rule type. Valid values are:
+	// + **black**: Blacklist. Users in regions specified in the blacklist cannot access resources and status code `403` is
+	//   returned.
+	// + **white**: Whitelist. Only users in regions specified in the whitelist can access resources. Status code `403` is
+	//   returned for other users.
+	Type pulumi.StringInput `pulumi:"type"`
+	// Specifies the IP address blacklist or whitelist. This field is required when `type` is
+	// set to **black** or **white**. A list contains up to `500` IP addresses and IP address segments, which are separated
+	// by commas (,). IPv6 addresses are supported. Duplicate IP addresses and IP address segments will be removed.
+	// Addresses with wildcard characters are not supported, for example, `192.168.0.*`.
+	Value pulumi.StringInput `pulumi:"value"`
+}
+
+func (DomainConfigsRemoteAuthRemoteAuthRulesAddCustomArgsRuleArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*DomainConfigsRemoteAuthRemoteAuthRulesAddCustomArgsRule)(nil)).Elem()
+}
+
+func (i DomainConfigsRemoteAuthRemoteAuthRulesAddCustomArgsRuleArgs) ToDomainConfigsRemoteAuthRemoteAuthRulesAddCustomArgsRuleOutput() DomainConfigsRemoteAuthRemoteAuthRulesAddCustomArgsRuleOutput {
+	return i.ToDomainConfigsRemoteAuthRemoteAuthRulesAddCustomArgsRuleOutputWithContext(context.Background())
+}
+
+func (i DomainConfigsRemoteAuthRemoteAuthRulesAddCustomArgsRuleArgs) ToDomainConfigsRemoteAuthRemoteAuthRulesAddCustomArgsRuleOutputWithContext(ctx context.Context) DomainConfigsRemoteAuthRemoteAuthRulesAddCustomArgsRuleOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(DomainConfigsRemoteAuthRemoteAuthRulesAddCustomArgsRuleOutput)
+}
+
+// DomainConfigsRemoteAuthRemoteAuthRulesAddCustomArgsRuleArrayInput is an input type that accepts DomainConfigsRemoteAuthRemoteAuthRulesAddCustomArgsRuleArray and DomainConfigsRemoteAuthRemoteAuthRulesAddCustomArgsRuleArrayOutput values.
+// You can construct a concrete instance of `DomainConfigsRemoteAuthRemoteAuthRulesAddCustomArgsRuleArrayInput` via:
+//
+//	DomainConfigsRemoteAuthRemoteAuthRulesAddCustomArgsRuleArray{ DomainConfigsRemoteAuthRemoteAuthRulesAddCustomArgsRuleArgs{...} }
+type DomainConfigsRemoteAuthRemoteAuthRulesAddCustomArgsRuleArrayInput interface {
+	pulumi.Input
+
+	ToDomainConfigsRemoteAuthRemoteAuthRulesAddCustomArgsRuleArrayOutput() DomainConfigsRemoteAuthRemoteAuthRulesAddCustomArgsRuleArrayOutput
+	ToDomainConfigsRemoteAuthRemoteAuthRulesAddCustomArgsRuleArrayOutputWithContext(context.Context) DomainConfigsRemoteAuthRemoteAuthRulesAddCustomArgsRuleArrayOutput
+}
+
+type DomainConfigsRemoteAuthRemoteAuthRulesAddCustomArgsRuleArray []DomainConfigsRemoteAuthRemoteAuthRulesAddCustomArgsRuleInput
+
+func (DomainConfigsRemoteAuthRemoteAuthRulesAddCustomArgsRuleArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]DomainConfigsRemoteAuthRemoteAuthRulesAddCustomArgsRule)(nil)).Elem()
+}
+
+func (i DomainConfigsRemoteAuthRemoteAuthRulesAddCustomArgsRuleArray) ToDomainConfigsRemoteAuthRemoteAuthRulesAddCustomArgsRuleArrayOutput() DomainConfigsRemoteAuthRemoteAuthRulesAddCustomArgsRuleArrayOutput {
+	return i.ToDomainConfigsRemoteAuthRemoteAuthRulesAddCustomArgsRuleArrayOutputWithContext(context.Background())
+}
+
+func (i DomainConfigsRemoteAuthRemoteAuthRulesAddCustomArgsRuleArray) ToDomainConfigsRemoteAuthRemoteAuthRulesAddCustomArgsRuleArrayOutputWithContext(ctx context.Context) DomainConfigsRemoteAuthRemoteAuthRulesAddCustomArgsRuleArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(DomainConfigsRemoteAuthRemoteAuthRulesAddCustomArgsRuleArrayOutput)
+}
+
+type DomainConfigsRemoteAuthRemoteAuthRulesAddCustomArgsRuleOutput struct{ *pulumi.OutputState }
+
+func (DomainConfigsRemoteAuthRemoteAuthRulesAddCustomArgsRuleOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*DomainConfigsRemoteAuthRemoteAuthRulesAddCustomArgsRule)(nil)).Elem()
+}
+
+func (o DomainConfigsRemoteAuthRemoteAuthRulesAddCustomArgsRuleOutput) ToDomainConfigsRemoteAuthRemoteAuthRulesAddCustomArgsRuleOutput() DomainConfigsRemoteAuthRemoteAuthRulesAddCustomArgsRuleOutput {
+	return o
+}
+
+func (o DomainConfigsRemoteAuthRemoteAuthRulesAddCustomArgsRuleOutput) ToDomainConfigsRemoteAuthRemoteAuthRulesAddCustomArgsRuleOutputWithContext(ctx context.Context) DomainConfigsRemoteAuthRemoteAuthRulesAddCustomArgsRuleOutput {
+	return o
+}
+
+// Specifies the parameter key. The value contains up to `256` characters. The value can be
+// composed of digits, uppercase letters, lowercase letters, and special characters (._-*#%|+^@?=).
+func (o DomainConfigsRemoteAuthRemoteAuthRulesAddCustomArgsRuleOutput) Key() pulumi.StringOutput {
+	return o.ApplyT(func(v DomainConfigsRemoteAuthRemoteAuthRulesAddCustomArgsRule) string { return v.Key }).(pulumi.StringOutput)
+}
+
+// Specifies the blacklist and whitelist rule type. Valid values are:
+//   - **black**: Blacklist. Users in regions specified in the blacklist cannot access resources and status code `403` is
+//     returned.
+//   - **white**: Whitelist. Only users in regions specified in the whitelist can access resources. Status code `403` is
+//     returned for other users.
+func (o DomainConfigsRemoteAuthRemoteAuthRulesAddCustomArgsRuleOutput) Type() pulumi.StringOutput {
+	return o.ApplyT(func(v DomainConfigsRemoteAuthRemoteAuthRulesAddCustomArgsRule) string { return v.Type }).(pulumi.StringOutput)
+}
+
+// Specifies the IP address blacklist or whitelist. This field is required when `type` is
+// set to **black** or **white**. A list contains up to `500` IP addresses and IP address segments, which are separated
+// by commas (,). IPv6 addresses are supported. Duplicate IP addresses and IP address segments will be removed.
+// Addresses with wildcard characters are not supported, for example, `192.168.0.*`.
+func (o DomainConfigsRemoteAuthRemoteAuthRulesAddCustomArgsRuleOutput) Value() pulumi.StringOutput {
+	return o.ApplyT(func(v DomainConfigsRemoteAuthRemoteAuthRulesAddCustomArgsRule) string { return v.Value }).(pulumi.StringOutput)
+}
+
+type DomainConfigsRemoteAuthRemoteAuthRulesAddCustomArgsRuleArrayOutput struct{ *pulumi.OutputState }
+
+func (DomainConfigsRemoteAuthRemoteAuthRulesAddCustomArgsRuleArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]DomainConfigsRemoteAuthRemoteAuthRulesAddCustomArgsRule)(nil)).Elem()
+}
+
+func (o DomainConfigsRemoteAuthRemoteAuthRulesAddCustomArgsRuleArrayOutput) ToDomainConfigsRemoteAuthRemoteAuthRulesAddCustomArgsRuleArrayOutput() DomainConfigsRemoteAuthRemoteAuthRulesAddCustomArgsRuleArrayOutput {
+	return o
+}
+
+func (o DomainConfigsRemoteAuthRemoteAuthRulesAddCustomArgsRuleArrayOutput) ToDomainConfigsRemoteAuthRemoteAuthRulesAddCustomArgsRuleArrayOutputWithContext(ctx context.Context) DomainConfigsRemoteAuthRemoteAuthRulesAddCustomArgsRuleArrayOutput {
+	return o
+}
+
+func (o DomainConfigsRemoteAuthRemoteAuthRulesAddCustomArgsRuleArrayOutput) Index(i pulumi.IntInput) DomainConfigsRemoteAuthRemoteAuthRulesAddCustomArgsRuleOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) DomainConfigsRemoteAuthRemoteAuthRulesAddCustomArgsRule {
+		return vs[0].([]DomainConfigsRemoteAuthRemoteAuthRulesAddCustomArgsRule)[vs[1].(int)]
+	}).(DomainConfigsRemoteAuthRemoteAuthRulesAddCustomArgsRuleOutput)
+}
+
+type DomainConfigsRemoteAuthRemoteAuthRulesAddCustomHeadersRule struct {
+	// Specifies the parameter key. The value contains up to `256` characters. The value can be
+	// composed of digits, uppercase letters, lowercase letters, and special characters (._-*#%|+^@?=).
+	Key string `pulumi:"key"`
+	// Specifies the blacklist and whitelist rule type. Valid values are:
+	// + **black**: Blacklist. Users in regions specified in the blacklist cannot access resources and status code `403` is
+	//   returned.
+	// + **white**: Whitelist. Only users in regions specified in the whitelist can access resources. Status code `403` is
+	//   returned for other users.
+	Type string `pulumi:"type"`
+	// Specifies the IP address blacklist or whitelist. This field is required when `type` is
+	// set to **black** or **white**. A list contains up to `500` IP addresses and IP address segments, which are separated
+	// by commas (,). IPv6 addresses are supported. Duplicate IP addresses and IP address segments will be removed.
+	// Addresses with wildcard characters are not supported, for example, `192.168.0.*`.
+	Value string `pulumi:"value"`
+}
+
+// DomainConfigsRemoteAuthRemoteAuthRulesAddCustomHeadersRuleInput is an input type that accepts DomainConfigsRemoteAuthRemoteAuthRulesAddCustomHeadersRuleArgs and DomainConfigsRemoteAuthRemoteAuthRulesAddCustomHeadersRuleOutput values.
+// You can construct a concrete instance of `DomainConfigsRemoteAuthRemoteAuthRulesAddCustomHeadersRuleInput` via:
+//
+//	DomainConfigsRemoteAuthRemoteAuthRulesAddCustomHeadersRuleArgs{...}
+type DomainConfigsRemoteAuthRemoteAuthRulesAddCustomHeadersRuleInput interface {
+	pulumi.Input
+
+	ToDomainConfigsRemoteAuthRemoteAuthRulesAddCustomHeadersRuleOutput() DomainConfigsRemoteAuthRemoteAuthRulesAddCustomHeadersRuleOutput
+	ToDomainConfigsRemoteAuthRemoteAuthRulesAddCustomHeadersRuleOutputWithContext(context.Context) DomainConfigsRemoteAuthRemoteAuthRulesAddCustomHeadersRuleOutput
+}
+
+type DomainConfigsRemoteAuthRemoteAuthRulesAddCustomHeadersRuleArgs struct {
+	// Specifies the parameter key. The value contains up to `256` characters. The value can be
+	// composed of digits, uppercase letters, lowercase letters, and special characters (._-*#%|+^@?=).
+	Key pulumi.StringInput `pulumi:"key"`
+	// Specifies the blacklist and whitelist rule type. Valid values are:
+	// + **black**: Blacklist. Users in regions specified in the blacklist cannot access resources and status code `403` is
+	//   returned.
+	// + **white**: Whitelist. Only users in regions specified in the whitelist can access resources. Status code `403` is
+	//   returned for other users.
+	Type pulumi.StringInput `pulumi:"type"`
+	// Specifies the IP address blacklist or whitelist. This field is required when `type` is
+	// set to **black** or **white**. A list contains up to `500` IP addresses and IP address segments, which are separated
+	// by commas (,). IPv6 addresses are supported. Duplicate IP addresses and IP address segments will be removed.
+	// Addresses with wildcard characters are not supported, for example, `192.168.0.*`.
+	Value pulumi.StringInput `pulumi:"value"`
+}
+
+func (DomainConfigsRemoteAuthRemoteAuthRulesAddCustomHeadersRuleArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*DomainConfigsRemoteAuthRemoteAuthRulesAddCustomHeadersRule)(nil)).Elem()
+}
+
+func (i DomainConfigsRemoteAuthRemoteAuthRulesAddCustomHeadersRuleArgs) ToDomainConfigsRemoteAuthRemoteAuthRulesAddCustomHeadersRuleOutput() DomainConfigsRemoteAuthRemoteAuthRulesAddCustomHeadersRuleOutput {
+	return i.ToDomainConfigsRemoteAuthRemoteAuthRulesAddCustomHeadersRuleOutputWithContext(context.Background())
+}
+
+func (i DomainConfigsRemoteAuthRemoteAuthRulesAddCustomHeadersRuleArgs) ToDomainConfigsRemoteAuthRemoteAuthRulesAddCustomHeadersRuleOutputWithContext(ctx context.Context) DomainConfigsRemoteAuthRemoteAuthRulesAddCustomHeadersRuleOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(DomainConfigsRemoteAuthRemoteAuthRulesAddCustomHeadersRuleOutput)
+}
+
+// DomainConfigsRemoteAuthRemoteAuthRulesAddCustomHeadersRuleArrayInput is an input type that accepts DomainConfigsRemoteAuthRemoteAuthRulesAddCustomHeadersRuleArray and DomainConfigsRemoteAuthRemoteAuthRulesAddCustomHeadersRuleArrayOutput values.
+// You can construct a concrete instance of `DomainConfigsRemoteAuthRemoteAuthRulesAddCustomHeadersRuleArrayInput` via:
+//
+//	DomainConfigsRemoteAuthRemoteAuthRulesAddCustomHeadersRuleArray{ DomainConfigsRemoteAuthRemoteAuthRulesAddCustomHeadersRuleArgs{...} }
+type DomainConfigsRemoteAuthRemoteAuthRulesAddCustomHeadersRuleArrayInput interface {
+	pulumi.Input
+
+	ToDomainConfigsRemoteAuthRemoteAuthRulesAddCustomHeadersRuleArrayOutput() DomainConfigsRemoteAuthRemoteAuthRulesAddCustomHeadersRuleArrayOutput
+	ToDomainConfigsRemoteAuthRemoteAuthRulesAddCustomHeadersRuleArrayOutputWithContext(context.Context) DomainConfigsRemoteAuthRemoteAuthRulesAddCustomHeadersRuleArrayOutput
+}
+
+type DomainConfigsRemoteAuthRemoteAuthRulesAddCustomHeadersRuleArray []DomainConfigsRemoteAuthRemoteAuthRulesAddCustomHeadersRuleInput
+
+func (DomainConfigsRemoteAuthRemoteAuthRulesAddCustomHeadersRuleArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]DomainConfigsRemoteAuthRemoteAuthRulesAddCustomHeadersRule)(nil)).Elem()
+}
+
+func (i DomainConfigsRemoteAuthRemoteAuthRulesAddCustomHeadersRuleArray) ToDomainConfigsRemoteAuthRemoteAuthRulesAddCustomHeadersRuleArrayOutput() DomainConfigsRemoteAuthRemoteAuthRulesAddCustomHeadersRuleArrayOutput {
+	return i.ToDomainConfigsRemoteAuthRemoteAuthRulesAddCustomHeadersRuleArrayOutputWithContext(context.Background())
+}
+
+func (i DomainConfigsRemoteAuthRemoteAuthRulesAddCustomHeadersRuleArray) ToDomainConfigsRemoteAuthRemoteAuthRulesAddCustomHeadersRuleArrayOutputWithContext(ctx context.Context) DomainConfigsRemoteAuthRemoteAuthRulesAddCustomHeadersRuleArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(DomainConfigsRemoteAuthRemoteAuthRulesAddCustomHeadersRuleArrayOutput)
+}
+
+type DomainConfigsRemoteAuthRemoteAuthRulesAddCustomHeadersRuleOutput struct{ *pulumi.OutputState }
+
+func (DomainConfigsRemoteAuthRemoteAuthRulesAddCustomHeadersRuleOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*DomainConfigsRemoteAuthRemoteAuthRulesAddCustomHeadersRule)(nil)).Elem()
+}
+
+func (o DomainConfigsRemoteAuthRemoteAuthRulesAddCustomHeadersRuleOutput) ToDomainConfigsRemoteAuthRemoteAuthRulesAddCustomHeadersRuleOutput() DomainConfigsRemoteAuthRemoteAuthRulesAddCustomHeadersRuleOutput {
+	return o
+}
+
+func (o DomainConfigsRemoteAuthRemoteAuthRulesAddCustomHeadersRuleOutput) ToDomainConfigsRemoteAuthRemoteAuthRulesAddCustomHeadersRuleOutputWithContext(ctx context.Context) DomainConfigsRemoteAuthRemoteAuthRulesAddCustomHeadersRuleOutput {
+	return o
+}
+
+// Specifies the parameter key. The value contains up to `256` characters. The value can be
+// composed of digits, uppercase letters, lowercase letters, and special characters (._-*#%|+^@?=).
+func (o DomainConfigsRemoteAuthRemoteAuthRulesAddCustomHeadersRuleOutput) Key() pulumi.StringOutput {
+	return o.ApplyT(func(v DomainConfigsRemoteAuthRemoteAuthRulesAddCustomHeadersRule) string { return v.Key }).(pulumi.StringOutput)
+}
+
+// Specifies the blacklist and whitelist rule type. Valid values are:
+//   - **black**: Blacklist. Users in regions specified in the blacklist cannot access resources and status code `403` is
+//     returned.
+//   - **white**: Whitelist. Only users in regions specified in the whitelist can access resources. Status code `403` is
+//     returned for other users.
+func (o DomainConfigsRemoteAuthRemoteAuthRulesAddCustomHeadersRuleOutput) Type() pulumi.StringOutput {
+	return o.ApplyT(func(v DomainConfigsRemoteAuthRemoteAuthRulesAddCustomHeadersRule) string { return v.Type }).(pulumi.StringOutput)
+}
+
+// Specifies the IP address blacklist or whitelist. This field is required when `type` is
+// set to **black** or **white**. A list contains up to `500` IP addresses and IP address segments, which are separated
+// by commas (,). IPv6 addresses are supported. Duplicate IP addresses and IP address segments will be removed.
+// Addresses with wildcard characters are not supported, for example, `192.168.0.*`.
+func (o DomainConfigsRemoteAuthRemoteAuthRulesAddCustomHeadersRuleOutput) Value() pulumi.StringOutput {
+	return o.ApplyT(func(v DomainConfigsRemoteAuthRemoteAuthRulesAddCustomHeadersRule) string { return v.Value }).(pulumi.StringOutput)
+}
+
+type DomainConfigsRemoteAuthRemoteAuthRulesAddCustomHeadersRuleArrayOutput struct{ *pulumi.OutputState }
+
+func (DomainConfigsRemoteAuthRemoteAuthRulesAddCustomHeadersRuleArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]DomainConfigsRemoteAuthRemoteAuthRulesAddCustomHeadersRule)(nil)).Elem()
+}
+
+func (o DomainConfigsRemoteAuthRemoteAuthRulesAddCustomHeadersRuleArrayOutput) ToDomainConfigsRemoteAuthRemoteAuthRulesAddCustomHeadersRuleArrayOutput() DomainConfigsRemoteAuthRemoteAuthRulesAddCustomHeadersRuleArrayOutput {
+	return o
+}
+
+func (o DomainConfigsRemoteAuthRemoteAuthRulesAddCustomHeadersRuleArrayOutput) ToDomainConfigsRemoteAuthRemoteAuthRulesAddCustomHeadersRuleArrayOutputWithContext(ctx context.Context) DomainConfigsRemoteAuthRemoteAuthRulesAddCustomHeadersRuleArrayOutput {
+	return o
+}
+
+func (o DomainConfigsRemoteAuthRemoteAuthRulesAddCustomHeadersRuleArrayOutput) Index(i pulumi.IntInput) DomainConfigsRemoteAuthRemoteAuthRulesAddCustomHeadersRuleOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) DomainConfigsRemoteAuthRemoteAuthRulesAddCustomHeadersRule {
+		return vs[0].([]DomainConfigsRemoteAuthRemoteAuthRulesAddCustomHeadersRule)[vs[1].(int)]
+	}).(DomainConfigsRemoteAuthRemoteAuthRulesAddCustomHeadersRuleOutput)
+}
+
+type DomainConfigsRequestLimitRule struct {
+	// Specifies the rate limiting condition. Unit: byte.
+	// The value ranges from `0` to `1,073,741,824`.
+	LimitRateAfter int `pulumi:"limitRateAfter"`
+	// Specifies the rate limiting value, in bit/s.
+	// The value ranges from `0` to `104,857,600`.
+	LimitRateValue int `pulumi:"limitRateValue"`
+	// Specifies the match type. Valid values are:
+	// + **all**: Match all files.
+	// + **file_extension**: Match by file suffix.
+	// + **catalog**: Match by directory.
+	// + **full_path**: Full path matching.
+	// + **home_page**: Match by homepage.
+	MatchType string `pulumi:"matchType"`
+	// Specifies the cache match settings.
+	// + When `matchType` is set to **all**, this field does not need to be configured.
+	// + When `matchType` is set to **file_extension**, this field value is the file suffix. The first character of the
+	//   value is "." and separated by "," such as **.jpg,.zip,.exe**. The total number of file name suffixes entered should
+	//   not exceed `20`.
+	// + When `matchType` is set to **catalog**, the value of this field is a directory. The value must start with "/" and
+	//   be separated by "," such as **/test/folder01,/test/folder02**. The total number of directory paths entered must not
+	//   exceed `20`.
+	// + When `matchType` is set to **full_path**, the value of this field is a full path. The value must start with "/".
+	//   It supports matching specific files in the specified directory or files with a wildcard "*".
+	//   The position of "*" must be after the last "/" and cannot end with "*". Only one full path can be configured in a
+	//   single full path cache rule, such as **/test/index.html** or ***/test/*.jpg**.
+	// + When `matchType` is set to **home_page**, this field does not need to be configured.
+	MatchValue *string `pulumi:"matchValue"`
+	// Specifies the priority weight of this rule. The default value is 1.
+	// A larger value indicates a higher priority. The value ranges from 1 to 100. The weight values must be unique.
+	Priority int `pulumi:"priority"`
+	// Specifies the blacklist and whitelist rule type. Valid values are:
+	// + **black**: Blacklist. Users in regions specified in the blacklist cannot access resources and status code `403` is
+	//   returned.
+	// + **white**: Whitelist. Only users in regions specified in the whitelist can access resources. Status code `403` is
+	//   returned for other users.
+	Type string `pulumi:"type"`
+}
+
+// DomainConfigsRequestLimitRuleInput is an input type that accepts DomainConfigsRequestLimitRuleArgs and DomainConfigsRequestLimitRuleOutput values.
+// You can construct a concrete instance of `DomainConfigsRequestLimitRuleInput` via:
+//
+//	DomainConfigsRequestLimitRuleArgs{...}
+type DomainConfigsRequestLimitRuleInput interface {
+	pulumi.Input
+
+	ToDomainConfigsRequestLimitRuleOutput() DomainConfigsRequestLimitRuleOutput
+	ToDomainConfigsRequestLimitRuleOutputWithContext(context.Context) DomainConfigsRequestLimitRuleOutput
+}
+
+type DomainConfigsRequestLimitRuleArgs struct {
+	// Specifies the rate limiting condition. Unit: byte.
+	// The value ranges from `0` to `1,073,741,824`.
+	LimitRateAfter pulumi.IntInput `pulumi:"limitRateAfter"`
+	// Specifies the rate limiting value, in bit/s.
+	// The value ranges from `0` to `104,857,600`.
+	LimitRateValue pulumi.IntInput `pulumi:"limitRateValue"`
+	// Specifies the match type. Valid values are:
+	// + **all**: Match all files.
+	// + **file_extension**: Match by file suffix.
+	// + **catalog**: Match by directory.
+	// + **full_path**: Full path matching.
+	// + **home_page**: Match by homepage.
+	MatchType pulumi.StringInput `pulumi:"matchType"`
+	// Specifies the cache match settings.
+	// + When `matchType` is set to **all**, this field does not need to be configured.
+	// + When `matchType` is set to **file_extension**, this field value is the file suffix. The first character of the
+	//   value is "." and separated by "," such as **.jpg,.zip,.exe**. The total number of file name suffixes entered should
+	//   not exceed `20`.
+	// + When `matchType` is set to **catalog**, the value of this field is a directory. The value must start with "/" and
+	//   be separated by "," such as **/test/folder01,/test/folder02**. The total number of directory paths entered must not
+	//   exceed `20`.
+	// + When `matchType` is set to **full_path**, the value of this field is a full path. The value must start with "/".
+	//   It supports matching specific files in the specified directory or files with a wildcard "*".
+	//   The position of "*" must be after the last "/" and cannot end with "*". Only one full path can be configured in a
+	//   single full path cache rule, such as **/test/index.html** or ***/test/*.jpg**.
+	// + When `matchType` is set to **home_page**, this field does not need to be configured.
+	MatchValue pulumi.StringPtrInput `pulumi:"matchValue"`
+	// Specifies the priority weight of this rule. The default value is 1.
+	// A larger value indicates a higher priority. The value ranges from 1 to 100. The weight values must be unique.
+	Priority pulumi.IntInput `pulumi:"priority"`
+	// Specifies the blacklist and whitelist rule type. Valid values are:
+	// + **black**: Blacklist. Users in regions specified in the blacklist cannot access resources and status code `403` is
+	//   returned.
+	// + **white**: Whitelist. Only users in regions specified in the whitelist can access resources. Status code `403` is
+	//   returned for other users.
+	Type pulumi.StringInput `pulumi:"type"`
+}
+
+func (DomainConfigsRequestLimitRuleArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*DomainConfigsRequestLimitRule)(nil)).Elem()
+}
+
+func (i DomainConfigsRequestLimitRuleArgs) ToDomainConfigsRequestLimitRuleOutput() DomainConfigsRequestLimitRuleOutput {
+	return i.ToDomainConfigsRequestLimitRuleOutputWithContext(context.Background())
+}
+
+func (i DomainConfigsRequestLimitRuleArgs) ToDomainConfigsRequestLimitRuleOutputWithContext(ctx context.Context) DomainConfigsRequestLimitRuleOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(DomainConfigsRequestLimitRuleOutput)
+}
+
+// DomainConfigsRequestLimitRuleArrayInput is an input type that accepts DomainConfigsRequestLimitRuleArray and DomainConfigsRequestLimitRuleArrayOutput values.
+// You can construct a concrete instance of `DomainConfigsRequestLimitRuleArrayInput` via:
+//
+//	DomainConfigsRequestLimitRuleArray{ DomainConfigsRequestLimitRuleArgs{...} }
+type DomainConfigsRequestLimitRuleArrayInput interface {
+	pulumi.Input
+
+	ToDomainConfigsRequestLimitRuleArrayOutput() DomainConfigsRequestLimitRuleArrayOutput
+	ToDomainConfigsRequestLimitRuleArrayOutputWithContext(context.Context) DomainConfigsRequestLimitRuleArrayOutput
+}
+
+type DomainConfigsRequestLimitRuleArray []DomainConfigsRequestLimitRuleInput
+
+func (DomainConfigsRequestLimitRuleArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]DomainConfigsRequestLimitRule)(nil)).Elem()
+}
+
+func (i DomainConfigsRequestLimitRuleArray) ToDomainConfigsRequestLimitRuleArrayOutput() DomainConfigsRequestLimitRuleArrayOutput {
+	return i.ToDomainConfigsRequestLimitRuleArrayOutputWithContext(context.Background())
+}
+
+func (i DomainConfigsRequestLimitRuleArray) ToDomainConfigsRequestLimitRuleArrayOutputWithContext(ctx context.Context) DomainConfigsRequestLimitRuleArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(DomainConfigsRequestLimitRuleArrayOutput)
+}
+
+type DomainConfigsRequestLimitRuleOutput struct{ *pulumi.OutputState }
+
+func (DomainConfigsRequestLimitRuleOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*DomainConfigsRequestLimitRule)(nil)).Elem()
+}
+
+func (o DomainConfigsRequestLimitRuleOutput) ToDomainConfigsRequestLimitRuleOutput() DomainConfigsRequestLimitRuleOutput {
+	return o
+}
+
+func (o DomainConfigsRequestLimitRuleOutput) ToDomainConfigsRequestLimitRuleOutputWithContext(ctx context.Context) DomainConfigsRequestLimitRuleOutput {
+	return o
+}
+
+// Specifies the rate limiting condition. Unit: byte.
+// The value ranges from `0` to `1,073,741,824`.
+func (o DomainConfigsRequestLimitRuleOutput) LimitRateAfter() pulumi.IntOutput {
+	return o.ApplyT(func(v DomainConfigsRequestLimitRule) int { return v.LimitRateAfter }).(pulumi.IntOutput)
+}
+
+// Specifies the rate limiting value, in bit/s.
+// The value ranges from `0` to `104,857,600`.
+func (o DomainConfigsRequestLimitRuleOutput) LimitRateValue() pulumi.IntOutput {
+	return o.ApplyT(func(v DomainConfigsRequestLimitRule) int { return v.LimitRateValue }).(pulumi.IntOutput)
+}
+
+// Specifies the match type. Valid values are:
+// + **all**: Match all files.
+// + **file_extension**: Match by file suffix.
+// + **catalog**: Match by directory.
+// + **full_path**: Full path matching.
+// + **home_page**: Match by homepage.
+func (o DomainConfigsRequestLimitRuleOutput) MatchType() pulumi.StringOutput {
+	return o.ApplyT(func(v DomainConfigsRequestLimitRule) string { return v.MatchType }).(pulumi.StringOutput)
+}
+
+// Specifies the cache match settings.
+//   - When `matchType` is set to **all**, this field does not need to be configured.
+//   - When `matchType` is set to **file_extension**, this field value is the file suffix. The first character of the
+//     value is "." and separated by "," such as **.jpg,.zip,.exe**. The total number of file name suffixes entered should
+//     not exceed `20`.
+//   - When `matchType` is set to **catalog**, the value of this field is a directory. The value must start with "/" and
+//     be separated by "," such as **/test/folder01,/test/folder02**. The total number of directory paths entered must not
+//     exceed `20`.
+//   - When `matchType` is set to **full_path**, the value of this field is a full path. The value must start with "/".
+//     It supports matching specific files in the specified directory or files with a wildcard "*".
+//     The position of "*" must be after the last "/" and cannot end with "*". Only one full path can be configured in a
+//     single full path cache rule, such as **/test/index.html** or ***/test/*.jpg**.
+//   - When `matchType` is set to **home_page**, this field does not need to be configured.
+func (o DomainConfigsRequestLimitRuleOutput) MatchValue() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v DomainConfigsRequestLimitRule) *string { return v.MatchValue }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the priority weight of this rule. The default value is 1.
+// A larger value indicates a higher priority. The value ranges from 1 to 100. The weight values must be unique.
+func (o DomainConfigsRequestLimitRuleOutput) Priority() pulumi.IntOutput {
+	return o.ApplyT(func(v DomainConfigsRequestLimitRule) int { return v.Priority }).(pulumi.IntOutput)
+}
+
+// Specifies the blacklist and whitelist rule type. Valid values are:
+//   - **black**: Blacklist. Users in regions specified in the blacklist cannot access resources and status code `403` is
+//     returned.
+//   - **white**: Whitelist. Only users in regions specified in the whitelist can access resources. Status code `403` is
+//     returned for other users.
+func (o DomainConfigsRequestLimitRuleOutput) Type() pulumi.StringOutput {
+	return o.ApplyT(func(v DomainConfigsRequestLimitRule) string { return v.Type }).(pulumi.StringOutput)
+}
+
+type DomainConfigsRequestLimitRuleArrayOutput struct{ *pulumi.OutputState }
+
+func (DomainConfigsRequestLimitRuleArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]DomainConfigsRequestLimitRule)(nil)).Elem()
+}
+
+func (o DomainConfigsRequestLimitRuleArrayOutput) ToDomainConfigsRequestLimitRuleArrayOutput() DomainConfigsRequestLimitRuleArrayOutput {
+	return o
+}
+
+func (o DomainConfigsRequestLimitRuleArrayOutput) ToDomainConfigsRequestLimitRuleArrayOutputWithContext(ctx context.Context) DomainConfigsRequestLimitRuleArrayOutput {
+	return o
+}
+
+func (o DomainConfigsRequestLimitRuleArrayOutput) Index(i pulumi.IntInput) DomainConfigsRequestLimitRuleOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) DomainConfigsRequestLimitRule {
+		return vs[0].([]DomainConfigsRequestLimitRule)[vs[1].(int)]
+	}).(DomainConfigsRequestLimitRuleOutput)
+}
+
+type DomainConfigsRequestUrlRewrite struct {
+	// Specifies matching condition.
+	// The condition structure is documented below.
+	Condition DomainConfigsRequestUrlRewriteCondition `pulumi:"condition"`
+	// Specifies the execution mode. Valid values are:
+	// + **redirect**: If the requested URL matches the current rule, the request will be redirected to the target path.
+	//   After the current rule is executed, if there are other configured rules, the remaining rules will continue to be matched.
+	// + **break**: If the requested URL matches the current rule, the request will be rewritten to the target path.
+	//   After the current rule is executed, if there are other configured rules, the remaining rules will no longer be matched.
+	//   The redirection host and redirection status code are not supported at this time, and the status code `200` is returned.
+	ExecutionMode string `pulumi:"executionMode"`
+	// Specifies the domain name to redirect client requests.
+	RedirectHost *string `pulumi:"redirectHost"`
+	// Specifies the redirect status code. Supports `301`, `302`, `303`, and `307`.
+	RedirectStatusCode *int `pulumi:"redirectStatusCode"`
+	// Specifies the redirect URL. The redirected URL starts with a forward slash (/)
+	// and does not contain the http:// header or domain name. Example: **/test/index.html**.
+	RedirectUrl string `pulumi:"redirectUrl"`
+}
+
+// DomainConfigsRequestUrlRewriteInput is an input type that accepts DomainConfigsRequestUrlRewriteArgs and DomainConfigsRequestUrlRewriteOutput values.
+// You can construct a concrete instance of `DomainConfigsRequestUrlRewriteInput` via:
+//
+//	DomainConfigsRequestUrlRewriteArgs{...}
+type DomainConfigsRequestUrlRewriteInput interface {
+	pulumi.Input
+
+	ToDomainConfigsRequestUrlRewriteOutput() DomainConfigsRequestUrlRewriteOutput
+	ToDomainConfigsRequestUrlRewriteOutputWithContext(context.Context) DomainConfigsRequestUrlRewriteOutput
+}
+
+type DomainConfigsRequestUrlRewriteArgs struct {
+	// Specifies matching condition.
+	// The condition structure is documented below.
+	Condition DomainConfigsRequestUrlRewriteConditionInput `pulumi:"condition"`
+	// Specifies the execution mode. Valid values are:
+	// + **redirect**: If the requested URL matches the current rule, the request will be redirected to the target path.
+	//   After the current rule is executed, if there are other configured rules, the remaining rules will continue to be matched.
+	// + **break**: If the requested URL matches the current rule, the request will be rewritten to the target path.
+	//   After the current rule is executed, if there are other configured rules, the remaining rules will no longer be matched.
+	//   The redirection host and redirection status code are not supported at this time, and the status code `200` is returned.
+	ExecutionMode pulumi.StringInput `pulumi:"executionMode"`
+	// Specifies the domain name to redirect client requests.
+	RedirectHost pulumi.StringPtrInput `pulumi:"redirectHost"`
+	// Specifies the redirect status code. Supports `301`, `302`, `303`, and `307`.
+	RedirectStatusCode pulumi.IntPtrInput `pulumi:"redirectStatusCode"`
+	// Specifies the redirect URL. The redirected URL starts with a forward slash (/)
+	// and does not contain the http:// header or domain name. Example: **/test/index.html**.
+	RedirectUrl pulumi.StringInput `pulumi:"redirectUrl"`
+}
+
+func (DomainConfigsRequestUrlRewriteArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*DomainConfigsRequestUrlRewrite)(nil)).Elem()
+}
+
+func (i DomainConfigsRequestUrlRewriteArgs) ToDomainConfigsRequestUrlRewriteOutput() DomainConfigsRequestUrlRewriteOutput {
+	return i.ToDomainConfigsRequestUrlRewriteOutputWithContext(context.Background())
+}
+
+func (i DomainConfigsRequestUrlRewriteArgs) ToDomainConfigsRequestUrlRewriteOutputWithContext(ctx context.Context) DomainConfigsRequestUrlRewriteOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(DomainConfigsRequestUrlRewriteOutput)
+}
+
+// DomainConfigsRequestUrlRewriteArrayInput is an input type that accepts DomainConfigsRequestUrlRewriteArray and DomainConfigsRequestUrlRewriteArrayOutput values.
+// You can construct a concrete instance of `DomainConfigsRequestUrlRewriteArrayInput` via:
+//
+//	DomainConfigsRequestUrlRewriteArray{ DomainConfigsRequestUrlRewriteArgs{...} }
+type DomainConfigsRequestUrlRewriteArrayInput interface {
+	pulumi.Input
+
+	ToDomainConfigsRequestUrlRewriteArrayOutput() DomainConfigsRequestUrlRewriteArrayOutput
+	ToDomainConfigsRequestUrlRewriteArrayOutputWithContext(context.Context) DomainConfigsRequestUrlRewriteArrayOutput
+}
+
+type DomainConfigsRequestUrlRewriteArray []DomainConfigsRequestUrlRewriteInput
+
+func (DomainConfigsRequestUrlRewriteArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]DomainConfigsRequestUrlRewrite)(nil)).Elem()
+}
+
+func (i DomainConfigsRequestUrlRewriteArray) ToDomainConfigsRequestUrlRewriteArrayOutput() DomainConfigsRequestUrlRewriteArrayOutput {
+	return i.ToDomainConfigsRequestUrlRewriteArrayOutputWithContext(context.Background())
+}
+
+func (i DomainConfigsRequestUrlRewriteArray) ToDomainConfigsRequestUrlRewriteArrayOutputWithContext(ctx context.Context) DomainConfigsRequestUrlRewriteArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(DomainConfigsRequestUrlRewriteArrayOutput)
+}
+
+type DomainConfigsRequestUrlRewriteOutput struct{ *pulumi.OutputState }
+
+func (DomainConfigsRequestUrlRewriteOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*DomainConfigsRequestUrlRewrite)(nil)).Elem()
+}
+
+func (o DomainConfigsRequestUrlRewriteOutput) ToDomainConfigsRequestUrlRewriteOutput() DomainConfigsRequestUrlRewriteOutput {
+	return o
+}
+
+func (o DomainConfigsRequestUrlRewriteOutput) ToDomainConfigsRequestUrlRewriteOutputWithContext(ctx context.Context) DomainConfigsRequestUrlRewriteOutput {
+	return o
+}
+
+// Specifies matching condition.
+// The condition structure is documented below.
+func (o DomainConfigsRequestUrlRewriteOutput) Condition() DomainConfigsRequestUrlRewriteConditionOutput {
+	return o.ApplyT(func(v DomainConfigsRequestUrlRewrite) DomainConfigsRequestUrlRewriteCondition { return v.Condition }).(DomainConfigsRequestUrlRewriteConditionOutput)
+}
+
+// Specifies the execution mode. Valid values are:
+//   - **redirect**: If the requested URL matches the current rule, the request will be redirected to the target path.
+//     After the current rule is executed, if there are other configured rules, the remaining rules will continue to be matched.
+//   - **break**: If the requested URL matches the current rule, the request will be rewritten to the target path.
+//     After the current rule is executed, if there are other configured rules, the remaining rules will no longer be matched.
+//     The redirection host and redirection status code are not supported at this time, and the status code `200` is returned.
+func (o DomainConfigsRequestUrlRewriteOutput) ExecutionMode() pulumi.StringOutput {
+	return o.ApplyT(func(v DomainConfigsRequestUrlRewrite) string { return v.ExecutionMode }).(pulumi.StringOutput)
+}
+
+// Specifies the domain name to redirect client requests.
+func (o DomainConfigsRequestUrlRewriteOutput) RedirectHost() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v DomainConfigsRequestUrlRewrite) *string { return v.RedirectHost }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the redirect status code. Supports `301`, `302`, `303`, and `307`.
+func (o DomainConfigsRequestUrlRewriteOutput) RedirectStatusCode() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v DomainConfigsRequestUrlRewrite) *int { return v.RedirectStatusCode }).(pulumi.IntPtrOutput)
+}
+
+// Specifies the redirect URL. The redirected URL starts with a forward slash (/)
+// and does not contain the http:// header or domain name. Example: **/test/index.html**.
+func (o DomainConfigsRequestUrlRewriteOutput) RedirectUrl() pulumi.StringOutput {
+	return o.ApplyT(func(v DomainConfigsRequestUrlRewrite) string { return v.RedirectUrl }).(pulumi.StringOutput)
+}
+
+type DomainConfigsRequestUrlRewriteArrayOutput struct{ *pulumi.OutputState }
+
+func (DomainConfigsRequestUrlRewriteArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]DomainConfigsRequestUrlRewrite)(nil)).Elem()
+}
+
+func (o DomainConfigsRequestUrlRewriteArrayOutput) ToDomainConfigsRequestUrlRewriteArrayOutput() DomainConfigsRequestUrlRewriteArrayOutput {
+	return o
+}
+
+func (o DomainConfigsRequestUrlRewriteArrayOutput) ToDomainConfigsRequestUrlRewriteArrayOutputWithContext(ctx context.Context) DomainConfigsRequestUrlRewriteArrayOutput {
+	return o
+}
+
+func (o DomainConfigsRequestUrlRewriteArrayOutput) Index(i pulumi.IntInput) DomainConfigsRequestUrlRewriteOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) DomainConfigsRequestUrlRewrite {
+		return vs[0].([]DomainConfigsRequestUrlRewrite)[vs[1].(int)]
+	}).(DomainConfigsRequestUrlRewriteOutput)
+}
+
+type DomainConfigsRequestUrlRewriteCondition struct {
+	// Specifies the match type. Valid values are:
+	// + **all**: Match all files.
+	// + **file_extension**: Match by file suffix.
+	// + **catalog**: Match by directory.
+	// + **full_path**: Full path matching.
+	// + **home_page**: Match by homepage.
+	MatchType string `pulumi:"matchType"`
+	// Specifies the cache match settings.
+	// + When `matchType` is set to **all**, this field does not need to be configured.
+	// + When `matchType` is set to **file_extension**, this field value is the file suffix. The first character of the
+	//   value is "." and separated by "," such as **.jpg,.zip,.exe**. The total number of file name suffixes entered should
+	//   not exceed `20`.
+	// + When `matchType` is set to **catalog**, the value of this field is a directory. The value must start with "/" and
+	//   be separated by "," such as **/test/folder01,/test/folder02**. The total number of directory paths entered must not
+	//   exceed `20`.
+	// + When `matchType` is set to **full_path**, the value of this field is a full path. The value must start with "/".
+	//   It supports matching specific files in the specified directory or files with a wildcard "*".
+	//   The position of "*" must be after the last "/" and cannot end with "*". Only one full path can be configured in a
+	//   single full path cache rule, such as **/test/index.html** or ***/test/*.jpg**.
+	// + When `matchType` is set to **home_page**, this field does not need to be configured.
+	MatchValue *string `pulumi:"matchValue"`
+	// Specifies the priority weight of this rule. The default value is 1.
+	// A larger value indicates a higher priority. The value ranges from 1 to 100. The weight values must be unique.
+	Priority int `pulumi:"priority"`
+}
+
+// DomainConfigsRequestUrlRewriteConditionInput is an input type that accepts DomainConfigsRequestUrlRewriteConditionArgs and DomainConfigsRequestUrlRewriteConditionOutput values.
+// You can construct a concrete instance of `DomainConfigsRequestUrlRewriteConditionInput` via:
+//
+//	DomainConfigsRequestUrlRewriteConditionArgs{...}
+type DomainConfigsRequestUrlRewriteConditionInput interface {
+	pulumi.Input
+
+	ToDomainConfigsRequestUrlRewriteConditionOutput() DomainConfigsRequestUrlRewriteConditionOutput
+	ToDomainConfigsRequestUrlRewriteConditionOutputWithContext(context.Context) DomainConfigsRequestUrlRewriteConditionOutput
+}
+
+type DomainConfigsRequestUrlRewriteConditionArgs struct {
+	// Specifies the match type. Valid values are:
+	// + **all**: Match all files.
+	// + **file_extension**: Match by file suffix.
+	// + **catalog**: Match by directory.
+	// + **full_path**: Full path matching.
+	// + **home_page**: Match by homepage.
+	MatchType pulumi.StringInput `pulumi:"matchType"`
+	// Specifies the cache match settings.
+	// + When `matchType` is set to **all**, this field does not need to be configured.
+	// + When `matchType` is set to **file_extension**, this field value is the file suffix. The first character of the
+	//   value is "." and separated by "," such as **.jpg,.zip,.exe**. The total number of file name suffixes entered should
+	//   not exceed `20`.
+	// + When `matchType` is set to **catalog**, the value of this field is a directory. The value must start with "/" and
+	//   be separated by "," such as **/test/folder01,/test/folder02**. The total number of directory paths entered must not
+	//   exceed `20`.
+	// + When `matchType` is set to **full_path**, the value of this field is a full path. The value must start with "/".
+	//   It supports matching specific files in the specified directory or files with a wildcard "*".
+	//   The position of "*" must be after the last "/" and cannot end with "*". Only one full path can be configured in a
+	//   single full path cache rule, such as **/test/index.html** or ***/test/*.jpg**.
+	// + When `matchType` is set to **home_page**, this field does not need to be configured.
+	MatchValue pulumi.StringPtrInput `pulumi:"matchValue"`
+	// Specifies the priority weight of this rule. The default value is 1.
+	// A larger value indicates a higher priority. The value ranges from 1 to 100. The weight values must be unique.
+	Priority pulumi.IntInput `pulumi:"priority"`
+}
+
+func (DomainConfigsRequestUrlRewriteConditionArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*DomainConfigsRequestUrlRewriteCondition)(nil)).Elem()
+}
+
+func (i DomainConfigsRequestUrlRewriteConditionArgs) ToDomainConfigsRequestUrlRewriteConditionOutput() DomainConfigsRequestUrlRewriteConditionOutput {
+	return i.ToDomainConfigsRequestUrlRewriteConditionOutputWithContext(context.Background())
+}
+
+func (i DomainConfigsRequestUrlRewriteConditionArgs) ToDomainConfigsRequestUrlRewriteConditionOutputWithContext(ctx context.Context) DomainConfigsRequestUrlRewriteConditionOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(DomainConfigsRequestUrlRewriteConditionOutput)
+}
+
+type DomainConfigsRequestUrlRewriteConditionOutput struct{ *pulumi.OutputState }
+
+func (DomainConfigsRequestUrlRewriteConditionOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*DomainConfigsRequestUrlRewriteCondition)(nil)).Elem()
+}
+
+func (o DomainConfigsRequestUrlRewriteConditionOutput) ToDomainConfigsRequestUrlRewriteConditionOutput() DomainConfigsRequestUrlRewriteConditionOutput {
+	return o
+}
+
+func (o DomainConfigsRequestUrlRewriteConditionOutput) ToDomainConfigsRequestUrlRewriteConditionOutputWithContext(ctx context.Context) DomainConfigsRequestUrlRewriteConditionOutput {
+	return o
+}
+
+// Specifies the match type. Valid values are:
+// + **all**: Match all files.
+// + **file_extension**: Match by file suffix.
+// + **catalog**: Match by directory.
+// + **full_path**: Full path matching.
+// + **home_page**: Match by homepage.
+func (o DomainConfigsRequestUrlRewriteConditionOutput) MatchType() pulumi.StringOutput {
+	return o.ApplyT(func(v DomainConfigsRequestUrlRewriteCondition) string { return v.MatchType }).(pulumi.StringOutput)
+}
+
+// Specifies the cache match settings.
+//   - When `matchType` is set to **all**, this field does not need to be configured.
+//   - When `matchType` is set to **file_extension**, this field value is the file suffix. The first character of the
+//     value is "." and separated by "," such as **.jpg,.zip,.exe**. The total number of file name suffixes entered should
+//     not exceed `20`.
+//   - When `matchType` is set to **catalog**, the value of this field is a directory. The value must start with "/" and
+//     be separated by "," such as **/test/folder01,/test/folder02**. The total number of directory paths entered must not
+//     exceed `20`.
+//   - When `matchType` is set to **full_path**, the value of this field is a full path. The value must start with "/".
+//     It supports matching specific files in the specified directory or files with a wildcard "*".
+//     The position of "*" must be after the last "/" and cannot end with "*". Only one full path can be configured in a
+//     single full path cache rule, such as **/test/index.html** or ***/test/*.jpg**.
+//   - When `matchType` is set to **home_page**, this field does not need to be configured.
+func (o DomainConfigsRequestUrlRewriteConditionOutput) MatchValue() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v DomainConfigsRequestUrlRewriteCondition) *string { return v.MatchValue }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the priority weight of this rule. The default value is 1.
+// A larger value indicates a higher priority. The value ranges from 1 to 100. The weight values must be unique.
+func (o DomainConfigsRequestUrlRewriteConditionOutput) Priority() pulumi.IntOutput {
+	return o.ApplyT(func(v DomainConfigsRequestUrlRewriteCondition) int { return v.Priority }).(pulumi.IntOutput)
+}
+
 type DomainConfigsRetrievalRequestHeader struct {
-	// Specifies the operation type of request or response
+	// Specifies the operation type of the HTTP response header. The value can be **set** or **delete**.
 	Action string `pulumi:"action"`
-	// Specifies the request or response header.
+	// Specifies the HTTP response header. Valid values are **Content-Disposition**, **Content-Language**,
+	// **Access-Control-Allow-Origin**, **Access-Control-Allow-Methods**, **Access-Control-Max-Age**, **Access-Control-Expose-Headers**,
+	// **Access-Control-Allow-Headers** or custom headers. A header contains `1` to `100` characters, including letters, digits,
+	// and hyphens (-), and starts with a letter.
 	Name string `pulumi:"name"`
-	// Specifies the parameter values. Multiple values are separated by semicolons (;).
+	// Specifies the IP address blacklist or whitelist. This field is required when `type` is
+	// set to **black** or **white**. A list contains up to `500` IP addresses and IP address segments, which are separated
+	// by commas (,). IPv6 addresses are supported. Duplicate IP addresses and IP address segments will be removed.
+	// Addresses with wildcard characters are not supported, for example, `192.168.0.*`.
 	Value *string `pulumi:"value"`
 }
 
@@ -1679,11 +6091,17 @@ type DomainConfigsRetrievalRequestHeaderInput interface {
 }
 
 type DomainConfigsRetrievalRequestHeaderArgs struct {
-	// Specifies the operation type of request or response
+	// Specifies the operation type of the HTTP response header. The value can be **set** or **delete**.
 	Action pulumi.StringInput `pulumi:"action"`
-	// Specifies the request or response header.
+	// Specifies the HTTP response header. Valid values are **Content-Disposition**, **Content-Language**,
+	// **Access-Control-Allow-Origin**, **Access-Control-Allow-Methods**, **Access-Control-Max-Age**, **Access-Control-Expose-Headers**,
+	// **Access-Control-Allow-Headers** or custom headers. A header contains `1` to `100` characters, including letters, digits,
+	// and hyphens (-), and starts with a letter.
 	Name pulumi.StringInput `pulumi:"name"`
-	// Specifies the parameter values. Multiple values are separated by semicolons (;).
+	// Specifies the IP address blacklist or whitelist. This field is required when `type` is
+	// set to **black** or **white**. A list contains up to `500` IP addresses and IP address segments, which are separated
+	// by commas (,). IPv6 addresses are supported. Duplicate IP addresses and IP address segments will be removed.
+	// Addresses with wildcard characters are not supported, for example, `192.168.0.*`.
 	Value pulumi.StringPtrInput `pulumi:"value"`
 }
 
@@ -1738,17 +6156,23 @@ func (o DomainConfigsRetrievalRequestHeaderOutput) ToDomainConfigsRetrievalReque
 	return o
 }
 
-// Specifies the operation type of request or response
+// Specifies the operation type of the HTTP response header. The value can be **set** or **delete**.
 func (o DomainConfigsRetrievalRequestHeaderOutput) Action() pulumi.StringOutput {
 	return o.ApplyT(func(v DomainConfigsRetrievalRequestHeader) string { return v.Action }).(pulumi.StringOutput)
 }
 
-// Specifies the request or response header.
+// Specifies the HTTP response header. Valid values are **Content-Disposition**, **Content-Language**,
+// **Access-Control-Allow-Origin**, **Access-Control-Allow-Methods**, **Access-Control-Max-Age**, **Access-Control-Expose-Headers**,
+// **Access-Control-Allow-Headers** or custom headers. A header contains `1` to `100` characters, including letters, digits,
+// and hyphens (-), and starts with a letter.
 func (o DomainConfigsRetrievalRequestHeaderOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v DomainConfigsRetrievalRequestHeader) string { return v.Name }).(pulumi.StringOutput)
 }
 
-// Specifies the parameter values. Multiple values are separated by semicolons (;).
+// Specifies the IP address blacklist or whitelist. This field is required when `type` is
+// set to **black** or **white**. A list contains up to `500` IP addresses and IP address segments, which are separated
+// by commas (,). IPv6 addresses are supported. Duplicate IP addresses and IP address segments will be removed.
+// Addresses with wildcard characters are not supported, for example, `192.168.0.*`.
 func (o DomainConfigsRetrievalRequestHeaderOutput) Value() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v DomainConfigsRetrievalRequestHeader) *string { return v.Value }).(pulumi.StringPtrOutput)
 }
@@ -1773,24 +6197,221 @@ func (o DomainConfigsRetrievalRequestHeaderArrayOutput) Index(i pulumi.IntInput)
 	}).(DomainConfigsRetrievalRequestHeaderOutput)
 }
 
-type DomainConfigsUrlSigning struct {
-	// Specifies the whether to enable force redirect or smart compression.
+type DomainConfigsSni struct {
+	// Specifies whether to enable client cert settings.
 	Enabled bool `pulumi:"enabled"`
-	// Specifies the expiration time. The value ranges from **0** to **31536000**,
-	// in seconds.
+	// Specifies the origin server domain name that the CDN node needs to access when
+	// returning to the source.
+	ServerName *string `pulumi:"serverName"`
+	Status     *string `pulumi:"status"`
+}
+
+// DomainConfigsSniInput is an input type that accepts DomainConfigsSniArgs and DomainConfigsSniOutput values.
+// You can construct a concrete instance of `DomainConfigsSniInput` via:
+//
+//	DomainConfigsSniArgs{...}
+type DomainConfigsSniInput interface {
+	pulumi.Input
+
+	ToDomainConfigsSniOutput() DomainConfigsSniOutput
+	ToDomainConfigsSniOutputWithContext(context.Context) DomainConfigsSniOutput
+}
+
+type DomainConfigsSniArgs struct {
+	// Specifies whether to enable client cert settings.
+	Enabled pulumi.BoolInput `pulumi:"enabled"`
+	// Specifies the origin server domain name that the CDN node needs to access when
+	// returning to the source.
+	ServerName pulumi.StringPtrInput `pulumi:"serverName"`
+	Status     pulumi.StringPtrInput `pulumi:"status"`
+}
+
+func (DomainConfigsSniArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*DomainConfigsSni)(nil)).Elem()
+}
+
+func (i DomainConfigsSniArgs) ToDomainConfigsSniOutput() DomainConfigsSniOutput {
+	return i.ToDomainConfigsSniOutputWithContext(context.Background())
+}
+
+func (i DomainConfigsSniArgs) ToDomainConfigsSniOutputWithContext(ctx context.Context) DomainConfigsSniOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(DomainConfigsSniOutput)
+}
+
+func (i DomainConfigsSniArgs) ToDomainConfigsSniPtrOutput() DomainConfigsSniPtrOutput {
+	return i.ToDomainConfigsSniPtrOutputWithContext(context.Background())
+}
+
+func (i DomainConfigsSniArgs) ToDomainConfigsSniPtrOutputWithContext(ctx context.Context) DomainConfigsSniPtrOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(DomainConfigsSniOutput).ToDomainConfigsSniPtrOutputWithContext(ctx)
+}
+
+// DomainConfigsSniPtrInput is an input type that accepts DomainConfigsSniArgs, DomainConfigsSniPtr and DomainConfigsSniPtrOutput values.
+// You can construct a concrete instance of `DomainConfigsSniPtrInput` via:
+//
+//	        DomainConfigsSniArgs{...}
+//
+//	or:
+//
+//	        nil
+type DomainConfigsSniPtrInput interface {
+	pulumi.Input
+
+	ToDomainConfigsSniPtrOutput() DomainConfigsSniPtrOutput
+	ToDomainConfigsSniPtrOutputWithContext(context.Context) DomainConfigsSniPtrOutput
+}
+
+type domainConfigsSniPtrType DomainConfigsSniArgs
+
+func DomainConfigsSniPtr(v *DomainConfigsSniArgs) DomainConfigsSniPtrInput {
+	return (*domainConfigsSniPtrType)(v)
+}
+
+func (*domainConfigsSniPtrType) ElementType() reflect.Type {
+	return reflect.TypeOf((**DomainConfigsSni)(nil)).Elem()
+}
+
+func (i *domainConfigsSniPtrType) ToDomainConfigsSniPtrOutput() DomainConfigsSniPtrOutput {
+	return i.ToDomainConfigsSniPtrOutputWithContext(context.Background())
+}
+
+func (i *domainConfigsSniPtrType) ToDomainConfigsSniPtrOutputWithContext(ctx context.Context) DomainConfigsSniPtrOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(DomainConfigsSniPtrOutput)
+}
+
+type DomainConfigsSniOutput struct{ *pulumi.OutputState }
+
+func (DomainConfigsSniOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*DomainConfigsSni)(nil)).Elem()
+}
+
+func (o DomainConfigsSniOutput) ToDomainConfigsSniOutput() DomainConfigsSniOutput {
+	return o
+}
+
+func (o DomainConfigsSniOutput) ToDomainConfigsSniOutputWithContext(ctx context.Context) DomainConfigsSniOutput {
+	return o
+}
+
+func (o DomainConfigsSniOutput) ToDomainConfigsSniPtrOutput() DomainConfigsSniPtrOutput {
+	return o.ToDomainConfigsSniPtrOutputWithContext(context.Background())
+}
+
+func (o DomainConfigsSniOutput) ToDomainConfigsSniPtrOutputWithContext(ctx context.Context) DomainConfigsSniPtrOutput {
+	return o.ApplyTWithContext(ctx, func(_ context.Context, v DomainConfigsSni) *DomainConfigsSni {
+		return &v
+	}).(DomainConfigsSniPtrOutput)
+}
+
+// Specifies whether to enable client cert settings.
+func (o DomainConfigsSniOutput) Enabled() pulumi.BoolOutput {
+	return o.ApplyT(func(v DomainConfigsSni) bool { return v.Enabled }).(pulumi.BoolOutput)
+}
+
+// Specifies the origin server domain name that the CDN node needs to access when
+// returning to the source.
+func (o DomainConfigsSniOutput) ServerName() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v DomainConfigsSni) *string { return v.ServerName }).(pulumi.StringPtrOutput)
+}
+
+func (o DomainConfigsSniOutput) Status() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v DomainConfigsSni) *string { return v.Status }).(pulumi.StringPtrOutput)
+}
+
+type DomainConfigsSniPtrOutput struct{ *pulumi.OutputState }
+
+func (DomainConfigsSniPtrOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((**DomainConfigsSni)(nil)).Elem()
+}
+
+func (o DomainConfigsSniPtrOutput) ToDomainConfigsSniPtrOutput() DomainConfigsSniPtrOutput {
+	return o
+}
+
+func (o DomainConfigsSniPtrOutput) ToDomainConfigsSniPtrOutputWithContext(ctx context.Context) DomainConfigsSniPtrOutput {
+	return o
+}
+
+func (o DomainConfigsSniPtrOutput) Elem() DomainConfigsSniOutput {
+	return o.ApplyT(func(v *DomainConfigsSni) DomainConfigsSni {
+		if v != nil {
+			return *v
+		}
+		var ret DomainConfigsSni
+		return ret
+	}).(DomainConfigsSniOutput)
+}
+
+// Specifies whether to enable client cert settings.
+func (o DomainConfigsSniPtrOutput) Enabled() pulumi.BoolPtrOutput {
+	return o.ApplyT(func(v *DomainConfigsSni) *bool {
+		if v == nil {
+			return nil
+		}
+		return &v.Enabled
+	}).(pulumi.BoolPtrOutput)
+}
+
+// Specifies the origin server domain name that the CDN node needs to access when
+// returning to the source.
+func (o DomainConfigsSniPtrOutput) ServerName() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *DomainConfigsSni) *string {
+		if v == nil {
+			return nil
+		}
+		return v.ServerName
+	}).(pulumi.StringPtrOutput)
+}
+
+func (o DomainConfigsSniPtrOutput) Status() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *DomainConfigsSni) *string {
+		if v == nil {
+			return nil
+		}
+		return v.Status
+	}).(pulumi.StringPtrOutput)
+}
+
+type DomainConfigsUrlSigning struct {
+	// Specifies the standby authentication key contains `16` to `32` characters,
+	// including letters and digits.
+	BackupKey *string `pulumi:"backupKey"`
+	// Specifies whether to enable client cert settings.
+	Enabled bool `pulumi:"enabled"`
+	// Specifies the expiration time. The value ranges from `0` to `31536000`, in seconds.
 	ExpireTime *int `pulumi:"expireTime"`
-	// Specifies the authentication key contains 6 to 32 characters, including letters and digits.
-	Key    *string `pulumi:"key"`
-	Status *string `pulumi:"status"`
+	// Specifies the details of the authentication inheritance.
+	// The inheritConfig structure is documented below.
+	InheritConfig *DomainConfigsUrlSigningInheritConfig `pulumi:"inheritConfig"`
+	// Specifies the parameter key. The value contains up to `256` characters. The value can be
+	// composed of digits, uppercase letters, lowercase letters, and special characters (._-*#%|+^@?=).
+	Key *string `pulumi:"key"`
+	// Specifies the match type. Valid values are:
+	// + **all**: Match all files.
+	// + **file_extension**: Match by file suffix.
+	// + **catalog**: Match by directory.
+	// + **full_path**: Full path matching.
+	// + **home_page**: Match by homepage.
+	MatchType *string `pulumi:"matchType"`
+	// Specifies the authentication parameters. The default value is **auth_key**.
+	// The valid length is limited from `1` to `100` characters, only letters, digits, and underscores (_) are allowed.
+	// The value can not start with a digit.
+	SignArg *string `pulumi:"signArg"`
+	// Specifies the encryption algorithm type for URL authentication.
+	// The default value is **md5**. The valid values are as following:
+	// + **md5**
+	// + **sha256**
+	SignMethod *string `pulumi:"signMethod"`
+	Status     *string `pulumi:"status"`
 	// Specifies the time format. Possible values are:
 	// **dec**: Decimal, can be used in Method A, Method B and Method C2.
 	// **hex**: Hexadecimal, can be used in Method C1 and Method C2.
 	TimeFormat *string `pulumi:"timeFormat"`
-	// Specifies the operation type for caching URL parameters. Posiible values are:
-	// **full_url**: cache all parameters
-	// **ignore_url_params**: ignore all parameters
-	// **del_args**: ignore specific URL parameters
-	// **reserve_args**: reserve specified URL parameters
+	// Specifies the blacklist and whitelist rule type. Valid values are:
+	// + **black**: Blacklist. Users in regions specified in the blacklist cannot access resources and status code `403` is
+	//   returned.
+	// + **white**: Whitelist. Only users in regions specified in the whitelist can access resources. Status code `403` is
+	//   returned for other users.
 	Type *string `pulumi:"type"`
 }
 
@@ -1806,23 +6427,45 @@ type DomainConfigsUrlSigningInput interface {
 }
 
 type DomainConfigsUrlSigningArgs struct {
-	// Specifies the whether to enable force redirect or smart compression.
+	// Specifies the standby authentication key contains `16` to `32` characters,
+	// including letters and digits.
+	BackupKey pulumi.StringPtrInput `pulumi:"backupKey"`
+	// Specifies whether to enable client cert settings.
 	Enabled pulumi.BoolInput `pulumi:"enabled"`
-	// Specifies the expiration time. The value ranges from **0** to **31536000**,
-	// in seconds.
+	// Specifies the expiration time. The value ranges from `0` to `31536000`, in seconds.
 	ExpireTime pulumi.IntPtrInput `pulumi:"expireTime"`
-	// Specifies the authentication key contains 6 to 32 characters, including letters and digits.
-	Key    pulumi.StringPtrInput `pulumi:"key"`
-	Status pulumi.StringPtrInput `pulumi:"status"`
+	// Specifies the details of the authentication inheritance.
+	// The inheritConfig structure is documented below.
+	InheritConfig DomainConfigsUrlSigningInheritConfigPtrInput `pulumi:"inheritConfig"`
+	// Specifies the parameter key. The value contains up to `256` characters. The value can be
+	// composed of digits, uppercase letters, lowercase letters, and special characters (._-*#%|+^@?=).
+	Key pulumi.StringPtrInput `pulumi:"key"`
+	// Specifies the match type. Valid values are:
+	// + **all**: Match all files.
+	// + **file_extension**: Match by file suffix.
+	// + **catalog**: Match by directory.
+	// + **full_path**: Full path matching.
+	// + **home_page**: Match by homepage.
+	MatchType pulumi.StringPtrInput `pulumi:"matchType"`
+	// Specifies the authentication parameters. The default value is **auth_key**.
+	// The valid length is limited from `1` to `100` characters, only letters, digits, and underscores (_) are allowed.
+	// The value can not start with a digit.
+	SignArg pulumi.StringPtrInput `pulumi:"signArg"`
+	// Specifies the encryption algorithm type for URL authentication.
+	// The default value is **md5**. The valid values are as following:
+	// + **md5**
+	// + **sha256**
+	SignMethod pulumi.StringPtrInput `pulumi:"signMethod"`
+	Status     pulumi.StringPtrInput `pulumi:"status"`
 	// Specifies the time format. Possible values are:
 	// **dec**: Decimal, can be used in Method A, Method B and Method C2.
 	// **hex**: Hexadecimal, can be used in Method C1 and Method C2.
 	TimeFormat pulumi.StringPtrInput `pulumi:"timeFormat"`
-	// Specifies the operation type for caching URL parameters. Posiible values are:
-	// **full_url**: cache all parameters
-	// **ignore_url_params**: ignore all parameters
-	// **del_args**: ignore specific URL parameters
-	// **reserve_args**: reserve specified URL parameters
+	// Specifies the blacklist and whitelist rule type. Valid values are:
+	// + **black**: Blacklist. Users in regions specified in the blacklist cannot access resources and status code `403` is
+	//   returned.
+	// + **white**: Whitelist. Only users in regions specified in the whitelist can access resources. Status code `403` is
+	//   returned for other users.
 	Type pulumi.StringPtrInput `pulumi:"type"`
 }
 
@@ -1903,20 +6546,57 @@ func (o DomainConfigsUrlSigningOutput) ToDomainConfigsUrlSigningPtrOutputWithCon
 	}).(DomainConfigsUrlSigningPtrOutput)
 }
 
-// Specifies the whether to enable force redirect or smart compression.
+// Specifies the standby authentication key contains `16` to `32` characters,
+// including letters and digits.
+func (o DomainConfigsUrlSigningOutput) BackupKey() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v DomainConfigsUrlSigning) *string { return v.BackupKey }).(pulumi.StringPtrOutput)
+}
+
+// Specifies whether to enable client cert settings.
 func (o DomainConfigsUrlSigningOutput) Enabled() pulumi.BoolOutput {
 	return o.ApplyT(func(v DomainConfigsUrlSigning) bool { return v.Enabled }).(pulumi.BoolOutput)
 }
 
-// Specifies the expiration time. The value ranges from **0** to **31536000**,
-// in seconds.
+// Specifies the expiration time. The value ranges from `0` to `31536000`, in seconds.
 func (o DomainConfigsUrlSigningOutput) ExpireTime() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v DomainConfigsUrlSigning) *int { return v.ExpireTime }).(pulumi.IntPtrOutput)
 }
 
-// Specifies the authentication key contains 6 to 32 characters, including letters and digits.
+// Specifies the details of the authentication inheritance.
+// The inheritConfig structure is documented below.
+func (o DomainConfigsUrlSigningOutput) InheritConfig() DomainConfigsUrlSigningInheritConfigPtrOutput {
+	return o.ApplyT(func(v DomainConfigsUrlSigning) *DomainConfigsUrlSigningInheritConfig { return v.InheritConfig }).(DomainConfigsUrlSigningInheritConfigPtrOutput)
+}
+
+// Specifies the parameter key. The value contains up to `256` characters. The value can be
+// composed of digits, uppercase letters, lowercase letters, and special characters (._-*#%|+^@?=).
 func (o DomainConfigsUrlSigningOutput) Key() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v DomainConfigsUrlSigning) *string { return v.Key }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the match type. Valid values are:
+// + **all**: Match all files.
+// + **file_extension**: Match by file suffix.
+// + **catalog**: Match by directory.
+// + **full_path**: Full path matching.
+// + **home_page**: Match by homepage.
+func (o DomainConfigsUrlSigningOutput) MatchType() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v DomainConfigsUrlSigning) *string { return v.MatchType }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the authentication parameters. The default value is **auth_key**.
+// The valid length is limited from `1` to `100` characters, only letters, digits, and underscores (_) are allowed.
+// The value can not start with a digit.
+func (o DomainConfigsUrlSigningOutput) SignArg() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v DomainConfigsUrlSigning) *string { return v.SignArg }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the encryption algorithm type for URL authentication.
+// The default value is **md5**. The valid values are as following:
+// + **md5**
+// + **sha256**
+func (o DomainConfigsUrlSigningOutput) SignMethod() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v DomainConfigsUrlSigning) *string { return v.SignMethod }).(pulumi.StringPtrOutput)
 }
 
 func (o DomainConfigsUrlSigningOutput) Status() pulumi.StringPtrOutput {
@@ -1930,11 +6610,11 @@ func (o DomainConfigsUrlSigningOutput) TimeFormat() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v DomainConfigsUrlSigning) *string { return v.TimeFormat }).(pulumi.StringPtrOutput)
 }
 
-// Specifies the operation type for caching URL parameters. Posiible values are:
-// **full_url**: cache all parameters
-// **ignore_url_params**: ignore all parameters
-// **del_args**: ignore specific URL parameters
-// **reserve_args**: reserve specified URL parameters
+// Specifies the blacklist and whitelist rule type. Valid values are:
+//   - **black**: Blacklist. Users in regions specified in the blacklist cannot access resources and status code `403` is
+//     returned.
+//   - **white**: Whitelist. Only users in regions specified in the whitelist can access resources. Status code `403` is
+//     returned for other users.
 func (o DomainConfigsUrlSigningOutput) Type() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v DomainConfigsUrlSigning) *string { return v.Type }).(pulumi.StringPtrOutput)
 }
@@ -1963,7 +6643,18 @@ func (o DomainConfigsUrlSigningPtrOutput) Elem() DomainConfigsUrlSigningOutput {
 	}).(DomainConfigsUrlSigningOutput)
 }
 
-// Specifies the whether to enable force redirect or smart compression.
+// Specifies the standby authentication key contains `16` to `32` characters,
+// including letters and digits.
+func (o DomainConfigsUrlSigningPtrOutput) BackupKey() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *DomainConfigsUrlSigning) *string {
+		if v == nil {
+			return nil
+		}
+		return v.BackupKey
+	}).(pulumi.StringPtrOutput)
+}
+
+// Specifies whether to enable client cert settings.
 func (o DomainConfigsUrlSigningPtrOutput) Enabled() pulumi.BoolPtrOutput {
 	return o.ApplyT(func(v *DomainConfigsUrlSigning) *bool {
 		if v == nil {
@@ -1973,8 +6664,7 @@ func (o DomainConfigsUrlSigningPtrOutput) Enabled() pulumi.BoolPtrOutput {
 	}).(pulumi.BoolPtrOutput)
 }
 
-// Specifies the expiration time. The value ranges from **0** to **31536000**,
-// in seconds.
+// Specifies the expiration time. The value ranges from `0` to `31536000`, in seconds.
 func (o DomainConfigsUrlSigningPtrOutput) ExpireTime() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v *DomainConfigsUrlSigning) *int {
 		if v == nil {
@@ -1984,13 +6674,65 @@ func (o DomainConfigsUrlSigningPtrOutput) ExpireTime() pulumi.IntPtrOutput {
 	}).(pulumi.IntPtrOutput)
 }
 
-// Specifies the authentication key contains 6 to 32 characters, including letters and digits.
+// Specifies the details of the authentication inheritance.
+// The inheritConfig structure is documented below.
+func (o DomainConfigsUrlSigningPtrOutput) InheritConfig() DomainConfigsUrlSigningInheritConfigPtrOutput {
+	return o.ApplyT(func(v *DomainConfigsUrlSigning) *DomainConfigsUrlSigningInheritConfig {
+		if v == nil {
+			return nil
+		}
+		return v.InheritConfig
+	}).(DomainConfigsUrlSigningInheritConfigPtrOutput)
+}
+
+// Specifies the parameter key. The value contains up to `256` characters. The value can be
+// composed of digits, uppercase letters, lowercase letters, and special characters (._-*#%|+^@?=).
 func (o DomainConfigsUrlSigningPtrOutput) Key() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *DomainConfigsUrlSigning) *string {
 		if v == nil {
 			return nil
 		}
 		return v.Key
+	}).(pulumi.StringPtrOutput)
+}
+
+// Specifies the match type. Valid values are:
+// + **all**: Match all files.
+// + **file_extension**: Match by file suffix.
+// + **catalog**: Match by directory.
+// + **full_path**: Full path matching.
+// + **home_page**: Match by homepage.
+func (o DomainConfigsUrlSigningPtrOutput) MatchType() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *DomainConfigsUrlSigning) *string {
+		if v == nil {
+			return nil
+		}
+		return v.MatchType
+	}).(pulumi.StringPtrOutput)
+}
+
+// Specifies the authentication parameters. The default value is **auth_key**.
+// The valid length is limited from `1` to `100` characters, only letters, digits, and underscores (_) are allowed.
+// The value can not start with a digit.
+func (o DomainConfigsUrlSigningPtrOutput) SignArg() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *DomainConfigsUrlSigning) *string {
+		if v == nil {
+			return nil
+		}
+		return v.SignArg
+	}).(pulumi.StringPtrOutput)
+}
+
+// Specifies the encryption algorithm type for URL authentication.
+// The default value is **md5**. The valid values are as following:
+// + **md5**
+// + **sha256**
+func (o DomainConfigsUrlSigningPtrOutput) SignMethod() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *DomainConfigsUrlSigning) *string {
+		if v == nil {
+			return nil
+		}
+		return v.SignMethod
 	}).(pulumi.StringPtrOutput)
 }
 
@@ -2015,11 +6757,11 @@ func (o DomainConfigsUrlSigningPtrOutput) TimeFormat() pulumi.StringPtrOutput {
 	}).(pulumi.StringPtrOutput)
 }
 
-// Specifies the operation type for caching URL parameters. Posiible values are:
-// **full_url**: cache all parameters
-// **ignore_url_params**: ignore all parameters
-// **del_args**: ignore specific URL parameters
-// **reserve_args**: reserve specified URL parameters
+// Specifies the blacklist and whitelist rule type. Valid values are:
+//   - **black**: Blacklist. Users in regions specified in the blacklist cannot access resources and status code `403` is
+//     returned.
+//   - **white**: Whitelist. Only users in regions specified in the whitelist can access resources. Status code `403` is
+//     returned for other users.
 func (o DomainConfigsUrlSigningPtrOutput) Type() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *DomainConfigsUrlSigning) *string {
 		if v == nil {
@@ -2029,23 +6771,826 @@ func (o DomainConfigsUrlSigningPtrOutput) Type() pulumi.StringPtrOutput {
 	}).(pulumi.StringPtrOutput)
 }
 
+type DomainConfigsUrlSigningInheritConfig struct {
+	// Specifies whether to enable client cert settings.
+	Enabled bool `pulumi:"enabled"`
+	// Specifies the time type that inherits authentication settings.
+	// The valid values are as follows:
+	// + **sys_time**: The current system time.
+	// + **parent_url_time**: The time when a user accesses the M3U8/MPD file.
+	InheritTimeType *string `pulumi:"inheritTimeType"`
+	// Specifies the authentication inheritance configuration.
+	// The valid values are **m3u8** and **mpd**. Separate multiple values with commas (,). e.g. **m3u8,mpd**.
+	InheritType *string `pulumi:"inheritType"`
+	Status      *string `pulumi:"status"`
+}
+
+// DomainConfigsUrlSigningInheritConfigInput is an input type that accepts DomainConfigsUrlSigningInheritConfigArgs and DomainConfigsUrlSigningInheritConfigOutput values.
+// You can construct a concrete instance of `DomainConfigsUrlSigningInheritConfigInput` via:
+//
+//	DomainConfigsUrlSigningInheritConfigArgs{...}
+type DomainConfigsUrlSigningInheritConfigInput interface {
+	pulumi.Input
+
+	ToDomainConfigsUrlSigningInheritConfigOutput() DomainConfigsUrlSigningInheritConfigOutput
+	ToDomainConfigsUrlSigningInheritConfigOutputWithContext(context.Context) DomainConfigsUrlSigningInheritConfigOutput
+}
+
+type DomainConfigsUrlSigningInheritConfigArgs struct {
+	// Specifies whether to enable client cert settings.
+	Enabled pulumi.BoolInput `pulumi:"enabled"`
+	// Specifies the time type that inherits authentication settings.
+	// The valid values are as follows:
+	// + **sys_time**: The current system time.
+	// + **parent_url_time**: The time when a user accesses the M3U8/MPD file.
+	InheritTimeType pulumi.StringPtrInput `pulumi:"inheritTimeType"`
+	// Specifies the authentication inheritance configuration.
+	// The valid values are **m3u8** and **mpd**. Separate multiple values with commas (,). e.g. **m3u8,mpd**.
+	InheritType pulumi.StringPtrInput `pulumi:"inheritType"`
+	Status      pulumi.StringPtrInput `pulumi:"status"`
+}
+
+func (DomainConfigsUrlSigningInheritConfigArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*DomainConfigsUrlSigningInheritConfig)(nil)).Elem()
+}
+
+func (i DomainConfigsUrlSigningInheritConfigArgs) ToDomainConfigsUrlSigningInheritConfigOutput() DomainConfigsUrlSigningInheritConfigOutput {
+	return i.ToDomainConfigsUrlSigningInheritConfigOutputWithContext(context.Background())
+}
+
+func (i DomainConfigsUrlSigningInheritConfigArgs) ToDomainConfigsUrlSigningInheritConfigOutputWithContext(ctx context.Context) DomainConfigsUrlSigningInheritConfigOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(DomainConfigsUrlSigningInheritConfigOutput)
+}
+
+func (i DomainConfigsUrlSigningInheritConfigArgs) ToDomainConfigsUrlSigningInheritConfigPtrOutput() DomainConfigsUrlSigningInheritConfigPtrOutput {
+	return i.ToDomainConfigsUrlSigningInheritConfigPtrOutputWithContext(context.Background())
+}
+
+func (i DomainConfigsUrlSigningInheritConfigArgs) ToDomainConfigsUrlSigningInheritConfigPtrOutputWithContext(ctx context.Context) DomainConfigsUrlSigningInheritConfigPtrOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(DomainConfigsUrlSigningInheritConfigOutput).ToDomainConfigsUrlSigningInheritConfigPtrOutputWithContext(ctx)
+}
+
+// DomainConfigsUrlSigningInheritConfigPtrInput is an input type that accepts DomainConfigsUrlSigningInheritConfigArgs, DomainConfigsUrlSigningInheritConfigPtr and DomainConfigsUrlSigningInheritConfigPtrOutput values.
+// You can construct a concrete instance of `DomainConfigsUrlSigningInheritConfigPtrInput` via:
+//
+//	        DomainConfigsUrlSigningInheritConfigArgs{...}
+//
+//	or:
+//
+//	        nil
+type DomainConfigsUrlSigningInheritConfigPtrInput interface {
+	pulumi.Input
+
+	ToDomainConfigsUrlSigningInheritConfigPtrOutput() DomainConfigsUrlSigningInheritConfigPtrOutput
+	ToDomainConfigsUrlSigningInheritConfigPtrOutputWithContext(context.Context) DomainConfigsUrlSigningInheritConfigPtrOutput
+}
+
+type domainConfigsUrlSigningInheritConfigPtrType DomainConfigsUrlSigningInheritConfigArgs
+
+func DomainConfigsUrlSigningInheritConfigPtr(v *DomainConfigsUrlSigningInheritConfigArgs) DomainConfigsUrlSigningInheritConfigPtrInput {
+	return (*domainConfigsUrlSigningInheritConfigPtrType)(v)
+}
+
+func (*domainConfigsUrlSigningInheritConfigPtrType) ElementType() reflect.Type {
+	return reflect.TypeOf((**DomainConfigsUrlSigningInheritConfig)(nil)).Elem()
+}
+
+func (i *domainConfigsUrlSigningInheritConfigPtrType) ToDomainConfigsUrlSigningInheritConfigPtrOutput() DomainConfigsUrlSigningInheritConfigPtrOutput {
+	return i.ToDomainConfigsUrlSigningInheritConfigPtrOutputWithContext(context.Background())
+}
+
+func (i *domainConfigsUrlSigningInheritConfigPtrType) ToDomainConfigsUrlSigningInheritConfigPtrOutputWithContext(ctx context.Context) DomainConfigsUrlSigningInheritConfigPtrOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(DomainConfigsUrlSigningInheritConfigPtrOutput)
+}
+
+type DomainConfigsUrlSigningInheritConfigOutput struct{ *pulumi.OutputState }
+
+func (DomainConfigsUrlSigningInheritConfigOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*DomainConfigsUrlSigningInheritConfig)(nil)).Elem()
+}
+
+func (o DomainConfigsUrlSigningInheritConfigOutput) ToDomainConfigsUrlSigningInheritConfigOutput() DomainConfigsUrlSigningInheritConfigOutput {
+	return o
+}
+
+func (o DomainConfigsUrlSigningInheritConfigOutput) ToDomainConfigsUrlSigningInheritConfigOutputWithContext(ctx context.Context) DomainConfigsUrlSigningInheritConfigOutput {
+	return o
+}
+
+func (o DomainConfigsUrlSigningInheritConfigOutput) ToDomainConfigsUrlSigningInheritConfigPtrOutput() DomainConfigsUrlSigningInheritConfigPtrOutput {
+	return o.ToDomainConfigsUrlSigningInheritConfigPtrOutputWithContext(context.Background())
+}
+
+func (o DomainConfigsUrlSigningInheritConfigOutput) ToDomainConfigsUrlSigningInheritConfigPtrOutputWithContext(ctx context.Context) DomainConfigsUrlSigningInheritConfigPtrOutput {
+	return o.ApplyTWithContext(ctx, func(_ context.Context, v DomainConfigsUrlSigningInheritConfig) *DomainConfigsUrlSigningInheritConfig {
+		return &v
+	}).(DomainConfigsUrlSigningInheritConfigPtrOutput)
+}
+
+// Specifies whether to enable client cert settings.
+func (o DomainConfigsUrlSigningInheritConfigOutput) Enabled() pulumi.BoolOutput {
+	return o.ApplyT(func(v DomainConfigsUrlSigningInheritConfig) bool { return v.Enabled }).(pulumi.BoolOutput)
+}
+
+// Specifies the time type that inherits authentication settings.
+// The valid values are as follows:
+// + **sys_time**: The current system time.
+// + **parent_url_time**: The time when a user accesses the M3U8/MPD file.
+func (o DomainConfigsUrlSigningInheritConfigOutput) InheritTimeType() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v DomainConfigsUrlSigningInheritConfig) *string { return v.InheritTimeType }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the authentication inheritance configuration.
+// The valid values are **m3u8** and **mpd**. Separate multiple values with commas (,). e.g. **m3u8,mpd**.
+func (o DomainConfigsUrlSigningInheritConfigOutput) InheritType() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v DomainConfigsUrlSigningInheritConfig) *string { return v.InheritType }).(pulumi.StringPtrOutput)
+}
+
+func (o DomainConfigsUrlSigningInheritConfigOutput) Status() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v DomainConfigsUrlSigningInheritConfig) *string { return v.Status }).(pulumi.StringPtrOutput)
+}
+
+type DomainConfigsUrlSigningInheritConfigPtrOutput struct{ *pulumi.OutputState }
+
+func (DomainConfigsUrlSigningInheritConfigPtrOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((**DomainConfigsUrlSigningInheritConfig)(nil)).Elem()
+}
+
+func (o DomainConfigsUrlSigningInheritConfigPtrOutput) ToDomainConfigsUrlSigningInheritConfigPtrOutput() DomainConfigsUrlSigningInheritConfigPtrOutput {
+	return o
+}
+
+func (o DomainConfigsUrlSigningInheritConfigPtrOutput) ToDomainConfigsUrlSigningInheritConfigPtrOutputWithContext(ctx context.Context) DomainConfigsUrlSigningInheritConfigPtrOutput {
+	return o
+}
+
+func (o DomainConfigsUrlSigningInheritConfigPtrOutput) Elem() DomainConfigsUrlSigningInheritConfigOutput {
+	return o.ApplyT(func(v *DomainConfigsUrlSigningInheritConfig) DomainConfigsUrlSigningInheritConfig {
+		if v != nil {
+			return *v
+		}
+		var ret DomainConfigsUrlSigningInheritConfig
+		return ret
+	}).(DomainConfigsUrlSigningInheritConfigOutput)
+}
+
+// Specifies whether to enable client cert settings.
+func (o DomainConfigsUrlSigningInheritConfigPtrOutput) Enabled() pulumi.BoolPtrOutput {
+	return o.ApplyT(func(v *DomainConfigsUrlSigningInheritConfig) *bool {
+		if v == nil {
+			return nil
+		}
+		return &v.Enabled
+	}).(pulumi.BoolPtrOutput)
+}
+
+// Specifies the time type that inherits authentication settings.
+// The valid values are as follows:
+// + **sys_time**: The current system time.
+// + **parent_url_time**: The time when a user accesses the M3U8/MPD file.
+func (o DomainConfigsUrlSigningInheritConfigPtrOutput) InheritTimeType() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *DomainConfigsUrlSigningInheritConfig) *string {
+		if v == nil {
+			return nil
+		}
+		return v.InheritTimeType
+	}).(pulumi.StringPtrOutput)
+}
+
+// Specifies the authentication inheritance configuration.
+// The valid values are **m3u8** and **mpd**. Separate multiple values with commas (,). e.g. **m3u8,mpd**.
+func (o DomainConfigsUrlSigningInheritConfigPtrOutput) InheritType() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *DomainConfigsUrlSigningInheritConfig) *string {
+		if v == nil {
+			return nil
+		}
+		return v.InheritType
+	}).(pulumi.StringPtrOutput)
+}
+
+func (o DomainConfigsUrlSigningInheritConfigPtrOutput) Status() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *DomainConfigsUrlSigningInheritConfig) *string {
+		if v == nil {
+			return nil
+		}
+		return v.Status
+	}).(pulumi.StringPtrOutput)
+}
+
+type DomainConfigsUserAgentFilter struct {
+	// Specifies whether empty user agents are included.
+	// A User-Agent blacklist including empty user agents indicates that requests without a user agent are rejected.
+	// A User-Agent whitelist including empty user agents indicates that requests without a user agent are accepted.
+	// Possible values: **true** (included) and **false** (excluded).
+	// The default value is **false** for a blacklist and **true** for a whitelist.
+	IncludeEmpty *string `pulumi:"includeEmpty"`
+	// Specifies the blacklist and whitelist rule type. Valid values are:
+	// + **black**: Blacklist. Users in regions specified in the blacklist cannot access resources and status code `403` is
+	//   returned.
+	// + **white**: Whitelist. Only users in regions specified in the whitelist can access resources. Status code `403` is
+	//   returned for other users.
+	Type string `pulumi:"type"`
+	// Specifies the User-Agent blacklist or whitelist. This parameter is required when `type`
+	// is set to **black** or **white**. Up to `10` rules can be configured. A rule contains up to `100` characters.
+	UaLists []string `pulumi:"uaLists"`
+}
+
+// DomainConfigsUserAgentFilterInput is an input type that accepts DomainConfigsUserAgentFilterArgs and DomainConfigsUserAgentFilterOutput values.
+// You can construct a concrete instance of `DomainConfigsUserAgentFilterInput` via:
+//
+//	DomainConfigsUserAgentFilterArgs{...}
+type DomainConfigsUserAgentFilterInput interface {
+	pulumi.Input
+
+	ToDomainConfigsUserAgentFilterOutput() DomainConfigsUserAgentFilterOutput
+	ToDomainConfigsUserAgentFilterOutputWithContext(context.Context) DomainConfigsUserAgentFilterOutput
+}
+
+type DomainConfigsUserAgentFilterArgs struct {
+	// Specifies whether empty user agents are included.
+	// A User-Agent blacklist including empty user agents indicates that requests without a user agent are rejected.
+	// A User-Agent whitelist including empty user agents indicates that requests without a user agent are accepted.
+	// Possible values: **true** (included) and **false** (excluded).
+	// The default value is **false** for a blacklist and **true** for a whitelist.
+	IncludeEmpty pulumi.StringPtrInput `pulumi:"includeEmpty"`
+	// Specifies the blacklist and whitelist rule type. Valid values are:
+	// + **black**: Blacklist. Users in regions specified in the blacklist cannot access resources and status code `403` is
+	//   returned.
+	// + **white**: Whitelist. Only users in regions specified in the whitelist can access resources. Status code `403` is
+	//   returned for other users.
+	Type pulumi.StringInput `pulumi:"type"`
+	// Specifies the User-Agent blacklist or whitelist. This parameter is required when `type`
+	// is set to **black** or **white**. Up to `10` rules can be configured. A rule contains up to `100` characters.
+	UaLists pulumi.StringArrayInput `pulumi:"uaLists"`
+}
+
+func (DomainConfigsUserAgentFilterArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*DomainConfigsUserAgentFilter)(nil)).Elem()
+}
+
+func (i DomainConfigsUserAgentFilterArgs) ToDomainConfigsUserAgentFilterOutput() DomainConfigsUserAgentFilterOutput {
+	return i.ToDomainConfigsUserAgentFilterOutputWithContext(context.Background())
+}
+
+func (i DomainConfigsUserAgentFilterArgs) ToDomainConfigsUserAgentFilterOutputWithContext(ctx context.Context) DomainConfigsUserAgentFilterOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(DomainConfigsUserAgentFilterOutput)
+}
+
+func (i DomainConfigsUserAgentFilterArgs) ToDomainConfigsUserAgentFilterPtrOutput() DomainConfigsUserAgentFilterPtrOutput {
+	return i.ToDomainConfigsUserAgentFilterPtrOutputWithContext(context.Background())
+}
+
+func (i DomainConfigsUserAgentFilterArgs) ToDomainConfigsUserAgentFilterPtrOutputWithContext(ctx context.Context) DomainConfigsUserAgentFilterPtrOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(DomainConfigsUserAgentFilterOutput).ToDomainConfigsUserAgentFilterPtrOutputWithContext(ctx)
+}
+
+// DomainConfigsUserAgentFilterPtrInput is an input type that accepts DomainConfigsUserAgentFilterArgs, DomainConfigsUserAgentFilterPtr and DomainConfigsUserAgentFilterPtrOutput values.
+// You can construct a concrete instance of `DomainConfigsUserAgentFilterPtrInput` via:
+//
+//	        DomainConfigsUserAgentFilterArgs{...}
+//
+//	or:
+//
+//	        nil
+type DomainConfigsUserAgentFilterPtrInput interface {
+	pulumi.Input
+
+	ToDomainConfigsUserAgentFilterPtrOutput() DomainConfigsUserAgentFilterPtrOutput
+	ToDomainConfigsUserAgentFilterPtrOutputWithContext(context.Context) DomainConfigsUserAgentFilterPtrOutput
+}
+
+type domainConfigsUserAgentFilterPtrType DomainConfigsUserAgentFilterArgs
+
+func DomainConfigsUserAgentFilterPtr(v *DomainConfigsUserAgentFilterArgs) DomainConfigsUserAgentFilterPtrInput {
+	return (*domainConfigsUserAgentFilterPtrType)(v)
+}
+
+func (*domainConfigsUserAgentFilterPtrType) ElementType() reflect.Type {
+	return reflect.TypeOf((**DomainConfigsUserAgentFilter)(nil)).Elem()
+}
+
+func (i *domainConfigsUserAgentFilterPtrType) ToDomainConfigsUserAgentFilterPtrOutput() DomainConfigsUserAgentFilterPtrOutput {
+	return i.ToDomainConfigsUserAgentFilterPtrOutputWithContext(context.Background())
+}
+
+func (i *domainConfigsUserAgentFilterPtrType) ToDomainConfigsUserAgentFilterPtrOutputWithContext(ctx context.Context) DomainConfigsUserAgentFilterPtrOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(DomainConfigsUserAgentFilterPtrOutput)
+}
+
+type DomainConfigsUserAgentFilterOutput struct{ *pulumi.OutputState }
+
+func (DomainConfigsUserAgentFilterOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*DomainConfigsUserAgentFilter)(nil)).Elem()
+}
+
+func (o DomainConfigsUserAgentFilterOutput) ToDomainConfigsUserAgentFilterOutput() DomainConfigsUserAgentFilterOutput {
+	return o
+}
+
+func (o DomainConfigsUserAgentFilterOutput) ToDomainConfigsUserAgentFilterOutputWithContext(ctx context.Context) DomainConfigsUserAgentFilterOutput {
+	return o
+}
+
+func (o DomainConfigsUserAgentFilterOutput) ToDomainConfigsUserAgentFilterPtrOutput() DomainConfigsUserAgentFilterPtrOutput {
+	return o.ToDomainConfigsUserAgentFilterPtrOutputWithContext(context.Background())
+}
+
+func (o DomainConfigsUserAgentFilterOutput) ToDomainConfigsUserAgentFilterPtrOutputWithContext(ctx context.Context) DomainConfigsUserAgentFilterPtrOutput {
+	return o.ApplyTWithContext(ctx, func(_ context.Context, v DomainConfigsUserAgentFilter) *DomainConfigsUserAgentFilter {
+		return &v
+	}).(DomainConfigsUserAgentFilterPtrOutput)
+}
+
+// Specifies whether empty user agents are included.
+// A User-Agent blacklist including empty user agents indicates that requests without a user agent are rejected.
+// A User-Agent whitelist including empty user agents indicates that requests without a user agent are accepted.
+// Possible values: **true** (included) and **false** (excluded).
+// The default value is **false** for a blacklist and **true** for a whitelist.
+func (o DomainConfigsUserAgentFilterOutput) IncludeEmpty() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v DomainConfigsUserAgentFilter) *string { return v.IncludeEmpty }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the blacklist and whitelist rule type. Valid values are:
+//   - **black**: Blacklist. Users in regions specified in the blacklist cannot access resources and status code `403` is
+//     returned.
+//   - **white**: Whitelist. Only users in regions specified in the whitelist can access resources. Status code `403` is
+//     returned for other users.
+func (o DomainConfigsUserAgentFilterOutput) Type() pulumi.StringOutput {
+	return o.ApplyT(func(v DomainConfigsUserAgentFilter) string { return v.Type }).(pulumi.StringOutput)
+}
+
+// Specifies the User-Agent blacklist or whitelist. This parameter is required when `type`
+// is set to **black** or **white**. Up to `10` rules can be configured. A rule contains up to `100` characters.
+func (o DomainConfigsUserAgentFilterOutput) UaLists() pulumi.StringArrayOutput {
+	return o.ApplyT(func(v DomainConfigsUserAgentFilter) []string { return v.UaLists }).(pulumi.StringArrayOutput)
+}
+
+type DomainConfigsUserAgentFilterPtrOutput struct{ *pulumi.OutputState }
+
+func (DomainConfigsUserAgentFilterPtrOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((**DomainConfigsUserAgentFilter)(nil)).Elem()
+}
+
+func (o DomainConfigsUserAgentFilterPtrOutput) ToDomainConfigsUserAgentFilterPtrOutput() DomainConfigsUserAgentFilterPtrOutput {
+	return o
+}
+
+func (o DomainConfigsUserAgentFilterPtrOutput) ToDomainConfigsUserAgentFilterPtrOutputWithContext(ctx context.Context) DomainConfigsUserAgentFilterPtrOutput {
+	return o
+}
+
+func (o DomainConfigsUserAgentFilterPtrOutput) Elem() DomainConfigsUserAgentFilterOutput {
+	return o.ApplyT(func(v *DomainConfigsUserAgentFilter) DomainConfigsUserAgentFilter {
+		if v != nil {
+			return *v
+		}
+		var ret DomainConfigsUserAgentFilter
+		return ret
+	}).(DomainConfigsUserAgentFilterOutput)
+}
+
+// Specifies whether empty user agents are included.
+// A User-Agent blacklist including empty user agents indicates that requests without a user agent are rejected.
+// A User-Agent whitelist including empty user agents indicates that requests without a user agent are accepted.
+// Possible values: **true** (included) and **false** (excluded).
+// The default value is **false** for a blacklist and **true** for a whitelist.
+func (o DomainConfigsUserAgentFilterPtrOutput) IncludeEmpty() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *DomainConfigsUserAgentFilter) *string {
+		if v == nil {
+			return nil
+		}
+		return v.IncludeEmpty
+	}).(pulumi.StringPtrOutput)
+}
+
+// Specifies the blacklist and whitelist rule type. Valid values are:
+//   - **black**: Blacklist. Users in regions specified in the blacklist cannot access resources and status code `403` is
+//     returned.
+//   - **white**: Whitelist. Only users in regions specified in the whitelist can access resources. Status code `403` is
+//     returned for other users.
+func (o DomainConfigsUserAgentFilterPtrOutput) Type() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *DomainConfigsUserAgentFilter) *string {
+		if v == nil {
+			return nil
+		}
+		return &v.Type
+	}).(pulumi.StringPtrOutput)
+}
+
+// Specifies the User-Agent blacklist or whitelist. This parameter is required when `type`
+// is set to **black** or **white**. Up to `10` rules can be configured. A rule contains up to `100` characters.
+func (o DomainConfigsUserAgentFilterPtrOutput) UaLists() pulumi.StringArrayOutput {
+	return o.ApplyT(func(v *DomainConfigsUserAgentFilter) []string {
+		if v == nil {
+			return nil
+		}
+		return v.UaLists
+	}).(pulumi.StringArrayOutput)
+}
+
+type DomainConfigsVideoSeek struct {
+	// Specifies the time-based `FLV` seek status.
+	// **true**: enabled; **false**: disabled. Defaults to **false**.
+	EnableFlvByTimeSeek *bool `pulumi:"enableFlvByTimeSeek"`
+	// Specifies the video seek status. **true**: enabled; **false**: disabled.
+	EnableVideoSeek bool `pulumi:"enableVideoSeek"`
+	// Specifies the video playback end parameter in user request URLs.
+	// The value contains up to `64` characters. Only letters, digits, and underscores (_) are allowed.
+	EndParameter *string `pulumi:"endParameter"`
+	// Specifies the video playback start parameter in user request URLs.
+	// The value contains up to `64` characters. Only letters, digits, and underscores (_) are allowed.
+	StartParameter *string `pulumi:"startParameter"`
+}
+
+// DomainConfigsVideoSeekInput is an input type that accepts DomainConfigsVideoSeekArgs and DomainConfigsVideoSeekOutput values.
+// You can construct a concrete instance of `DomainConfigsVideoSeekInput` via:
+//
+//	DomainConfigsVideoSeekArgs{...}
+type DomainConfigsVideoSeekInput interface {
+	pulumi.Input
+
+	ToDomainConfigsVideoSeekOutput() DomainConfigsVideoSeekOutput
+	ToDomainConfigsVideoSeekOutputWithContext(context.Context) DomainConfigsVideoSeekOutput
+}
+
+type DomainConfigsVideoSeekArgs struct {
+	// Specifies the time-based `FLV` seek status.
+	// **true**: enabled; **false**: disabled. Defaults to **false**.
+	EnableFlvByTimeSeek pulumi.BoolPtrInput `pulumi:"enableFlvByTimeSeek"`
+	// Specifies the video seek status. **true**: enabled; **false**: disabled.
+	EnableVideoSeek pulumi.BoolInput `pulumi:"enableVideoSeek"`
+	// Specifies the video playback end parameter in user request URLs.
+	// The value contains up to `64` characters. Only letters, digits, and underscores (_) are allowed.
+	EndParameter pulumi.StringPtrInput `pulumi:"endParameter"`
+	// Specifies the video playback start parameter in user request URLs.
+	// The value contains up to `64` characters. Only letters, digits, and underscores (_) are allowed.
+	StartParameter pulumi.StringPtrInput `pulumi:"startParameter"`
+}
+
+func (DomainConfigsVideoSeekArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*DomainConfigsVideoSeek)(nil)).Elem()
+}
+
+func (i DomainConfigsVideoSeekArgs) ToDomainConfigsVideoSeekOutput() DomainConfigsVideoSeekOutput {
+	return i.ToDomainConfigsVideoSeekOutputWithContext(context.Background())
+}
+
+func (i DomainConfigsVideoSeekArgs) ToDomainConfigsVideoSeekOutputWithContext(ctx context.Context) DomainConfigsVideoSeekOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(DomainConfigsVideoSeekOutput)
+}
+
+func (i DomainConfigsVideoSeekArgs) ToDomainConfigsVideoSeekPtrOutput() DomainConfigsVideoSeekPtrOutput {
+	return i.ToDomainConfigsVideoSeekPtrOutputWithContext(context.Background())
+}
+
+func (i DomainConfigsVideoSeekArgs) ToDomainConfigsVideoSeekPtrOutputWithContext(ctx context.Context) DomainConfigsVideoSeekPtrOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(DomainConfigsVideoSeekOutput).ToDomainConfigsVideoSeekPtrOutputWithContext(ctx)
+}
+
+// DomainConfigsVideoSeekPtrInput is an input type that accepts DomainConfigsVideoSeekArgs, DomainConfigsVideoSeekPtr and DomainConfigsVideoSeekPtrOutput values.
+// You can construct a concrete instance of `DomainConfigsVideoSeekPtrInput` via:
+//
+//	        DomainConfigsVideoSeekArgs{...}
+//
+//	or:
+//
+//	        nil
+type DomainConfigsVideoSeekPtrInput interface {
+	pulumi.Input
+
+	ToDomainConfigsVideoSeekPtrOutput() DomainConfigsVideoSeekPtrOutput
+	ToDomainConfigsVideoSeekPtrOutputWithContext(context.Context) DomainConfigsVideoSeekPtrOutput
+}
+
+type domainConfigsVideoSeekPtrType DomainConfigsVideoSeekArgs
+
+func DomainConfigsVideoSeekPtr(v *DomainConfigsVideoSeekArgs) DomainConfigsVideoSeekPtrInput {
+	return (*domainConfigsVideoSeekPtrType)(v)
+}
+
+func (*domainConfigsVideoSeekPtrType) ElementType() reflect.Type {
+	return reflect.TypeOf((**DomainConfigsVideoSeek)(nil)).Elem()
+}
+
+func (i *domainConfigsVideoSeekPtrType) ToDomainConfigsVideoSeekPtrOutput() DomainConfigsVideoSeekPtrOutput {
+	return i.ToDomainConfigsVideoSeekPtrOutputWithContext(context.Background())
+}
+
+func (i *domainConfigsVideoSeekPtrType) ToDomainConfigsVideoSeekPtrOutputWithContext(ctx context.Context) DomainConfigsVideoSeekPtrOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(DomainConfigsVideoSeekPtrOutput)
+}
+
+type DomainConfigsVideoSeekOutput struct{ *pulumi.OutputState }
+
+func (DomainConfigsVideoSeekOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*DomainConfigsVideoSeek)(nil)).Elem()
+}
+
+func (o DomainConfigsVideoSeekOutput) ToDomainConfigsVideoSeekOutput() DomainConfigsVideoSeekOutput {
+	return o
+}
+
+func (o DomainConfigsVideoSeekOutput) ToDomainConfigsVideoSeekOutputWithContext(ctx context.Context) DomainConfigsVideoSeekOutput {
+	return o
+}
+
+func (o DomainConfigsVideoSeekOutput) ToDomainConfigsVideoSeekPtrOutput() DomainConfigsVideoSeekPtrOutput {
+	return o.ToDomainConfigsVideoSeekPtrOutputWithContext(context.Background())
+}
+
+func (o DomainConfigsVideoSeekOutput) ToDomainConfigsVideoSeekPtrOutputWithContext(ctx context.Context) DomainConfigsVideoSeekPtrOutput {
+	return o.ApplyTWithContext(ctx, func(_ context.Context, v DomainConfigsVideoSeek) *DomainConfigsVideoSeek {
+		return &v
+	}).(DomainConfigsVideoSeekPtrOutput)
+}
+
+// Specifies the time-based `FLV` seek status.
+// **true**: enabled; **false**: disabled. Defaults to **false**.
+func (o DomainConfigsVideoSeekOutput) EnableFlvByTimeSeek() pulumi.BoolPtrOutput {
+	return o.ApplyT(func(v DomainConfigsVideoSeek) *bool { return v.EnableFlvByTimeSeek }).(pulumi.BoolPtrOutput)
+}
+
+// Specifies the video seek status. **true**: enabled; **false**: disabled.
+func (o DomainConfigsVideoSeekOutput) EnableVideoSeek() pulumi.BoolOutput {
+	return o.ApplyT(func(v DomainConfigsVideoSeek) bool { return v.EnableVideoSeek }).(pulumi.BoolOutput)
+}
+
+// Specifies the video playback end parameter in user request URLs.
+// The value contains up to `64` characters. Only letters, digits, and underscores (_) are allowed.
+func (o DomainConfigsVideoSeekOutput) EndParameter() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v DomainConfigsVideoSeek) *string { return v.EndParameter }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the video playback start parameter in user request URLs.
+// The value contains up to `64` characters. Only letters, digits, and underscores (_) are allowed.
+func (o DomainConfigsVideoSeekOutput) StartParameter() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v DomainConfigsVideoSeek) *string { return v.StartParameter }).(pulumi.StringPtrOutput)
+}
+
+type DomainConfigsVideoSeekPtrOutput struct{ *pulumi.OutputState }
+
+func (DomainConfigsVideoSeekPtrOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((**DomainConfigsVideoSeek)(nil)).Elem()
+}
+
+func (o DomainConfigsVideoSeekPtrOutput) ToDomainConfigsVideoSeekPtrOutput() DomainConfigsVideoSeekPtrOutput {
+	return o
+}
+
+func (o DomainConfigsVideoSeekPtrOutput) ToDomainConfigsVideoSeekPtrOutputWithContext(ctx context.Context) DomainConfigsVideoSeekPtrOutput {
+	return o
+}
+
+func (o DomainConfigsVideoSeekPtrOutput) Elem() DomainConfigsVideoSeekOutput {
+	return o.ApplyT(func(v *DomainConfigsVideoSeek) DomainConfigsVideoSeek {
+		if v != nil {
+			return *v
+		}
+		var ret DomainConfigsVideoSeek
+		return ret
+	}).(DomainConfigsVideoSeekOutput)
+}
+
+// Specifies the time-based `FLV` seek status.
+// **true**: enabled; **false**: disabled. Defaults to **false**.
+func (o DomainConfigsVideoSeekPtrOutput) EnableFlvByTimeSeek() pulumi.BoolPtrOutput {
+	return o.ApplyT(func(v *DomainConfigsVideoSeek) *bool {
+		if v == nil {
+			return nil
+		}
+		return v.EnableFlvByTimeSeek
+	}).(pulumi.BoolPtrOutput)
+}
+
+// Specifies the video seek status. **true**: enabled; **false**: disabled.
+func (o DomainConfigsVideoSeekPtrOutput) EnableVideoSeek() pulumi.BoolPtrOutput {
+	return o.ApplyT(func(v *DomainConfigsVideoSeek) *bool {
+		if v == nil {
+			return nil
+		}
+		return &v.EnableVideoSeek
+	}).(pulumi.BoolPtrOutput)
+}
+
+// Specifies the video playback end parameter in user request URLs.
+// The value contains up to `64` characters. Only letters, digits, and underscores (_) are allowed.
+func (o DomainConfigsVideoSeekPtrOutput) EndParameter() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *DomainConfigsVideoSeek) *string {
+		if v == nil {
+			return nil
+		}
+		return v.EndParameter
+	}).(pulumi.StringPtrOutput)
+}
+
+// Specifies the video playback start parameter in user request URLs.
+// The value contains up to `64` characters. Only letters, digits, and underscores (_) are allowed.
+func (o DomainConfigsVideoSeekPtrOutput) StartParameter() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *DomainConfigsVideoSeek) *string {
+		if v == nil {
+			return nil
+		}
+		return v.StartParameter
+	}).(pulumi.StringPtrOutput)
+}
+
+type DomainConfigsWebsocket struct {
+	// Specifies whether to enable client cert settings.
+	Enabled bool `pulumi:"enabled"`
+	// Specifies the duration from the time when a CDN node forwards an authentication request
+	// to the time when the CDN node receives the result returned by the remote authentication server. Enter `0` or a value
+	// ranging from `50` to `3,000`. The unit is millisecond.
+	Timeout *int `pulumi:"timeout"`
+}
+
+// DomainConfigsWebsocketInput is an input type that accepts DomainConfigsWebsocketArgs and DomainConfigsWebsocketOutput values.
+// You can construct a concrete instance of `DomainConfigsWebsocketInput` via:
+//
+//	DomainConfigsWebsocketArgs{...}
+type DomainConfigsWebsocketInput interface {
+	pulumi.Input
+
+	ToDomainConfigsWebsocketOutput() DomainConfigsWebsocketOutput
+	ToDomainConfigsWebsocketOutputWithContext(context.Context) DomainConfigsWebsocketOutput
+}
+
+type DomainConfigsWebsocketArgs struct {
+	// Specifies whether to enable client cert settings.
+	Enabled pulumi.BoolInput `pulumi:"enabled"`
+	// Specifies the duration from the time when a CDN node forwards an authentication request
+	// to the time when the CDN node receives the result returned by the remote authentication server. Enter `0` or a value
+	// ranging from `50` to `3,000`. The unit is millisecond.
+	Timeout pulumi.IntPtrInput `pulumi:"timeout"`
+}
+
+func (DomainConfigsWebsocketArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*DomainConfigsWebsocket)(nil)).Elem()
+}
+
+func (i DomainConfigsWebsocketArgs) ToDomainConfigsWebsocketOutput() DomainConfigsWebsocketOutput {
+	return i.ToDomainConfigsWebsocketOutputWithContext(context.Background())
+}
+
+func (i DomainConfigsWebsocketArgs) ToDomainConfigsWebsocketOutputWithContext(ctx context.Context) DomainConfigsWebsocketOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(DomainConfigsWebsocketOutput)
+}
+
+func (i DomainConfigsWebsocketArgs) ToDomainConfigsWebsocketPtrOutput() DomainConfigsWebsocketPtrOutput {
+	return i.ToDomainConfigsWebsocketPtrOutputWithContext(context.Background())
+}
+
+func (i DomainConfigsWebsocketArgs) ToDomainConfigsWebsocketPtrOutputWithContext(ctx context.Context) DomainConfigsWebsocketPtrOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(DomainConfigsWebsocketOutput).ToDomainConfigsWebsocketPtrOutputWithContext(ctx)
+}
+
+// DomainConfigsWebsocketPtrInput is an input type that accepts DomainConfigsWebsocketArgs, DomainConfigsWebsocketPtr and DomainConfigsWebsocketPtrOutput values.
+// You can construct a concrete instance of `DomainConfigsWebsocketPtrInput` via:
+//
+//	        DomainConfigsWebsocketArgs{...}
+//
+//	or:
+//
+//	        nil
+type DomainConfigsWebsocketPtrInput interface {
+	pulumi.Input
+
+	ToDomainConfigsWebsocketPtrOutput() DomainConfigsWebsocketPtrOutput
+	ToDomainConfigsWebsocketPtrOutputWithContext(context.Context) DomainConfigsWebsocketPtrOutput
+}
+
+type domainConfigsWebsocketPtrType DomainConfigsWebsocketArgs
+
+func DomainConfigsWebsocketPtr(v *DomainConfigsWebsocketArgs) DomainConfigsWebsocketPtrInput {
+	return (*domainConfigsWebsocketPtrType)(v)
+}
+
+func (*domainConfigsWebsocketPtrType) ElementType() reflect.Type {
+	return reflect.TypeOf((**DomainConfigsWebsocket)(nil)).Elem()
+}
+
+func (i *domainConfigsWebsocketPtrType) ToDomainConfigsWebsocketPtrOutput() DomainConfigsWebsocketPtrOutput {
+	return i.ToDomainConfigsWebsocketPtrOutputWithContext(context.Background())
+}
+
+func (i *domainConfigsWebsocketPtrType) ToDomainConfigsWebsocketPtrOutputWithContext(ctx context.Context) DomainConfigsWebsocketPtrOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(DomainConfigsWebsocketPtrOutput)
+}
+
+type DomainConfigsWebsocketOutput struct{ *pulumi.OutputState }
+
+func (DomainConfigsWebsocketOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*DomainConfigsWebsocket)(nil)).Elem()
+}
+
+func (o DomainConfigsWebsocketOutput) ToDomainConfigsWebsocketOutput() DomainConfigsWebsocketOutput {
+	return o
+}
+
+func (o DomainConfigsWebsocketOutput) ToDomainConfigsWebsocketOutputWithContext(ctx context.Context) DomainConfigsWebsocketOutput {
+	return o
+}
+
+func (o DomainConfigsWebsocketOutput) ToDomainConfigsWebsocketPtrOutput() DomainConfigsWebsocketPtrOutput {
+	return o.ToDomainConfigsWebsocketPtrOutputWithContext(context.Background())
+}
+
+func (o DomainConfigsWebsocketOutput) ToDomainConfigsWebsocketPtrOutputWithContext(ctx context.Context) DomainConfigsWebsocketPtrOutput {
+	return o.ApplyTWithContext(ctx, func(_ context.Context, v DomainConfigsWebsocket) *DomainConfigsWebsocket {
+		return &v
+	}).(DomainConfigsWebsocketPtrOutput)
+}
+
+// Specifies whether to enable client cert settings.
+func (o DomainConfigsWebsocketOutput) Enabled() pulumi.BoolOutput {
+	return o.ApplyT(func(v DomainConfigsWebsocket) bool { return v.Enabled }).(pulumi.BoolOutput)
+}
+
+// Specifies the duration from the time when a CDN node forwards an authentication request
+// to the time when the CDN node receives the result returned by the remote authentication server. Enter `0` or a value
+// ranging from `50` to `3,000`. The unit is millisecond.
+func (o DomainConfigsWebsocketOutput) Timeout() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v DomainConfigsWebsocket) *int { return v.Timeout }).(pulumi.IntPtrOutput)
+}
+
+type DomainConfigsWebsocketPtrOutput struct{ *pulumi.OutputState }
+
+func (DomainConfigsWebsocketPtrOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((**DomainConfigsWebsocket)(nil)).Elem()
+}
+
+func (o DomainConfigsWebsocketPtrOutput) ToDomainConfigsWebsocketPtrOutput() DomainConfigsWebsocketPtrOutput {
+	return o
+}
+
+func (o DomainConfigsWebsocketPtrOutput) ToDomainConfigsWebsocketPtrOutputWithContext(ctx context.Context) DomainConfigsWebsocketPtrOutput {
+	return o
+}
+
+func (o DomainConfigsWebsocketPtrOutput) Elem() DomainConfigsWebsocketOutput {
+	return o.ApplyT(func(v *DomainConfigsWebsocket) DomainConfigsWebsocket {
+		if v != nil {
+			return *v
+		}
+		var ret DomainConfigsWebsocket
+		return ret
+	}).(DomainConfigsWebsocketOutput)
+}
+
+// Specifies whether to enable client cert settings.
+func (o DomainConfigsWebsocketPtrOutput) Enabled() pulumi.BoolPtrOutput {
+	return o.ApplyT(func(v *DomainConfigsWebsocket) *bool {
+		if v == nil {
+			return nil
+		}
+		return &v.Enabled
+	}).(pulumi.BoolPtrOutput)
+}
+
+// Specifies the duration from the time when a CDN node forwards an authentication request
+// to the time when the CDN node receives the result returned by the remote authentication server. Enter `0` or a value
+// ranging from `50` to `3,000`. The unit is millisecond.
+func (o DomainConfigsWebsocketPtrOutput) Timeout() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v *DomainConfigsWebsocket) *int {
+		if v == nil {
+			return nil
+		}
+		return v.Timeout
+	}).(pulumi.IntPtrOutput)
+}
+
 type DomainSource struct {
-	// Whether an origin server is active or standby (1: active; 0: standby). The default value is
-	// 1.
+	// Specifies whether the origin server is primary or standby. Valid values are as follows:
+	// + **1**: Primary.
+	// + **0**: Standby.
 	Active *int `pulumi:"active"`
-	// Specifies the HTTP port. Default value: **80**.
+	// Specifies the HTTP port, ranging from `1` to `65,535`. Defaults to **80**.
 	HttpPort *int `pulumi:"httpPort"`
-	// Specifies the HTTPS port. Default value: **443**.
+	// Specifies the HTTPS port, ranging from `1` to `65,535`. Defaults to **443**.
 	HttpsPort *int `pulumi:"httpsPort"`
-	// Whether to enable static website hosting for the OBS bucket.
-	// This parameter is mandatory when the `originType` is **obs_bucket**.
+	// Specifies the OBS bucket type. Valid values are **private** and **public**.
+	// This field is required when `sourcesType` is set to **obs_bucket**.
+	ObsBucketType *string `pulumi:"obsBucketType"`
+	// Specifies whether to enable static website hosting for the OBS bucket.
+	// This parameter is valid only when the `originType` is set to **obs_bucket**. Defaults to **false**.
 	ObsWebHostingEnabled *bool `pulumi:"obsWebHostingEnabled"`
-	// The domain name or IP address of the origin server.
+	// Specifies the unique domain name or IP address of the origin server.
+	// + If `originType` is set to **ipaddr**, this field can only be set to IPv4 address.
+	// + If `originType` is set to **domain**, this field can only be set to domain name.
+	// + If `originType` is set to **obs_bucket**, this field can only be set to OBS bucket domain name. The OBS bucket
+	//   domain name must end with `.myhuaweicloud.com` or `.myhuaweicloud.cn`.
 	Origin string `pulumi:"origin"`
-	// The origin server type. The valid values are 'ipaddr', 'domain', and 'obs_bucket'.
+	// Specifies the origin server type. The valid values are as follows:
+	// + **ipaddr**: Origin server IP address.
+	// + **domain**: Origin server domain name.
+	// + **obs_bucket**: OBS bucket domain name.
 	OriginType string `pulumi:"originType"`
-	// Specifies the retrieval host. The default value is the acceleration domain name.
+	// Specifies the retrieval host. Things to note when using this field are as follows:
+	// + If `originType` is set to **ipaddr** or **domain**, the acceleration domain name will be used by default.
+	// + If `originType` is set to **obs_bucket**, the bucket's domain name will be used by default.
 	RetrievalHost *string `pulumi:"retrievalHost"`
+	// Specifies the weight. The value ranges from `1` to `100`. Defaults to `50`.
+	// A larger value indicates a larger number of times that content is pulled from this IP address.
+	Weight *int `pulumi:"weight"`
 }
 
 // DomainSourceInput is an input type that accepts DomainSourceArgs and DomainSourceOutput values.
@@ -2060,22 +7605,38 @@ type DomainSourceInput interface {
 }
 
 type DomainSourceArgs struct {
-	// Whether an origin server is active or standby (1: active; 0: standby). The default value is
-	// 1.
+	// Specifies whether the origin server is primary or standby. Valid values are as follows:
+	// + **1**: Primary.
+	// + **0**: Standby.
 	Active pulumi.IntPtrInput `pulumi:"active"`
-	// Specifies the HTTP port. Default value: **80**.
+	// Specifies the HTTP port, ranging from `1` to `65,535`. Defaults to **80**.
 	HttpPort pulumi.IntPtrInput `pulumi:"httpPort"`
-	// Specifies the HTTPS port. Default value: **443**.
+	// Specifies the HTTPS port, ranging from `1` to `65,535`. Defaults to **443**.
 	HttpsPort pulumi.IntPtrInput `pulumi:"httpsPort"`
-	// Whether to enable static website hosting for the OBS bucket.
-	// This parameter is mandatory when the `originType` is **obs_bucket**.
+	// Specifies the OBS bucket type. Valid values are **private** and **public**.
+	// This field is required when `sourcesType` is set to **obs_bucket**.
+	ObsBucketType pulumi.StringPtrInput `pulumi:"obsBucketType"`
+	// Specifies whether to enable static website hosting for the OBS bucket.
+	// This parameter is valid only when the `originType` is set to **obs_bucket**. Defaults to **false**.
 	ObsWebHostingEnabled pulumi.BoolPtrInput `pulumi:"obsWebHostingEnabled"`
-	// The domain name or IP address of the origin server.
+	// Specifies the unique domain name or IP address of the origin server.
+	// + If `originType` is set to **ipaddr**, this field can only be set to IPv4 address.
+	// + If `originType` is set to **domain**, this field can only be set to domain name.
+	// + If `originType` is set to **obs_bucket**, this field can only be set to OBS bucket domain name. The OBS bucket
+	//   domain name must end with `.myhuaweicloud.com` or `.myhuaweicloud.cn`.
 	Origin pulumi.StringInput `pulumi:"origin"`
-	// The origin server type. The valid values are 'ipaddr', 'domain', and 'obs_bucket'.
+	// Specifies the origin server type. The valid values are as follows:
+	// + **ipaddr**: Origin server IP address.
+	// + **domain**: Origin server domain name.
+	// + **obs_bucket**: OBS bucket domain name.
 	OriginType pulumi.StringInput `pulumi:"originType"`
-	// Specifies the retrieval host. The default value is the acceleration domain name.
+	// Specifies the retrieval host. Things to note when using this field are as follows:
+	// + If `originType` is set to **ipaddr** or **domain**, the acceleration domain name will be used by default.
+	// + If `originType` is set to **obs_bucket**, the bucket's domain name will be used by default.
 	RetrievalHost pulumi.StringPtrInput `pulumi:"retrievalHost"`
+	// Specifies the weight. The value ranges from `1` to `100`. Defaults to `50`.
+	// A larger value indicates a larger number of times that content is pulled from this IP address.
+	Weight pulumi.IntPtrInput `pulumi:"weight"`
 }
 
 func (DomainSourceArgs) ElementType() reflect.Type {
@@ -2129,41 +7690,63 @@ func (o DomainSourceOutput) ToDomainSourceOutputWithContext(ctx context.Context)
 	return o
 }
 
-// Whether an origin server is active or standby (1: active; 0: standby). The default value is
-// 1.
+// Specifies whether the origin server is primary or standby. Valid values are as follows:
+// + **1**: Primary.
+// + **0**: Standby.
 func (o DomainSourceOutput) Active() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v DomainSource) *int { return v.Active }).(pulumi.IntPtrOutput)
 }
 
-// Specifies the HTTP port. Default value: **80**.
+// Specifies the HTTP port, ranging from `1` to `65,535`. Defaults to **80**.
 func (o DomainSourceOutput) HttpPort() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v DomainSource) *int { return v.HttpPort }).(pulumi.IntPtrOutput)
 }
 
-// Specifies the HTTPS port. Default value: **443**.
+// Specifies the HTTPS port, ranging from `1` to `65,535`. Defaults to **443**.
 func (o DomainSourceOutput) HttpsPort() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v DomainSource) *int { return v.HttpsPort }).(pulumi.IntPtrOutput)
 }
 
-// Whether to enable static website hosting for the OBS bucket.
-// This parameter is mandatory when the `originType` is **obs_bucket**.
+// Specifies the OBS bucket type. Valid values are **private** and **public**.
+// This field is required when `sourcesType` is set to **obs_bucket**.
+func (o DomainSourceOutput) ObsBucketType() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v DomainSource) *string { return v.ObsBucketType }).(pulumi.StringPtrOutput)
+}
+
+// Specifies whether to enable static website hosting for the OBS bucket.
+// This parameter is valid only when the `originType` is set to **obs_bucket**. Defaults to **false**.
 func (o DomainSourceOutput) ObsWebHostingEnabled() pulumi.BoolPtrOutput {
 	return o.ApplyT(func(v DomainSource) *bool { return v.ObsWebHostingEnabled }).(pulumi.BoolPtrOutput)
 }
 
-// The domain name or IP address of the origin server.
+// Specifies the unique domain name or IP address of the origin server.
+//   - If `originType` is set to **ipaddr**, this field can only be set to IPv4 address.
+//   - If `originType` is set to **domain**, this field can only be set to domain name.
+//   - If `originType` is set to **obs_bucket**, this field can only be set to OBS bucket domain name. The OBS bucket
+//     domain name must end with `.myhuaweicloud.com` or `.myhuaweicloud.cn`.
 func (o DomainSourceOutput) Origin() pulumi.StringOutput {
 	return o.ApplyT(func(v DomainSource) string { return v.Origin }).(pulumi.StringOutput)
 }
 
-// The origin server type. The valid values are 'ipaddr', 'domain', and 'obs_bucket'.
+// Specifies the origin server type. The valid values are as follows:
+// + **ipaddr**: Origin server IP address.
+// + **domain**: Origin server domain name.
+// + **obs_bucket**: OBS bucket domain name.
 func (o DomainSourceOutput) OriginType() pulumi.StringOutput {
 	return o.ApplyT(func(v DomainSource) string { return v.OriginType }).(pulumi.StringOutput)
 }
 
-// Specifies the retrieval host. The default value is the acceleration domain name.
+// Specifies the retrieval host. Things to note when using this field are as follows:
+// + If `originType` is set to **ipaddr** or **domain**, the acceleration domain name will be used by default.
+// + If `originType` is set to **obs_bucket**, the bucket's domain name will be used by default.
 func (o DomainSourceOutput) RetrievalHost() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v DomainSource) *string { return v.RetrievalHost }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the weight. The value ranges from `1` to `100`. Defaults to `50`.
+// A larger value indicates a larger number of times that content is pulled from this IP address.
+func (o DomainSourceOutput) Weight() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v DomainSource) *int { return v.Weight }).(pulumi.IntPtrOutput)
 }
 
 type DomainSourceArrayOutput struct{ *pulumi.OutputState }
@@ -2193,20 +7776,69 @@ func init() {
 	pulumi.RegisterInputType(reflect.TypeOf((*DomainCacheSettingsRuleArrayInput)(nil)).Elem(), DomainCacheSettingsRuleArray{})
 	pulumi.RegisterInputType(reflect.TypeOf((*DomainConfigsInput)(nil)).Elem(), DomainConfigsArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*DomainConfigsPtrInput)(nil)).Elem(), DomainConfigsArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*DomainConfigsAccessAreaFilterInput)(nil)).Elem(), DomainConfigsAccessAreaFilterArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*DomainConfigsAccessAreaFilterArrayInput)(nil)).Elem(), DomainConfigsAccessAreaFilterArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*DomainConfigsBrowserCacheRuleInput)(nil)).Elem(), DomainConfigsBrowserCacheRuleArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*DomainConfigsBrowserCacheRuleArrayInput)(nil)).Elem(), DomainConfigsBrowserCacheRuleArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*DomainConfigsBrowserCacheRuleConditionInput)(nil)).Elem(), DomainConfigsBrowserCacheRuleConditionArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*DomainConfigsCacheUrlParameterFilterInput)(nil)).Elem(), DomainConfigsCacheUrlParameterFilterArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*DomainConfigsCacheUrlParameterFilterPtrInput)(nil)).Elem(), DomainConfigsCacheUrlParameterFilterArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*DomainConfigsClientCertInput)(nil)).Elem(), DomainConfigsClientCertArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*DomainConfigsClientCertPtrInput)(nil)).Elem(), DomainConfigsClientCertArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*DomainConfigsCompressInput)(nil)).Elem(), DomainConfigsCompressArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*DomainConfigsCompressPtrInput)(nil)).Elem(), DomainConfigsCompressArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*DomainConfigsErrorCodeCachInput)(nil)).Elem(), DomainConfigsErrorCodeCachArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*DomainConfigsErrorCodeCachArrayInput)(nil)).Elem(), DomainConfigsErrorCodeCachArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*DomainConfigsErrorCodeRedirectRuleInput)(nil)).Elem(), DomainConfigsErrorCodeRedirectRuleArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*DomainConfigsErrorCodeRedirectRuleArrayInput)(nil)).Elem(), DomainConfigsErrorCodeRedirectRuleArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*DomainConfigsFlexibleOriginInput)(nil)).Elem(), DomainConfigsFlexibleOriginArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*DomainConfigsFlexibleOriginArrayInput)(nil)).Elem(), DomainConfigsFlexibleOriginArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*DomainConfigsFlexibleOriginBackSourcesInput)(nil)).Elem(), DomainConfigsFlexibleOriginBackSourcesArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*DomainConfigsForceRedirectInput)(nil)).Elem(), DomainConfigsForceRedirectArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*DomainConfigsForceRedirectPtrInput)(nil)).Elem(), DomainConfigsForceRedirectArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*DomainConfigsHstsInput)(nil)).Elem(), DomainConfigsHstsArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*DomainConfigsHstsPtrInput)(nil)).Elem(), DomainConfigsHstsArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*DomainConfigsHttpResponseHeaderInput)(nil)).Elem(), DomainConfigsHttpResponseHeaderArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*DomainConfigsHttpResponseHeaderArrayInput)(nil)).Elem(), DomainConfigsHttpResponseHeaderArray{})
 	pulumi.RegisterInputType(reflect.TypeOf((*DomainConfigsHttpsSettingsInput)(nil)).Elem(), DomainConfigsHttpsSettingsArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*DomainConfigsHttpsSettingsPtrInput)(nil)).Elem(), DomainConfigsHttpsSettingsArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*DomainConfigsIpFilterInput)(nil)).Elem(), DomainConfigsIpFilterArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*DomainConfigsIpFilterPtrInput)(nil)).Elem(), DomainConfigsIpFilterArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*DomainConfigsIpFrequencyLimitInput)(nil)).Elem(), DomainConfigsIpFrequencyLimitArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*DomainConfigsIpFrequencyLimitPtrInput)(nil)).Elem(), DomainConfigsIpFrequencyLimitArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*DomainConfigsOriginRequestUrlRewriteInput)(nil)).Elem(), DomainConfigsOriginRequestUrlRewriteArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*DomainConfigsOriginRequestUrlRewriteArrayInput)(nil)).Elem(), DomainConfigsOriginRequestUrlRewriteArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*DomainConfigsQuicInput)(nil)).Elem(), DomainConfigsQuicArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*DomainConfigsQuicPtrInput)(nil)).Elem(), DomainConfigsQuicArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*DomainConfigsRefererInput)(nil)).Elem(), DomainConfigsRefererArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*DomainConfigsRefererPtrInput)(nil)).Elem(), DomainConfigsRefererArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*DomainConfigsRemoteAuthInput)(nil)).Elem(), DomainConfigsRemoteAuthArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*DomainConfigsRemoteAuthPtrInput)(nil)).Elem(), DomainConfigsRemoteAuthArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*DomainConfigsRemoteAuthRemoteAuthRulesInput)(nil)).Elem(), DomainConfigsRemoteAuthRemoteAuthRulesArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*DomainConfigsRemoteAuthRemoteAuthRulesPtrInput)(nil)).Elem(), DomainConfigsRemoteAuthRemoteAuthRulesArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*DomainConfigsRemoteAuthRemoteAuthRulesAddCustomArgsRuleInput)(nil)).Elem(), DomainConfigsRemoteAuthRemoteAuthRulesAddCustomArgsRuleArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*DomainConfigsRemoteAuthRemoteAuthRulesAddCustomArgsRuleArrayInput)(nil)).Elem(), DomainConfigsRemoteAuthRemoteAuthRulesAddCustomArgsRuleArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*DomainConfigsRemoteAuthRemoteAuthRulesAddCustomHeadersRuleInput)(nil)).Elem(), DomainConfigsRemoteAuthRemoteAuthRulesAddCustomHeadersRuleArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*DomainConfigsRemoteAuthRemoteAuthRulesAddCustomHeadersRuleArrayInput)(nil)).Elem(), DomainConfigsRemoteAuthRemoteAuthRulesAddCustomHeadersRuleArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*DomainConfigsRequestLimitRuleInput)(nil)).Elem(), DomainConfigsRequestLimitRuleArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*DomainConfigsRequestLimitRuleArrayInput)(nil)).Elem(), DomainConfigsRequestLimitRuleArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*DomainConfigsRequestUrlRewriteInput)(nil)).Elem(), DomainConfigsRequestUrlRewriteArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*DomainConfigsRequestUrlRewriteArrayInput)(nil)).Elem(), DomainConfigsRequestUrlRewriteArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*DomainConfigsRequestUrlRewriteConditionInput)(nil)).Elem(), DomainConfigsRequestUrlRewriteConditionArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*DomainConfigsRetrievalRequestHeaderInput)(nil)).Elem(), DomainConfigsRetrievalRequestHeaderArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*DomainConfigsRetrievalRequestHeaderArrayInput)(nil)).Elem(), DomainConfigsRetrievalRequestHeaderArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*DomainConfigsSniInput)(nil)).Elem(), DomainConfigsSniArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*DomainConfigsSniPtrInput)(nil)).Elem(), DomainConfigsSniArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*DomainConfigsUrlSigningInput)(nil)).Elem(), DomainConfigsUrlSigningArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*DomainConfigsUrlSigningPtrInput)(nil)).Elem(), DomainConfigsUrlSigningArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*DomainConfigsUrlSigningInheritConfigInput)(nil)).Elem(), DomainConfigsUrlSigningInheritConfigArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*DomainConfigsUrlSigningInheritConfigPtrInput)(nil)).Elem(), DomainConfigsUrlSigningInheritConfigArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*DomainConfigsUserAgentFilterInput)(nil)).Elem(), DomainConfigsUserAgentFilterArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*DomainConfigsUserAgentFilterPtrInput)(nil)).Elem(), DomainConfigsUserAgentFilterArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*DomainConfigsVideoSeekInput)(nil)).Elem(), DomainConfigsVideoSeekArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*DomainConfigsVideoSeekPtrInput)(nil)).Elem(), DomainConfigsVideoSeekArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*DomainConfigsWebsocketInput)(nil)).Elem(), DomainConfigsWebsocketArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*DomainConfigsWebsocketPtrInput)(nil)).Elem(), DomainConfigsWebsocketArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*DomainSourceInput)(nil)).Elem(), DomainSourceArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*DomainSourceArrayInput)(nil)).Elem(), DomainSourceArray{})
 	pulumi.RegisterOutputType(DomainCacheSettingsOutput{})
@@ -2215,20 +7847,69 @@ func init() {
 	pulumi.RegisterOutputType(DomainCacheSettingsRuleArrayOutput{})
 	pulumi.RegisterOutputType(DomainConfigsOutput{})
 	pulumi.RegisterOutputType(DomainConfigsPtrOutput{})
+	pulumi.RegisterOutputType(DomainConfigsAccessAreaFilterOutput{})
+	pulumi.RegisterOutputType(DomainConfigsAccessAreaFilterArrayOutput{})
+	pulumi.RegisterOutputType(DomainConfigsBrowserCacheRuleOutput{})
+	pulumi.RegisterOutputType(DomainConfigsBrowserCacheRuleArrayOutput{})
+	pulumi.RegisterOutputType(DomainConfigsBrowserCacheRuleConditionOutput{})
 	pulumi.RegisterOutputType(DomainConfigsCacheUrlParameterFilterOutput{})
 	pulumi.RegisterOutputType(DomainConfigsCacheUrlParameterFilterPtrOutput{})
+	pulumi.RegisterOutputType(DomainConfigsClientCertOutput{})
+	pulumi.RegisterOutputType(DomainConfigsClientCertPtrOutput{})
 	pulumi.RegisterOutputType(DomainConfigsCompressOutput{})
 	pulumi.RegisterOutputType(DomainConfigsCompressPtrOutput{})
+	pulumi.RegisterOutputType(DomainConfigsErrorCodeCachOutput{})
+	pulumi.RegisterOutputType(DomainConfigsErrorCodeCachArrayOutput{})
+	pulumi.RegisterOutputType(DomainConfigsErrorCodeRedirectRuleOutput{})
+	pulumi.RegisterOutputType(DomainConfigsErrorCodeRedirectRuleArrayOutput{})
+	pulumi.RegisterOutputType(DomainConfigsFlexibleOriginOutput{})
+	pulumi.RegisterOutputType(DomainConfigsFlexibleOriginArrayOutput{})
+	pulumi.RegisterOutputType(DomainConfigsFlexibleOriginBackSourcesOutput{})
 	pulumi.RegisterOutputType(DomainConfigsForceRedirectOutput{})
 	pulumi.RegisterOutputType(DomainConfigsForceRedirectPtrOutput{})
+	pulumi.RegisterOutputType(DomainConfigsHstsOutput{})
+	pulumi.RegisterOutputType(DomainConfigsHstsPtrOutput{})
 	pulumi.RegisterOutputType(DomainConfigsHttpResponseHeaderOutput{})
 	pulumi.RegisterOutputType(DomainConfigsHttpResponseHeaderArrayOutput{})
 	pulumi.RegisterOutputType(DomainConfigsHttpsSettingsOutput{})
 	pulumi.RegisterOutputType(DomainConfigsHttpsSettingsPtrOutput{})
+	pulumi.RegisterOutputType(DomainConfigsIpFilterOutput{})
+	pulumi.RegisterOutputType(DomainConfigsIpFilterPtrOutput{})
+	pulumi.RegisterOutputType(DomainConfigsIpFrequencyLimitOutput{})
+	pulumi.RegisterOutputType(DomainConfigsIpFrequencyLimitPtrOutput{})
+	pulumi.RegisterOutputType(DomainConfigsOriginRequestUrlRewriteOutput{})
+	pulumi.RegisterOutputType(DomainConfigsOriginRequestUrlRewriteArrayOutput{})
+	pulumi.RegisterOutputType(DomainConfigsQuicOutput{})
+	pulumi.RegisterOutputType(DomainConfigsQuicPtrOutput{})
+	pulumi.RegisterOutputType(DomainConfigsRefererOutput{})
+	pulumi.RegisterOutputType(DomainConfigsRefererPtrOutput{})
+	pulumi.RegisterOutputType(DomainConfigsRemoteAuthOutput{})
+	pulumi.RegisterOutputType(DomainConfigsRemoteAuthPtrOutput{})
+	pulumi.RegisterOutputType(DomainConfigsRemoteAuthRemoteAuthRulesOutput{})
+	pulumi.RegisterOutputType(DomainConfigsRemoteAuthRemoteAuthRulesPtrOutput{})
+	pulumi.RegisterOutputType(DomainConfigsRemoteAuthRemoteAuthRulesAddCustomArgsRuleOutput{})
+	pulumi.RegisterOutputType(DomainConfigsRemoteAuthRemoteAuthRulesAddCustomArgsRuleArrayOutput{})
+	pulumi.RegisterOutputType(DomainConfigsRemoteAuthRemoteAuthRulesAddCustomHeadersRuleOutput{})
+	pulumi.RegisterOutputType(DomainConfigsRemoteAuthRemoteAuthRulesAddCustomHeadersRuleArrayOutput{})
+	pulumi.RegisterOutputType(DomainConfigsRequestLimitRuleOutput{})
+	pulumi.RegisterOutputType(DomainConfigsRequestLimitRuleArrayOutput{})
+	pulumi.RegisterOutputType(DomainConfigsRequestUrlRewriteOutput{})
+	pulumi.RegisterOutputType(DomainConfigsRequestUrlRewriteArrayOutput{})
+	pulumi.RegisterOutputType(DomainConfigsRequestUrlRewriteConditionOutput{})
 	pulumi.RegisterOutputType(DomainConfigsRetrievalRequestHeaderOutput{})
 	pulumi.RegisterOutputType(DomainConfigsRetrievalRequestHeaderArrayOutput{})
+	pulumi.RegisterOutputType(DomainConfigsSniOutput{})
+	pulumi.RegisterOutputType(DomainConfigsSniPtrOutput{})
 	pulumi.RegisterOutputType(DomainConfigsUrlSigningOutput{})
 	pulumi.RegisterOutputType(DomainConfigsUrlSigningPtrOutput{})
+	pulumi.RegisterOutputType(DomainConfigsUrlSigningInheritConfigOutput{})
+	pulumi.RegisterOutputType(DomainConfigsUrlSigningInheritConfigPtrOutput{})
+	pulumi.RegisterOutputType(DomainConfigsUserAgentFilterOutput{})
+	pulumi.RegisterOutputType(DomainConfigsUserAgentFilterPtrOutput{})
+	pulumi.RegisterOutputType(DomainConfigsVideoSeekOutput{})
+	pulumi.RegisterOutputType(DomainConfigsVideoSeekPtrOutput{})
+	pulumi.RegisterOutputType(DomainConfigsWebsocketOutput{})
+	pulumi.RegisterOutputType(DomainConfigsWebsocketPtrOutput{})
 	pulumi.RegisterOutputType(DomainSourceOutput{})
 	pulumi.RegisterOutputType(DomainSourceArrayOutput{})
 }

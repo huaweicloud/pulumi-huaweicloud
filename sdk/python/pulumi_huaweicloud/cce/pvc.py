@@ -44,9 +44,10 @@ class PvcArgs:
                Changing this will create a new PVC resource.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] labels: Specifies the map of string keys and values for labels.
                Changing this will create a new PVC resource.
-        :param pulumi.Input[str] name: Specifies the unique name of the PVC resource. This parameter can contain a
-               maximum of 63 characters, which may consist of lowercase letters, digits and hyphens (-), and must start and end with
-               lowercase letters and digits. Changing this will create a new PVC resource.
+        :param pulumi.Input[str] name: Specifies the unique name of the PVC resource.  
+               This parameter can contain a maximum of `63` characters, which may consist of lowercase letters, digits and
+               hyphens (-), and must start and end with lowercase letters and digits.
+               Changing this will create a new PVC resource.
         :param pulumi.Input[str] region: Specifies the region in which to create the PVC resource.
                If omitted, the provider-level region will be used. Changing this will create a new PVC resource.
         """
@@ -164,9 +165,10 @@ class PvcArgs:
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the unique name of the PVC resource. This parameter can contain a
-        maximum of 63 characters, which may consist of lowercase letters, digits and hyphens (-), and must start and end with
-        lowercase letters and digits. Changing this will create a new PVC resource.
+        Specifies the unique name of the PVC resource.  
+        This parameter can contain a maximum of `63` characters, which may consist of lowercase letters, digits and
+        hyphens (-), and must start and end with lowercase letters and digits.
+        Changing this will create a new PVC resource.
         """
         return pulumi.get(self, "name")
 
@@ -215,9 +217,10 @@ class _PvcState:
         :param pulumi.Input[str] creation_timestamp: The server time when PVC was created.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] labels: Specifies the map of string keys and values for labels.
                Changing this will create a new PVC resource.
-        :param pulumi.Input[str] name: Specifies the unique name of the PVC resource. This parameter can contain a
-               maximum of 63 characters, which may consist of lowercase letters, digits and hyphens (-), and must start and end with
-               lowercase letters and digits. Changing this will create a new PVC resource.
+        :param pulumi.Input[str] name: Specifies the unique name of the PVC resource.  
+               This parameter can contain a maximum of `63` characters, which may consist of lowercase letters, digits and
+               hyphens (-), and must start and end with lowercase letters and digits.
+               Changing this will create a new PVC resource.
         :param pulumi.Input[str] namespace: Specifies the namespace to logically divide your containers into different
                group. Changing this will create a new PVC resource.
         :param pulumi.Input[str] region: Specifies the region in which to create the PVC resource.
@@ -326,9 +329,10 @@ class _PvcState:
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the unique name of the PVC resource. This parameter can contain a
-        maximum of 63 characters, which may consist of lowercase letters, digits and hyphens (-), and must start and end with
-        lowercase letters and digits. Changing this will create a new PVC resource.
+        Specifies the unique name of the PVC resource.  
+        This parameter can contain a maximum of `63` characters, which may consist of lowercase letters, digits and
+        hyphens (-), and must start and end with lowercase letters and digits.
+        Changing this will create a new PVC resource.
         """
         return pulumi.get(self, "name")
 
@@ -486,13 +490,13 @@ class Pvc(pulumi.CustomResource):
 
         ## Import
 
-        CCE PVC can be imported using the cluster ID, namespace and ID separated by slashes, e.g.
+        CCE PVC can be imported using the cluster ID, namespace and ID separated by slashes, e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:Cce/pvc:Pvc test 5c20fdad-7288-11eb-b817-0255ac10158b/default/fa540f3b-12d9-40e5-8268-04bcfed95a46
         ```
 
-         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`annotations`. It is generally recommended running `terraform plan` after importing a PVC. You can then decide if changes should be applied to the PVC, or the resource definition should be updated to align with the PVC. Also you can ignore changes as below. resource "huaweicloud_cce_pvc" "test" {
+         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`annotations`. It is generally recommended running `terraform plan` after importing a PVC. You can then decide if changes should be applied to the PVC, or the resource definition should be updated to align with the PVC. Also you can ignore changes as below. hcl resource "huaweicloud_cce_pvc" "test" {
 
          ...
 
@@ -518,9 +522,10 @@ class Pvc(pulumi.CustomResource):
         :param pulumi.Input[str] cluster_id: Specifies the cluster ID to which the CCE PVC belongs.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] labels: Specifies the map of string keys and values for labels.
                Changing this will create a new PVC resource.
-        :param pulumi.Input[str] name: Specifies the unique name of the PVC resource. This parameter can contain a
-               maximum of 63 characters, which may consist of lowercase letters, digits and hyphens (-), and must start and end with
-               lowercase letters and digits. Changing this will create a new PVC resource.
+        :param pulumi.Input[str] name: Specifies the unique name of the PVC resource.  
+               This parameter can contain a maximum of `63` characters, which may consist of lowercase letters, digits and
+               hyphens (-), and must start and end with lowercase letters and digits.
+               Changing this will create a new PVC resource.
         :param pulumi.Input[str] namespace: Specifies the namespace to logically divide your containers into different
                group. Changing this will create a new PVC resource.
         :param pulumi.Input[str] region: Specifies the region in which to create the PVC resource.
@@ -604,13 +609,13 @@ class Pvc(pulumi.CustomResource):
 
         ## Import
 
-        CCE PVC can be imported using the cluster ID, namespace and ID separated by slashes, e.g.
+        CCE PVC can be imported using the cluster ID, namespace and ID separated by slashes, e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:Cce/pvc:Pvc test 5c20fdad-7288-11eb-b817-0255ac10158b/default/fa540f3b-12d9-40e5-8268-04bcfed95a46
         ```
 
-         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`annotations`. It is generally recommended running `terraform plan` after importing a PVC. You can then decide if changes should be applied to the PVC, or the resource definition should be updated to align with the PVC. Also you can ignore changes as below. resource "huaweicloud_cce_pvc" "test" {
+         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`annotations`. It is generally recommended running `terraform plan` after importing a PVC. You can then decide if changes should be applied to the PVC, or the resource definition should be updated to align with the PVC. Also you can ignore changes as below. hcl resource "huaweicloud_cce_pvc" "test" {
 
          ...
 
@@ -717,9 +722,10 @@ class Pvc(pulumi.CustomResource):
         :param pulumi.Input[str] creation_timestamp: The server time when PVC was created.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] labels: Specifies the map of string keys and values for labels.
                Changing this will create a new PVC resource.
-        :param pulumi.Input[str] name: Specifies the unique name of the PVC resource. This parameter can contain a
-               maximum of 63 characters, which may consist of lowercase letters, digits and hyphens (-), and must start and end with
-               lowercase letters and digits. Changing this will create a new PVC resource.
+        :param pulumi.Input[str] name: Specifies the unique name of the PVC resource.  
+               This parameter can contain a maximum of `63` characters, which may consist of lowercase letters, digits and
+               hyphens (-), and must start and end with lowercase letters and digits.
+               Changing this will create a new PVC resource.
         :param pulumi.Input[str] namespace: Specifies the namespace to logically divide your containers into different
                group. Changing this will create a new PVC resource.
         :param pulumi.Input[str] region: Specifies the region in which to create the PVC resource.
@@ -802,9 +808,10 @@ class Pvc(pulumi.CustomResource):
     @pulumi.getter
     def name(self) -> pulumi.Output[str]:
         """
-        Specifies the unique name of the PVC resource. This parameter can contain a
-        maximum of 63 characters, which may consist of lowercase letters, digits and hyphens (-), and must start and end with
-        lowercase letters and digits. Changing this will create a new PVC resource.
+        Specifies the unique name of the PVC resource.  
+        This parameter can contain a maximum of `63` characters, which may consist of lowercase letters, digits and
+        hyphens (-), and must start and end with lowercase letters and digits.
+        Changing this will create a new PVC resource.
         """
         return pulumi.get(self, "name")
 

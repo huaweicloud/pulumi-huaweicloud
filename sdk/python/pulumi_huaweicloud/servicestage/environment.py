@@ -30,11 +30,11 @@ class EnvironmentArgs:
         :param pulumi.Input[str] vpc_id: Specifies the VPC ID to which the environment belongs.
                Changing this will create a new resource.
         :param pulumi.Input[str] description: Specifies the environment description.
-               The description can contain a maximum of 128 characters.
-        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise projcet ID to which the application
+               The description can contain a maximum of `128` characters.
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID to which the application
                belongs. Changing this will create a new resource.
         :param pulumi.Input[str] name: Specifies the environment name.
-               The name can contain of 2 to 64 characters, only letters, digits, hyphens (-) and underscores (_) are allowed.
+               The name can contain of `2` to `64` characters, only letters, digits, hyphens (-) and underscores (_) are allowed.
                The name must start with a letter and end with a letter or a digit.
         :param pulumi.Input[Sequence[pulumi.Input['EnvironmentOptionalResourceArgs']]] optional_resources: Specifies the optional resources.
                The object structure is documented below.
@@ -85,7 +85,7 @@ class EnvironmentArgs:
     def description(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the environment description.
-        The description can contain a maximum of 128 characters.
+        The description can contain a maximum of `128` characters.
         """
         return pulumi.get(self, "description")
 
@@ -97,7 +97,7 @@ class EnvironmentArgs:
     @pulumi.getter(name="enterpriseProjectId")
     def enterprise_project_id(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the enterprise projcet ID to which the application
+        Specifies the enterprise project ID to which the application
         belongs. Changing this will create a new resource.
         """
         return pulumi.get(self, "enterprise_project_id")
@@ -111,7 +111,7 @@ class EnvironmentArgs:
     def name(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the environment name.
-        The name can contain of 2 to 64 characters, only letters, digits, hyphens (-) and underscores (_) are allowed.
+        The name can contain of `2` to `64` characters, only letters, digits, hyphens (-) and underscores (_) are allowed.
         The name must start with a letter and end with a letter or a digit.
         """
         return pulumi.get(self, "name")
@@ -162,11 +162,11 @@ class _EnvironmentState:
         :param pulumi.Input[Sequence[pulumi.Input['EnvironmentBasicResourceArgs']]] basic_resources: Specifies the basic resources.
                The object structure is documented below.
         :param pulumi.Input[str] description: Specifies the environment description.
-               The description can contain a maximum of 128 characters.
-        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise projcet ID to which the application
+               The description can contain a maximum of `128` characters.
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID to which the application
                belongs. Changing this will create a new resource.
         :param pulumi.Input[str] name: Specifies the environment name.
-               The name can contain of 2 to 64 characters, only letters, digits, hyphens (-) and underscores (_) are allowed.
+               The name can contain of `2` to `64` characters, only letters, digits, hyphens (-) and underscores (_) are allowed.
                The name must start with a letter and end with a letter or a digit.
         :param pulumi.Input[Sequence[pulumi.Input['EnvironmentOptionalResourceArgs']]] optional_resources: Specifies the optional resources.
                The object structure is documented below.
@@ -208,7 +208,7 @@ class _EnvironmentState:
     def description(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the environment description.
-        The description can contain a maximum of 128 characters.
+        The description can contain a maximum of `128` characters.
         """
         return pulumi.get(self, "description")
 
@@ -220,7 +220,7 @@ class _EnvironmentState:
     @pulumi.getter(name="enterpriseProjectId")
     def enterprise_project_id(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the enterprise projcet ID to which the application
+        Specifies the enterprise project ID to which the application
         belongs. Changing this will create a new resource.
         """
         return pulumi.get(self, "enterprise_project_id")
@@ -234,7 +234,7 @@ class _EnvironmentState:
     def name(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the environment name.
-        The name can contain of 2 to 64 characters, only letters, digits, hyphens (-) and underscores (_) are allowed.
+        The name can contain of `2` to `64` characters, only letters, digits, hyphens (-) and underscores (_) are allowed.
         The name must start with a letter and end with a letter or a digit.
         """
         return pulumi.get(self, "name")
@@ -327,7 +327,7 @@ class Environment(pulumi.CustomResource):
 
         ## Import
 
-        Environments can be imported using their `id`, e.g.
+        Environments can be imported using their `id`, e.g.bash
 
         ```sh
          $ pulumi import huaweicloud:ServiceStage/environment:Environment test 17383329-b686-47e4-8f70-0d8dcddb65e9
@@ -338,11 +338,11 @@ class Environment(pulumi.CustomResource):
         :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['EnvironmentBasicResourceArgs']]]] basic_resources: Specifies the basic resources.
                The object structure is documented below.
         :param pulumi.Input[str] description: Specifies the environment description.
-               The description can contain a maximum of 128 characters.
-        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise projcet ID to which the application
+               The description can contain a maximum of `128` characters.
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID to which the application
                belongs. Changing this will create a new resource.
         :param pulumi.Input[str] name: Specifies the environment name.
-               The name can contain of 2 to 64 characters, only letters, digits, hyphens (-) and underscores (_) are allowed.
+               The name can contain of `2` to `64` characters, only letters, digits, hyphens (-) and underscores (_) are allowed.
                The name must start with a letter and end with a letter or a digit.
         :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['EnvironmentOptionalResourceArgs']]]] optional_resources: Specifies the optional resources.
                The object structure is documented below.
@@ -388,7 +388,7 @@ class Environment(pulumi.CustomResource):
 
         ## Import
 
-        Environments can be imported using their `id`, e.g.
+        Environments can be imported using their `id`, e.g.bash
 
         ```sh
          $ pulumi import huaweicloud:ServiceStage/environment:Environment test 17383329-b686-47e4-8f70-0d8dcddb65e9
@@ -463,11 +463,11 @@ class Environment(pulumi.CustomResource):
         :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['EnvironmentBasicResourceArgs']]]] basic_resources: Specifies the basic resources.
                The object structure is documented below.
         :param pulumi.Input[str] description: Specifies the environment description.
-               The description can contain a maximum of 128 characters.
-        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise projcet ID to which the application
+               The description can contain a maximum of `128` characters.
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID to which the application
                belongs. Changing this will create a new resource.
         :param pulumi.Input[str] name: Specifies the environment name.
-               The name can contain of 2 to 64 characters, only letters, digits, hyphens (-) and underscores (_) are allowed.
+               The name can contain of `2` to `64` characters, only letters, digits, hyphens (-) and underscores (_) are allowed.
                The name must start with a letter and end with a letter or a digit.
         :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['EnvironmentOptionalResourceArgs']]]] optional_resources: Specifies the optional resources.
                The object structure is documented below.
@@ -503,7 +503,7 @@ class Environment(pulumi.CustomResource):
     def description(self) -> pulumi.Output[Optional[str]]:
         """
         Specifies the environment description.
-        The description can contain a maximum of 128 characters.
+        The description can contain a maximum of `128` characters.
         """
         return pulumi.get(self, "description")
 
@@ -511,7 +511,7 @@ class Environment(pulumi.CustomResource):
     @pulumi.getter(name="enterpriseProjectId")
     def enterprise_project_id(self) -> pulumi.Output[str]:
         """
-        Specifies the enterprise projcet ID to which the application
+        Specifies the enterprise project ID to which the application
         belongs. Changing this will create a new resource.
         """
         return pulumi.get(self, "enterprise_project_id")
@@ -521,7 +521,7 @@ class Environment(pulumi.CustomResource):
     def name(self) -> pulumi.Output[str]:
         """
         Specifies the environment name.
-        The name can contain of 2 to 64 characters, only letters, digits, hyphens (-) and underscores (_) are allowed.
+        The name can contain of `2` to `64` characters, only letters, digits, hyphens (-) and underscores (_) are allowed.
         The name must start with a letter and end with a letter or a digit.
         """
         return pulumi.get(self, "name")

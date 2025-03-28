@@ -182,6 +182,8 @@ class BucketPolicy(pulumi.CustomResource):
         """
         Attaches a policy to an OBS bucket resource.
 
+        > **NOTE:** When creating or updating the OBS bucket policy, the original policy will be overwritten.
+
         ## Example Usage
         ### Policy with OBS format
 
@@ -236,13 +238,13 @@ class BucketPolicy(pulumi.CustomResource):
 
         ## Import
 
-        OBS format bucket policy can be imported using the `<bucket>`, e.g.
+        OBS format bucket policy can be imported using the `<bucket>`, e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:Obs/bucketPolicy:BucketPolicy policy <bucket-name>
         ```
 
-         S3 foramt bucket policy can be imported using the `<bucket>` and "s3" by a slash, e.g.
+         S3 format bucket policy can be imported using the `<bucket>` and "s3" by a slash, e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:Obs/bucketPolicy:BucketPolicy s3_policy <bucket-name>/s3
@@ -268,6 +270,8 @@ class BucketPolicy(pulumi.CustomResource):
         """
         Attaches a policy to an OBS bucket resource.
 
+        > **NOTE:** When creating or updating the OBS bucket policy, the original policy will be overwritten.
+
         ## Example Usage
         ### Policy with OBS format
 
@@ -322,13 +326,13 @@ class BucketPolicy(pulumi.CustomResource):
 
         ## Import
 
-        OBS format bucket policy can be imported using the `<bucket>`, e.g.
+        OBS format bucket policy can be imported using the `<bucket>`, e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:Obs/bucketPolicy:BucketPolicy policy <bucket-name>
         ```
 
-         S3 foramt bucket policy can be imported using the `<bucket>` and "s3" by a slash, e.g.
+         S3 format bucket policy can be imported using the `<bucket>` and "s3" by a slash, e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:Obs/bucketPolicy:BucketPolicy s3_policy <bucket-name>/s3

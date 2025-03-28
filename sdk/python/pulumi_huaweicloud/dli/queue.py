@@ -8,6 +8,8 @@ import pulumi
 import pulumi.runtime
 from typing import Any, Mapping, Optional, Sequence, Union, overload
 from .. import _utilities
+from . import outputs
+from ._inputs import *
 
 __all__ = ['QueueArgs', 'Queue']
 
@@ -16,6 +18,7 @@ class QueueArgs:
     def __init__(__self__, *,
                  cu_count: pulumi.Input[int],
                  description: Optional[pulumi.Input[str]] = None,
+                 elastic_resource_pool_name: Optional[pulumi.Input[str]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  feature: Optional[pulumi.Input[str]] = None,
                  management_subnet_cidr: Optional[pulumi.Input[str]] = None,
@@ -24,15 +27,19 @@ class QueueArgs:
                  queue_type: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
                  resource_mode: Optional[pulumi.Input[int]] = None,
+                 scaling_policies: Optional[pulumi.Input[Sequence[pulumi.Input['QueueScalingPolicyArgs']]]] = None,
+                 spark_driver: Optional[pulumi.Input['QueueSparkDriverArgs']] = None,
                  subnet_cidr: Optional[pulumi.Input[str]] = None,
                  tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  vpc_cidr: Optional[pulumi.Input[str]] = None):
         """
         The set of arguments for constructing a Queue resource.
         :param pulumi.Input[int] cu_count: Minimum number of CUs that are bound to a queue. Initial value can be `16`,
-               `64`, or `256`. When scale_out or scale_in, the number must be a multiple of 16
+               `64`, or `256`. When scale_out or scale_in, the number must be a multiple of `16`.
         :param pulumi.Input[str] description: Description of a queue. Changing this parameter will create a new
                resource.
+        :param pulumi.Input[str] elastic_resource_pool_name: Specifies the name of the elastic resource pool to which the queue
+               belongs.
         :param pulumi.Input[str] enterprise_project_id: Enterprise project ID. The value 0 indicates the default
                enterprise project. Changing this parameter will create a new resource.
         :param pulumi.Input[str] feature: Indicates the queue feature. Changing this parameter will create a new
@@ -40,8 +47,8 @@ class QueueArgs:
                + basic: basic type (default value)
                + ai: AI-enhanced (Only the SQL x86_64 dedicated queue supports this option.)
         :param pulumi.Input[str] name: Name of a queue. Name of a newly created resource queue. The name can contain
-               only digits, letters, and underscores (\\_), but cannot contain only digits or start with an underscore (_). Length
-               range: 1 to 128 characters. Changing this parameter will create a new resource.
+               only digits, lowercase letters, and underscores (\\_), but cannot contain only digits or start with an underscore (_).
+               Length range: `1` to `128` characters. Changing this parameter will create a new resource.
         :param pulumi.Input[str] platform: CPU architecture of queue compute resources. Changing this parameter will
                create a new resource. The options are as follows:
                + x86_64 : default value
@@ -52,18 +59,25 @@ class QueueArgs:
                + general
         :param pulumi.Input[str] region: Specifies the region in which to create the dli queue resource. If omitted,
                the provider-level region will be used. Changing this will create a new VPC channel resource.
-        :param pulumi.Input[int] resource_mode: Queue resource mode. Changing this parameter will create a new
-               resource. The options are as follows:
-               + 0: indicates the shared resource mode.
+        :param pulumi.Input[int] resource_mode: Specifies the queue resource mode.  
+               The valid value is as follows:
                + 1: indicates the exclusive resource mode.
+        :param pulumi.Input[Sequence[pulumi.Input['QueueScalingPolicyArgs']]] scaling_policies: Specifies the list of scaling policies of the queue associated with
+               an elastic resource pool.
+               This parameter is only available if `resource_mode` is set to `1`.
+               If you want to use this parameter, you must ensure that there is a scaling policy with a time period from `00:00` to `24:00`.
+               The scaling_policies structure is documented below.
+        :param pulumi.Input['QueueSparkDriverArgs'] spark_driver: Specifies spark driver configuration of the queue.
+               This parameter is only available if `queue_type` is set to `sql`.
+               The spark_driver structure is documented below.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Label of a queue. Changing this parameter will create a new resource.
-        :param pulumi.Input[str] vpc_cidr: The CIDR block of a queue. If use DLI enhanced datasource connections, the CIDR block
-               cannot be the same as that of the data source.
-               The CIDR blocks supported by different CU specifications:
+        :param pulumi.Input[str] vpc_cidr: The CIDR block of the queue.
         """
         pulumi.set(__self__, "cu_count", cu_count)
         if description is not None:
             pulumi.set(__self__, "description", description)
+        if elastic_resource_pool_name is not None:
+            pulumi.set(__self__, "elastic_resource_pool_name", elastic_resource_pool_name)
         if enterprise_project_id is not None:
             pulumi.set(__self__, "enterprise_project_id", enterprise_project_id)
         if feature is not None:
@@ -83,6 +97,10 @@ class QueueArgs:
             pulumi.set(__self__, "region", region)
         if resource_mode is not None:
             pulumi.set(__self__, "resource_mode", resource_mode)
+        if scaling_policies is not None:
+            pulumi.set(__self__, "scaling_policies", scaling_policies)
+        if spark_driver is not None:
+            pulumi.set(__self__, "spark_driver", spark_driver)
         if subnet_cidr is not None:
             warnings.warn("""subnet_cidr is Deprecated""", DeprecationWarning)
             pulumi.log.warn("""subnet_cidr is deprecated: subnet_cidr is Deprecated""")
@@ -98,7 +116,7 @@ class QueueArgs:
     def cu_count(self) -> pulumi.Input[int]:
         """
         Minimum number of CUs that are bound to a queue. Initial value can be `16`,
-        `64`, or `256`. When scale_out or scale_in, the number must be a multiple of 16
+        `64`, or `256`. When scale_out or scale_in, the number must be a multiple of `16`.
         """
         return pulumi.get(self, "cu_count")
 
@@ -118,6 +136,19 @@ class QueueArgs:
     @description.setter
     def description(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "description", value)
+
+    @property
+    @pulumi.getter(name="elasticResourcePoolName")
+    def elastic_resource_pool_name(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the name of the elastic resource pool to which the queue
+        belongs.
+        """
+        return pulumi.get(self, "elastic_resource_pool_name")
+
+    @elastic_resource_pool_name.setter
+    def elastic_resource_pool_name(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "elastic_resource_pool_name", value)
 
     @property
     @pulumi.getter(name="enterpriseProjectId")
@@ -161,8 +192,8 @@ class QueueArgs:
     def name(self) -> Optional[pulumi.Input[str]]:
         """
         Name of a queue. Name of a newly created resource queue. The name can contain
-        only digits, letters, and underscores (\\_), but cannot contain only digits or start with an underscore (_). Length
-        range: 1 to 128 characters. Changing this parameter will create a new resource.
+        only digits, lowercase letters, and underscores (\\_), but cannot contain only digits or start with an underscore (_).
+        Length range: `1` to `128` characters. Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "name")
 
@@ -217,9 +248,8 @@ class QueueArgs:
     @pulumi.getter(name="resourceMode")
     def resource_mode(self) -> Optional[pulumi.Input[int]]:
         """
-        Queue resource mode. Changing this parameter will create a new
-        resource. The options are as follows:
-        + 0: indicates the shared resource mode.
+        Specifies the queue resource mode.  
+        The valid value is as follows:
         + 1: indicates the exclusive resource mode.
         """
         return pulumi.get(self, "resource_mode")
@@ -227,6 +257,36 @@ class QueueArgs:
     @resource_mode.setter
     def resource_mode(self, value: Optional[pulumi.Input[int]]):
         pulumi.set(self, "resource_mode", value)
+
+    @property
+    @pulumi.getter(name="scalingPolicies")
+    def scaling_policies(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['QueueScalingPolicyArgs']]]]:
+        """
+        Specifies the list of scaling policies of the queue associated with
+        an elastic resource pool.
+        This parameter is only available if `resource_mode` is set to `1`.
+        If you want to use this parameter, you must ensure that there is a scaling policy with a time period from `00:00` to `24:00`.
+        The scaling_policies structure is documented below.
+        """
+        return pulumi.get(self, "scaling_policies")
+
+    @scaling_policies.setter
+    def scaling_policies(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['QueueScalingPolicyArgs']]]]):
+        pulumi.set(self, "scaling_policies", value)
+
+    @property
+    @pulumi.getter(name="sparkDriver")
+    def spark_driver(self) -> Optional[pulumi.Input['QueueSparkDriverArgs']]:
+        """
+        Specifies spark driver configuration of the queue.
+        This parameter is only available if `queue_type` is set to `sql`.
+        The spark_driver structure is documented below.
+        """
+        return pulumi.get(self, "spark_driver")
+
+    @spark_driver.setter
+    def spark_driver(self, value: Optional[pulumi.Input['QueueSparkDriverArgs']]):
+        pulumi.set(self, "spark_driver", value)
 
     @property
     @pulumi.getter(name="subnetCidr")
@@ -253,9 +313,7 @@ class QueueArgs:
     @pulumi.getter(name="vpcCidr")
     def vpc_cidr(self) -> Optional[pulumi.Input[str]]:
         """
-        The CIDR block of a queue. If use DLI enhanced datasource connections, the CIDR block
-        cannot be the same as that of the data source.
-        The CIDR blocks supported by different CU specifications:
+        The CIDR block of the queue.
         """
         return pulumi.get(self, "vpc_cidr")
 
@@ -270,6 +328,7 @@ class _QueueState:
                  create_time: Optional[pulumi.Input[int]] = None,
                  cu_count: Optional[pulumi.Input[int]] = None,
                  description: Optional[pulumi.Input[str]] = None,
+                 elastic_resource_pool_name: Optional[pulumi.Input[str]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  feature: Optional[pulumi.Input[str]] = None,
                  management_subnet_cidr: Optional[pulumi.Input[str]] = None,
@@ -278,6 +337,8 @@ class _QueueState:
                  queue_type: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
                  resource_mode: Optional[pulumi.Input[int]] = None,
+                 scaling_policies: Optional[pulumi.Input[Sequence[pulumi.Input['QueueScalingPolicyArgs']]]] = None,
+                 spark_driver: Optional[pulumi.Input['QueueSparkDriverArgs']] = None,
                  subnet_cidr: Optional[pulumi.Input[str]] = None,
                  tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  vpc_cidr: Optional[pulumi.Input[str]] = None):
@@ -285,9 +346,11 @@ class _QueueState:
         Input properties used for looking up and filtering Queue resources.
         :param pulumi.Input[int] create_time: Time when a queue is created.
         :param pulumi.Input[int] cu_count: Minimum number of CUs that are bound to a queue. Initial value can be `16`,
-               `64`, or `256`. When scale_out or scale_in, the number must be a multiple of 16
+               `64`, or `256`. When scale_out or scale_in, the number must be a multiple of `16`.
         :param pulumi.Input[str] description: Description of a queue. Changing this parameter will create a new
                resource.
+        :param pulumi.Input[str] elastic_resource_pool_name: Specifies the name of the elastic resource pool to which the queue
+               belongs.
         :param pulumi.Input[str] enterprise_project_id: Enterprise project ID. The value 0 indicates the default
                enterprise project. Changing this parameter will create a new resource.
         :param pulumi.Input[str] feature: Indicates the queue feature. Changing this parameter will create a new
@@ -295,8 +358,8 @@ class _QueueState:
                + basic: basic type (default value)
                + ai: AI-enhanced (Only the SQL x86_64 dedicated queue supports this option.)
         :param pulumi.Input[str] name: Name of a queue. Name of a newly created resource queue. The name can contain
-               only digits, letters, and underscores (\\_), but cannot contain only digits or start with an underscore (_). Length
-               range: 1 to 128 characters. Changing this parameter will create a new resource.
+               only digits, lowercase letters, and underscores (\\_), but cannot contain only digits or start with an underscore (_).
+               Length range: `1` to `128` characters. Changing this parameter will create a new resource.
         :param pulumi.Input[str] platform: CPU architecture of queue compute resources. Changing this parameter will
                create a new resource. The options are as follows:
                + x86_64 : default value
@@ -307,14 +370,19 @@ class _QueueState:
                + general
         :param pulumi.Input[str] region: Specifies the region in which to create the dli queue resource. If omitted,
                the provider-level region will be used. Changing this will create a new VPC channel resource.
-        :param pulumi.Input[int] resource_mode: Queue resource mode. Changing this parameter will create a new
-               resource. The options are as follows:
-               + 0: indicates the shared resource mode.
+        :param pulumi.Input[int] resource_mode: Specifies the queue resource mode.  
+               The valid value is as follows:
                + 1: indicates the exclusive resource mode.
+        :param pulumi.Input[Sequence[pulumi.Input['QueueScalingPolicyArgs']]] scaling_policies: Specifies the list of scaling policies of the queue associated with
+               an elastic resource pool.
+               This parameter is only available if `resource_mode` is set to `1`.
+               If you want to use this parameter, you must ensure that there is a scaling policy with a time period from `00:00` to `24:00`.
+               The scaling_policies structure is documented below.
+        :param pulumi.Input['QueueSparkDriverArgs'] spark_driver: Specifies spark driver configuration of the queue.
+               This parameter is only available if `queue_type` is set to `sql`.
+               The spark_driver structure is documented below.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Label of a queue. Changing this parameter will create a new resource.
-        :param pulumi.Input[str] vpc_cidr: The CIDR block of a queue. If use DLI enhanced datasource connections, the CIDR block
-               cannot be the same as that of the data source.
-               The CIDR blocks supported by different CU specifications:
+        :param pulumi.Input[str] vpc_cidr: The CIDR block of the queue.
         """
         if create_time is not None:
             pulumi.set(__self__, "create_time", create_time)
@@ -322,6 +390,8 @@ class _QueueState:
             pulumi.set(__self__, "cu_count", cu_count)
         if description is not None:
             pulumi.set(__self__, "description", description)
+        if elastic_resource_pool_name is not None:
+            pulumi.set(__self__, "elastic_resource_pool_name", elastic_resource_pool_name)
         if enterprise_project_id is not None:
             pulumi.set(__self__, "enterprise_project_id", enterprise_project_id)
         if feature is not None:
@@ -341,6 +411,10 @@ class _QueueState:
             pulumi.set(__self__, "region", region)
         if resource_mode is not None:
             pulumi.set(__self__, "resource_mode", resource_mode)
+        if scaling_policies is not None:
+            pulumi.set(__self__, "scaling_policies", scaling_policies)
+        if spark_driver is not None:
+            pulumi.set(__self__, "spark_driver", spark_driver)
         if subnet_cidr is not None:
             warnings.warn("""subnet_cidr is Deprecated""", DeprecationWarning)
             pulumi.log.warn("""subnet_cidr is deprecated: subnet_cidr is Deprecated""")
@@ -368,7 +442,7 @@ class _QueueState:
     def cu_count(self) -> Optional[pulumi.Input[int]]:
         """
         Minimum number of CUs that are bound to a queue. Initial value can be `16`,
-        `64`, or `256`. When scale_out or scale_in, the number must be a multiple of 16
+        `64`, or `256`. When scale_out or scale_in, the number must be a multiple of `16`.
         """
         return pulumi.get(self, "cu_count")
 
@@ -388,6 +462,19 @@ class _QueueState:
     @description.setter
     def description(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "description", value)
+
+    @property
+    @pulumi.getter(name="elasticResourcePoolName")
+    def elastic_resource_pool_name(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the name of the elastic resource pool to which the queue
+        belongs.
+        """
+        return pulumi.get(self, "elastic_resource_pool_name")
+
+    @elastic_resource_pool_name.setter
+    def elastic_resource_pool_name(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "elastic_resource_pool_name", value)
 
     @property
     @pulumi.getter(name="enterpriseProjectId")
@@ -431,8 +518,8 @@ class _QueueState:
     def name(self) -> Optional[pulumi.Input[str]]:
         """
         Name of a queue. Name of a newly created resource queue. The name can contain
-        only digits, letters, and underscores (\\_), but cannot contain only digits or start with an underscore (_). Length
-        range: 1 to 128 characters. Changing this parameter will create a new resource.
+        only digits, lowercase letters, and underscores (\\_), but cannot contain only digits or start with an underscore (_).
+        Length range: `1` to `128` characters. Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "name")
 
@@ -487,9 +574,8 @@ class _QueueState:
     @pulumi.getter(name="resourceMode")
     def resource_mode(self) -> Optional[pulumi.Input[int]]:
         """
-        Queue resource mode. Changing this parameter will create a new
-        resource. The options are as follows:
-        + 0: indicates the shared resource mode.
+        Specifies the queue resource mode.  
+        The valid value is as follows:
         + 1: indicates the exclusive resource mode.
         """
         return pulumi.get(self, "resource_mode")
@@ -497,6 +583,36 @@ class _QueueState:
     @resource_mode.setter
     def resource_mode(self, value: Optional[pulumi.Input[int]]):
         pulumi.set(self, "resource_mode", value)
+
+    @property
+    @pulumi.getter(name="scalingPolicies")
+    def scaling_policies(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['QueueScalingPolicyArgs']]]]:
+        """
+        Specifies the list of scaling policies of the queue associated with
+        an elastic resource pool.
+        This parameter is only available if `resource_mode` is set to `1`.
+        If you want to use this parameter, you must ensure that there is a scaling policy with a time period from `00:00` to `24:00`.
+        The scaling_policies structure is documented below.
+        """
+        return pulumi.get(self, "scaling_policies")
+
+    @scaling_policies.setter
+    def scaling_policies(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['QueueScalingPolicyArgs']]]]):
+        pulumi.set(self, "scaling_policies", value)
+
+    @property
+    @pulumi.getter(name="sparkDriver")
+    def spark_driver(self) -> Optional[pulumi.Input['QueueSparkDriverArgs']]:
+        """
+        Specifies spark driver configuration of the queue.
+        This parameter is only available if `queue_type` is set to `sql`.
+        The spark_driver structure is documented below.
+        """
+        return pulumi.get(self, "spark_driver")
+
+    @spark_driver.setter
+    def spark_driver(self, value: Optional[pulumi.Input['QueueSparkDriverArgs']]):
+        pulumi.set(self, "spark_driver", value)
 
     @property
     @pulumi.getter(name="subnetCidr")
@@ -523,9 +639,7 @@ class _QueueState:
     @pulumi.getter(name="vpcCidr")
     def vpc_cidr(self) -> Optional[pulumi.Input[str]]:
         """
-        The CIDR block of a queue. If use DLI enhanced datasource connections, the CIDR block
-        cannot be the same as that of the data source.
-        The CIDR blocks supported by different CU specifications:
+        The CIDR block of the queue.
         """
         return pulumi.get(self, "vpc_cidr")
 
@@ -541,6 +655,7 @@ class Queue(pulumi.CustomResource):
                  opts: Optional[pulumi.ResourceOptions] = None,
                  cu_count: Optional[pulumi.Input[int]] = None,
                  description: Optional[pulumi.Input[str]] = None,
+                 elastic_resource_pool_name: Optional[pulumi.Input[str]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  feature: Optional[pulumi.Input[str]] = None,
                  management_subnet_cidr: Optional[pulumi.Input[str]] = None,
@@ -549,6 +664,8 @@ class Queue(pulumi.CustomResource):
                  queue_type: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
                  resource_mode: Optional[pulumi.Input[int]] = None,
+                 scaling_policies: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['QueueScalingPolicyArgs']]]]] = None,
+                 spark_driver: Optional[pulumi.Input[pulumi.InputType['QueueSparkDriverArgs']]] = None,
                  subnet_cidr: Optional[pulumi.Input[str]] = None,
                  tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  vpc_cidr: Optional[pulumi.Input[str]] = None,
@@ -557,51 +674,55 @@ class Queue(pulumi.CustomResource):
         Manages DLI Queue resource within HuaweiCloud
 
         ## Example Usage
-        ### Create a queue
+        ### Create an exclusive mode queue
 
         ```python
         import pulumi
         import pulumi_huaweicloud as huaweicloud
 
-        queue = huaweicloud.dli.Queue("queue",
+        config = pulumi.Config()
+        elastic_resource_pool_name = config.require_object("elasticResourcePoolName")
+        queue_name = config.require_object("queueName")
+        test = huaweicloud.dli.Queue("test",
+            elastic_resource_pool_name=elastic_resource_pool_name,
+            resource_mode=1,
             cu_count=16,
             tags={
                 "foo": "bar",
                 "key": "value",
             })
         ```
-        ### Create a queue with CIDR Block
-
-        ```python
-        import pulumi
-        import pulumi_huaweicloud as huaweicloud
-
-        queue = huaweicloud.dli.Queue("queue",
-            cu_count=16,
-            resource_mode=1,
-            tags={
-                "foo": "bar",
-                "key": "value",
-            },
-            vpc_cidr="172.16.0.0/14")
-        ```
 
         ## Import
 
-        DLI queue can be imported by
-
-        `id`. For example,
+        ### Import a SQL type queue bash
 
         ```sh
-         $ pulumi import huaweicloud:Dli/queue:Queue example abc123
+         $ pulumi import huaweicloud:Dli/queue:Queue test <name>
         ```
+
+         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response. The missing attributes include`tags`. It is generally recommended running `terraform plan` after importing a DLI queue. You can then decide if changes should be applied to the resource, or the resource definition should be updated to align with the resource. Also you can ignore changes as below. hcl resource "huaweicloud_dli_queue" "test" {
+
+         ...
+
+         lifecycle {
+
+         ignore_changes = [
+
+         tags
+
+         ]
+
+         } }
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[int] cu_count: Minimum number of CUs that are bound to a queue. Initial value can be `16`,
-               `64`, or `256`. When scale_out or scale_in, the number must be a multiple of 16
+               `64`, or `256`. When scale_out or scale_in, the number must be a multiple of `16`.
         :param pulumi.Input[str] description: Description of a queue. Changing this parameter will create a new
                resource.
+        :param pulumi.Input[str] elastic_resource_pool_name: Specifies the name of the elastic resource pool to which the queue
+               belongs.
         :param pulumi.Input[str] enterprise_project_id: Enterprise project ID. The value 0 indicates the default
                enterprise project. Changing this parameter will create a new resource.
         :param pulumi.Input[str] feature: Indicates the queue feature. Changing this parameter will create a new
@@ -609,8 +730,8 @@ class Queue(pulumi.CustomResource):
                + basic: basic type (default value)
                + ai: AI-enhanced (Only the SQL x86_64 dedicated queue supports this option.)
         :param pulumi.Input[str] name: Name of a queue. Name of a newly created resource queue. The name can contain
-               only digits, letters, and underscores (\\_), but cannot contain only digits or start with an underscore (_). Length
-               range: 1 to 128 characters. Changing this parameter will create a new resource.
+               only digits, lowercase letters, and underscores (\\_), but cannot contain only digits or start with an underscore (_).
+               Length range: `1` to `128` characters. Changing this parameter will create a new resource.
         :param pulumi.Input[str] platform: CPU architecture of queue compute resources. Changing this parameter will
                create a new resource. The options are as follows:
                + x86_64 : default value
@@ -621,14 +742,19 @@ class Queue(pulumi.CustomResource):
                + general
         :param pulumi.Input[str] region: Specifies the region in which to create the dli queue resource. If omitted,
                the provider-level region will be used. Changing this will create a new VPC channel resource.
-        :param pulumi.Input[int] resource_mode: Queue resource mode. Changing this parameter will create a new
-               resource. The options are as follows:
-               + 0: indicates the shared resource mode.
+        :param pulumi.Input[int] resource_mode: Specifies the queue resource mode.  
+               The valid value is as follows:
                + 1: indicates the exclusive resource mode.
+        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['QueueScalingPolicyArgs']]]] scaling_policies: Specifies the list of scaling policies of the queue associated with
+               an elastic resource pool.
+               This parameter is only available if `resource_mode` is set to `1`.
+               If you want to use this parameter, you must ensure that there is a scaling policy with a time period from `00:00` to `24:00`.
+               The scaling_policies structure is documented below.
+        :param pulumi.Input[pulumi.InputType['QueueSparkDriverArgs']] spark_driver: Specifies spark driver configuration of the queue.
+               This parameter is only available if `queue_type` is set to `sql`.
+               The spark_driver structure is documented below.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Label of a queue. Changing this parameter will create a new resource.
-        :param pulumi.Input[str] vpc_cidr: The CIDR block of a queue. If use DLI enhanced datasource connections, the CIDR block
-               cannot be the same as that of the data source.
-               The CIDR blocks supported by different CU specifications:
+        :param pulumi.Input[str] vpc_cidr: The CIDR block of the queue.
         """
         ...
     @overload
@@ -640,44 +766,46 @@ class Queue(pulumi.CustomResource):
         Manages DLI Queue resource within HuaweiCloud
 
         ## Example Usage
-        ### Create a queue
+        ### Create an exclusive mode queue
 
         ```python
         import pulumi
         import pulumi_huaweicloud as huaweicloud
 
-        queue = huaweicloud.dli.Queue("queue",
+        config = pulumi.Config()
+        elastic_resource_pool_name = config.require_object("elasticResourcePoolName")
+        queue_name = config.require_object("queueName")
+        test = huaweicloud.dli.Queue("test",
+            elastic_resource_pool_name=elastic_resource_pool_name,
+            resource_mode=1,
             cu_count=16,
             tags={
                 "foo": "bar",
                 "key": "value",
             })
         ```
-        ### Create a queue with CIDR Block
-
-        ```python
-        import pulumi
-        import pulumi_huaweicloud as huaweicloud
-
-        queue = huaweicloud.dli.Queue("queue",
-            cu_count=16,
-            resource_mode=1,
-            tags={
-                "foo": "bar",
-                "key": "value",
-            },
-            vpc_cidr="172.16.0.0/14")
-        ```
 
         ## Import
 
-        DLI queue can be imported by
-
-        `id`. For example,
+        ### Import a SQL type queue bash
 
         ```sh
-         $ pulumi import huaweicloud:Dli/queue:Queue example abc123
+         $ pulumi import huaweicloud:Dli/queue:Queue test <name>
         ```
+
+         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response. The missing attributes include`tags`. It is generally recommended running `terraform plan` after importing a DLI queue. You can then decide if changes should be applied to the resource, or the resource definition should be updated to align with the resource. Also you can ignore changes as below. hcl resource "huaweicloud_dli_queue" "test" {
+
+         ...
+
+         lifecycle {
+
+         ignore_changes = [
+
+         tags
+
+         ]
+
+         } }
 
         :param str resource_name: The name of the resource.
         :param QueueArgs args: The arguments to use to populate this resource's properties.
@@ -696,6 +824,7 @@ class Queue(pulumi.CustomResource):
                  opts: Optional[pulumi.ResourceOptions] = None,
                  cu_count: Optional[pulumi.Input[int]] = None,
                  description: Optional[pulumi.Input[str]] = None,
+                 elastic_resource_pool_name: Optional[pulumi.Input[str]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  feature: Optional[pulumi.Input[str]] = None,
                  management_subnet_cidr: Optional[pulumi.Input[str]] = None,
@@ -704,6 +833,8 @@ class Queue(pulumi.CustomResource):
                  queue_type: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
                  resource_mode: Optional[pulumi.Input[int]] = None,
+                 scaling_policies: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['QueueScalingPolicyArgs']]]]] = None,
+                 spark_driver: Optional[pulumi.Input[pulumi.InputType['QueueSparkDriverArgs']]] = None,
                  subnet_cidr: Optional[pulumi.Input[str]] = None,
                  tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  vpc_cidr: Optional[pulumi.Input[str]] = None,
@@ -720,6 +851,7 @@ class Queue(pulumi.CustomResource):
                 raise TypeError("Missing required property 'cu_count'")
             __props__.__dict__["cu_count"] = cu_count
             __props__.__dict__["description"] = description
+            __props__.__dict__["elastic_resource_pool_name"] = elastic_resource_pool_name
             __props__.__dict__["enterprise_project_id"] = enterprise_project_id
             __props__.__dict__["feature"] = feature
             if management_subnet_cidr is not None and not opts.urn:
@@ -731,6 +863,8 @@ class Queue(pulumi.CustomResource):
             __props__.__dict__["queue_type"] = queue_type
             __props__.__dict__["region"] = region
             __props__.__dict__["resource_mode"] = resource_mode
+            __props__.__dict__["scaling_policies"] = scaling_policies
+            __props__.__dict__["spark_driver"] = spark_driver
             if subnet_cidr is not None and not opts.urn:
                 warnings.warn("""subnet_cidr is Deprecated""", DeprecationWarning)
                 pulumi.log.warn("""subnet_cidr is deprecated: subnet_cidr is Deprecated""")
@@ -751,6 +885,7 @@ class Queue(pulumi.CustomResource):
             create_time: Optional[pulumi.Input[int]] = None,
             cu_count: Optional[pulumi.Input[int]] = None,
             description: Optional[pulumi.Input[str]] = None,
+            elastic_resource_pool_name: Optional[pulumi.Input[str]] = None,
             enterprise_project_id: Optional[pulumi.Input[str]] = None,
             feature: Optional[pulumi.Input[str]] = None,
             management_subnet_cidr: Optional[pulumi.Input[str]] = None,
@@ -759,6 +894,8 @@ class Queue(pulumi.CustomResource):
             queue_type: Optional[pulumi.Input[str]] = None,
             region: Optional[pulumi.Input[str]] = None,
             resource_mode: Optional[pulumi.Input[int]] = None,
+            scaling_policies: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['QueueScalingPolicyArgs']]]]] = None,
+            spark_driver: Optional[pulumi.Input[pulumi.InputType['QueueSparkDriverArgs']]] = None,
             subnet_cidr: Optional[pulumi.Input[str]] = None,
             tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
             vpc_cidr: Optional[pulumi.Input[str]] = None) -> 'Queue':
@@ -771,9 +908,11 @@ class Queue(pulumi.CustomResource):
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[int] create_time: Time when a queue is created.
         :param pulumi.Input[int] cu_count: Minimum number of CUs that are bound to a queue. Initial value can be `16`,
-               `64`, or `256`. When scale_out or scale_in, the number must be a multiple of 16
+               `64`, or `256`. When scale_out or scale_in, the number must be a multiple of `16`.
         :param pulumi.Input[str] description: Description of a queue. Changing this parameter will create a new
                resource.
+        :param pulumi.Input[str] elastic_resource_pool_name: Specifies the name of the elastic resource pool to which the queue
+               belongs.
         :param pulumi.Input[str] enterprise_project_id: Enterprise project ID. The value 0 indicates the default
                enterprise project. Changing this parameter will create a new resource.
         :param pulumi.Input[str] feature: Indicates the queue feature. Changing this parameter will create a new
@@ -781,8 +920,8 @@ class Queue(pulumi.CustomResource):
                + basic: basic type (default value)
                + ai: AI-enhanced (Only the SQL x86_64 dedicated queue supports this option.)
         :param pulumi.Input[str] name: Name of a queue. Name of a newly created resource queue. The name can contain
-               only digits, letters, and underscores (\\_), but cannot contain only digits or start with an underscore (_). Length
-               range: 1 to 128 characters. Changing this parameter will create a new resource.
+               only digits, lowercase letters, and underscores (\\_), but cannot contain only digits or start with an underscore (_).
+               Length range: `1` to `128` characters. Changing this parameter will create a new resource.
         :param pulumi.Input[str] platform: CPU architecture of queue compute resources. Changing this parameter will
                create a new resource. The options are as follows:
                + x86_64 : default value
@@ -793,14 +932,19 @@ class Queue(pulumi.CustomResource):
                + general
         :param pulumi.Input[str] region: Specifies the region in which to create the dli queue resource. If omitted,
                the provider-level region will be used. Changing this will create a new VPC channel resource.
-        :param pulumi.Input[int] resource_mode: Queue resource mode. Changing this parameter will create a new
-               resource. The options are as follows:
-               + 0: indicates the shared resource mode.
+        :param pulumi.Input[int] resource_mode: Specifies the queue resource mode.  
+               The valid value is as follows:
                + 1: indicates the exclusive resource mode.
+        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['QueueScalingPolicyArgs']]]] scaling_policies: Specifies the list of scaling policies of the queue associated with
+               an elastic resource pool.
+               This parameter is only available if `resource_mode` is set to `1`.
+               If you want to use this parameter, you must ensure that there is a scaling policy with a time period from `00:00` to `24:00`.
+               The scaling_policies structure is documented below.
+        :param pulumi.Input[pulumi.InputType['QueueSparkDriverArgs']] spark_driver: Specifies spark driver configuration of the queue.
+               This parameter is only available if `queue_type` is set to `sql`.
+               The spark_driver structure is documented below.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Label of a queue. Changing this parameter will create a new resource.
-        :param pulumi.Input[str] vpc_cidr: The CIDR block of a queue. If use DLI enhanced datasource connections, the CIDR block
-               cannot be the same as that of the data source.
-               The CIDR blocks supported by different CU specifications:
+        :param pulumi.Input[str] vpc_cidr: The CIDR block of the queue.
         """
         opts = pulumi.ResourceOptions.merge(opts, pulumi.ResourceOptions(id=id))
 
@@ -809,6 +953,7 @@ class Queue(pulumi.CustomResource):
         __props__.__dict__["create_time"] = create_time
         __props__.__dict__["cu_count"] = cu_count
         __props__.__dict__["description"] = description
+        __props__.__dict__["elastic_resource_pool_name"] = elastic_resource_pool_name
         __props__.__dict__["enterprise_project_id"] = enterprise_project_id
         __props__.__dict__["feature"] = feature
         __props__.__dict__["management_subnet_cidr"] = management_subnet_cidr
@@ -817,6 +962,8 @@ class Queue(pulumi.CustomResource):
         __props__.__dict__["queue_type"] = queue_type
         __props__.__dict__["region"] = region
         __props__.__dict__["resource_mode"] = resource_mode
+        __props__.__dict__["scaling_policies"] = scaling_policies
+        __props__.__dict__["spark_driver"] = spark_driver
         __props__.__dict__["subnet_cidr"] = subnet_cidr
         __props__.__dict__["tags"] = tags
         __props__.__dict__["vpc_cidr"] = vpc_cidr
@@ -835,7 +982,7 @@ class Queue(pulumi.CustomResource):
     def cu_count(self) -> pulumi.Output[int]:
         """
         Minimum number of CUs that are bound to a queue. Initial value can be `16`,
-        `64`, or `256`. When scale_out or scale_in, the number must be a multiple of 16
+        `64`, or `256`. When scale_out or scale_in, the number must be a multiple of `16`.
         """
         return pulumi.get(self, "cu_count")
 
@@ -847,6 +994,15 @@ class Queue(pulumi.CustomResource):
         resource.
         """
         return pulumi.get(self, "description")
+
+    @property
+    @pulumi.getter(name="elasticResourcePoolName")
+    def elastic_resource_pool_name(self) -> pulumi.Output[str]:
+        """
+        Specifies the name of the elastic resource pool to which the queue
+        belongs.
+        """
+        return pulumi.get(self, "elastic_resource_pool_name")
 
     @property
     @pulumi.getter(name="enterpriseProjectId")
@@ -878,8 +1034,8 @@ class Queue(pulumi.CustomResource):
     def name(self) -> pulumi.Output[str]:
         """
         Name of a queue. Name of a newly created resource queue. The name can contain
-        only digits, letters, and underscores (\\_), but cannot contain only digits or start with an underscore (_). Length
-        range: 1 to 128 characters. Changing this parameter will create a new resource.
+        only digits, lowercase letters, and underscores (\\_), but cannot contain only digits or start with an underscore (_).
+        Length range: `1` to `128` characters. Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "name")
 
@@ -916,14 +1072,35 @@ class Queue(pulumi.CustomResource):
 
     @property
     @pulumi.getter(name="resourceMode")
-    def resource_mode(self) -> pulumi.Output[Optional[int]]:
+    def resource_mode(self) -> pulumi.Output[int]:
         """
-        Queue resource mode. Changing this parameter will create a new
-        resource. The options are as follows:
-        + 0: indicates the shared resource mode.
+        Specifies the queue resource mode.  
+        The valid value is as follows:
         + 1: indicates the exclusive resource mode.
         """
         return pulumi.get(self, "resource_mode")
+
+    @property
+    @pulumi.getter(name="scalingPolicies")
+    def scaling_policies(self) -> pulumi.Output[Sequence['outputs.QueueScalingPolicy']]:
+        """
+        Specifies the list of scaling policies of the queue associated with
+        an elastic resource pool.
+        This parameter is only available if `resource_mode` is set to `1`.
+        If you want to use this parameter, you must ensure that there is a scaling policy with a time period from `00:00` to `24:00`.
+        The scaling_policies structure is documented below.
+        """
+        return pulumi.get(self, "scaling_policies")
+
+    @property
+    @pulumi.getter(name="sparkDriver")
+    def spark_driver(self) -> pulumi.Output[Optional['outputs.QueueSparkDriver']]:
+        """
+        Specifies spark driver configuration of the queue.
+        This parameter is only available if `queue_type` is set to `sql`.
+        The spark_driver structure is documented below.
+        """
+        return pulumi.get(self, "spark_driver")
 
     @property
     @pulumi.getter(name="subnetCidr")
@@ -942,9 +1119,7 @@ class Queue(pulumi.CustomResource):
     @pulumi.getter(name="vpcCidr")
     def vpc_cidr(self) -> pulumi.Output[str]:
         """
-        The CIDR block of a queue. If use DLI enhanced datasource connections, the CIDR block
-        cannot be the same as that of the data source.
-        The CIDR blocks supported by different CU specifications:
+        The CIDR block of the queue.
         """
         return pulumi.get(self, "vpc_cidr")
 

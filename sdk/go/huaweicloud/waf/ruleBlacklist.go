@@ -14,10 +14,10 @@ import (
 // Manages a WAF blacklist and whitelist rule resource within HuaweiCloud.
 //
 // > **NOTE:** All WAF resources depend on WAF instances, and the WAF instances need to be purchased before they can be
-// used. The blacklist and whitelist rule resource can be used in Cloud Mode, Dedicated Mode and ELB Mode.
+// used. The blacklist and whitelist rule resource can be used in Cloud Mode and Dedicated Mode.
 //
 // ## Example Usage
-// ### WAF rule blacklist and whitelist with ip address
+// ### WAF rule blacklist and whitelist with IP address
 //
 // ```go
 // package main
@@ -103,12 +103,12 @@ import (
 type RuleBlacklist struct {
 	pulumi.CustomResourceState
 
-	// Specifies the protective action. Defaults is `0`. The value can be:
+	// Specifies the protective action. Defaults to `0`. The value can be:
 	// + `0`: block the request.
 	// + `1`: allow the request.
 	// + `2`: log the request only.
 	Action pulumi.IntPtrOutput `pulumi:"action"`
-	// Specifies the WAF address group id.
+	// Specifies the WAF address group ID.
 	// This parameter is required when `ipAddress` is not specified. The parameter `addressGroupId` and `ipAddress`
 	// can not be configured together.
 	AddressGroupId pulumi.StringPtrOutput `pulumi:"addressGroupId"`
@@ -119,21 +119,26 @@ type RuleBlacklist struct {
 	// Specifies the rule description of the WAF address group.
 	Description pulumi.StringPtrOutput `pulumi:"description"`
 	// Specifies the enterprise project ID of WAF rule blacklist
-	// and whitelist. Changing this parameter will create a new resource.
+	// and whitelist. For enterprise users, if omitted, default enterprise project will be used.
+	// Changing this parameter will create a new resource.
 	EnterpriseProjectId pulumi.StringPtrOutput `pulumi:"enterpriseProjectId"`
-	// Specifies the IP address or range. For example, 192.168.0.125 or 192.168.0.0/24.
+	// Specifies the IP address or range. For example, **192.168.0.125** or **192.168.0.0/24**.
 	// This parameter is required when `addressGroupId` is not specified. The parameter `addressGroupId` and `ipAddress`
 	// can not be configured together.
 	IpAddress pulumi.StringPtrOutput `pulumi:"ipAddress"`
-	// Specifies the Rule name. The value can contain a maximum of 64 characters.
+	// Specifies the rule name. The value can contain a maximum of `64` characters.
 	// Only letters, digits, hyphens (-), underscores (_) and periods (.) are allowed.
 	Name pulumi.StringOutput `pulumi:"name"`
-	// Specifies the WAF policy ID. Changing this creates a new rule. Please make
-	// sure that the region which the policy belongs to be consistent with the `region`.
+	// Specifies the WAF policy ID. Changing this parameter will create a new resource.
 	PolicyId pulumi.StringOutput `pulumi:"policyId"`
-	// The region in which to create the WAF blacklist and whitelist rule resource.
-	// If omitted, the provider-level region will be used. Changing this setting will push a new certificate.
+	// Specifies the region in which to create the WAF blacklist and whitelist rule resource.
+	// If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
 	Region pulumi.StringOutput `pulumi:"region"`
+	// Specifies the status of WAF blacklist and whitelist rule.
+	// Valid values are as follows:
+	// + **0**: Disabled.
+	// + **1**: Enabled.
+	Status pulumi.IntPtrOutput `pulumi:"status"`
 }
 
 // NewRuleBlacklist registers a new resource with the given unique name, arguments, and options.
@@ -169,12 +174,12 @@ func GetRuleBlacklist(ctx *pulumi.Context,
 
 // Input properties used for looking up and filtering RuleBlacklist resources.
 type ruleBlacklistState struct {
-	// Specifies the protective action. Defaults is `0`. The value can be:
+	// Specifies the protective action. Defaults to `0`. The value can be:
 	// + `0`: block the request.
 	// + `1`: allow the request.
 	// + `2`: log the request only.
 	Action *int `pulumi:"action"`
-	// Specifies the WAF address group id.
+	// Specifies the WAF address group ID.
 	// This parameter is required when `ipAddress` is not specified. The parameter `addressGroupId` and `ipAddress`
 	// can not be configured together.
 	AddressGroupId *string `pulumi:"addressGroupId"`
@@ -185,30 +190,35 @@ type ruleBlacklistState struct {
 	// Specifies the rule description of the WAF address group.
 	Description *string `pulumi:"description"`
 	// Specifies the enterprise project ID of WAF rule blacklist
-	// and whitelist. Changing this parameter will create a new resource.
+	// and whitelist. For enterprise users, if omitted, default enterprise project will be used.
+	// Changing this parameter will create a new resource.
 	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
-	// Specifies the IP address or range. For example, 192.168.0.125 or 192.168.0.0/24.
+	// Specifies the IP address or range. For example, **192.168.0.125** or **192.168.0.0/24**.
 	// This parameter is required when `addressGroupId` is not specified. The parameter `addressGroupId` and `ipAddress`
 	// can not be configured together.
 	IpAddress *string `pulumi:"ipAddress"`
-	// Specifies the Rule name. The value can contain a maximum of 64 characters.
+	// Specifies the rule name. The value can contain a maximum of `64` characters.
 	// Only letters, digits, hyphens (-), underscores (_) and periods (.) are allowed.
 	Name *string `pulumi:"name"`
-	// Specifies the WAF policy ID. Changing this creates a new rule. Please make
-	// sure that the region which the policy belongs to be consistent with the `region`.
+	// Specifies the WAF policy ID. Changing this parameter will create a new resource.
 	PolicyId *string `pulumi:"policyId"`
-	// The region in which to create the WAF blacklist and whitelist rule resource.
-	// If omitted, the provider-level region will be used. Changing this setting will push a new certificate.
+	// Specifies the region in which to create the WAF blacklist and whitelist rule resource.
+	// If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
 	Region *string `pulumi:"region"`
+	// Specifies the status of WAF blacklist and whitelist rule.
+	// Valid values are as follows:
+	// + **0**: Disabled.
+	// + **1**: Enabled.
+	Status *int `pulumi:"status"`
 }
 
 type RuleBlacklistState struct {
-	// Specifies the protective action. Defaults is `0`. The value can be:
+	// Specifies the protective action. Defaults to `0`. The value can be:
 	// + `0`: block the request.
 	// + `1`: allow the request.
 	// + `2`: log the request only.
 	Action pulumi.IntPtrInput
-	// Specifies the WAF address group id.
+	// Specifies the WAF address group ID.
 	// This parameter is required when `ipAddress` is not specified. The parameter `addressGroupId` and `ipAddress`
 	// can not be configured together.
 	AddressGroupId pulumi.StringPtrInput
@@ -219,21 +229,26 @@ type RuleBlacklistState struct {
 	// Specifies the rule description of the WAF address group.
 	Description pulumi.StringPtrInput
 	// Specifies the enterprise project ID of WAF rule blacklist
-	// and whitelist. Changing this parameter will create a new resource.
+	// and whitelist. For enterprise users, if omitted, default enterprise project will be used.
+	// Changing this parameter will create a new resource.
 	EnterpriseProjectId pulumi.StringPtrInput
-	// Specifies the IP address or range. For example, 192.168.0.125 or 192.168.0.0/24.
+	// Specifies the IP address or range. For example, **192.168.0.125** or **192.168.0.0/24**.
 	// This parameter is required when `addressGroupId` is not specified. The parameter `addressGroupId` and `ipAddress`
 	// can not be configured together.
 	IpAddress pulumi.StringPtrInput
-	// Specifies the Rule name. The value can contain a maximum of 64 characters.
+	// Specifies the rule name. The value can contain a maximum of `64` characters.
 	// Only letters, digits, hyphens (-), underscores (_) and periods (.) are allowed.
 	Name pulumi.StringPtrInput
-	// Specifies the WAF policy ID. Changing this creates a new rule. Please make
-	// sure that the region which the policy belongs to be consistent with the `region`.
+	// Specifies the WAF policy ID. Changing this parameter will create a new resource.
 	PolicyId pulumi.StringPtrInput
-	// The region in which to create the WAF blacklist and whitelist rule resource.
-	// If omitted, the provider-level region will be used. Changing this setting will push a new certificate.
+	// Specifies the region in which to create the WAF blacklist and whitelist rule resource.
+	// If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
 	Region pulumi.StringPtrInput
+	// Specifies the status of WAF blacklist and whitelist rule.
+	// Valid values are as follows:
+	// + **0**: Disabled.
+	// + **1**: Enabled.
+	Status pulumi.IntPtrInput
 }
 
 func (RuleBlacklistState) ElementType() reflect.Type {
@@ -241,64 +256,74 @@ func (RuleBlacklistState) ElementType() reflect.Type {
 }
 
 type ruleBlacklistArgs struct {
-	// Specifies the protective action. Defaults is `0`. The value can be:
+	// Specifies the protective action. Defaults to `0`. The value can be:
 	// + `0`: block the request.
 	// + `1`: allow the request.
 	// + `2`: log the request only.
 	Action *int `pulumi:"action"`
-	// Specifies the WAF address group id.
+	// Specifies the WAF address group ID.
 	// This parameter is required when `ipAddress` is not specified. The parameter `addressGroupId` and `ipAddress`
 	// can not be configured together.
 	AddressGroupId *string `pulumi:"addressGroupId"`
 	// Specifies the rule description of the WAF address group.
 	Description *string `pulumi:"description"`
 	// Specifies the enterprise project ID of WAF rule blacklist
-	// and whitelist. Changing this parameter will create a new resource.
+	// and whitelist. For enterprise users, if omitted, default enterprise project will be used.
+	// Changing this parameter will create a new resource.
 	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
-	// Specifies the IP address or range. For example, 192.168.0.125 or 192.168.0.0/24.
+	// Specifies the IP address or range. For example, **192.168.0.125** or **192.168.0.0/24**.
 	// This parameter is required when `addressGroupId` is not specified. The parameter `addressGroupId` and `ipAddress`
 	// can not be configured together.
 	IpAddress *string `pulumi:"ipAddress"`
-	// Specifies the Rule name. The value can contain a maximum of 64 characters.
+	// Specifies the rule name. The value can contain a maximum of `64` characters.
 	// Only letters, digits, hyphens (-), underscores (_) and periods (.) are allowed.
 	Name *string `pulumi:"name"`
-	// Specifies the WAF policy ID. Changing this creates a new rule. Please make
-	// sure that the region which the policy belongs to be consistent with the `region`.
+	// Specifies the WAF policy ID. Changing this parameter will create a new resource.
 	PolicyId string `pulumi:"policyId"`
-	// The region in which to create the WAF blacklist and whitelist rule resource.
-	// If omitted, the provider-level region will be used. Changing this setting will push a new certificate.
+	// Specifies the region in which to create the WAF blacklist and whitelist rule resource.
+	// If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
 	Region *string `pulumi:"region"`
+	// Specifies the status of WAF blacklist and whitelist rule.
+	// Valid values are as follows:
+	// + **0**: Disabled.
+	// + **1**: Enabled.
+	Status *int `pulumi:"status"`
 }
 
 // The set of arguments for constructing a RuleBlacklist resource.
 type RuleBlacklistArgs struct {
-	// Specifies the protective action. Defaults is `0`. The value can be:
+	// Specifies the protective action. Defaults to `0`. The value can be:
 	// + `0`: block the request.
 	// + `1`: allow the request.
 	// + `2`: log the request only.
 	Action pulumi.IntPtrInput
-	// Specifies the WAF address group id.
+	// Specifies the WAF address group ID.
 	// This parameter is required when `ipAddress` is not specified. The parameter `addressGroupId` and `ipAddress`
 	// can not be configured together.
 	AddressGroupId pulumi.StringPtrInput
 	// Specifies the rule description of the WAF address group.
 	Description pulumi.StringPtrInput
 	// Specifies the enterprise project ID of WAF rule blacklist
-	// and whitelist. Changing this parameter will create a new resource.
+	// and whitelist. For enterprise users, if omitted, default enterprise project will be used.
+	// Changing this parameter will create a new resource.
 	EnterpriseProjectId pulumi.StringPtrInput
-	// Specifies the IP address or range. For example, 192.168.0.125 or 192.168.0.0/24.
+	// Specifies the IP address or range. For example, **192.168.0.125** or **192.168.0.0/24**.
 	// This parameter is required when `addressGroupId` is not specified. The parameter `addressGroupId` and `ipAddress`
 	// can not be configured together.
 	IpAddress pulumi.StringPtrInput
-	// Specifies the Rule name. The value can contain a maximum of 64 characters.
+	// Specifies the rule name. The value can contain a maximum of `64` characters.
 	// Only letters, digits, hyphens (-), underscores (_) and periods (.) are allowed.
 	Name pulumi.StringPtrInput
-	// Specifies the WAF policy ID. Changing this creates a new rule. Please make
-	// sure that the region which the policy belongs to be consistent with the `region`.
+	// Specifies the WAF policy ID. Changing this parameter will create a new resource.
 	PolicyId pulumi.StringInput
-	// The region in which to create the WAF blacklist and whitelist rule resource.
-	// If omitted, the provider-level region will be used. Changing this setting will push a new certificate.
+	// Specifies the region in which to create the WAF blacklist and whitelist rule resource.
+	// If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
 	Region pulumi.StringPtrInput
+	// Specifies the status of WAF blacklist and whitelist rule.
+	// Valid values are as follows:
+	// + **0**: Disabled.
+	// + **1**: Enabled.
+	Status pulumi.IntPtrInput
 }
 
 func (RuleBlacklistArgs) ElementType() reflect.Type {
@@ -388,7 +413,7 @@ func (o RuleBlacklistOutput) ToRuleBlacklistOutputWithContext(ctx context.Contex
 	return o
 }
 
-// Specifies the protective action. Defaults is `0`. The value can be:
+// Specifies the protective action. Defaults to `0`. The value can be:
 // + `0`: block the request.
 // + `1`: allow the request.
 // + `2`: log the request only.
@@ -396,7 +421,7 @@ func (o RuleBlacklistOutput) Action() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v *RuleBlacklist) pulumi.IntPtrOutput { return v.Action }).(pulumi.IntPtrOutput)
 }
 
-// Specifies the WAF address group id.
+// Specifies the WAF address group ID.
 // This parameter is required when `ipAddress` is not specified. The parameter `addressGroupId` and `ipAddress`
 // can not be configured together.
 func (o RuleBlacklistOutput) AddressGroupId() pulumi.StringPtrOutput {
@@ -419,34 +444,42 @@ func (o RuleBlacklistOutput) Description() pulumi.StringPtrOutput {
 }
 
 // Specifies the enterprise project ID of WAF rule blacklist
-// and whitelist. Changing this parameter will create a new resource.
+// and whitelist. For enterprise users, if omitted, default enterprise project will be used.
+// Changing this parameter will create a new resource.
 func (o RuleBlacklistOutput) EnterpriseProjectId() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *RuleBlacklist) pulumi.StringPtrOutput { return v.EnterpriseProjectId }).(pulumi.StringPtrOutput)
 }
 
-// Specifies the IP address or range. For example, 192.168.0.125 or 192.168.0.0/24.
+// Specifies the IP address or range. For example, **192.168.0.125** or **192.168.0.0/24**.
 // This parameter is required when `addressGroupId` is not specified. The parameter `addressGroupId` and `ipAddress`
 // can not be configured together.
 func (o RuleBlacklistOutput) IpAddress() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *RuleBlacklist) pulumi.StringPtrOutput { return v.IpAddress }).(pulumi.StringPtrOutput)
 }
 
-// Specifies the Rule name. The value can contain a maximum of 64 characters.
+// Specifies the rule name. The value can contain a maximum of `64` characters.
 // Only letters, digits, hyphens (-), underscores (_) and periods (.) are allowed.
 func (o RuleBlacklistOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v *RuleBlacklist) pulumi.StringOutput { return v.Name }).(pulumi.StringOutput)
 }
 
-// Specifies the WAF policy ID. Changing this creates a new rule. Please make
-// sure that the region which the policy belongs to be consistent with the `region`.
+// Specifies the WAF policy ID. Changing this parameter will create a new resource.
 func (o RuleBlacklistOutput) PolicyId() pulumi.StringOutput {
 	return o.ApplyT(func(v *RuleBlacklist) pulumi.StringOutput { return v.PolicyId }).(pulumi.StringOutput)
 }
 
-// The region in which to create the WAF blacklist and whitelist rule resource.
-// If omitted, the provider-level region will be used. Changing this setting will push a new certificate.
+// Specifies the region in which to create the WAF blacklist and whitelist rule resource.
+// If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
 func (o RuleBlacklistOutput) Region() pulumi.StringOutput {
 	return o.ApplyT(func(v *RuleBlacklist) pulumi.StringOutput { return v.Region }).(pulumi.StringOutput)
+}
+
+// Specifies the status of WAF blacklist and whitelist rule.
+// Valid values are as follows:
+// + **0**: Disabled.
+// + **1**: Enabled.
+func (o RuleBlacklistOutput) Status() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v *RuleBlacklist) pulumi.IntPtrOutput { return v.Status }).(pulumi.IntPtrOutput)
 }
 
 type RuleBlacklistArrayOutput struct{ *pulumi.OutputState }

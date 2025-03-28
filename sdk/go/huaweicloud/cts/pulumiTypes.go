@@ -10,6 +10,214 @@ import (
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
+type NotificationFilter struct {
+	// Specifies the relationship between multiple rules. The valid values are as follows:
+	// + **AND**: Effective after all filtering conditions are met.
+	// + **OR**: Effective when any one of the conditions is met.
+	Condition string `pulumi:"condition"`
+	// Specifies an array of filtering rules. It consists of three parts,
+	// the first part is the **key**, the second part is the **rule**, and the third part is the **value**,
+	// the format is: **key != value**.
+	// + The **key** can be: **api_version**, **code**, **trace_rating**, **trace_type**, **resource_id** and
+	//   **resource_name**.
+	//   When the key is **api_version**, the value needs to follow the regular constraint: **^ (a-zA-Z0-9_ -.) {1,64}$**.
+	//   When the key is **code**, the length range of value is from `1` to `256`.
+	//   When the key is **trace_rating**, the value can be **normal**, **warning** or **incident**.
+	//   When the key is **trace_type**, the value can be **ConsoleAction**, **ApiCall** or **SystemAction**.
+	//   When the key is **resource_id**, the length range of value is from `1` to `350`.
+	//   When the key is **resource_name**, the length range of value is from `1` to `256`.
+	// + The **rule** can be: **!=** or **=**.
+	Rules []string `pulumi:"rules"`
+}
+
+// NotificationFilterInput is an input type that accepts NotificationFilterArgs and NotificationFilterOutput values.
+// You can construct a concrete instance of `NotificationFilterInput` via:
+//
+//	NotificationFilterArgs{...}
+type NotificationFilterInput interface {
+	pulumi.Input
+
+	ToNotificationFilterOutput() NotificationFilterOutput
+	ToNotificationFilterOutputWithContext(context.Context) NotificationFilterOutput
+}
+
+type NotificationFilterArgs struct {
+	// Specifies the relationship between multiple rules. The valid values are as follows:
+	// + **AND**: Effective after all filtering conditions are met.
+	// + **OR**: Effective when any one of the conditions is met.
+	Condition pulumi.StringInput `pulumi:"condition"`
+	// Specifies an array of filtering rules. It consists of three parts,
+	// the first part is the **key**, the second part is the **rule**, and the third part is the **value**,
+	// the format is: **key != value**.
+	// + The **key** can be: **api_version**, **code**, **trace_rating**, **trace_type**, **resource_id** and
+	//   **resource_name**.
+	//   When the key is **api_version**, the value needs to follow the regular constraint: **^ (a-zA-Z0-9_ -.) {1,64}$**.
+	//   When the key is **code**, the length range of value is from `1` to `256`.
+	//   When the key is **trace_rating**, the value can be **normal**, **warning** or **incident**.
+	//   When the key is **trace_type**, the value can be **ConsoleAction**, **ApiCall** or **SystemAction**.
+	//   When the key is **resource_id**, the length range of value is from `1` to `350`.
+	//   When the key is **resource_name**, the length range of value is from `1` to `256`.
+	// + The **rule** can be: **!=** or **=**.
+	Rules pulumi.StringArrayInput `pulumi:"rules"`
+}
+
+func (NotificationFilterArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*NotificationFilter)(nil)).Elem()
+}
+
+func (i NotificationFilterArgs) ToNotificationFilterOutput() NotificationFilterOutput {
+	return i.ToNotificationFilterOutputWithContext(context.Background())
+}
+
+func (i NotificationFilterArgs) ToNotificationFilterOutputWithContext(ctx context.Context) NotificationFilterOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(NotificationFilterOutput)
+}
+
+func (i NotificationFilterArgs) ToNotificationFilterPtrOutput() NotificationFilterPtrOutput {
+	return i.ToNotificationFilterPtrOutputWithContext(context.Background())
+}
+
+func (i NotificationFilterArgs) ToNotificationFilterPtrOutputWithContext(ctx context.Context) NotificationFilterPtrOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(NotificationFilterOutput).ToNotificationFilterPtrOutputWithContext(ctx)
+}
+
+// NotificationFilterPtrInput is an input type that accepts NotificationFilterArgs, NotificationFilterPtr and NotificationFilterPtrOutput values.
+// You can construct a concrete instance of `NotificationFilterPtrInput` via:
+//
+//	        NotificationFilterArgs{...}
+//
+//	or:
+//
+//	        nil
+type NotificationFilterPtrInput interface {
+	pulumi.Input
+
+	ToNotificationFilterPtrOutput() NotificationFilterPtrOutput
+	ToNotificationFilterPtrOutputWithContext(context.Context) NotificationFilterPtrOutput
+}
+
+type notificationFilterPtrType NotificationFilterArgs
+
+func NotificationFilterPtr(v *NotificationFilterArgs) NotificationFilterPtrInput {
+	return (*notificationFilterPtrType)(v)
+}
+
+func (*notificationFilterPtrType) ElementType() reflect.Type {
+	return reflect.TypeOf((**NotificationFilter)(nil)).Elem()
+}
+
+func (i *notificationFilterPtrType) ToNotificationFilterPtrOutput() NotificationFilterPtrOutput {
+	return i.ToNotificationFilterPtrOutputWithContext(context.Background())
+}
+
+func (i *notificationFilterPtrType) ToNotificationFilterPtrOutputWithContext(ctx context.Context) NotificationFilterPtrOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(NotificationFilterPtrOutput)
+}
+
+type NotificationFilterOutput struct{ *pulumi.OutputState }
+
+func (NotificationFilterOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*NotificationFilter)(nil)).Elem()
+}
+
+func (o NotificationFilterOutput) ToNotificationFilterOutput() NotificationFilterOutput {
+	return o
+}
+
+func (o NotificationFilterOutput) ToNotificationFilterOutputWithContext(ctx context.Context) NotificationFilterOutput {
+	return o
+}
+
+func (o NotificationFilterOutput) ToNotificationFilterPtrOutput() NotificationFilterPtrOutput {
+	return o.ToNotificationFilterPtrOutputWithContext(context.Background())
+}
+
+func (o NotificationFilterOutput) ToNotificationFilterPtrOutputWithContext(ctx context.Context) NotificationFilterPtrOutput {
+	return o.ApplyTWithContext(ctx, func(_ context.Context, v NotificationFilter) *NotificationFilter {
+		return &v
+	}).(NotificationFilterPtrOutput)
+}
+
+// Specifies the relationship between multiple rules. The valid values are as follows:
+// + **AND**: Effective after all filtering conditions are met.
+// + **OR**: Effective when any one of the conditions is met.
+func (o NotificationFilterOutput) Condition() pulumi.StringOutput {
+	return o.ApplyT(func(v NotificationFilter) string { return v.Condition }).(pulumi.StringOutput)
+}
+
+// Specifies an array of filtering rules. It consists of three parts,
+// the first part is the **key**, the second part is the **rule**, and the third part is the **value**,
+// the format is: **key != value**.
+//   - The **key** can be: **api_version**, **code**, **trace_rating**, **trace_type**, **resource_id** and
+//     **resource_name**.
+//     When the key is **api_version**, the value needs to follow the regular constraint: **^ (a-zA-Z0-9_ -.) {1,64}$**.
+//     When the key is **code**, the length range of value is from `1` to `256`.
+//     When the key is **trace_rating**, the value can be **normal**, **warning** or **incident**.
+//     When the key is **trace_type**, the value can be **ConsoleAction**, **ApiCall** or **SystemAction**.
+//     When the key is **resource_id**, the length range of value is from `1` to `350`.
+//     When the key is **resource_name**, the length range of value is from `1` to `256`.
+//   - The **rule** can be: **!=** or **=**.
+func (o NotificationFilterOutput) Rules() pulumi.StringArrayOutput {
+	return o.ApplyT(func(v NotificationFilter) []string { return v.Rules }).(pulumi.StringArrayOutput)
+}
+
+type NotificationFilterPtrOutput struct{ *pulumi.OutputState }
+
+func (NotificationFilterPtrOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((**NotificationFilter)(nil)).Elem()
+}
+
+func (o NotificationFilterPtrOutput) ToNotificationFilterPtrOutput() NotificationFilterPtrOutput {
+	return o
+}
+
+func (o NotificationFilterPtrOutput) ToNotificationFilterPtrOutputWithContext(ctx context.Context) NotificationFilterPtrOutput {
+	return o
+}
+
+func (o NotificationFilterPtrOutput) Elem() NotificationFilterOutput {
+	return o.ApplyT(func(v *NotificationFilter) NotificationFilter {
+		if v != nil {
+			return *v
+		}
+		var ret NotificationFilter
+		return ret
+	}).(NotificationFilterOutput)
+}
+
+// Specifies the relationship between multiple rules. The valid values are as follows:
+// + **AND**: Effective after all filtering conditions are met.
+// + **OR**: Effective when any one of the conditions is met.
+func (o NotificationFilterPtrOutput) Condition() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *NotificationFilter) *string {
+		if v == nil {
+			return nil
+		}
+		return &v.Condition
+	}).(pulumi.StringPtrOutput)
+}
+
+// Specifies an array of filtering rules. It consists of three parts,
+// the first part is the **key**, the second part is the **rule**, and the third part is the **value**,
+// the format is: **key != value**.
+//   - The **key** can be: **api_version**, **code**, **trace_rating**, **trace_type**, **resource_id** and
+//     **resource_name**.
+//     When the key is **api_version**, the value needs to follow the regular constraint: **^ (a-zA-Z0-9_ -.) {1,64}$**.
+//     When the key is **code**, the length range of value is from `1` to `256`.
+//     When the key is **trace_rating**, the value can be **normal**, **warning** or **incident**.
+//     When the key is **trace_type**, the value can be **ConsoleAction**, **ApiCall** or **SystemAction**.
+//     When the key is **resource_id**, the length range of value is from `1` to `350`.
+//     When the key is **resource_name**, the length range of value is from `1` to `256`.
+//   - The **rule** can be: **!=** or **=**.
+func (o NotificationFilterPtrOutput) Rules() pulumi.StringArrayOutput {
+	return o.ApplyT(func(v *NotificationFilter) []string {
+		if v == nil {
+			return nil
+		}
+		return v.Rules
+	}).(pulumi.StringArrayOutput)
+}
+
 type NotificationOperation struct {
 	// Specifies the resource type.
 	Resource string `pulumi:"resource"`
@@ -232,10 +440,14 @@ func (o NotificationOperationUserArrayOutput) Index(i pulumi.IntInput) Notificat
 }
 
 func init() {
+	pulumi.RegisterInputType(reflect.TypeOf((*NotificationFilterInput)(nil)).Elem(), NotificationFilterArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*NotificationFilterPtrInput)(nil)).Elem(), NotificationFilterArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*NotificationOperationInput)(nil)).Elem(), NotificationOperationArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*NotificationOperationArrayInput)(nil)).Elem(), NotificationOperationArray{})
 	pulumi.RegisterInputType(reflect.TypeOf((*NotificationOperationUserInput)(nil)).Elem(), NotificationOperationUserArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*NotificationOperationUserArrayInput)(nil)).Elem(), NotificationOperationUserArray{})
+	pulumi.RegisterOutputType(NotificationFilterOutput{})
+	pulumi.RegisterOutputType(NotificationFilterPtrOutput{})
 	pulumi.RegisterOutputType(NotificationOperationOutput{})
 	pulumi.RegisterOutputType(NotificationOperationArrayOutput{})
 	pulumi.RegisterOutputType(NotificationOperationUserOutput{})

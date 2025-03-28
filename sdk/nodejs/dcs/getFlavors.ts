@@ -19,7 +19,8 @@ import * as utilities from "../utilities";
  * }));
  * ```
  */
-export function getFlavors(args: GetFlavorsArgs, opts?: pulumi.InvokeOptions): Promise<GetFlavorsResult> {
+export function getFlavors(args?: GetFlavorsArgs, opts?: pulumi.InvokeOptions): Promise<GetFlavorsResult> {
+    args = args || {};
     if (!opts) {
         opts = {}
     }
@@ -54,7 +55,7 @@ export interface GetFlavorsArgs {
      * Proxy cluster instance specifications support `64`, `128`, `256`, `512`, and `1024`.
      * + **Memcached**: Stand-alone and active/standby type instance values: `2`, `4`, `8`, `16`, `32` and `64`.
      */
-    capacity: number;
+    capacity?: number;
     /**
      * The CPU architecture of cache instance.
      * Valid values *x86_64* and *aarch64*.
@@ -92,7 +93,7 @@ export interface GetFlavorsResult {
     /**
      * The total memory of the cache, in GB.
      */
-    readonly capacity: number;
+    readonly capacity?: number;
     /**
      * The CPU architecture of cache instance. Value is *x86_64* or *aarch64*.
      */
@@ -117,7 +118,7 @@ export interface GetFlavorsResult {
     readonly region: string;
 }
 
-export function getFlavorsOutput(args: GetFlavorsOutputArgs, opts?: pulumi.InvokeOptions): pulumi.Output<GetFlavorsResult> {
+export function getFlavorsOutput(args?: GetFlavorsOutputArgs, opts?: pulumi.InvokeOptions): pulumi.Output<GetFlavorsResult> {
     return pulumi.output(args).apply(a => getFlavors(a, opts))
 }
 
@@ -139,7 +140,7 @@ export interface GetFlavorsOutputArgs {
      * Proxy cluster instance specifications support `64`, `128`, `256`, `512`, and `1024`.
      * + **Memcached**: Stand-alone and active/standby type instance values: `2`, `4`, `8`, `16`, `32` and `64`.
      */
-    capacity: pulumi.Input<number>;
+    capacity?: pulumi.Input<number>;
     /**
      * The CPU architecture of cache instance.
      * Valid values *x86_64* and *aarch64*.

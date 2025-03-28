@@ -54,7 +54,7 @@ type Package struct {
 	CreatedAt pulumi.StringOutput `pulumi:"createdAt"`
 	// Specifies the group name which the package belongs to.
 	// Changing this parameter will delete the current package and upload a new package.
-	GroupName pulumi.StringOutput `pulumi:"groupName"`
+	GroupName pulumi.StringPtrOutput `pulumi:"groupName"`
 	// Specifies whether to upload resource packages in asynchronous mode.
 	// The default value is **false**. Changing this parameter will delete the current package and upload a new package.
 	IsAsync pulumi.BoolOutput `pulumi:"isAsync"`
@@ -72,12 +72,15 @@ type Package struct {
 	Region pulumi.StringOutput `pulumi:"region"`
 	// Status of a package group to be uploaded.
 	Status pulumi.StringOutput `pulumi:"status"`
+	// Specifies the key/value pairs to associate with the package.
+	Tags pulumi.StringMapOutput `pulumi:"tags"`
 	// Specifies the package type.
 	// + **jar**: `.jar` or jar related files.
 	// + **pyFile**: `.py` or python related files.
 	// + **file**: Other user files.
+	// + **modelFile**: User AI model files.
 	Type pulumi.StringOutput `pulumi:"type"`
-	// The last time when the package configuration update has complated.
+	// The last time when the package configuration update has completed.
 	UpdatedAt pulumi.StringOutput `pulumi:"updatedAt"`
 }
 
@@ -88,9 +91,6 @@ func NewPackage(ctx *pulumi.Context,
 		return nil, errors.New("missing one or more required arguments")
 	}
 
-	if args.GroupName == nil {
-		return nil, errors.New("invalid value for required argument 'GroupName'")
-	}
 	if args.ObjectPath == nil {
 		return nil, errors.New("invalid value for required argument 'ObjectPath'")
 	}
@@ -142,12 +142,15 @@ type packageState struct {
 	Region *string `pulumi:"region"`
 	// Status of a package group to be uploaded.
 	Status *string `pulumi:"status"`
+	// Specifies the key/value pairs to associate with the package.
+	Tags map[string]string `pulumi:"tags"`
 	// Specifies the package type.
 	// + **jar**: `.jar` or jar related files.
 	// + **pyFile**: `.py` or python related files.
 	// + **file**: Other user files.
+	// + **modelFile**: User AI model files.
 	Type *string `pulumi:"type"`
-	// The last time when the package configuration update has complated.
+	// The last time when the package configuration update has completed.
 	UpdatedAt *string `pulumi:"updatedAt"`
 }
 
@@ -174,12 +177,15 @@ type PackageState struct {
 	Region pulumi.StringPtrInput
 	// Status of a package group to be uploaded.
 	Status pulumi.StringPtrInput
+	// Specifies the key/value pairs to associate with the package.
+	Tags pulumi.StringMapInput
 	// Specifies the package type.
 	// + **jar**: `.jar` or jar related files.
 	// + **pyFile**: `.py` or python related files.
 	// + **file**: Other user files.
+	// + **modelFile**: User AI model files.
 	Type pulumi.StringPtrInput
-	// The last time when the package configuration update has complated.
+	// The last time when the package configuration update has completed.
 	UpdatedAt pulumi.StringPtrInput
 }
 
@@ -190,7 +196,7 @@ func (PackageState) ElementType() reflect.Type {
 type packageArgs struct {
 	// Specifies the group name which the package belongs to.
 	// Changing this parameter will delete the current package and upload a new package.
-	GroupName string `pulumi:"groupName"`
+	GroupName *string `pulumi:"groupName"`
 	// Specifies whether to upload resource packages in asynchronous mode.
 	// The default value is **false**. Changing this parameter will delete the current package and upload a new package.
 	IsAsync *bool `pulumi:"isAsync"`
@@ -204,10 +210,13 @@ type packageArgs struct {
 	// If omitted, the provider-level region will be used.
 	// Changing this parameter will delete the current package and upload a new package.
 	Region *string `pulumi:"region"`
+	// Specifies the key/value pairs to associate with the package.
+	Tags map[string]string `pulumi:"tags"`
 	// Specifies the package type.
 	// + **jar**: `.jar` or jar related files.
 	// + **pyFile**: `.py` or python related files.
 	// + **file**: Other user files.
+	// + **modelFile**: User AI model files.
 	Type string `pulumi:"type"`
 }
 
@@ -215,7 +224,7 @@ type packageArgs struct {
 type PackageArgs struct {
 	// Specifies the group name which the package belongs to.
 	// Changing this parameter will delete the current package and upload a new package.
-	GroupName pulumi.StringInput
+	GroupName pulumi.StringPtrInput
 	// Specifies whether to upload resource packages in asynchronous mode.
 	// The default value is **false**. Changing this parameter will delete the current package and upload a new package.
 	IsAsync pulumi.BoolPtrInput
@@ -229,10 +238,13 @@ type PackageArgs struct {
 	// If omitted, the provider-level region will be used.
 	// Changing this parameter will delete the current package and upload a new package.
 	Region pulumi.StringPtrInput
+	// Specifies the key/value pairs to associate with the package.
+	Tags pulumi.StringMapInput
 	// Specifies the package type.
 	// + **jar**: `.jar` or jar related files.
 	// + **pyFile**: `.py` or python related files.
 	// + **file**: Other user files.
+	// + **modelFile**: User AI model files.
 	Type pulumi.StringInput
 }
 
@@ -330,8 +342,8 @@ func (o PackageOutput) CreatedAt() pulumi.StringOutput {
 
 // Specifies the group name which the package belongs to.
 // Changing this parameter will delete the current package and upload a new package.
-func (o PackageOutput) GroupName() pulumi.StringOutput {
-	return o.ApplyT(func(v *Package) pulumi.StringOutput { return v.GroupName }).(pulumi.StringOutput)
+func (o PackageOutput) GroupName() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *Package) pulumi.StringPtrOutput { return v.GroupName }).(pulumi.StringPtrOutput)
 }
 
 // Specifies whether to upload resource packages in asynchronous mode.
@@ -369,15 +381,21 @@ func (o PackageOutput) Status() pulumi.StringOutput {
 	return o.ApplyT(func(v *Package) pulumi.StringOutput { return v.Status }).(pulumi.StringOutput)
 }
 
+// Specifies the key/value pairs to associate with the package.
+func (o PackageOutput) Tags() pulumi.StringMapOutput {
+	return o.ApplyT(func(v *Package) pulumi.StringMapOutput { return v.Tags }).(pulumi.StringMapOutput)
+}
+
 // Specifies the package type.
 // + **jar**: `.jar` or jar related files.
 // + **pyFile**: `.py` or python related files.
 // + **file**: Other user files.
+// + **modelFile**: User AI model files.
 func (o PackageOutput) Type() pulumi.StringOutput {
 	return o.ApplyT(func(v *Package) pulumi.StringOutput { return v.Type }).(pulumi.StringOutput)
 }
 
-// The last time when the package configuration update has complated.
+// The last time when the package configuration update has completed.
 func (o PackageOutput) UpdatedAt() pulumi.StringOutput {
 	return o.ApplyT(func(v *Package) pulumi.StringOutput { return v.UpdatedAt }).(pulumi.StringOutput)
 }

@@ -12,6 +12,14 @@ from .. import _utilities
 __all__ = [
     'FunctionCustomImageArgs',
     'FunctionFuncMountArgs',
+    'FunctionNetworkControllerArgs',
+    'FunctionNetworkControllerTriggerAccessVpcArgs',
+    'FunctionReservedInstanceArgs',
+    'FunctionReservedInstanceTacticsConfigArgs',
+    'FunctionReservedInstanceTacticsConfigCronConfigArgs',
+    'FunctionReservedInstanceTacticsConfigMetricConfigArgs',
+    'FunctionVersionArgs',
+    'FunctionVersionAliasesArgs',
     'TriggerApigArgs',
     'TriggerDisArgs',
     'TriggerKafkaArgs',
@@ -24,11 +32,35 @@ __all__ = [
 @pulumi.input_type
 class FunctionCustomImageArgs:
     def __init__(__self__, *,
-                 url: pulumi.Input[str]):
+                 url: pulumi.Input[str],
+                 args: Optional[pulumi.Input[str]] = None,
+                 command: Optional[pulumi.Input[str]] = None,
+                 user_group_id: Optional[pulumi.Input[str]] = None,
+                 user_id: Optional[pulumi.Input[str]] = None,
+                 working_dir: Optional[pulumi.Input[str]] = None):
         """
         :param pulumi.Input[str] url: Specifies the URL of SWR image, the URL must start with `swr.`.
+        :param pulumi.Input[str] args: Specifies the command line arguments used to start the SWR image.  
+               If multiple arguments are separated by commas (,). e.g. `-args,value`.
+               If this parameter is not specified, the CMD in the image configuration will be used by default.
+        :param pulumi.Input[str] command: Specifies the startup commands of the SWR image.  
+               Multiple commands are separated by commas (,). e.g. `/bin/sh`.
+               If this parameter is not specified, the entrypoint or CMD in the image configuration will be used by default.
+        :param pulumi.Input[str] working_dir: Specifies the working directory of the SWR image.  
+               If not specified, the default value is `/`.
+               Currently, the folder path can only be set to `/` and it cannot be created or modified.
         """
         pulumi.set(__self__, "url", url)
+        if args is not None:
+            pulumi.set(__self__, "args", args)
+        if command is not None:
+            pulumi.set(__self__, "command", command)
+        if user_group_id is not None:
+            pulumi.set(__self__, "user_group_id", user_group_id)
+        if user_id is not None:
+            pulumi.set(__self__, "user_id", user_id)
+        if working_dir is not None:
+            pulumi.set(__self__, "working_dir", working_dir)
 
     @property
     @pulumi.getter
@@ -42,6 +74,66 @@ class FunctionCustomImageArgs:
     def url(self, value: pulumi.Input[str]):
         pulumi.set(self, "url", value)
 
+    @property
+    @pulumi.getter
+    def args(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the command line arguments used to start the SWR image.  
+        If multiple arguments are separated by commas (,). e.g. `-args,value`.
+        If this parameter is not specified, the CMD in the image configuration will be used by default.
+        """
+        return pulumi.get(self, "args")
+
+    @args.setter
+    def args(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "args", value)
+
+    @property
+    @pulumi.getter
+    def command(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the startup commands of the SWR image.  
+        Multiple commands are separated by commas (,). e.g. `/bin/sh`.
+        If this parameter is not specified, the entrypoint or CMD in the image configuration will be used by default.
+        """
+        return pulumi.get(self, "command")
+
+    @command.setter
+    def command(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "command", value)
+
+    @property
+    @pulumi.getter(name="userGroupId")
+    def user_group_id(self) -> Optional[pulumi.Input[str]]:
+        return pulumi.get(self, "user_group_id")
+
+    @user_group_id.setter
+    def user_group_id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "user_group_id", value)
+
+    @property
+    @pulumi.getter(name="userId")
+    def user_id(self) -> Optional[pulumi.Input[str]]:
+        return pulumi.get(self, "user_id")
+
+    @user_id.setter
+    def user_id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "user_id", value)
+
+    @property
+    @pulumi.getter(name="workingDir")
+    def working_dir(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the working directory of the SWR image.  
+        If not specified, the default value is `/`.
+        Currently, the folder path can only be set to `/` and it cannot be created or modified.
+        """
+        return pulumi.get(self, "working_dir")
+
+    @working_dir.setter
+    def working_dir(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "working_dir", value)
+
 
 @pulumi.input_type
 class FunctionFuncMountArgs:
@@ -54,8 +146,12 @@ class FunctionFuncMountArgs:
         """
         :param pulumi.Input[str] local_mount_path: Specifies the function access path.
         :param pulumi.Input[str] mount_resource: Specifies the ID of the mounted resource (corresponding cloud service).
-        :param pulumi.Input[str] mount_share_path: Specifies the remote mount path. Example: 192.168.0.12:/data.
-        :param pulumi.Input[str] mount_type: Specifies the mount type. Options: sfs, sfsTurbo, and ecs.
+        :param pulumi.Input[str] mount_share_path: Specifies the remote mount path, e.g. **192.168.0.12:/data**.
+        :param pulumi.Input[str] mount_type: Specifies the mount type.
+               + **sfs**
+               + **sfsTurbo**
+               + **ecs**
+        :param pulumi.Input[str] status: The mount status.
         """
         pulumi.set(__self__, "local_mount_path", local_mount_path)
         pulumi.set(__self__, "mount_resource", mount_resource)
@@ -92,7 +188,7 @@ class FunctionFuncMountArgs:
     @pulumi.getter(name="mountSharePath")
     def mount_share_path(self) -> pulumi.Input[str]:
         """
-        Specifies the remote mount path. Example: 192.168.0.12:/data.
+        Specifies the remote mount path, e.g. **192.168.0.12:/data**.
         """
         return pulumi.get(self, "mount_share_path")
 
@@ -104,7 +200,10 @@ class FunctionFuncMountArgs:
     @pulumi.getter(name="mountType")
     def mount_type(self) -> pulumi.Input[str]:
         """
-        Specifies the mount type. Options: sfs, sfsTurbo, and ecs.
+        Specifies the mount type.
+        + **sfs**
+        + **sfsTurbo**
+        + **ecs**
         """
         return pulumi.get(self, "mount_type")
 
@@ -115,11 +214,526 @@ class FunctionFuncMountArgs:
     @property
     @pulumi.getter
     def status(self) -> Optional[pulumi.Input[str]]:
+        """
+        The mount status.
+        """
         return pulumi.get(self, "status")
 
     @status.setter
     def status(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "status", value)
+
+
+@pulumi.input_type
+class FunctionNetworkControllerArgs:
+    def __init__(__self__, *,
+                 trigger_access_vpcs: pulumi.Input[Sequence[pulumi.Input['FunctionNetworkControllerTriggerAccessVpcArgs']]],
+                 disable_public_network: Optional[pulumi.Input[bool]] = None):
+        """
+        :param pulumi.Input[Sequence[pulumi.Input['FunctionNetworkControllerTriggerAccessVpcArgs']]] trigger_access_vpcs: Specifies the configuration of the VPCs that can trigger the function.  
+               The trigger_access_vpcs structure is documented below.
+        :param pulumi.Input[bool] disable_public_network: Specifies whether to disable the public network access.
+        """
+        pulumi.set(__self__, "trigger_access_vpcs", trigger_access_vpcs)
+        if disable_public_network is not None:
+            pulumi.set(__self__, "disable_public_network", disable_public_network)
+
+    @property
+    @pulumi.getter(name="triggerAccessVpcs")
+    def trigger_access_vpcs(self) -> pulumi.Input[Sequence[pulumi.Input['FunctionNetworkControllerTriggerAccessVpcArgs']]]:
+        """
+        Specifies the configuration of the VPCs that can trigger the function.  
+        The trigger_access_vpcs structure is documented below.
+        """
+        return pulumi.get(self, "trigger_access_vpcs")
+
+    @trigger_access_vpcs.setter
+    def trigger_access_vpcs(self, value: pulumi.Input[Sequence[pulumi.Input['FunctionNetworkControllerTriggerAccessVpcArgs']]]):
+        pulumi.set(self, "trigger_access_vpcs", value)
+
+    @property
+    @pulumi.getter(name="disablePublicNetwork")
+    def disable_public_network(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies whether to disable the public network access.
+        """
+        return pulumi.get(self, "disable_public_network")
+
+    @disable_public_network.setter
+    def disable_public_network(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "disable_public_network", value)
+
+
+@pulumi.input_type
+class FunctionNetworkControllerTriggerAccessVpcArgs:
+    def __init__(__self__, *,
+                 vpc_id: pulumi.Input[str]):
+        """
+        :param pulumi.Input[str] vpc_id: Specifies the ID of the VPC that can trigger the function.
+        """
+        pulumi.set(__self__, "vpc_id", vpc_id)
+
+    @property
+    @pulumi.getter(name="vpcId")
+    def vpc_id(self) -> pulumi.Input[str]:
+        """
+        Specifies the ID of the VPC that can trigger the function.
+        """
+        return pulumi.get(self, "vpc_id")
+
+    @vpc_id.setter
+    def vpc_id(self, value: pulumi.Input[str]):
+        pulumi.set(self, "vpc_id", value)
+
+
+@pulumi.input_type
+class FunctionReservedInstanceArgs:
+    def __init__(__self__, *,
+                 count: pulumi.Input[int],
+                 qualifier_name: pulumi.Input[str],
+                 qualifier_type: pulumi.Input[str],
+                 idle_mode: Optional[pulumi.Input[bool]] = None,
+                 tactics_config: Optional[pulumi.Input['FunctionReservedInstanceTacticsConfigArgs']] = None):
+        """
+        :param pulumi.Input[int] count: Specifies the number of reserved instance to which the policy belongs.  
+               The valid value is range from `0` to `1,000`.
+        :param pulumi.Input[str] qualifier_name: Specifies the version name or alias name.
+        :param pulumi.Input[str] qualifier_type: Specifies the qualifier type of reserved instance.  
+               The valid values are as follows:
+               + **version**
+               + **alias**
+        :param pulumi.Input[bool] idle_mode: Specifies whether to enable the idle mode.  
+               Defaults to **false**.
+               If this parameter is enabled, reserved instances are initialized and the mode change needs some time to take effect.
+               You will still be billed at the price of reserved instances for non-idle mode in this period.
+        :param pulumi.Input['FunctionReservedInstanceTacticsConfigArgs'] tactics_config: Specifies the auto scaling policies for reserved instance.  
+               The tactics_config structure is documented below.
+        """
+        pulumi.set(__self__, "count", count)
+        pulumi.set(__self__, "qualifier_name", qualifier_name)
+        pulumi.set(__self__, "qualifier_type", qualifier_type)
+        if idle_mode is not None:
+            pulumi.set(__self__, "idle_mode", idle_mode)
+        if tactics_config is not None:
+            pulumi.set(__self__, "tactics_config", tactics_config)
+
+    @property
+    @pulumi.getter
+    def count(self) -> pulumi.Input[int]:
+        """
+        Specifies the number of reserved instance to which the policy belongs.  
+        The valid value is range from `0` to `1,000`.
+        """
+        return pulumi.get(self, "count")
+
+    @count.setter
+    def count(self, value: pulumi.Input[int]):
+        pulumi.set(self, "count", value)
+
+    @property
+    @pulumi.getter(name="qualifierName")
+    def qualifier_name(self) -> pulumi.Input[str]:
+        """
+        Specifies the version name or alias name.
+        """
+        return pulumi.get(self, "qualifier_name")
+
+    @qualifier_name.setter
+    def qualifier_name(self, value: pulumi.Input[str]):
+        pulumi.set(self, "qualifier_name", value)
+
+    @property
+    @pulumi.getter(name="qualifierType")
+    def qualifier_type(self) -> pulumi.Input[str]:
+        """
+        Specifies the qualifier type of reserved instance.  
+        The valid values are as follows:
+        + **version**
+        + **alias**
+        """
+        return pulumi.get(self, "qualifier_type")
+
+    @qualifier_type.setter
+    def qualifier_type(self, value: pulumi.Input[str]):
+        pulumi.set(self, "qualifier_type", value)
+
+    @property
+    @pulumi.getter(name="idleMode")
+    def idle_mode(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies whether to enable the idle mode.  
+        Defaults to **false**.
+        If this parameter is enabled, reserved instances are initialized and the mode change needs some time to take effect.
+        You will still be billed at the price of reserved instances for non-idle mode in this period.
+        """
+        return pulumi.get(self, "idle_mode")
+
+    @idle_mode.setter
+    def idle_mode(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "idle_mode", value)
+
+    @property
+    @pulumi.getter(name="tacticsConfig")
+    def tactics_config(self) -> Optional[pulumi.Input['FunctionReservedInstanceTacticsConfigArgs']]:
+        """
+        Specifies the auto scaling policies for reserved instance.  
+        The tactics_config structure is documented below.
+        """
+        return pulumi.get(self, "tactics_config")
+
+    @tactics_config.setter
+    def tactics_config(self, value: Optional[pulumi.Input['FunctionReservedInstanceTacticsConfigArgs']]):
+        pulumi.set(self, "tactics_config", value)
+
+
+@pulumi.input_type
+class FunctionReservedInstanceTacticsConfigArgs:
+    def __init__(__self__, *,
+                 cron_configs: Optional[pulumi.Input[Sequence[pulumi.Input['FunctionReservedInstanceTacticsConfigCronConfigArgs']]]] = None,
+                 metric_configs: Optional[pulumi.Input[Sequence[pulumi.Input['FunctionReservedInstanceTacticsConfigMetricConfigArgs']]]] = None):
+        """
+        :param pulumi.Input[Sequence[pulumi.Input['FunctionReservedInstanceTacticsConfigCronConfigArgs']]] cron_configs: Specifies the list of scheduled policy configurations.  
+               The cron_configs structure is documented below.
+        :param pulumi.Input[Sequence[pulumi.Input['FunctionReservedInstanceTacticsConfigMetricConfigArgs']]] metric_configs: Specifies the list of metric policy configurations.  
+               The metric_configs structure is documented below.
+        """
+        if cron_configs is not None:
+            pulumi.set(__self__, "cron_configs", cron_configs)
+        if metric_configs is not None:
+            pulumi.set(__self__, "metric_configs", metric_configs)
+
+    @property
+    @pulumi.getter(name="cronConfigs")
+    def cron_configs(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['FunctionReservedInstanceTacticsConfigCronConfigArgs']]]]:
+        """
+        Specifies the list of scheduled policy configurations.  
+        The cron_configs structure is documented below.
+        """
+        return pulumi.get(self, "cron_configs")
+
+    @cron_configs.setter
+    def cron_configs(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['FunctionReservedInstanceTacticsConfigCronConfigArgs']]]]):
+        pulumi.set(self, "cron_configs", value)
+
+    @property
+    @pulumi.getter(name="metricConfigs")
+    def metric_configs(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['FunctionReservedInstanceTacticsConfigMetricConfigArgs']]]]:
+        """
+        Specifies the list of metric policy configurations.  
+        The metric_configs structure is documented below.
+        """
+        return pulumi.get(self, "metric_configs")
+
+    @metric_configs.setter
+    def metric_configs(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['FunctionReservedInstanceTacticsConfigMetricConfigArgs']]]]):
+        pulumi.set(self, "metric_configs", value)
+
+
+@pulumi.input_type
+class FunctionReservedInstanceTacticsConfigCronConfigArgs:
+    def __init__(__self__, *,
+                 count: pulumi.Input[int],
+                 cron: pulumi.Input[str],
+                 expired_time: pulumi.Input[int],
+                 name: pulumi.Input[str],
+                 start_time: pulumi.Input[int]):
+        """
+        :param pulumi.Input[int] count: Specifies the number of reserved instance to which the policy belongs.  
+               The valid value is range from `0` to `1,000`.
+        :param pulumi.Input[str] cron: Specifies the cron expression.  
+               For the syntax, please refer to the [documentation](https://support.huaweicloud.com/intl/en-us/usermanual-functiongraph/functiongraph_01_0908.html).
+        :param pulumi.Input[int] expired_time: Specifies the expiration timestamp of the policy. The unit is `s`, e.g. **1740560074**.
+        :param pulumi.Input[str] name: Specifies the name of metric policy.  
+               The valid length is limited from `1` to `60` characters, only letters, digits, hyphens (-), and underscores (_) are
+               allowed. The name must start with a letter and ending with a letter or digit.
+        :param pulumi.Input[int] start_time: Specifies the effective timestamp of policy. The unit is `s`, e.g. **1740560074**.
+        """
+        pulumi.set(__self__, "count", count)
+        pulumi.set(__self__, "cron", cron)
+        pulumi.set(__self__, "expired_time", expired_time)
+        pulumi.set(__self__, "name", name)
+        pulumi.set(__self__, "start_time", start_time)
+
+    @property
+    @pulumi.getter
+    def count(self) -> pulumi.Input[int]:
+        """
+        Specifies the number of reserved instance to which the policy belongs.  
+        The valid value is range from `0` to `1,000`.
+        """
+        return pulumi.get(self, "count")
+
+    @count.setter
+    def count(self, value: pulumi.Input[int]):
+        pulumi.set(self, "count", value)
+
+    @property
+    @pulumi.getter
+    def cron(self) -> pulumi.Input[str]:
+        """
+        Specifies the cron expression.  
+        For the syntax, please refer to the [documentation](https://support.huaweicloud.com/intl/en-us/usermanual-functiongraph/functiongraph_01_0908.html).
+        """
+        return pulumi.get(self, "cron")
+
+    @cron.setter
+    def cron(self, value: pulumi.Input[str]):
+        pulumi.set(self, "cron", value)
+
+    @property
+    @pulumi.getter(name="expiredTime")
+    def expired_time(self) -> pulumi.Input[int]:
+        """
+        Specifies the expiration timestamp of the policy. The unit is `s`, e.g. **1740560074**.
+        """
+        return pulumi.get(self, "expired_time")
+
+    @expired_time.setter
+    def expired_time(self, value: pulumi.Input[int]):
+        pulumi.set(self, "expired_time", value)
+
+    @property
+    @pulumi.getter
+    def name(self) -> pulumi.Input[str]:
+        """
+        Specifies the name of metric policy.  
+        The valid length is limited from `1` to `60` characters, only letters, digits, hyphens (-), and underscores (_) are
+        allowed. The name must start with a letter and ending with a letter or digit.
+        """
+        return pulumi.get(self, "name")
+
+    @name.setter
+    def name(self, value: pulumi.Input[str]):
+        pulumi.set(self, "name", value)
+
+    @property
+    @pulumi.getter(name="startTime")
+    def start_time(self) -> pulumi.Input[int]:
+        """
+        Specifies the effective timestamp of policy. The unit is `s`, e.g. **1740560074**.
+        """
+        return pulumi.get(self, "start_time")
+
+    @start_time.setter
+    def start_time(self, value: pulumi.Input[int]):
+        pulumi.set(self, "start_time", value)
+
+
+@pulumi.input_type
+class FunctionReservedInstanceTacticsConfigMetricConfigArgs:
+    def __init__(__self__, *,
+                 min: pulumi.Input[int],
+                 name: pulumi.Input[str],
+                 threshold: pulumi.Input[int],
+                 type: pulumi.Input[str]):
+        """
+        :param pulumi.Input[int] min: Specifies the minimun of traffic.  
+               The valid value is range from `0` to `1,000`.
+        :param pulumi.Input[str] name: Specifies the name of metric policy.  
+               The valid length is limited from `1` to `60` characters, only letters, digits, hyphens (-), and underscores (_) are
+               allowed. The name must start with a letter and ending with a letter or digit.
+        :param pulumi.Input[int] threshold: Specifies the metric policy threshold.  
+               The valid value is range from `1` to `99`.
+        :param pulumi.Input[str] type: Specifies the type of metric policy.  
+               The valid value is as follows:
+               + **Concurrency**: Reserved instance usage.
+        """
+        pulumi.set(__self__, "min", min)
+        pulumi.set(__self__, "name", name)
+        pulumi.set(__self__, "threshold", threshold)
+        pulumi.set(__self__, "type", type)
+
+    @property
+    @pulumi.getter
+    def min(self) -> pulumi.Input[int]:
+        """
+        Specifies the minimun of traffic.  
+        The valid value is range from `0` to `1,000`.
+        """
+        return pulumi.get(self, "min")
+
+    @min.setter
+    def min(self, value: pulumi.Input[int]):
+        pulumi.set(self, "min", value)
+
+    @property
+    @pulumi.getter
+    def name(self) -> pulumi.Input[str]:
+        """
+        Specifies the name of metric policy.  
+        The valid length is limited from `1` to `60` characters, only letters, digits, hyphens (-), and underscores (_) are
+        allowed. The name must start with a letter and ending with a letter or digit.
+        """
+        return pulumi.get(self, "name")
+
+    @name.setter
+    def name(self, value: pulumi.Input[str]):
+        pulumi.set(self, "name", value)
+
+    @property
+    @pulumi.getter
+    def threshold(self) -> pulumi.Input[int]:
+        """
+        Specifies the metric policy threshold.  
+        The valid value is range from `1` to `99`.
+        """
+        return pulumi.get(self, "threshold")
+
+    @threshold.setter
+    def threshold(self, value: pulumi.Input[int]):
+        pulumi.set(self, "threshold", value)
+
+    @property
+    @pulumi.getter
+    def type(self) -> pulumi.Input[str]:
+        """
+        Specifies the type of metric policy.  
+        The valid value is as follows:
+        + **Concurrency**: Reserved instance usage.
+        """
+        return pulumi.get(self, "type")
+
+    @type.setter
+    def type(self, value: pulumi.Input[str]):
+        pulumi.set(self, "type", value)
+
+
+@pulumi.input_type
+class FunctionVersionArgs:
+    def __init__(__self__, *,
+                 name: pulumi.Input[str],
+                 aliases: Optional[pulumi.Input['FunctionVersionAliasesArgs']] = None,
+                 description: Optional[pulumi.Input[str]] = None):
+        """
+        :param pulumi.Input[str] name: Specifies the name of metric policy.  
+               The valid length is limited from `1` to `60` characters, only letters, digits, hyphens (-), and underscores (_) are
+               allowed. The name must start with a letter and ending with a letter or digit.
+        :param pulumi.Input['FunctionVersionAliasesArgs'] aliases: Specifies the aliases management for specified version.  
+               The aliases structure is documented below.
+        :param pulumi.Input[str] description: Specifies the description of the version alias.
+        """
+        pulumi.set(__self__, "name", name)
+        if aliases is not None:
+            pulumi.set(__self__, "aliases", aliases)
+        if description is not None:
+            pulumi.set(__self__, "description", description)
+
+    @property
+    @pulumi.getter
+    def name(self) -> pulumi.Input[str]:
+        """
+        Specifies the name of metric policy.  
+        The valid length is limited from `1` to `60` characters, only letters, digits, hyphens (-), and underscores (_) are
+        allowed. The name must start with a letter and ending with a letter or digit.
+        """
+        return pulumi.get(self, "name")
+
+    @name.setter
+    def name(self, value: pulumi.Input[str]):
+        pulumi.set(self, "name", value)
+
+    @property
+    @pulumi.getter
+    def aliases(self) -> Optional[pulumi.Input['FunctionVersionAliasesArgs']]:
+        """
+        Specifies the aliases management for specified version.  
+        The aliases structure is documented below.
+        """
+        return pulumi.get(self, "aliases")
+
+    @aliases.setter
+    def aliases(self, value: Optional[pulumi.Input['FunctionVersionAliasesArgs']]):
+        pulumi.set(self, "aliases", value)
+
+    @property
+    @pulumi.getter
+    def description(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the description of the version alias.
+        """
+        return pulumi.get(self, "description")
+
+    @description.setter
+    def description(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "description", value)
+
+
+@pulumi.input_type
+class FunctionVersionAliasesArgs:
+    def __init__(__self__, *,
+                 name: pulumi.Input[str],
+                 additional_version_strategy: Optional[pulumi.Input[str]] = None,
+                 additional_version_weights: Optional[pulumi.Input[str]] = None,
+                 description: Optional[pulumi.Input[str]] = None):
+        """
+        :param pulumi.Input[str] name: Specifies the name of metric policy.  
+               The valid length is limited from `1` to `60` characters, only letters, digits, hyphens (-), and underscores (_) are
+               allowed. The name must start with a letter and ending with a letter or digit.
+        :param pulumi.Input[str] additional_version_strategy: Specifies the rule grayscale configuration of the version
+               alias, in JSON format.
+        :param pulumi.Input[str] additional_version_weights: Specifies the percentage grayscale configuration of the version
+               alias, in JSON format.
+        :param pulumi.Input[str] description: Specifies the description of the version alias.
+        """
+        pulumi.set(__self__, "name", name)
+        if additional_version_strategy is not None:
+            pulumi.set(__self__, "additional_version_strategy", additional_version_strategy)
+        if additional_version_weights is not None:
+            pulumi.set(__self__, "additional_version_weights", additional_version_weights)
+        if description is not None:
+            pulumi.set(__self__, "description", description)
+
+    @property
+    @pulumi.getter
+    def name(self) -> pulumi.Input[str]:
+        """
+        Specifies the name of metric policy.  
+        The valid length is limited from `1` to `60` characters, only letters, digits, hyphens (-), and underscores (_) are
+        allowed. The name must start with a letter and ending with a letter or digit.
+        """
+        return pulumi.get(self, "name")
+
+    @name.setter
+    def name(self, value: pulumi.Input[str]):
+        pulumi.set(self, "name", value)
+
+    @property
+    @pulumi.getter(name="additionalVersionStrategy")
+    def additional_version_strategy(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the rule grayscale configuration of the version
+        alias, in JSON format.
+        """
+        return pulumi.get(self, "additional_version_strategy")
+
+    @additional_version_strategy.setter
+    def additional_version_strategy(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "additional_version_strategy", value)
+
+    @property
+    @pulumi.getter(name="additionalVersionWeights")
+    def additional_version_weights(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the percentage grayscale configuration of the version
+        alias, in JSON format.
+        """
+        return pulumi.get(self, "additional_version_weights")
+
+    @additional_version_weights.setter
+    def additional_version_weights(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "additional_version_weights", value)
+
+    @property
+    @pulumi.getter
+    def description(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the description of the version alias.
+        """
+        return pulumi.get(self, "description")
+
+    @description.setter
+    def description(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "description", value)
 
 
 @pulumi.input_type
@@ -361,7 +975,9 @@ class TriggerKafkaArgs:
     def __init__(__self__, *,
                  instance_id: pulumi.Input[str],
                  topic_ids: pulumi.Input[Sequence[pulumi.Input[str]]],
-                 batch_size: Optional[pulumi.Input[int]] = None):
+                 batch_size: Optional[pulumi.Input[int]] = None,
+                 password: Optional[pulumi.Input[str]] = None,
+                 user_name: Optional[pulumi.Input[str]] = None):
         """
         :param pulumi.Input[str] instance_id: Specifies the ID of the APIG dedicated instance to which the API belongs.
                Required if the `type` is `DEDICATEDGATEWAY`. Changing this will create a new trigger resource.
@@ -370,11 +986,19 @@ class TriggerKafkaArgs:
         :param pulumi.Input[int] batch_size: Specifies the The number of messages consumed from the topic each time.
                The valid value is range from `1` to `1,000`. Defaults to `100`.
                Changing this will create a new trigger resource.
+        :param pulumi.Input[str] password: Specifies the password for logging in to the Kafka Manager.
+               Changing this will create a new trigger resource.
+        :param pulumi.Input[str] user_name: Specifies the username for logging in to the Kafka Manager.
+               Changing this will create a new trigger resource.
         """
         pulumi.set(__self__, "instance_id", instance_id)
         pulumi.set(__self__, "topic_ids", topic_ids)
         if batch_size is not None:
             pulumi.set(__self__, "batch_size", batch_size)
+        if password is not None:
+            pulumi.set(__self__, "password", password)
+        if user_name is not None:
+            pulumi.set(__self__, "user_name", user_name)
 
     @property
     @pulumi.getter(name="instanceId")
@@ -415,6 +1039,32 @@ class TriggerKafkaArgs:
     @batch_size.setter
     def batch_size(self, value: Optional[pulumi.Input[int]]):
         pulumi.set(self, "batch_size", value)
+
+    @property
+    @pulumi.getter
+    def password(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the password for logging in to the Kafka Manager.
+        Changing this will create a new trigger resource.
+        """
+        return pulumi.get(self, "password")
+
+    @password.setter
+    def password(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "password", value)
+
+    @property
+    @pulumi.getter(name="userName")
+    def user_name(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the username for logging in to the Kafka Manager.
+        Changing this will create a new trigger resource.
+        """
+        return pulumi.get(self, "user_name")
+
+    @user_name.setter
+    def user_name(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "user_name", value)
 
 
 @pulumi.input_type
@@ -590,7 +1240,7 @@ class TriggerTimerArgs:
                  schedule_type: pulumi.Input[str],
                  additional_information: Optional[pulumi.Input[str]] = None):
         """
-        :param pulumi.Input[str] name: Specifies the trigger name, which can contains of 1 to 64 characters.
+        :param pulumi.Input[str] name: Specifies the trigger name, which can contains of `1` to `64` characters.
                The name must start with a letter, only letters, digits, hyphens (-) and underscores (_) are allowed.
                Changing this will create a new trigger resource.
         :param pulumi.Input[str] schedule: Specifies the time schedule.
@@ -615,7 +1265,7 @@ class TriggerTimerArgs:
     @pulumi.getter
     def name(self) -> pulumi.Input[str]:
         """
-        Specifies the trigger name, which can contains of 1 to 64 characters.
+        Specifies the trigger name, which can contains of `1` to `64` characters.
         The name must start with a letter, only letters, digits, hyphens (-) and underscores (_) are allowed.
         Changing this will create a new trigger resource.
         """

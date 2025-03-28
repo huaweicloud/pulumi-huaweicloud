@@ -138,7 +138,7 @@ def get_cassandra_dedicated_resource(region: Optional[str] = None,
                                      resource_name: Optional[str] = None,
                                      opts: Optional[pulumi.InvokeOptions] = None) -> AwaitableGetCassandraDedicatedResourceResult:
     """
-    Use this data source to get available HuaweiCloud gaussdb cassandra dedicated resource.
+    Use this data source to get available HuaweiCloud GeminiDB Cassandra dedicated resource.
 
     ## Example Usage
 
@@ -177,7 +177,7 @@ def get_cassandra_dedicated_resource_output(region: Optional[pulumi.Input[Option
                                             resource_name: Optional[pulumi.Input[Optional[str]]] = None,
                                             opts: Optional[pulumi.InvokeOptions] = None) -> pulumi.Output[GetCassandraDedicatedResourceResult]:
     """
-    Use this data source to get available HuaweiCloud gaussdb cassandra dedicated resource.
+    Use this data source to get available HuaweiCloud GeminiDB Cassandra dedicated resource.
 
     ## Example Usage
 

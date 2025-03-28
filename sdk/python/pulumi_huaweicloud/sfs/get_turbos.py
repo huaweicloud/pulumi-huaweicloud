@@ -134,7 +134,7 @@ def get_turbos(enterprise_project_id: Optional[str] = None,
                size: Optional[int] = None,
                opts: Optional[pulumi.InvokeOptions] = None) -> AwaitableGetTurbosResult:
     """
-    Use this data source to get the list of the available SFS turbos.
+    Use this data source to get the list of the SFS turbos.
 
     ## Example Usage
 
@@ -188,7 +188,7 @@ def get_turbos_output(enterprise_project_id: Optional[pulumi.Input[Optional[str]
                       size: Optional[pulumi.Input[Optional[int]]] = None,
                       opts: Optional[pulumi.InvokeOptions] = None) -> pulumi.Output[GetTurbosResult]:
     """
-    Use this data source to get the list of the available SFS turbos.
+    Use this data source to get the list of the SFS turbos.
 
     ## Example Usage
 

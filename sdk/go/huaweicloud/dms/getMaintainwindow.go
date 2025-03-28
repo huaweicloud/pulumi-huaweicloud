@@ -10,7 +10,7 @@ import (
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
-// Use this data source to get the ID of an available HuaweiCloud dms maintainwindow.
+// Use this data source to get the ID of an available HuaweiCloud dms maintenance windows.
 //
 // ## Example Usage
 //
@@ -56,7 +56,7 @@ type GetMaintainwindowArgs struct {
 	Default *bool `pulumi:"default"`
 	// Indicates the time at which a maintenance time window ends.
 	End *string `pulumi:"end"`
-	// The region in which to obtain the dms maintainwindows. If omitted, the provider-level
+	// The region in which to obtain the dms maintenance windows. If omitted, the provider-level
 	// region will be used.
 	Region *string `pulumi:"region"`
 	// Indicates the sequential number of a maintenance time window.
@@ -95,7 +95,7 @@ type GetMaintainwindowOutputArgs struct {
 	Default pulumi.BoolPtrInput `pulumi:"default"`
 	// Indicates the time at which a maintenance time window ends.
 	End pulumi.StringPtrInput `pulumi:"end"`
-	// The region in which to obtain the dms maintainwindows. If omitted, the provider-level
+	// The region in which to obtain the dms maintenance windows. If omitted, the provider-level
 	// region will be used.
 	Region pulumi.StringPtrInput `pulumi:"region"`
 	// Indicates the sequential number of a maintenance time window.

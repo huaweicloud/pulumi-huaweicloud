@@ -13,102 +13,65 @@ import (
 
 // Manages a dedicated microservice resource within HuaweiCloud.
 //
-// > When deleting a microservice, all instances under it will also be deleted together.
+// > 1. Before creating a configuration, make sure the engine has enabled the rules shown in the appendix
+// >       table.
+// >       <br/> 2. When deleting a microservice, all instances under it will also be deleted together.
 //
 // ## Example Usage
-// ### Create a microservice in an engine with RBAC authentication disabled
+// ## Appendix
 //
-// ```go
-// package main
+// <a name="microserviceDefaultEngineAccessRules"></a>
+// Security group rules required to access the engine:
+// (Remote is not the minimum range and can be adjusted according to business needs)
 //
-// import (
-//
-//	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud/Cse"
-//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
-//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi/config"
-//
-// )
-//
-//	func main() {
-//		pulumi.Run(func(ctx *pulumi.Context) error {
-//			cfg := config.New(ctx, "")
-//			engineConnAddr := cfg.RequireObject("engineConnAddr")
-//			serviceName := cfg.RequireObject("serviceName")
-//			appName := cfg.RequireObject("appName")
-//			_, err := Cse.NewMicroservice(ctx, "test", &Cse.MicroserviceArgs{
-//				ConnectAddress: pulumi.Any(engineConnAddr),
-//				Version:        pulumi.String("1.0.0"),
-//				Environment:    pulumi.String("development"),
-//				AppName:        pulumi.Any(appName),
-//			})
-//			if err != nil {
-//				return err
-//			}
-//			return nil
-//		})
-//	}
-//
-// ```
-// ### Create a microservice in an engine with RBAC authentication enabled
-//
-// ```go
-// package main
-//
-// import (
-//
-//	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud/Cse"
-//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
-//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi/config"
-//
-// )
-//
-//	func main() {
-//		pulumi.Run(func(ctx *pulumi.Context) error {
-//			cfg := config.New(ctx, "")
-//			engineConnAddr := cfg.RequireObject("engineConnAddr")
-//			serviceName := cfg.RequireObject("serviceName")
-//			appName := cfg.RequireObject("appName")
-//			_, err := Cse.NewMicroservice(ctx, "test", &Cse.MicroserviceArgs{
-//				ConnectAddress: pulumi.Any(engineConnAddr),
-//				Version:        pulumi.String("1.0.0"),
-//				Environment:    pulumi.String("development"),
-//				AppName:        pulumi.Any(appName),
-//				AdminUser:      pulumi.String("root"),
-//				AdminPass:      pulumi.String("Huawei!123"),
-//			})
-//			if err != nil {
-//				return err
-//			}
-//			return nil
-//		})
-//	}
-//
-// ```
+// | Direction | Priority | Action | Protocol | Ports         | Ethertype | Remote                |
+// | --------- | -------- | ------ | -------- | ------------- | --------- | --------------------- |
+// | Ingress   | 1        | Allow  | ICMP     | All           | Ipv6      | ::/0                  |
+// | Ingress   | 1        | Allow  | TCP      | 30100-30130   | Ipv6      | ::/0                  |
+// | Ingress   | 1        | Allow  | All      | All           | Ipv6      | cse-engine-default-sg |
+// | Ingress   | 1        | Allow  | ICMP     | All           | Ipv4      | 0.0.0.0/0             |
+// | Ingress   | 1        | Allow  | TCP      | 30100-30130   | Ipv4      | 0.0.0.0/0             |
+// | Ingress   | 1        | Allow  | All      | All           | Ipv4      | cse-engine-default-sg |
+// | Egress    | 100      | Allow  | All      | All           | Ipv6      | ::/0                  |
+// | Egress    | 100      | Allow  | All      | All           | Ipv4      | 0.0.0.0/0             |
 //
 // ## Import
 //
-// Microservices can be imported using related `connect_address` and their `id`, separated by a slash (/), e.g.
+// Microservices can be imported using related `auth_address`, `connect_address` and their `id`, separated by the slashes (/), e.g. bash
 //
 // ```sh
 //
-//	$ pulumi import huaweicloud:Cse/microservice:Microservice test https://124.70.26.32:30100/f14960ba495e03f59f85aacaaafbdef3fbff3f0d
+//	$ pulumi import huaweicloud:Cse/microservice:Microservice test <auth_address>/<connect_address>/<id>
 //
 // ```
 //
-//	If you enabled the **RBAC** authorization, you also need to provide the account name and password, e.g.
+//	If you enabled the **RBAC** authorization, you also need to provide the account name (`admin_user`) and password (`admin_pass`) of the microservice engine. All fields separated by the slashes (/), e.g. bash
 //
 // ```sh
 //
-//	$ pulumi import huaweicloud:Cse/microservice:Microservice test 'https://124.70.26.32:30100/f14960ba495e03f59f85aacaaafbdef3fbff3f0d/root/Test!123'
+//	$ pulumi import huaweicloud:Cse/microservice:Microservice test <auth_address>/<connect_address>/<id>/<admin_user>/<admin_pass>
 //
 // ```
 //
-//	The single quotes can help you solve the problem of special characters reporting errors on bash.
+//	The single quotes (') or backslashes (\\) can help you solve the problem of special characters reporting errors on bash. bash
+//
+// ```sh
+//
+//	$ pulumi import huaweicloud:Cse/microservice:Microservice test https://124.70.26.32:30100/https://124.70.26.32:30100/f14960ba495e03f59f85aacaaafbdef3fbff3f0d/root/Test\!123
+//
+// ```
+//
+//	bash
+//
+// ```sh
+//
+//	$ pulumi import huaweicloud:Cse/microservice:Microservice test 'https://124.70.26.32:30100/https://124.70.26.32:30100/f14960ba495e03f59f85aacaaafbdef3fbff3f0d/root/Test!123'
+//
+// ```
 type Microservice struct {
 	pulumi.CustomResourceState
 
-	// Specifies the account password.
-	// Required if the `authType` of engine is **RBAC**. Changing this will create a new microservice.
+	// Specifies the account password for **RBAC** login.
 	// The password format must meet the following conditions:
 	// + Must be `8` to `32` characters long.
 	// + A password must contain at least one digit, one uppercase letter, one lowercase letter, and one special character
@@ -116,14 +79,20 @@ type Microservice struct {
 	// + Cannot be the account name or account name spelled backwards.
 	// + The password can only start with a letter.
 	AdminPass pulumi.StringPtrOutput `pulumi:"adminPass"`
-	// Specifies the account name. The initial account name is **root**.
-	// Required if the `authType` of engine is **RBAC**. Changing this will create a new microservice.
+	// Specifies the account name for **RBAC** login.
+	// Changing this will create a new resource.
 	AdminUser pulumi.StringPtrOutput `pulumi:"adminUser"`
 	// Specifies the name of the dedicated microservice application.
 	// Changing this will create a new microservice.
 	AppName pulumi.StringOutput `pulumi:"appName"`
-	// Specifies the connection address of service registry center for the
-	// specified dedicated CSE engine. Changing this will create a new microservice.
+	// Specifies the address that used to request the access token.\
+	// Usually is the connection address of service center.
+	// Changing this will create a new resource.
+	AuthAddress pulumi.StringOutput `pulumi:"authAddress"`
+	// Specifies the address that used to access engine and manages
+	// microservice.
+	// Usually is the connection address of service center.
+	// Changing this will create a new resource.
 	ConnectAddress pulumi.StringOutput `pulumi:"connectAddress"`
 	// Specifies the description of the dedicated microservice.
 	// The description can contain a maximum of `256` characters.
@@ -187,8 +156,7 @@ func GetMicroservice(ctx *pulumi.Context,
 
 // Input properties used for looking up and filtering Microservice resources.
 type microserviceState struct {
-	// Specifies the account password.
-	// Required if the `authType` of engine is **RBAC**. Changing this will create a new microservice.
+	// Specifies the account password for **RBAC** login.
 	// The password format must meet the following conditions:
 	// + Must be `8` to `32` characters long.
 	// + A password must contain at least one digit, one uppercase letter, one lowercase letter, and one special character
@@ -196,14 +164,20 @@ type microserviceState struct {
 	// + Cannot be the account name or account name spelled backwards.
 	// + The password can only start with a letter.
 	AdminPass *string `pulumi:"adminPass"`
-	// Specifies the account name. The initial account name is **root**.
-	// Required if the `authType` of engine is **RBAC**. Changing this will create a new microservice.
+	// Specifies the account name for **RBAC** login.
+	// Changing this will create a new resource.
 	AdminUser *string `pulumi:"adminUser"`
 	// Specifies the name of the dedicated microservice application.
 	// Changing this will create a new microservice.
 	AppName *string `pulumi:"appName"`
-	// Specifies the connection address of service registry center for the
-	// specified dedicated CSE engine. Changing this will create a new microservice.
+	// Specifies the address that used to request the access token.\
+	// Usually is the connection address of service center.
+	// Changing this will create a new resource.
+	AuthAddress *string `pulumi:"authAddress"`
+	// Specifies the address that used to access engine and manages
+	// microservice.
+	// Usually is the connection address of service center.
+	// Changing this will create a new resource.
 	ConnectAddress *string `pulumi:"connectAddress"`
 	// Specifies the description of the dedicated microservice.
 	// The description can contain a maximum of `256` characters.
@@ -229,8 +203,7 @@ type microserviceState struct {
 }
 
 type MicroserviceState struct {
-	// Specifies the account password.
-	// Required if the `authType` of engine is **RBAC**. Changing this will create a new microservice.
+	// Specifies the account password for **RBAC** login.
 	// The password format must meet the following conditions:
 	// + Must be `8` to `32` characters long.
 	// + A password must contain at least one digit, one uppercase letter, one lowercase letter, and one special character
@@ -238,14 +211,20 @@ type MicroserviceState struct {
 	// + Cannot be the account name or account name spelled backwards.
 	// + The password can only start with a letter.
 	AdminPass pulumi.StringPtrInput
-	// Specifies the account name. The initial account name is **root**.
-	// Required if the `authType` of engine is **RBAC**. Changing this will create a new microservice.
+	// Specifies the account name for **RBAC** login.
+	// Changing this will create a new resource.
 	AdminUser pulumi.StringPtrInput
 	// Specifies the name of the dedicated microservice application.
 	// Changing this will create a new microservice.
 	AppName pulumi.StringPtrInput
-	// Specifies the connection address of service registry center for the
-	// specified dedicated CSE engine. Changing this will create a new microservice.
+	// Specifies the address that used to request the access token.\
+	// Usually is the connection address of service center.
+	// Changing this will create a new resource.
+	AuthAddress pulumi.StringPtrInput
+	// Specifies the address that used to access engine and manages
+	// microservice.
+	// Usually is the connection address of service center.
+	// Changing this will create a new resource.
 	ConnectAddress pulumi.StringPtrInput
 	// Specifies the description of the dedicated microservice.
 	// The description can contain a maximum of `256` characters.
@@ -275,8 +254,7 @@ func (MicroserviceState) ElementType() reflect.Type {
 }
 
 type microserviceArgs struct {
-	// Specifies the account password.
-	// Required if the `authType` of engine is **RBAC**. Changing this will create a new microservice.
+	// Specifies the account password for **RBAC** login.
 	// The password format must meet the following conditions:
 	// + Must be `8` to `32` characters long.
 	// + A password must contain at least one digit, one uppercase letter, one lowercase letter, and one special character
@@ -284,14 +262,20 @@ type microserviceArgs struct {
 	// + Cannot be the account name or account name spelled backwards.
 	// + The password can only start with a letter.
 	AdminPass *string `pulumi:"adminPass"`
-	// Specifies the account name. The initial account name is **root**.
-	// Required if the `authType` of engine is **RBAC**. Changing this will create a new microservice.
+	// Specifies the account name for **RBAC** login.
+	// Changing this will create a new resource.
 	AdminUser *string `pulumi:"adminUser"`
 	// Specifies the name of the dedicated microservice application.
 	// Changing this will create a new microservice.
 	AppName string `pulumi:"appName"`
-	// Specifies the connection address of service registry center for the
-	// specified dedicated CSE engine. Changing this will create a new microservice.
+	// Specifies the address that used to request the access token.\
+	// Usually is the connection address of service center.
+	// Changing this will create a new resource.
+	AuthAddress *string `pulumi:"authAddress"`
+	// Specifies the address that used to access engine and manages
+	// microservice.
+	// Usually is the connection address of service center.
+	// Changing this will create a new resource.
 	ConnectAddress string `pulumi:"connectAddress"`
 	// Specifies the description of the dedicated microservice.
 	// The description can contain a maximum of `256` characters.
@@ -316,8 +300,7 @@ type microserviceArgs struct {
 
 // The set of arguments for constructing a Microservice resource.
 type MicroserviceArgs struct {
-	// Specifies the account password.
-	// Required if the `authType` of engine is **RBAC**. Changing this will create a new microservice.
+	// Specifies the account password for **RBAC** login.
 	// The password format must meet the following conditions:
 	// + Must be `8` to `32` characters long.
 	// + A password must contain at least one digit, one uppercase letter, one lowercase letter, and one special character
@@ -325,14 +308,20 @@ type MicroserviceArgs struct {
 	// + Cannot be the account name or account name spelled backwards.
 	// + The password can only start with a letter.
 	AdminPass pulumi.StringPtrInput
-	// Specifies the account name. The initial account name is **root**.
-	// Required if the `authType` of engine is **RBAC**. Changing this will create a new microservice.
+	// Specifies the account name for **RBAC** login.
+	// Changing this will create a new resource.
 	AdminUser pulumi.StringPtrInput
 	// Specifies the name of the dedicated microservice application.
 	// Changing this will create a new microservice.
 	AppName pulumi.StringInput
-	// Specifies the connection address of service registry center for the
-	// specified dedicated CSE engine. Changing this will create a new microservice.
+	// Specifies the address that used to request the access token.\
+	// Usually is the connection address of service center.
+	// Changing this will create a new resource.
+	AuthAddress pulumi.StringPtrInput
+	// Specifies the address that used to access engine and manages
+	// microservice.
+	// Usually is the connection address of service center.
+	// Changing this will create a new resource.
 	ConnectAddress pulumi.StringInput
 	// Specifies the description of the dedicated microservice.
 	// The description can contain a maximum of `256` characters.
@@ -442,8 +431,7 @@ func (o MicroserviceOutput) ToMicroserviceOutputWithContext(ctx context.Context)
 	return o
 }
 
-// Specifies the account password.
-// Required if the `authType` of engine is **RBAC**. Changing this will create a new microservice.
+// Specifies the account password for **RBAC** login.
 // The password format must meet the following conditions:
 //   - Must be `8` to `32` characters long.
 //   - A password must contain at least one digit, one uppercase letter, one lowercase letter, and one special character
@@ -454,8 +442,8 @@ func (o MicroserviceOutput) AdminPass() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Microservice) pulumi.StringPtrOutput { return v.AdminPass }).(pulumi.StringPtrOutput)
 }
 
-// Specifies the account name. The initial account name is **root**.
-// Required if the `authType` of engine is **RBAC**. Changing this will create a new microservice.
+// Specifies the account name for **RBAC** login.
+// Changing this will create a new resource.
 func (o MicroserviceOutput) AdminUser() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Microservice) pulumi.StringPtrOutput { return v.AdminUser }).(pulumi.StringPtrOutput)
 }
@@ -466,8 +454,17 @@ func (o MicroserviceOutput) AppName() pulumi.StringOutput {
 	return o.ApplyT(func(v *Microservice) pulumi.StringOutput { return v.AppName }).(pulumi.StringOutput)
 }
 
-// Specifies the connection address of service registry center for the
-// specified dedicated CSE engine. Changing this will create a new microservice.
+// Specifies the address that used to request the access token.\
+// Usually is the connection address of service center.
+// Changing this will create a new resource.
+func (o MicroserviceOutput) AuthAddress() pulumi.StringOutput {
+	return o.ApplyT(func(v *Microservice) pulumi.StringOutput { return v.AuthAddress }).(pulumi.StringOutput)
+}
+
+// Specifies the address that used to access engine and manages
+// microservice.
+// Usually is the connection address of service center.
+// Changing this will create a new resource.
 func (o MicroserviceOutput) ConnectAddress() pulumi.StringOutput {
 	return o.ApplyT(func(v *Microservice) pulumi.StringOutput { return v.ConnectAddress }).(pulumi.StringOutput)
 }

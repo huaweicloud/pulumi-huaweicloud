@@ -280,7 +280,7 @@ class PeeringConnection(pulumi.CustomResource):
 
         ## Import
 
-        VPC Peering resources can be imported using the `vpc peering id`, e.g.
+        VPC Peering resources can be imported using the `vpc peering id`, e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:Vpc/peeringConnection:PeeringConnection test_connection 22b76469-08e3-4937-8c1d-7aad34892be1
@@ -319,7 +319,7 @@ class PeeringConnection(pulumi.CustomResource):
 
         ## Import
 
-        VPC Peering resources can be imported using the `vpc peering id`, e.g.
+        VPC Peering resources can be imported using the `vpc peering id`, e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:Vpc/peeringConnection:PeeringConnection test_connection 22b76469-08e3-4937-8c1d-7aad34892be1

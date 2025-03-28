@@ -13,7 +13,11 @@ __all__ = [
     'AclIpCidrArgs',
     'AclIpRangeArgs',
     'AgencyProjectRoleArgs',
+    'ProtectionPolicySelfManagementArgs',
     'ProviderAccessConfigArgs',
+    'ProviderConversionConversionRuleArgs',
+    'ProviderConversionConversionRuleLocalArgs',
+    'ProviderConversionConversionRuleRemoteArgs',
     'ProviderConversionRuleArgs',
     'ProviderConversionRuleLocalArgs',
     'ProviderConversionRuleRemoteArgs',
@@ -137,6 +141,77 @@ class AgencyProjectRoleArgs:
 
 
 @pulumi.input_type
+class ProtectionPolicySelfManagementArgs:
+    def __init__(__self__, *,
+                 access_key: Optional[pulumi.Input[bool]] = None,
+                 email: Optional[pulumi.Input[bool]] = None,
+                 mobile: Optional[pulumi.Input[bool]] = None,
+                 password: Optional[pulumi.Input[bool]] = None):
+        """
+        :param pulumi.Input[bool] access_key: Specifies whether to allow IAM users to manage access keys by themselves.
+        :param pulumi.Input[bool] email: Specifies whether to allow IAM users to change their email addresses.
+        :param pulumi.Input[bool] mobile: Specifies whether to allow IAM users to change their mobile numbers.
+        :param pulumi.Input[bool] password: Specifies whether to allow IAM users to change their passwords.
+        """
+        if access_key is not None:
+            pulumi.set(__self__, "access_key", access_key)
+        if email is not None:
+            pulumi.set(__self__, "email", email)
+        if mobile is not None:
+            pulumi.set(__self__, "mobile", mobile)
+        if password is not None:
+            pulumi.set(__self__, "password", password)
+
+    @property
+    @pulumi.getter(name="accessKey")
+    def access_key(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies whether to allow IAM users to manage access keys by themselves.
+        """
+        return pulumi.get(self, "access_key")
+
+    @access_key.setter
+    def access_key(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "access_key", value)
+
+    @property
+    @pulumi.getter
+    def email(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies whether to allow IAM users to change their email addresses.
+        """
+        return pulumi.get(self, "email")
+
+    @email.setter
+    def email(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "email", value)
+
+    @property
+    @pulumi.getter
+    def mobile(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies whether to allow IAM users to change their mobile numbers.
+        """
+        return pulumi.get(self, "mobile")
+
+    @mobile.setter
+    def mobile(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "mobile", value)
+
+    @property
+    @pulumi.getter
+    def password(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies whether to allow IAM users to change their passwords.
+        """
+        return pulumi.get(self, "password")
+
+    @password.setter
+    def password(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "password", value)
+
+
+@pulumi.input_type
 class ProviderAccessConfigArgs:
     def __init__(__self__, *,
                  access_type: pulumi.Input[str],
@@ -150,8 +225,8 @@ class ProviderAccessConfigArgs:
         """
         :param pulumi.Input[str] access_type: Specifies the access type of the identity provider.
                Available options are:
-               + `program`: programmatic access only.
-               + `program_console`: programmatic access and management console access.
+               + **program**: programmatic access only.
+               + **program_console**: programmatic access and management console access.
         :param pulumi.Input[str] client_id: Specifies the ID of a client registered with the OpenID Connect identity provider.
         :param pulumi.Input[str] provider_url: Specifies the URL of the identity provider.
                This field corresponds to the iss field in the ID token.
@@ -187,8 +262,8 @@ class ProviderAccessConfigArgs:
         """
         Specifies the access type of the identity provider.
         Available options are:
-        + `program`: programmatic access only.
-        + `program_console`: programmatic access and management console access.
+        + **program**: programmatic access only.
+        + **program_console**: programmatic access and management console access.
         """
         return pulumi.get(self, "access_type")
 
@@ -287,6 +362,142 @@ class ProviderAccessConfigArgs:
     @scopes.setter
     def scopes(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]):
         pulumi.set(self, "scopes", value)
+
+
+@pulumi.input_type
+class ProviderConversionConversionRuleArgs:
+    def __init__(__self__, *,
+                 locals: pulumi.Input[Sequence[pulumi.Input['ProviderConversionConversionRuleLocalArgs']]],
+                 remotes: pulumi.Input[Sequence[pulumi.Input['ProviderConversionConversionRuleRemoteArgs']]]):
+        """
+        :param pulumi.Input[Sequence[pulumi.Input['ProviderConversionConversionRuleLocalArgs']]] locals: Specifies the federated user information on the cloud platform.
+        :param pulumi.Input[Sequence[pulumi.Input['ProviderConversionConversionRuleRemoteArgs']]] remotes: Specifies Federated user information in the IDP system.
+        """
+        pulumi.set(__self__, "locals", locals)
+        pulumi.set(__self__, "remotes", remotes)
+
+    @property
+    @pulumi.getter
+    def locals(self) -> pulumi.Input[Sequence[pulumi.Input['ProviderConversionConversionRuleLocalArgs']]]:
+        """
+        Specifies the federated user information on the cloud platform.
+        """
+        return pulumi.get(self, "locals")
+
+    @locals.setter
+    def locals(self, value: pulumi.Input[Sequence[pulumi.Input['ProviderConversionConversionRuleLocalArgs']]]):
+        pulumi.set(self, "locals", value)
+
+    @property
+    @pulumi.getter
+    def remotes(self) -> pulumi.Input[Sequence[pulumi.Input['ProviderConversionConversionRuleRemoteArgs']]]:
+        """
+        Specifies Federated user information in the IDP system.
+        """
+        return pulumi.get(self, "remotes")
+
+    @remotes.setter
+    def remotes(self, value: pulumi.Input[Sequence[pulumi.Input['ProviderConversionConversionRuleRemoteArgs']]]):
+        pulumi.set(self, "remotes", value)
+
+
+@pulumi.input_type
+class ProviderConversionConversionRuleLocalArgs:
+    def __init__(__self__, *,
+                 group: Optional[pulumi.Input[str]] = None,
+                 username: Optional[pulumi.Input[str]] = None):
+        """
+        :param pulumi.Input[str] group: Specifies the user group to which the federated user belongs on the cloud platform.
+        :param pulumi.Input[str] username: Specifies the name of a federated user on the cloud platform.
+        """
+        if group is not None:
+            pulumi.set(__self__, "group", group)
+        if username is not None:
+            pulumi.set(__self__, "username", username)
+
+    @property
+    @pulumi.getter
+    def group(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the user group to which the federated user belongs on the cloud platform.
+        """
+        return pulumi.get(self, "group")
+
+    @group.setter
+    def group(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "group", value)
+
+    @property
+    @pulumi.getter
+    def username(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the name of a federated user on the cloud platform.
+        """
+        return pulumi.get(self, "username")
+
+    @username.setter
+    def username(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "username", value)
+
+
+@pulumi.input_type
+class ProviderConversionConversionRuleRemoteArgs:
+    def __init__(__self__, *,
+                 attribute: pulumi.Input[str],
+                 condition: Optional[pulumi.Input[str]] = None,
+                 values: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None):
+        """
+        :param pulumi.Input[str] attribute: Specifies the attribute in the IDP assertion.
+        :param pulumi.Input[str] condition: Specifies the condition of conversion rule.
+               Available options are:
+               + `any_one_of`: The rule is matched only if the specified strings appear in the attribute type.
+               + `not_any_of`: The rule is matched only if the specified strings do not appear in the attribute type.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] values: Specifies the rule is matched only if the specified strings appear in the attribute type.
+        """
+        pulumi.set(__self__, "attribute", attribute)
+        if condition is not None:
+            pulumi.set(__self__, "condition", condition)
+        if values is not None:
+            pulumi.set(__self__, "values", values)
+
+    @property
+    @pulumi.getter
+    def attribute(self) -> pulumi.Input[str]:
+        """
+        Specifies the attribute in the IDP assertion.
+        """
+        return pulumi.get(self, "attribute")
+
+    @attribute.setter
+    def attribute(self, value: pulumi.Input[str]):
+        pulumi.set(self, "attribute", value)
+
+    @property
+    @pulumi.getter
+    def condition(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the condition of conversion rule.
+        Available options are:
+        + `any_one_of`: The rule is matched only if the specified strings appear in the attribute type.
+        + `not_any_of`: The rule is matched only if the specified strings do not appear in the attribute type.
+        """
+        return pulumi.get(self, "condition")
+
+    @condition.setter
+    def condition(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "condition", value)
+
+    @property
+    @pulumi.getter
+    def values(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]:
+        """
+        Specifies the rule is matched only if the specified strings appear in the attribute type.
+        """
+        return pulumi.get(self, "values")
+
+    @values.setter
+    def values(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]):
+        pulumi.set(self, "values", value)
 
 
 @pulumi.input_type

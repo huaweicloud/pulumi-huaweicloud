@@ -20,9 +20,7 @@ import (
 //
 // import (
 //
-//	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud"
 //	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud/Cci"
-//	"github.com/pulumi/pulumi-huaweicloud/sdk/go/huaweicloud"
 //	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 //	"github.com/pulumi/pulumi/sdk/v3/go/pulumi/config"
 //
@@ -35,15 +33,10 @@ import (
 //			networkName := cfg.RequireObject("networkName")
 //			vpcNetworkId := cfg.RequireObject("vpcNetworkId")
 //			securityGroupId := cfg.RequireObject("securityGroupId")
-//			testAvailabilityZones, err := huaweicloud.GetAvailabilityZones(ctx, nil, nil)
-//			if err != nil {
-//				return err
-//			}
-//			_, err = Cci.NewNetwork(ctx, "testNetwork", &Cci.NetworkArgs{
-//				AvailabilityZone: pulumi.String(testAvailabilityZones.Names[0]),
-//				Namespace:        pulumi.Any(namespaceName),
-//				NetworkId:        pulumi.Any(vpcNetworkId),
-//				SecurityGroupId:  pulumi.Any(securityGroupId),
+//			_, err := Cci.NewNetwork(ctx, "test", &Cci.NetworkArgs{
+//				Namespace:       pulumi.Any(namespaceName),
+//				NetworkId:       pulumi.Any(vpcNetworkId),
+//				SecurityGroupId: pulumi.Any(securityGroupId),
 //			})
 //			if err != nil {
 //				return err
@@ -56,7 +49,7 @@ import (
 //
 // ## Import
 //
-// Networks can be imported using their `namespace` and `id`, separated by a slash, e.g.
+// # Networks can be imported using their `namespace` and `id`, separated by a slash, e.g.bash
 //
 // ```sh
 //
@@ -68,11 +61,11 @@ type Network struct {
 
 	// Specifies the availability zone (AZ) to which the CCI network
 	// belongs. Changing this will create a new CCI network resource.
-	AvailabilityZone pulumi.StringOutput `pulumi:"availabilityZone"`
+	AvailabilityZone pulumi.StringPtrOutput `pulumi:"availabilityZone"`
 	// The network segment on which the subnet resides.
 	Cidr pulumi.StringOutput `pulumi:"cidr"`
 	// Specifies an unique name of the CCI network resource.
-	// The name can contain a maximum of 200 characters, which may consist of lowercase letters, digits and hyphens (-).
+	// The name can contain a maximum of `200` characters, which may consist of lowercase letters, digits and hyphens (-).
 	// The name must start and end with a lowercase letter or digit. Changing this will create a new CCI network resource.
 	Name pulumi.StringOutput `pulumi:"name"`
 	// Specifies the namespace to logically divide your cloud container instances
@@ -102,9 +95,6 @@ func NewNetwork(ctx *pulumi.Context,
 		return nil, errors.New("missing one or more required arguments")
 	}
 
-	if args.AvailabilityZone == nil {
-		return nil, errors.New("invalid value for required argument 'AvailabilityZone'")
-	}
 	if args.Namespace == nil {
 		return nil, errors.New("invalid value for required argument 'Namespace'")
 	}
@@ -143,7 +133,7 @@ type networkState struct {
 	// The network segment on which the subnet resides.
 	Cidr *string `pulumi:"cidr"`
 	// Specifies an unique name of the CCI network resource.
-	// The name can contain a maximum of 200 characters, which may consist of lowercase letters, digits and hyphens (-).
+	// The name can contain a maximum of `200` characters, which may consist of lowercase letters, digits and hyphens (-).
 	// The name must start and end with a lowercase letter or digit. Changing this will create a new CCI network resource.
 	Name *string `pulumi:"name"`
 	// Specifies the namespace to logically divide your cloud container instances
@@ -173,7 +163,7 @@ type NetworkState struct {
 	// The network segment on which the subnet resides.
 	Cidr pulumi.StringPtrInput
 	// Specifies an unique name of the CCI network resource.
-	// The name can contain a maximum of 200 characters, which may consist of lowercase letters, digits and hyphens (-).
+	// The name can contain a maximum of `200` characters, which may consist of lowercase letters, digits and hyphens (-).
 	// The name must start and end with a lowercase letter or digit. Changing this will create a new CCI network resource.
 	Name pulumi.StringPtrInput
 	// Specifies the namespace to logically divide your cloud container instances
@@ -203,9 +193,9 @@ func (NetworkState) ElementType() reflect.Type {
 type networkArgs struct {
 	// Specifies the availability zone (AZ) to which the CCI network
 	// belongs. Changing this will create a new CCI network resource.
-	AvailabilityZone string `pulumi:"availabilityZone"`
+	AvailabilityZone *string `pulumi:"availabilityZone"`
 	// Specifies an unique name of the CCI network resource.
-	// The name can contain a maximum of 200 characters, which may consist of lowercase letters, digits and hyphens (-).
+	// The name can contain a maximum of `200` characters, which may consist of lowercase letters, digits and hyphens (-).
 	// The name must start and end with a lowercase letter or digit. Changing this will create a new CCI network resource.
 	Name *string `pulumi:"name"`
 	// Specifies the namespace to logically divide your cloud container instances
@@ -226,9 +216,9 @@ type networkArgs struct {
 type NetworkArgs struct {
 	// Specifies the availability zone (AZ) to which the CCI network
 	// belongs. Changing this will create a new CCI network resource.
-	AvailabilityZone pulumi.StringInput
+	AvailabilityZone pulumi.StringPtrInput
 	// Specifies an unique name of the CCI network resource.
-	// The name can contain a maximum of 200 characters, which may consist of lowercase letters, digits and hyphens (-).
+	// The name can contain a maximum of `200` characters, which may consist of lowercase letters, digits and hyphens (-).
 	// The name must start and end with a lowercase letter or digit. Changing this will create a new CCI network resource.
 	Name pulumi.StringPtrInput
 	// Specifies the namespace to logically divide your cloud container instances
@@ -334,8 +324,8 @@ func (o NetworkOutput) ToNetworkOutputWithContext(ctx context.Context) NetworkOu
 
 // Specifies the availability zone (AZ) to which the CCI network
 // belongs. Changing this will create a new CCI network resource.
-func (o NetworkOutput) AvailabilityZone() pulumi.StringOutput {
-	return o.ApplyT(func(v *Network) pulumi.StringOutput { return v.AvailabilityZone }).(pulumi.StringOutput)
+func (o NetworkOutput) AvailabilityZone() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *Network) pulumi.StringPtrOutput { return v.AvailabilityZone }).(pulumi.StringPtrOutput)
 }
 
 // The network segment on which the subnet resides.
@@ -344,7 +334,7 @@ func (o NetworkOutput) Cidr() pulumi.StringOutput {
 }
 
 // Specifies an unique name of the CCI network resource.
-// The name can contain a maximum of 200 characters, which may consist of lowercase letters, digits and hyphens (-).
+// The name can contain a maximum of `200` characters, which may consist of lowercase letters, digits and hyphens (-).
 // The name must start and end with a lowercase letter or digit. Changing this will create a new CCI network resource.
 func (o NetworkOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v *Network) pulumi.StringOutput { return v.Name }).(pulumi.StringOutput)

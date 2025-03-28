@@ -21,6 +21,7 @@ import * as utilities from "../utilities";
  * const test = new huaweicloud.dedicatedapig.CustomAuthorizer("test", {
  *     instanceId: instanceId,
  *     functionUrn: functionUrn,
+ *     functionVersion: "latest",
  *     type: "FRONTEND",
  *     cacheAge: 60,
  *     identities: [{
@@ -67,7 +68,8 @@ export class CustomAuthorizer extends pulumi.CustomResource {
     }
 
     /**
-     * Specifies the maximum cache age.
+     * Specifies the maximum cache age.  
+     * The valid value is range from `1` to `3,600`.
      */
     public readonly cacheAge!: pulumi.Output<number | undefined>;
     /**
@@ -75,9 +77,17 @@ export class CustomAuthorizer extends pulumi.CustomResource {
      */
     public /*out*/ readonly createdAt!: pulumi.Output<string>;
     /**
+     * Specifies the version alias URI of the FGS function.
+     */
+    public readonly functionAliasUri!: pulumi.Output<string>;
+    /**
      * Specifies the uniform function URN of the function graph resource.
      */
     public readonly functionUrn!: pulumi.Output<string>;
+    /**
+     * Specifies the version of the FGS function.
+     */
+    public readonly functionVersion!: pulumi.Output<string>;
     /**
      * Specifies an array of one or more parameter identities of the custom authorizer.
      * The object structure is documented below.
@@ -99,13 +109,19 @@ export class CustomAuthorizer extends pulumi.CustomResource {
      */
     public readonly name!: pulumi.Output<string>;
     /**
+     * Specifies the framework type of the function.
+     * + **V1**: Non-VPC network architecture.
+     * + **V2**: VPC network architecture.
+     */
+    public readonly networkType!: pulumi.Output<string>;
+    /**
      * Specifies the region in which to create the custom authorizer resource.
      * If omitted, the provider-level region will be used.
      * Changing this will create a new custom authorizer resource.
      */
     public readonly region!: pulumi.Output<string>;
     /**
-     * Specifies the custom authoriz type.
+     * Specifies the custom authorize type.
      * The valid values are **FRONTEND** and **BACKEND**. Defaults to **FRONTEND**.
      * Changing this will create a new custom authorizer resource.
      */
@@ -131,11 +147,14 @@ export class CustomAuthorizer extends pulumi.CustomResource {
             const state = argsOrState as CustomAuthorizerState | undefined;
             resourceInputs["cacheAge"] = state ? state.cacheAge : undefined;
             resourceInputs["createdAt"] = state ? state.createdAt : undefined;
+            resourceInputs["functionAliasUri"] = state ? state.functionAliasUri : undefined;
             resourceInputs["functionUrn"] = state ? state.functionUrn : undefined;
+            resourceInputs["functionVersion"] = state ? state.functionVersion : undefined;
             resourceInputs["identities"] = state ? state.identities : undefined;
             resourceInputs["instanceId"] = state ? state.instanceId : undefined;
             resourceInputs["isBodySend"] = state ? state.isBodySend : undefined;
             resourceInputs["name"] = state ? state.name : undefined;
+            resourceInputs["networkType"] = state ? state.networkType : undefined;
             resourceInputs["region"] = state ? state.region : undefined;
             resourceInputs["type"] = state ? state.type : undefined;
             resourceInputs["userData"] = state ? state.userData : undefined;
@@ -148,11 +167,14 @@ export class CustomAuthorizer extends pulumi.CustomResource {
                 throw new Error("Missing required property 'instanceId'");
             }
             resourceInputs["cacheAge"] = args ? args.cacheAge : undefined;
+            resourceInputs["functionAliasUri"] = args ? args.functionAliasUri : undefined;
             resourceInputs["functionUrn"] = args ? args.functionUrn : undefined;
+            resourceInputs["functionVersion"] = args ? args.functionVersion : undefined;
             resourceInputs["identities"] = args ? args.identities : undefined;
             resourceInputs["instanceId"] = args ? args.instanceId : undefined;
             resourceInputs["isBodySend"] = args ? args.isBodySend : undefined;
             resourceInputs["name"] = args ? args.name : undefined;
+            resourceInputs["networkType"] = args ? args.networkType : undefined;
             resourceInputs["region"] = args ? args.region : undefined;
             resourceInputs["type"] = args ? args.type : undefined;
             resourceInputs["userData"] = args ? args.userData : undefined;
@@ -168,7 +190,8 @@ export class CustomAuthorizer extends pulumi.CustomResource {
  */
 export interface CustomAuthorizerState {
     /**
-     * Specifies the maximum cache age.
+     * Specifies the maximum cache age.  
+     * The valid value is range from `1` to `3,600`.
      */
     cacheAge?: pulumi.Input<number>;
     /**
@@ -176,9 +199,17 @@ export interface CustomAuthorizerState {
      */
     createdAt?: pulumi.Input<string>;
     /**
+     * Specifies the version alias URI of the FGS function.
+     */
+    functionAliasUri?: pulumi.Input<string>;
+    /**
      * Specifies the uniform function URN of the function graph resource.
      */
     functionUrn?: pulumi.Input<string>;
+    /**
+     * Specifies the version of the FGS function.
+     */
+    functionVersion?: pulumi.Input<string>;
     /**
      * Specifies an array of one or more parameter identities of the custom authorizer.
      * The object structure is documented below.
@@ -200,13 +231,19 @@ export interface CustomAuthorizerState {
      */
     name?: pulumi.Input<string>;
     /**
+     * Specifies the framework type of the function.
+     * + **V1**: Non-VPC network architecture.
+     * + **V2**: VPC network architecture.
+     */
+    networkType?: pulumi.Input<string>;
+    /**
      * Specifies the region in which to create the custom authorizer resource.
      * If omitted, the provider-level region will be used.
      * Changing this will create a new custom authorizer resource.
      */
     region?: pulumi.Input<string>;
     /**
-     * Specifies the custom authoriz type.
+     * Specifies the custom authorize type.
      * The valid values are **FRONTEND** and **BACKEND**. Defaults to **FRONTEND**.
      * Changing this will create a new custom authorizer resource.
      */
@@ -223,13 +260,22 @@ export interface CustomAuthorizerState {
  */
 export interface CustomAuthorizerArgs {
     /**
-     * Specifies the maximum cache age.
+     * Specifies the maximum cache age.  
+     * The valid value is range from `1` to `3,600`.
      */
     cacheAge?: pulumi.Input<number>;
+    /**
+     * Specifies the version alias URI of the FGS function.
+     */
+    functionAliasUri?: pulumi.Input<string>;
     /**
      * Specifies the uniform function URN of the function graph resource.
      */
     functionUrn: pulumi.Input<string>;
+    /**
+     * Specifies the version of the FGS function.
+     */
+    functionVersion?: pulumi.Input<string>;
     /**
      * Specifies an array of one or more parameter identities of the custom authorizer.
      * The object structure is documented below.
@@ -251,13 +297,19 @@ export interface CustomAuthorizerArgs {
      */
     name?: pulumi.Input<string>;
     /**
+     * Specifies the framework type of the function.
+     * + **V1**: Non-VPC network architecture.
+     * + **V2**: VPC network architecture.
+     */
+    networkType?: pulumi.Input<string>;
+    /**
      * Specifies the region in which to create the custom authorizer resource.
      * If omitted, the provider-level region will be used.
      * Changing this will create a new custom authorizer resource.
      */
     region?: pulumi.Input<string>;
     /**
-     * Specifies the custom authoriz type.
+     * Specifies the custom authorize type.
      * The valid values are **FRONTEND** and **BACKEND**. Defaults to **FRONTEND**.
      * Changing this will create a new custom authorizer resource.
      */

@@ -8,7 +8,7 @@ import * as utilities from "../utilities";
  * Manages a WAF reference table resource within HuaweiCloud.
  *
  * > **NOTE:** All WAF resources depend on WAF instances, and the WAF instances need to be purchased before they can be
- * used. The reference table resource can be used in Cloud Mode (professional version), Dedicated Mode and ELB Mode.
+ * used. The reference table resource can be used in Cloud Mode and Dedicated Mode.
  *
  * ## Example Usage
  *
@@ -17,8 +17,9 @@ import * as utilities from "../utilities";
  * import * as pulumi from "@huaweicloudos/pulumi";
  *
  * const config = new pulumi.Config();
+ * const name = config.requireObject("name");
  * const enterpriseProjectId = config.requireObject("enterpriseProjectId");
- * const refTable = new huaweicloud.waf.ReferenceTable("refTable", {
+ * const test = new huaweicloud.waf.ReferenceTable("test", {
  *     type: "url",
  *     enterpriseProjectId: enterpriseProjectId,
  *     conditions: [
@@ -71,36 +72,38 @@ export class ReferenceTable extends pulumi.CustomResource {
     }
 
     /**
-     * The conditions of the reference table. The maximum length is 30. The maximum length of
-     * condition is 2048 characters.
+     * Specifies the conditions of the reference table.
      */
     public readonly conditions!: pulumi.Output<string[] | undefined>;
     /**
-     * The server time when reference table was created.
+     * The creation time of the reference table, in UTC format.
      */
     public /*out*/ readonly creationTime!: pulumi.Output<string>;
     /**
-     * The description of the reference table. The maximum length is 128 characters.
+     * Specifies the description of the reference table.
+     * The maximum length is `128` characters.
      */
     public readonly description!: pulumi.Output<string | undefined>;
     /**
-     * Specifies the enterprise project ID of WAF reference table.
+     * Specifies the enterprise project ID to which the reference
+     * table belongs. For enterprise users, if omitted, default enterprise project will be used.
      * Changing this parameter will create a new resource.
      */
     public readonly enterpriseProjectId!: pulumi.Output<string | undefined>;
     /**
-     * The name of the reference table. Only letters, digits, and underscores(_) are allowed. The
-     * maximum length is 64 characters.
+     * Specifies the name of the reference table. Only letters, digits, hyphens (-),
+     * underscores(_) and dots(.) are allowed. The maximum length is `64` characters.
      */
     public readonly name!: pulumi.Output<string>;
     /**
-     * The region in which to create the WAF reference table resource. If omitted,
-     * the provider-level region will be used. Changing this setting will push a new reference table.
+     * Specifies the region in which to create the WAF reference table resource.
+     * If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
      */
     public readonly region!: pulumi.Output<string>;
     /**
-     * The type of the reference table, The options are `url`, `user-agent`, `ip`,
-     * `params`, `cookie`, `referer` and `header`. Changing this setting will push a new reference table.
+     * Specifies the type of the reference table.
+     * The valid values are **url**, **user-agent**, **ip**, **params**, **cookie**, **referer** and **header**.
+     * Changing this parameter will create a new resource.
      */
     public readonly type!: pulumi.Output<string>;
 
@@ -147,36 +150,38 @@ export class ReferenceTable extends pulumi.CustomResource {
  */
 export interface ReferenceTableState {
     /**
-     * The conditions of the reference table. The maximum length is 30. The maximum length of
-     * condition is 2048 characters.
+     * Specifies the conditions of the reference table.
      */
     conditions?: pulumi.Input<pulumi.Input<string>[]>;
     /**
-     * The server time when reference table was created.
+     * The creation time of the reference table, in UTC format.
      */
     creationTime?: pulumi.Input<string>;
     /**
-     * The description of the reference table. The maximum length is 128 characters.
+     * Specifies the description of the reference table.
+     * The maximum length is `128` characters.
      */
     description?: pulumi.Input<string>;
     /**
-     * Specifies the enterprise project ID of WAF reference table.
+     * Specifies the enterprise project ID to which the reference
+     * table belongs. For enterprise users, if omitted, default enterprise project will be used.
      * Changing this parameter will create a new resource.
      */
     enterpriseProjectId?: pulumi.Input<string>;
     /**
-     * The name of the reference table. Only letters, digits, and underscores(_) are allowed. The
-     * maximum length is 64 characters.
+     * Specifies the name of the reference table. Only letters, digits, hyphens (-),
+     * underscores(_) and dots(.) are allowed. The maximum length is `64` characters.
      */
     name?: pulumi.Input<string>;
     /**
-     * The region in which to create the WAF reference table resource. If omitted,
-     * the provider-level region will be used. Changing this setting will push a new reference table.
+     * Specifies the region in which to create the WAF reference table resource.
+     * If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
      */
     region?: pulumi.Input<string>;
     /**
-     * The type of the reference table, The options are `url`, `user-agent`, `ip`,
-     * `params`, `cookie`, `referer` and `header`. Changing this setting will push a new reference table.
+     * Specifies the type of the reference table.
+     * The valid values are **url**, **user-agent**, **ip**, **params**, **cookie**, **referer** and **header**.
+     * Changing this parameter will create a new resource.
      */
     type?: pulumi.Input<string>;
 }
@@ -186,32 +191,34 @@ export interface ReferenceTableState {
  */
 export interface ReferenceTableArgs {
     /**
-     * The conditions of the reference table. The maximum length is 30. The maximum length of
-     * condition is 2048 characters.
+     * Specifies the conditions of the reference table.
      */
     conditions?: pulumi.Input<pulumi.Input<string>[]>;
     /**
-     * The description of the reference table. The maximum length is 128 characters.
+     * Specifies the description of the reference table.
+     * The maximum length is `128` characters.
      */
     description?: pulumi.Input<string>;
     /**
-     * Specifies the enterprise project ID of WAF reference table.
+     * Specifies the enterprise project ID to which the reference
+     * table belongs. For enterprise users, if omitted, default enterprise project will be used.
      * Changing this parameter will create a new resource.
      */
     enterpriseProjectId?: pulumi.Input<string>;
     /**
-     * The name of the reference table. Only letters, digits, and underscores(_) are allowed. The
-     * maximum length is 64 characters.
+     * Specifies the name of the reference table. Only letters, digits, hyphens (-),
+     * underscores(_) and dots(.) are allowed. The maximum length is `64` characters.
      */
     name?: pulumi.Input<string>;
     /**
-     * The region in which to create the WAF reference table resource. If omitted,
-     * the provider-level region will be used. Changing this setting will push a new reference table.
+     * Specifies the region in which to create the WAF reference table resource.
+     * If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
      */
     region?: pulumi.Input<string>;
     /**
-     * The type of the reference table, The options are `url`, `user-agent`, `ip`,
-     * `params`, `cookie`, `referer` and `header`. Changing this setting will push a new reference table.
+     * Specifies the type of the reference table.
+     * The valid values are **url**, **user-agent**, **ip**, **params**, **cookie**, **referer** and **header**.
+     * Changing this parameter will create a new resource.
      */
     type: pulumi.Input<string>;
 }

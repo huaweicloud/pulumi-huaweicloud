@@ -55,26 +55,26 @@ func GetKeypairs(ctx *pulumi.Context, args *GetKeypairsArgs, opts ...pulumi.Invo
 type GetKeypairsArgs struct {
 	// Specifies the fingerprint of the keypair.
 	Fingerprint *string `pulumi:"fingerprint"`
-	// Specifies whether the private key is managed by HuaweiCloud.
+	// Indicates whether the private key is managed by HuaweiCloud.
 	IsManaged *bool `pulumi:"isManaged"`
 	// Specifies the name of the keypair.
 	Name *string `pulumi:"name"`
 	// Specifies the imported OpenSSH-formatted public key.
 	PublicKey *string `pulumi:"publicKey"`
-	// The region in which to obtain the keypairs. If omitted, the provider-level region will
-	// be used.
+	// Specifies the region in which to obtain the keypairs. If omitted, the provider-level
+	// region will be used.
 	Region *string `pulumi:"region"`
 }
 
 // A collection of values returned by getKeypairs.
 type GetKeypairsResult struct {
-	// Indicates the fingerprint information about an key pair.
+	// Indicates the fingerprint information about a keypair.
 	Fingerprint *string `pulumi:"fingerprint"`
 	// The provider-assigned unique ID for this managed resource.
 	Id string `pulumi:"id"`
 	// Indicates whether the private key is managed by HuaweiCloud.
 	IsManaged *bool `pulumi:"isManaged"`
-	// Indicates a list of all keypairs found. Structure is documented below.
+	// The KPS keypairs list.
 	Keypairs []GetKeypairsKeypair `pulumi:"keypairs"`
 	// Indicates the name of the keypair.
 	Name *string `pulumi:"name"`
@@ -100,14 +100,14 @@ func GetKeypairsOutput(ctx *pulumi.Context, args GetKeypairsOutputArgs, opts ...
 type GetKeypairsOutputArgs struct {
 	// Specifies the fingerprint of the keypair.
 	Fingerprint pulumi.StringPtrInput `pulumi:"fingerprint"`
-	// Specifies whether the private key is managed by HuaweiCloud.
+	// Indicates whether the private key is managed by HuaweiCloud.
 	IsManaged pulumi.BoolPtrInput `pulumi:"isManaged"`
 	// Specifies the name of the keypair.
 	Name pulumi.StringPtrInput `pulumi:"name"`
 	// Specifies the imported OpenSSH-formatted public key.
 	PublicKey pulumi.StringPtrInput `pulumi:"publicKey"`
-	// The region in which to obtain the keypairs. If omitted, the provider-level region will
-	// be used.
+	// Specifies the region in which to obtain the keypairs. If omitted, the provider-level
+	// region will be used.
 	Region pulumi.StringPtrInput `pulumi:"region"`
 }
 
@@ -130,7 +130,7 @@ func (o GetKeypairsResultOutput) ToGetKeypairsResultOutputWithContext(ctx contex
 	return o
 }
 
-// Indicates the fingerprint information about an key pair.
+// Indicates the fingerprint information about a keypair.
 func (o GetKeypairsResultOutput) Fingerprint() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v GetKeypairsResult) *string { return v.Fingerprint }).(pulumi.StringPtrOutput)
 }
@@ -145,7 +145,7 @@ func (o GetKeypairsResultOutput) IsManaged() pulumi.BoolPtrOutput {
 	return o.ApplyT(func(v GetKeypairsResult) *bool { return v.IsManaged }).(pulumi.BoolPtrOutput)
 }
 
-// Indicates a list of all keypairs found. Structure is documented below.
+// The KPS keypairs list.
 func (o GetKeypairsResultOutput) Keypairs() GetKeypairsKeypairArrayOutput {
 	return o.ApplyT(func(v GetKeypairsResult) []GetKeypairsKeypair { return v.Keypairs }).(GetKeypairsKeypairArrayOutput)
 }

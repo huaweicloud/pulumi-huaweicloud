@@ -34,6 +34,7 @@ class InstanceArgs:
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  iptype: Optional[pulumi.Input[str]] = None,
                  key_pair: Optional[pulumi.Input[str]] = None,
+                 metadata: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  period: Optional[pulumi.Input[int]] = None,
                  period_unit: Optional[pulumi.Input[str]] = None,
@@ -54,15 +55,20 @@ class InstanceArgs:
         :param pulumi.Input[str] image_id: Specifies the image ID of the desired image for the instance. Changing this
                creates a new instance.
         :param pulumi.Input[Sequence[pulumi.Input['InstanceNicArgs']]] nics: Specifies an array of one or more networks to attach to the instance. The network
-               object structure is documented below. Changing this creates a new instance.
+               object structure is documented below.
         :param pulumi.Input[str] user_id: Specifies the user ID. You can obtain the user ID from My Credential on the
                management console. Changing this creates a new instance.
         :param pulumi.Input[str] vpc_id: Specifies id of vpc in which to create the instance. Changing this creates a
                new instance.
-        :param pulumi.Input[str] admin_pass: Specifies the administrative password to assign to the instance. Changing
-               this creates a new instance.
+        :param pulumi.Input[str] admin_pass: Specifies the login password of the administrator for logging in to the
+               BMS using password authentication. Changing this creates a new instance. The password must meet the following
+               complexity requirements:
+               + Contains 8 to 26 characters.
+               + Contains at least three of the following character types: uppercase letters, lowercase letters, digits, and special
+               characters !@$%^-_=+[{}]:,./?
+               + Cannot contain the username or the username in reverse.
         :param pulumi.Input[str] agency_name: Specifies the IAM agency name which is created on IAM to provide
-               temporary credentials for BMS to access cloud services. Changing this creates a new instance.
+               temporary credentials for BMS to access cloud services.
         :param pulumi.Input[str] auto_renew: Specifies whether auto renew is enabled. Valid values are "true" and "
                false", defaults to *false*.
         :param pulumi.Input[str] bandwidth_charge_mode: Bandwidth billing type. Available options are:
@@ -80,14 +86,18 @@ class InstanceArgs:
                + `prePaid`: indicates the yearly/monthly billing mode.
                + `postPaid`: indicates the pay-per-use billing mode.
         :param pulumi.Input[str] eip_id: The ID of the EIP. Changing this creates a new instance.
-        :param pulumi.Input[str] enterprise_project_id: Specifies a unique id in UUID format of enterprise project .
-               Changing this creates a new instance.
+        :param pulumi.Input[str] enterprise_project_id: Specifies a unique id in UUID format of enterprise project.
         :param pulumi.Input[str] iptype: Elastic IP type. Changing this creates a new instance.
                Available options are:
                + `5_bgp`: dynamic BGP.
                + `5_sbgp`: static BGP.
-        :param pulumi.Input[str] key_pair: Specifies the name of a key pair to put on the instance. The key pair must
-               already be created and associated with the tenant's account. Changing this creates a new instance.
+        :param pulumi.Input[str] key_pair: Specifies the name of a key pair for logging in to the BMS using key pair
+               authentication. The key pair must already be created and associated with the tenant's account. The parameter is
+               required when using a Windows image to create a BMS. Changing this creates a new instance.
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] metadata: Specifies the user-defined metadata key-value pair.
+               + A metadata key contains of a maximum of 255 Unicode characters which can be letters, digits, hyphens (-),
+               underscores (_), colons (:), and point (.).
+               + A metadata value consists of a maximum of 255 Unicode characters.
         :param pulumi.Input[str] name: Specifies a unique name for the instance. The name consists of 1 to 63 characters,
                including letters, digits, underscores (_), hyphens (-), and periods (.).
         :param pulumi.Input[int] period: Specifies the charging period of the instance. If `period_unit` is set to *month*
@@ -114,11 +124,10 @@ class InstanceArgs:
                + `SSD`: ultra-high I/O disk type.
                + `GPSSD`: general purpose SSD disk type.
                + `SAS`: high I/O disk type.
-        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the instance. Changing this creates
-               a new instance.
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the instance.
         :param pulumi.Input[str] user_data: Specifies the user data to be injected during the instance creation. Text
-               and text files can be injected. `user_data` can come from a variety of sources: inline, read in from the
-               *file* function. Changing this creates a new instance.
+               and text files can be injected. `user_data` can come from a variety of sources: inline, read in from the *file*
+               function. The content of `user_data` can be plaint text or encoded with base64. Changing this creates a new instance.
         """
         pulumi.set(__self__, "availability_zone", availability_zone)
         pulumi.set(__self__, "flavor_id", flavor_id)
@@ -150,6 +159,8 @@ class InstanceArgs:
             pulumi.set(__self__, "iptype", iptype)
         if key_pair is not None:
             pulumi.set(__self__, "key_pair", key_pair)
+        if metadata is not None:
+            pulumi.set(__self__, "metadata", metadata)
         if name is not None:
             pulumi.set(__self__, "name", name)
         if period is not None:
@@ -216,7 +227,7 @@ class InstanceArgs:
     def nics(self) -> pulumi.Input[Sequence[pulumi.Input['InstanceNicArgs']]]:
         """
         Specifies an array of one or more networks to attach to the instance. The network
-        object structure is documented below. Changing this creates a new instance.
+        object structure is documented below.
         """
         return pulumi.get(self, "nics")
 
@@ -254,8 +265,13 @@ class InstanceArgs:
     @pulumi.getter(name="adminPass")
     def admin_pass(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the administrative password to assign to the instance. Changing
-        this creates a new instance.
+        Specifies the login password of the administrator for logging in to the
+        BMS using password authentication. Changing this creates a new instance. The password must meet the following
+        complexity requirements:
+        + Contains 8 to 26 characters.
+        + Contains at least three of the following character types: uppercase letters, lowercase letters, digits, and special
+        characters !@$%^-_=+[{}]:,./?
+        + Cannot contain the username or the username in reverse.
         """
         return pulumi.get(self, "admin_pass")
 
@@ -268,7 +284,7 @@ class InstanceArgs:
     def agency_name(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the IAM agency name which is created on IAM to provide
-        temporary credentials for BMS to access cloud services. Changing this creates a new instance.
+        temporary credentials for BMS to access cloud services.
         """
         return pulumi.get(self, "agency_name")
 
@@ -374,8 +390,7 @@ class InstanceArgs:
     @pulumi.getter(name="enterpriseProjectId")
     def enterprise_project_id(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies a unique id in UUID format of enterprise project .
-        Changing this creates a new instance.
+        Specifies a unique id in UUID format of enterprise project.
         """
         return pulumi.get(self, "enterprise_project_id")
 
@@ -402,14 +417,30 @@ class InstanceArgs:
     @pulumi.getter(name="keyPair")
     def key_pair(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the name of a key pair to put on the instance. The key pair must
-        already be created and associated with the tenant's account. Changing this creates a new instance.
+        Specifies the name of a key pair for logging in to the BMS using key pair
+        authentication. The key pair must already be created and associated with the tenant's account. The parameter is
+        required when using a Windows image to create a BMS. Changing this creates a new instance.
         """
         return pulumi.get(self, "key_pair")
 
     @key_pair.setter
     def key_pair(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "key_pair", value)
+
+    @property
+    @pulumi.getter
+    def metadata(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]:
+        """
+        Specifies the user-defined metadata key-value pair.
+        + A metadata key contains of a maximum of 255 Unicode characters which can be letters, digits, hyphens (-),
+        underscores (_), colons (:), and point (.).
+        + A metadata value consists of a maximum of 255 Unicode characters.
+        """
+        return pulumi.get(self, "metadata")
+
+    @metadata.setter
+    def metadata(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]):
+        pulumi.set(self, "metadata", value)
 
     @property
     @pulumi.getter
@@ -529,8 +560,7 @@ class InstanceArgs:
     @pulumi.getter
     def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]:
         """
-        Specifies the key/value pairs to associate with the instance. Changing this creates
-        a new instance.
+        Specifies the key/value pairs to associate with the instance.
         """
         return pulumi.get(self, "tags")
 
@@ -543,8 +573,8 @@ class InstanceArgs:
     def user_data(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the user data to be injected during the instance creation. Text
-        and text files can be injected. `user_data` can come from a variety of sources: inline, read in from the
-        *file* function. Changing this creates a new instance.
+        and text files can be injected. `user_data` can come from a variety of sources: inline, read in from the *file*
+        function. The content of `user_data` can be plaint text or encoded with base64. Changing this creates a new instance.
         """
         return pulumi.get(self, "user_data")
 
@@ -575,6 +605,7 @@ class _InstanceState:
                  image_name: Optional[pulumi.Input[str]] = None,
                  iptype: Optional[pulumi.Input[str]] = None,
                  key_pair: Optional[pulumi.Input[str]] = None,
+                 metadata: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  nics: Optional[pulumi.Input[Sequence[pulumi.Input['InstanceNicArgs']]]] = None,
                  period: Optional[pulumi.Input[int]] = None,
@@ -592,10 +623,15 @@ class _InstanceState:
                  vpc_id: Optional[pulumi.Input[str]] = None):
         """
         Input properties used for looking up and filtering Instance resources.
-        :param pulumi.Input[str] admin_pass: Specifies the administrative password to assign to the instance. Changing
-               this creates a new instance.
+        :param pulumi.Input[str] admin_pass: Specifies the login password of the administrator for logging in to the
+               BMS using password authentication. Changing this creates a new instance. The password must meet the following
+               complexity requirements:
+               + Contains 8 to 26 characters.
+               + Contains at least three of the following character types: uppercase letters, lowercase letters, digits, and special
+               characters !@$%^-_=+[{}]:,./?
+               + Cannot contain the username or the username in reverse.
         :param pulumi.Input[str] agency_name: Specifies the IAM agency name which is created on IAM to provide
-               temporary credentials for BMS to access cloud services. Changing this creates a new instance.
+               temporary credentials for BMS to access cloud services.
         :param pulumi.Input[str] auto_renew: Specifies whether auto renew is enabled. Valid values are "true" and "
                false", defaults to *false*.
         :param pulumi.Input[str] availability_zone: Specifies the availability zone in which to create the instance.
@@ -618,8 +654,7 @@ class _InstanceState:
                + `prePaid`: indicates the yearly/monthly billing mode.
                + `postPaid`: indicates the pay-per-use billing mode.
         :param pulumi.Input[str] eip_id: The ID of the EIP. Changing this creates a new instance.
-        :param pulumi.Input[str] enterprise_project_id: Specifies a unique id in UUID format of enterprise project .
-               Changing this creates a new instance.
+        :param pulumi.Input[str] enterprise_project_id: Specifies a unique id in UUID format of enterprise project.
         :param pulumi.Input[str] flavor_id: Specifies the flavor ID of the desired flavor for the instance. Changing
                this creates a new instance.
         :param pulumi.Input[str] host_id: The host ID of the instance.
@@ -630,19 +665,24 @@ class _InstanceState:
                Available options are:
                + `5_bgp`: dynamic BGP.
                + `5_sbgp`: static BGP.
-        :param pulumi.Input[str] key_pair: Specifies the name of a key pair to put on the instance. The key pair must
-               already be created and associated with the tenant's account. Changing this creates a new instance.
+        :param pulumi.Input[str] key_pair: Specifies the name of a key pair for logging in to the BMS using key pair
+               authentication. The key pair must already be created and associated with the tenant's account. The parameter is
+               required when using a Windows image to create a BMS. Changing this creates a new instance.
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] metadata: Specifies the user-defined metadata key-value pair.
+               + A metadata key contains of a maximum of 255 Unicode characters which can be letters, digits, hyphens (-),
+               underscores (_), colons (:), and point (.).
+               + A metadata value consists of a maximum of 255 Unicode characters.
         :param pulumi.Input[str] name: Specifies a unique name for the instance. The name consists of 1 to 63 characters,
                including letters, digits, underscores (_), hyphens (-), and periods (.).
         :param pulumi.Input[Sequence[pulumi.Input['InstanceNicArgs']]] nics: Specifies an array of one or more networks to attach to the instance. The network
-               object structure is documented below. Changing this creates a new instance.
+               object structure is documented below.
         :param pulumi.Input[int] period: Specifies the charging period of the instance. If `period_unit` is set to *month*
                , the value ranges from 1 to 9. If `period_unit` is set to *year*, the value is 1. This parameter is mandatory
                if `charging_mode` is set to *prePaid*. Changing this creates a new instance.
         :param pulumi.Input[str] period_unit: Specifies the charging period unit of the instance. Valid values are *
                month* and *year*. This parameter is mandatory if `charging_mode` is set to *prePaid*. Changing this creates a new
                instance.
-        :param pulumi.Input[str] public_ip: The EIP address that is associted to the instance.
+        :param pulumi.Input[str] public_ip: The EIP address that is associated to the instance.
         :param pulumi.Input[str] region: Specifies the region in which to create the instance. If omitted, the
                provider-level region will be used. Changing this creates a new instance.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] security_groups: Specifies an array of one or more security group IDs to associate with
@@ -662,11 +702,10 @@ class _InstanceState:
                + `SSD`: ultra-high I/O disk type.
                + `GPSSD`: general purpose SSD disk type.
                + `SAS`: high I/O disk type.
-        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the instance. Changing this creates
-               a new instance.
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the instance.
         :param pulumi.Input[str] user_data: Specifies the user data to be injected during the instance creation. Text
-               and text files can be injected. `user_data` can come from a variety of sources: inline, read in from the
-               *file* function. Changing this creates a new instance.
+               and text files can be injected. `user_data` can come from a variety of sources: inline, read in from the *file*
+               function. The content of `user_data` can be plaint text or encoded with base64. Changing this creates a new instance.
         :param pulumi.Input[str] user_id: Specifies the user ID. You can obtain the user ID from My Credential on the
                management console. Changing this creates a new instance.
         :param pulumi.Input[str] vpc_id: Specifies id of vpc in which to create the instance. Changing this creates a
@@ -710,6 +749,8 @@ class _InstanceState:
             pulumi.set(__self__, "iptype", iptype)
         if key_pair is not None:
             pulumi.set(__self__, "key_pair", key_pair)
+        if metadata is not None:
+            pulumi.set(__self__, "metadata", metadata)
         if name is not None:
             pulumi.set(__self__, "name", name)
         if nics is not None:
@@ -745,8 +786,13 @@ class _InstanceState:
     @pulumi.getter(name="adminPass")
     def admin_pass(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the administrative password to assign to the instance. Changing
-        this creates a new instance.
+        Specifies the login password of the administrator for logging in to the
+        BMS using password authentication. Changing this creates a new instance. The password must meet the following
+        complexity requirements:
+        + Contains 8 to 26 characters.
+        + Contains at least three of the following character types: uppercase letters, lowercase letters, digits, and special
+        characters !@$%^-_=+[{}]:,./?
+        + Cannot contain the username or the username in reverse.
         """
         return pulumi.get(self, "admin_pass")
 
@@ -759,7 +805,7 @@ class _InstanceState:
     def agency_name(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the IAM agency name which is created on IAM to provide
-        temporary credentials for BMS to access cloud services. Changing this creates a new instance.
+        temporary credentials for BMS to access cloud services.
         """
         return pulumi.get(self, "agency_name")
 
@@ -903,8 +949,7 @@ class _InstanceState:
     @pulumi.getter(name="enterpriseProjectId")
     def enterprise_project_id(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies a unique id in UUID format of enterprise project .
-        Changing this creates a new instance.
+        Specifies a unique id in UUID format of enterprise project.
         """
         return pulumi.get(self, "enterprise_project_id")
 
@@ -981,14 +1026,30 @@ class _InstanceState:
     @pulumi.getter(name="keyPair")
     def key_pair(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the name of a key pair to put on the instance. The key pair must
-        already be created and associated with the tenant's account. Changing this creates a new instance.
+        Specifies the name of a key pair for logging in to the BMS using key pair
+        authentication. The key pair must already be created and associated with the tenant's account. The parameter is
+        required when using a Windows image to create a BMS. Changing this creates a new instance.
         """
         return pulumi.get(self, "key_pair")
 
     @key_pair.setter
     def key_pair(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "key_pair", value)
+
+    @property
+    @pulumi.getter
+    def metadata(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]:
+        """
+        Specifies the user-defined metadata key-value pair.
+        + A metadata key contains of a maximum of 255 Unicode characters which can be letters, digits, hyphens (-),
+        underscores (_), colons (:), and point (.).
+        + A metadata value consists of a maximum of 255 Unicode characters.
+        """
+        return pulumi.get(self, "metadata")
+
+    @metadata.setter
+    def metadata(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]):
+        pulumi.set(self, "metadata", value)
 
     @property
     @pulumi.getter
@@ -1008,7 +1069,7 @@ class _InstanceState:
     def nics(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['InstanceNicArgs']]]]:
         """
         Specifies an array of one or more networks to attach to the instance. The network
-        object structure is documented below. Changing this creates a new instance.
+        object structure is documented below.
         """
         return pulumi.get(self, "nics")
 
@@ -1048,7 +1109,7 @@ class _InstanceState:
     @pulumi.getter(name="publicIp")
     def public_ip(self) -> Optional[pulumi.Input[str]]:
         """
-        The EIP address that is associted to the instance.
+        The EIP address that is associated to the instance.
         """
         return pulumi.get(self, "public_ip")
 
@@ -1145,8 +1206,7 @@ class _InstanceState:
     @pulumi.getter
     def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]:
         """
-        Specifies the key/value pairs to associate with the instance. Changing this creates
-        a new instance.
+        Specifies the key/value pairs to associate with the instance.
         """
         return pulumi.get(self, "tags")
 
@@ -1159,8 +1219,8 @@ class _InstanceState:
     def user_data(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the user data to be injected during the instance creation. Text
-        and text files can be injected. `user_data` can come from a variety of sources: inline, read in from the
-        *file* function. Changing this creates a new instance.
+        and text files can be injected. `user_data` can come from a variety of sources: inline, read in from the *file*
+        function. The content of `user_data` can be plaint text or encoded with base64. Changing this creates a new instance.
         """
         return pulumi.get(self, "user_data")
 
@@ -1215,6 +1275,7 @@ class Instance(pulumi.CustomResource):
                  image_id: Optional[pulumi.Input[str]] = None,
                  iptype: Optional[pulumi.Input[str]] = None,
                  key_pair: Optional[pulumi.Input[str]] = None,
+                 metadata: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  nics: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['InstanceNicArgs']]]]] = None,
                  period: Optional[pulumi.Input[int]] = None,
@@ -1282,10 +1343,15 @@ class Instance(pulumi.CustomResource):
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[str] admin_pass: Specifies the administrative password to assign to the instance. Changing
-               this creates a new instance.
+        :param pulumi.Input[str] admin_pass: Specifies the login password of the administrator for logging in to the
+               BMS using password authentication. Changing this creates a new instance. The password must meet the following
+               complexity requirements:
+               + Contains 8 to 26 characters.
+               + Contains at least three of the following character types: uppercase letters, lowercase letters, digits, and special
+               characters !@$%^-_=+[{}]:,./?
+               + Cannot contain the username or the username in reverse.
         :param pulumi.Input[str] agency_name: Specifies the IAM agency name which is created on IAM to provide
-               temporary credentials for BMS to access cloud services. Changing this creates a new instance.
+               temporary credentials for BMS to access cloud services.
         :param pulumi.Input[str] auto_renew: Specifies whether auto renew is enabled. Valid values are "true" and "
                false", defaults to *false*.
         :param pulumi.Input[str] availability_zone: Specifies the availability zone in which to create the instance.
@@ -1306,8 +1372,7 @@ class Instance(pulumi.CustomResource):
                + `prePaid`: indicates the yearly/monthly billing mode.
                + `postPaid`: indicates the pay-per-use billing mode.
         :param pulumi.Input[str] eip_id: The ID of the EIP. Changing this creates a new instance.
-        :param pulumi.Input[str] enterprise_project_id: Specifies a unique id in UUID format of enterprise project .
-               Changing this creates a new instance.
+        :param pulumi.Input[str] enterprise_project_id: Specifies a unique id in UUID format of enterprise project.
         :param pulumi.Input[str] flavor_id: Specifies the flavor ID of the desired flavor for the instance. Changing
                this creates a new instance.
         :param pulumi.Input[str] image_id: Specifies the image ID of the desired image for the instance. Changing this
@@ -1316,12 +1381,17 @@ class Instance(pulumi.CustomResource):
                Available options are:
                + `5_bgp`: dynamic BGP.
                + `5_sbgp`: static BGP.
-        :param pulumi.Input[str] key_pair: Specifies the name of a key pair to put on the instance. The key pair must
-               already be created and associated with the tenant's account. Changing this creates a new instance.
+        :param pulumi.Input[str] key_pair: Specifies the name of a key pair for logging in to the BMS using key pair
+               authentication. The key pair must already be created and associated with the tenant's account. The parameter is
+               required when using a Windows image to create a BMS. Changing this creates a new instance.
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] metadata: Specifies the user-defined metadata key-value pair.
+               + A metadata key contains of a maximum of 255 Unicode characters which can be letters, digits, hyphens (-),
+               underscores (_), colons (:), and point (.).
+               + A metadata value consists of a maximum of 255 Unicode characters.
         :param pulumi.Input[str] name: Specifies a unique name for the instance. The name consists of 1 to 63 characters,
                including letters, digits, underscores (_), hyphens (-), and periods (.).
         :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['InstanceNicArgs']]]] nics: Specifies an array of one or more networks to attach to the instance. The network
-               object structure is documented below. Changing this creates a new instance.
+               object structure is documented below.
         :param pulumi.Input[int] period: Specifies the charging period of the instance. If `period_unit` is set to *month*
                , the value ranges from 1 to 9. If `period_unit` is set to *year*, the value is 1. This parameter is mandatory
                if `charging_mode` is set to *prePaid*. Changing this creates a new instance.
@@ -1346,11 +1416,10 @@ class Instance(pulumi.CustomResource):
                + `SSD`: ultra-high I/O disk type.
                + `GPSSD`: general purpose SSD disk type.
                + `SAS`: high I/O disk type.
-        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the instance. Changing this creates
-               a new instance.
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the instance.
         :param pulumi.Input[str] user_data: Specifies the user data to be injected during the instance creation. Text
-               and text files can be injected. `user_data` can come from a variety of sources: inline, read in from the
-               *file* function. Changing this creates a new instance.
+               and text files can be injected. `user_data` can come from a variety of sources: inline, read in from the *file*
+               function. The content of `user_data` can be plaint text or encoded with base64. Changing this creates a new instance.
         :param pulumi.Input[str] user_id: Specifies the user ID. You can obtain the user ID from My Credential on the
                management console. Changing this creates a new instance.
         :param pulumi.Input[str] vpc_id: Specifies id of vpc in which to create the instance. Changing this creates a
@@ -1443,6 +1512,7 @@ class Instance(pulumi.CustomResource):
                  image_id: Optional[pulumi.Input[str]] = None,
                  iptype: Optional[pulumi.Input[str]] = None,
                  key_pair: Optional[pulumi.Input[str]] = None,
+                 metadata: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  nics: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['InstanceNicArgs']]]]] = None,
                  period: Optional[pulumi.Input[int]] = None,
@@ -1486,6 +1556,7 @@ class Instance(pulumi.CustomResource):
             __props__.__dict__["image_id"] = image_id
             __props__.__dict__["iptype"] = iptype
             __props__.__dict__["key_pair"] = key_pair
+            __props__.__dict__["metadata"] = metadata
             __props__.__dict__["name"] = name
             if nics is None and not opts.urn:
                 raise TypeError("Missing required property 'nics'")
@@ -1540,6 +1611,7 @@ class Instance(pulumi.CustomResource):
             image_name: Optional[pulumi.Input[str]] = None,
             iptype: Optional[pulumi.Input[str]] = None,
             key_pair: Optional[pulumi.Input[str]] = None,
+            metadata: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
             name: Optional[pulumi.Input[str]] = None,
             nics: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['InstanceNicArgs']]]]] = None,
             period: Optional[pulumi.Input[int]] = None,
@@ -1562,10 +1634,15 @@ class Instance(pulumi.CustomResource):
         :param str resource_name: The unique name of the resulting resource.
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[str] admin_pass: Specifies the administrative password to assign to the instance. Changing
-               this creates a new instance.
+        :param pulumi.Input[str] admin_pass: Specifies the login password of the administrator for logging in to the
+               BMS using password authentication. Changing this creates a new instance. The password must meet the following
+               complexity requirements:
+               + Contains 8 to 26 characters.
+               + Contains at least three of the following character types: uppercase letters, lowercase letters, digits, and special
+               characters !@$%^-_=+[{}]:,./?
+               + Cannot contain the username or the username in reverse.
         :param pulumi.Input[str] agency_name: Specifies the IAM agency name which is created on IAM to provide
-               temporary credentials for BMS to access cloud services. Changing this creates a new instance.
+               temporary credentials for BMS to access cloud services.
         :param pulumi.Input[str] auto_renew: Specifies whether auto renew is enabled. Valid values are "true" and "
                false", defaults to *false*.
         :param pulumi.Input[str] availability_zone: Specifies the availability zone in which to create the instance.
@@ -1588,8 +1665,7 @@ class Instance(pulumi.CustomResource):
                + `prePaid`: indicates the yearly/monthly billing mode.
                + `postPaid`: indicates the pay-per-use billing mode.
         :param pulumi.Input[str] eip_id: The ID of the EIP. Changing this creates a new instance.
-        :param pulumi.Input[str] enterprise_project_id: Specifies a unique id in UUID format of enterprise project .
-               Changing this creates a new instance.
+        :param pulumi.Input[str] enterprise_project_id: Specifies a unique id in UUID format of enterprise project.
         :param pulumi.Input[str] flavor_id: Specifies the flavor ID of the desired flavor for the instance. Changing
                this creates a new instance.
         :param pulumi.Input[str] host_id: The host ID of the instance.
@@ -1600,19 +1676,24 @@ class Instance(pulumi.CustomResource):
                Available options are:
                + `5_bgp`: dynamic BGP.
                + `5_sbgp`: static BGP.
-        :param pulumi.Input[str] key_pair: Specifies the name of a key pair to put on the instance. The key pair must
-               already be created and associated with the tenant's account. Changing this creates a new instance.
+        :param pulumi.Input[str] key_pair: Specifies the name of a key pair for logging in to the BMS using key pair
+               authentication. The key pair must already be created and associated with the tenant's account. The parameter is
+               required when using a Windows image to create a BMS. Changing this creates a new instance.
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] metadata: Specifies the user-defined metadata key-value pair.
+               + A metadata key contains of a maximum of 255 Unicode characters which can be letters, digits, hyphens (-),
+               underscores (_), colons (:), and point (.).
+               + A metadata value consists of a maximum of 255 Unicode characters.
         :param pulumi.Input[str] name: Specifies a unique name for the instance. The name consists of 1 to 63 characters,
                including letters, digits, underscores (_), hyphens (-), and periods (.).
         :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['InstanceNicArgs']]]] nics: Specifies an array of one or more networks to attach to the instance. The network
-               object structure is documented below. Changing this creates a new instance.
+               object structure is documented below.
         :param pulumi.Input[int] period: Specifies the charging period of the instance. If `period_unit` is set to *month*
                , the value ranges from 1 to 9. If `period_unit` is set to *year*, the value is 1. This parameter is mandatory
                if `charging_mode` is set to *prePaid*. Changing this creates a new instance.
         :param pulumi.Input[str] period_unit: Specifies the charging period unit of the instance. Valid values are *
                month* and *year*. This parameter is mandatory if `charging_mode` is set to *prePaid*. Changing this creates a new
                instance.
-        :param pulumi.Input[str] public_ip: The EIP address that is associted to the instance.
+        :param pulumi.Input[str] public_ip: The EIP address that is associated to the instance.
         :param pulumi.Input[str] region: Specifies the region in which to create the instance. If omitted, the
                provider-level region will be used. Changing this creates a new instance.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] security_groups: Specifies an array of one or more security group IDs to associate with
@@ -1632,11 +1713,10 @@ class Instance(pulumi.CustomResource):
                + `SSD`: ultra-high I/O disk type.
                + `GPSSD`: general purpose SSD disk type.
                + `SAS`: high I/O disk type.
-        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the instance. Changing this creates
-               a new instance.
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the instance.
         :param pulumi.Input[str] user_data: Specifies the user data to be injected during the instance creation. Text
-               and text files can be injected. `user_data` can come from a variety of sources: inline, read in from the
-               *file* function. Changing this creates a new instance.
+               and text files can be injected. `user_data` can come from a variety of sources: inline, read in from the *file*
+               function. The content of `user_data` can be plaint text or encoded with base64. Changing this creates a new instance.
         :param pulumi.Input[str] user_id: Specifies the user ID. You can obtain the user ID from My Credential on the
                management console. Changing this creates a new instance.
         :param pulumi.Input[str] vpc_id: Specifies id of vpc in which to create the instance. Changing this creates a
@@ -1665,6 +1745,7 @@ class Instance(pulumi.CustomResource):
         __props__.__dict__["image_name"] = image_name
         __props__.__dict__["iptype"] = iptype
         __props__.__dict__["key_pair"] = key_pair
+        __props__.__dict__["metadata"] = metadata
         __props__.__dict__["name"] = name
         __props__.__dict__["nics"] = nics
         __props__.__dict__["period"] = period
@@ -1686,17 +1767,22 @@ class Instance(pulumi.CustomResource):
     @pulumi.getter(name="adminPass")
     def admin_pass(self) -> pulumi.Output[Optional[str]]:
         """
-        Specifies the administrative password to assign to the instance. Changing
-        this creates a new instance.
+        Specifies the login password of the administrator for logging in to the
+        BMS using password authentication. Changing this creates a new instance. The password must meet the following
+        complexity requirements:
+        + Contains 8 to 26 characters.
+        + Contains at least three of the following character types: uppercase letters, lowercase letters, digits, and special
+        characters !@$%^-_=+[{}]:,./?
+        + Cannot contain the username or the username in reverse.
         """
         return pulumi.get(self, "admin_pass")
 
     @property
     @pulumi.getter(name="agencyName")
-    def agency_name(self) -> pulumi.Output[Optional[str]]:
+    def agency_name(self) -> pulumi.Output[str]:
         """
         Specifies the IAM agency name which is created on IAM to provide
-        temporary credentials for BMS to access cloud services. Changing this creates a new instance.
+        temporary credentials for BMS to access cloud services.
         """
         return pulumi.get(self, "agency_name")
 
@@ -1796,8 +1882,7 @@ class Instance(pulumi.CustomResource):
     @pulumi.getter(name="enterpriseProjectId")
     def enterprise_project_id(self) -> pulumi.Output[str]:
         """
-        Specifies a unique id in UUID format of enterprise project .
-        Changing this creates a new instance.
+        Specifies a unique id in UUID format of enterprise project.
         """
         return pulumi.get(self, "enterprise_project_id")
 
@@ -1850,10 +1935,22 @@ class Instance(pulumi.CustomResource):
     @pulumi.getter(name="keyPair")
     def key_pair(self) -> pulumi.Output[Optional[str]]:
         """
-        Specifies the name of a key pair to put on the instance. The key pair must
-        already be created and associated with the tenant's account. Changing this creates a new instance.
+        Specifies the name of a key pair for logging in to the BMS using key pair
+        authentication. The key pair must already be created and associated with the tenant's account. The parameter is
+        required when using a Windows image to create a BMS. Changing this creates a new instance.
         """
         return pulumi.get(self, "key_pair")
+
+    @property
+    @pulumi.getter
+    def metadata(self) -> pulumi.Output[Optional[Mapping[str, str]]]:
+        """
+        Specifies the user-defined metadata key-value pair.
+        + A metadata key contains of a maximum of 255 Unicode characters which can be letters, digits, hyphens (-),
+        underscores (_), colons (:), and point (.).
+        + A metadata value consists of a maximum of 255 Unicode characters.
+        """
+        return pulumi.get(self, "metadata")
 
     @property
     @pulumi.getter
@@ -1869,7 +1966,7 @@ class Instance(pulumi.CustomResource):
     def nics(self) -> pulumi.Output[Sequence['outputs.InstanceNic']]:
         """
         Specifies an array of one or more networks to attach to the instance. The network
-        object structure is documented below. Changing this creates a new instance.
+        object structure is documented below.
         """
         return pulumi.get(self, "nics")
 
@@ -1897,7 +1994,7 @@ class Instance(pulumi.CustomResource):
     @pulumi.getter(name="publicIp")
     def public_ip(self) -> pulumi.Output[str]:
         """
-        The EIP address that is associted to the instance.
+        The EIP address that is associated to the instance.
         """
         return pulumi.get(self, "public_ip")
 
@@ -1966,18 +2063,17 @@ class Instance(pulumi.CustomResource):
     @pulumi.getter
     def tags(self) -> pulumi.Output[Optional[Mapping[str, str]]]:
         """
-        Specifies the key/value pairs to associate with the instance. Changing this creates
-        a new instance.
+        Specifies the key/value pairs to associate with the instance.
         """
         return pulumi.get(self, "tags")
 
     @property
     @pulumi.getter(name="userData")
-    def user_data(self) -> pulumi.Output[Optional[str]]:
+    def user_data(self) -> pulumi.Output[str]:
         """
         Specifies the user data to be injected during the instance creation. Text
-        and text files can be injected. `user_data` can come from a variety of sources: inline, read in from the
-        *file* function. Changing this creates a new instance.
+        and text files can be injected. `user_data` can come from a variety of sources: inline, read in from the *file*
+        function. The content of `user_data` can be plaint text or encoded with base64. Changing this creates a new instance.
         """
         return pulumi.get(self, "user_data")
 

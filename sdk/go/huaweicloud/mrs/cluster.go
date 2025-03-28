@@ -192,62 +192,56 @@ import (
 //			subnetId := cfg.RequireObject("subnetId")
 //			_, err = Mrs.Newcluster(ctx, "testcluster", &Mrs.clusterArgs{
 //				AvailabilityZone: pulumi.String(testAvailabilityZones.Names[0]),
-//				Version:          pulumi.String("MRS 1.9.2"),
+//				Version:          pulumi.String("MRS 3.1.5"),
 //				Type:             pulumi.String("MIXED"),
 //				ComponentLists: pulumi.StringArray{
 //					pulumi.String("Hadoop"),
-//					pulumi.String("Spark"),
-//					pulumi.String("Hive"),
+//					pulumi.String("ZooKeeper"),
+//					pulumi.String("Ranger"),
 //					pulumi.String("Tez"),
-//					pulumi.String("Storm"),
+//					pulumi.String("Spark2x"),
+//					pulumi.String("Hive"),
+//					pulumi.String("Kafka"),
+//					pulumi.String("Flume"),
 //				},
 //				ManagerAdminPass: pulumi.Any(password),
 //				NodeAdminPass:    pulumi.Any(password),
 //				VpcId:            pulumi.Any(vpcId),
 //				SubnetId:         pulumi.Any(subnetId),
 //				MasterNodes: &mrs.ClusterMasterNodesArgs{
-//					Flavor:          pulumi.String("c6.2xlarge.4.linux.bigdata"),
+//					Flavor:          pulumi.String("ac7.4xlarge.4.linux.bigdata"),
 //					NodeNumber:      pulumi.Int(2),
 //					RootVolumeType:  pulumi.String("SAS"),
-//					RootVolumeSize:  pulumi.Int(300),
+//					RootVolumeSize:  pulumi.Int(100),
 //					DataVolumeType:  pulumi.String("SAS"),
-//					DataVolumeSize:  pulumi.Int(480),
+//					DataVolumeSize:  pulumi.Int(200),
 //					DataVolumeCount: pulumi.Int(1),
 //				},
 //				AnalysisCoreNodes: &mrs.ClusterAnalysisCoreNodesArgs{
-//					Flavor:          pulumi.String("c6.2xlarge.4.linux.bigdata"),
+//					Flavor:          pulumi.String("ac7.4xlarge.4.linux.bigdata"),
 //					NodeNumber:      pulumi.Int(2),
 //					RootVolumeType:  pulumi.String("SAS"),
-//					RootVolumeSize:  pulumi.Int(300),
+//					RootVolumeSize:  pulumi.Int(100),
 //					DataVolumeType:  pulumi.String("SAS"),
-//					DataVolumeSize:  pulumi.Int(480),
+//					DataVolumeSize:  pulumi.Int(200),
 //					DataVolumeCount: pulumi.Int(1),
 //				},
 //				StreamingCoreNodes: &mrs.ClusterStreamingCoreNodesArgs{
-//					Flavor:          pulumi.String("c6.2xlarge.4.linux.bigdata"),
+//					Flavor:          pulumi.String("ac7.4xlarge.4.linux.bigdata"),
 //					NodeNumber:      pulumi.Int(2),
 //					RootVolumeType:  pulumi.String("SAS"),
-//					RootVolumeSize:  pulumi.Int(300),
+//					RootVolumeSize:  pulumi.Int(100),
 //					DataVolumeType:  pulumi.String("SAS"),
-//					DataVolumeSize:  pulumi.Int(480),
+//					DataVolumeSize:  pulumi.Int(200),
 //					DataVolumeCount: pulumi.Int(1),
 //				},
 //				AnalysisTaskNodes: &mrs.ClusterAnalysisTaskNodesArgs{
-//					Flavor:          pulumi.String("c6.2xlarge.4.linux.bigdata"),
-//					NodeNumber:      pulumi.Int(1),
+//					Flavor:          pulumi.String("ac7.4xlarge.4.linux.bigdata"),
+//					NodeNumber:      pulumi.Int(2),
 //					RootVolumeType:  pulumi.String("SAS"),
-//					RootVolumeSize:  pulumi.Int(300),
+//					RootVolumeSize:  pulumi.Int(100),
 //					DataVolumeType:  pulumi.String("SAS"),
-//					DataVolumeSize:  pulumi.Int(480),
-//					DataVolumeCount: pulumi.Int(1),
-//				},
-//				StreamingTaskNodes: &mrs.ClusterStreamingTaskNodesArgs{
-//					Flavor:          pulumi.String("c6.2xlarge.4.linux.bigdata"),
-//					NodeNumber:      pulumi.Int(1),
-//					RootVolumeType:  pulumi.String("SAS"),
-//					RootVolumeSize:  pulumi.Int(300),
-//					DataVolumeType:  pulumi.String("SAS"),
-//					DataVolumeSize:  pulumi.Int(480),
+//					DataVolumeSize:  pulumi.Int(200),
 //					DataVolumeCount: pulumi.Int(1),
 //				},
 //				Tags: pulumi.StringMap{
@@ -446,6 +440,76 @@ import (
 //	}
 //
 // ```
+// ### Create a prePaid stream cluster
+//
+// ```go
+// package main
+//
+// import (
+//
+//	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud"
+//	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud/Mrs"
+//	"github.com/pulumi/pulumi-huaweicloud/sdk/go/huaweicloud"
+//	"github.com/pulumi/pulumi-huaweicloud/sdk/go/huaweicloud/Mrs"
+//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi/config"
+//
+// )
+//
+//	func main() {
+//		pulumi.Run(func(ctx *pulumi.Context) error {
+//			testAvailabilityZones, err := huaweicloud.GetAvailabilityZones(ctx, nil, nil)
+//			if err != nil {
+//				return err
+//			}
+//			cfg := config.New(ctx, "")
+//			clusterName := cfg.RequireObject("clusterName")
+//			password := cfg.RequireObject("password")
+//			vpcId := cfg.RequireObject("vpcId")
+//			subnetId := cfg.RequireObject("subnetId")
+//			period := cfg.RequireObject("period")
+//			periodUnit := cfg.RequireObject("periodUnit")
+//			_, err = Mrs.Newcluster(ctx, "testcluster", &Mrs.clusterArgs{
+//				AvailabilityZone: pulumi.String(testAvailabilityZones.Names[0]),
+//				Type:             pulumi.String("STREAMING"),
+//				Version:          pulumi.String("MRS 1.9.2"),
+//				ManagerAdminPass: pulumi.Any(password),
+//				NodeAdminPass:    pulumi.Any(password),
+//				VpcId:            pulumi.Any(vpcId),
+//				SubnetId:         pulumi.Any(subnetId),
+//				ComponentLists: pulumi.StringArray{
+//					pulumi.String("Storm"),
+//				},
+//				ChargingMode: pulumi.String("prePaid"),
+//				Period:       pulumi.Any(period),
+//				PeriodUnit:   pulumi.Any(periodUnit),
+//				MasterNodes: &mrs.ClusterMasterNodesArgs{
+//					Flavor:          pulumi.String("c6.2xlarge.4.linux.bigdata"),
+//					NodeNumber:      pulumi.Int(2),
+//					RootVolumeType:  pulumi.String("SAS"),
+//					RootVolumeSize:  pulumi.Int(300),
+//					DataVolumeType:  pulumi.String("SAS"),
+//					DataVolumeSize:  pulumi.Int(480),
+//					DataVolumeCount: pulumi.Int(1),
+//				},
+//				StreamingCoreNodes: &mrs.ClusterStreamingCoreNodesArgs{
+//					Flavor:          pulumi.String("c6.2xlarge.4.linux.bigdata"),
+//					NodeNumber:      pulumi.Int(2),
+//					RootVolumeType:  pulumi.String("SAS"),
+//					RootVolumeSize:  pulumi.Int(300),
+//					DataVolumeType:  pulumi.String("SAS"),
+//					DataVolumeSize:  pulumi.Int(480),
+//					DataVolumeCount: pulumi.Int(1),
+//				},
+//			})
+//			if err != nil {
+//				return err
+//			}
+//			return nil
+//		})
+//	}
+//
+// ```
 //
 // ## Import
 //
@@ -457,7 +521,7 @@ import (
 //
 // ```
 //
-//	Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`manager_admin_pass`, `node_admin_pass`,`template_id`, `assigned_roles` and `component_configs`. It is generally recommended running `terraform plan` after importing a cluster. You can then decide if changes should be applied to the cluster, or the resource definition should be updated to align with the cluster. Also you can ignore changes as below. hcl resource "huaweicloud_mapreduce_cluster" "test" {
+//	Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`manager_admin_pass`, `node_admin_pass`,`template_id`, `assigned_roles`, `external_datasources`, `component_configs`, `smn_notify`, `charging_mode`, `period` and `period_unit`. It is generally recommended running `terraform plan` after importing a cluster. You can then decide if changes should be applied to the cluster, or the resource definition should be updated to align with the cluster. Also you can ignore changes as below. hcl resource "huaweicloud_mapreduce_cluster" "test" {
 //
 //	...
 //
@@ -465,7 +529,9 @@ import (
 //
 //	ignore_changes = [
 //
-//	manager_admin_pass, node_admin_pass,
+//	manager_admin_pass, node_admin_pass, template_id, assigned_roles, external_datasources, component_configs, smn_notify,
+//
+//	charging_mode, period, period_unit,
 //
 //	]
 //
@@ -487,6 +553,15 @@ type Cluster struct {
 	// Please following [reference](https://developer.huaweicloud.com/intl/en-us/endpoint?all)
 	// Changing this will create a new MapReduce cluster resource.
 	AvailabilityZone pulumi.StringOutput `pulumi:"availabilityZone"`
+	// Specifies the bootstrap action scripts.
+	// Bootstrap action scripts will be executed on specified cluster nodes before or after big data components are
+	// started. You can execute bootstrap actions to install third-party software, modify the cluster running environment,
+	// and customize cluster configuration. [Learn more](https://support.huaweicloud.com/intl/en-us/usermanual-mrs/mrs_01_0414.html)
+	BootstrapScripts ClusterBootstrapScriptArrayOutput `pulumi:"bootstrapScripts"`
+	// Specifies the charging mode of the cluster.\
+	// Valid values are **prePaid** and **postPaid**, defaults to **postPaid**.
+	// Changing this parameter will create a new MapReduce cluster resource.
+	ChargingMode pulumi.StringOutput `pulumi:"chargingMode"`
 	// The charging start time which is the start time of billing, in RFC-3339 format.
 	ChargingStartTime pulumi.StringOutput `pulumi:"chargingStartTime"`
 	// Specifies the component configurations of the cluster.
@@ -508,8 +583,11 @@ type Cluster struct {
 	// Changing this will create a new MapReduce cluster resource.
 	EipId pulumi.StringOutput `pulumi:"eipId"`
 	// Specifies a unique ID in UUID format of enterprise project.
-	// Changing this will create a new MapReduce cluster resource.
 	EnterpriseProjectId pulumi.StringOutput `pulumi:"enterpriseProjectId"`
+	// Specifies the external datasource configurations of the cluster.
+	// The object structure is documented below.
+	// Changing this will create a new MapReduce cluster resource.
+	ExternalDatasources ClusterExternalDatasourceArrayOutput `pulumi:"externalDatasources"`
 	// Specifies whether logs are collected when cluster installation fails.
 	// Defaults to true. If `logCollection` set true, the OBS buckets will be created and only used to collect logs that
 	// record MapReduce cluster creation failures. Changing this will create a new MapReduce cluster resource.
@@ -525,7 +603,7 @@ type Cluster struct {
 	// The `nodes` object structure of the `masterNodes` is documented below.
 	// Changing this will create a new MapReduce cluster resource.
 	MasterNodes ClusterMasterNodesOutput `pulumi:"masterNodes"`
-	// Specifies the component name of the cluster which has installed.
+	// Specifies the name of a bootstrap action script.
 	// Changing this will create a new MapReduce cluster resource.
 	Name pulumi.StringOutput `pulumi:"name"`
 	// Specifies the administrator password, which is used to log in to the
@@ -537,6 +615,16 @@ type Cluster struct {
 	// Specifies the name of a key pair, which is used to log in to the each
 	// nodes(/ECSs). Changing this will create a new MapReduce cluster resource.
 	NodeKeyPair pulumi.StringPtrOutput `pulumi:"nodeKeyPair"`
+	// Specifies the charging period of the cluster.\
+	// If `periodUnit` is set to **month**, the value ranges from 1 to 9.
+	// If `periodUnit` is set to **year**, the value ranges from 1 to 3.
+	// This parameter is mandatory if `chargingMode` is set to **prePaid**.
+	// Changing this parameter will create a new MapReduce cluster resource.
+	Period pulumi.IntPtrOutput `pulumi:"period"`
+	// Specifies the charging period unit of the cluster.\
+	// Valid values are **month** and **year**. This parameter is mandatory if `chargingMode` is set to **prePaid**.
+	// Changing this parameter will create a new MapReduce cluster resource.
+	PeriodUnit pulumi.StringPtrOutput `pulumi:"periodUnit"`
 	// The preferred private IP address of the master node.
 	PrivateIp pulumi.StringOutput `pulumi:"privateIp"`
 	// Specifies the EIP address which bound to the MapReduce cluster.
@@ -554,6 +642,10 @@ type Cluster struct {
 	// Specifies an array of one or more security group ID to attach to the
 	// MapReduce cluster. If using the specified security group, the group need to open the specified port (9022) rules.
 	SecurityGroupIds pulumi.StringArrayOutput `pulumi:"securityGroupIds"`
+	// Specifies the alarm configuration of the cluster. The smnNotify
+	// structure is documented below.
+	// Changing this will create a new MapReduce cluster resource.
+	SmnNotify ClusterSmnNotifyPtrOutput `pulumi:"smnNotify"`
 	// The cluster state, which include: running, frozen, abnormal and failed.
 	Status pulumi.StringOutput `pulumi:"status"`
 	// Specifies the informations about streaming core nodes in the
@@ -585,7 +677,7 @@ type Cluster struct {
 	TemplateId pulumi.StringPtrOutput `pulumi:"templateId"`
 	// The total number of nodes deployed in the cluster.
 	TotalNodeNumber pulumi.IntOutput `pulumi:"totalNodeNumber"`
-	// Specifies the type of the MapReduce cluster. The valid values are **ANALYSIS***,
+	// Specifies the type of the MapReduce cluster. The valid values are **ANALYSIS**,
 	// **STREAMING** and **MIXED**, defaults to **ANALYSIS**. Changing this will create a new MapReduce cluster resource.
 	Type pulumi.StringPtrOutput `pulumi:"type"`
 	// The cluster update time, in RFC-3339 format.
@@ -663,6 +755,15 @@ type clusterState struct {
 	// Please following [reference](https://developer.huaweicloud.com/intl/en-us/endpoint?all)
 	// Changing this will create a new MapReduce cluster resource.
 	AvailabilityZone *string `pulumi:"availabilityZone"`
+	// Specifies the bootstrap action scripts.
+	// Bootstrap action scripts will be executed on specified cluster nodes before or after big data components are
+	// started. You can execute bootstrap actions to install third-party software, modify the cluster running environment,
+	// and customize cluster configuration. [Learn more](https://support.huaweicloud.com/intl/en-us/usermanual-mrs/mrs_01_0414.html)
+	BootstrapScripts []ClusterBootstrapScript `pulumi:"bootstrapScripts"`
+	// Specifies the charging mode of the cluster.\
+	// Valid values are **prePaid** and **postPaid**, defaults to **postPaid**.
+	// Changing this parameter will create a new MapReduce cluster resource.
+	ChargingMode *string `pulumi:"chargingMode"`
 	// The charging start time which is the start time of billing, in RFC-3339 format.
 	ChargingStartTime *string `pulumi:"chargingStartTime"`
 	// Specifies the component configurations of the cluster.
@@ -684,8 +785,11 @@ type clusterState struct {
 	// Changing this will create a new MapReduce cluster resource.
 	EipId *string `pulumi:"eipId"`
 	// Specifies a unique ID in UUID format of enterprise project.
-	// Changing this will create a new MapReduce cluster resource.
 	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
+	// Specifies the external datasource configurations of the cluster.
+	// The object structure is documented below.
+	// Changing this will create a new MapReduce cluster resource.
+	ExternalDatasources []ClusterExternalDatasource `pulumi:"externalDatasources"`
 	// Specifies whether logs are collected when cluster installation fails.
 	// Defaults to true. If `logCollection` set true, the OBS buckets will be created and only used to collect logs that
 	// record MapReduce cluster creation failures. Changing this will create a new MapReduce cluster resource.
@@ -701,7 +805,7 @@ type clusterState struct {
 	// The `nodes` object structure of the `masterNodes` is documented below.
 	// Changing this will create a new MapReduce cluster resource.
 	MasterNodes *ClusterMasterNodes `pulumi:"masterNodes"`
-	// Specifies the component name of the cluster which has installed.
+	// Specifies the name of a bootstrap action script.
 	// Changing this will create a new MapReduce cluster resource.
 	Name *string `pulumi:"name"`
 	// Specifies the administrator password, which is used to log in to the
@@ -713,6 +817,16 @@ type clusterState struct {
 	// Specifies the name of a key pair, which is used to log in to the each
 	// nodes(/ECSs). Changing this will create a new MapReduce cluster resource.
 	NodeKeyPair *string `pulumi:"nodeKeyPair"`
+	// Specifies the charging period of the cluster.\
+	// If `periodUnit` is set to **month**, the value ranges from 1 to 9.
+	// If `periodUnit` is set to **year**, the value ranges from 1 to 3.
+	// This parameter is mandatory if `chargingMode` is set to **prePaid**.
+	// Changing this parameter will create a new MapReduce cluster resource.
+	Period *int `pulumi:"period"`
+	// Specifies the charging period unit of the cluster.\
+	// Valid values are **month** and **year**. This parameter is mandatory if `chargingMode` is set to **prePaid**.
+	// Changing this parameter will create a new MapReduce cluster resource.
+	PeriodUnit *string `pulumi:"periodUnit"`
 	// The preferred private IP address of the master node.
 	PrivateIp *string `pulumi:"privateIp"`
 	// Specifies the EIP address which bound to the MapReduce cluster.
@@ -730,6 +844,10 @@ type clusterState struct {
 	// Specifies an array of one or more security group ID to attach to the
 	// MapReduce cluster. If using the specified security group, the group need to open the specified port (9022) rules.
 	SecurityGroupIds []string `pulumi:"securityGroupIds"`
+	// Specifies the alarm configuration of the cluster. The smnNotify
+	// structure is documented below.
+	// Changing this will create a new MapReduce cluster resource.
+	SmnNotify *ClusterSmnNotify `pulumi:"smnNotify"`
 	// The cluster state, which include: running, frozen, abnormal and failed.
 	Status *string `pulumi:"status"`
 	// Specifies the informations about streaming core nodes in the
@@ -761,7 +879,7 @@ type clusterState struct {
 	TemplateId *string `pulumi:"templateId"`
 	// The total number of nodes deployed in the cluster.
 	TotalNodeNumber *int `pulumi:"totalNodeNumber"`
-	// Specifies the type of the MapReduce cluster. The valid values are **ANALYSIS***,
+	// Specifies the type of the MapReduce cluster. The valid values are **ANALYSIS**,
 	// **STREAMING** and **MIXED**, defaults to **ANALYSIS**. Changing this will create a new MapReduce cluster resource.
 	Type *string `pulumi:"type"`
 	// The cluster update time, in RFC-3339 format.
@@ -789,6 +907,15 @@ type ClusterState struct {
 	// Please following [reference](https://developer.huaweicloud.com/intl/en-us/endpoint?all)
 	// Changing this will create a new MapReduce cluster resource.
 	AvailabilityZone pulumi.StringPtrInput
+	// Specifies the bootstrap action scripts.
+	// Bootstrap action scripts will be executed on specified cluster nodes before or after big data components are
+	// started. You can execute bootstrap actions to install third-party software, modify the cluster running environment,
+	// and customize cluster configuration. [Learn more](https://support.huaweicloud.com/intl/en-us/usermanual-mrs/mrs_01_0414.html)
+	BootstrapScripts ClusterBootstrapScriptArrayInput
+	// Specifies the charging mode of the cluster.\
+	// Valid values are **prePaid** and **postPaid**, defaults to **postPaid**.
+	// Changing this parameter will create a new MapReduce cluster resource.
+	ChargingMode pulumi.StringPtrInput
 	// The charging start time which is the start time of billing, in RFC-3339 format.
 	ChargingStartTime pulumi.StringPtrInput
 	// Specifies the component configurations of the cluster.
@@ -810,8 +937,11 @@ type ClusterState struct {
 	// Changing this will create a new MapReduce cluster resource.
 	EipId pulumi.StringPtrInput
 	// Specifies a unique ID in UUID format of enterprise project.
-	// Changing this will create a new MapReduce cluster resource.
 	EnterpriseProjectId pulumi.StringPtrInput
+	// Specifies the external datasource configurations of the cluster.
+	// The object structure is documented below.
+	// Changing this will create a new MapReduce cluster resource.
+	ExternalDatasources ClusterExternalDatasourceArrayInput
 	// Specifies whether logs are collected when cluster installation fails.
 	// Defaults to true. If `logCollection` set true, the OBS buckets will be created and only used to collect logs that
 	// record MapReduce cluster creation failures. Changing this will create a new MapReduce cluster resource.
@@ -827,7 +957,7 @@ type ClusterState struct {
 	// The `nodes` object structure of the `masterNodes` is documented below.
 	// Changing this will create a new MapReduce cluster resource.
 	MasterNodes ClusterMasterNodesPtrInput
-	// Specifies the component name of the cluster which has installed.
+	// Specifies the name of a bootstrap action script.
 	// Changing this will create a new MapReduce cluster resource.
 	Name pulumi.StringPtrInput
 	// Specifies the administrator password, which is used to log in to the
@@ -839,6 +969,16 @@ type ClusterState struct {
 	// Specifies the name of a key pair, which is used to log in to the each
 	// nodes(/ECSs). Changing this will create a new MapReduce cluster resource.
 	NodeKeyPair pulumi.StringPtrInput
+	// Specifies the charging period of the cluster.\
+	// If `periodUnit` is set to **month**, the value ranges from 1 to 9.
+	// If `periodUnit` is set to **year**, the value ranges from 1 to 3.
+	// This parameter is mandatory if `chargingMode` is set to **prePaid**.
+	// Changing this parameter will create a new MapReduce cluster resource.
+	Period pulumi.IntPtrInput
+	// Specifies the charging period unit of the cluster.\
+	// Valid values are **month** and **year**. This parameter is mandatory if `chargingMode` is set to **prePaid**.
+	// Changing this parameter will create a new MapReduce cluster resource.
+	PeriodUnit pulumi.StringPtrInput
 	// The preferred private IP address of the master node.
 	PrivateIp pulumi.StringPtrInput
 	// Specifies the EIP address which bound to the MapReduce cluster.
@@ -856,6 +996,10 @@ type ClusterState struct {
 	// Specifies an array of one or more security group ID to attach to the
 	// MapReduce cluster. If using the specified security group, the group need to open the specified port (9022) rules.
 	SecurityGroupIds pulumi.StringArrayInput
+	// Specifies the alarm configuration of the cluster. The smnNotify
+	// structure is documented below.
+	// Changing this will create a new MapReduce cluster resource.
+	SmnNotify ClusterSmnNotifyPtrInput
 	// The cluster state, which include: running, frozen, abnormal and failed.
 	Status pulumi.StringPtrInput
 	// Specifies the informations about streaming core nodes in the
@@ -887,7 +1031,7 @@ type ClusterState struct {
 	TemplateId pulumi.StringPtrInput
 	// The total number of nodes deployed in the cluster.
 	TotalNodeNumber pulumi.IntPtrInput
-	// Specifies the type of the MapReduce cluster. The valid values are **ANALYSIS***,
+	// Specifies the type of the MapReduce cluster. The valid values are **ANALYSIS**,
 	// **STREAMING** and **MIXED**, defaults to **ANALYSIS**. Changing this will create a new MapReduce cluster resource.
 	Type pulumi.StringPtrInput
 	// The cluster update time, in RFC-3339 format.
@@ -919,6 +1063,15 @@ type clusterArgs struct {
 	// Please following [reference](https://developer.huaweicloud.com/intl/en-us/endpoint?all)
 	// Changing this will create a new MapReduce cluster resource.
 	AvailabilityZone string `pulumi:"availabilityZone"`
+	// Specifies the bootstrap action scripts.
+	// Bootstrap action scripts will be executed on specified cluster nodes before or after big data components are
+	// started. You can execute bootstrap actions to install third-party software, modify the cluster running environment,
+	// and customize cluster configuration. [Learn more](https://support.huaweicloud.com/intl/en-us/usermanual-mrs/mrs_01_0414.html)
+	BootstrapScripts []ClusterBootstrapScript `pulumi:"bootstrapScripts"`
+	// Specifies the charging mode of the cluster.\
+	// Valid values are **prePaid** and **postPaid**, defaults to **postPaid**.
+	// Changing this parameter will create a new MapReduce cluster resource.
+	ChargingMode *string `pulumi:"chargingMode"`
 	// Specifies the component configurations of the cluster.
 	// The object structure is documented below.
 	// Changing this will create a new MapReduce cluster resource.
@@ -936,8 +1089,11 @@ type clusterArgs struct {
 	// Changing this will create a new MapReduce cluster resource.
 	EipId *string `pulumi:"eipId"`
 	// Specifies a unique ID in UUID format of enterprise project.
-	// Changing this will create a new MapReduce cluster resource.
 	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
+	// Specifies the external datasource configurations of the cluster.
+	// The object structure is documented below.
+	// Changing this will create a new MapReduce cluster resource.
+	ExternalDatasources []ClusterExternalDatasource `pulumi:"externalDatasources"`
 	// Specifies whether logs are collected when cluster installation fails.
 	// Defaults to true. If `logCollection` set true, the OBS buckets will be created and only used to collect logs that
 	// record MapReduce cluster creation failures. Changing this will create a new MapReduce cluster resource.
@@ -951,7 +1107,7 @@ type clusterArgs struct {
 	// The `nodes` object structure of the `masterNodes` is documented below.
 	// Changing this will create a new MapReduce cluster resource.
 	MasterNodes ClusterMasterNodes `pulumi:"masterNodes"`
-	// Specifies the component name of the cluster which has installed.
+	// Specifies the name of a bootstrap action script.
 	// Changing this will create a new MapReduce cluster resource.
 	Name *string `pulumi:"name"`
 	// Specifies the administrator password, which is used to log in to the
@@ -963,6 +1119,16 @@ type clusterArgs struct {
 	// Specifies the name of a key pair, which is used to log in to the each
 	// nodes(/ECSs). Changing this will create a new MapReduce cluster resource.
 	NodeKeyPair *string `pulumi:"nodeKeyPair"`
+	// Specifies the charging period of the cluster.\
+	// If `periodUnit` is set to **month**, the value ranges from 1 to 9.
+	// If `periodUnit` is set to **year**, the value ranges from 1 to 3.
+	// This parameter is mandatory if `chargingMode` is set to **prePaid**.
+	// Changing this parameter will create a new MapReduce cluster resource.
+	Period *int `pulumi:"period"`
+	// Specifies the charging period unit of the cluster.\
+	// Valid values are **month** and **year**. This parameter is mandatory if `chargingMode` is set to **prePaid**.
+	// Changing this parameter will create a new MapReduce cluster resource.
+	PeriodUnit *string `pulumi:"periodUnit"`
 	// Specifies the EIP address which bound to the MapReduce cluster.
 	// The EIP must have been created and must be in the same region as the cluster.
 	// Changing this will create a new MapReduce cluster resource.
@@ -978,6 +1144,10 @@ type clusterArgs struct {
 	// Specifies an array of one or more security group ID to attach to the
 	// MapReduce cluster. If using the specified security group, the group need to open the specified port (9022) rules.
 	SecurityGroupIds []string `pulumi:"securityGroupIds"`
+	// Specifies the alarm configuration of the cluster. The smnNotify
+	// structure is documented below.
+	// Changing this will create a new MapReduce cluster resource.
+	SmnNotify *ClusterSmnNotify `pulumi:"smnNotify"`
 	// Specifies the informations about streaming core nodes in the
 	// MapReduce cluster.
 	// The `nodes` object structure of the `streamingCoreNodes` is documented below.
@@ -1005,7 +1175,7 @@ type clusterArgs struct {
 	//   and data instances are deployed in different node groups. This deployment mode is applicable to a cluster with more
 	//   than 500 nodes. Components can be deployed separately, which can be used for a larger cluster scale.
 	TemplateId *string `pulumi:"templateId"`
-	// Specifies the type of the MapReduce cluster. The valid values are **ANALYSIS***,
+	// Specifies the type of the MapReduce cluster. The valid values are **ANALYSIS**,
 	// **STREAMING** and **MIXED**, defaults to **ANALYSIS**. Changing this will create a new MapReduce cluster resource.
 	Type *string `pulumi:"type"`
 	// Specifies the MapReduce cluster version. The valid values are `MRS 1.9.2`
@@ -1032,6 +1202,15 @@ type ClusterArgs struct {
 	// Please following [reference](https://developer.huaweicloud.com/intl/en-us/endpoint?all)
 	// Changing this will create a new MapReduce cluster resource.
 	AvailabilityZone pulumi.StringInput
+	// Specifies the bootstrap action scripts.
+	// Bootstrap action scripts will be executed on specified cluster nodes before or after big data components are
+	// started. You can execute bootstrap actions to install third-party software, modify the cluster running environment,
+	// and customize cluster configuration. [Learn more](https://support.huaweicloud.com/intl/en-us/usermanual-mrs/mrs_01_0414.html)
+	BootstrapScripts ClusterBootstrapScriptArrayInput
+	// Specifies the charging mode of the cluster.\
+	// Valid values are **prePaid** and **postPaid**, defaults to **postPaid**.
+	// Changing this parameter will create a new MapReduce cluster resource.
+	ChargingMode pulumi.StringPtrInput
 	// Specifies the component configurations of the cluster.
 	// The object structure is documented below.
 	// Changing this will create a new MapReduce cluster resource.
@@ -1049,8 +1228,11 @@ type ClusterArgs struct {
 	// Changing this will create a new MapReduce cluster resource.
 	EipId pulumi.StringPtrInput
 	// Specifies a unique ID in UUID format of enterprise project.
-	// Changing this will create a new MapReduce cluster resource.
 	EnterpriseProjectId pulumi.StringPtrInput
+	// Specifies the external datasource configurations of the cluster.
+	// The object structure is documented below.
+	// Changing this will create a new MapReduce cluster resource.
+	ExternalDatasources ClusterExternalDatasourceArrayInput
 	// Specifies whether logs are collected when cluster installation fails.
 	// Defaults to true. If `logCollection` set true, the OBS buckets will be created and only used to collect logs that
 	// record MapReduce cluster creation failures. Changing this will create a new MapReduce cluster resource.
@@ -1064,7 +1246,7 @@ type ClusterArgs struct {
 	// The `nodes` object structure of the `masterNodes` is documented below.
 	// Changing this will create a new MapReduce cluster resource.
 	MasterNodes ClusterMasterNodesInput
-	// Specifies the component name of the cluster which has installed.
+	// Specifies the name of a bootstrap action script.
 	// Changing this will create a new MapReduce cluster resource.
 	Name pulumi.StringPtrInput
 	// Specifies the administrator password, which is used to log in to the
@@ -1076,6 +1258,16 @@ type ClusterArgs struct {
 	// Specifies the name of a key pair, which is used to log in to the each
 	// nodes(/ECSs). Changing this will create a new MapReduce cluster resource.
 	NodeKeyPair pulumi.StringPtrInput
+	// Specifies the charging period of the cluster.\
+	// If `periodUnit` is set to **month**, the value ranges from 1 to 9.
+	// If `periodUnit` is set to **year**, the value ranges from 1 to 3.
+	// This parameter is mandatory if `chargingMode` is set to **prePaid**.
+	// Changing this parameter will create a new MapReduce cluster resource.
+	Period pulumi.IntPtrInput
+	// Specifies the charging period unit of the cluster.\
+	// Valid values are **month** and **year**. This parameter is mandatory if `chargingMode` is set to **prePaid**.
+	// Changing this parameter will create a new MapReduce cluster resource.
+	PeriodUnit pulumi.StringPtrInput
 	// Specifies the EIP address which bound to the MapReduce cluster.
 	// The EIP must have been created and must be in the same region as the cluster.
 	// Changing this will create a new MapReduce cluster resource.
@@ -1091,6 +1283,10 @@ type ClusterArgs struct {
 	// Specifies an array of one or more security group ID to attach to the
 	// MapReduce cluster. If using the specified security group, the group need to open the specified port (9022) rules.
 	SecurityGroupIds pulumi.StringArrayInput
+	// Specifies the alarm configuration of the cluster. The smnNotify
+	// structure is documented below.
+	// Changing this will create a new MapReduce cluster resource.
+	SmnNotify ClusterSmnNotifyPtrInput
 	// Specifies the informations about streaming core nodes in the
 	// MapReduce cluster.
 	// The `nodes` object structure of the `streamingCoreNodes` is documented below.
@@ -1118,7 +1314,7 @@ type ClusterArgs struct {
 	//   and data instances are deployed in different node groups. This deployment mode is applicable to a cluster with more
 	//   than 500 nodes. Components can be deployed separately, which can be used for a larger cluster scale.
 	TemplateId pulumi.StringPtrInput
-	// Specifies the type of the MapReduce cluster. The valid values are **ANALYSIS***,
+	// Specifies the type of the MapReduce cluster. The valid values are **ANALYSIS**,
 	// **STREAMING** and **MIXED**, defaults to **ANALYSIS**. Changing this will create a new MapReduce cluster resource.
 	Type pulumi.StringPtrInput
 	// Specifies the MapReduce cluster version. The valid values are `MRS 1.9.2`
@@ -1239,6 +1435,21 @@ func (o ClusterOutput) AvailabilityZone() pulumi.StringOutput {
 	return o.ApplyT(func(v *Cluster) pulumi.StringOutput { return v.AvailabilityZone }).(pulumi.StringOutput)
 }
 
+// Specifies the bootstrap action scripts.
+// Bootstrap action scripts will be executed on specified cluster nodes before or after big data components are
+// started. You can execute bootstrap actions to install third-party software, modify the cluster running environment,
+// and customize cluster configuration. [Learn more](https://support.huaweicloud.com/intl/en-us/usermanual-mrs/mrs_01_0414.html)
+func (o ClusterOutput) BootstrapScripts() ClusterBootstrapScriptArrayOutput {
+	return o.ApplyT(func(v *Cluster) ClusterBootstrapScriptArrayOutput { return v.BootstrapScripts }).(ClusterBootstrapScriptArrayOutput)
+}
+
+// Specifies the charging mode of the cluster.\
+// Valid values are **prePaid** and **postPaid**, defaults to **postPaid**.
+// Changing this parameter will create a new MapReduce cluster resource.
+func (o ClusterOutput) ChargingMode() pulumi.StringOutput {
+	return o.ApplyT(func(v *Cluster) pulumi.StringOutput { return v.ChargingMode }).(pulumi.StringOutput)
+}
+
 // The charging start time which is the start time of billing, in RFC-3339 format.
 func (o ClusterOutput) ChargingStartTime() pulumi.StringOutput {
 	return o.ApplyT(func(v *Cluster) pulumi.StringOutput { return v.ChargingStartTime }).(pulumi.StringOutput)
@@ -1278,9 +1489,15 @@ func (o ClusterOutput) EipId() pulumi.StringOutput {
 }
 
 // Specifies a unique ID in UUID format of enterprise project.
-// Changing this will create a new MapReduce cluster resource.
 func (o ClusterOutput) EnterpriseProjectId() pulumi.StringOutput {
 	return o.ApplyT(func(v *Cluster) pulumi.StringOutput { return v.EnterpriseProjectId }).(pulumi.StringOutput)
+}
+
+// Specifies the external datasource configurations of the cluster.
+// The object structure is documented below.
+// Changing this will create a new MapReduce cluster resource.
+func (o ClusterOutput) ExternalDatasources() ClusterExternalDatasourceArrayOutput {
+	return o.ApplyT(func(v *Cluster) ClusterExternalDatasourceArrayOutput { return v.ExternalDatasources }).(ClusterExternalDatasourceArrayOutput)
 }
 
 // Specifies whether logs are collected when cluster installation fails.
@@ -1310,7 +1527,7 @@ func (o ClusterOutput) MasterNodes() ClusterMasterNodesOutput {
 	return o.ApplyT(func(v *Cluster) ClusterMasterNodesOutput { return v.MasterNodes }).(ClusterMasterNodesOutput)
 }
 
-// Specifies the component name of the cluster which has installed.
+// Specifies the name of a bootstrap action script.
 // Changing this will create a new MapReduce cluster resource.
 func (o ClusterOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v *Cluster) pulumi.StringOutput { return v.Name }).(pulumi.StringOutput)
@@ -1329,6 +1546,22 @@ func (o ClusterOutput) NodeAdminPass() pulumi.StringPtrOutput {
 // nodes(/ECSs). Changing this will create a new MapReduce cluster resource.
 func (o ClusterOutput) NodeKeyPair() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Cluster) pulumi.StringPtrOutput { return v.NodeKeyPair }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the charging period of the cluster.\
+// If `periodUnit` is set to **month**, the value ranges from 1 to 9.
+// If `periodUnit` is set to **year**, the value ranges from 1 to 3.
+// This parameter is mandatory if `chargingMode` is set to **prePaid**.
+// Changing this parameter will create a new MapReduce cluster resource.
+func (o ClusterOutput) Period() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v *Cluster) pulumi.IntPtrOutput { return v.Period }).(pulumi.IntPtrOutput)
+}
+
+// Specifies the charging period unit of the cluster.\
+// Valid values are **month** and **year**. This parameter is mandatory if `chargingMode` is set to **prePaid**.
+// Changing this parameter will create a new MapReduce cluster resource.
+func (o ClusterOutput) PeriodUnit() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *Cluster) pulumi.StringPtrOutput { return v.PeriodUnit }).(pulumi.StringPtrOutput)
 }
 
 // The preferred private IP address of the master node.
@@ -1361,6 +1594,13 @@ func (o ClusterOutput) SafeMode() pulumi.BoolPtrOutput {
 // MapReduce cluster. If using the specified security group, the group need to open the specified port (9022) rules.
 func (o ClusterOutput) SecurityGroupIds() pulumi.StringArrayOutput {
 	return o.ApplyT(func(v *Cluster) pulumi.StringArrayOutput { return v.SecurityGroupIds }).(pulumi.StringArrayOutput)
+}
+
+// Specifies the alarm configuration of the cluster. The smnNotify
+// structure is documented below.
+// Changing this will create a new MapReduce cluster resource.
+func (o ClusterOutput) SmnNotify() ClusterSmnNotifyPtrOutput {
+	return o.ApplyT(func(v *Cluster) ClusterSmnNotifyPtrOutput { return v.SmnNotify }).(ClusterSmnNotifyPtrOutput)
 }
 
 // The cluster state, which include: running, frozen, abnormal and failed.
@@ -1415,7 +1655,7 @@ func (o ClusterOutput) TotalNodeNumber() pulumi.IntOutput {
 	return o.ApplyT(func(v *Cluster) pulumi.IntOutput { return v.TotalNodeNumber }).(pulumi.IntOutput)
 }
 
-// Specifies the type of the MapReduce cluster. The valid values are **ANALYSIS***,
+// Specifies the type of the MapReduce cluster. The valid values are **ANALYSIS**,
 // **STREAMING** and **MIXED**, defaults to **ANALYSIS**. Changing this will create a new MapReduce cluster resource.
 func (o ClusterOutput) Type() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Cluster) pulumi.StringPtrOutput { return v.Type }).(pulumi.StringPtrOutput)

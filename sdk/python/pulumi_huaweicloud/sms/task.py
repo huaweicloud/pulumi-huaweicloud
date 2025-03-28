@@ -621,7 +621,7 @@ class Task(pulumi.CustomResource):
          $ pulumi import huaweicloud:Sms/task:Task demo 6402c49b-7d9a-413e-8b5f-a7307f7d5679
         ```
 
-         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response. The missing attributes include`use_public_ip`, `syncing` and `action`. It is generally recommended running `terraform plan` after importing a migration task. You can then decide if changes should be applied to the task, or the resource definition should be updated to align with the task. Also you can ignore changes as below. resource "huaweicloud_sms_task" "demo" {
+         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response. The missing attributes include`use_public_ip`, `syncing` and `action`. It is generally recommended running `terraform plan` after importing a migration task. You can then decide if changes should be applied to the task, or the resource definition should be updated to align with the task. Also you can ignore changes as below. hcl resource "huaweicloud_sms_task" "demo" {
 
          ...
 
@@ -702,7 +702,7 @@ class Task(pulumi.CustomResource):
          $ pulumi import huaweicloud:Sms/task:Task demo 6402c49b-7d9a-413e-8b5f-a7307f7d5679
         ```
 
-         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response. The missing attributes include`use_public_ip`, `syncing` and `action`. It is generally recommended running `terraform plan` after importing a migration task. You can then decide if changes should be applied to the task, or the resource definition should be updated to align with the task. Also you can ignore changes as below. resource "huaweicloud_sms_task" "demo" {
+         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response. The missing attributes include`use_public_ip`, `syncing` and `action`. It is generally recommended running `terraform plan` after importing a migration task. You can then decide if changes should be applied to the task, or the resource definition should be updated to align with the task. Also you can ignore changes as below. hcl resource "huaweicloud_sms_task" "demo" {
 
          ...
 

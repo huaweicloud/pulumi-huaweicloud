@@ -11,11 +11,184 @@ from .. import _utilities
 from . import outputs
 
 __all__ = [
+    'QueueScalingPolicy',
+    'QueueSparkDriver',
     'SparkJobDependentPackage',
     'SparkJobDependentPackagePackage',
     'SqlJobConf',
     'TableColumn',
 ]
+
+@pulumi.output_type
+class QueueScalingPolicy(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "impactStartTime":
+            suggest = "impact_start_time"
+        elif key == "impactStopTime":
+            suggest = "impact_stop_time"
+        elif key == "maxCu":
+            suggest = "max_cu"
+        elif key == "minCu":
+            suggest = "min_cu"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in QueueScalingPolicy. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        QueueScalingPolicy.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        QueueScalingPolicy.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 impact_start_time: str,
+                 impact_stop_time: str,
+                 max_cu: int,
+                 min_cu: int,
+                 priority: int):
+        """
+        :param str impact_start_time: Specifies the effective time of the queue scaling policy.
+               The value can be set only by hour.
+        :param str impact_stop_time: Specifies the expiration time of the queue scaling policy.
+               The value can be set only by hour.
+        :param int max_cu: Specifies the maximum number of CUs allowed by the scaling policy.
+               The number must be a multiple of `4`.
+        :param int min_cu: Specifies the minimum number of CUs allowed by the scaling policy.
+               The number must be a multiple of `4`.
+        :param int priority: Specifies the priority of the queue scaling policy.
+               The valid value ranges from `1` to `100`. The larger value means the higher priority.
+        """
+        pulumi.set(__self__, "impact_start_time", impact_start_time)
+        pulumi.set(__self__, "impact_stop_time", impact_stop_time)
+        pulumi.set(__self__, "max_cu", max_cu)
+        pulumi.set(__self__, "min_cu", min_cu)
+        pulumi.set(__self__, "priority", priority)
+
+    @property
+    @pulumi.getter(name="impactStartTime")
+    def impact_start_time(self) -> str:
+        """
+        Specifies the effective time of the queue scaling policy.
+        The value can be set only by hour.
+        """
+        return pulumi.get(self, "impact_start_time")
+
+    @property
+    @pulumi.getter(name="impactStopTime")
+    def impact_stop_time(self) -> str:
+        """
+        Specifies the expiration time of the queue scaling policy.
+        The value can be set only by hour.
+        """
+        return pulumi.get(self, "impact_stop_time")
+
+    @property
+    @pulumi.getter(name="maxCu")
+    def max_cu(self) -> int:
+        """
+        Specifies the maximum number of CUs allowed by the scaling policy.
+        The number must be a multiple of `4`.
+        """
+        return pulumi.get(self, "max_cu")
+
+    @property
+    @pulumi.getter(name="minCu")
+    def min_cu(self) -> int:
+        """
+        Specifies the minimum number of CUs allowed by the scaling policy.
+        The number must be a multiple of `4`.
+        """
+        return pulumi.get(self, "min_cu")
+
+    @property
+    @pulumi.getter
+    def priority(self) -> int:
+        """
+        Specifies the priority of the queue scaling policy.
+        The valid value ranges from `1` to `100`. The larger value means the higher priority.
+        """
+        return pulumi.get(self, "priority")
+
+
+@pulumi.output_type
+class QueueSparkDriver(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "maxConcurrent":
+            suggest = "max_concurrent"
+        elif key == "maxInstance":
+            suggest = "max_instance"
+        elif key == "maxPrefetchInstance":
+            suggest = "max_prefetch_instance"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in QueueSparkDriver. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        QueueSparkDriver.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        QueueSparkDriver.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 max_concurrent: Optional[int] = None,
+                 max_instance: Optional[int] = None,
+                 max_prefetch_instance: Optional[str] = None):
+        """
+        :param int max_concurrent: Specifies the maximum number of tasks that can be concurrently executed by a spark driver.
+               The valid value ranges from `1` to `32`.
+        :param int max_instance: Specifies the maximum number of spark drivers that can be started on the queue.
+               If the `cu_count` is `16`, the value can only be `2`.
+               If The `cu_count` is greater than `16`, the minimum value is `2`, the maximum value is the number of queue CUs
+               divided by `16`.
+        :param str max_prefetch_instance: Specifies the maximum number of spark drivers to be pre-started on the queue.
+               The minimum value is `0`. If the `cu_count` is less than `32`, the maximum value is `1`.
+               If the `cu_count` is greater than or equal to `32`, the maximum value is the number of queue CUs divided by `16`.
+        """
+        if max_concurrent is not None:
+            pulumi.set(__self__, "max_concurrent", max_concurrent)
+        if max_instance is not None:
+            pulumi.set(__self__, "max_instance", max_instance)
+        if max_prefetch_instance is not None:
+            pulumi.set(__self__, "max_prefetch_instance", max_prefetch_instance)
+
+    @property
+    @pulumi.getter(name="maxConcurrent")
+    def max_concurrent(self) -> Optional[int]:
+        """
+        Specifies the maximum number of tasks that can be concurrently executed by a spark driver.
+        The valid value ranges from `1` to `32`.
+        """
+        return pulumi.get(self, "max_concurrent")
+
+    @property
+    @pulumi.getter(name="maxInstance")
+    def max_instance(self) -> Optional[int]:
+        """
+        Specifies the maximum number of spark drivers that can be started on the queue.
+        If the `cu_count` is `16`, the value can only be `2`.
+        If The `cu_count` is greater than `16`, the minimum value is `2`, the maximum value is the number of queue CUs
+        divided by `16`.
+        """
+        return pulumi.get(self, "max_instance")
+
+    @property
+    @pulumi.getter(name="maxPrefetchInstance")
+    def max_prefetch_instance(self) -> Optional[str]:
+        """
+        Specifies the maximum number of spark drivers to be pre-started on the queue.
+        The minimum value is `0`. If the `cu_count` is less than `32`, the maximum value is `1`.
+        If the `cu_count` is greater than or equal to `32`, the maximum value is the number of queue CUs divided by `16`.
+        """
+        return pulumi.get(self, "max_prefetch_instance")
+
 
 @pulumi.output_type
 class SparkJobDependentPackage(dict):
@@ -40,7 +213,8 @@ class SparkJobDependentPackage(dict):
                  group_name: str,
                  packages: Sequence['outputs.SparkJobDependentPackagePackage']):
         """
-        :param str group_name: Specifies the user group name.
+        :param str group_name: Specifies the user group name.  
+               Only letters, digits, dots (.), hyphens (-) and underscores (_) are allowed.
                Changing this parameter will submit a new spark job.
         :param Sequence['SparkJobDependentPackagePackageArgs'] packages: Specifies the user group resource for details.
                Changing this parameter will submit a new spark job.
@@ -53,7 +227,8 @@ class SparkJobDependentPackage(dict):
     @pulumi.getter(name="groupName")
     def group_name(self) -> str:
         """
-        Specifies the user group name.
+        Specifies the user group name.  
+        Only letters, digits, dots (.), hyphens (-) and underscores (_) are allowed.
         Changing this parameter will submit a new spark job.
         """
         return pulumi.get(self, "group_name")

@@ -46,16 +46,17 @@ class MediaAssetArgs:
                Changing this creates a new resource.
         :param pulumi.Input[bool] auto_preload: Specifies whether to automatically warm up the media to CDN. Defaults to: **false**.
                Changing this creates a new resource.
-        :param pulumi.Input[int] category_id: Specifies the category ID of the media asset. Default to: **-1**, which means the media
+        :param pulumi.Input[int] category_id: Specifies the category ID of the media asset. Defaults to `-1`, which means the media
                asset will be categorized into the 'Other' category of system presets.
-        :param pulumi.Input[str] description: Specifies the media asset description, which contains a maximum of 1024 characters.
+        :param pulumi.Input[str] description: Specifies the media asset description, which contains a maximum of `1,024`
+               characters.
         :param pulumi.Input[str] input_bucket: Specifies the OBS bucket name of media source file.
                Either this field or `url` must be specified. Changing this creates a new resource.
         :param pulumi.Input[str] input_path: Specifies the media source file path in the OBS bucket.
                Changing this creates a new resource.
         :param pulumi.Input[str] labels: Specifies the labels of the media asset, which contains a maximum of 16 labels
                separated by commas.
-        :param pulumi.Input[str] name: Specifies the media asset name, which contains a maximum of 128 characters.
+        :param pulumi.Input[str] name: Specifies the media asset name, which contains a maximum of `128` characters.
         :param pulumi.Input[str] output_bucket: Specifies the output OBS bucket name.
                Changing this creates a new resource.
         :param pulumi.Input[str] output_path: Specifies the output file path in the OBS bucket.
@@ -160,7 +161,7 @@ class MediaAssetArgs:
     @pulumi.getter(name="categoryId")
     def category_id(self) -> Optional[pulumi.Input[int]]:
         """
-        Specifies the category ID of the media asset. Default to: **-1**, which means the media
+        Specifies the category ID of the media asset. Defaults to `-1`, which means the media
         asset will be categorized into the 'Other' category of system presets.
         """
         return pulumi.get(self, "category_id")
@@ -173,7 +174,8 @@ class MediaAssetArgs:
     @pulumi.getter
     def description(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the media asset description, which contains a maximum of 1024 characters.
+        Specifies the media asset description, which contains a maximum of `1,024`
+        characters.
         """
         return pulumi.get(self, "description")
 
@@ -224,7 +226,7 @@ class MediaAssetArgs:
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the media asset name, which contains a maximum of 128 characters.
+        Specifies the media asset name, which contains a maximum of `128` characters.
         """
         return pulumi.get(self, "name")
 
@@ -394,10 +396,11 @@ class _MediaAssetState:
                Changing this creates a new resource.
         :param pulumi.Input[bool] auto_preload: Specifies whether to automatically warm up the media to CDN. Defaults to: **false**.
                Changing this creates a new resource.
-        :param pulumi.Input[int] category_id: Specifies the category ID of the media asset. Default to: **-1**, which means the media
+        :param pulumi.Input[int] category_id: Specifies the category ID of the media asset. Defaults to `-1`, which means the media
                asset will be categorized into the 'Other' category of system presets.
         :param pulumi.Input[str] category_name: The category name of the media asset.
-        :param pulumi.Input[str] description: Specifies the media asset description, which contains a maximum of 1024 characters.
+        :param pulumi.Input[str] description: Specifies the media asset description, which contains a maximum of `1,024`
+               characters.
         :param pulumi.Input[str] input_bucket: Specifies the OBS bucket name of media source file.
                Either this field or `url` must be specified. Changing this creates a new resource.
         :param pulumi.Input[str] input_path: Specifies the media source file path in the OBS bucket.
@@ -410,7 +413,7 @@ class _MediaAssetState:
                **M3U8**, **MP3**, **OGG**, **WAV**, **WMA**, **APE**, **FLAC**, **AAC**, **AC3**, **MMF**, **AMR**, **M4A**,
                **M4R**, **WV**, **MP2**. Changing this creates a new resource.
         :param pulumi.Input[str] media_url: The URL of original media file.
-        :param pulumi.Input[str] name: Specifies the media asset name, which contains a maximum of 128 characters.
+        :param pulumi.Input[str] name: Specifies the media asset name, which contains a maximum of `128` characters.
         :param pulumi.Input[str] output_bucket: Specifies the output OBS bucket name.
                Changing this creates a new resource.
         :param pulumi.Input[str] output_path: Specifies the output file path in the OBS bucket.
@@ -507,7 +510,7 @@ class _MediaAssetState:
     @pulumi.getter(name="categoryId")
     def category_id(self) -> Optional[pulumi.Input[int]]:
         """
-        Specifies the category ID of the media asset. Default to: **-1**, which means the media
+        Specifies the category ID of the media asset. Defaults to `-1`, which means the media
         asset will be categorized into the 'Other' category of system presets.
         """
         return pulumi.get(self, "category_id")
@@ -532,7 +535,8 @@ class _MediaAssetState:
     @pulumi.getter
     def description(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the media asset description, which contains a maximum of 1024 characters.
+        Specifies the media asset description, which contains a maximum of `1,024`
+        characters.
         """
         return pulumi.get(self, "description")
 
@@ -622,7 +626,7 @@ class _MediaAssetState:
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the media asset name, which contains a maximum of 128 characters.
+        Specifies the media asset name, which contains a maximum of `128` characters.
         """
         return pulumi.get(self, "name")
 
@@ -830,13 +834,13 @@ class MediaAsset(pulumi.CustomResource):
 
         ## Import
 
-        The media asset can be imported using the `id`, e.g.
+        The media asset can be imported using the `id`, e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:Vod/mediaAsset:MediaAsset test 8754976729b8a2ba745d01036edded2b
         ```
 
-         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`url`, `input_bucket`, `input_path`, `output_bucket`, `output_path`, `storage_mode`, `template_group_name`, `workflow_name`, `publish`, `auto_encrypt`, `auto_preload`, `review_template_id`, `thumbnail`. It is generally recommended running `terraform plan` after importing a media asset. You can then decide if changes should be applied to the media asset, or the resource definition should be updated to align with the media asset. Also you can ignore changes as below. resource "huaweicloud_vod_media_asset" "test" {
+         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`url`, `input_bucket`, `input_path`, `output_bucket`, `output_path`, `storage_mode`, `template_group_name`, `workflow_name`, `publish`, `auto_encrypt`, `auto_preload`, `review_template_id`, `thumbnail`. It is generally recommended running `terraform plan` after importing a media asset. You can then decide if changes should be applied to the media asset, or the resource definition should be updated to align with the media asset. Also you can ignore changes as below. hcl resource "huaweicloud_vod_media_asset" "test" {
 
          ...
 
@@ -859,9 +863,10 @@ class MediaAsset(pulumi.CustomResource):
                Changing this creates a new resource.
         :param pulumi.Input[bool] auto_preload: Specifies whether to automatically warm up the media to CDN. Defaults to: **false**.
                Changing this creates a new resource.
-        :param pulumi.Input[int] category_id: Specifies the category ID of the media asset. Default to: **-1**, which means the media
+        :param pulumi.Input[int] category_id: Specifies the category ID of the media asset. Defaults to `-1`, which means the media
                asset will be categorized into the 'Other' category of system presets.
-        :param pulumi.Input[str] description: Specifies the media asset description, which contains a maximum of 1024 characters.
+        :param pulumi.Input[str] description: Specifies the media asset description, which contains a maximum of `1,024`
+               characters.
         :param pulumi.Input[str] input_bucket: Specifies the OBS bucket name of media source file.
                Either this field or `url` must be specified. Changing this creates a new resource.
         :param pulumi.Input[str] input_path: Specifies the media source file path in the OBS bucket.
@@ -872,7 +877,7 @@ class MediaAsset(pulumi.CustomResource):
                **MXF**, **MPG**, **FLV**, **WMV**, **AVI**, **M4V**, **F4V**, **MPEG**, **3GP**, **ASF**, **MKV**, **HLS**,
                **M3U8**, **MP3**, **OGG**, **WAV**, **WMA**, **APE**, **FLAC**, **AAC**, **AC3**, **MMF**, **AMR**, **M4A**,
                **M4R**, **WV**, **MP2**. Changing this creates a new resource.
-        :param pulumi.Input[str] name: Specifies the media asset name, which contains a maximum of 128 characters.
+        :param pulumi.Input[str] name: Specifies the media asset name, which contains a maximum of `128` characters.
         :param pulumi.Input[str] output_bucket: Specifies the output OBS bucket name.
                Changing this creates a new resource.
         :param pulumi.Input[str] output_path: Specifies the output file path in the OBS bucket.
@@ -944,13 +949,13 @@ class MediaAsset(pulumi.CustomResource):
 
         ## Import
 
-        The media asset can be imported using the `id`, e.g.
+        The media asset can be imported using the `id`, e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:Vod/mediaAsset:MediaAsset test 8754976729b8a2ba745d01036edded2b
         ```
 
-         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`url`, `input_bucket`, `input_path`, `output_bucket`, `output_path`, `storage_mode`, `template_group_name`, `workflow_name`, `publish`, `auto_encrypt`, `auto_preload`, `review_template_id`, `thumbnail`. It is generally recommended running `terraform plan` after importing a media asset. You can then decide if changes should be applied to the media asset, or the resource definition should be updated to align with the media asset. Also you can ignore changes as below. resource "huaweicloud_vod_media_asset" "test" {
+         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`url`, `input_bucket`, `input_path`, `output_bucket`, `output_path`, `storage_mode`, `template_group_name`, `workflow_name`, `publish`, `auto_encrypt`, `auto_preload`, `review_template_id`, `thumbnail`. It is generally recommended running `terraform plan` after importing a media asset. You can then decide if changes should be applied to the media asset, or the resource definition should be updated to align with the media asset. Also you can ignore changes as below. hcl resource "huaweicloud_vod_media_asset" "test" {
 
          ...
 
@@ -1077,10 +1082,11 @@ class MediaAsset(pulumi.CustomResource):
                Changing this creates a new resource.
         :param pulumi.Input[bool] auto_preload: Specifies whether to automatically warm up the media to CDN. Defaults to: **false**.
                Changing this creates a new resource.
-        :param pulumi.Input[int] category_id: Specifies the category ID of the media asset. Default to: **-1**, which means the media
+        :param pulumi.Input[int] category_id: Specifies the category ID of the media asset. Defaults to `-1`, which means the media
                asset will be categorized into the 'Other' category of system presets.
         :param pulumi.Input[str] category_name: The category name of the media asset.
-        :param pulumi.Input[str] description: Specifies the media asset description, which contains a maximum of 1024 characters.
+        :param pulumi.Input[str] description: Specifies the media asset description, which contains a maximum of `1,024`
+               characters.
         :param pulumi.Input[str] input_bucket: Specifies the OBS bucket name of media source file.
                Either this field or `url` must be specified. Changing this creates a new resource.
         :param pulumi.Input[str] input_path: Specifies the media source file path in the OBS bucket.
@@ -1093,7 +1099,7 @@ class MediaAsset(pulumi.CustomResource):
                **M3U8**, **MP3**, **OGG**, **WAV**, **WMA**, **APE**, **FLAC**, **AAC**, **AC3**, **MMF**, **AMR**, **M4A**,
                **M4R**, **WV**, **MP2**. Changing this creates a new resource.
         :param pulumi.Input[str] media_url: The URL of original media file.
-        :param pulumi.Input[str] name: Specifies the media asset name, which contains a maximum of 128 characters.
+        :param pulumi.Input[str] name: Specifies the media asset name, which contains a maximum of `128` characters.
         :param pulumi.Input[str] output_bucket: Specifies the output OBS bucket name.
                Changing this creates a new resource.
         :param pulumi.Input[str] output_path: Specifies the output file path in the OBS bucket.
@@ -1165,7 +1171,7 @@ class MediaAsset(pulumi.CustomResource):
     @pulumi.getter(name="categoryId")
     def category_id(self) -> pulumi.Output[int]:
         """
-        Specifies the category ID of the media asset. Default to: **-1**, which means the media
+        Specifies the category ID of the media asset. Defaults to `-1`, which means the media
         asset will be categorized into the 'Other' category of system presets.
         """
         return pulumi.get(self, "category_id")
@@ -1182,7 +1188,8 @@ class MediaAsset(pulumi.CustomResource):
     @pulumi.getter
     def description(self) -> pulumi.Output[Optional[str]]:
         """
-        Specifies the media asset description, which contains a maximum of 1024 characters.
+        Specifies the media asset description, which contains a maximum of `1,024`
+        characters.
         """
         return pulumi.get(self, "description")
 
@@ -1244,7 +1251,7 @@ class MediaAsset(pulumi.CustomResource):
     @pulumi.getter
     def name(self) -> pulumi.Output[str]:
         """
-        Specifies the media asset name, which contains a maximum of 128 characters.
+        Specifies the media asset name, which contains a maximum of `128` characters.
         """
         return pulumi.get(self, "name")
 

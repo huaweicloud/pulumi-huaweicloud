@@ -10,6 +10,112 @@ import (
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
+type OpengaussInstanceAdvanceFeature struct {
+	// Specifies the name of the advance feature.
+	Name string `pulumi:"name"`
+	// Specifies the value of the advance feature.
+	Value string `pulumi:"value"`
+}
+
+// OpengaussInstanceAdvanceFeatureInput is an input type that accepts OpengaussInstanceAdvanceFeatureArgs and OpengaussInstanceAdvanceFeatureOutput values.
+// You can construct a concrete instance of `OpengaussInstanceAdvanceFeatureInput` via:
+//
+//	OpengaussInstanceAdvanceFeatureArgs{...}
+type OpengaussInstanceAdvanceFeatureInput interface {
+	pulumi.Input
+
+	ToOpengaussInstanceAdvanceFeatureOutput() OpengaussInstanceAdvanceFeatureOutput
+	ToOpengaussInstanceAdvanceFeatureOutputWithContext(context.Context) OpengaussInstanceAdvanceFeatureOutput
+}
+
+type OpengaussInstanceAdvanceFeatureArgs struct {
+	// Specifies the name of the advance feature.
+	Name pulumi.StringInput `pulumi:"name"`
+	// Specifies the value of the advance feature.
+	Value pulumi.StringInput `pulumi:"value"`
+}
+
+func (OpengaussInstanceAdvanceFeatureArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*OpengaussInstanceAdvanceFeature)(nil)).Elem()
+}
+
+func (i OpengaussInstanceAdvanceFeatureArgs) ToOpengaussInstanceAdvanceFeatureOutput() OpengaussInstanceAdvanceFeatureOutput {
+	return i.ToOpengaussInstanceAdvanceFeatureOutputWithContext(context.Background())
+}
+
+func (i OpengaussInstanceAdvanceFeatureArgs) ToOpengaussInstanceAdvanceFeatureOutputWithContext(ctx context.Context) OpengaussInstanceAdvanceFeatureOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(OpengaussInstanceAdvanceFeatureOutput)
+}
+
+// OpengaussInstanceAdvanceFeatureArrayInput is an input type that accepts OpengaussInstanceAdvanceFeatureArray and OpengaussInstanceAdvanceFeatureArrayOutput values.
+// You can construct a concrete instance of `OpengaussInstanceAdvanceFeatureArrayInput` via:
+//
+//	OpengaussInstanceAdvanceFeatureArray{ OpengaussInstanceAdvanceFeatureArgs{...} }
+type OpengaussInstanceAdvanceFeatureArrayInput interface {
+	pulumi.Input
+
+	ToOpengaussInstanceAdvanceFeatureArrayOutput() OpengaussInstanceAdvanceFeatureArrayOutput
+	ToOpengaussInstanceAdvanceFeatureArrayOutputWithContext(context.Context) OpengaussInstanceAdvanceFeatureArrayOutput
+}
+
+type OpengaussInstanceAdvanceFeatureArray []OpengaussInstanceAdvanceFeatureInput
+
+func (OpengaussInstanceAdvanceFeatureArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]OpengaussInstanceAdvanceFeature)(nil)).Elem()
+}
+
+func (i OpengaussInstanceAdvanceFeatureArray) ToOpengaussInstanceAdvanceFeatureArrayOutput() OpengaussInstanceAdvanceFeatureArrayOutput {
+	return i.ToOpengaussInstanceAdvanceFeatureArrayOutputWithContext(context.Background())
+}
+
+func (i OpengaussInstanceAdvanceFeatureArray) ToOpengaussInstanceAdvanceFeatureArrayOutputWithContext(ctx context.Context) OpengaussInstanceAdvanceFeatureArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(OpengaussInstanceAdvanceFeatureArrayOutput)
+}
+
+type OpengaussInstanceAdvanceFeatureOutput struct{ *pulumi.OutputState }
+
+func (OpengaussInstanceAdvanceFeatureOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*OpengaussInstanceAdvanceFeature)(nil)).Elem()
+}
+
+func (o OpengaussInstanceAdvanceFeatureOutput) ToOpengaussInstanceAdvanceFeatureOutput() OpengaussInstanceAdvanceFeatureOutput {
+	return o
+}
+
+func (o OpengaussInstanceAdvanceFeatureOutput) ToOpengaussInstanceAdvanceFeatureOutputWithContext(ctx context.Context) OpengaussInstanceAdvanceFeatureOutput {
+	return o
+}
+
+// Specifies the name of the advance feature.
+func (o OpengaussInstanceAdvanceFeatureOutput) Name() pulumi.StringOutput {
+	return o.ApplyT(func(v OpengaussInstanceAdvanceFeature) string { return v.Name }).(pulumi.StringOutput)
+}
+
+// Specifies the value of the advance feature.
+func (o OpengaussInstanceAdvanceFeatureOutput) Value() pulumi.StringOutput {
+	return o.ApplyT(func(v OpengaussInstanceAdvanceFeature) string { return v.Value }).(pulumi.StringOutput)
+}
+
+type OpengaussInstanceAdvanceFeatureArrayOutput struct{ *pulumi.OutputState }
+
+func (OpengaussInstanceAdvanceFeatureArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]OpengaussInstanceAdvanceFeature)(nil)).Elem()
+}
+
+func (o OpengaussInstanceAdvanceFeatureArrayOutput) ToOpengaussInstanceAdvanceFeatureArrayOutput() OpengaussInstanceAdvanceFeatureArrayOutput {
+	return o
+}
+
+func (o OpengaussInstanceAdvanceFeatureArrayOutput) ToOpengaussInstanceAdvanceFeatureArrayOutputWithContext(ctx context.Context) OpengaussInstanceAdvanceFeatureArrayOutput {
+	return o
+}
+
+func (o OpengaussInstanceAdvanceFeatureArrayOutput) Index(i pulumi.IntInput) OpengaussInstanceAdvanceFeatureOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) OpengaussInstanceAdvanceFeature {
+		return vs[0].([]OpengaussInstanceAdvanceFeature)[vs[1].(int)]
+	}).(OpengaussInstanceAdvanceFeatureOutput)
+}
+
 type OpengaussInstanceBackupStrategy struct {
 	// Specifies the number of days to retain the generated backup files. The value ranges from
 	// `0` to `732`. If this parameter is set to `0`, the automated backup policy is not set.
@@ -352,10 +458,15 @@ func (o OpengaussInstanceDatastorePtrOutput) Version() pulumi.StringPtrOutput {
 
 type OpengaussInstanceHa struct {
 	// Specifies the database consistency mode.
-	// The valid values are **strong** and **eventual**, not case sensitive.
+	// The valid values are **strong** and **eventual**, not case-sensitive.
 	// Changing this parameter will create a new resource.
 	Consistency *string `pulumi:"consistency"`
-	// Specifies the database mode.
+	// Specifies the product type of the instance. Value options:
+	// + **enterprise**: The instance of the enterprise edition will be created.
+	// + **basic**: The instance of the basic edition will be created.
+	// + **ecology**: The instance of the ecosystem edition will be created.
+	InstanceMode *string `pulumi:"instanceMode"`
+	// Specifies the deployment model.
 	// The valid values are **enterprise** and **centralization_standard**.
 	// Changing this parameter will create a new resource.
 	Mode string `pulumi:"mode"`
@@ -377,10 +488,15 @@ type OpengaussInstanceHaInput interface {
 
 type OpengaussInstanceHaArgs struct {
 	// Specifies the database consistency mode.
-	// The valid values are **strong** and **eventual**, not case sensitive.
+	// The valid values are **strong** and **eventual**, not case-sensitive.
 	// Changing this parameter will create a new resource.
 	Consistency pulumi.StringPtrInput `pulumi:"consistency"`
-	// Specifies the database mode.
+	// Specifies the product type of the instance. Value options:
+	// + **enterprise**: The instance of the enterprise edition will be created.
+	// + **basic**: The instance of the basic edition will be created.
+	// + **ecology**: The instance of the ecosystem edition will be created.
+	InstanceMode pulumi.StringPtrInput `pulumi:"instanceMode"`
+	// Specifies the deployment model.
 	// The valid values are **enterprise** and **centralization_standard**.
 	// Changing this parameter will create a new resource.
 	Mode pulumi.StringInput `pulumi:"mode"`
@@ -467,13 +583,21 @@ func (o OpengaussInstanceHaOutput) ToOpengaussInstanceHaPtrOutputWithContext(ctx
 }
 
 // Specifies the database consistency mode.
-// The valid values are **strong** and **eventual**, not case sensitive.
+// The valid values are **strong** and **eventual**, not case-sensitive.
 // Changing this parameter will create a new resource.
 func (o OpengaussInstanceHaOutput) Consistency() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v OpengaussInstanceHa) *string { return v.Consistency }).(pulumi.StringPtrOutput)
 }
 
-// Specifies the database mode.
+// Specifies the product type of the instance. Value options:
+// + **enterprise**: The instance of the enterprise edition will be created.
+// + **basic**: The instance of the basic edition will be created.
+// + **ecology**: The instance of the ecosystem edition will be created.
+func (o OpengaussInstanceHaOutput) InstanceMode() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v OpengaussInstanceHa) *string { return v.InstanceMode }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the deployment model.
 // The valid values are **enterprise** and **centralization_standard**.
 // Changing this parameter will create a new resource.
 func (o OpengaussInstanceHaOutput) Mode() pulumi.StringOutput {
@@ -511,7 +635,7 @@ func (o OpengaussInstanceHaPtrOutput) Elem() OpengaussInstanceHaOutput {
 }
 
 // Specifies the database consistency mode.
-// The valid values are **strong** and **eventual**, not case sensitive.
+// The valid values are **strong** and **eventual**, not case-sensitive.
 // Changing this parameter will create a new resource.
 func (o OpengaussInstanceHaPtrOutput) Consistency() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *OpengaussInstanceHa) *string {
@@ -522,7 +646,20 @@ func (o OpengaussInstanceHaPtrOutput) Consistency() pulumi.StringPtrOutput {
 	}).(pulumi.StringPtrOutput)
 }
 
-// Specifies the database mode.
+// Specifies the product type of the instance. Value options:
+// + **enterprise**: The instance of the enterprise edition will be created.
+// + **basic**: The instance of the basic edition will be created.
+// + **ecology**: The instance of the ecosystem edition will be created.
+func (o OpengaussInstanceHaPtrOutput) InstanceMode() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *OpengaussInstanceHa) *string {
+		if v == nil {
+			return nil
+		}
+		return v.InstanceMode
+	}).(pulumi.StringPtrOutput)
+}
+
+// Specifies the deployment model.
 // The valid values are **enterprise** and **centralization_standard**.
 // Changing this parameter will create a new resource.
 func (o OpengaussInstanceHaPtrOutput) Mode() pulumi.StringPtrOutput {
@@ -551,10 +688,12 @@ type OpengaussInstanceNode struct {
 	AvailabilityZone *string `pulumi:"availabilityZone"`
 	// Indicates the node ID.
 	Id *string `pulumi:"id"`
-	// Specifies the instance name, which can be the same as an existing instance name.
-	// The value must be `4` to `64` characters in length and start with a letter. It is case-sensitive and can contain only
-	// letters, digits, hyphens (-), and underscores (_).
+	// Specifies the name of the advance feature.
 	Name *string `pulumi:"name"`
+	// Indicates the private IP address of the node.
+	PrivateIp *string `pulumi:"privateIp"`
+	// Indicates the EIP that has been bound.
+	PublicIp *string `pulumi:"publicIp"`
 	// Indicates the node role.
 	// + **master**.
 	// + **slave**.
@@ -580,10 +719,12 @@ type OpengaussInstanceNodeArgs struct {
 	AvailabilityZone pulumi.StringPtrInput `pulumi:"availabilityZone"`
 	// Indicates the node ID.
 	Id pulumi.StringPtrInput `pulumi:"id"`
-	// Specifies the instance name, which can be the same as an existing instance name.
-	// The value must be `4` to `64` characters in length and start with a letter. It is case-sensitive and can contain only
-	// letters, digits, hyphens (-), and underscores (_).
+	// Specifies the name of the advance feature.
 	Name pulumi.StringPtrInput `pulumi:"name"`
+	// Indicates the private IP address of the node.
+	PrivateIp pulumi.StringPtrInput `pulumi:"privateIp"`
+	// Indicates the EIP that has been bound.
+	PublicIp pulumi.StringPtrInput `pulumi:"publicIp"`
 	// Indicates the node role.
 	// + **master**.
 	// + **slave**.
@@ -654,11 +795,19 @@ func (o OpengaussInstanceNodeOutput) Id() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v OpengaussInstanceNode) *string { return v.Id }).(pulumi.StringPtrOutput)
 }
 
-// Specifies the instance name, which can be the same as an existing instance name.
-// The value must be `4` to `64` characters in length and start with a letter. It is case-sensitive and can contain only
-// letters, digits, hyphens (-), and underscores (_).
+// Specifies the name of the advance feature.
 func (o OpengaussInstanceNodeOutput) Name() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v OpengaussInstanceNode) *string { return v.Name }).(pulumi.StringPtrOutput)
+}
+
+// Indicates the private IP address of the node.
+func (o OpengaussInstanceNodeOutput) PrivateIp() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v OpengaussInstanceNode) *string { return v.PrivateIp }).(pulumi.StringPtrOutput)
+}
+
+// Indicates the EIP that has been bound.
+func (o OpengaussInstanceNodeOutput) PublicIp() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v OpengaussInstanceNode) *string { return v.PublicIp }).(pulumi.StringPtrOutput)
 }
 
 // Indicates the node role.
@@ -691,6 +840,112 @@ func (o OpengaussInstanceNodeArrayOutput) Index(i pulumi.IntInput) OpengaussInst
 	return pulumi.All(o, i).ApplyT(func(vs []interface{}) OpengaussInstanceNode {
 		return vs[0].([]OpengaussInstanceNode)[vs[1].(int)]
 	}).(OpengaussInstanceNodeOutput)
+}
+
+type OpengaussInstanceParameter struct {
+	// Specifies the name of the advance feature.
+	Name string `pulumi:"name"`
+	// Specifies the value of the advance feature.
+	Value string `pulumi:"value"`
+}
+
+// OpengaussInstanceParameterInput is an input type that accepts OpengaussInstanceParameterArgs and OpengaussInstanceParameterOutput values.
+// You can construct a concrete instance of `OpengaussInstanceParameterInput` via:
+//
+//	OpengaussInstanceParameterArgs{...}
+type OpengaussInstanceParameterInput interface {
+	pulumi.Input
+
+	ToOpengaussInstanceParameterOutput() OpengaussInstanceParameterOutput
+	ToOpengaussInstanceParameterOutputWithContext(context.Context) OpengaussInstanceParameterOutput
+}
+
+type OpengaussInstanceParameterArgs struct {
+	// Specifies the name of the advance feature.
+	Name pulumi.StringInput `pulumi:"name"`
+	// Specifies the value of the advance feature.
+	Value pulumi.StringInput `pulumi:"value"`
+}
+
+func (OpengaussInstanceParameterArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*OpengaussInstanceParameter)(nil)).Elem()
+}
+
+func (i OpengaussInstanceParameterArgs) ToOpengaussInstanceParameterOutput() OpengaussInstanceParameterOutput {
+	return i.ToOpengaussInstanceParameterOutputWithContext(context.Background())
+}
+
+func (i OpengaussInstanceParameterArgs) ToOpengaussInstanceParameterOutputWithContext(ctx context.Context) OpengaussInstanceParameterOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(OpengaussInstanceParameterOutput)
+}
+
+// OpengaussInstanceParameterArrayInput is an input type that accepts OpengaussInstanceParameterArray and OpengaussInstanceParameterArrayOutput values.
+// You can construct a concrete instance of `OpengaussInstanceParameterArrayInput` via:
+//
+//	OpengaussInstanceParameterArray{ OpengaussInstanceParameterArgs{...} }
+type OpengaussInstanceParameterArrayInput interface {
+	pulumi.Input
+
+	ToOpengaussInstanceParameterArrayOutput() OpengaussInstanceParameterArrayOutput
+	ToOpengaussInstanceParameterArrayOutputWithContext(context.Context) OpengaussInstanceParameterArrayOutput
+}
+
+type OpengaussInstanceParameterArray []OpengaussInstanceParameterInput
+
+func (OpengaussInstanceParameterArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]OpengaussInstanceParameter)(nil)).Elem()
+}
+
+func (i OpengaussInstanceParameterArray) ToOpengaussInstanceParameterArrayOutput() OpengaussInstanceParameterArrayOutput {
+	return i.ToOpengaussInstanceParameterArrayOutputWithContext(context.Background())
+}
+
+func (i OpengaussInstanceParameterArray) ToOpengaussInstanceParameterArrayOutputWithContext(ctx context.Context) OpengaussInstanceParameterArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(OpengaussInstanceParameterArrayOutput)
+}
+
+type OpengaussInstanceParameterOutput struct{ *pulumi.OutputState }
+
+func (OpengaussInstanceParameterOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*OpengaussInstanceParameter)(nil)).Elem()
+}
+
+func (o OpengaussInstanceParameterOutput) ToOpengaussInstanceParameterOutput() OpengaussInstanceParameterOutput {
+	return o
+}
+
+func (o OpengaussInstanceParameterOutput) ToOpengaussInstanceParameterOutputWithContext(ctx context.Context) OpengaussInstanceParameterOutput {
+	return o
+}
+
+// Specifies the name of the advance feature.
+func (o OpengaussInstanceParameterOutput) Name() pulumi.StringOutput {
+	return o.ApplyT(func(v OpengaussInstanceParameter) string { return v.Name }).(pulumi.StringOutput)
+}
+
+// Specifies the value of the advance feature.
+func (o OpengaussInstanceParameterOutput) Value() pulumi.StringOutput {
+	return o.ApplyT(func(v OpengaussInstanceParameter) string { return v.Value }).(pulumi.StringOutput)
+}
+
+type OpengaussInstanceParameterArrayOutput struct{ *pulumi.OutputState }
+
+func (OpengaussInstanceParameterArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]OpengaussInstanceParameter)(nil)).Elem()
+}
+
+func (o OpengaussInstanceParameterArrayOutput) ToOpengaussInstanceParameterArrayOutput() OpengaussInstanceParameterArrayOutput {
+	return o
+}
+
+func (o OpengaussInstanceParameterArrayOutput) ToOpengaussInstanceParameterArrayOutputWithContext(ctx context.Context) OpengaussInstanceParameterArrayOutput {
+	return o
+}
+
+func (o OpengaussInstanceParameterArrayOutput) Index(i pulumi.IntInput) OpengaussInstanceParameterOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) OpengaussInstanceParameter {
+		return vs[0].([]OpengaussInstanceParameter)[vs[1].(int)]
+	}).(OpengaussInstanceParameterOutput)
 }
 
 type OpengaussInstanceVolume struct {
@@ -1296,9 +1551,10 @@ func (o GetOpengaussInstanceNodeArrayOutput) Index(i pulumi.IntInput) GetOpengau
 }
 
 type GetOpengaussInstanceVolume struct {
-	// Indicates the volume size.
+	// Indicates the volume size. For ECS deployment: The value is from (Number of shards x 40 GB) to (Number of
+	// shards x 24 TB) and must be a multiple of (Number of shards x 4 GB).
 	Size int `pulumi:"size"`
-	// Indicates the volume type.
+	// Indicates the volume type. Value options: **ULTRAHIGH**, **ESSD**.
 	Type string `pulumi:"type"`
 }
 
@@ -1314,9 +1570,10 @@ type GetOpengaussInstanceVolumeInput interface {
 }
 
 type GetOpengaussInstanceVolumeArgs struct {
-	// Indicates the volume size.
+	// Indicates the volume size. For ECS deployment: The value is from (Number of shards x 40 GB) to (Number of
+	// shards x 24 TB) and must be a multiple of (Number of shards x 4 GB).
 	Size pulumi.IntInput `pulumi:"size"`
-	// Indicates the volume type.
+	// Indicates the volume type. Value options: **ULTRAHIGH**, **ESSD**.
 	Type pulumi.StringInput `pulumi:"type"`
 }
 
@@ -1371,12 +1628,13 @@ func (o GetOpengaussInstanceVolumeOutput) ToGetOpengaussInstanceVolumeOutputWith
 	return o
 }
 
-// Indicates the volume size.
+// Indicates the volume size. For ECS deployment: The value is from (Number of shards x 40 GB) to (Number of
+// shards x 24 TB) and must be a multiple of (Number of shards x 4 GB).
 func (o GetOpengaussInstanceVolumeOutput) Size() pulumi.IntOutput {
 	return o.ApplyT(func(v GetOpengaussInstanceVolume) int { return v.Size }).(pulumi.IntOutput)
 }
 
-// Indicates the volume type.
+// Indicates the volume type. Value options: **ULTRAHIGH**, **ESSD**.
 func (o GetOpengaussInstanceVolumeOutput) Type() pulumi.StringOutput {
 	return o.ApplyT(func(v GetOpengaussInstanceVolume) string { return v.Type }).(pulumi.StringOutput)
 }
@@ -1422,6 +1680,8 @@ type GetOpengaussInstancesInstance struct {
 	Id string `pulumi:"id"`
 	// Indicates the maintenance window.
 	MaintenanceWindow string `pulumi:"maintenanceWindow"`
+	// Indicates the port for MySQL compatibility.
+	MysqlCompatibilityPort string `pulumi:"mysqlCompatibilityPort"`
 	// Specifies the name of the instance.
 	Name string `pulumi:"name"`
 	// Indicates the instance nodes information. Structure is documented below.
@@ -1489,6 +1749,8 @@ type GetOpengaussInstancesInstanceArgs struct {
 	Id pulumi.StringInput `pulumi:"id"`
 	// Indicates the maintenance window.
 	MaintenanceWindow pulumi.StringInput `pulumi:"maintenanceWindow"`
+	// Indicates the port for MySQL compatibility.
+	MysqlCompatibilityPort pulumi.StringInput `pulumi:"mysqlCompatibilityPort"`
 	// Specifies the name of the instance.
 	Name pulumi.StringInput `pulumi:"name"`
 	// Indicates the instance nodes information. Structure is documented below.
@@ -1625,6 +1887,11 @@ func (o GetOpengaussInstancesInstanceOutput) Id() pulumi.StringOutput {
 // Indicates the maintenance window.
 func (o GetOpengaussInstancesInstanceOutput) MaintenanceWindow() pulumi.StringOutput {
 	return o.ApplyT(func(v GetOpengaussInstancesInstance) string { return v.MaintenanceWindow }).(pulumi.StringOutput)
+}
+
+// Indicates the port for MySQL compatibility.
+func (o GetOpengaussInstancesInstanceOutput) MysqlCompatibilityPort() pulumi.StringOutput {
+	return o.ApplyT(func(v GetOpengaussInstancesInstance) string { return v.MysqlCompatibilityPort }).(pulumi.StringOutput)
 }
 
 // Specifies the name of the instance.
@@ -2277,6 +2544,8 @@ func (o GetOpengaussInstancesInstanceVolumeArrayOutput) Index(i pulumi.IntInput)
 }
 
 func init() {
+	pulumi.RegisterInputType(reflect.TypeOf((*OpengaussInstanceAdvanceFeatureInput)(nil)).Elem(), OpengaussInstanceAdvanceFeatureArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*OpengaussInstanceAdvanceFeatureArrayInput)(nil)).Elem(), OpengaussInstanceAdvanceFeatureArray{})
 	pulumi.RegisterInputType(reflect.TypeOf((*OpengaussInstanceBackupStrategyInput)(nil)).Elem(), OpengaussInstanceBackupStrategyArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*OpengaussInstanceBackupStrategyPtrInput)(nil)).Elem(), OpengaussInstanceBackupStrategyArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*OpengaussInstanceDatastoreInput)(nil)).Elem(), OpengaussInstanceDatastoreArgs{})
@@ -2285,6 +2554,8 @@ func init() {
 	pulumi.RegisterInputType(reflect.TypeOf((*OpengaussInstanceHaPtrInput)(nil)).Elem(), OpengaussInstanceHaArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*OpengaussInstanceNodeInput)(nil)).Elem(), OpengaussInstanceNodeArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*OpengaussInstanceNodeArrayInput)(nil)).Elem(), OpengaussInstanceNodeArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*OpengaussInstanceParameterInput)(nil)).Elem(), OpengaussInstanceParameterArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*OpengaussInstanceParameterArrayInput)(nil)).Elem(), OpengaussInstanceParameterArray{})
 	pulumi.RegisterInputType(reflect.TypeOf((*OpengaussInstanceVolumeInput)(nil)).Elem(), OpengaussInstanceVolumeArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*OpengaussInstanceVolumePtrInput)(nil)).Elem(), OpengaussInstanceVolumeArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*GetOpengaussInstanceBackupStrategyInput)(nil)).Elem(), GetOpengaussInstanceBackupStrategyArgs{})
@@ -2309,6 +2580,8 @@ func init() {
 	pulumi.RegisterInputType(reflect.TypeOf((*GetOpengaussInstancesInstanceNodeArrayInput)(nil)).Elem(), GetOpengaussInstancesInstanceNodeArray{})
 	pulumi.RegisterInputType(reflect.TypeOf((*GetOpengaussInstancesInstanceVolumeInput)(nil)).Elem(), GetOpengaussInstancesInstanceVolumeArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*GetOpengaussInstancesInstanceVolumeArrayInput)(nil)).Elem(), GetOpengaussInstancesInstanceVolumeArray{})
+	pulumi.RegisterOutputType(OpengaussInstanceAdvanceFeatureOutput{})
+	pulumi.RegisterOutputType(OpengaussInstanceAdvanceFeatureArrayOutput{})
 	pulumi.RegisterOutputType(OpengaussInstanceBackupStrategyOutput{})
 	pulumi.RegisterOutputType(OpengaussInstanceBackupStrategyPtrOutput{})
 	pulumi.RegisterOutputType(OpengaussInstanceDatastoreOutput{})
@@ -2317,6 +2590,8 @@ func init() {
 	pulumi.RegisterOutputType(OpengaussInstanceHaPtrOutput{})
 	pulumi.RegisterOutputType(OpengaussInstanceNodeOutput{})
 	pulumi.RegisterOutputType(OpengaussInstanceNodeArrayOutput{})
+	pulumi.RegisterOutputType(OpengaussInstanceParameterOutput{})
+	pulumi.RegisterOutputType(OpengaussInstanceParameterArrayOutput{})
 	pulumi.RegisterOutputType(OpengaussInstanceVolumeOutput{})
 	pulumi.RegisterOutputType(OpengaussInstanceVolumePtrOutput{})
 	pulumi.RegisterOutputType(GetOpengaussInstanceBackupStrategyOutput{})

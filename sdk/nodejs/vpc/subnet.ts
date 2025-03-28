@@ -9,10 +9,10 @@ import * as utilities from "../utilities";
  *
  * ## Import
  *
- * Subnets can be imported using the subnet `Network ID`, e.g.
+ * Subnets can be imported using the subnet `Network ID`, e.g. bash
  *
  * ```sh
- *  $ pulumi import huaweicloud:Vpc/subnet:Subnet huaweicloud_vpc_subnet 4779ab1c-7c1a-44b1-a02e-93dfc361b32d
+ *  $ pulumi import huaweicloud:Vpc/subnet:Subnet subnet 4779ab1c-7c1a-44b1-a02e-93dfc361b32d
  * ```
  */
 export class Subnet extends pulumi.CustomResource {
@@ -45,13 +45,13 @@ export class Subnet extends pulumi.CustomResource {
 
     /**
      * Specifies the availability zone (AZ) to which the subnet belongs.
-     * The value must be an existing AZ in the system. Changing this creates a new Subnet.
+     * The value must be an existing AZ in the system. Changing this creates a new subnet.
      */
     public readonly availabilityZone!: pulumi.Output<string>;
     /**
      * Specifies the network segment on which the subnet resides. The value must be in
      * CIDR format and within the CIDR block of the VPC. The subnet mask cannot be greater than 28. Changing this creates a
-     * new Subnet.
+     * new subnet.
      */
     public readonly cidr!: pulumi.Output<string>;
     /**
@@ -77,7 +77,7 @@ export class Subnet extends pulumi.CustomResource {
     public readonly dnsLists!: pulumi.Output<string[]>;
     /**
      * Specifies the gateway of the subnet. The value must be a valid IP address
-     * in the subnet segment. Changing this creates a new Subnet.
+     * in the subnet segment. Changing this creates a new subnet.
      */
     public readonly gatewayIp!: pulumi.Output<string>;
     /**
@@ -117,8 +117,8 @@ export class Subnet extends pulumi.CustomResource {
      */
     public readonly primaryDns!: pulumi.Output<string>;
     /**
-     * Specifies tThe region in which to create the vpc subnet. If omitted, the
-     * provider-level region will be used. Changing this creates a new Subnet.
+     * Specifies the region in which to create the vpc subnet. If omitted, the
+     * provider-level region will be used. Changing this creates a new subnet.
      */
     public readonly region!: pulumi.Output<string>;
     /**
@@ -136,7 +136,7 @@ export class Subnet extends pulumi.CustomResource {
     public readonly tags!: pulumi.Output<{[key: string]: string} | undefined>;
     /**
      * Specifies the ID of the VPC to which the subnet belongs. Changing this creates
-     * a new Subnet.
+     * a new subnet.
      */
     public readonly vpcId!: pulumi.Output<string>;
 
@@ -216,13 +216,13 @@ export class Subnet extends pulumi.CustomResource {
 export interface SubnetState {
     /**
      * Specifies the availability zone (AZ) to which the subnet belongs.
-     * The value must be an existing AZ in the system. Changing this creates a new Subnet.
+     * The value must be an existing AZ in the system. Changing this creates a new subnet.
      */
     availabilityZone?: pulumi.Input<string>;
     /**
      * Specifies the network segment on which the subnet resides. The value must be in
      * CIDR format and within the CIDR block of the VPC. The subnet mask cannot be greater than 28. Changing this creates a
-     * new Subnet.
+     * new subnet.
      */
     cidr?: pulumi.Input<string>;
     /**
@@ -248,7 +248,7 @@ export interface SubnetState {
     dnsLists?: pulumi.Input<pulumi.Input<string>[]>;
     /**
      * Specifies the gateway of the subnet. The value must be a valid IP address
-     * in the subnet segment. Changing this creates a new Subnet.
+     * in the subnet segment. Changing this creates a new subnet.
      */
     gatewayIp?: pulumi.Input<string>;
     /**
@@ -288,8 +288,8 @@ export interface SubnetState {
      */
     primaryDns?: pulumi.Input<string>;
     /**
-     * Specifies tThe region in which to create the vpc subnet. If omitted, the
-     * provider-level region will be used. Changing this creates a new Subnet.
+     * Specifies the region in which to create the vpc subnet. If omitted, the
+     * provider-level region will be used. Changing this creates a new subnet.
      */
     region?: pulumi.Input<string>;
     /**
@@ -307,7 +307,7 @@ export interface SubnetState {
     tags?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
     /**
      * Specifies the ID of the VPC to which the subnet belongs. Changing this creates
-     * a new Subnet.
+     * a new subnet.
      */
     vpcId?: pulumi.Input<string>;
 }
@@ -318,13 +318,13 @@ export interface SubnetState {
 export interface SubnetArgs {
     /**
      * Specifies the availability zone (AZ) to which the subnet belongs.
-     * The value must be an existing AZ in the system. Changing this creates a new Subnet.
+     * The value must be an existing AZ in the system. Changing this creates a new subnet.
      */
     availabilityZone?: pulumi.Input<string>;
     /**
      * Specifies the network segment on which the subnet resides. The value must be in
      * CIDR format and within the CIDR block of the VPC. The subnet mask cannot be greater than 28. Changing this creates a
-     * new Subnet.
+     * new subnet.
      */
     cidr: pulumi.Input<string>;
     /**
@@ -350,7 +350,7 @@ export interface SubnetArgs {
     dnsLists?: pulumi.Input<pulumi.Input<string>[]>;
     /**
      * Specifies the gateway of the subnet. The value must be a valid IP address
-     * in the subnet segment. Changing this creates a new Subnet.
+     * in the subnet segment. Changing this creates a new subnet.
      */
     gatewayIp: pulumi.Input<string>;
     /**
@@ -374,8 +374,8 @@ export interface SubnetArgs {
      */
     primaryDns?: pulumi.Input<string>;
     /**
-     * Specifies tThe region in which to create the vpc subnet. If omitted, the
-     * provider-level region will be used. Changing this creates a new Subnet.
+     * Specifies the region in which to create the vpc subnet. If omitted, the
+     * provider-level region will be used. Changing this creates a new subnet.
      */
     region?: pulumi.Input<string>;
     /**
@@ -389,7 +389,7 @@ export interface SubnetArgs {
     tags?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
     /**
      * Specifies the ID of the VPC to which the subnet belongs. Changing this creates
-     * a new Subnet.
+     * a new subnet.
      */
     vpcId: pulumi.Input<string>;
 }

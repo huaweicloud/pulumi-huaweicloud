@@ -78,11 +78,11 @@ export interface GetFlavorsArgs {
     availabilityZones?: string[];
     /**
      * Specifies the flavor billing mode.
-     * The valid valus are **prePaid** and **postPaid**.
+     * The valid values are **prePaid** and **postPaid**.
      */
     chargingMode?: string;
     /**
-     * Specifies the DMS flvaor ID, e.g. **c6.2u4g.cluster**.
+     * Specifies the DMS flavor ID, e.g. **c6.2u4g.cluster**.
      */
     flavorId?: string;
     /**
@@ -97,7 +97,7 @@ export interface GetFlavorsArgs {
      */
     storageSpecCode?: string;
     /**
-     * Specifies flavor type. The valid values are **single** and **cluster**.
+     * Specifies flavor type. The valid values are **single**, **cluster** and **cluster.small**.
      */
     type?: string;
 }
@@ -122,7 +122,7 @@ export interface GetFlavorsResult {
      * The provider-assigned unique ID for this managed resource.
      */
     readonly id: string;
-    readonly region?: string;
+    readonly region: string;
     /**
      * The disk IO encoding.
      */
@@ -155,11 +155,11 @@ export interface GetFlavorsOutputArgs {
     availabilityZones?: pulumi.Input<pulumi.Input<string>[]>;
     /**
      * Specifies the flavor billing mode.
-     * The valid valus are **prePaid** and **postPaid**.
+     * The valid values are **prePaid** and **postPaid**.
      */
     chargingMode?: pulumi.Input<string>;
     /**
-     * Specifies the DMS flvaor ID, e.g. **c6.2u4g.cluster**.
+     * Specifies the DMS flavor ID, e.g. **c6.2u4g.cluster**.
      */
     flavorId?: pulumi.Input<string>;
     /**
@@ -174,7 +174,7 @@ export interface GetFlavorsOutputArgs {
      */
     storageSpecCode?: pulumi.Input<string>;
     /**
-     * Specifies flavor type. The valid values are **single** and **cluster**.
+     * Specifies flavor type. The valid values are **single**, **cluster** and **cluster.small**.
      */
     type?: pulumi.Input<string>;
 }

@@ -11,9 +11,9 @@ import (
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
-// Manages a User Group Membership resource within HuaweiCloud IAM service.
+// Manages an IAM group membership resource within HuaweiCloud.
 //
-// Note: You *must* have admin privileges in your HuaweiCloud cloud to use this resource.
+// > **NOTE:** You *must* have admin privileges to use this resource.
 //
 // ## Example Usage
 //
@@ -24,11 +24,15 @@ import (
 //
 //	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud/Iam"
 //	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi/config"
 //
 // )
 //
 //	func main() {
 //		pulumi.Run(func(ctx *pulumi.Context) error {
+//			cfg := config.New(ctx, "")
+//			user1Password := cfg.RequireObject("user1Password")
+//			user2Password := cfg.RequireObject("user2Password")
 //			group1, err := Iam.NewGroup(ctx, "group1", &Iam.GroupArgs{
 //				Description: pulumi.String("This is a test group"),
 //			})
@@ -37,14 +41,14 @@ import (
 //			}
 //			user1, err := Iam.NewUser(ctx, "user1", &Iam.UserArgs{
 //				Enabled:  pulumi.Bool(true),
-//				Password: pulumi.String("password12345!"),
+//				Password: pulumi.Any(user1Password),
 //			})
 //			if err != nil {
 //				return err
 //			}
 //			user2, err := Iam.NewUser(ctx, "user2", &Iam.UserArgs{
 //				Enabled:  pulumi.Bool(true),
-//				Password: pulumi.String("password12345!"),
+//				Password: pulumi.Any(user2Password),
 //			})
 //			if err != nil {
 //				return err
@@ -67,9 +71,9 @@ import (
 type GroupMembership struct {
 	pulumi.CustomResourceState
 
-	// The group ID of this membership.
+	// Specifies the group ID of this membership.
 	Group pulumi.StringOutput `pulumi:"group"`
-	// A List of user IDs to associate to the group.
+	// Specifies a list of IAM user IDs to associate to the group.
 	Users pulumi.StringArrayOutput `pulumi:"users"`
 }
 
@@ -109,16 +113,16 @@ func GetGroupMembership(ctx *pulumi.Context,
 
 // Input properties used for looking up and filtering GroupMembership resources.
 type groupMembershipState struct {
-	// The group ID of this membership.
+	// Specifies the group ID of this membership.
 	Group *string `pulumi:"group"`
-	// A List of user IDs to associate to the group.
+	// Specifies a list of IAM user IDs to associate to the group.
 	Users []string `pulumi:"users"`
 }
 
 type GroupMembershipState struct {
-	// The group ID of this membership.
+	// Specifies the group ID of this membership.
 	Group pulumi.StringPtrInput
-	// A List of user IDs to associate to the group.
+	// Specifies a list of IAM user IDs to associate to the group.
 	Users pulumi.StringArrayInput
 }
 
@@ -127,17 +131,17 @@ func (GroupMembershipState) ElementType() reflect.Type {
 }
 
 type groupMembershipArgs struct {
-	// The group ID of this membership.
+	// Specifies the group ID of this membership.
 	Group string `pulumi:"group"`
-	// A List of user IDs to associate to the group.
+	// Specifies a list of IAM user IDs to associate to the group.
 	Users []string `pulumi:"users"`
 }
 
 // The set of arguments for constructing a GroupMembership resource.
 type GroupMembershipArgs struct {
-	// The group ID of this membership.
+	// Specifies the group ID of this membership.
 	Group pulumi.StringInput
-	// A List of user IDs to associate to the group.
+	// Specifies a list of IAM user IDs to associate to the group.
 	Users pulumi.StringArrayInput
 }
 
@@ -228,12 +232,12 @@ func (o GroupMembershipOutput) ToGroupMembershipOutputWithContext(ctx context.Co
 	return o
 }
 
-// The group ID of this membership.
+// Specifies the group ID of this membership.
 func (o GroupMembershipOutput) Group() pulumi.StringOutput {
 	return o.ApplyT(func(v *GroupMembership) pulumi.StringOutput { return v.Group }).(pulumi.StringOutput)
 }
 
-// A List of user IDs to associate to the group.
+// Specifies a list of IAM user IDs to associate to the group.
 func (o GroupMembershipOutput) Users() pulumi.StringArrayOutput {
 	return o.ApplyT(func(v *GroupMembership) pulumi.StringArrayOutput { return v.Users }).(pulumi.StringArrayOutput)
 }

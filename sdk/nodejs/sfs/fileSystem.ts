@@ -6,6 +6,8 @@ import { input as inputs, output as outputs } from "../types";
 import * as utilities from "../utilities";
 
 /**
+ * !> **WARNING:** It has been deprecated.
+ *
  * Provides a Shared File System (SFS) resource within HuaweiCloud.
  *
  * ## Example Usage
@@ -78,7 +80,7 @@ import * as utilities from "../utilities";
  *
  * ## Import
  *
- * SFS can be imported using the `id`, e.g.
+ * SFS can be imported using the `id`, e.g. bash
  *
  * ```sh
  *  $ pulumi import huaweicloud:Sfs/fileSystem:FileSystem huaweicloud_sfs_file_system 4779ab1c-7c1a-44b1-a02e-93dfc361b32d

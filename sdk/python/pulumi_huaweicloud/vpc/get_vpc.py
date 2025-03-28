@@ -22,7 +22,7 @@ class GetVpcResult:
     """
     A collection of values returned by getVpc.
     """
-    def __init__(__self__, cidr=None, description=None, enterprise_project_id=None, id=None, name=None, region=None, routes=None, status=None, tags=None):
+    def __init__(__self__, cidr=None, description=None, enterprise_project_id=None, id=None, name=None, region=None, routes=None, secondary_cidrs=None, status=None, tags=None):
         if cidr and not isinstance(cidr, str):
             raise TypeError("Expected argument 'cidr' to be a str")
         pulumi.set(__self__, "cidr", cidr)
@@ -48,6 +48,9 @@ class GetVpcResult:
             pulumi.log.warn("""routes is deprecated: use huaweicloud_vpc_route_table data source to get all routes""")
 
         pulumi.set(__self__, "routes", routes)
+        if secondary_cidrs and not isinstance(secondary_cidrs, list):
+            raise TypeError("Expected argument 'secondary_cidrs' to be a list")
+        pulumi.set(__self__, "secondary_cidrs", secondary_cidrs)
         if status and not isinstance(status, str):
             raise TypeError("Expected argument 'status' to be a str")
         pulumi.set(__self__, "status", status)
@@ -95,6 +98,14 @@ class GetVpcResult:
         return pulumi.get(self, "routes")
 
     @property
+    @pulumi.getter(name="secondaryCidrs")
+    def secondary_cidrs(self) -> Sequence[str]:
+        """
+        The secondary CIDR blocks of the VPC.
+        """
+        return pulumi.get(self, "secondary_cidrs")
+
+    @property
     @pulumi.getter
     def status(self) -> str:
         return pulumi.get(self, "status")
@@ -121,6 +132,7 @@ class AwaitableGetVpcResult(GetVpcResult):
             name=self.name,
             region=self.region,
             routes=self.routes,
+            secondary_cidrs=self.secondary_cidrs,
             status=self.status,
             tags=self.tags)
 
@@ -174,6 +186,7 @@ def get_vpc(cidr: Optional[str] = None,
         name=__ret__.name,
         region=__ret__.region,
         routes=__ret__.routes,
+        secondary_cidrs=__ret__.secondary_cidrs,
         status=__ret__.status,
         tags=__ret__.tags)
 

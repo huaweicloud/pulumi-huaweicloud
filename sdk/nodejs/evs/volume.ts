@@ -12,17 +12,19 @@ import * as utilities from "../utilities";
  *
  * ```typescript
  * import * as pulumi from "@pulumi/pulumi";
- * import * as huaweicloud from "@pulumi/huaweicloud";
+ * import * as pulumi from "@huaweicloudos/pulumi";
  *
- * const volume = new huaweicloud.Evs.Volume("volume", {
- *     availabilityZone: "cn-north-4a",
+ * const config = new pulumi.Config();
+ * const availabilityZone = config.requireObject("availabilityZone");
+ * const volume = new huaweicloud.evs.Volume("volume", {
  *     description: "my volume",
+ *     volumeType: "SAS",
  *     size: 20,
+ *     availabilityZone: availabilityZone,
  *     tags: {
  *         foo: "bar",
  *         key: "value",
  *     },
- *     volumeType: "SAS",
  * });
  * ```
  * ### With KMS Encryption
@@ -31,12 +33,49 @@ import * as utilities from "../utilities";
  * import * as pulumi from "@pulumi/pulumi";
  * import * as pulumi from "@huaweicloudos/pulumi";
  *
+ * const config = new pulumi.Config();
+ * const availabilityZone = config.requireObject("availabilityZone");
  * const volume = new huaweicloud.evs.Volume("volume", {
  *     description: "my volume",
  *     volumeType: "SAS",
  *     size: 20,
  *     kmsId: _var.kms_id,
- *     availabilityZone: "cn-north-4a",
+ *     availabilityZone: availabilityZone,
+ *     tags: {
+ *         foo: "bar",
+ *         key: "value",
+ *     },
+ * });
+ * ```
+ * ### With Server_id
+ *
+ * ```typescript
+ * import * as pulumi from "@pulumi/pulumi";
+ * import * as pulumi from "@huaweicloudos/pulumi";
+ *
+ * const config = new pulumi.Config();
+ * const imageId = config.requireObject("imageId");
+ * const flavorId = config.requireObject("flavorId");
+ * const keyPair = config.requireObject("keyPair");
+ * const securityGroupId = config.requireObject("securityGroupId");
+ * const availabilityZone = config.requireObject("availabilityZone");
+ * const subnetId = config.requireObject("subnetId");
+ * const myinstance = new huaweicloud.ecs.Instance("myinstance", {
+ *     imageId: imageId,
+ *     flavorId: flavorId,
+ *     keyPair: keyPair,
+ *     securityGroupIds: [securityGroupId],
+ *     availabilityZone: availabilityZone,
+ *     networks: [{
+ *         uuid: subnetId,
+ *     }],
+ * });
+ * const volume = new huaweicloud.evs.Volume("volume", {
+ *     description: "my volume",
+ *     volumeType: "SAS",
+ *     size: 20,
+ *     availabilityZone: availabilityZone,
+ *     serverId: myinstance.id,
  *     tags: {
  *         foo: "bar",
  *         key: "value",
@@ -46,13 +85,13 @@ import * as utilities from "../utilities";
  *
  * ## Import
  *
- * Volumes can be imported using the `id`, e.g.
+ * Volumes can be imported using the `id`, e.g. bash
  *
  * ```sh
- *  $ pulumi import huaweicloud:Evs/volume:Volume volume_1 14a80bc7-c12c-4fe0-a38a-cb77eeac9bd6
+ *  $ pulumi import huaweicloud:Evs/volume:Volume test <id>
  * ```
  *
- *  Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include**cascade**, **period_unit**, **period** and **auto_renew**. It is generally recommended running terraform plan after importing an disk. You can then decide if changes should be applied to the disk, or the resource definition should be updated to align with the disk. Also you can ignore changes as below. resource "huaweicloud_evs_volume" "volume_1" {
+ *  Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`cascade`, `period_unit`, `period`, `server_id`, `auto_renew`, and `charging_mode`. It is generally recommended running terraform plan after importing a disk. You can then decide if changes should be applied to the disk, or the resource definition should be updated to align with the disk. Also, you can ignore changes as below. hcl resource "huaweicloud_evs_volume" "test" {
  *
  *  ...
  *
@@ -60,9 +99,9 @@ import * as utilities from "../utilities";
  *
  *  ignore_changes = [
  *
- *  cascade,
+ *  cascade, period_unit, period, server_id, auto_renew, charging_mode,
  *
- *  ]
+ * ]
  *
  *  } }
  */
@@ -95,8 +134,8 @@ export class Volume extends pulumi.CustomResource {
     }
 
     /**
-     * If a disk is attached to an instance, this attribute will display the Attachment ID, Instance ID, and
-     * the Device as the Instance sees it. The object structure is documented below.
+     * If a disk is attached to an instance, this attribute will display the attachment ID, instance ID, and
+     * the device as the instance sees it. The attachment structure is documented below.
      */
     public /*out*/ readonly attachments!: pulumi.Output<outputs.Evs.VolumeAttachment[]>;
     /**
@@ -104,23 +143,21 @@ export class Volume extends pulumi.CustomResource {
      */
     public readonly autoPay!: pulumi.Output<string | undefined>;
     /**
-     * Specifies whether auto renew is enabled.
-     * Valid values are **true** and **false**.
+     * Specifies whether auto-renew is enabled.
+     * Valid values are **true** and **false**. Defaults to **false**.
      */
     public readonly autoRenew!: pulumi.Output<string | undefined>;
     /**
-     * Specifies the availability zone for the disk. Changing this creates
-     * a new disk.
+     * Specifies the availability zone for the disk.
      */
     public readonly availabilityZone!: pulumi.Output<string>;
     /**
-     * Specifies the backup ID from which to create the disk. Changing this
-     * creates a new disk.
+     * Specifies the backup ID from which to create the disk.
      */
     public readonly backupId!: pulumi.Output<string | undefined>;
     /**
-     * Specifies the delete mode of snapshot. The default value is false. All snapshot
-     * associated with the disk will also be deleted when the parameter is set to true.
+     * Specifies the delete mode of snapshot. The default value is **false**. All snapshot
+     * associated with the disk will also be deleted when the parameter is set to **true**.
      */
     public readonly cascade!: pulumi.Output<boolean | undefined>;
     /**
@@ -128,7 +165,6 @@ export class Volume extends pulumi.CustomResource {
      * The valid values are as follows:
      * + **prePaid**: the yearly/monthly billing mode.
      * + **postPaid**: the pay-per-use billing mode.
-     * Changing this creates a new disk.
      */
     public readonly chargingMode!: pulumi.Output<string>;
     /**
@@ -140,79 +176,97 @@ export class Volume extends pulumi.CustomResource {
      */
     public /*out*/ readonly dedicatedStorageName!: pulumi.Output<string>;
     /**
-     * Specifies the disk description. The value can contain a maximum of 255 bytes.
+     * Specifies the disk description. You can enter up to `85` characters.
      */
     public readonly description!: pulumi.Output<string | undefined>;
     /**
-     * Specifies the device type of disk to create. Valid options are VBD and
-     * SCSI. Defaults to VBD. Changing this creates a new disk.
+     * Specifies the device type of disk to create. Valid options are **VBD** and
+     * **SCSI**. Defaults to **VBD**.
      */
     public readonly deviceType!: pulumi.Output<string | undefined>;
     /**
-     * Specifies the enterprise project id of the disk. Changing this
-     * creates a new disk.
+     * Specifies the enterprise project ID of the disk.
+     * For enterprise users, if omitted, default enterprise project will be used.
      */
     public readonly enterpriseProjectId!: pulumi.Output<string>;
     /**
-     * Specifies the image ID from which to create the disk. Changing this creates
-     * a new disk.
+     * Specifies the image ID from which to create the disk.
      */
     public readonly imageId!: pulumi.Output<string | undefined>;
     /**
-     * Specifies the Encryption KMS ID to create the disk. Changing this creates a
-     * new disk.
+     * Specifies the IOPS(Input/Output Operations Per Second) for the volume.
+     * The field is valid and required when `volumeType` is set to **GPSSD2** or **ESSD2**.
+     * This field can be changed only when the disk status is Available or In-use.
+     */
+    public readonly iops!: pulumi.Output<number>;
+    /**
+     * Specifies the Encryption KMS ID to create the disk.
      */
     public readonly kmsId!: pulumi.Output<string | undefined>;
     /**
-     * Specifies whether the disk is shareable. The default value is false.
-     * Changing this creates a new disk.
+     * Specifies whether the disk is shareable. Defaults to **false**.
      */
     public readonly multiattach!: pulumi.Output<boolean | undefined>;
     /**
-     * Specifies the disk name. The value can contain a maximum of 255 bytes.
+     * Specifies the disk name. You can enter up to `64` characters.
      */
     public readonly name!: pulumi.Output<string>;
     /**
      * Specifies the charging period of the disk.
-     * If `periodUnit` is set to **month**, the value ranges from 1 to 9.
-     * If `periodUnit` is set to **year**, the valid value is 1.
-     * This parameter is mandatory if `chargingMode` is set to **prePaid**.
-     * Changing this creates a new disk.
+     * + If `periodUnit` is set to **month**, the value ranges from `1` to `9`.
+     * + If `periodUnit` is set to **year**, the valid value is `1`.
      */
     public readonly period!: pulumi.Output<number | undefined>;
     /**
      * Specifies the charging period unit of the disk.
      * Valid values are **month** and **year**. This parameter is mandatory if `chargingMode` is set to **prePaid**.
-     * Changing this creates a new disk.
      */
     public readonly periodUnit!: pulumi.Output<string | undefined>;
     /**
      * Specifies the region in which to create the disk. If omitted, the
-     * provider-level region will be used. Changing this creates a new disk.
+     * provider-level region will be used. Changing this parameter will create a new resource.
      */
     public readonly region!: pulumi.Output<string>;
     /**
-     * Specifies the disk size, in GB. The valid value is range from:
-     * + System disk: 1 GB to 1024 GB
-     * + Data disk: 10 GB to 32768 GB
+     * Specifies the server ID to which the cloud volume is to be mounted.
+     * After specifying the value of this field, the cloud volume will be automatically attached on the cloud server.
+     * The chargingMode of the created cloud volume will be consistent with that of the cloud server.
+     * Currently, only ECS cloud-servers are supported, and BMS bare metal cloud-servers are not supported yet.
+     */
+    public readonly serverId!: pulumi.Output<string | undefined>;
+    /**
+     * Specifies the disk size, in GB.
+     * For system disk, the valid value ranges from `1` GB to `1,024` GB.
+     * For data disk, the valid value ranges from `10` GB to `32,768` GB.
      */
     public readonly size!: pulumi.Output<number>;
     /**
-     * Specifies the snapshot ID from which to create the disk. Changing this
-     * creates a new disk.
+     * Specifies the snapshot ID from which to create the disk.
      */
     public readonly snapshotId!: pulumi.Output<string | undefined>;
+    /**
+     * The disk status.
+     * Please refer to [EVS Disk Status](https://support.huaweicloud.com/intl/en-us/api-evs/evs_04_0040.html).
+     */
+    public /*out*/ readonly status!: pulumi.Output<string>;
     /**
      * Specifies the key/value pairs to associate with the disk.
      */
     public readonly tags!: pulumi.Output<{[key: string]: string} | undefined>;
     /**
-     * Specifies the disk type. Currently, the value can be SAS, SSD, GPSSD or
-     * ESSD.
-     * + SAS: specifies the high I/O disk type.
-     * + SSD: specifies the ultra-high I/O disk type.
-     * + GPSSD: specifies the general purpose SSD disk type.
-     * + ESSD: Extreme SSD type.
+     * Specifies the throughput for the volume. The Unit is MiB/s.
+     * The field is valid and required when `volumeType` is set to **GPSSD2**.
+     * This field can be changed only when the disk status is Available or In-use.
+     */
+    public readonly throughput!: pulumi.Output<number>;
+    /**
+     * Specifies the disk type. Valid values are as follows:
+     * + **SAS**: High I/O type.
+     * + **SSD**: Ultra-high I/O type.
+     * + **GPSSD**: General purpose SSD type.
+     * + **ESSD**: Extreme SSD type.
+     * + **GPSSD2**: General purpose SSD V2 type.
+     * + **ESSD2**: Extreme SSD V2 type.
      */
     public readonly volumeType!: pulumi.Output<string>;
     /**
@@ -246,15 +300,19 @@ export class Volume extends pulumi.CustomResource {
             resourceInputs["deviceType"] = state ? state.deviceType : undefined;
             resourceInputs["enterpriseProjectId"] = state ? state.enterpriseProjectId : undefined;
             resourceInputs["imageId"] = state ? state.imageId : undefined;
+            resourceInputs["iops"] = state ? state.iops : undefined;
             resourceInputs["kmsId"] = state ? state.kmsId : undefined;
             resourceInputs["multiattach"] = state ? state.multiattach : undefined;
             resourceInputs["name"] = state ? state.name : undefined;
             resourceInputs["period"] = state ? state.period : undefined;
             resourceInputs["periodUnit"] = state ? state.periodUnit : undefined;
             resourceInputs["region"] = state ? state.region : undefined;
+            resourceInputs["serverId"] = state ? state.serverId : undefined;
             resourceInputs["size"] = state ? state.size : undefined;
             resourceInputs["snapshotId"] = state ? state.snapshotId : undefined;
+            resourceInputs["status"] = state ? state.status : undefined;
             resourceInputs["tags"] = state ? state.tags : undefined;
+            resourceInputs["throughput"] = state ? state.throughput : undefined;
             resourceInputs["volumeType"] = state ? state.volumeType : undefined;
             resourceInputs["wwn"] = state ? state.wwn : undefined;
         } else {
@@ -276,18 +334,22 @@ export class Volume extends pulumi.CustomResource {
             resourceInputs["deviceType"] = args ? args.deviceType : undefined;
             resourceInputs["enterpriseProjectId"] = args ? args.enterpriseProjectId : undefined;
             resourceInputs["imageId"] = args ? args.imageId : undefined;
+            resourceInputs["iops"] = args ? args.iops : undefined;
             resourceInputs["kmsId"] = args ? args.kmsId : undefined;
             resourceInputs["multiattach"] = args ? args.multiattach : undefined;
             resourceInputs["name"] = args ? args.name : undefined;
             resourceInputs["period"] = args ? args.period : undefined;
             resourceInputs["periodUnit"] = args ? args.periodUnit : undefined;
             resourceInputs["region"] = args ? args.region : undefined;
+            resourceInputs["serverId"] = args ? args.serverId : undefined;
             resourceInputs["size"] = args ? args.size : undefined;
             resourceInputs["snapshotId"] = args ? args.snapshotId : undefined;
             resourceInputs["tags"] = args ? args.tags : undefined;
+            resourceInputs["throughput"] = args ? args.throughput : undefined;
             resourceInputs["volumeType"] = args ? args.volumeType : undefined;
             resourceInputs["attachments"] = undefined /*out*/;
             resourceInputs["dedicatedStorageName"] = undefined /*out*/;
+            resourceInputs["status"] = undefined /*out*/;
             resourceInputs["wwn"] = undefined /*out*/;
         }
         opts = pulumi.mergeOptions(utilities.resourceOptsDefaults(), opts);
@@ -300,8 +362,8 @@ export class Volume extends pulumi.CustomResource {
  */
 export interface VolumeState {
     /**
-     * If a disk is attached to an instance, this attribute will display the Attachment ID, Instance ID, and
-     * the Device as the Instance sees it. The object structure is documented below.
+     * If a disk is attached to an instance, this attribute will display the attachment ID, instance ID, and
+     * the device as the instance sees it. The attachment structure is documented below.
      */
     attachments?: pulumi.Input<pulumi.Input<inputs.Evs.VolumeAttachment>[]>;
     /**
@@ -309,23 +371,21 @@ export interface VolumeState {
      */
     autoPay?: pulumi.Input<string>;
     /**
-     * Specifies whether auto renew is enabled.
-     * Valid values are **true** and **false**.
+     * Specifies whether auto-renew is enabled.
+     * Valid values are **true** and **false**. Defaults to **false**.
      */
     autoRenew?: pulumi.Input<string>;
     /**
-     * Specifies the availability zone for the disk. Changing this creates
-     * a new disk.
+     * Specifies the availability zone for the disk.
      */
     availabilityZone?: pulumi.Input<string>;
     /**
-     * Specifies the backup ID from which to create the disk. Changing this
-     * creates a new disk.
+     * Specifies the backup ID from which to create the disk.
      */
     backupId?: pulumi.Input<string>;
     /**
-     * Specifies the delete mode of snapshot. The default value is false. All snapshot
-     * associated with the disk will also be deleted when the parameter is set to true.
+     * Specifies the delete mode of snapshot. The default value is **false**. All snapshot
+     * associated with the disk will also be deleted when the parameter is set to **true**.
      */
     cascade?: pulumi.Input<boolean>;
     /**
@@ -333,7 +393,6 @@ export interface VolumeState {
      * The valid values are as follows:
      * + **prePaid**: the yearly/monthly billing mode.
      * + **postPaid**: the pay-per-use billing mode.
-     * Changing this creates a new disk.
      */
     chargingMode?: pulumi.Input<string>;
     /**
@@ -345,79 +404,97 @@ export interface VolumeState {
      */
     dedicatedStorageName?: pulumi.Input<string>;
     /**
-     * Specifies the disk description. The value can contain a maximum of 255 bytes.
+     * Specifies the disk description. You can enter up to `85` characters.
      */
     description?: pulumi.Input<string>;
     /**
-     * Specifies the device type of disk to create. Valid options are VBD and
-     * SCSI. Defaults to VBD. Changing this creates a new disk.
+     * Specifies the device type of disk to create. Valid options are **VBD** and
+     * **SCSI**. Defaults to **VBD**.
      */
     deviceType?: pulumi.Input<string>;
     /**
-     * Specifies the enterprise project id of the disk. Changing this
-     * creates a new disk.
+     * Specifies the enterprise project ID of the disk.
+     * For enterprise users, if omitted, default enterprise project will be used.
      */
     enterpriseProjectId?: pulumi.Input<string>;
     /**
-     * Specifies the image ID from which to create the disk. Changing this creates
-     * a new disk.
+     * Specifies the image ID from which to create the disk.
      */
     imageId?: pulumi.Input<string>;
     /**
-     * Specifies the Encryption KMS ID to create the disk. Changing this creates a
-     * new disk.
+     * Specifies the IOPS(Input/Output Operations Per Second) for the volume.
+     * The field is valid and required when `volumeType` is set to **GPSSD2** or **ESSD2**.
+     * This field can be changed only when the disk status is Available or In-use.
+     */
+    iops?: pulumi.Input<number>;
+    /**
+     * Specifies the Encryption KMS ID to create the disk.
      */
     kmsId?: pulumi.Input<string>;
     /**
-     * Specifies whether the disk is shareable. The default value is false.
-     * Changing this creates a new disk.
+     * Specifies whether the disk is shareable. Defaults to **false**.
      */
     multiattach?: pulumi.Input<boolean>;
     /**
-     * Specifies the disk name. The value can contain a maximum of 255 bytes.
+     * Specifies the disk name. You can enter up to `64` characters.
      */
     name?: pulumi.Input<string>;
     /**
      * Specifies the charging period of the disk.
-     * If `periodUnit` is set to **month**, the value ranges from 1 to 9.
-     * If `periodUnit` is set to **year**, the valid value is 1.
-     * This parameter is mandatory if `chargingMode` is set to **prePaid**.
-     * Changing this creates a new disk.
+     * + If `periodUnit` is set to **month**, the value ranges from `1` to `9`.
+     * + If `periodUnit` is set to **year**, the valid value is `1`.
      */
     period?: pulumi.Input<number>;
     /**
      * Specifies the charging period unit of the disk.
      * Valid values are **month** and **year**. This parameter is mandatory if `chargingMode` is set to **prePaid**.
-     * Changing this creates a new disk.
      */
     periodUnit?: pulumi.Input<string>;
     /**
      * Specifies the region in which to create the disk. If omitted, the
-     * provider-level region will be used. Changing this creates a new disk.
+     * provider-level region will be used. Changing this parameter will create a new resource.
      */
     region?: pulumi.Input<string>;
     /**
-     * Specifies the disk size, in GB. The valid value is range from:
-     * + System disk: 1 GB to 1024 GB
-     * + Data disk: 10 GB to 32768 GB
+     * Specifies the server ID to which the cloud volume is to be mounted.
+     * After specifying the value of this field, the cloud volume will be automatically attached on the cloud server.
+     * The chargingMode of the created cloud volume will be consistent with that of the cloud server.
+     * Currently, only ECS cloud-servers are supported, and BMS bare metal cloud-servers are not supported yet.
+     */
+    serverId?: pulumi.Input<string>;
+    /**
+     * Specifies the disk size, in GB.
+     * For system disk, the valid value ranges from `1` GB to `1,024` GB.
+     * For data disk, the valid value ranges from `10` GB to `32,768` GB.
      */
     size?: pulumi.Input<number>;
     /**
-     * Specifies the snapshot ID from which to create the disk. Changing this
-     * creates a new disk.
+     * Specifies the snapshot ID from which to create the disk.
      */
     snapshotId?: pulumi.Input<string>;
+    /**
+     * The disk status.
+     * Please refer to [EVS Disk Status](https://support.huaweicloud.com/intl/en-us/api-evs/evs_04_0040.html).
+     */
+    status?: pulumi.Input<string>;
     /**
      * Specifies the key/value pairs to associate with the disk.
      */
     tags?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
     /**
-     * Specifies the disk type. Currently, the value can be SAS, SSD, GPSSD or
-     * ESSD.
-     * + SAS: specifies the high I/O disk type.
-     * + SSD: specifies the ultra-high I/O disk type.
-     * + GPSSD: specifies the general purpose SSD disk type.
-     * + ESSD: Extreme SSD type.
+     * Specifies the throughput for the volume. The Unit is MiB/s.
+     * The field is valid and required when `volumeType` is set to **GPSSD2**.
+     * This field can be changed only when the disk status is Available or In-use.
+     */
+    throughput?: pulumi.Input<number>;
+    /**
+     * Specifies the disk type. Valid values are as follows:
+     * + **SAS**: High I/O type.
+     * + **SSD**: Ultra-high I/O type.
+     * + **GPSSD**: General purpose SSD type.
+     * + **ESSD**: Extreme SSD type.
+     * + **GPSSD2**: General purpose SSD V2 type.
+     * + **ESSD2**: Extreme SSD V2 type.
      */
     volumeType?: pulumi.Input<string>;
     /**
@@ -435,23 +512,21 @@ export interface VolumeArgs {
      */
     autoPay?: pulumi.Input<string>;
     /**
-     * Specifies whether auto renew is enabled.
-     * Valid values are **true** and **false**.
+     * Specifies whether auto-renew is enabled.
+     * Valid values are **true** and **false**. Defaults to **false**.
      */
     autoRenew?: pulumi.Input<string>;
     /**
-     * Specifies the availability zone for the disk. Changing this creates
-     * a new disk.
+     * Specifies the availability zone for the disk.
      */
     availabilityZone: pulumi.Input<string>;
     /**
-     * Specifies the backup ID from which to create the disk. Changing this
-     * creates a new disk.
+     * Specifies the backup ID from which to create the disk.
      */
     backupId?: pulumi.Input<string>;
     /**
-     * Specifies the delete mode of snapshot. The default value is false. All snapshot
-     * associated with the disk will also be deleted when the parameter is set to true.
+     * Specifies the delete mode of snapshot. The default value is **false**. All snapshot
+     * associated with the disk will also be deleted when the parameter is set to **true**.
      */
     cascade?: pulumi.Input<boolean>;
     /**
@@ -459,7 +534,6 @@ export interface VolumeArgs {
      * The valid values are as follows:
      * + **prePaid**: the yearly/monthly billing mode.
      * + **postPaid**: the pay-per-use billing mode.
-     * Changing this creates a new disk.
      */
     chargingMode?: pulumi.Input<string>;
     /**
@@ -467,66 +541,72 @@ export interface VolumeArgs {
      */
     dedicatedStorageId?: pulumi.Input<string>;
     /**
-     * Specifies the disk description. The value can contain a maximum of 255 bytes.
+     * Specifies the disk description. You can enter up to `85` characters.
      */
     description?: pulumi.Input<string>;
     /**
-     * Specifies the device type of disk to create. Valid options are VBD and
-     * SCSI. Defaults to VBD. Changing this creates a new disk.
+     * Specifies the device type of disk to create. Valid options are **VBD** and
+     * **SCSI**. Defaults to **VBD**.
      */
     deviceType?: pulumi.Input<string>;
     /**
-     * Specifies the enterprise project id of the disk. Changing this
-     * creates a new disk.
+     * Specifies the enterprise project ID of the disk.
+     * For enterprise users, if omitted, default enterprise project will be used.
      */
     enterpriseProjectId?: pulumi.Input<string>;
     /**
-     * Specifies the image ID from which to create the disk. Changing this creates
-     * a new disk.
+     * Specifies the image ID from which to create the disk.
      */
     imageId?: pulumi.Input<string>;
     /**
-     * Specifies the Encryption KMS ID to create the disk. Changing this creates a
-     * new disk.
+     * Specifies the IOPS(Input/Output Operations Per Second) for the volume.
+     * The field is valid and required when `volumeType` is set to **GPSSD2** or **ESSD2**.
+     * This field can be changed only when the disk status is Available or In-use.
+     */
+    iops?: pulumi.Input<number>;
+    /**
+     * Specifies the Encryption KMS ID to create the disk.
      */
     kmsId?: pulumi.Input<string>;
     /**
-     * Specifies whether the disk is shareable. The default value is false.
-     * Changing this creates a new disk.
+     * Specifies whether the disk is shareable. Defaults to **false**.
      */
     multiattach?: pulumi.Input<boolean>;
     /**
-     * Specifies the disk name. The value can contain a maximum of 255 bytes.
+     * Specifies the disk name. You can enter up to `64` characters.
      */
     name?: pulumi.Input<string>;
     /**
      * Specifies the charging period of the disk.
-     * If `periodUnit` is set to **month**, the value ranges from 1 to 9.
-     * If `periodUnit` is set to **year**, the valid value is 1.
-     * This parameter is mandatory if `chargingMode` is set to **prePaid**.
-     * Changing this creates a new disk.
+     * + If `periodUnit` is set to **month**, the value ranges from `1` to `9`.
+     * + If `periodUnit` is set to **year**, the valid value is `1`.
      */
     period?: pulumi.Input<number>;
     /**
      * Specifies the charging period unit of the disk.
      * Valid values are **month** and **year**. This parameter is mandatory if `chargingMode` is set to **prePaid**.
-     * Changing this creates a new disk.
      */
     periodUnit?: pulumi.Input<string>;
     /**
      * Specifies the region in which to create the disk. If omitted, the
-     * provider-level region will be used. Changing this creates a new disk.
+     * provider-level region will be used. Changing this parameter will create a new resource.
      */
     region?: pulumi.Input<string>;
     /**
-     * Specifies the disk size, in GB. The valid value is range from:
-     * + System disk: 1 GB to 1024 GB
-     * + Data disk: 10 GB to 32768 GB
+     * Specifies the server ID to which the cloud volume is to be mounted.
+     * After specifying the value of this field, the cloud volume will be automatically attached on the cloud server.
+     * The chargingMode of the created cloud volume will be consistent with that of the cloud server.
+     * Currently, only ECS cloud-servers are supported, and BMS bare metal cloud-servers are not supported yet.
+     */
+    serverId?: pulumi.Input<string>;
+    /**
+     * Specifies the disk size, in GB.
+     * For system disk, the valid value ranges from `1` GB to `1,024` GB.
+     * For data disk, the valid value ranges from `10` GB to `32,768` GB.
      */
     size?: pulumi.Input<number>;
     /**
-     * Specifies the snapshot ID from which to create the disk. Changing this
-     * creates a new disk.
+     * Specifies the snapshot ID from which to create the disk.
      */
     snapshotId?: pulumi.Input<string>;
     /**
@@ -534,12 +614,19 @@ export interface VolumeArgs {
      */
     tags?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
     /**
-     * Specifies the disk type. Currently, the value can be SAS, SSD, GPSSD or
-     * ESSD.
-     * + SAS: specifies the high I/O disk type.
-     * + SSD: specifies the ultra-high I/O disk type.
-     * + GPSSD: specifies the general purpose SSD disk type.
-     * + ESSD: Extreme SSD type.
+     * Specifies the throughput for the volume. The Unit is MiB/s.
+     * The field is valid and required when `volumeType` is set to **GPSSD2**.
+     * This field can be changed only when the disk status is Available or In-use.
+     */
+    throughput?: pulumi.Input<number>;
+    /**
+     * Specifies the disk type. Valid values are as follows:
+     * + **SAS**: High I/O type.
+     * + **SSD**: Ultra-high I/O type.
+     * + **GPSSD**: General purpose SSD type.
+     * + **ESSD**: Extreme SSD type.
+     * + **GPSSD2**: General purpose SSD V2 type.
+     * + **ESSD2**: Extreme SSD V2 type.
      */
     volumeType: pulumi.Input<string>;
 }

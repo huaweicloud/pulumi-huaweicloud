@@ -22,9 +22,10 @@ class ConfigurationArgs:
         """
         The set of arguments for constructing a Configuration resource.
         :param pulumi.Input['ConfigurationInstanceConfigArgs'] instance_config: Specifies the information about instance configuration.
-               The object structure is documented below. Changing this will create a new resource.
+               The instance_config structure is documented below.
+               Changing this will create a new resource.
         :param pulumi.Input[str] scaling_configuration_name: Specifies the AS configuration name.
-               The name contains only letters, digits, underscores (_), and hyphens (-), and cannot exceed 64 characters.
+               The name contains only letters, digits, underscores (_), and hyphens (-), and cannot exceed `64` characters.
                Changing this will create a new resource.
         :param pulumi.Input[str] region: Specifies the region in which to create the AS configuration.
                If omitted, the provider-level region will be used. Changing this will create a new resource.
@@ -39,7 +40,8 @@ class ConfigurationArgs:
     def instance_config(self) -> pulumi.Input['ConfigurationInstanceConfigArgs']:
         """
         Specifies the information about instance configuration.
-        The object structure is documented below. Changing this will create a new resource.
+        The instance_config structure is documented below.
+        Changing this will create a new resource.
         """
         return pulumi.get(self, "instance_config")
 
@@ -52,7 +54,7 @@ class ConfigurationArgs:
     def scaling_configuration_name(self) -> pulumi.Input[str]:
         """
         Specifies the AS configuration name.
-        The name contains only letters, digits, underscores (_), and hyphens (-), and cannot exceed 64 characters.
+        The name contains only letters, digits, underscores (_), and hyphens (-), and cannot exceed `64` characters.
         Changing this will create a new resource.
         """
         return pulumi.get(self, "scaling_configuration_name")
@@ -85,11 +87,12 @@ class _ConfigurationState:
         """
         Input properties used for looking up and filtering Configuration resources.
         :param pulumi.Input['ConfigurationInstanceConfigArgs'] instance_config: Specifies the information about instance configuration.
-               The object structure is documented below. Changing this will create a new resource.
+               The instance_config structure is documented below.
+               Changing this will create a new resource.
         :param pulumi.Input[str] region: Specifies the region in which to create the AS configuration.
                If omitted, the provider-level region will be used. Changing this will create a new resource.
         :param pulumi.Input[str] scaling_configuration_name: Specifies the AS configuration name.
-               The name contains only letters, digits, underscores (_), and hyphens (-), and cannot exceed 64 characters.
+               The name contains only letters, digits, underscores (_), and hyphens (-), and cannot exceed `64` characters.
                Changing this will create a new resource.
         :param pulumi.Input[str] status: The AS configuration status, the value can be **Bound** or **Unbound**.
         """
@@ -107,7 +110,8 @@ class _ConfigurationState:
     def instance_config(self) -> Optional[pulumi.Input['ConfigurationInstanceConfigArgs']]:
         """
         Specifies the information about instance configuration.
-        The object structure is documented below. Changing this will create a new resource.
+        The instance_config structure is documented below.
+        Changing this will create a new resource.
         """
         return pulumi.get(self, "instance_config")
 
@@ -133,7 +137,7 @@ class _ConfigurationState:
     def scaling_configuration_name(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the AS configuration name.
-        The name contains only letters, digits, underscores (_), and hyphens (-), and cannot exceed 64 characters.
+        The name contains only letters, digits, underscores (_), and hyphens (-), and cannot exceed `64` characters.
         Changing this will create a new resource.
         """
         return pulumi.get(self, "scaling_configuration_name")
@@ -256,6 +260,31 @@ class Configuration(pulumi.CustomResource):
                 },
             ))
         ```
+        ### AS Configuration uses password authentication for Windows ECS
+
+        ```python
+        import pulumi
+        import pulumi_huaweicloud as huaweicloud
+
+        config = pulumi.Config()
+        flavor_id = config.require_object("flavorId")
+        windows_image_id = config.require_object("windowsImageId")
+        security_group_id = config.require_object("securityGroupId")
+        admin_pass = config.require_object("adminPass")
+        my_as_config = huaweicloud.as_.Configuration("myAsConfig",
+            scaling_configuration_name="my_as_config",
+            instance_config=huaweicloud.as_.ConfigurationInstanceConfigArgs(
+                flavor=flavor_id,
+                image=windows_image_id,
+                security_group_ids=[security_group_id],
+                admin_pass=admin_pass,
+                disks=[huaweicloud.as_.ConfigurationInstanceConfigDiskArgs(
+                    size=40,
+                    volume_type="SSD",
+                    disk_type="SYS",
+                )],
+            ))
+        ```
         ### AS Configuration uses the existing instance specifications as the template
 
         ```python
@@ -277,30 +306,31 @@ class Configuration(pulumi.CustomResource):
 
         ## Import
 
-        AS configurations can be imported by their `id`, e.g.
+        AS configurations can be imported by their `id`, e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:As/configuration:Configuration test 18518c8a-9d15-416b-8add-2ee874751d18
         ```
 
-         Note that the imported state may not be identical to your resource definition, due to `instance_config.0.instance_id` is missing from the API response. You can ignore changes after importing an AS configuration as below. resource "huaweicloud_as_configuration" "test" {
+         Note that the imported state may not be identical to your resource definition, due to `instance_config.0.instance_id`, `instance_config.0.admin_pass`, and `instance_config.0.metadata` are missing from the API response. You can ignore changes after importing an AS configuration as below. hcl resource "huaweicloud_as_configuration" "test" {
 
          ...
 
          lifecycle {
 
-         ignore_changes = [ instance_config.0.instance_id ]
+         ignore_changes = [ instance_config.0.instance_id, instance_config.0.admin_pass, instance_config.0.metadata ]
 
          } }
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[pulumi.InputType['ConfigurationInstanceConfigArgs']] instance_config: Specifies the information about instance configuration.
-               The object structure is documented below. Changing this will create a new resource.
+               The instance_config structure is documented below.
+               Changing this will create a new resource.
         :param pulumi.Input[str] region: Specifies the region in which to create the AS configuration.
                If omitted, the provider-level region will be used. Changing this will create a new resource.
         :param pulumi.Input[str] scaling_configuration_name: Specifies the AS configuration name.
-               The name contains only letters, digits, underscores (_), and hyphens (-), and cannot exceed 64 characters.
+               The name contains only letters, digits, underscores (_), and hyphens (-), and cannot exceed `64` characters.
                Changing this will create a new resource.
         """
         ...
@@ -401,6 +431,31 @@ class Configuration(pulumi.CustomResource):
                 },
             ))
         ```
+        ### AS Configuration uses password authentication for Windows ECS
+
+        ```python
+        import pulumi
+        import pulumi_huaweicloud as huaweicloud
+
+        config = pulumi.Config()
+        flavor_id = config.require_object("flavorId")
+        windows_image_id = config.require_object("windowsImageId")
+        security_group_id = config.require_object("securityGroupId")
+        admin_pass = config.require_object("adminPass")
+        my_as_config = huaweicloud.as_.Configuration("myAsConfig",
+            scaling_configuration_name="my_as_config",
+            instance_config=huaweicloud.as_.ConfigurationInstanceConfigArgs(
+                flavor=flavor_id,
+                image=windows_image_id,
+                security_group_ids=[security_group_id],
+                admin_pass=admin_pass,
+                disks=[huaweicloud.as_.ConfigurationInstanceConfigDiskArgs(
+                    size=40,
+                    volume_type="SSD",
+                    disk_type="SYS",
+                )],
+            ))
+        ```
         ### AS Configuration uses the existing instance specifications as the template
 
         ```python
@@ -422,19 +477,19 @@ class Configuration(pulumi.CustomResource):
 
         ## Import
 
-        AS configurations can be imported by their `id`, e.g.
+        AS configurations can be imported by their `id`, e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:As/configuration:Configuration test 18518c8a-9d15-416b-8add-2ee874751d18
         ```
 
-         Note that the imported state may not be identical to your resource definition, due to `instance_config.0.instance_id` is missing from the API response. You can ignore changes after importing an AS configuration as below. resource "huaweicloud_as_configuration" "test" {
+         Note that the imported state may not be identical to your resource definition, due to `instance_config.0.instance_id`, `instance_config.0.admin_pass`, and `instance_config.0.metadata` are missing from the API response. You can ignore changes after importing an AS configuration as below. hcl resource "huaweicloud_as_configuration" "test" {
 
          ...
 
          lifecycle {
 
-         ignore_changes = [ instance_config.0.instance_id ]
+         ignore_changes = [ instance_config.0.instance_id, instance_config.0.admin_pass, instance_config.0.metadata ]
 
          } }
 
@@ -495,11 +550,12 @@ class Configuration(pulumi.CustomResource):
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[pulumi.InputType['ConfigurationInstanceConfigArgs']] instance_config: Specifies the information about instance configuration.
-               The object structure is documented below. Changing this will create a new resource.
+               The instance_config structure is documented below.
+               Changing this will create a new resource.
         :param pulumi.Input[str] region: Specifies the region in which to create the AS configuration.
                If omitted, the provider-level region will be used. Changing this will create a new resource.
         :param pulumi.Input[str] scaling_configuration_name: Specifies the AS configuration name.
-               The name contains only letters, digits, underscores (_), and hyphens (-), and cannot exceed 64 characters.
+               The name contains only letters, digits, underscores (_), and hyphens (-), and cannot exceed `64` characters.
                Changing this will create a new resource.
         :param pulumi.Input[str] status: The AS configuration status, the value can be **Bound** or **Unbound**.
         """
@@ -518,7 +574,8 @@ class Configuration(pulumi.CustomResource):
     def instance_config(self) -> pulumi.Output['outputs.ConfigurationInstanceConfig']:
         """
         Specifies the information about instance configuration.
-        The object structure is documented below. Changing this will create a new resource.
+        The instance_config structure is documented below.
+        Changing this will create a new resource.
         """
         return pulumi.get(self, "instance_config")
 
@@ -536,7 +593,7 @@ class Configuration(pulumi.CustomResource):
     def scaling_configuration_name(self) -> pulumi.Output[str]:
         """
         Specifies the AS configuration name.
-        The name contains only letters, digits, underscores (_), and hyphens (-), and cannot exceed 64 characters.
+        The name contains only letters, digits, underscores (_), and hyphens (-), and cannot exceed `64` characters.
         Changing this will create a new resource.
         """
         return pulumi.get(self, "scaling_configuration_name")

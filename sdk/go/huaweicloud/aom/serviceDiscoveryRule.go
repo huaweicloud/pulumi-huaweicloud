@@ -88,16 +88,20 @@ import (
 //
 // ## Import
 //
-// AOM service discovery rules can be imported using the `name`, e.g.
+// AOM service discovery rules can be imported using the `name`, e.g. bash
 //
 // ```sh
 //
-//	$ pulumi import huaweicloud:Aom/serviceDiscoveryRule:ServiceDiscoveryRule alarm_rule rule_name
+//	$ pulumi import huaweicloud:Aom/serviceDiscoveryRule:ServiceDiscoveryRule alarm_rule <name>
 //
 // ```
 type ServiceDiscoveryRule struct {
 	pulumi.CustomResourceState
 
+	// The rule create time.
+	CreatedAt pulumi.StringOutput `pulumi:"createdAt"`
+	// Specifies the rule description.
+	Description pulumi.StringPtrOutput `pulumi:"description"`
 	// Specifies whether to enable log collection. The default value is true.
 	DetectLogEnabled pulumi.BoolPtrOutput `pulumi:"detectLogEnabled"`
 	// Specifies whether the rule is enabled. The default value is true.
@@ -121,7 +125,7 @@ type ServiceDiscoveryRule struct {
 	// .log or .trace are collected. If the value of `nameType` is **cmdLineHash**, args is in the format of ["00001"] and
 	// value is in the format of ["/xxx/xx.log"], indicating that the log path is /xxx/xx.log when the startup command is 00001.
 	LogPathRules ServiceDiscoveryRuleLogPathRuleArrayOutput `pulumi:"logPathRules"`
-	// Specifies the rule name, which contains 4 to 63 characters. It must start
+	// Specifies the rule name, which contains `4` to `63` characters. It must start
 	// with a lowercase letter but cannot end with a hyphen (-). Only digits, lowercase letters, and hyphens are allowed.
 	Name pulumi.StringOutput `pulumi:"name"`
 	// Specifies the naming rules for discovered services and applications.
@@ -181,6 +185,10 @@ func GetServiceDiscoveryRule(ctx *pulumi.Context,
 
 // Input properties used for looking up and filtering ServiceDiscoveryRule resources.
 type serviceDiscoveryRuleState struct {
+	// The rule create time.
+	CreatedAt *string `pulumi:"createdAt"`
+	// Specifies the rule description.
+	Description *string `pulumi:"description"`
 	// Specifies whether to enable log collection. The default value is true.
 	DetectLogEnabled *bool `pulumi:"detectLogEnabled"`
 	// Specifies whether the rule is enabled. The default value is true.
@@ -204,7 +212,7 @@ type serviceDiscoveryRuleState struct {
 	// .log or .trace are collected. If the value of `nameType` is **cmdLineHash**, args is in the format of ["00001"] and
 	// value is in the format of ["/xxx/xx.log"], indicating that the log path is /xxx/xx.log when the startup command is 00001.
 	LogPathRules []ServiceDiscoveryRuleLogPathRule `pulumi:"logPathRules"`
-	// Specifies the rule name, which contains 4 to 63 characters. It must start
+	// Specifies the rule name, which contains `4` to `63` characters. It must start
 	// with a lowercase letter but cannot end with a hyphen (-). Only digits, lowercase letters, and hyphens are allowed.
 	Name *string `pulumi:"name"`
 	// Specifies the naming rules for discovered services and applications.
@@ -223,6 +231,10 @@ type serviceDiscoveryRuleState struct {
 }
 
 type ServiceDiscoveryRuleState struct {
+	// The rule create time.
+	CreatedAt pulumi.StringPtrInput
+	// Specifies the rule description.
+	Description pulumi.StringPtrInput
 	// Specifies whether to enable log collection. The default value is true.
 	DetectLogEnabled pulumi.BoolPtrInput
 	// Specifies whether the rule is enabled. The default value is true.
@@ -246,7 +258,7 @@ type ServiceDiscoveryRuleState struct {
 	// .log or .trace are collected. If the value of `nameType` is **cmdLineHash**, args is in the format of ["00001"] and
 	// value is in the format of ["/xxx/xx.log"], indicating that the log path is /xxx/xx.log when the startup command is 00001.
 	LogPathRules ServiceDiscoveryRuleLogPathRuleArrayInput
-	// Specifies the rule name, which contains 4 to 63 characters. It must start
+	// Specifies the rule name, which contains `4` to `63` characters. It must start
 	// with a lowercase letter but cannot end with a hyphen (-). Only digits, lowercase letters, and hyphens are allowed.
 	Name pulumi.StringPtrInput
 	// Specifies the naming rules for discovered services and applications.
@@ -269,6 +281,8 @@ func (ServiceDiscoveryRuleState) ElementType() reflect.Type {
 }
 
 type serviceDiscoveryRuleArgs struct {
+	// Specifies the rule description.
+	Description *string `pulumi:"description"`
 	// Specifies whether to enable log collection. The default value is true.
 	DetectLogEnabled *bool `pulumi:"detectLogEnabled"`
 	// Specifies whether the rule is enabled. The default value is true.
@@ -292,7 +306,7 @@ type serviceDiscoveryRuleArgs struct {
 	// .log or .trace are collected. If the value of `nameType` is **cmdLineHash**, args is in the format of ["00001"] and
 	// value is in the format of ["/xxx/xx.log"], indicating that the log path is /xxx/xx.log when the startup command is 00001.
 	LogPathRules []ServiceDiscoveryRuleLogPathRule `pulumi:"logPathRules"`
-	// Specifies the rule name, which contains 4 to 63 characters. It must start
+	// Specifies the rule name, which contains `4` to `63` characters. It must start
 	// with a lowercase letter but cannot end with a hyphen (-). Only digits, lowercase letters, and hyphens are allowed.
 	Name *string `pulumi:"name"`
 	// Specifies the naming rules for discovered services and applications.
@@ -310,6 +324,8 @@ type serviceDiscoveryRuleArgs struct {
 
 // The set of arguments for constructing a ServiceDiscoveryRule resource.
 type ServiceDiscoveryRuleArgs struct {
+	// Specifies the rule description.
+	Description pulumi.StringPtrInput
 	// Specifies whether to enable log collection. The default value is true.
 	DetectLogEnabled pulumi.BoolPtrInput
 	// Specifies whether the rule is enabled. The default value is true.
@@ -333,7 +349,7 @@ type ServiceDiscoveryRuleArgs struct {
 	// .log or .trace are collected. If the value of `nameType` is **cmdLineHash**, args is in the format of ["00001"] and
 	// value is in the format of ["/xxx/xx.log"], indicating that the log path is /xxx/xx.log when the startup command is 00001.
 	LogPathRules ServiceDiscoveryRuleLogPathRuleArrayInput
-	// Specifies the rule name, which contains 4 to 63 characters. It must start
+	// Specifies the rule name, which contains `4` to `63` characters. It must start
 	// with a lowercase letter but cannot end with a hyphen (-). Only digits, lowercase letters, and hyphens are allowed.
 	Name pulumi.StringPtrInput
 	// Specifies the naming rules for discovered services and applications.
@@ -436,6 +452,16 @@ func (o ServiceDiscoveryRuleOutput) ToServiceDiscoveryRuleOutputWithContext(ctx 
 	return o
 }
 
+// The rule create time.
+func (o ServiceDiscoveryRuleOutput) CreatedAt() pulumi.StringOutput {
+	return o.ApplyT(func(v *ServiceDiscoveryRule) pulumi.StringOutput { return v.CreatedAt }).(pulumi.StringOutput)
+}
+
+// Specifies the rule description.
+func (o ServiceDiscoveryRuleOutput) Description() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *ServiceDiscoveryRule) pulumi.StringPtrOutput { return v.Description }).(pulumi.StringPtrOutput)
+}
+
 // Specifies whether to enable log collection. The default value is true.
 func (o ServiceDiscoveryRuleOutput) DetectLogEnabled() pulumi.BoolPtrOutput {
 	return o.ApplyT(func(v *ServiceDiscoveryRule) pulumi.BoolPtrOutput { return v.DetectLogEnabled }).(pulumi.BoolPtrOutput)
@@ -477,7 +503,7 @@ func (o ServiceDiscoveryRuleOutput) LogPathRules() ServiceDiscoveryRuleLogPathRu
 	return o.ApplyT(func(v *ServiceDiscoveryRule) ServiceDiscoveryRuleLogPathRuleArrayOutput { return v.LogPathRules }).(ServiceDiscoveryRuleLogPathRuleArrayOutput)
 }
 
-// Specifies the rule name, which contains 4 to 63 characters. It must start
+// Specifies the rule name, which contains `4` to `63` characters. It must start
 // with a lowercase letter but cannot end with a hyphen (-). Only digits, lowercase letters, and hyphens are allowed.
 func (o ServiceDiscoveryRuleOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v *ServiceDiscoveryRule) pulumi.StringOutput { return v.Name }).(pulumi.StringOutput)

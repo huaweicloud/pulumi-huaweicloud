@@ -5,6 +5,10 @@ import * as pulumi from "@pulumi/pulumi";
 import * as utilities from "../utilities";
 
 /**
+ * !> **WARNING:** It has been deprecated, use `huaweicloud.Dew.Keypair` instead.
+ *
+ * Manages a keypair resource within HuaweiCloud.
+ *
  * ## Example Usage
  * ### Create a new keypair and export private key to current folder
  *
@@ -29,7 +33,7 @@ import * as utilities from "../utilities";
  *
  * ## Import
  *
- * Keypairs can be imported using the `name`, e.g.
+ * Keypairs can be imported using the `name`, e.g. bash
  *
  * ```sh
  *  $ pulumi import huaweicloud:Ecs/keypair:Keypair my-keypair test-keypair

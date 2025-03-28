@@ -19,8 +19,8 @@ class TagsArgs:
                  tags: pulumi.Input[Sequence[pulumi.Input['TagsTagArgs']]]):
         """
         The set of arguments for constructing a Tags resource.
-        :param pulumi.Input[Sequence[pulumi.Input['TagsTagArgs']]] tags: Specifies an array of one or more predefined tags. The tags object
-               structure is documented below. Changing this will create a new resource.
+        :param pulumi.Input[Sequence[pulumi.Input['TagsTagArgs']]] tags: Specifies an array of one or more predefined tags.
+               The tags structure is documented below.
         """
         pulumi.set(__self__, "tags", tags)
 
@@ -28,8 +28,8 @@ class TagsArgs:
     @pulumi.getter
     def tags(self) -> pulumi.Input[Sequence[pulumi.Input['TagsTagArgs']]]:
         """
-        Specifies an array of one or more predefined tags. The tags object
-        structure is documented below. Changing this will create a new resource.
+        Specifies an array of one or more predefined tags.
+        The tags structure is documented below.
         """
         return pulumi.get(self, "tags")
 
@@ -44,8 +44,8 @@ class _TagsState:
                  tags: Optional[pulumi.Input[Sequence[pulumi.Input['TagsTagArgs']]]] = None):
         """
         Input properties used for looking up and filtering Tags resources.
-        :param pulumi.Input[Sequence[pulumi.Input['TagsTagArgs']]] tags: Specifies an array of one or more predefined tags. The tags object
-               structure is documented below. Changing this will create a new resource.
+        :param pulumi.Input[Sequence[pulumi.Input['TagsTagArgs']]] tags: Specifies an array of one or more predefined tags.
+               The tags structure is documented below.
         """
         if tags is not None:
             pulumi.set(__self__, "tags", tags)
@@ -54,8 +54,8 @@ class _TagsState:
     @pulumi.getter
     def tags(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['TagsTagArgs']]]]:
         """
-        Specifies an array of one or more predefined tags. The tags object
-        structure is documented below. Changing this will create a new resource.
+        Specifies an array of one or more predefined tags.
+        The tags structure is documented below.
         """
         return pulumi.get(self, "tags")
 
@@ -88,8 +88,8 @@ class Tags(pulumi.CustomResource):
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['TagsTagArgs']]]] tags: Specifies an array of one or more predefined tags. The tags object
-               structure is documented below. Changing this will create a new resource.
+        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['TagsTagArgs']]]] tags: Specifies an array of one or more predefined tags.
+               The tags structure is documented below.
         """
         ...
     @overload
@@ -158,8 +158,8 @@ class Tags(pulumi.CustomResource):
         :param str resource_name: The unique name of the resulting resource.
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['TagsTagArgs']]]] tags: Specifies an array of one or more predefined tags. The tags object
-               structure is documented below. Changing this will create a new resource.
+        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['TagsTagArgs']]]] tags: Specifies an array of one or more predefined tags.
+               The tags structure is documented below.
         """
         opts = pulumi.ResourceOptions.merge(opts, pulumi.ResourceOptions(id=id))
 
@@ -172,8 +172,8 @@ class Tags(pulumi.CustomResource):
     @pulumi.getter
     def tags(self) -> pulumi.Output[Sequence['outputs.TagsTag']]:
         """
-        Specifies an array of one or more predefined tags. The tags object
-        structure is documented below. Changing this will create a new resource.
+        Specifies an array of one or more predefined tags.
+        The tags structure is documented below.
         """
         return pulumi.get(self, "tags")
 

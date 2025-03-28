@@ -18,7 +18,7 @@ class AmqpArgs:
                  region: Optional[pulumi.Input[str]] = None):
         """
         The set of arguments for constructing a Amqp resource.
-        :param pulumi.Input[str] name: Specifies the AMQP queue name, which contains 8 to 128 characters.
+        :param pulumi.Input[str] name: Specifies the AMQP queue name, which contains `8` to `128` characters.
                Only letters, digits, hyphens (-), underscores (_), dots (.) and colons (:) are allowed.
                Changing this parameter will create a new resource.
         :param pulumi.Input[str] region: Specifies the region in which to create the IoTDA AMQP queue resource.
@@ -33,7 +33,7 @@ class AmqpArgs:
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the AMQP queue name, which contains 8 to 128 characters.
+        Specifies the AMQP queue name, which contains `8` to `128` characters.
         Only letters, digits, hyphens (-), underscores (_), dots (.) and colons (:) are allowed.
         Changing this parameter will create a new resource.
         """
@@ -60,26 +60,49 @@ class AmqpArgs:
 @pulumi.input_type
 class _AmqpState:
     def __init__(__self__, *,
+                 created_at: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
-                 region: Optional[pulumi.Input[str]] = None):
+                 region: Optional[pulumi.Input[str]] = None,
+                 updated_at: Optional[pulumi.Input[str]] = None):
         """
         Input properties used for looking up and filtering Amqp resources.
-        :param pulumi.Input[str] name: Specifies the AMQP queue name, which contains 8 to 128 characters.
+        :param pulumi.Input[str] created_at: The creation time of the AMQP queue.
+               The format is **yyyyMMdd'T'HHmmss'Z'**. e.g. **20151212T121212Z**.
+        :param pulumi.Input[str] name: Specifies the AMQP queue name, which contains `8` to `128` characters.
                Only letters, digits, hyphens (-), underscores (_), dots (.) and colons (:) are allowed.
                Changing this parameter will create a new resource.
         :param pulumi.Input[str] region: Specifies the region in which to create the IoTDA AMQP queue resource.
                If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
+        :param pulumi.Input[str] updated_at: The latest update time of the AMQP queue.
+               The format is **yyyyMMdd'T'HHmmss'Z'**. e.g. **20151212T121212Z**.
         """
+        if created_at is not None:
+            pulumi.set(__self__, "created_at", created_at)
         if name is not None:
             pulumi.set(__self__, "name", name)
         if region is not None:
             pulumi.set(__self__, "region", region)
+        if updated_at is not None:
+            pulumi.set(__self__, "updated_at", updated_at)
+
+    @property
+    @pulumi.getter(name="createdAt")
+    def created_at(self) -> Optional[pulumi.Input[str]]:
+        """
+        The creation time of the AMQP queue.
+        The format is **yyyyMMdd'T'HHmmss'Z'**. e.g. **20151212T121212Z**.
+        """
+        return pulumi.get(self, "created_at")
+
+    @created_at.setter
+    def created_at(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "created_at", value)
 
     @property
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the AMQP queue name, which contains 8 to 128 characters.
+        Specifies the AMQP queue name, which contains `8` to `128` characters.
         Only letters, digits, hyphens (-), underscores (_), dots (.) and colons (:) are allowed.
         Changing this parameter will create a new resource.
         """
@@ -102,6 +125,19 @@ class _AmqpState:
     def region(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "region", value)
 
+    @property
+    @pulumi.getter(name="updatedAt")
+    def updated_at(self) -> Optional[pulumi.Input[str]]:
+        """
+        The latest update time of the AMQP queue.
+        The format is **yyyyMMdd'T'HHmmss'Z'**. e.g. **20151212T121212Z**.
+        """
+        return pulumi.get(self, "updated_at")
+
+    @updated_at.setter
+    def updated_at(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "updated_at", value)
+
 
 class Amqp(pulumi.CustomResource):
     @overload
@@ -112,7 +148,14 @@ class Amqp(pulumi.CustomResource):
                  region: Optional[pulumi.Input[str]] = None,
                  __props__=None):
         """
-        Manages an IoTDA AMQP queue within HuaweiCloud.
+        Manages an IoTDA AMQP queue resource within HuaweiCloud.
+
+        > When accessing an IoTDA **standard** or **enterprise** edition instance, you need to specify the IoTDA service
+          endpoint in `provider` block.
+          You can login to the IoTDA console, choose the instance **Overview** and click **Access Details**
+          to view the HTTPS application access address. An example of the access address might be
+          **9bc34xxxxx.st1.iotda-app.ap-southeast-1.myhuaweicloud.com**, then you need to configure the
+          `provider` block as follows:
 
         ## Example Usage
 
@@ -120,20 +163,22 @@ class Amqp(pulumi.CustomResource):
         import pulumi
         import pulumi_huaweicloud as huaweicloud
 
-        queue = huaweicloud.io_tda.Amqp("queue")
+        config = pulumi.Config()
+        queue_name = config.require_object("queueName")
+        test = huaweicloud.io_tda.Amqp("test")
         ```
 
         ## Import
 
-        AMQP queues can be imported using the `id`, e.g.
+        The AMQP queue can be imported using the `id`, e.g. bash
 
         ```sh
-         $ pulumi import huaweicloud:IoTDA/amqp:Amqp test 10022532f4f94f26b01daa1e424853e1
+         $ pulumi import huaweicloud:IoTDA/amqp:Amqp test <id>
         ```
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[str] name: Specifies the AMQP queue name, which contains 8 to 128 characters.
+        :param pulumi.Input[str] name: Specifies the AMQP queue name, which contains `8` to `128` characters.
                Only letters, digits, hyphens (-), underscores (_), dots (.) and colons (:) are allowed.
                Changing this parameter will create a new resource.
         :param pulumi.Input[str] region: Specifies the region in which to create the IoTDA AMQP queue resource.
@@ -146,7 +191,14 @@ class Amqp(pulumi.CustomResource):
                  args: Optional[AmqpArgs] = None,
                  opts: Optional[pulumi.ResourceOptions] = None):
         """
-        Manages an IoTDA AMQP queue within HuaweiCloud.
+        Manages an IoTDA AMQP queue resource within HuaweiCloud.
+
+        > When accessing an IoTDA **standard** or **enterprise** edition instance, you need to specify the IoTDA service
+          endpoint in `provider` block.
+          You can login to the IoTDA console, choose the instance **Overview** and click **Access Details**
+          to view the HTTPS application access address. An example of the access address might be
+          **9bc34xxxxx.st1.iotda-app.ap-southeast-1.myhuaweicloud.com**, then you need to configure the
+          `provider` block as follows:
 
         ## Example Usage
 
@@ -154,15 +206,17 @@ class Amqp(pulumi.CustomResource):
         import pulumi
         import pulumi_huaweicloud as huaweicloud
 
-        queue = huaweicloud.io_tda.Amqp("queue")
+        config = pulumi.Config()
+        queue_name = config.require_object("queueName")
+        test = huaweicloud.io_tda.Amqp("test")
         ```
 
         ## Import
 
-        AMQP queues can be imported using the `id`, e.g.
+        The AMQP queue can be imported using the `id`, e.g. bash
 
         ```sh
-         $ pulumi import huaweicloud:IoTDA/amqp:Amqp test 10022532f4f94f26b01daa1e424853e1
+         $ pulumi import huaweicloud:IoTDA/amqp:Amqp test <id>
         ```
 
         :param str resource_name: The name of the resource.
@@ -193,6 +247,8 @@ class Amqp(pulumi.CustomResource):
 
             __props__.__dict__["name"] = name
             __props__.__dict__["region"] = region
+            __props__.__dict__["created_at"] = None
+            __props__.__dict__["updated_at"] = None
         super(Amqp, __self__).__init__(
             'huaweicloud:IoTDA/amqp:Amqp',
             resource_name,
@@ -203,8 +259,10 @@ class Amqp(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
+            created_at: Optional[pulumi.Input[str]] = None,
             name: Optional[pulumi.Input[str]] = None,
-            region: Optional[pulumi.Input[str]] = None) -> 'Amqp':
+            region: Optional[pulumi.Input[str]] = None,
+            updated_at: Optional[pulumi.Input[str]] = None) -> 'Amqp':
         """
         Get an existing Amqp resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.
@@ -212,25 +270,40 @@ class Amqp(pulumi.CustomResource):
         :param str resource_name: The unique name of the resulting resource.
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[str] name: Specifies the AMQP queue name, which contains 8 to 128 characters.
+        :param pulumi.Input[str] created_at: The creation time of the AMQP queue.
+               The format is **yyyyMMdd'T'HHmmss'Z'**. e.g. **20151212T121212Z**.
+        :param pulumi.Input[str] name: Specifies the AMQP queue name, which contains `8` to `128` characters.
                Only letters, digits, hyphens (-), underscores (_), dots (.) and colons (:) are allowed.
                Changing this parameter will create a new resource.
         :param pulumi.Input[str] region: Specifies the region in which to create the IoTDA AMQP queue resource.
                If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
+        :param pulumi.Input[str] updated_at: The latest update time of the AMQP queue.
+               The format is **yyyyMMdd'T'HHmmss'Z'**. e.g. **20151212T121212Z**.
         """
         opts = pulumi.ResourceOptions.merge(opts, pulumi.ResourceOptions(id=id))
 
         __props__ = _AmqpState.__new__(_AmqpState)
 
+        __props__.__dict__["created_at"] = created_at
         __props__.__dict__["name"] = name
         __props__.__dict__["region"] = region
+        __props__.__dict__["updated_at"] = updated_at
         return Amqp(resource_name, opts=opts, __props__=__props__)
+
+    @property
+    @pulumi.getter(name="createdAt")
+    def created_at(self) -> pulumi.Output[str]:
+        """
+        The creation time of the AMQP queue.
+        The format is **yyyyMMdd'T'HHmmss'Z'**. e.g. **20151212T121212Z**.
+        """
+        return pulumi.get(self, "created_at")
 
     @property
     @pulumi.getter
     def name(self) -> pulumi.Output[str]:
         """
-        Specifies the AMQP queue name, which contains 8 to 128 characters.
+        Specifies the AMQP queue name, which contains `8` to `128` characters.
         Only letters, digits, hyphens (-), underscores (_), dots (.) and colons (:) are allowed.
         Changing this parameter will create a new resource.
         """
@@ -244,4 +317,13 @@ class Amqp(pulumi.CustomResource):
         If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "region")
+
+    @property
+    @pulumi.getter(name="updatedAt")
+    def updated_at(self) -> pulumi.Output[str]:
+        """
+        The latest update time of the AMQP queue.
+        The format is **yyyyMMdd'T'HHmmss'Z'**. e.g. **20151212T121212Z**.
+        """
+        return pulumi.get(self, "updated_at")
 

@@ -16,7 +16,7 @@ import * as utilities from "../utilities";
  *
  * const config = new pulumi.Config();
  * const enterpriseProjectId = config.requireObject("enterpriseProjectId");
- * const reftables = huaweicloud.Waf.getReferenceTables({
+ * const test = huaweicloud.Waf.getReferenceTables({
  *     name: "reference_table_name",
  *     enterpriseProjectId: enterpriseProjectId,
  * });
@@ -42,14 +42,15 @@ export function getReferenceTables(args?: GetReferenceTablesArgs, opts?: pulumi.
 export interface GetReferenceTablesArgs {
     /**
      * Specifies the enterprise project ID of WAF reference tables.
+     * For enterprise users, if omitted, default enterprise project will be used.
      */
     enterpriseProjectId?: string;
     /**
-     * The name of the reference table. The value is case sensitive and matches exactly.
+     * Specifies the name of the reference table. The value is case-sensitive and matches exactly.
      */
     name?: string;
     /**
-     * The region in which to create the WAF reference table resource.
+     * Specifies the region in which to create the WAF reference table resource.
      * If omitted, the provider-level region will be used.
      */
     region?: string;
@@ -65,7 +66,7 @@ export interface GetReferenceTablesResult {
      */
     readonly id: string;
     /**
-     * The name of the reference table. The maximum length is 64 characters.
+     * The name of the reference table. The maximum length is `64` characters.
      */
     readonly name?: string;
     readonly region: string;
@@ -85,14 +86,15 @@ export function getReferenceTablesOutput(args?: GetReferenceTablesOutputArgs, op
 export interface GetReferenceTablesOutputArgs {
     /**
      * Specifies the enterprise project ID of WAF reference tables.
+     * For enterprise users, if omitted, default enterprise project will be used.
      */
     enterpriseProjectId?: pulumi.Input<string>;
     /**
-     * The name of the reference table. The value is case sensitive and matches exactly.
+     * Specifies the name of the reference table. The value is case-sensitive and matches exactly.
      */
     name?: pulumi.Input<string>;
     /**
-     * The region in which to create the WAF reference table resource.
+     * Specifies the region in which to create the WAF reference table resource.
      * If omitted, the provider-level region will be used.
      */
     region?: pulumi.Input<string>;

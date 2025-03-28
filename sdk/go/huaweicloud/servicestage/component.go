@@ -17,7 +17,7 @@ import (
 //
 // ## Import
 //
-// Components can be imported using their `application_id` and `id`, separated by a slash (/), e.g.
+// Components can be imported using their `application_id` and `id`, separated by a slash (/), e.g. bash
 //
 // ```sh
 //
@@ -40,8 +40,8 @@ type Component struct {
 	// + The framework of type **Common** can be empty.
 	Framework pulumi.StringPtrOutput `pulumi:"framework"`
 	// Specifies the authorization name.
-	// The name can contain of 2 to 64 characters, only letters, digits, underscores (_) and hyphens (-) are allowed, and the
-	// name must start with a letter and end with a letter or digit.
+	// The name can contain of `2` to `64` characters, only letters, digits, underscores (_) and hyphens (-) are allowed,
+	// and the name must start with a letter and end with a letter or digit.
 	Name pulumi.StringOutput `pulumi:"name"`
 	// Specifies the region where the application and component are located.
 	// If omitted, the provider-level region will be used. Changing this parameter will create a new component.
@@ -109,8 +109,8 @@ type componentState struct {
 	// + The framework of type **Common** can be empty.
 	Framework *string `pulumi:"framework"`
 	// Specifies the authorization name.
-	// The name can contain of 2 to 64 characters, only letters, digits, underscores (_) and hyphens (-) are allowed, and the
-	// name must start with a letter and end with a letter or digit.
+	// The name can contain of `2` to `64` characters, only letters, digits, underscores (_) and hyphens (-) are allowed,
+	// and the name must start with a letter and end with a letter or digit.
 	Name *string `pulumi:"name"`
 	// Specifies the region where the application and component are located.
 	// If omitted, the provider-level region will be used. Changing this parameter will create a new component.
@@ -140,8 +140,8 @@ type ComponentState struct {
 	// + The framework of type **Common** can be empty.
 	Framework pulumi.StringPtrInput
 	// Specifies the authorization name.
-	// The name can contain of 2 to 64 characters, only letters, digits, underscores (_) and hyphens (-) are allowed, and the
-	// name must start with a letter and end with a letter or digit.
+	// The name can contain of `2` to `64` characters, only letters, digits, underscores (_) and hyphens (-) are allowed,
+	// and the name must start with a letter and end with a letter or digit.
 	Name pulumi.StringPtrInput
 	// Specifies the region where the application and component are located.
 	// If omitted, the provider-level region will be used. Changing this parameter will create a new component.
@@ -175,8 +175,8 @@ type componentArgs struct {
 	// + The framework of type **Common** can be empty.
 	Framework *string `pulumi:"framework"`
 	// Specifies the authorization name.
-	// The name can contain of 2 to 64 characters, only letters, digits, underscores (_) and hyphens (-) are allowed, and the
-	// name must start with a letter and end with a letter or digit.
+	// The name can contain of `2` to `64` characters, only letters, digits, underscores (_) and hyphens (-) are allowed,
+	// and the name must start with a letter and end with a letter or digit.
 	Name *string `pulumi:"name"`
 	// Specifies the region where the application and component are located.
 	// If omitted, the provider-level region will be used. Changing this parameter will create a new component.
@@ -207,8 +207,8 @@ type ComponentArgs struct {
 	// + The framework of type **Common** can be empty.
 	Framework pulumi.StringPtrInput
 	// Specifies the authorization name.
-	// The name can contain of 2 to 64 characters, only letters, digits, underscores (_) and hyphens (-) are allowed, and the
-	// name must start with a letter and end with a letter or digit.
+	// The name can contain of `2` to `64` characters, only letters, digits, underscores (_) and hyphens (-) are allowed,
+	// and the name must start with a letter and end with a letter or digit.
 	Name pulumi.StringPtrInput
 	// Specifies the region where the application and component are located.
 	// If omitted, the provider-level region will be used. Changing this parameter will create a new component.
@@ -333,8 +333,8 @@ func (o ComponentOutput) Framework() pulumi.StringPtrOutput {
 }
 
 // Specifies the authorization name.
-// The name can contain of 2 to 64 characters, only letters, digits, underscores (_) and hyphens (-) are allowed, and the
-// name must start with a letter and end with a letter or digit.
+// The name can contain of `2` to `64` characters, only letters, digits, underscores (_) and hyphens (-) are allowed,
+// and the name must start with a letter and end with a letter or digit.
 func (o ComponentOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v *Component) pulumi.StringOutput { return v.Name }).(pulumi.StringOutput)
 }

@@ -180,7 +180,7 @@ class _CertificateState:
         :param pulumi.Input[str] domain: The domain of the Certificate. The value contains a maximum of 100 characters. This
                parameter is valid only when `type` is set to "server".
         :param pulumi.Input[str] enterprise_project_id: The enterprise project id of the certificate.
-        :param pulumi.Input[str] expire_time: Indicates the expire time.
+        :param pulumi.Input[str] expire_time: Indicates the expiration time.
         :param pulumi.Input[str] name: Human-readable name for the Certificate. Does not have to be unique.
         :param pulumi.Input[str] private_key: The private encrypted key of the Certificate, PEM format. This parameter is valid
                and mandatory only when `type` is set to "server".
@@ -280,7 +280,7 @@ class _CertificateState:
     @pulumi.getter(name="expireTime")
     def expire_time(self) -> Optional[pulumi.Input[str]]:
         """
-        Indicates the expire time.
+        Indicates the expiration time.
         """
         return pulumi.get(self, "expire_time")
 
@@ -437,13 +437,13 @@ class Certificate(pulumi.CustomResource):
 
         ## Import
 
-        ELB certificate can be imported using the certificate ID, e.g.
+        ELB certificate can be imported using the certificate ID, e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:DedicatedElb/certificate:Certificate certificate_1 5c20fdad-7288-11eb-b817-0255ac10158b
         ```
 
-         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`enterprise_project_id`. It is generally recommended running `terraform plan` after importing a certificate. You can then decide if changes should be applied to the certificate, or the resource definition should be updated to align with the certificate. Also you can ignore changes as below. resource "huaweicloud_elb_certificate" "certificate_1" {
+         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`enterprise_project_id`. It is generally recommended running `terraform plan` after importing a certificate. You can then decide if changes should be applied to the certificate, or the resource definition should be updated to align with the certificate. Also you can ignore changes as below. hcl resource "huaweicloud_elb_certificate" "certificate_1" {
 
          ...
 
@@ -549,13 +549,13 @@ class Certificate(pulumi.CustomResource):
 
         ## Import
 
-        ELB certificate can be imported using the certificate ID, e.g.
+        ELB certificate can be imported using the certificate ID, e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:DedicatedElb/certificate:Certificate certificate_1 5c20fdad-7288-11eb-b817-0255ac10158b
         ```
 
-         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`enterprise_project_id`. It is generally recommended running `terraform plan` after importing a certificate. You can then decide if changes should be applied to the certificate, or the resource definition should be updated to align with the certificate. Also you can ignore changes as below. resource "huaweicloud_elb_certificate" "certificate_1" {
+         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`enterprise_project_id`. It is generally recommended running `terraform plan` after importing a certificate. You can then decide if changes should be applied to the certificate, or the resource definition should be updated to align with the certificate. Also you can ignore changes as below. hcl resource "huaweicloud_elb_certificate" "certificate_1" {
 
          ...
 
@@ -648,7 +648,7 @@ class Certificate(pulumi.CustomResource):
         :param pulumi.Input[str] domain: The domain of the Certificate. The value contains a maximum of 100 characters. This
                parameter is valid only when `type` is set to "server".
         :param pulumi.Input[str] enterprise_project_id: The enterprise project id of the certificate.
-        :param pulumi.Input[str] expire_time: Indicates the expire time.
+        :param pulumi.Input[str] expire_time: Indicates the expiration time.
         :param pulumi.Input[str] name: Human-readable name for the Certificate. Does not have to be unique.
         :param pulumi.Input[str] private_key: The private encrypted key of the Certificate, PEM format. This parameter is valid
                and mandatory only when `type` is set to "server".
@@ -722,7 +722,7 @@ class Certificate(pulumi.CustomResource):
     @pulumi.getter(name="expireTime")
     def expire_time(self) -> pulumi.Output[str]:
         """
-        Indicates the expire time.
+        Indicates the expiration time.
         """
         return pulumi.get(self, "expire_time")
 

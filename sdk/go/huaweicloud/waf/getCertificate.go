@@ -10,7 +10,9 @@ import (
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
-// Get the certificate in the WAF, including the one pushed from SCM.
+// Use this data source to get the certificate of WAF within HuaweiCloud.
+//
+// > When multiple pieces of data are queried, the datasource will process the first piece of data and put it back.
 //
 // ## Example Usage
 //
@@ -31,7 +33,7 @@ import (
 //			cfg := config.New(ctx, "")
 //			enterpriseProjectId := cfg.RequireObject("enterpriseProjectId")
 //			_, err := Waf.GetCertificate(ctx, &waf.GetCertificateArgs{
-//				Name:                "certificate name",
+//				Name:                pulumi.StringRef("test-name"),
 //				EnterpriseProjectId: pulumi.StringRef(enterpriseProjectId),
 //			}, nil)
 //			if err != nil {
@@ -54,26 +56,35 @@ func LookupCertificate(ctx *pulumi.Context, args *LookupCertificateArgs, opts ..
 
 // A collection of arguments for invoking getCertificate.
 type LookupCertificateArgs struct {
-	// The enterprise project ID of WAF certificate.
+	// Specifies the enterprise project ID of WAF certificate.
+	// For enterprise users, if omitted, default enterprise project will be used.
 	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
-	// The expire status of certificate. Defaults is `0`. The value can be:
-	// + `0`: not expire
-	// + `1`: has expired
-	// + `2`: wil expired soon
+	// Specifies the certificate expiration status. The options are as follows:
+	// + `0`: Not expired;
+	// + `1`: Expired;
+	// + `2`: Expired soon (The certificate will expire in one month.)
+	ExpirationStatus *string `pulumi:"expirationStatus"`
+	// Deprecated: Use 'expiration_status' instead.
 	ExpireStatus *int `pulumi:"expireStatus"`
-	// The name of certificate. The value is case sensitive and supports fuzzy matching.
-	Name string `pulumi:"name"`
-	// The region in which to obtain the WAF. If omitted, the provider-level region will be
-	// used.
+	// Specifies the name of certificate. The value is case-sensitive and supports fuzzy matching.
+	Name *string `pulumi:"name"`
+	// Specifies the region in which to obtain the WAF. If omitted, the provider-level region
+	// will be used.
 	Region *string `pulumi:"region"`
 }
 
 // A collection of values returned by getCertificate.
 type LookupCertificateResult struct {
-	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
-	// Indicates the time when the certificate expires.
-	Expiration   string `pulumi:"expiration"`
-	ExpireStatus *int   `pulumi:"expireStatus"`
+	// Indicates the time when the certificate uploaded, in RFC3339 format.
+	CreatedAt           string `pulumi:"createdAt"`
+	EnterpriseProjectId string `pulumi:"enterpriseProjectId"`
+	// Deprecated: Use 'expired_at' instead.
+	Expiration       string `pulumi:"expiration"`
+	ExpirationStatus string `pulumi:"expirationStatus"`
+	// Deprecated: Use 'expiration_status' instead.
+	ExpireStatus *int `pulumi:"expireStatus"`
+	// Indicates the time when the certificate expires, in RFC3339 format.
+	ExpiredAt string `pulumi:"expiredAt"`
 	// The provider-assigned unique ID for this managed resource.
 	Id     string `pulumi:"id"`
 	Name   string `pulumi:"name"`
@@ -95,17 +106,20 @@ func LookupCertificateOutput(ctx *pulumi.Context, args LookupCertificateOutputAr
 
 // A collection of arguments for invoking getCertificate.
 type LookupCertificateOutputArgs struct {
-	// The enterprise project ID of WAF certificate.
+	// Specifies the enterprise project ID of WAF certificate.
+	// For enterprise users, if omitted, default enterprise project will be used.
 	EnterpriseProjectId pulumi.StringPtrInput `pulumi:"enterpriseProjectId"`
-	// The expire status of certificate. Defaults is `0`. The value can be:
-	// + `0`: not expire
-	// + `1`: has expired
-	// + `2`: wil expired soon
+	// Specifies the certificate expiration status. The options are as follows:
+	// + `0`: Not expired;
+	// + `1`: Expired;
+	// + `2`: Expired soon (The certificate will expire in one month.)
+	ExpirationStatus pulumi.StringPtrInput `pulumi:"expirationStatus"`
+	// Deprecated: Use 'expiration_status' instead.
 	ExpireStatus pulumi.IntPtrInput `pulumi:"expireStatus"`
-	// The name of certificate. The value is case sensitive and supports fuzzy matching.
-	Name pulumi.StringInput `pulumi:"name"`
-	// The region in which to obtain the WAF. If omitted, the provider-level region will be
-	// used.
+	// Specifies the name of certificate. The value is case-sensitive and supports fuzzy matching.
+	Name pulumi.StringPtrInput `pulumi:"name"`
+	// Specifies the region in which to obtain the WAF. If omitted, the provider-level region
+	// will be used.
 	Region pulumi.StringPtrInput `pulumi:"region"`
 }
 
@@ -128,17 +142,32 @@ func (o LookupCertificateResultOutput) ToLookupCertificateResultOutputWithContex
 	return o
 }
 
-func (o LookupCertificateResultOutput) EnterpriseProjectId() pulumi.StringPtrOutput {
-	return o.ApplyT(func(v LookupCertificateResult) *string { return v.EnterpriseProjectId }).(pulumi.StringPtrOutput)
+// Indicates the time when the certificate uploaded, in RFC3339 format.
+func (o LookupCertificateResultOutput) CreatedAt() pulumi.StringOutput {
+	return o.ApplyT(func(v LookupCertificateResult) string { return v.CreatedAt }).(pulumi.StringOutput)
 }
 
-// Indicates the time when the certificate expires.
+func (o LookupCertificateResultOutput) EnterpriseProjectId() pulumi.StringOutput {
+	return o.ApplyT(func(v LookupCertificateResult) string { return v.EnterpriseProjectId }).(pulumi.StringOutput)
+}
+
+// Deprecated: Use 'expired_at' instead.
 func (o LookupCertificateResultOutput) Expiration() pulumi.StringOutput {
 	return o.ApplyT(func(v LookupCertificateResult) string { return v.Expiration }).(pulumi.StringOutput)
 }
 
+func (o LookupCertificateResultOutput) ExpirationStatus() pulumi.StringOutput {
+	return o.ApplyT(func(v LookupCertificateResult) string { return v.ExpirationStatus }).(pulumi.StringOutput)
+}
+
+// Deprecated: Use 'expiration_status' instead.
 func (o LookupCertificateResultOutput) ExpireStatus() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v LookupCertificateResult) *int { return v.ExpireStatus }).(pulumi.IntPtrOutput)
+}
+
+// Indicates the time when the certificate expires, in RFC3339 format.
+func (o LookupCertificateResultOutput) ExpiredAt() pulumi.StringOutput {
+	return o.ApplyT(func(v LookupCertificateResult) string { return v.ExpiredAt }).(pulumi.StringOutput)
 }
 
 // The provider-assigned unique ID for this managed resource.

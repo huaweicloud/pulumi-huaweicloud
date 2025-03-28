@@ -21,8 +21,12 @@ func (m *module) Version() semver.Version {
 
 func (m *module) Construct(ctx *pulumi.Context, name, typ, urn string) (r pulumi.Resource, err error) {
 	switch typ {
+	case "huaweicloud:DedicatedElb/activeStandbyPool:ActiveStandbyPool":
+		r = &ActiveStandbyPool{}
 	case "huaweicloud:DedicatedElb/certificate:Certificate":
 		r = &Certificate{}
+	case "huaweicloud:DedicatedElb/certificatePrivateKeyEcho:CertificatePrivateKeyEcho":
+		r = &CertificatePrivateKeyEcho{}
 	case "huaweicloud:DedicatedElb/ipgroup:Ipgroup":
 		r = &Ipgroup{}
 	case "huaweicloud:DedicatedElb/l7policy:L7policy":
@@ -33,12 +37,18 @@ func (m *module) Construct(ctx *pulumi.Context, name, typ, urn string) (r pulumi
 		r = &Listener{}
 	case "huaweicloud:DedicatedElb/loadbalancer:Loadbalancer":
 		r = &Loadbalancer{}
+	case "huaweicloud:DedicatedElb/loadbalancerCopy:LoadbalancerCopy":
+		r = &LoadbalancerCopy{}
+	case "huaweicloud:DedicatedElb/logtank:Logtank":
+		r = &Logtank{}
 	case "huaweicloud:DedicatedElb/member:Member":
 		r = &Member{}
 	case "huaweicloud:DedicatedElb/monitor:Monitor":
 		r = &Monitor{}
 	case "huaweicloud:DedicatedElb/pool:Pool":
 		r = &Pool{}
+	case "huaweicloud:DedicatedElb/securityPolicy:SecurityPolicy":
+		r = &SecurityPolicy{}
 	default:
 		return nil, fmt.Errorf("unknown resource type: %s", typ)
 	}
@@ -54,7 +64,17 @@ func init() {
 	}
 	pulumi.RegisterResourceModule(
 		"huaweicloud",
+		"DedicatedElb/activeStandbyPool",
+		&module{version},
+	)
+	pulumi.RegisterResourceModule(
+		"huaweicloud",
 		"DedicatedElb/certificate",
+		&module{version},
+	)
+	pulumi.RegisterResourceModule(
+		"huaweicloud",
+		"DedicatedElb/certificatePrivateKeyEcho",
 		&module{version},
 	)
 	pulumi.RegisterResourceModule(
@@ -84,6 +104,16 @@ func init() {
 	)
 	pulumi.RegisterResourceModule(
 		"huaweicloud",
+		"DedicatedElb/loadbalancerCopy",
+		&module{version},
+	)
+	pulumi.RegisterResourceModule(
+		"huaweicloud",
+		"DedicatedElb/logtank",
+		&module{version},
+	)
+	pulumi.RegisterResourceModule(
+		"huaweicloud",
 		"DedicatedElb/member",
 		&module{version},
 	)
@@ -95,6 +125,11 @@ func init() {
 	pulumi.RegisterResourceModule(
 		"huaweicloud",
 		"DedicatedElb/pool",
+		&module{version},
+	)
+	pulumi.RegisterResourceModule(
+		"huaweicloud",
+		"DedicatedElb/securityPolicy",
 		&module{version},
 	)
 }

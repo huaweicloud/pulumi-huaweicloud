@@ -47,13 +47,13 @@ class MongoInstanceArgs:
         :param pulumi.Input[str] flavor: Specifies the instance specifications. For details,
                see [DB Instance Specifications](https://support.huaweicloud.com/intl/en-us/mongoug-nosql/nosql_05_0029.html)
                Changing this parameter will create a new resource.
-        :param pulumi.Input[str] password: Specifies the database password. The value must be **8** to **32** characters in
+        :param pulumi.Input[str] password: Specifies the database password. The value must be `8` to `32` characters in
                length, including uppercase and lowercase letters, digits, and special characters, such as ~!@#%^*-_=+? You are
                advised to enter a strong password to improve security, preventing security risks such as brute force cracking.
         :param pulumi.Input[str] subnet_id: Specifies the network ID of a subnet. Changing this parameter will create
                a new resource.
-        :param pulumi.Input[int] volume_size: Specifies the storage space in GB. The value must be a multiple of **10**. For a
-               GaussDB mongo DB instance, the minimum storage space is **100** GB, and the maximum storage space is related to the
+        :param pulumi.Input[int] volume_size: Specifies the storage space in GB. The value must be a multiple of `10`. For a
+               GaussDB mongo DB instance, the minimum storage space is `100` GB, and the maximum storage space is related to the
                instance performance specifications. For details,
                see [DB Instance Specifications](https://support.huaweicloud.com/intl/en-us/mongoug-nosql/nosql_05_0029.html)
         :param pulumi.Input[str] vpc_id: Specifies the VPC ID. Changing this parameter will create a new resource.
@@ -70,18 +70,19 @@ class MongoInstanceArgs:
         :param pulumi.Input[str] dedicated_resource_name: Specifies the dedicated resource name. Changing this
                parameter will create a new resource.
         :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project id, Only valid for users who
-               have enabled the enterprise multi-project service. Changing this parameter will create a new resource.
+               have enabled the enterprise multi-project service.
         :param pulumi.Input[bool] force_import: If specified, try to import the instance instead of creating if the name already
                existed.
         :param pulumi.Input[str] name: Specifies the instance name, which can be the same as an existing instance name. The
-               value must be **4** to **64** characters in length and start with a letter. It is case-sensitive and can contain only
+               value must be `4` to `64` characters in length and start with a letter. It is case-sensitive and can contain only
                letters, digits, hyphens (-), and underscores (_).
-        :param pulumi.Input[int] node_num: Specifies the number of nodes, only **3** is supported now. Defaults to **3**.
+        :param pulumi.Input[int] node_num: Specifies the number of nodes, only `3` is supported now. Defaults to `3`.
                Changing this parameter will create a new resource.
-        :param pulumi.Input[int] period: Specifies the charging period of the instance.
-               If `period_unit` is set to **month** , the value ranges from **1** to **9**. If `period_unit` is set to **year**, the
-               value ranges from **1** to **3**. This parameter is mandatory if `charging_mode` is set to **prePaid**. Changing this
-               will do nothing.
+        :param pulumi.Input[int] period: Specifies the charging period of the instance.  
+               If `period_unit` is set to **month** , the value ranges from `1` to `9`.
+               If `period_unit` is set to *year*, the value ranges from `1` to `3`.
+               This parameter is mandatory if `charging_mode` is set to **prePaid**.
+               Changing this will do nothing.
         :param pulumi.Input[str] period_unit: Specifies the charging period unit of the instance.
                Valid values are **month** and **year**. This parameter is mandatory if `charging_mode` is set to **prePaid**.
                Changing this will do nothing.
@@ -166,7 +167,7 @@ class MongoInstanceArgs:
     @pulumi.getter
     def password(self) -> pulumi.Input[str]:
         """
-        Specifies the database password. The value must be **8** to **32** characters in
+        Specifies the database password. The value must be `8` to `32` characters in
         length, including uppercase and lowercase letters, digits, and special characters, such as ~!@#%^*-_=+? You are
         advised to enter a strong password to improve security, preventing security risks such as brute force cracking.
         """
@@ -193,8 +194,8 @@ class MongoInstanceArgs:
     @pulumi.getter(name="volumeSize")
     def volume_size(self) -> pulumi.Input[int]:
         """
-        Specifies the storage space in GB. The value must be a multiple of **10**. For a
-        GaussDB mongo DB instance, the minimum storage space is **100** GB, and the maximum storage space is related to the
+        Specifies the storage space in GB. The value must be a multiple of `10`. For a
+        GaussDB mongo DB instance, the minimum storage space is `100` GB, and the maximum storage space is related to the
         instance performance specifications. For details,
         see [DB Instance Specifications](https://support.huaweicloud.com/intl/en-us/mongoug-nosql/nosql_05_0029.html)
         """
@@ -310,7 +311,7 @@ class MongoInstanceArgs:
     def enterprise_project_id(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the enterprise project id, Only valid for users who
-        have enabled the enterprise multi-project service. Changing this parameter will create a new resource.
+        have enabled the enterprise multi-project service.
         """
         return pulumi.get(self, "enterprise_project_id")
 
@@ -336,7 +337,7 @@ class MongoInstanceArgs:
     def name(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the instance name, which can be the same as an existing instance name. The
-        value must be **4** to **64** characters in length and start with a letter. It is case-sensitive and can contain only
+        value must be `4` to `64` characters in length and start with a letter. It is case-sensitive and can contain only
         letters, digits, hyphens (-), and underscores (_).
         """
         return pulumi.get(self, "name")
@@ -349,7 +350,7 @@ class MongoInstanceArgs:
     @pulumi.getter(name="nodeNum")
     def node_num(self) -> Optional[pulumi.Input[int]]:
         """
-        Specifies the number of nodes, only **3** is supported now. Defaults to **3**.
+        Specifies the number of nodes, only `3` is supported now. Defaults to `3`.
         Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "node_num")
@@ -362,10 +363,11 @@ class MongoInstanceArgs:
     @pulumi.getter
     def period(self) -> Optional[pulumi.Input[int]]:
         """
-        Specifies the charging period of the instance.
-        If `period_unit` is set to **month** , the value ranges from **1** to **9**. If `period_unit` is set to **year**, the
-        value ranges from **1** to **3**. This parameter is mandatory if `charging_mode` is set to **prePaid**. Changing this
-        will do nothing.
+        Specifies the charging period of the instance.  
+        If `period_unit` is set to **month** , the value ranges from `1` to `9`.
+        If `period_unit` is set to *year*, the value ranges from `1` to `3`.
+        This parameter is mandatory if `charging_mode` is set to **prePaid**.
+        Changing this will do nothing.
         """
         return pulumi.get(self, "period")
 
@@ -492,7 +494,7 @@ class _MongoInstanceState:
         :param pulumi.Input[str] dedicated_resource_name: Specifies the dedicated resource name. Changing this
                parameter will create a new resource.
         :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project id, Only valid for users who
-               have enabled the enterprise multi-project service. Changing this parameter will create a new resource.
+               have enabled the enterprise multi-project service.
         :param pulumi.Input[str] flavor: Specifies the instance specifications. For details,
                see [DB Instance Specifications](https://support.huaweicloud.com/intl/en-us/mongoug-nosql/nosql_05_0029.html)
                Changing this parameter will create a new resource.
@@ -502,18 +504,19 @@ class _MongoInstanceState:
         :param pulumi.Input[str] lb_port: Indicates the LB port of the db.
         :param pulumi.Input[str] mode: Indicates the instance type.
         :param pulumi.Input[str] name: Specifies the instance name, which can be the same as an existing instance name. The
-               value must be **4** to **64** characters in length and start with a letter. It is case-sensitive and can contain only
+               value must be `4` to `64` characters in length and start with a letter. It is case-sensitive and can contain only
                letters, digits, hyphens (-), and underscores (_).
-        :param pulumi.Input[int] node_num: Specifies the number of nodes, only **3** is supported now. Defaults to **3**.
+        :param pulumi.Input[int] node_num: Specifies the number of nodes, only `3` is supported now. Defaults to `3`.
                Changing this parameter will create a new resource.
         :param pulumi.Input[Sequence[pulumi.Input['MongoInstanceNodeArgs']]] nodes: Indicates the instance nodes information. Structure is documented below.
-        :param pulumi.Input[str] password: Specifies the database password. The value must be **8** to **32** characters in
+        :param pulumi.Input[str] password: Specifies the database password. The value must be `8` to `32` characters in
                length, including uppercase and lowercase letters, digits, and special characters, such as ~!@#%^*-_=+? You are
                advised to enter a strong password to improve security, preventing security risks such as brute force cracking.
-        :param pulumi.Input[int] period: Specifies the charging period of the instance.
-               If `period_unit` is set to **month** , the value ranges from **1** to **9**. If `period_unit` is set to **year**, the
-               value ranges from **1** to **3**. This parameter is mandatory if `charging_mode` is set to **prePaid**. Changing this
-               will do nothing.
+        :param pulumi.Input[int] period: Specifies the charging period of the instance.  
+               If `period_unit` is set to **month** , the value ranges from `1` to `9`.
+               If `period_unit` is set to *year*, the value ranges from `1` to `3`.
+               This parameter is mandatory if `charging_mode` is set to **prePaid**.
+               Changing this will do nothing.
         :param pulumi.Input[str] period_unit: Specifies the charging period unit of the instance.
                Valid values are **month** and **year**. This parameter is mandatory if `charging_mode` is set to **prePaid**.
                Changing this will do nothing.
@@ -529,8 +532,8 @@ class _MongoInstanceState:
         :param pulumi.Input[str] subnet_id: Specifies the network ID of a subnet. Changing this parameter will create
                a new resource.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: The key/value pairs to associate with the instance.
-        :param pulumi.Input[int] volume_size: Specifies the storage space in GB. The value must be a multiple of **10**. For a
-               GaussDB mongo DB instance, the minimum storage space is **100** GB, and the maximum storage space is related to the
+        :param pulumi.Input[int] volume_size: Specifies the storage space in GB. The value must be a multiple of `10`. For a
+               GaussDB mongo DB instance, the minimum storage space is `100` GB, and the maximum storage space is related to the
                instance performance specifications. For details,
                see [DB Instance Specifications](https://support.huaweicloud.com/intl/en-us/mongoug-nosql/nosql_05_0029.html)
         :param pulumi.Input[str] vpc_id: Specifies the VPC ID. Changing this parameter will create a new resource.
@@ -718,7 +721,7 @@ class _MongoInstanceState:
     def enterprise_project_id(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the enterprise project id, Only valid for users who
-        have enabled the enterprise multi-project service. Changing this parameter will create a new resource.
+        have enabled the enterprise multi-project service.
         """
         return pulumi.get(self, "enterprise_project_id")
 
@@ -794,7 +797,7 @@ class _MongoInstanceState:
     def name(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the instance name, which can be the same as an existing instance name. The
-        value must be **4** to **64** characters in length and start with a letter. It is case-sensitive and can contain only
+        value must be `4` to `64` characters in length and start with a letter. It is case-sensitive and can contain only
         letters, digits, hyphens (-), and underscores (_).
         """
         return pulumi.get(self, "name")
@@ -807,7 +810,7 @@ class _MongoInstanceState:
     @pulumi.getter(name="nodeNum")
     def node_num(self) -> Optional[pulumi.Input[int]]:
         """
-        Specifies the number of nodes, only **3** is supported now. Defaults to **3**.
+        Specifies the number of nodes, only `3` is supported now. Defaults to `3`.
         Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "node_num")
@@ -832,7 +835,7 @@ class _MongoInstanceState:
     @pulumi.getter
     def password(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the database password. The value must be **8** to **32** characters in
+        Specifies the database password. The value must be `8` to `32` characters in
         length, including uppercase and lowercase letters, digits, and special characters, such as ~!@#%^*-_=+? You are
         advised to enter a strong password to improve security, preventing security risks such as brute force cracking.
         """
@@ -846,10 +849,11 @@ class _MongoInstanceState:
     @pulumi.getter
     def period(self) -> Optional[pulumi.Input[int]]:
         """
-        Specifies the charging period of the instance.
-        If `period_unit` is set to **month** , the value ranges from **1** to **9**. If `period_unit` is set to **year**, the
-        value ranges from **1** to **3**. This parameter is mandatory if `charging_mode` is set to **prePaid**. Changing this
-        will do nothing.
+        Specifies the charging period of the instance.  
+        If `period_unit` is set to **month** , the value ranges from `1` to `9`.
+        If `period_unit` is set to *year*, the value ranges from `1` to `3`.
+        This parameter is mandatory if `charging_mode` is set to **prePaid**.
+        Changing this will do nothing.
         """
         return pulumi.get(self, "period")
 
@@ -975,8 +979,8 @@ class _MongoInstanceState:
     @pulumi.getter(name="volumeSize")
     def volume_size(self) -> Optional[pulumi.Input[int]]:
         """
-        Specifies the storage space in GB. The value must be a multiple of **10**. For a
-        GaussDB mongo DB instance, the minimum storage space is **100** GB, and the maximum storage space is related to the
+        Specifies the storage space in GB. The value must be a multiple of `10`. For a
+        GaussDB mongo DB instance, the minimum storage space is `100` GB, and the maximum storage space is related to the
         instance performance specifications. For details,
         see [DB Instance Specifications](https://support.huaweicloud.com/intl/en-us/mongoug-nosql/nosql_05_0029.html)
         """
@@ -1029,10 +1033,10 @@ class MongoInstance(pulumi.CustomResource):
                  vpc_id: Optional[pulumi.Input[str]] = None,
                  __props__=None):
         """
-        GaussDB for mongo instance management within HuaweiCoud.
+        GeminiDB Mongo instance management within HuaweiCould.
 
         ## Example Usage
-        ### create a gaussdb for mongo instance with tags
+        ### create a geminidb mongo instance with tags
 
         ```python
         import pulumi
@@ -1051,7 +1055,7 @@ class MongoInstance(pulumi.CustomResource):
                 "key": "value",
             })
         ```
-        ### create a gaussdb mongo instance with backup strategy
+        ### create a geminidb mongo instance with backup strategy
 
         ```python
         import pulumi
@@ -1073,7 +1077,7 @@ class MongoInstance(pulumi.CustomResource):
 
         ## Import
 
-        GaussDB mongo instance can be imported using the `id`, e.g.
+        GaussDB mongo instance can be imported using the `id`, e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:GaussDBforNoSQL/mongoInstance:MongoInstance instance_1 2d3cb29c73754417bbbf46b1f856b371in10
@@ -1097,24 +1101,25 @@ class MongoInstance(pulumi.CustomResource):
         :param pulumi.Input[str] dedicated_resource_name: Specifies the dedicated resource name. Changing this
                parameter will create a new resource.
         :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project id, Only valid for users who
-               have enabled the enterprise multi-project service. Changing this parameter will create a new resource.
+               have enabled the enterprise multi-project service.
         :param pulumi.Input[str] flavor: Specifies the instance specifications. For details,
                see [DB Instance Specifications](https://support.huaweicloud.com/intl/en-us/mongoug-nosql/nosql_05_0029.html)
                Changing this parameter will create a new resource.
         :param pulumi.Input[bool] force_import: If specified, try to import the instance instead of creating if the name already
                existed.
         :param pulumi.Input[str] name: Specifies the instance name, which can be the same as an existing instance name. The
-               value must be **4** to **64** characters in length and start with a letter. It is case-sensitive and can contain only
+               value must be `4` to `64` characters in length and start with a letter. It is case-sensitive and can contain only
                letters, digits, hyphens (-), and underscores (_).
-        :param pulumi.Input[int] node_num: Specifies the number of nodes, only **3** is supported now. Defaults to **3**.
+        :param pulumi.Input[int] node_num: Specifies the number of nodes, only `3` is supported now. Defaults to `3`.
                Changing this parameter will create a new resource.
-        :param pulumi.Input[str] password: Specifies the database password. The value must be **8** to **32** characters in
+        :param pulumi.Input[str] password: Specifies the database password. The value must be `8` to `32` characters in
                length, including uppercase and lowercase letters, digits, and special characters, such as ~!@#%^*-_=+? You are
                advised to enter a strong password to improve security, preventing security risks such as brute force cracking.
-        :param pulumi.Input[int] period: Specifies the charging period of the instance.
-               If `period_unit` is set to **month** , the value ranges from **1** to **9**. If `period_unit` is set to **year**, the
-               value ranges from **1** to **3**. This parameter is mandatory if `charging_mode` is set to **prePaid**. Changing this
-               will do nothing.
+        :param pulumi.Input[int] period: Specifies the charging period of the instance.  
+               If `period_unit` is set to **month** , the value ranges from `1` to `9`.
+               If `period_unit` is set to *year*, the value ranges from `1` to `3`.
+               This parameter is mandatory if `charging_mode` is set to **prePaid**.
+               Changing this will do nothing.
         :param pulumi.Input[str] period_unit: Specifies the charging period unit of the instance.
                Valid values are **month** and **year**. This parameter is mandatory if `charging_mode` is set to **prePaid**.
                Changing this will do nothing.
@@ -1127,8 +1132,8 @@ class MongoInstance(pulumi.CustomResource):
         :param pulumi.Input[str] subnet_id: Specifies the network ID of a subnet. Changing this parameter will create
                a new resource.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: The key/value pairs to associate with the instance.
-        :param pulumi.Input[int] volume_size: Specifies the storage space in GB. The value must be a multiple of **10**. For a
-               GaussDB mongo DB instance, the minimum storage space is **100** GB, and the maximum storage space is related to the
+        :param pulumi.Input[int] volume_size: Specifies the storage space in GB. The value must be a multiple of `10`. For a
+               GaussDB mongo DB instance, the minimum storage space is `100` GB, and the maximum storage space is related to the
                instance performance specifications. For details,
                see [DB Instance Specifications](https://support.huaweicloud.com/intl/en-us/mongoug-nosql/nosql_05_0029.html)
         :param pulumi.Input[str] vpc_id: Specifies the VPC ID. Changing this parameter will create a new resource.
@@ -1140,10 +1145,10 @@ class MongoInstance(pulumi.CustomResource):
                  args: MongoInstanceArgs,
                  opts: Optional[pulumi.ResourceOptions] = None):
         """
-        GaussDB for mongo instance management within HuaweiCoud.
+        GeminiDB Mongo instance management within HuaweiCould.
 
         ## Example Usage
-        ### create a gaussdb for mongo instance with tags
+        ### create a geminidb mongo instance with tags
 
         ```python
         import pulumi
@@ -1162,7 +1167,7 @@ class MongoInstance(pulumi.CustomResource):
                 "key": "value",
             })
         ```
-        ### create a gaussdb mongo instance with backup strategy
+        ### create a geminidb mongo instance with backup strategy
 
         ```python
         import pulumi
@@ -1184,7 +1189,7 @@ class MongoInstance(pulumi.CustomResource):
 
         ## Import
 
-        GaussDB mongo instance can be imported using the `id`, e.g.
+        GaussDB mongo instance can be imported using the `id`, e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:GaussDBforNoSQL/mongoInstance:MongoInstance instance_1 2d3cb29c73754417bbbf46b1f856b371in10
@@ -1345,7 +1350,7 @@ class MongoInstance(pulumi.CustomResource):
         :param pulumi.Input[str] dedicated_resource_name: Specifies the dedicated resource name. Changing this
                parameter will create a new resource.
         :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project id, Only valid for users who
-               have enabled the enterprise multi-project service. Changing this parameter will create a new resource.
+               have enabled the enterprise multi-project service.
         :param pulumi.Input[str] flavor: Specifies the instance specifications. For details,
                see [DB Instance Specifications](https://support.huaweicloud.com/intl/en-us/mongoug-nosql/nosql_05_0029.html)
                Changing this parameter will create a new resource.
@@ -1355,18 +1360,19 @@ class MongoInstance(pulumi.CustomResource):
         :param pulumi.Input[str] lb_port: Indicates the LB port of the db.
         :param pulumi.Input[str] mode: Indicates the instance type.
         :param pulumi.Input[str] name: Specifies the instance name, which can be the same as an existing instance name. The
-               value must be **4** to **64** characters in length and start with a letter. It is case-sensitive and can contain only
+               value must be `4` to `64` characters in length and start with a letter. It is case-sensitive and can contain only
                letters, digits, hyphens (-), and underscores (_).
-        :param pulumi.Input[int] node_num: Specifies the number of nodes, only **3** is supported now. Defaults to **3**.
+        :param pulumi.Input[int] node_num: Specifies the number of nodes, only `3` is supported now. Defaults to `3`.
                Changing this parameter will create a new resource.
         :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['MongoInstanceNodeArgs']]]] nodes: Indicates the instance nodes information. Structure is documented below.
-        :param pulumi.Input[str] password: Specifies the database password. The value must be **8** to **32** characters in
+        :param pulumi.Input[str] password: Specifies the database password. The value must be `8` to `32` characters in
                length, including uppercase and lowercase letters, digits, and special characters, such as ~!@#%^*-_=+? You are
                advised to enter a strong password to improve security, preventing security risks such as brute force cracking.
-        :param pulumi.Input[int] period: Specifies the charging period of the instance.
-               If `period_unit` is set to **month** , the value ranges from **1** to **9**. If `period_unit` is set to **year**, the
-               value ranges from **1** to **3**. This parameter is mandatory if `charging_mode` is set to **prePaid**. Changing this
-               will do nothing.
+        :param pulumi.Input[int] period: Specifies the charging period of the instance.  
+               If `period_unit` is set to **month** , the value ranges from `1` to `9`.
+               If `period_unit` is set to *year*, the value ranges from `1` to `3`.
+               This parameter is mandatory if `charging_mode` is set to **prePaid**.
+               Changing this will do nothing.
         :param pulumi.Input[str] period_unit: Specifies the charging period unit of the instance.
                Valid values are **month** and **year**. This parameter is mandatory if `charging_mode` is set to **prePaid**.
                Changing this will do nothing.
@@ -1382,8 +1388,8 @@ class MongoInstance(pulumi.CustomResource):
         :param pulumi.Input[str] subnet_id: Specifies the network ID of a subnet. Changing this parameter will create
                a new resource.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: The key/value pairs to associate with the instance.
-        :param pulumi.Input[int] volume_size: Specifies the storage space in GB. The value must be a multiple of **10**. For a
-               GaussDB mongo DB instance, the minimum storage space is **100** GB, and the maximum storage space is related to the
+        :param pulumi.Input[int] volume_size: Specifies the storage space in GB. The value must be a multiple of `10`. For a
+               GaussDB mongo DB instance, the minimum storage space is `100` GB, and the maximum storage space is related to the
                instance performance specifications. For details,
                see [DB Instance Specifications](https://support.huaweicloud.com/intl/en-us/mongoug-nosql/nosql_05_0029.html)
         :param pulumi.Input[str] vpc_id: Specifies the VPC ID. Changing this parameter will create a new resource.
@@ -1509,7 +1515,7 @@ class MongoInstance(pulumi.CustomResource):
     def enterprise_project_id(self) -> pulumi.Output[Optional[str]]:
         """
         Specifies the enterprise project id, Only valid for users who
-        have enabled the enterprise multi-project service. Changing this parameter will create a new resource.
+        have enabled the enterprise multi-project service.
         """
         return pulumi.get(self, "enterprise_project_id")
 
@@ -1561,7 +1567,7 @@ class MongoInstance(pulumi.CustomResource):
     def name(self) -> pulumi.Output[str]:
         """
         Specifies the instance name, which can be the same as an existing instance name. The
-        value must be **4** to **64** characters in length and start with a letter. It is case-sensitive and can contain only
+        value must be `4` to `64` characters in length and start with a letter. It is case-sensitive and can contain only
         letters, digits, hyphens (-), and underscores (_).
         """
         return pulumi.get(self, "name")
@@ -1570,7 +1576,7 @@ class MongoInstance(pulumi.CustomResource):
     @pulumi.getter(name="nodeNum")
     def node_num(self) -> pulumi.Output[Optional[int]]:
         """
-        Specifies the number of nodes, only **3** is supported now. Defaults to **3**.
+        Specifies the number of nodes, only `3` is supported now. Defaults to `3`.
         Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "node_num")
@@ -1587,7 +1593,7 @@ class MongoInstance(pulumi.CustomResource):
     @pulumi.getter
     def password(self) -> pulumi.Output[str]:
         """
-        Specifies the database password. The value must be **8** to **32** characters in
+        Specifies the database password. The value must be `8` to `32` characters in
         length, including uppercase and lowercase letters, digits, and special characters, such as ~!@#%^*-_=+? You are
         advised to enter a strong password to improve security, preventing security risks such as brute force cracking.
         """
@@ -1597,10 +1603,11 @@ class MongoInstance(pulumi.CustomResource):
     @pulumi.getter
     def period(self) -> pulumi.Output[Optional[int]]:
         """
-        Specifies the charging period of the instance.
-        If `period_unit` is set to **month** , the value ranges from **1** to **9**. If `period_unit` is set to **year**, the
-        value ranges from **1** to **3**. This parameter is mandatory if `charging_mode` is set to **prePaid**. Changing this
-        will do nothing.
+        Specifies the charging period of the instance.  
+        If `period_unit` is set to **month** , the value ranges from `1` to `9`.
+        If `period_unit` is set to *year*, the value ranges from `1` to `3`.
+        This parameter is mandatory if `charging_mode` is set to **prePaid**.
+        Changing this will do nothing.
         """
         return pulumi.get(self, "period")
 
@@ -1686,8 +1693,8 @@ class MongoInstance(pulumi.CustomResource):
     @pulumi.getter(name="volumeSize")
     def volume_size(self) -> pulumi.Output[int]:
         """
-        Specifies the storage space in GB. The value must be a multiple of **10**. For a
-        GaussDB mongo DB instance, the minimum storage space is **100** GB, and the maximum storage space is related to the
+        Specifies the storage space in GB. The value must be a multiple of `10`. For a
+        GaussDB mongo DB instance, the minimum storage space is `100` GB, and the maximum storage space is related to the
         instance performance specifications. For details,
         see [DB Instance Specifications](https://support.huaweicloud.com/intl/en-us/mongoug-nosql/nosql_05_0029.html)
         """

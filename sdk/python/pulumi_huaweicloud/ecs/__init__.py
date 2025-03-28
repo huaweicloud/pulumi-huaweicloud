@@ -8,7 +8,9 @@ import typing
 from .eip_associate import *
 from .get_flavors import *
 from .get_instance import *
+from .get_instance_remote_console import *
 from .get_instances import *
+from .get_servergroups import *
 from .instance import *
 from .interface_attach import *
 from .keypair import *

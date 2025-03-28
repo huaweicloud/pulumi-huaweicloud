@@ -143,6 +143,362 @@ func (o KafkaInstanceCrossVpcAccessArrayOutput) Index(i pulumi.IntInput) KafkaIn
 	}).(KafkaInstanceCrossVpcAccessOutput)
 }
 
+type KafkaInstanceParameter struct {
+	// Specifies the parameter name. Static parameter needs to restart the instance to take effect.
+	Name string `pulumi:"name"`
+	// Specifies the parameter value.
+	Value string `pulumi:"value"`
+}
+
+// KafkaInstanceParameterInput is an input type that accepts KafkaInstanceParameterArgs and KafkaInstanceParameterOutput values.
+// You can construct a concrete instance of `KafkaInstanceParameterInput` via:
+//
+//	KafkaInstanceParameterArgs{...}
+type KafkaInstanceParameterInput interface {
+	pulumi.Input
+
+	ToKafkaInstanceParameterOutput() KafkaInstanceParameterOutput
+	ToKafkaInstanceParameterOutputWithContext(context.Context) KafkaInstanceParameterOutput
+}
+
+type KafkaInstanceParameterArgs struct {
+	// Specifies the parameter name. Static parameter needs to restart the instance to take effect.
+	Name pulumi.StringInput `pulumi:"name"`
+	// Specifies the parameter value.
+	Value pulumi.StringInput `pulumi:"value"`
+}
+
+func (KafkaInstanceParameterArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*KafkaInstanceParameter)(nil)).Elem()
+}
+
+func (i KafkaInstanceParameterArgs) ToKafkaInstanceParameterOutput() KafkaInstanceParameterOutput {
+	return i.ToKafkaInstanceParameterOutputWithContext(context.Background())
+}
+
+func (i KafkaInstanceParameterArgs) ToKafkaInstanceParameterOutputWithContext(ctx context.Context) KafkaInstanceParameterOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(KafkaInstanceParameterOutput)
+}
+
+// KafkaInstanceParameterArrayInput is an input type that accepts KafkaInstanceParameterArray and KafkaInstanceParameterArrayOutput values.
+// You can construct a concrete instance of `KafkaInstanceParameterArrayInput` via:
+//
+//	KafkaInstanceParameterArray{ KafkaInstanceParameterArgs{...} }
+type KafkaInstanceParameterArrayInput interface {
+	pulumi.Input
+
+	ToKafkaInstanceParameterArrayOutput() KafkaInstanceParameterArrayOutput
+	ToKafkaInstanceParameterArrayOutputWithContext(context.Context) KafkaInstanceParameterArrayOutput
+}
+
+type KafkaInstanceParameterArray []KafkaInstanceParameterInput
+
+func (KafkaInstanceParameterArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]KafkaInstanceParameter)(nil)).Elem()
+}
+
+func (i KafkaInstanceParameterArray) ToKafkaInstanceParameterArrayOutput() KafkaInstanceParameterArrayOutput {
+	return i.ToKafkaInstanceParameterArrayOutputWithContext(context.Background())
+}
+
+func (i KafkaInstanceParameterArray) ToKafkaInstanceParameterArrayOutputWithContext(ctx context.Context) KafkaInstanceParameterArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(KafkaInstanceParameterArrayOutput)
+}
+
+type KafkaInstanceParameterOutput struct{ *pulumi.OutputState }
+
+func (KafkaInstanceParameterOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*KafkaInstanceParameter)(nil)).Elem()
+}
+
+func (o KafkaInstanceParameterOutput) ToKafkaInstanceParameterOutput() KafkaInstanceParameterOutput {
+	return o
+}
+
+func (o KafkaInstanceParameterOutput) ToKafkaInstanceParameterOutputWithContext(ctx context.Context) KafkaInstanceParameterOutput {
+	return o
+}
+
+// Specifies the parameter name. Static parameter needs to restart the instance to take effect.
+func (o KafkaInstanceParameterOutput) Name() pulumi.StringOutput {
+	return o.ApplyT(func(v KafkaInstanceParameter) string { return v.Name }).(pulumi.StringOutput)
+}
+
+// Specifies the parameter value.
+func (o KafkaInstanceParameterOutput) Value() pulumi.StringOutput {
+	return o.ApplyT(func(v KafkaInstanceParameter) string { return v.Value }).(pulumi.StringOutput)
+}
+
+type KafkaInstanceParameterArrayOutput struct{ *pulumi.OutputState }
+
+func (KafkaInstanceParameterArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]KafkaInstanceParameter)(nil)).Elem()
+}
+
+func (o KafkaInstanceParameterArrayOutput) ToKafkaInstanceParameterArrayOutput() KafkaInstanceParameterArrayOutput {
+	return o
+}
+
+func (o KafkaInstanceParameterArrayOutput) ToKafkaInstanceParameterArrayOutputWithContext(ctx context.Context) KafkaInstanceParameterArrayOutput {
+	return o
+}
+
+func (o KafkaInstanceParameterArrayOutput) Index(i pulumi.IntInput) KafkaInstanceParameterOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) KafkaInstanceParameter {
+		return vs[0].([]KafkaInstanceParameter)[vs[1].(int)]
+	}).(KafkaInstanceParameterOutput)
+}
+
+type KafkaInstancePortProtocol struct {
+	// The private plain address.
+	PrivatePlainAddress *string `pulumi:"privatePlainAddress"`
+	// The private plain domain name.
+	PrivatePlainDomainName *string `pulumi:"privatePlainDomainName"`
+	// Whether the private plain enabled.
+	PrivatePlainEnable *bool `pulumi:"privatePlainEnable"`
+	// The private sasl plaintext address.
+	PrivateSaslPlaintextAddress *string `pulumi:"privateSaslPlaintextAddress"`
+	// The private sasl plaintext domain name.
+	PrivateSaslPlaintextDomainName *string `pulumi:"privateSaslPlaintextDomainName"`
+	// Whether the private sasl plaintext enabled.
+	PrivateSaslPlaintextEnable *bool `pulumi:"privateSaslPlaintextEnable"`
+	// The private sasl ssl address.
+	PrivateSaslSslAddress *string `pulumi:"privateSaslSslAddress"`
+	// The private sasl ssl domain name.
+	PrivateSaslSslDomainName *string `pulumi:"privateSaslSslDomainName"`
+	// Whether the private sasl ssl enabled.
+	PrivateSaslSslEnable *bool `pulumi:"privateSaslSslEnable"`
+	// The public plain address.
+	PublicPlainAddress *string `pulumi:"publicPlainAddress"`
+	// The public plain domain name.
+	PublicPlainDomainName *string `pulumi:"publicPlainDomainName"`
+	// Whether the public plain enabled.
+	PublicPlainEnable *bool `pulumi:"publicPlainEnable"`
+	// The public sasl plaintext address.
+	PublicSaslPlaintextAddress *string `pulumi:"publicSaslPlaintextAddress"`
+	// The public sasl plaintext domain name.
+	PublicSaslPlaintextDomainName *string `pulumi:"publicSaslPlaintextDomainName"`
+	// Whether the public sasl plaintext enabled.
+	PublicSaslPlaintextEnable *bool `pulumi:"publicSaslPlaintextEnable"`
+	// The public sasl ssl address.
+	PublicSaslSslAddress *string `pulumi:"publicSaslSslAddress"`
+	// The public sasl ssl domain name.
+	PublicSaslSslDomainName *string `pulumi:"publicSaslSslDomainName"`
+	// Whether the public sasl ssl enabled.
+	PublicSaslSslEnable *bool `pulumi:"publicSaslSslEnable"`
+}
+
+// KafkaInstancePortProtocolInput is an input type that accepts KafkaInstancePortProtocolArgs and KafkaInstancePortProtocolOutput values.
+// You can construct a concrete instance of `KafkaInstancePortProtocolInput` via:
+//
+//	KafkaInstancePortProtocolArgs{...}
+type KafkaInstancePortProtocolInput interface {
+	pulumi.Input
+
+	ToKafkaInstancePortProtocolOutput() KafkaInstancePortProtocolOutput
+	ToKafkaInstancePortProtocolOutputWithContext(context.Context) KafkaInstancePortProtocolOutput
+}
+
+type KafkaInstancePortProtocolArgs struct {
+	// The private plain address.
+	PrivatePlainAddress pulumi.StringPtrInput `pulumi:"privatePlainAddress"`
+	// The private plain domain name.
+	PrivatePlainDomainName pulumi.StringPtrInput `pulumi:"privatePlainDomainName"`
+	// Whether the private plain enabled.
+	PrivatePlainEnable pulumi.BoolPtrInput `pulumi:"privatePlainEnable"`
+	// The private sasl plaintext address.
+	PrivateSaslPlaintextAddress pulumi.StringPtrInput `pulumi:"privateSaslPlaintextAddress"`
+	// The private sasl plaintext domain name.
+	PrivateSaslPlaintextDomainName pulumi.StringPtrInput `pulumi:"privateSaslPlaintextDomainName"`
+	// Whether the private sasl plaintext enabled.
+	PrivateSaslPlaintextEnable pulumi.BoolPtrInput `pulumi:"privateSaslPlaintextEnable"`
+	// The private sasl ssl address.
+	PrivateSaslSslAddress pulumi.StringPtrInput `pulumi:"privateSaslSslAddress"`
+	// The private sasl ssl domain name.
+	PrivateSaslSslDomainName pulumi.StringPtrInput `pulumi:"privateSaslSslDomainName"`
+	// Whether the private sasl ssl enabled.
+	PrivateSaslSslEnable pulumi.BoolPtrInput `pulumi:"privateSaslSslEnable"`
+	// The public plain address.
+	PublicPlainAddress pulumi.StringPtrInput `pulumi:"publicPlainAddress"`
+	// The public plain domain name.
+	PublicPlainDomainName pulumi.StringPtrInput `pulumi:"publicPlainDomainName"`
+	// Whether the public plain enabled.
+	PublicPlainEnable pulumi.BoolPtrInput `pulumi:"publicPlainEnable"`
+	// The public sasl plaintext address.
+	PublicSaslPlaintextAddress pulumi.StringPtrInput `pulumi:"publicSaslPlaintextAddress"`
+	// The public sasl plaintext domain name.
+	PublicSaslPlaintextDomainName pulumi.StringPtrInput `pulumi:"publicSaslPlaintextDomainName"`
+	// Whether the public sasl plaintext enabled.
+	PublicSaslPlaintextEnable pulumi.BoolPtrInput `pulumi:"publicSaslPlaintextEnable"`
+	// The public sasl ssl address.
+	PublicSaslSslAddress pulumi.StringPtrInput `pulumi:"publicSaslSslAddress"`
+	// The public sasl ssl domain name.
+	PublicSaslSslDomainName pulumi.StringPtrInput `pulumi:"publicSaslSslDomainName"`
+	// Whether the public sasl ssl enabled.
+	PublicSaslSslEnable pulumi.BoolPtrInput `pulumi:"publicSaslSslEnable"`
+}
+
+func (KafkaInstancePortProtocolArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*KafkaInstancePortProtocol)(nil)).Elem()
+}
+
+func (i KafkaInstancePortProtocolArgs) ToKafkaInstancePortProtocolOutput() KafkaInstancePortProtocolOutput {
+	return i.ToKafkaInstancePortProtocolOutputWithContext(context.Background())
+}
+
+func (i KafkaInstancePortProtocolArgs) ToKafkaInstancePortProtocolOutputWithContext(ctx context.Context) KafkaInstancePortProtocolOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(KafkaInstancePortProtocolOutput)
+}
+
+// KafkaInstancePortProtocolArrayInput is an input type that accepts KafkaInstancePortProtocolArray and KafkaInstancePortProtocolArrayOutput values.
+// You can construct a concrete instance of `KafkaInstancePortProtocolArrayInput` via:
+//
+//	KafkaInstancePortProtocolArray{ KafkaInstancePortProtocolArgs{...} }
+type KafkaInstancePortProtocolArrayInput interface {
+	pulumi.Input
+
+	ToKafkaInstancePortProtocolArrayOutput() KafkaInstancePortProtocolArrayOutput
+	ToKafkaInstancePortProtocolArrayOutputWithContext(context.Context) KafkaInstancePortProtocolArrayOutput
+}
+
+type KafkaInstancePortProtocolArray []KafkaInstancePortProtocolInput
+
+func (KafkaInstancePortProtocolArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]KafkaInstancePortProtocol)(nil)).Elem()
+}
+
+func (i KafkaInstancePortProtocolArray) ToKafkaInstancePortProtocolArrayOutput() KafkaInstancePortProtocolArrayOutput {
+	return i.ToKafkaInstancePortProtocolArrayOutputWithContext(context.Background())
+}
+
+func (i KafkaInstancePortProtocolArray) ToKafkaInstancePortProtocolArrayOutputWithContext(ctx context.Context) KafkaInstancePortProtocolArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(KafkaInstancePortProtocolArrayOutput)
+}
+
+type KafkaInstancePortProtocolOutput struct{ *pulumi.OutputState }
+
+func (KafkaInstancePortProtocolOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*KafkaInstancePortProtocol)(nil)).Elem()
+}
+
+func (o KafkaInstancePortProtocolOutput) ToKafkaInstancePortProtocolOutput() KafkaInstancePortProtocolOutput {
+	return o
+}
+
+func (o KafkaInstancePortProtocolOutput) ToKafkaInstancePortProtocolOutputWithContext(ctx context.Context) KafkaInstancePortProtocolOutput {
+	return o
+}
+
+// The private plain address.
+func (o KafkaInstancePortProtocolOutput) PrivatePlainAddress() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v KafkaInstancePortProtocol) *string { return v.PrivatePlainAddress }).(pulumi.StringPtrOutput)
+}
+
+// The private plain domain name.
+func (o KafkaInstancePortProtocolOutput) PrivatePlainDomainName() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v KafkaInstancePortProtocol) *string { return v.PrivatePlainDomainName }).(pulumi.StringPtrOutput)
+}
+
+// Whether the private plain enabled.
+func (o KafkaInstancePortProtocolOutput) PrivatePlainEnable() pulumi.BoolPtrOutput {
+	return o.ApplyT(func(v KafkaInstancePortProtocol) *bool { return v.PrivatePlainEnable }).(pulumi.BoolPtrOutput)
+}
+
+// The private sasl plaintext address.
+func (o KafkaInstancePortProtocolOutput) PrivateSaslPlaintextAddress() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v KafkaInstancePortProtocol) *string { return v.PrivateSaslPlaintextAddress }).(pulumi.StringPtrOutput)
+}
+
+// The private sasl plaintext domain name.
+func (o KafkaInstancePortProtocolOutput) PrivateSaslPlaintextDomainName() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v KafkaInstancePortProtocol) *string { return v.PrivateSaslPlaintextDomainName }).(pulumi.StringPtrOutput)
+}
+
+// Whether the private sasl plaintext enabled.
+func (o KafkaInstancePortProtocolOutput) PrivateSaslPlaintextEnable() pulumi.BoolPtrOutput {
+	return o.ApplyT(func(v KafkaInstancePortProtocol) *bool { return v.PrivateSaslPlaintextEnable }).(pulumi.BoolPtrOutput)
+}
+
+// The private sasl ssl address.
+func (o KafkaInstancePortProtocolOutput) PrivateSaslSslAddress() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v KafkaInstancePortProtocol) *string { return v.PrivateSaslSslAddress }).(pulumi.StringPtrOutput)
+}
+
+// The private sasl ssl domain name.
+func (o KafkaInstancePortProtocolOutput) PrivateSaslSslDomainName() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v KafkaInstancePortProtocol) *string { return v.PrivateSaslSslDomainName }).(pulumi.StringPtrOutput)
+}
+
+// Whether the private sasl ssl enabled.
+func (o KafkaInstancePortProtocolOutput) PrivateSaslSslEnable() pulumi.BoolPtrOutput {
+	return o.ApplyT(func(v KafkaInstancePortProtocol) *bool { return v.PrivateSaslSslEnable }).(pulumi.BoolPtrOutput)
+}
+
+// The public plain address.
+func (o KafkaInstancePortProtocolOutput) PublicPlainAddress() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v KafkaInstancePortProtocol) *string { return v.PublicPlainAddress }).(pulumi.StringPtrOutput)
+}
+
+// The public plain domain name.
+func (o KafkaInstancePortProtocolOutput) PublicPlainDomainName() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v KafkaInstancePortProtocol) *string { return v.PublicPlainDomainName }).(pulumi.StringPtrOutput)
+}
+
+// Whether the public plain enabled.
+func (o KafkaInstancePortProtocolOutput) PublicPlainEnable() pulumi.BoolPtrOutput {
+	return o.ApplyT(func(v KafkaInstancePortProtocol) *bool { return v.PublicPlainEnable }).(pulumi.BoolPtrOutput)
+}
+
+// The public sasl plaintext address.
+func (o KafkaInstancePortProtocolOutput) PublicSaslPlaintextAddress() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v KafkaInstancePortProtocol) *string { return v.PublicSaslPlaintextAddress }).(pulumi.StringPtrOutput)
+}
+
+// The public sasl plaintext domain name.
+func (o KafkaInstancePortProtocolOutput) PublicSaslPlaintextDomainName() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v KafkaInstancePortProtocol) *string { return v.PublicSaslPlaintextDomainName }).(pulumi.StringPtrOutput)
+}
+
+// Whether the public sasl plaintext enabled.
+func (o KafkaInstancePortProtocolOutput) PublicSaslPlaintextEnable() pulumi.BoolPtrOutput {
+	return o.ApplyT(func(v KafkaInstancePortProtocol) *bool { return v.PublicSaslPlaintextEnable }).(pulumi.BoolPtrOutput)
+}
+
+// The public sasl ssl address.
+func (o KafkaInstancePortProtocolOutput) PublicSaslSslAddress() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v KafkaInstancePortProtocol) *string { return v.PublicSaslSslAddress }).(pulumi.StringPtrOutput)
+}
+
+// The public sasl ssl domain name.
+func (o KafkaInstancePortProtocolOutput) PublicSaslSslDomainName() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v KafkaInstancePortProtocol) *string { return v.PublicSaslSslDomainName }).(pulumi.StringPtrOutput)
+}
+
+// Whether the public sasl ssl enabled.
+func (o KafkaInstancePortProtocolOutput) PublicSaslSslEnable() pulumi.BoolPtrOutput {
+	return o.ApplyT(func(v KafkaInstancePortProtocol) *bool { return v.PublicSaslSslEnable }).(pulumi.BoolPtrOutput)
+}
+
+type KafkaInstancePortProtocolArrayOutput struct{ *pulumi.OutputState }
+
+func (KafkaInstancePortProtocolArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]KafkaInstancePortProtocol)(nil)).Elem()
+}
+
+func (o KafkaInstancePortProtocolArrayOutput) ToKafkaInstancePortProtocolArrayOutput() KafkaInstancePortProtocolArrayOutput {
+	return o
+}
+
+func (o KafkaInstancePortProtocolArrayOutput) ToKafkaInstancePortProtocolArrayOutputWithContext(ctx context.Context) KafkaInstancePortProtocolArrayOutput {
+	return o
+}
+
+func (o KafkaInstancePortProtocolArrayOutput) Index(i pulumi.IntInput) KafkaInstancePortProtocolOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) KafkaInstancePortProtocol {
+		return vs[0].([]KafkaInstancePortProtocol)[vs[1].(int)]
+	}).(KafkaInstancePortProtocolOutput)
+}
+
 type KafkaPermissionsPolicy struct {
 	// Specifies the permissions type. The value can be:
 	// + **all**: publish and subscribe permissions.
@@ -258,6 +614,112 @@ func (o KafkaPermissionsPolicyArrayOutput) Index(i pulumi.IntInput) KafkaPermiss
 	}).(KafkaPermissionsPolicyOutput)
 }
 
+type KafkaTopicConfig struct {
+	// Specifies the configuration name.
+	Name string `pulumi:"name"`
+	// Specifies the configuration value.
+	Value string `pulumi:"value"`
+}
+
+// KafkaTopicConfigInput is an input type that accepts KafkaTopicConfigArgs and KafkaTopicConfigOutput values.
+// You can construct a concrete instance of `KafkaTopicConfigInput` via:
+//
+//	KafkaTopicConfigArgs{...}
+type KafkaTopicConfigInput interface {
+	pulumi.Input
+
+	ToKafkaTopicConfigOutput() KafkaTopicConfigOutput
+	ToKafkaTopicConfigOutputWithContext(context.Context) KafkaTopicConfigOutput
+}
+
+type KafkaTopicConfigArgs struct {
+	// Specifies the configuration name.
+	Name pulumi.StringInput `pulumi:"name"`
+	// Specifies the configuration value.
+	Value pulumi.StringInput `pulumi:"value"`
+}
+
+func (KafkaTopicConfigArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*KafkaTopicConfig)(nil)).Elem()
+}
+
+func (i KafkaTopicConfigArgs) ToKafkaTopicConfigOutput() KafkaTopicConfigOutput {
+	return i.ToKafkaTopicConfigOutputWithContext(context.Background())
+}
+
+func (i KafkaTopicConfigArgs) ToKafkaTopicConfigOutputWithContext(ctx context.Context) KafkaTopicConfigOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(KafkaTopicConfigOutput)
+}
+
+// KafkaTopicConfigArrayInput is an input type that accepts KafkaTopicConfigArray and KafkaTopicConfigArrayOutput values.
+// You can construct a concrete instance of `KafkaTopicConfigArrayInput` via:
+//
+//	KafkaTopicConfigArray{ KafkaTopicConfigArgs{...} }
+type KafkaTopicConfigArrayInput interface {
+	pulumi.Input
+
+	ToKafkaTopicConfigArrayOutput() KafkaTopicConfigArrayOutput
+	ToKafkaTopicConfigArrayOutputWithContext(context.Context) KafkaTopicConfigArrayOutput
+}
+
+type KafkaTopicConfigArray []KafkaTopicConfigInput
+
+func (KafkaTopicConfigArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]KafkaTopicConfig)(nil)).Elem()
+}
+
+func (i KafkaTopicConfigArray) ToKafkaTopicConfigArrayOutput() KafkaTopicConfigArrayOutput {
+	return i.ToKafkaTopicConfigArrayOutputWithContext(context.Background())
+}
+
+func (i KafkaTopicConfigArray) ToKafkaTopicConfigArrayOutputWithContext(ctx context.Context) KafkaTopicConfigArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(KafkaTopicConfigArrayOutput)
+}
+
+type KafkaTopicConfigOutput struct{ *pulumi.OutputState }
+
+func (KafkaTopicConfigOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*KafkaTopicConfig)(nil)).Elem()
+}
+
+func (o KafkaTopicConfigOutput) ToKafkaTopicConfigOutput() KafkaTopicConfigOutput {
+	return o
+}
+
+func (o KafkaTopicConfigOutput) ToKafkaTopicConfigOutputWithContext(ctx context.Context) KafkaTopicConfigOutput {
+	return o
+}
+
+// Specifies the configuration name.
+func (o KafkaTopicConfigOutput) Name() pulumi.StringOutput {
+	return o.ApplyT(func(v KafkaTopicConfig) string { return v.Name }).(pulumi.StringOutput)
+}
+
+// Specifies the configuration value.
+func (o KafkaTopicConfigOutput) Value() pulumi.StringOutput {
+	return o.ApplyT(func(v KafkaTopicConfig) string { return v.Value }).(pulumi.StringOutput)
+}
+
+type KafkaTopicConfigArrayOutput struct{ *pulumi.OutputState }
+
+func (KafkaTopicConfigArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]KafkaTopicConfig)(nil)).Elem()
+}
+
+func (o KafkaTopicConfigArrayOutput) ToKafkaTopicConfigArrayOutput() KafkaTopicConfigArrayOutput {
+	return o
+}
+
+func (o KafkaTopicConfigArrayOutput) ToKafkaTopicConfigArrayOutputWithContext(ctx context.Context) KafkaTopicConfigArrayOutput {
+	return o
+}
+
+func (o KafkaTopicConfigArrayOutput) Index(i pulumi.IntInput) KafkaTopicConfigOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) KafkaTopicConfig {
+		return vs[0].([]KafkaTopicConfig)[vs[1].(int)]
+	}).(KafkaTopicConfigOutput)
+}
+
 type GetFlavorsFlavor struct {
 	// The list of supported CPU architectures.
 	ArchTypes []string `pulumi:"archTypes"`
@@ -274,7 +736,7 @@ type GetFlavorsFlavor struct {
 	// The list of features supported by the current specification.
 	// The object structure is documented below.
 	SupportFeatures []GetFlavorsFlavorSupportFeature `pulumi:"supportFeatures"`
-	// Specifies flavor type. The valid values are **single** and **cluster**.
+	// Specifies flavor type. The valid values are **single**, **cluster** and **cluster.small**.
 	Type string `pulumi:"type"`
 	// The underlying VM specification.
 	VmSpecification string `pulumi:"vmSpecification"`
@@ -307,7 +769,7 @@ type GetFlavorsFlavorArgs struct {
 	// The list of features supported by the current specification.
 	// The object structure is documented below.
 	SupportFeatures GetFlavorsFlavorSupportFeatureArrayInput `pulumi:"supportFeatures"`
-	// Specifies flavor type. The valid values are **single** and **cluster**.
+	// Specifies flavor type. The valid values are **single**, **cluster** and **cluster.small**.
 	Type pulumi.StringInput `pulumi:"type"`
 	// The underlying VM specification.
 	VmSpecification pulumi.StringInput `pulumi:"vmSpecification"`
@@ -397,7 +859,7 @@ func (o GetFlavorsFlavorOutput) SupportFeatures() GetFlavorsFlavorSupportFeature
 	return o.ApplyT(func(v GetFlavorsFlavor) []GetFlavorsFlavorSupportFeature { return v.SupportFeatures }).(GetFlavorsFlavorSupportFeatureArrayOutput)
 }
 
-// Specifies flavor type. The valid values are **single** and **cluster**.
+// Specifies flavor type. The valid values are **single**, **cluster** and **cluster.small**.
 func (o GetFlavorsFlavorOutput) Type() pulumi.StringOutput {
 	return o.ApplyT(func(v GetFlavorsFlavor) string { return v.Type }).(pulumi.StringOutput)
 }
@@ -434,7 +896,7 @@ type GetFlavorsFlavorIo struct {
 	// + **dms.physical.storage.high.v2**: Type of the disk that uses high I/O.
 	// + **dms.physical.storage.ultra.v2**: Type of the disk that uses ultra-high I/O.
 	StorageSpecCode string `pulumi:"storageSpecCode"`
-	// Specifies flavor type. The valid values are **single** and **cluster**.
+	// Specifies flavor type. The valid values are **single**, **cluster** and **cluster.small**.
 	Type string `pulumi:"type"`
 	// The list of unavailability zones with available resources.
 	UnavailabilityZones []string `pulumi:"unavailabilityZones"`
@@ -458,7 +920,7 @@ type GetFlavorsFlavorIoArgs struct {
 	// + **dms.physical.storage.high.v2**: Type of the disk that uses high I/O.
 	// + **dms.physical.storage.ultra.v2**: Type of the disk that uses ultra-high I/O.
 	StorageSpecCode pulumi.StringInput `pulumi:"storageSpecCode"`
-	// Specifies flavor type. The valid values are **single** and **cluster**.
+	// Specifies flavor type. The valid values are **single**, **cluster** and **cluster.small**.
 	Type pulumi.StringInput `pulumi:"type"`
 	// The list of unavailability zones with available resources.
 	UnavailabilityZones pulumi.StringArrayInput `pulumi:"unavailabilityZones"`
@@ -527,7 +989,7 @@ func (o GetFlavorsFlavorIoOutput) StorageSpecCode() pulumi.StringOutput {
 	return o.ApplyT(func(v GetFlavorsFlavorIo) string { return v.StorageSpecCode }).(pulumi.StringOutput)
 }
 
-// Specifies flavor type. The valid values are **single** and **cluster**.
+// Specifies flavor type. The valid values are **single**, **cluster** and **cluster.small**.
 func (o GetFlavorsFlavorIoOutput) Type() pulumi.StringOutput {
 	return o.ApplyT(func(v GetFlavorsFlavorIo) string { return v.Type }).(pulumi.StringOutput)
 }
@@ -976,6 +1438,8 @@ type GetInstancesInstance struct {
 	EnableAutoTopic bool `pulumi:"enableAutoTopic"`
 	// Whether public access to the instance is enabled.
 	EnablePublicIp bool `pulumi:"enablePublicIp"`
+	// The authentication mechanisms to use after SASL is enabled.
+	EnabledMechanisms []string `pulumi:"enabledMechanisms"`
 	// The kafka engine version.
 	EngineVersion string `pulumi:"engineVersion"`
 	// Specifies the enterprise project ID to which all instances of the list
@@ -1014,6 +1478,8 @@ type GetInstancesInstance struct {
 	RetentionPolicy string `pulumi:"retentionPolicy"`
 	// The security group ID associated with the instance.
 	SecurityGroupId string `pulumi:"securityGroupId"`
+	// The protocol to use after SASL is enabled.
+	SecurityProtocol string `pulumi:"securityProtocol"`
 	// Whether the Kafka SASL_SSL is enabled.
 	SslEnable bool `pulumi:"sslEnable"`
 	// Specifies the kafka instance status for data-source queries.
@@ -1064,6 +1530,8 @@ type GetInstancesInstanceArgs struct {
 	EnableAutoTopic pulumi.BoolInput `pulumi:"enableAutoTopic"`
 	// Whether public access to the instance is enabled.
 	EnablePublicIp pulumi.BoolInput `pulumi:"enablePublicIp"`
+	// The authentication mechanisms to use after SASL is enabled.
+	EnabledMechanisms pulumi.StringArrayInput `pulumi:"enabledMechanisms"`
 	// The kafka engine version.
 	EngineVersion pulumi.StringInput `pulumi:"engineVersion"`
 	// Specifies the enterprise project ID to which all instances of the list
@@ -1102,6 +1570,8 @@ type GetInstancesInstanceArgs struct {
 	RetentionPolicy pulumi.StringInput `pulumi:"retentionPolicy"`
 	// The security group ID associated with the instance.
 	SecurityGroupId pulumi.StringInput `pulumi:"securityGroupId"`
+	// The protocol to use after SASL is enabled.
+	SecurityProtocol pulumi.StringInput `pulumi:"securityProtocol"`
 	// Whether the Kafka SASL_SSL is enabled.
 	SslEnable pulumi.BoolInput `pulumi:"sslEnable"`
 	// Specifies the kafka instance status for data-source queries.
@@ -1215,6 +1685,11 @@ func (o GetInstancesInstanceOutput) EnablePublicIp() pulumi.BoolOutput {
 	return o.ApplyT(func(v GetInstancesInstance) bool { return v.EnablePublicIp }).(pulumi.BoolOutput)
 }
 
+// The authentication mechanisms to use after SASL is enabled.
+func (o GetInstancesInstanceOutput) EnabledMechanisms() pulumi.StringArrayOutput {
+	return o.ApplyT(func(v GetInstancesInstance) []string { return v.EnabledMechanisms }).(pulumi.StringArrayOutput)
+}
+
 // The kafka engine version.
 func (o GetInstancesInstanceOutput) EngineVersion() pulumi.StringOutput {
 	return o.ApplyT(func(v GetInstancesInstance) string { return v.EngineVersion }).(pulumi.StringOutput)
@@ -1305,6 +1780,11 @@ func (o GetInstancesInstanceOutput) RetentionPolicy() pulumi.StringOutput {
 // The security group ID associated with the instance.
 func (o GetInstancesInstanceOutput) SecurityGroupId() pulumi.StringOutput {
 	return o.ApplyT(func(v GetInstancesInstance) string { return v.SecurityGroupId }).(pulumi.StringOutput)
+}
+
+// The protocol to use after SASL is enabled.
+func (o GetInstancesInstanceOutput) SecurityProtocol() pulumi.StringOutput {
+	return o.ApplyT(func(v GetInstancesInstance) string { return v.SecurityProtocol }).(pulumi.StringOutput)
 }
 
 // Whether the Kafka SASL_SSL is enabled.
@@ -1513,8 +1993,14 @@ func (o GetInstancesInstanceCrossVpcAccessArrayOutput) Index(i pulumi.IntInput) 
 func init() {
 	pulumi.RegisterInputType(reflect.TypeOf((*KafkaInstanceCrossVpcAccessInput)(nil)).Elem(), KafkaInstanceCrossVpcAccessArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*KafkaInstanceCrossVpcAccessArrayInput)(nil)).Elem(), KafkaInstanceCrossVpcAccessArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*KafkaInstanceParameterInput)(nil)).Elem(), KafkaInstanceParameterArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*KafkaInstanceParameterArrayInput)(nil)).Elem(), KafkaInstanceParameterArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*KafkaInstancePortProtocolInput)(nil)).Elem(), KafkaInstancePortProtocolArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*KafkaInstancePortProtocolArrayInput)(nil)).Elem(), KafkaInstancePortProtocolArray{})
 	pulumi.RegisterInputType(reflect.TypeOf((*KafkaPermissionsPolicyInput)(nil)).Elem(), KafkaPermissionsPolicyArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*KafkaPermissionsPolicyArrayInput)(nil)).Elem(), KafkaPermissionsPolicyArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*KafkaTopicConfigInput)(nil)).Elem(), KafkaTopicConfigArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*KafkaTopicConfigArrayInput)(nil)).Elem(), KafkaTopicConfigArray{})
 	pulumi.RegisterInputType(reflect.TypeOf((*GetFlavorsFlavorInput)(nil)).Elem(), GetFlavorsFlavorArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*GetFlavorsFlavorArrayInput)(nil)).Elem(), GetFlavorsFlavorArray{})
 	pulumi.RegisterInputType(reflect.TypeOf((*GetFlavorsFlavorIoInput)(nil)).Elem(), GetFlavorsFlavorIoArgs{})
@@ -1531,8 +2017,14 @@ func init() {
 	pulumi.RegisterInputType(reflect.TypeOf((*GetInstancesInstanceCrossVpcAccessArrayInput)(nil)).Elem(), GetInstancesInstanceCrossVpcAccessArray{})
 	pulumi.RegisterOutputType(KafkaInstanceCrossVpcAccessOutput{})
 	pulumi.RegisterOutputType(KafkaInstanceCrossVpcAccessArrayOutput{})
+	pulumi.RegisterOutputType(KafkaInstanceParameterOutput{})
+	pulumi.RegisterOutputType(KafkaInstanceParameterArrayOutput{})
+	pulumi.RegisterOutputType(KafkaInstancePortProtocolOutput{})
+	pulumi.RegisterOutputType(KafkaInstancePortProtocolArrayOutput{})
 	pulumi.RegisterOutputType(KafkaPermissionsPolicyOutput{})
 	pulumi.RegisterOutputType(KafkaPermissionsPolicyArrayOutput{})
+	pulumi.RegisterOutputType(KafkaTopicConfigOutput{})
+	pulumi.RegisterOutputType(KafkaTopicConfigArrayOutput{})
 	pulumi.RegisterOutputType(GetFlavorsFlavorOutput{})
 	pulumi.RegisterOutputType(GetFlavorsFlavorArrayOutput{})
 	pulumi.RegisterOutputType(GetFlavorsFlavorIoOutput{})

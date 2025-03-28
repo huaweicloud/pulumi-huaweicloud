@@ -139,7 +139,7 @@ import (
 //
 // ## Import
 //
-// The bandwidth scaling policies can be imported using the `id`, e.g.
+// The bandwidth scaling policies can be imported using the `id`, e.g. bash
 //
 // ```sh
 //

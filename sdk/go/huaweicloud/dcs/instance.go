@@ -39,7 +39,7 @@ import (
 //			subnetId := cfg.RequireObject("subnetId")
 //			singleFlavors, err := Dcs.GetFlavors(ctx, &dcs.GetFlavorsArgs{
 //				CacheMode: pulumi.StringRef("single"),
-//				Capacity:  0.125,
+//				Capacity:  pulumi.Float64Ref(0.125),
 //			}, nil)
 //			if err != nil {
 //				return err
@@ -126,6 +126,18 @@ import (
 //						},
 //					},
 //				},
+//				Parameters: dcs.InstanceParameterArray{
+//					&dcs.InstanceParameterArgs{
+//						Id:    pulumi.String("1"),
+//						Name:  pulumi.String("timeout"),
+//						Value: pulumi.String("500"),
+//					},
+//					&dcs.InstanceParameterArgs{
+//						Id:    pulumi.String("3"),
+//						Name:  pulumi.String("hash-max-ziplist-entries"),
+//						Value: pulumi.String("4096"),
+//					},
+//				},
 //			})
 //			if err != nil {
 //				return err
@@ -146,7 +158,7 @@ import (
 //
 // ```
 //
-//	Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`password`, `auto_renew`, `period`, `period_unit`, `rename_commands`, `internal_version`, `save_days`, `backup_type`, `begin_at`, `period_type`, `backup_at`. It is generally recommended running `terraform plan` after importing an instance. You can then decide if changes should be applied to the instance, or the resource definition should be updated to align with the instance. Also you can ignore changes as below. resource "huaweicloud_dcs_instance" "instance_1" {
+//	Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`password`, `auto_renew`, `period`, `period_unit`, `rename_commands`, `internal_version`, `save_days`, `backup_type`, `begin_at`, `period_type`, `backup_at`, `parameters`. It is generally recommended running `terraform plan` after importing an instance. You can then decide if changes should be applied to the instance, or the resource definition should be updated to align with the instance. Also you can ignore changes as below. hcl resource "huaweicloud_dcs_instance" "instance_1" {
 //
 //	...
 //
@@ -179,7 +191,7 @@ type Instance struct {
 	AvailabilityZones pulumi.StringArrayOutput `pulumi:"availabilityZones"`
 	// Deprecated: Deprecated, please use `availability_zones` instead
 	AvailableZones pulumi.StringArrayOutput `pulumi:"availableZones"`
-	// Day in a week on which backup starts, the value ranges from 1 to 7.
+	// Day in a week on which backup starts, the value ranges from `1` to `7`.
 	// Where: 1 indicates Monday; 7 indicates Sunday.
 	//
 	// Deprecated: Deprecated, please use `backup_policy` instead
@@ -193,11 +205,16 @@ type Instance struct {
 	//
 	// Deprecated: Deprecated, please use `backup_policy` instead
 	BackupType pulumi.StringPtrOutput `pulumi:"backupType"`
+	// Indicates the bandwidth information of the instance.
+	// The bandwidthInfo structure is documented below.
+	BandwidthInfos InstanceBandwidthInfoArrayOutput `pulumi:"bandwidthInfos"`
 	// Time at which backup starts.
 	// Format: `hh24:00-hh24:00`, "00:00-01:00" indicates that backup starts at 00:00:00.
 	//
 	// Deprecated: Deprecated, please use `backup_policy` instead
 	BeginAt pulumi.StringPtrOutput `pulumi:"beginAt"`
+	// Indicates the instance type. The value can be **single**, **ha**, **cluster** or **proxy**.
+	CacheMode pulumi.StringOutput `pulumi:"cacheMode"`
 	// Specifies the cache capacity. Unit: GB.
 	// + **Redis4.0, Redis5.0 and Redis6.0**: Stand-alone and active/standby type instance values: `0.125`, `0.25`,
 	//   `0.5`, `1`, `2`, `4`, `8`, `16`, `32` and `64`.
@@ -214,6 +231,10 @@ type Instance struct {
 	//   Default value is `postPaid`.
 	//   Changing this creates a new instance.
 	ChargingMode pulumi.StringOutput `pulumi:"chargingMode"`
+	// Indicates the CPU type of the instance. The value can be **x86_64** or **aarch64**.
+	CpuType pulumi.StringOutput `pulumi:"cpuType"`
+	// Indicates the time when the instance is created, in RFC3339 format.
+	CreatedAt pulumi.StringOutput `pulumi:"createdAt"`
 	// Specifies the ID of the replica to delete. This parameter is mandatory when
 	// you delete replicas of a master/standby DCS Redis 4.0 or 5.0 instance. Currently, only one replica can be deleted
 	// at a time.
@@ -231,7 +252,6 @@ type Instance struct {
 	// Changing this creates a new instance.
 	EngineVersion pulumi.StringPtrOutput `pulumi:"engineVersion"`
 	// The enterprise project id of the dcs instance.
-	// Changing this creates a new instance.
 	EnterpriseProjectId pulumi.StringOutput `pulumi:"enterpriseProjectId"`
 	// Deprecated: Deprecated, this is a non-public attribute.
 	EnterpriseProjectName pulumi.StringOutput `pulumi:"enterpriseProjectName"`
@@ -247,34 +267,33 @@ type Instance struct {
 	InternalVersion pulumi.StringOutput `pulumi:"internalVersion"`
 	// Deprecated: Deprecated, please us `private_ip` instead.
 	Ip pulumi.StringOutput `pulumi:"ip"`
-	// Time at which the maintenance time window starts.
-	// The valid values are `22:00:00`, `02:00:00`, `06:00:00`, `10:00:00`, `14:00:00` and `18:00:00`.
-	// Default value is `02:00:00`.
+	// Indicates the time when the instance is started, in RFC3339 format.
+	LaunchedAt pulumi.StringOutput `pulumi:"launchedAt"`
+	// Time at which the maintenance time window starts. Defaults to **02:00:00**.
 	// + The start time and end time of a maintenance time window must indicate the time segment of a supported maintenance
 	//   time window.
-	// + Parameters `maintainBegin` and `maintainEnd` must be set in pairs.
-	// + If parameter maintainBegin is left blank, parameter maintainEnd is also blank.
-	//   In this case, the system automatically allocates the default start time 02:00:00.
-	MaintainBegin pulumi.StringPtrOutput `pulumi:"maintainBegin"`
-	// Time at which the maintenance time window ends.
-	// The valid values are `22:00:00`, `02:00:00`, `06:00:00`, `10:00:00`, `14:00:00` and `18:00:00`.
-	// Default value is `06:00:00`.
+	// + The start time must be on the hour, such as **18:00:00**.
+	// + If parameter `maintainBegin` is left blank, parameter `maintainEnd` is also blank.
+	//   In this case, the system automatically allocates the default start time **02:00:00**.
+	MaintainBegin pulumi.StringOutput `pulumi:"maintainBegin"`
+	// Time at which the maintenance time window ends. Defaults to **06:00:00**.
 	// + The start time and end time of a maintenance time window must indicate the time segment of a supported maintenance
 	//   time window.
-	// + The end time is four hours later than the start time.
-	//   For example, if the start time is 22:00:00, the end time is 02:00:00.
-	// + Parameters `maintainBegin` and `maintainEnd` must be set in pairs.
-	// + If parameter maintainEnd is left blank, parameter maintainBegin is also blank.
-	//   In this case, the system automatically allocates the default end time 06:00:00.
-	MaintainEnd pulumi.StringPtrOutput `pulumi:"maintainEnd"`
+	// + The end time is one hour later than the start time. For example, if the start time is **18:00:00**, the end time is
+	//   **19:00:00**.
+	// + If parameter `maintainEnd` is left blank, parameter `maintainBegin` is also blank.
+	//   In this case, the system automatically allocates the default end time **06:00:00**.
+	MaintainEnd pulumi.StringOutput `pulumi:"maintainEnd"`
 	// Total memory size. Unit: MB.
 	MaxMemory pulumi.IntOutput `pulumi:"maxMemory"`
-	// Specifies the name of an instance.
-	// The name must be 4 to 64 characters and start with a letter.
-	// Only chinese, letters (case-insensitive), digits, underscores (_) ,and hyphens (-) are allowed.
+	// Specifies the name of the configuration item.
 	Name pulumi.StringOutput `pulumi:"name"`
 	// The ID of the order that created the instance.
 	OrderId pulumi.StringOutput `pulumi:"orderId"`
+	// Specify an array of one or more parameters to be set to the DCS instance after
+	// launched. You can check on console to see which parameters supported.
+	// The parameters structure is documented below.
+	Parameters InstanceParameterArrayOutput `pulumi:"parameters"`
 	// Specifies the password of a DCS instance.
 	// The password of a DCS instance must meet the following complexity requirements:
 	// + Must be a string of 8 to 32 bits in length.
@@ -308,6 +327,11 @@ type Instance struct {
 	PrivateIp pulumi.StringOutput `pulumi:"privateIp"`
 	// Deprecated: Deprecated, please use `flavor` instead
 	ProductId pulumi.StringOutput `pulumi:"productId"`
+	// Indicates the product type of the instance. The value can be: **generic** or **enterprise**.
+	ProductType pulumi.StringOutput `pulumi:"productType"`
+	// Indicates the read-only domain name of the instance. This parameter is available
+	// only for master/standby instances.
+	ReadonlyDomainName pulumi.StringOutput `pulumi:"readonlyDomainName"`
 	// Specifies the region in which to create the DCS instance resource.
 	// If omitted, the provider-level region will be used. Changing this creates a new DCS instance resource.
 	Region pulumi.StringOutput `pulumi:"region"`
@@ -315,10 +339,12 @@ type Instance struct {
 	// Redis 5.0 instances but not by Redis 3.0 instance.
 	// The valid commands that can be renamed are: **command**, **keys**, **flushdb**, **flushall** and **hgetall**.
 	RenameCommands pulumi.StringMapOutput `pulumi:"renameCommands"`
+	// Indicates the number of replicas in the instance.
+	ReplicaCount pulumi.IntOutput `pulumi:"replicaCount"`
 	// Specifies IP addresses to retain. Mandatory during cluster scale-in. If this
 	// parameter is not set, the system randomly deletes unnecessary shards.
 	ReservedIps pulumi.StringArrayOutput `pulumi:"reservedIps"`
-	// Retention time. Unit: day, the value ranges from 1 to 7.
+	// Retention time. Unit: day, the value ranges from `1` to `7`.
 	// This parameter is required if the backupType is **auto**.
 	//
 	// Deprecated: Deprecated, please use `backup_policy` instead
@@ -328,6 +354,10 @@ type Instance struct {
 	SecurityGroupId pulumi.StringPtrOutput `pulumi:"securityGroupId"`
 	// The name of security group which the instance belongs to.
 	SecurityGroupName pulumi.StringOutput `pulumi:"securityGroupName"`
+	// Indicates the number of shards in a cluster instance.
+	ShardingCount pulumi.IntOutput `pulumi:"shardingCount"`
+	// Specifies whether to enable the SSL. Value options: **true**, **false**.
+	SslEnable pulumi.BoolOutput `pulumi:"sslEnable"`
 	// Cache instance status. The valid values are as follows:
 	// + `RUNNING`: The instance is running properly.
 	//   Only instances in the Running state can provide in-memory cache service.
@@ -339,6 +369,8 @@ type Instance struct {
 	// + `RESTORING`: The instance data is being restored.
 	// + `FLUSHING`: The DCS instance is being cleared.
 	Status pulumi.StringOutput `pulumi:"status"`
+	// Indicates the subnet segment.
+	SubnetCidr pulumi.StringOutput `pulumi:"subnetCidr"`
 	// The ID of subnet which the instance belongs to.
 	// Changing this creates a new instance resource.
 	SubnetId pulumi.StringOutput `pulumi:"subnetId"`
@@ -349,6 +381,8 @@ type Instance struct {
 	// The Parameter Template ID.
 	// Changing this creates a new instance resource.
 	TemplateId pulumi.StringPtrOutput `pulumi:"templateId"`
+	// Indicates whether client IP pass-through is enabled.
+	TransparentClientIpEnable pulumi.BoolOutput `pulumi:"transparentClientIpEnable"`
 	// Size of the used memory. Unit: MB.
 	UsedMemory pulumi.IntOutput `pulumi:"usedMemory"`
 	// Deprecated: Deprecated
@@ -427,7 +461,7 @@ type instanceState struct {
 	AvailabilityZones []string `pulumi:"availabilityZones"`
 	// Deprecated: Deprecated, please use `availability_zones` instead
 	AvailableZones []string `pulumi:"availableZones"`
-	// Day in a week on which backup starts, the value ranges from 1 to 7.
+	// Day in a week on which backup starts, the value ranges from `1` to `7`.
 	// Where: 1 indicates Monday; 7 indicates Sunday.
 	//
 	// Deprecated: Deprecated, please use `backup_policy` instead
@@ -441,11 +475,16 @@ type instanceState struct {
 	//
 	// Deprecated: Deprecated, please use `backup_policy` instead
 	BackupType *string `pulumi:"backupType"`
+	// Indicates the bandwidth information of the instance.
+	// The bandwidthInfo structure is documented below.
+	BandwidthInfos []InstanceBandwidthInfo `pulumi:"bandwidthInfos"`
 	// Time at which backup starts.
 	// Format: `hh24:00-hh24:00`, "00:00-01:00" indicates that backup starts at 00:00:00.
 	//
 	// Deprecated: Deprecated, please use `backup_policy` instead
 	BeginAt *string `pulumi:"beginAt"`
+	// Indicates the instance type. The value can be **single**, **ha**, **cluster** or **proxy**.
+	CacheMode *string `pulumi:"cacheMode"`
 	// Specifies the cache capacity. Unit: GB.
 	// + **Redis4.0, Redis5.0 and Redis6.0**: Stand-alone and active/standby type instance values: `0.125`, `0.25`,
 	//   `0.5`, `1`, `2`, `4`, `8`, `16`, `32` and `64`.
@@ -462,6 +501,10 @@ type instanceState struct {
 	//   Default value is `postPaid`.
 	//   Changing this creates a new instance.
 	ChargingMode *string `pulumi:"chargingMode"`
+	// Indicates the CPU type of the instance. The value can be **x86_64** or **aarch64**.
+	CpuType *string `pulumi:"cpuType"`
+	// Indicates the time when the instance is created, in RFC3339 format.
+	CreatedAt *string `pulumi:"createdAt"`
 	// Specifies the ID of the replica to delete. This parameter is mandatory when
 	// you delete replicas of a master/standby DCS Redis 4.0 or 5.0 instance. Currently, only one replica can be deleted
 	// at a time.
@@ -479,7 +522,6 @@ type instanceState struct {
 	// Changing this creates a new instance.
 	EngineVersion *string `pulumi:"engineVersion"`
 	// The enterprise project id of the dcs instance.
-	// Changing this creates a new instance.
 	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
 	// Deprecated: Deprecated, this is a non-public attribute.
 	EnterpriseProjectName *string `pulumi:"enterpriseProjectName"`
@@ -495,34 +537,33 @@ type instanceState struct {
 	InternalVersion *string `pulumi:"internalVersion"`
 	// Deprecated: Deprecated, please us `private_ip` instead.
 	Ip *string `pulumi:"ip"`
-	// Time at which the maintenance time window starts.
-	// The valid values are `22:00:00`, `02:00:00`, `06:00:00`, `10:00:00`, `14:00:00` and `18:00:00`.
-	// Default value is `02:00:00`.
+	// Indicates the time when the instance is started, in RFC3339 format.
+	LaunchedAt *string `pulumi:"launchedAt"`
+	// Time at which the maintenance time window starts. Defaults to **02:00:00**.
 	// + The start time and end time of a maintenance time window must indicate the time segment of a supported maintenance
 	//   time window.
-	// + Parameters `maintainBegin` and `maintainEnd` must be set in pairs.
-	// + If parameter maintainBegin is left blank, parameter maintainEnd is also blank.
-	//   In this case, the system automatically allocates the default start time 02:00:00.
+	// + The start time must be on the hour, such as **18:00:00**.
+	// + If parameter `maintainBegin` is left blank, parameter `maintainEnd` is also blank.
+	//   In this case, the system automatically allocates the default start time **02:00:00**.
 	MaintainBegin *string `pulumi:"maintainBegin"`
-	// Time at which the maintenance time window ends.
-	// The valid values are `22:00:00`, `02:00:00`, `06:00:00`, `10:00:00`, `14:00:00` and `18:00:00`.
-	// Default value is `06:00:00`.
+	// Time at which the maintenance time window ends. Defaults to **06:00:00**.
 	// + The start time and end time of a maintenance time window must indicate the time segment of a supported maintenance
 	//   time window.
-	// + The end time is four hours later than the start time.
-	//   For example, if the start time is 22:00:00, the end time is 02:00:00.
-	// + Parameters `maintainBegin` and `maintainEnd` must be set in pairs.
-	// + If parameter maintainEnd is left blank, parameter maintainBegin is also blank.
-	//   In this case, the system automatically allocates the default end time 06:00:00.
+	// + The end time is one hour later than the start time. For example, if the start time is **18:00:00**, the end time is
+	//   **19:00:00**.
+	// + If parameter `maintainEnd` is left blank, parameter `maintainBegin` is also blank.
+	//   In this case, the system automatically allocates the default end time **06:00:00**.
 	MaintainEnd *string `pulumi:"maintainEnd"`
 	// Total memory size. Unit: MB.
 	MaxMemory *int `pulumi:"maxMemory"`
-	// Specifies the name of an instance.
-	// The name must be 4 to 64 characters and start with a letter.
-	// Only chinese, letters (case-insensitive), digits, underscores (_) ,and hyphens (-) are allowed.
+	// Specifies the name of the configuration item.
 	Name *string `pulumi:"name"`
 	// The ID of the order that created the instance.
 	OrderId *string `pulumi:"orderId"`
+	// Specify an array of one or more parameters to be set to the DCS instance after
+	// launched. You can check on console to see which parameters supported.
+	// The parameters structure is documented below.
+	Parameters []InstanceParameter `pulumi:"parameters"`
 	// Specifies the password of a DCS instance.
 	// The password of a DCS instance must meet the following complexity requirements:
 	// + Must be a string of 8 to 32 bits in length.
@@ -556,6 +597,11 @@ type instanceState struct {
 	PrivateIp *string `pulumi:"privateIp"`
 	// Deprecated: Deprecated, please use `flavor` instead
 	ProductId *string `pulumi:"productId"`
+	// Indicates the product type of the instance. The value can be: **generic** or **enterprise**.
+	ProductType *string `pulumi:"productType"`
+	// Indicates the read-only domain name of the instance. This parameter is available
+	// only for master/standby instances.
+	ReadonlyDomainName *string `pulumi:"readonlyDomainName"`
 	// Specifies the region in which to create the DCS instance resource.
 	// If omitted, the provider-level region will be used. Changing this creates a new DCS instance resource.
 	Region *string `pulumi:"region"`
@@ -563,10 +609,12 @@ type instanceState struct {
 	// Redis 5.0 instances but not by Redis 3.0 instance.
 	// The valid commands that can be renamed are: **command**, **keys**, **flushdb**, **flushall** and **hgetall**.
 	RenameCommands map[string]string `pulumi:"renameCommands"`
+	// Indicates the number of replicas in the instance.
+	ReplicaCount *int `pulumi:"replicaCount"`
 	// Specifies IP addresses to retain. Mandatory during cluster scale-in. If this
 	// parameter is not set, the system randomly deletes unnecessary shards.
 	ReservedIps []string `pulumi:"reservedIps"`
-	// Retention time. Unit: day, the value ranges from 1 to 7.
+	// Retention time. Unit: day, the value ranges from `1` to `7`.
 	// This parameter is required if the backupType is **auto**.
 	//
 	// Deprecated: Deprecated, please use `backup_policy` instead
@@ -576,6 +624,10 @@ type instanceState struct {
 	SecurityGroupId *string `pulumi:"securityGroupId"`
 	// The name of security group which the instance belongs to.
 	SecurityGroupName *string `pulumi:"securityGroupName"`
+	// Indicates the number of shards in a cluster instance.
+	ShardingCount *int `pulumi:"shardingCount"`
+	// Specifies whether to enable the SSL. Value options: **true**, **false**.
+	SslEnable *bool `pulumi:"sslEnable"`
 	// Cache instance status. The valid values are as follows:
 	// + `RUNNING`: The instance is running properly.
 	//   Only instances in the Running state can provide in-memory cache service.
@@ -587,6 +639,8 @@ type instanceState struct {
 	// + `RESTORING`: The instance data is being restored.
 	// + `FLUSHING`: The DCS instance is being cleared.
 	Status *string `pulumi:"status"`
+	// Indicates the subnet segment.
+	SubnetCidr *string `pulumi:"subnetCidr"`
 	// The ID of subnet which the instance belongs to.
 	// Changing this creates a new instance resource.
 	SubnetId *string `pulumi:"subnetId"`
@@ -597,6 +651,8 @@ type instanceState struct {
 	// The Parameter Template ID.
 	// Changing this creates a new instance resource.
 	TemplateId *string `pulumi:"templateId"`
+	// Indicates whether client IP pass-through is enabled.
+	TransparentClientIpEnable *bool `pulumi:"transparentClientIpEnable"`
 	// Size of the used memory. Unit: MB.
 	UsedMemory *int `pulumi:"usedMemory"`
 	// Deprecated: Deprecated
@@ -634,7 +690,7 @@ type InstanceState struct {
 	AvailabilityZones pulumi.StringArrayInput
 	// Deprecated: Deprecated, please use `availability_zones` instead
 	AvailableZones pulumi.StringArrayInput
-	// Day in a week on which backup starts, the value ranges from 1 to 7.
+	// Day in a week on which backup starts, the value ranges from `1` to `7`.
 	// Where: 1 indicates Monday; 7 indicates Sunday.
 	//
 	// Deprecated: Deprecated, please use `backup_policy` instead
@@ -648,11 +704,16 @@ type InstanceState struct {
 	//
 	// Deprecated: Deprecated, please use `backup_policy` instead
 	BackupType pulumi.StringPtrInput
+	// Indicates the bandwidth information of the instance.
+	// The bandwidthInfo structure is documented below.
+	BandwidthInfos InstanceBandwidthInfoArrayInput
 	// Time at which backup starts.
 	// Format: `hh24:00-hh24:00`, "00:00-01:00" indicates that backup starts at 00:00:00.
 	//
 	// Deprecated: Deprecated, please use `backup_policy` instead
 	BeginAt pulumi.StringPtrInput
+	// Indicates the instance type. The value can be **single**, **ha**, **cluster** or **proxy**.
+	CacheMode pulumi.StringPtrInput
 	// Specifies the cache capacity. Unit: GB.
 	// + **Redis4.0, Redis5.0 and Redis6.0**: Stand-alone and active/standby type instance values: `0.125`, `0.25`,
 	//   `0.5`, `1`, `2`, `4`, `8`, `16`, `32` and `64`.
@@ -669,6 +730,10 @@ type InstanceState struct {
 	//   Default value is `postPaid`.
 	//   Changing this creates a new instance.
 	ChargingMode pulumi.StringPtrInput
+	// Indicates the CPU type of the instance. The value can be **x86_64** or **aarch64**.
+	CpuType pulumi.StringPtrInput
+	// Indicates the time when the instance is created, in RFC3339 format.
+	CreatedAt pulumi.StringPtrInput
 	// Specifies the ID of the replica to delete. This parameter is mandatory when
 	// you delete replicas of a master/standby DCS Redis 4.0 or 5.0 instance. Currently, only one replica can be deleted
 	// at a time.
@@ -686,7 +751,6 @@ type InstanceState struct {
 	// Changing this creates a new instance.
 	EngineVersion pulumi.StringPtrInput
 	// The enterprise project id of the dcs instance.
-	// Changing this creates a new instance.
 	EnterpriseProjectId pulumi.StringPtrInput
 	// Deprecated: Deprecated, this is a non-public attribute.
 	EnterpriseProjectName pulumi.StringPtrInput
@@ -702,34 +766,33 @@ type InstanceState struct {
 	InternalVersion pulumi.StringPtrInput
 	// Deprecated: Deprecated, please us `private_ip` instead.
 	Ip pulumi.StringPtrInput
-	// Time at which the maintenance time window starts.
-	// The valid values are `22:00:00`, `02:00:00`, `06:00:00`, `10:00:00`, `14:00:00` and `18:00:00`.
-	// Default value is `02:00:00`.
+	// Indicates the time when the instance is started, in RFC3339 format.
+	LaunchedAt pulumi.StringPtrInput
+	// Time at which the maintenance time window starts. Defaults to **02:00:00**.
 	// + The start time and end time of a maintenance time window must indicate the time segment of a supported maintenance
 	//   time window.
-	// + Parameters `maintainBegin` and `maintainEnd` must be set in pairs.
-	// + If parameter maintainBegin is left blank, parameter maintainEnd is also blank.
-	//   In this case, the system automatically allocates the default start time 02:00:00.
+	// + The start time must be on the hour, such as **18:00:00**.
+	// + If parameter `maintainBegin` is left blank, parameter `maintainEnd` is also blank.
+	//   In this case, the system automatically allocates the default start time **02:00:00**.
 	MaintainBegin pulumi.StringPtrInput
-	// Time at which the maintenance time window ends.
-	// The valid values are `22:00:00`, `02:00:00`, `06:00:00`, `10:00:00`, `14:00:00` and `18:00:00`.
-	// Default value is `06:00:00`.
+	// Time at which the maintenance time window ends. Defaults to **06:00:00**.
 	// + The start time and end time of a maintenance time window must indicate the time segment of a supported maintenance
 	//   time window.
-	// + The end time is four hours later than the start time.
-	//   For example, if the start time is 22:00:00, the end time is 02:00:00.
-	// + Parameters `maintainBegin` and `maintainEnd` must be set in pairs.
-	// + If parameter maintainEnd is left blank, parameter maintainBegin is also blank.
-	//   In this case, the system automatically allocates the default end time 06:00:00.
+	// + The end time is one hour later than the start time. For example, if the start time is **18:00:00**, the end time is
+	//   **19:00:00**.
+	// + If parameter `maintainEnd` is left blank, parameter `maintainBegin` is also blank.
+	//   In this case, the system automatically allocates the default end time **06:00:00**.
 	MaintainEnd pulumi.StringPtrInput
 	// Total memory size. Unit: MB.
 	MaxMemory pulumi.IntPtrInput
-	// Specifies the name of an instance.
-	// The name must be 4 to 64 characters and start with a letter.
-	// Only chinese, letters (case-insensitive), digits, underscores (_) ,and hyphens (-) are allowed.
+	// Specifies the name of the configuration item.
 	Name pulumi.StringPtrInput
 	// The ID of the order that created the instance.
 	OrderId pulumi.StringPtrInput
+	// Specify an array of one or more parameters to be set to the DCS instance after
+	// launched. You can check on console to see which parameters supported.
+	// The parameters structure is documented below.
+	Parameters InstanceParameterArrayInput
 	// Specifies the password of a DCS instance.
 	// The password of a DCS instance must meet the following complexity requirements:
 	// + Must be a string of 8 to 32 bits in length.
@@ -763,6 +826,11 @@ type InstanceState struct {
 	PrivateIp pulumi.StringPtrInput
 	// Deprecated: Deprecated, please use `flavor` instead
 	ProductId pulumi.StringPtrInput
+	// Indicates the product type of the instance. The value can be: **generic** or **enterprise**.
+	ProductType pulumi.StringPtrInput
+	// Indicates the read-only domain name of the instance. This parameter is available
+	// only for master/standby instances.
+	ReadonlyDomainName pulumi.StringPtrInput
 	// Specifies the region in which to create the DCS instance resource.
 	// If omitted, the provider-level region will be used. Changing this creates a new DCS instance resource.
 	Region pulumi.StringPtrInput
@@ -770,10 +838,12 @@ type InstanceState struct {
 	// Redis 5.0 instances but not by Redis 3.0 instance.
 	// The valid commands that can be renamed are: **command**, **keys**, **flushdb**, **flushall** and **hgetall**.
 	RenameCommands pulumi.StringMapInput
+	// Indicates the number of replicas in the instance.
+	ReplicaCount pulumi.IntPtrInput
 	// Specifies IP addresses to retain. Mandatory during cluster scale-in. If this
 	// parameter is not set, the system randomly deletes unnecessary shards.
 	ReservedIps pulumi.StringArrayInput
-	// Retention time. Unit: day, the value ranges from 1 to 7.
+	// Retention time. Unit: day, the value ranges from `1` to `7`.
 	// This parameter is required if the backupType is **auto**.
 	//
 	// Deprecated: Deprecated, please use `backup_policy` instead
@@ -783,6 +853,10 @@ type InstanceState struct {
 	SecurityGroupId pulumi.StringPtrInput
 	// The name of security group which the instance belongs to.
 	SecurityGroupName pulumi.StringPtrInput
+	// Indicates the number of shards in a cluster instance.
+	ShardingCount pulumi.IntPtrInput
+	// Specifies whether to enable the SSL. Value options: **true**, **false**.
+	SslEnable pulumi.BoolPtrInput
 	// Cache instance status. The valid values are as follows:
 	// + `RUNNING`: The instance is running properly.
 	//   Only instances in the Running state can provide in-memory cache service.
@@ -794,6 +868,8 @@ type InstanceState struct {
 	// + `RESTORING`: The instance data is being restored.
 	// + `FLUSHING`: The DCS instance is being cleared.
 	Status pulumi.StringPtrInput
+	// Indicates the subnet segment.
+	SubnetCidr pulumi.StringPtrInput
 	// The ID of subnet which the instance belongs to.
 	// Changing this creates a new instance resource.
 	SubnetId pulumi.StringPtrInput
@@ -804,6 +880,8 @@ type InstanceState struct {
 	// The Parameter Template ID.
 	// Changing this creates a new instance resource.
 	TemplateId pulumi.StringPtrInput
+	// Indicates whether client IP pass-through is enabled.
+	TransparentClientIpEnable pulumi.BoolPtrInput
 	// Size of the used memory. Unit: MB.
 	UsedMemory pulumi.IntPtrInput
 	// Deprecated: Deprecated
@@ -845,7 +923,7 @@ type instanceArgs struct {
 	AvailabilityZones []string `pulumi:"availabilityZones"`
 	// Deprecated: Deprecated, please use `availability_zones` instead
 	AvailableZones []string `pulumi:"availableZones"`
-	// Day in a week on which backup starts, the value ranges from 1 to 7.
+	// Day in a week on which backup starts, the value ranges from `1` to `7`.
 	// Where: 1 indicates Monday; 7 indicates Sunday.
 	//
 	// Deprecated: Deprecated, please use `backup_policy` instead
@@ -895,7 +973,6 @@ type instanceArgs struct {
 	// Changing this creates a new instance.
 	EngineVersion *string `pulumi:"engineVersion"`
 	// The enterprise project id of the dcs instance.
-	// Changing this creates a new instance.
 	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
 	// Deprecated: Deprecated, this is a non-public attribute.
 	EnterpriseProjectName *string `pulumi:"enterpriseProjectName"`
@@ -907,30 +984,27 @@ type instanceArgs struct {
 	//   in [DCS Instance Specifications](https://support.huaweicloud.com/intl/en-us/productdesc-dcs/dcs-pd-200713003.html)
 	// + Log in to the DCS console, click *Buy DCS Instance*, and find the corresponding instance specification.
 	Flavor *string `pulumi:"flavor"`
-	// Time at which the maintenance time window starts.
-	// The valid values are `22:00:00`, `02:00:00`, `06:00:00`, `10:00:00`, `14:00:00` and `18:00:00`.
-	// Default value is `02:00:00`.
+	// Time at which the maintenance time window starts. Defaults to **02:00:00**.
 	// + The start time and end time of a maintenance time window must indicate the time segment of a supported maintenance
 	//   time window.
-	// + Parameters `maintainBegin` and `maintainEnd` must be set in pairs.
-	// + If parameter maintainBegin is left blank, parameter maintainEnd is also blank.
-	//   In this case, the system automatically allocates the default start time 02:00:00.
+	// + The start time must be on the hour, such as **18:00:00**.
+	// + If parameter `maintainBegin` is left blank, parameter `maintainEnd` is also blank.
+	//   In this case, the system automatically allocates the default start time **02:00:00**.
 	MaintainBegin *string `pulumi:"maintainBegin"`
-	// Time at which the maintenance time window ends.
-	// The valid values are `22:00:00`, `02:00:00`, `06:00:00`, `10:00:00`, `14:00:00` and `18:00:00`.
-	// Default value is `06:00:00`.
+	// Time at which the maintenance time window ends. Defaults to **06:00:00**.
 	// + The start time and end time of a maintenance time window must indicate the time segment of a supported maintenance
 	//   time window.
-	// + The end time is four hours later than the start time.
-	//   For example, if the start time is 22:00:00, the end time is 02:00:00.
-	// + Parameters `maintainBegin` and `maintainEnd` must be set in pairs.
-	// + If parameter maintainEnd is left blank, parameter maintainBegin is also blank.
-	//   In this case, the system automatically allocates the default end time 06:00:00.
+	// + The end time is one hour later than the start time. For example, if the start time is **18:00:00**, the end time is
+	//   **19:00:00**.
+	// + If parameter `maintainEnd` is left blank, parameter `maintainBegin` is also blank.
+	//   In this case, the system automatically allocates the default end time **06:00:00**.
 	MaintainEnd *string `pulumi:"maintainEnd"`
-	// Specifies the name of an instance.
-	// The name must be 4 to 64 characters and start with a letter.
-	// Only chinese, letters (case-insensitive), digits, underscores (_) ,and hyphens (-) are allowed.
+	// Specifies the name of the configuration item.
 	Name *string `pulumi:"name"`
+	// Specify an array of one or more parameters to be set to the DCS instance after
+	// launched. You can check on console to see which parameters supported.
+	// The parameters structure is documented below.
+	Parameters []InstanceParameter `pulumi:"parameters"`
 	// Specifies the password of a DCS instance.
 	// The password of a DCS instance must meet the following complexity requirements:
 	// + Must be a string of 8 to 32 bits in length.
@@ -974,7 +1048,7 @@ type instanceArgs struct {
 	// Specifies IP addresses to retain. Mandatory during cluster scale-in. If this
 	// parameter is not set, the system randomly deletes unnecessary shards.
 	ReservedIps []string `pulumi:"reservedIps"`
-	// Retention time. Unit: day, the value ranges from 1 to 7.
+	// Retention time. Unit: day, the value ranges from `1` to `7`.
 	// This parameter is required if the backupType is **auto**.
 	//
 	// Deprecated: Deprecated, please use `backup_policy` instead
@@ -982,6 +1056,8 @@ type instanceArgs struct {
 	// The ID of the security group which the instance belongs to.
 	// This parameter is mandatory for Memcached and Redis 3.0 version.
 	SecurityGroupId *string `pulumi:"securityGroupId"`
+	// Specifies whether to enable the SSL. Value options: **true**, **false**.
+	SslEnable *bool `pulumi:"sslEnable"`
 	// The ID of subnet which the instance belongs to.
 	// Changing this creates a new instance resource.
 	SubnetId string `pulumi:"subnetId"`
@@ -1020,7 +1096,7 @@ type InstanceArgs struct {
 	AvailabilityZones pulumi.StringArrayInput
 	// Deprecated: Deprecated, please use `availability_zones` instead
 	AvailableZones pulumi.StringArrayInput
-	// Day in a week on which backup starts, the value ranges from 1 to 7.
+	// Day in a week on which backup starts, the value ranges from `1` to `7`.
 	// Where: 1 indicates Monday; 7 indicates Sunday.
 	//
 	// Deprecated: Deprecated, please use `backup_policy` instead
@@ -1070,7 +1146,6 @@ type InstanceArgs struct {
 	// Changing this creates a new instance.
 	EngineVersion pulumi.StringPtrInput
 	// The enterprise project id of the dcs instance.
-	// Changing this creates a new instance.
 	EnterpriseProjectId pulumi.StringPtrInput
 	// Deprecated: Deprecated, this is a non-public attribute.
 	EnterpriseProjectName pulumi.StringPtrInput
@@ -1082,30 +1157,27 @@ type InstanceArgs struct {
 	//   in [DCS Instance Specifications](https://support.huaweicloud.com/intl/en-us/productdesc-dcs/dcs-pd-200713003.html)
 	// + Log in to the DCS console, click *Buy DCS Instance*, and find the corresponding instance specification.
 	Flavor pulumi.StringPtrInput
-	// Time at which the maintenance time window starts.
-	// The valid values are `22:00:00`, `02:00:00`, `06:00:00`, `10:00:00`, `14:00:00` and `18:00:00`.
-	// Default value is `02:00:00`.
+	// Time at which the maintenance time window starts. Defaults to **02:00:00**.
 	// + The start time and end time of a maintenance time window must indicate the time segment of a supported maintenance
 	//   time window.
-	// + Parameters `maintainBegin` and `maintainEnd` must be set in pairs.
-	// + If parameter maintainBegin is left blank, parameter maintainEnd is also blank.
-	//   In this case, the system automatically allocates the default start time 02:00:00.
+	// + The start time must be on the hour, such as **18:00:00**.
+	// + If parameter `maintainBegin` is left blank, parameter `maintainEnd` is also blank.
+	//   In this case, the system automatically allocates the default start time **02:00:00**.
 	MaintainBegin pulumi.StringPtrInput
-	// Time at which the maintenance time window ends.
-	// The valid values are `22:00:00`, `02:00:00`, `06:00:00`, `10:00:00`, `14:00:00` and `18:00:00`.
-	// Default value is `06:00:00`.
+	// Time at which the maintenance time window ends. Defaults to **06:00:00**.
 	// + The start time and end time of a maintenance time window must indicate the time segment of a supported maintenance
 	//   time window.
-	// + The end time is four hours later than the start time.
-	//   For example, if the start time is 22:00:00, the end time is 02:00:00.
-	// + Parameters `maintainBegin` and `maintainEnd` must be set in pairs.
-	// + If parameter maintainEnd is left blank, parameter maintainBegin is also blank.
-	//   In this case, the system automatically allocates the default end time 06:00:00.
+	// + The end time is one hour later than the start time. For example, if the start time is **18:00:00**, the end time is
+	//   **19:00:00**.
+	// + If parameter `maintainEnd` is left blank, parameter `maintainBegin` is also blank.
+	//   In this case, the system automatically allocates the default end time **06:00:00**.
 	MaintainEnd pulumi.StringPtrInput
-	// Specifies the name of an instance.
-	// The name must be 4 to 64 characters and start with a letter.
-	// Only chinese, letters (case-insensitive), digits, underscores (_) ,and hyphens (-) are allowed.
+	// Specifies the name of the configuration item.
 	Name pulumi.StringPtrInput
+	// Specify an array of one or more parameters to be set to the DCS instance after
+	// launched. You can check on console to see which parameters supported.
+	// The parameters structure is documented below.
+	Parameters InstanceParameterArrayInput
 	// Specifies the password of a DCS instance.
 	// The password of a DCS instance must meet the following complexity requirements:
 	// + Must be a string of 8 to 32 bits in length.
@@ -1149,7 +1221,7 @@ type InstanceArgs struct {
 	// Specifies IP addresses to retain. Mandatory during cluster scale-in. If this
 	// parameter is not set, the system randomly deletes unnecessary shards.
 	ReservedIps pulumi.StringArrayInput
-	// Retention time. Unit: day, the value ranges from 1 to 7.
+	// Retention time. Unit: day, the value ranges from `1` to `7`.
 	// This parameter is required if the backupType is **auto**.
 	//
 	// Deprecated: Deprecated, please use `backup_policy` instead
@@ -1157,6 +1229,8 @@ type InstanceArgs struct {
 	// The ID of the security group which the instance belongs to.
 	// This parameter is mandatory for Memcached and Redis 3.0 version.
 	SecurityGroupId pulumi.StringPtrInput
+	// Specifies whether to enable the SSL. Value options: **true**, **false**.
+	SslEnable pulumi.BoolPtrInput
 	// The ID of subnet which the instance belongs to.
 	// Changing this creates a new instance resource.
 	SubnetId pulumi.StringInput
@@ -1295,7 +1369,7 @@ func (o InstanceOutput) AvailableZones() pulumi.StringArrayOutput {
 	return o.ApplyT(func(v *Instance) pulumi.StringArrayOutput { return v.AvailableZones }).(pulumi.StringArrayOutput)
 }
 
-// Day in a week on which backup starts, the value ranges from 1 to 7.
+// Day in a week on which backup starts, the value ranges from `1` to `7`.
 // Where: 1 indicates Monday; 7 indicates Sunday.
 //
 // Deprecated: Deprecated, please use `backup_policy` instead
@@ -1318,12 +1392,23 @@ func (o InstanceOutput) BackupType() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Instance) pulumi.StringPtrOutput { return v.BackupType }).(pulumi.StringPtrOutput)
 }
 
+// Indicates the bandwidth information of the instance.
+// The bandwidthInfo structure is documented below.
+func (o InstanceOutput) BandwidthInfos() InstanceBandwidthInfoArrayOutput {
+	return o.ApplyT(func(v *Instance) InstanceBandwidthInfoArrayOutput { return v.BandwidthInfos }).(InstanceBandwidthInfoArrayOutput)
+}
+
 // Time at which backup starts.
 // Format: `hh24:00-hh24:00`, "00:00-01:00" indicates that backup starts at 00:00:00.
 //
 // Deprecated: Deprecated, please use `backup_policy` instead
 func (o InstanceOutput) BeginAt() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Instance) pulumi.StringPtrOutput { return v.BeginAt }).(pulumi.StringPtrOutput)
+}
+
+// Indicates the instance type. The value can be **single**, **ha**, **cluster** or **proxy**.
+func (o InstanceOutput) CacheMode() pulumi.StringOutput {
+	return o.ApplyT(func(v *Instance) pulumi.StringOutput { return v.CacheMode }).(pulumi.StringOutput)
 }
 
 // Specifies the cache capacity. Unit: GB.
@@ -1346,6 +1431,16 @@ func (o InstanceOutput) Capacity() pulumi.Float64Output {
 //     Changing this creates a new instance.
 func (o InstanceOutput) ChargingMode() pulumi.StringOutput {
 	return o.ApplyT(func(v *Instance) pulumi.StringOutput { return v.ChargingMode }).(pulumi.StringOutput)
+}
+
+// Indicates the CPU type of the instance. The value can be **x86_64** or **aarch64**.
+func (o InstanceOutput) CpuType() pulumi.StringOutput {
+	return o.ApplyT(func(v *Instance) pulumi.StringOutput { return v.CpuType }).(pulumi.StringOutput)
+}
+
+// Indicates the time when the instance is created, in RFC3339 format.
+func (o InstanceOutput) CreatedAt() pulumi.StringOutput {
+	return o.ApplyT(func(v *Instance) pulumi.StringOutput { return v.CreatedAt }).(pulumi.StringOutput)
 }
 
 // Specifies the ID of the replica to delete. This parameter is mandatory when
@@ -1380,7 +1475,6 @@ func (o InstanceOutput) EngineVersion() pulumi.StringPtrOutput {
 }
 
 // The enterprise project id of the dcs instance.
-// Changing this creates a new instance.
 func (o InstanceOutput) EnterpriseProjectId() pulumi.StringOutput {
 	return o.ApplyT(func(v *Instance) pulumi.StringOutput { return v.EnterpriseProjectId }).(pulumi.StringOutput)
 }
@@ -1411,30 +1505,30 @@ func (o InstanceOutput) Ip() pulumi.StringOutput {
 	return o.ApplyT(func(v *Instance) pulumi.StringOutput { return v.Ip }).(pulumi.StringOutput)
 }
 
-// Time at which the maintenance time window starts.
-// The valid values are `22:00:00`, `02:00:00`, `06:00:00`, `10:00:00`, `14:00:00` and `18:00:00`.
-// Default value is `02:00:00`.
-//   - The start time and end time of a maintenance time window must indicate the time segment of a supported maintenance
-//     time window.
-//   - Parameters `maintainBegin` and `maintainEnd` must be set in pairs.
-//   - If parameter maintainBegin is left blank, parameter maintainEnd is also blank.
-//     In this case, the system automatically allocates the default start time 02:00:00.
-func (o InstanceOutput) MaintainBegin() pulumi.StringPtrOutput {
-	return o.ApplyT(func(v *Instance) pulumi.StringPtrOutput { return v.MaintainBegin }).(pulumi.StringPtrOutput)
+// Indicates the time when the instance is started, in RFC3339 format.
+func (o InstanceOutput) LaunchedAt() pulumi.StringOutput {
+	return o.ApplyT(func(v *Instance) pulumi.StringOutput { return v.LaunchedAt }).(pulumi.StringOutput)
 }
 
-// Time at which the maintenance time window ends.
-// The valid values are `22:00:00`, `02:00:00`, `06:00:00`, `10:00:00`, `14:00:00` and `18:00:00`.
-// Default value is `06:00:00`.
+// Time at which the maintenance time window starts. Defaults to **02:00:00**.
 //   - The start time and end time of a maintenance time window must indicate the time segment of a supported maintenance
 //     time window.
-//   - The end time is four hours later than the start time.
-//     For example, if the start time is 22:00:00, the end time is 02:00:00.
-//   - Parameters `maintainBegin` and `maintainEnd` must be set in pairs.
-//   - If parameter maintainEnd is left blank, parameter maintainBegin is also blank.
-//     In this case, the system automatically allocates the default end time 06:00:00.
-func (o InstanceOutput) MaintainEnd() pulumi.StringPtrOutput {
-	return o.ApplyT(func(v *Instance) pulumi.StringPtrOutput { return v.MaintainEnd }).(pulumi.StringPtrOutput)
+//   - The start time must be on the hour, such as **18:00:00**.
+//   - If parameter `maintainBegin` is left blank, parameter `maintainEnd` is also blank.
+//     In this case, the system automatically allocates the default start time **02:00:00**.
+func (o InstanceOutput) MaintainBegin() pulumi.StringOutput {
+	return o.ApplyT(func(v *Instance) pulumi.StringOutput { return v.MaintainBegin }).(pulumi.StringOutput)
+}
+
+// Time at which the maintenance time window ends. Defaults to **06:00:00**.
+//   - The start time and end time of a maintenance time window must indicate the time segment of a supported maintenance
+//     time window.
+//   - The end time is one hour later than the start time. For example, if the start time is **18:00:00**, the end time is
+//     **19:00:00**.
+//   - If parameter `maintainEnd` is left blank, parameter `maintainBegin` is also blank.
+//     In this case, the system automatically allocates the default end time **06:00:00**.
+func (o InstanceOutput) MaintainEnd() pulumi.StringOutput {
+	return o.ApplyT(func(v *Instance) pulumi.StringOutput { return v.MaintainEnd }).(pulumi.StringOutput)
 }
 
 // Total memory size. Unit: MB.
@@ -1442,9 +1536,7 @@ func (o InstanceOutput) MaxMemory() pulumi.IntOutput {
 	return o.ApplyT(func(v *Instance) pulumi.IntOutput { return v.MaxMemory }).(pulumi.IntOutput)
 }
 
-// Specifies the name of an instance.
-// The name must be 4 to 64 characters and start with a letter.
-// Only chinese, letters (case-insensitive), digits, underscores (_) ,and hyphens (-) are allowed.
+// Specifies the name of the configuration item.
 func (o InstanceOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v *Instance) pulumi.StringOutput { return v.Name }).(pulumi.StringOutput)
 }
@@ -1452,6 +1544,13 @@ func (o InstanceOutput) Name() pulumi.StringOutput {
 // The ID of the order that created the instance.
 func (o InstanceOutput) OrderId() pulumi.StringOutput {
 	return o.ApplyT(func(v *Instance) pulumi.StringOutput { return v.OrderId }).(pulumi.StringOutput)
+}
+
+// Specify an array of one or more parameters to be set to the DCS instance after
+// launched. You can check on console to see which parameters supported.
+// The parameters structure is documented below.
+func (o InstanceOutput) Parameters() InstanceParameterArrayOutput {
+	return o.ApplyT(func(v *Instance) InstanceParameterArrayOutput { return v.Parameters }).(InstanceParameterArrayOutput)
 }
 
 // Specifies the password of a DCS instance.
@@ -1508,6 +1607,17 @@ func (o InstanceOutput) ProductId() pulumi.StringOutput {
 	return o.ApplyT(func(v *Instance) pulumi.StringOutput { return v.ProductId }).(pulumi.StringOutput)
 }
 
+// Indicates the product type of the instance. The value can be: **generic** or **enterprise**.
+func (o InstanceOutput) ProductType() pulumi.StringOutput {
+	return o.ApplyT(func(v *Instance) pulumi.StringOutput { return v.ProductType }).(pulumi.StringOutput)
+}
+
+// Indicates the read-only domain name of the instance. This parameter is available
+// only for master/standby instances.
+func (o InstanceOutput) ReadonlyDomainName() pulumi.StringOutput {
+	return o.ApplyT(func(v *Instance) pulumi.StringOutput { return v.ReadonlyDomainName }).(pulumi.StringOutput)
+}
+
 // Specifies the region in which to create the DCS instance resource.
 // If omitted, the provider-level region will be used. Changing this creates a new DCS instance resource.
 func (o InstanceOutput) Region() pulumi.StringOutput {
@@ -1521,13 +1631,18 @@ func (o InstanceOutput) RenameCommands() pulumi.StringMapOutput {
 	return o.ApplyT(func(v *Instance) pulumi.StringMapOutput { return v.RenameCommands }).(pulumi.StringMapOutput)
 }
 
+// Indicates the number of replicas in the instance.
+func (o InstanceOutput) ReplicaCount() pulumi.IntOutput {
+	return o.ApplyT(func(v *Instance) pulumi.IntOutput { return v.ReplicaCount }).(pulumi.IntOutput)
+}
+
 // Specifies IP addresses to retain. Mandatory during cluster scale-in. If this
 // parameter is not set, the system randomly deletes unnecessary shards.
 func (o InstanceOutput) ReservedIps() pulumi.StringArrayOutput {
 	return o.ApplyT(func(v *Instance) pulumi.StringArrayOutput { return v.ReservedIps }).(pulumi.StringArrayOutput)
 }
 
-// Retention time. Unit: day, the value ranges from 1 to 7.
+// Retention time. Unit: day, the value ranges from `1` to `7`.
 // This parameter is required if the backupType is **auto**.
 //
 // Deprecated: Deprecated, please use `backup_policy` instead
@@ -1546,6 +1661,16 @@ func (o InstanceOutput) SecurityGroupName() pulumi.StringOutput {
 	return o.ApplyT(func(v *Instance) pulumi.StringOutput { return v.SecurityGroupName }).(pulumi.StringOutput)
 }
 
+// Indicates the number of shards in a cluster instance.
+func (o InstanceOutput) ShardingCount() pulumi.IntOutput {
+	return o.ApplyT(func(v *Instance) pulumi.IntOutput { return v.ShardingCount }).(pulumi.IntOutput)
+}
+
+// Specifies whether to enable the SSL. Value options: **true**, **false**.
+func (o InstanceOutput) SslEnable() pulumi.BoolOutput {
+	return o.ApplyT(func(v *Instance) pulumi.BoolOutput { return v.SslEnable }).(pulumi.BoolOutput)
+}
+
 // Cache instance status. The valid values are as follows:
 //   - `RUNNING`: The instance is running properly.
 //     Only instances in the Running state can provide in-memory cache service.
@@ -1558,6 +1683,11 @@ func (o InstanceOutput) SecurityGroupName() pulumi.StringOutput {
 //   - `FLUSHING`: The DCS instance is being cleared.
 func (o InstanceOutput) Status() pulumi.StringOutput {
 	return o.ApplyT(func(v *Instance) pulumi.StringOutput { return v.Status }).(pulumi.StringOutput)
+}
+
+// Indicates the subnet segment.
+func (o InstanceOutput) SubnetCidr() pulumi.StringOutput {
+	return o.ApplyT(func(v *Instance) pulumi.StringOutput { return v.SubnetCidr }).(pulumi.StringOutput)
 }
 
 // The ID of subnet which the instance belongs to.
@@ -1580,6 +1710,11 @@ func (o InstanceOutput) Tags() pulumi.StringMapOutput {
 // Changing this creates a new instance resource.
 func (o InstanceOutput) TemplateId() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Instance) pulumi.StringPtrOutput { return v.TemplateId }).(pulumi.StringPtrOutput)
+}
+
+// Indicates whether client IP pass-through is enabled.
+func (o InstanceOutput) TransparentClientIpEnable() pulumi.BoolOutput {
+	return o.ApplyT(func(v *Instance) pulumi.BoolOutput { return v.TransparentClientIpEnable }).(pulumi.BoolOutput)
 }
 
 // Size of the used memory. Unit: MB.

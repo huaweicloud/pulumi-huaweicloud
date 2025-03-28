@@ -15,53 +15,66 @@ __all__ = ['DedicatedInstanceArgs', 'DedicatedInstance']
 class DedicatedInstanceArgs:
     def __init__(__self__, *,
                  available_zone: pulumi.Input[str],
-                 ecs_flavor: pulumi.Input[str],
                  security_groups: pulumi.Input[Sequence[pulumi.Input[str]]],
                  specification_code: pulumi.Input[str],
                  subnet_id: pulumi.Input[str],
                  vpc_id: pulumi.Input[str],
+                 anti_affinity: Optional[pulumi.Input[bool]] = None,
                  cpu_architecture: Optional[pulumi.Input[str]] = None,
+                 ecs_flavor: Optional[pulumi.Input[str]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  group_id: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
-                 res_tenant: Optional[pulumi.Input[bool]] = None):
+                 res_tenant: Optional[pulumi.Input[bool]] = None,
+                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None):
         """
         The set of arguments for constructing a DedicatedInstance resource.
-        :param pulumi.Input[str] available_zone: The available zone names for the dedicated instances. It can be
+        :param pulumi.Input[str] available_zone: Specifies the available zone name for the dedicated instance. It can be
                obtained through this data source `get_availability_zones`. Changing this will create a new instance.
-        :param pulumi.Input[str] ecs_flavor: The flavor of the ECS used by the WAF instance. Flavors can be obtained
-               through this data source `_ecs.get_flavors`. Changing this will create a new instance.
-        :param pulumi.Input[Sequence[pulumi.Input[str]]] security_groups: The security group of the instance. This is an array of security group
-               ids. Changing this will create a new instance.
-        :param pulumi.Input[str] specification_code: The specification code of instance. Different specifications have
-               different throughput. Changing this will create a new instance. Values are:
-               + `waf.instance.professional` - The professional edition, throughput: 100 Mbit/s; QPS: 2,000 (Reference only).
-               + `waf.instance.enterprise` - The enterprise edition, throughput: 500 Mbit/s; QPS: 10,000 (Reference only).
-        :param pulumi.Input[str] subnet_id: The subnet id of WAF dedicated instance VPC. Changing this will create a
-               new instance.
-        :param pulumi.Input[str] vpc_id: The VPC id of WAF dedicated instance. Changing this will create a new
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] security_groups: Specifies the security group of the instance. This is an array of
+               security group IDs. Changing this will create a new instance.
+        :param pulumi.Input[str] specification_code: Specifies the specification code of instance.
+               Different specifications have different throughput. Changing this will create a new instance.
+               Values are:
+               + **waf.instance.professional**: The professional edition, corresponding to WI-500 on the console.
+               + **waf.instance.enterprise**: The enterprise edition, corresponding to WI-100 on the console.
+        :param pulumi.Input[str] subnet_id: Specifies the subnet ID of WAF dedicated instance VPC. Changing this will
+               create a new instance.
+        :param pulumi.Input[str] vpc_id: Specifies the VPC ID of WAF dedicated instance. Changing this will create a new
                instance.
-        :param pulumi.Input[str] cpu_architecture: The ECS cpu architecture of instance, Default value is `x86`.
+        :param pulumi.Input[bool] anti_affinity: Specifies whether to enable anti-affinity. This field is valid only
+               when `res_tenant` is set to **true**. Changing this will create a new instance.
+        :param pulumi.Input[str] cpu_architecture: Specifies the ECS CPU architecture of instance. Defaults to **x86**.
                Changing this will create a new instance.
-        :param pulumi.Input[str] enterprise_project_id: The enterprise project ID of WAF dedicated instance. Changing this
+        :param pulumi.Input[str] ecs_flavor: Specifies the flavor of the ECS used by the WAF instance. Flavors can be
+               obtained through this data source `_ecs.get_flavors`. Changing this will create a new instance.
+               This field is valid and required only when `res_tenant` is set to **false**.
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID of WAF dedicated instance. Changing this
                will migrate the WAF instance to a new enterprise project.
-        :param pulumi.Input[str] group_id: The instance group ID used by the WAF dedicated instance in ELB mode.
+               For enterprise users, if omitted, default enterprise project will be used.
+        :param pulumi.Input[str] group_id: schema: Deprecated;
+        :param pulumi.Input[str] name: Specifies the name of WAF dedicated instance. Duplicate names are allowed, we suggest to
+               keeping the name unique.
+        :param pulumi.Input[str] region: Specifies the region in which to create the WAF dedicated instance.
+               If omitted, the provider-level region will be used. Changing this setting will create a new instance.
+        :param pulumi.Input[bool] res_tenant: Specifies whether this is resource tenant.
                Changing this will create a new instance.
-        :param pulumi.Input[str] name: The name of WAF dedicated instance. Duplicate names are allowed, we suggest to keeping the
-               name unique.
-        :param pulumi.Input[str] region: The region in which to create the WAF dedicated instance. If omitted, the
-               provider-level region will be used. Changing this setting will create a new instance.
-        :param pulumi.Input[bool] res_tenant: schema: Internal; Specifies whether this is resource tenant.
+               + **false**: Common tenant.
+               + **true**: Resource tenant.
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the WAF dedicated instance.
         """
         pulumi.set(__self__, "available_zone", available_zone)
-        pulumi.set(__self__, "ecs_flavor", ecs_flavor)
         pulumi.set(__self__, "security_groups", security_groups)
         pulumi.set(__self__, "specification_code", specification_code)
         pulumi.set(__self__, "subnet_id", subnet_id)
         pulumi.set(__self__, "vpc_id", vpc_id)
+        if anti_affinity is not None:
+            pulumi.set(__self__, "anti_affinity", anti_affinity)
         if cpu_architecture is not None:
             pulumi.set(__self__, "cpu_architecture", cpu_architecture)
+        if ecs_flavor is not None:
+            pulumi.set(__self__, "ecs_flavor", ecs_flavor)
         if enterprise_project_id is not None:
             pulumi.set(__self__, "enterprise_project_id", enterprise_project_id)
         if group_id is not None:
@@ -72,12 +85,14 @@ class DedicatedInstanceArgs:
             pulumi.set(__self__, "region", region)
         if res_tenant is not None:
             pulumi.set(__self__, "res_tenant", res_tenant)
+        if tags is not None:
+            pulumi.set(__self__, "tags", tags)
 
     @property
     @pulumi.getter(name="availableZone")
     def available_zone(self) -> pulumi.Input[str]:
         """
-        The available zone names for the dedicated instances. It can be
+        Specifies the available zone name for the dedicated instance. It can be
         obtained through this data source `get_availability_zones`. Changing this will create a new instance.
         """
         return pulumi.get(self, "available_zone")
@@ -87,24 +102,11 @@ class DedicatedInstanceArgs:
         pulumi.set(self, "available_zone", value)
 
     @property
-    @pulumi.getter(name="ecsFlavor")
-    def ecs_flavor(self) -> pulumi.Input[str]:
-        """
-        The flavor of the ECS used by the WAF instance. Flavors can be obtained
-        through this data source `_ecs.get_flavors`. Changing this will create a new instance.
-        """
-        return pulumi.get(self, "ecs_flavor")
-
-    @ecs_flavor.setter
-    def ecs_flavor(self, value: pulumi.Input[str]):
-        pulumi.set(self, "ecs_flavor", value)
-
-    @property
     @pulumi.getter(name="securityGroups")
     def security_groups(self) -> pulumi.Input[Sequence[pulumi.Input[str]]]:
         """
-        The security group of the instance. This is an array of security group
-        ids. Changing this will create a new instance.
+        Specifies the security group of the instance. This is an array of
+        security group IDs. Changing this will create a new instance.
         """
         return pulumi.get(self, "security_groups")
 
@@ -116,10 +118,11 @@ class DedicatedInstanceArgs:
     @pulumi.getter(name="specificationCode")
     def specification_code(self) -> pulumi.Input[str]:
         """
-        The specification code of instance. Different specifications have
-        different throughput. Changing this will create a new instance. Values are:
-        + `waf.instance.professional` - The professional edition, throughput: 100 Mbit/s; QPS: 2,000 (Reference only).
-        + `waf.instance.enterprise` - The enterprise edition, throughput: 500 Mbit/s; QPS: 10,000 (Reference only).
+        Specifies the specification code of instance.
+        Different specifications have different throughput. Changing this will create a new instance.
+        Values are:
+        + **waf.instance.professional**: The professional edition, corresponding to WI-500 on the console.
+        + **waf.instance.enterprise**: The enterprise edition, corresponding to WI-100 on the console.
         """
         return pulumi.get(self, "specification_code")
 
@@ -131,8 +134,8 @@ class DedicatedInstanceArgs:
     @pulumi.getter(name="subnetId")
     def subnet_id(self) -> pulumi.Input[str]:
         """
-        The subnet id of WAF dedicated instance VPC. Changing this will create a
-        new instance.
+        Specifies the subnet ID of WAF dedicated instance VPC. Changing this will
+        create a new instance.
         """
         return pulumi.get(self, "subnet_id")
 
@@ -144,7 +147,7 @@ class DedicatedInstanceArgs:
     @pulumi.getter(name="vpcId")
     def vpc_id(self) -> pulumi.Input[str]:
         """
-        The VPC id of WAF dedicated instance. Changing this will create a new
+        Specifies the VPC ID of WAF dedicated instance. Changing this will create a new
         instance.
         """
         return pulumi.get(self, "vpc_id")
@@ -154,10 +157,23 @@ class DedicatedInstanceArgs:
         pulumi.set(self, "vpc_id", value)
 
     @property
+    @pulumi.getter(name="antiAffinity")
+    def anti_affinity(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies whether to enable anti-affinity. This field is valid only
+        when `res_tenant` is set to **true**. Changing this will create a new instance.
+        """
+        return pulumi.get(self, "anti_affinity")
+
+    @anti_affinity.setter
+    def anti_affinity(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "anti_affinity", value)
+
+    @property
     @pulumi.getter(name="cpuArchitecture")
     def cpu_architecture(self) -> Optional[pulumi.Input[str]]:
         """
-        The ECS cpu architecture of instance, Default value is `x86`.
+        Specifies the ECS CPU architecture of instance. Defaults to **x86**.
         Changing this will create a new instance.
         """
         return pulumi.get(self, "cpu_architecture")
@@ -167,11 +183,26 @@ class DedicatedInstanceArgs:
         pulumi.set(self, "cpu_architecture", value)
 
     @property
+    @pulumi.getter(name="ecsFlavor")
+    def ecs_flavor(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the flavor of the ECS used by the WAF instance. Flavors can be
+        obtained through this data source `_ecs.get_flavors`. Changing this will create a new instance.
+        This field is valid and required only when `res_tenant` is set to **false**.
+        """
+        return pulumi.get(self, "ecs_flavor")
+
+    @ecs_flavor.setter
+    def ecs_flavor(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "ecs_flavor", value)
+
+    @property
     @pulumi.getter(name="enterpriseProjectId")
     def enterprise_project_id(self) -> Optional[pulumi.Input[str]]:
         """
-        The enterprise project ID of WAF dedicated instance. Changing this
+        Specifies the enterprise project ID of WAF dedicated instance. Changing this
         will migrate the WAF instance to a new enterprise project.
+        For enterprise users, if omitted, default enterprise project will be used.
         """
         return pulumi.get(self, "enterprise_project_id")
 
@@ -183,8 +214,7 @@ class DedicatedInstanceArgs:
     @pulumi.getter(name="groupId")
     def group_id(self) -> Optional[pulumi.Input[str]]:
         """
-        The instance group ID used by the WAF dedicated instance in ELB mode.
-        Changing this will create a new instance.
+        schema: Deprecated;
         """
         return pulumi.get(self, "group_id")
 
@@ -196,8 +226,8 @@ class DedicatedInstanceArgs:
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        The name of WAF dedicated instance. Duplicate names are allowed, we suggest to keeping the
-        name unique.
+        Specifies the name of WAF dedicated instance. Duplicate names are allowed, we suggest to
+        keeping the name unique.
         """
         return pulumi.get(self, "name")
 
@@ -209,8 +239,8 @@ class DedicatedInstanceArgs:
     @pulumi.getter
     def region(self) -> Optional[pulumi.Input[str]]:
         """
-        The region in which to create the WAF dedicated instance. If omitted, the
-        provider-level region will be used. Changing this setting will create a new instance.
+        Specifies the region in which to create the WAF dedicated instance.
+        If omitted, the provider-level region will be used. Changing this setting will create a new instance.
         """
         return pulumi.get(self, "region")
 
@@ -222,7 +252,10 @@ class DedicatedInstanceArgs:
     @pulumi.getter(name="resTenant")
     def res_tenant(self) -> Optional[pulumi.Input[bool]]:
         """
-        schema: Internal; Specifies whether this is resource tenant.
+        Specifies whether this is resource tenant.
+        Changing this will create a new instance.
+        + **false**: Common tenant.
+        + **true**: Resource tenant.
         """
         return pulumi.get(self, "res_tenant")
 
@@ -230,11 +263,24 @@ class DedicatedInstanceArgs:
     def res_tenant(self, value: Optional[pulumi.Input[bool]]):
         pulumi.set(self, "res_tenant", value)
 
+    @property
+    @pulumi.getter
+    def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]:
+        """
+        Specifies the key/value pairs to associate with the WAF dedicated instance.
+        """
+        return pulumi.get(self, "tags")
+
+    @tags.setter
+    def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]):
+        pulumi.set(self, "tags", value)
+
 
 @pulumi.input_type
 class _DedicatedInstanceState:
     def __init__(__self__, *,
                  access_status: Optional[pulumi.Input[int]] = None,
+                 anti_affinity: Optional[pulumi.Input[bool]] = None,
                  available_zone: Optional[pulumi.Input[str]] = None,
                  cpu_architecture: Optional[pulumi.Input[str]] = None,
                  ecs_flavor: Optional[pulumi.Input[str]] = None,
@@ -249,43 +295,54 @@ class _DedicatedInstanceState:
                  service_ip: Optional[pulumi.Input[str]] = None,
                  specification_code: Optional[pulumi.Input[str]] = None,
                  subnet_id: Optional[pulumi.Input[str]] = None,
+                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  upgradable: Optional[pulumi.Input[int]] = None,
                  vpc_id: Optional[pulumi.Input[str]] = None):
         """
         Input properties used for looking up and filtering DedicatedInstance resources.
         :param pulumi.Input[int] access_status: The access status of the instance. `0`: inaccessible, `1`: accessible.
-        :param pulumi.Input[str] available_zone: The available zone names for the dedicated instances. It can be
+        :param pulumi.Input[bool] anti_affinity: Specifies whether to enable anti-affinity. This field is valid only
+               when `res_tenant` is set to **true**. Changing this will create a new instance.
+        :param pulumi.Input[str] available_zone: Specifies the available zone name for the dedicated instance. It can be
                obtained through this data source `get_availability_zones`. Changing this will create a new instance.
-        :param pulumi.Input[str] cpu_architecture: The ECS cpu architecture of instance, Default value is `x86`.
+        :param pulumi.Input[str] cpu_architecture: Specifies the ECS CPU architecture of instance. Defaults to **x86**.
                Changing this will create a new instance.
-        :param pulumi.Input[str] ecs_flavor: The flavor of the ECS used by the WAF instance. Flavors can be obtained
-               through this data source `_ecs.get_flavors`. Changing this will create a new instance.
-        :param pulumi.Input[str] enterprise_project_id: The enterprise project ID of WAF dedicated instance. Changing this
+        :param pulumi.Input[str] ecs_flavor: Specifies the flavor of the ECS used by the WAF instance. Flavors can be
+               obtained through this data source `_ecs.get_flavors`. Changing this will create a new instance.
+               This field is valid and required only when `res_tenant` is set to **false**.
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID of WAF dedicated instance. Changing this
                will migrate the WAF instance to a new enterprise project.
-        :param pulumi.Input[str] group_id: The instance group ID used by the WAF dedicated instance in ELB mode.
+               For enterprise users, if omitted, default enterprise project will be used.
+        :param pulumi.Input[str] group_id: schema: Deprecated;
+        :param pulumi.Input[str] name: Specifies the name of WAF dedicated instance. Duplicate names are allowed, we suggest to
+               keeping the name unique.
+        :param pulumi.Input[str] region: Specifies the region in which to create the WAF dedicated instance.
+               If omitted, the provider-level region will be used. Changing this setting will create a new instance.
+        :param pulumi.Input[bool] res_tenant: Specifies whether this is resource tenant.
                Changing this will create a new instance.
-        :param pulumi.Input[str] name: The name of WAF dedicated instance. Duplicate names are allowed, we suggest to keeping the
-               name unique.
-        :param pulumi.Input[str] region: The region in which to create the WAF dedicated instance. If omitted, the
-               provider-level region will be used. Changing this setting will create a new instance.
-        :param pulumi.Input[bool] res_tenant: schema: Internal; Specifies whether this is resource tenant.
+               + **false**: Common tenant.
+               + **true**: Resource tenant.
         :param pulumi.Input[int] run_status: The running status of the instance. Values are:
-        :param pulumi.Input[Sequence[pulumi.Input[str]]] security_groups: The security group of the instance. This is an array of security group
-               ids. Changing this will create a new instance.
-        :param pulumi.Input[str] server_id: The id of the instance server.
-        :param pulumi.Input[str] service_ip: The ip of the instance service.
-        :param pulumi.Input[str] specification_code: The specification code of instance. Different specifications have
-               different throughput. Changing this will create a new instance. Values are:
-               + `waf.instance.professional` - The professional edition, throughput: 100 Mbit/s; QPS: 2,000 (Reference only).
-               + `waf.instance.enterprise` - The enterprise edition, throughput: 500 Mbit/s; QPS: 10,000 (Reference only).
-        :param pulumi.Input[str] subnet_id: The subnet id of WAF dedicated instance VPC. Changing this will create a
-               new instance.
-        :param pulumi.Input[int] upgradable: The instance is to support upgrades. `0`: Cannot be upgraded, `1`: Can be upgraded.
-        :param pulumi.Input[str] vpc_id: The VPC id of WAF dedicated instance. Changing this will create a new
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] security_groups: Specifies the security group of the instance. This is an array of
+               security group IDs. Changing this will create a new instance.
+        :param pulumi.Input[str] server_id: The ID of the ECS hosting the dedicated engine.
+        :param pulumi.Input[str] service_ip: The service plane IP address of the WAF dedicated instance.
+        :param pulumi.Input[str] specification_code: Specifies the specification code of instance.
+               Different specifications have different throughput. Changing this will create a new instance.
+               Values are:
+               + **waf.instance.professional**: The professional edition, corresponding to WI-500 on the console.
+               + **waf.instance.enterprise**: The enterprise edition, corresponding to WI-100 on the console.
+        :param pulumi.Input[str] subnet_id: Specifies the subnet ID of WAF dedicated instance VPC. Changing this will
+               create a new instance.
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the WAF dedicated instance.
+        :param pulumi.Input[int] upgradable: Whether the dedicated engine can be upgraded. `0`: Cannot be upgraded, `1`: Can be upgraded.
+        :param pulumi.Input[str] vpc_id: Specifies the VPC ID of WAF dedicated instance. Changing this will create a new
                instance.
         """
         if access_status is not None:
             pulumi.set(__self__, "access_status", access_status)
+        if anti_affinity is not None:
+            pulumi.set(__self__, "anti_affinity", anti_affinity)
         if available_zone is not None:
             pulumi.set(__self__, "available_zone", available_zone)
         if cpu_architecture is not None:
@@ -314,6 +371,8 @@ class _DedicatedInstanceState:
             pulumi.set(__self__, "specification_code", specification_code)
         if subnet_id is not None:
             pulumi.set(__self__, "subnet_id", subnet_id)
+        if tags is not None:
+            pulumi.set(__self__, "tags", tags)
         if upgradable is not None:
             pulumi.set(__self__, "upgradable", upgradable)
         if vpc_id is not None:
@@ -332,10 +391,23 @@ class _DedicatedInstanceState:
         pulumi.set(self, "access_status", value)
 
     @property
+    @pulumi.getter(name="antiAffinity")
+    def anti_affinity(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies whether to enable anti-affinity. This field is valid only
+        when `res_tenant` is set to **true**. Changing this will create a new instance.
+        """
+        return pulumi.get(self, "anti_affinity")
+
+    @anti_affinity.setter
+    def anti_affinity(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "anti_affinity", value)
+
+    @property
     @pulumi.getter(name="availableZone")
     def available_zone(self) -> Optional[pulumi.Input[str]]:
         """
-        The available zone names for the dedicated instances. It can be
+        Specifies the available zone name for the dedicated instance. It can be
         obtained through this data source `get_availability_zones`. Changing this will create a new instance.
         """
         return pulumi.get(self, "available_zone")
@@ -348,7 +420,7 @@ class _DedicatedInstanceState:
     @pulumi.getter(name="cpuArchitecture")
     def cpu_architecture(self) -> Optional[pulumi.Input[str]]:
         """
-        The ECS cpu architecture of instance, Default value is `x86`.
+        Specifies the ECS CPU architecture of instance. Defaults to **x86**.
         Changing this will create a new instance.
         """
         return pulumi.get(self, "cpu_architecture")
@@ -361,8 +433,9 @@ class _DedicatedInstanceState:
     @pulumi.getter(name="ecsFlavor")
     def ecs_flavor(self) -> Optional[pulumi.Input[str]]:
         """
-        The flavor of the ECS used by the WAF instance. Flavors can be obtained
-        through this data source `_ecs.get_flavors`. Changing this will create a new instance.
+        Specifies the flavor of the ECS used by the WAF instance. Flavors can be
+        obtained through this data source `_ecs.get_flavors`. Changing this will create a new instance.
+        This field is valid and required only when `res_tenant` is set to **false**.
         """
         return pulumi.get(self, "ecs_flavor")
 
@@ -374,8 +447,9 @@ class _DedicatedInstanceState:
     @pulumi.getter(name="enterpriseProjectId")
     def enterprise_project_id(self) -> Optional[pulumi.Input[str]]:
         """
-        The enterprise project ID of WAF dedicated instance. Changing this
+        Specifies the enterprise project ID of WAF dedicated instance. Changing this
         will migrate the WAF instance to a new enterprise project.
+        For enterprise users, if omitted, default enterprise project will be used.
         """
         return pulumi.get(self, "enterprise_project_id")
 
@@ -387,8 +461,7 @@ class _DedicatedInstanceState:
     @pulumi.getter(name="groupId")
     def group_id(self) -> Optional[pulumi.Input[str]]:
         """
-        The instance group ID used by the WAF dedicated instance in ELB mode.
-        Changing this will create a new instance.
+        schema: Deprecated;
         """
         return pulumi.get(self, "group_id")
 
@@ -400,8 +473,8 @@ class _DedicatedInstanceState:
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        The name of WAF dedicated instance. Duplicate names are allowed, we suggest to keeping the
-        name unique.
+        Specifies the name of WAF dedicated instance. Duplicate names are allowed, we suggest to
+        keeping the name unique.
         """
         return pulumi.get(self, "name")
 
@@ -413,8 +486,8 @@ class _DedicatedInstanceState:
     @pulumi.getter
     def region(self) -> Optional[pulumi.Input[str]]:
         """
-        The region in which to create the WAF dedicated instance. If omitted, the
-        provider-level region will be used. Changing this setting will create a new instance.
+        Specifies the region in which to create the WAF dedicated instance.
+        If omitted, the provider-level region will be used. Changing this setting will create a new instance.
         """
         return pulumi.get(self, "region")
 
@@ -426,7 +499,10 @@ class _DedicatedInstanceState:
     @pulumi.getter(name="resTenant")
     def res_tenant(self) -> Optional[pulumi.Input[bool]]:
         """
-        schema: Internal; Specifies whether this is resource tenant.
+        Specifies whether this is resource tenant.
+        Changing this will create a new instance.
+        + **false**: Common tenant.
+        + **true**: Resource tenant.
         """
         return pulumi.get(self, "res_tenant")
 
@@ -450,8 +526,8 @@ class _DedicatedInstanceState:
     @pulumi.getter(name="securityGroups")
     def security_groups(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]:
         """
-        The security group of the instance. This is an array of security group
-        ids. Changing this will create a new instance.
+        Specifies the security group of the instance. This is an array of
+        security group IDs. Changing this will create a new instance.
         """
         return pulumi.get(self, "security_groups")
 
@@ -463,7 +539,7 @@ class _DedicatedInstanceState:
     @pulumi.getter(name="serverId")
     def server_id(self) -> Optional[pulumi.Input[str]]:
         """
-        The id of the instance server.
+        The ID of the ECS hosting the dedicated engine.
         """
         return pulumi.get(self, "server_id")
 
@@ -475,7 +551,7 @@ class _DedicatedInstanceState:
     @pulumi.getter(name="serviceIp")
     def service_ip(self) -> Optional[pulumi.Input[str]]:
         """
-        The ip of the instance service.
+        The service plane IP address of the WAF dedicated instance.
         """
         return pulumi.get(self, "service_ip")
 
@@ -487,10 +563,11 @@ class _DedicatedInstanceState:
     @pulumi.getter(name="specificationCode")
     def specification_code(self) -> Optional[pulumi.Input[str]]:
         """
-        The specification code of instance. Different specifications have
-        different throughput. Changing this will create a new instance. Values are:
-        + `waf.instance.professional` - The professional edition, throughput: 100 Mbit/s; QPS: 2,000 (Reference only).
-        + `waf.instance.enterprise` - The enterprise edition, throughput: 500 Mbit/s; QPS: 10,000 (Reference only).
+        Specifies the specification code of instance.
+        Different specifications have different throughput. Changing this will create a new instance.
+        Values are:
+        + **waf.instance.professional**: The professional edition, corresponding to WI-500 on the console.
+        + **waf.instance.enterprise**: The enterprise edition, corresponding to WI-100 on the console.
         """
         return pulumi.get(self, "specification_code")
 
@@ -502,8 +579,8 @@ class _DedicatedInstanceState:
     @pulumi.getter(name="subnetId")
     def subnet_id(self) -> Optional[pulumi.Input[str]]:
         """
-        The subnet id of WAF dedicated instance VPC. Changing this will create a
-        new instance.
+        Specifies the subnet ID of WAF dedicated instance VPC. Changing this will
+        create a new instance.
         """
         return pulumi.get(self, "subnet_id")
 
@@ -513,9 +590,21 @@ class _DedicatedInstanceState:
 
     @property
     @pulumi.getter
+    def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]:
+        """
+        Specifies the key/value pairs to associate with the WAF dedicated instance.
+        """
+        return pulumi.get(self, "tags")
+
+    @tags.setter
+    def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]):
+        pulumi.set(self, "tags", value)
+
+    @property
+    @pulumi.getter
     def upgradable(self) -> Optional[pulumi.Input[int]]:
         """
-        The instance is to support upgrades. `0`: Cannot be upgraded, `1`: Can be upgraded.
+        Whether the dedicated engine can be upgraded. `0`: Cannot be upgraded, `1`: Can be upgraded.
         """
         return pulumi.get(self, "upgradable")
 
@@ -527,7 +616,7 @@ class _DedicatedInstanceState:
     @pulumi.getter(name="vpcId")
     def vpc_id(self) -> Optional[pulumi.Input[str]]:
         """
-        The VPC id of WAF dedicated instance. Changing this will create a new
+        Specifies the VPC ID of WAF dedicated instance. Changing this will create a new
         instance.
         """
         return pulumi.get(self, "vpc_id")
@@ -542,6 +631,7 @@ class DedicatedInstance(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
+                 anti_affinity: Optional[pulumi.Input[bool]] = None,
                  available_zone: Optional[pulumi.Input[str]] = None,
                  cpu_architecture: Optional[pulumi.Input[str]] = None,
                  ecs_flavor: Optional[pulumi.Input[str]] = None,
@@ -553,12 +643,14 @@ class DedicatedInstance(pulumi.CustomResource):
                  security_groups: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  specification_code: Optional[pulumi.Input[str]] = None,
                  subnet_id: Optional[pulumi.Input[str]] = None,
+                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  vpc_id: Optional[pulumi.Input[str]] = None,
                  __props__=None):
         """
         Manages a WAF dedicated instance resource within HuaweiCloud.
 
         ## Example Usage
+        ### Creating with common tenant
 
         ```python
         import pulumi
@@ -571,13 +663,42 @@ class DedicatedInstance(pulumi.CustomResource):
         subnet_id = config.require_object("subnetId")
         security_group_id = config.require_object("securityGroupId")
         enterprise_project_id = config.require_object("enterpriseProjectId")
-        instance1 = huaweicloud.waf.DedicatedInstance("instance1",
+        test = huaweicloud.waf.DedicatedInstance("test",
             available_zone=az_name,
             specification_code="waf.instance.professional",
             ecs_flavor=ecs_flavor_id,
             vpc_id=vpc_id,
             subnet_id=subnet_id,
             enterprise_project_id=enterprise_project_id,
+            tags={
+                "foo": "bar",
+                "key": "value",
+            },
+            security_groups=[security_group_id])
+        ```
+        ### Creating with resource tenant
+
+        ```python
+        import pulumi
+        import pulumi_huaweicloud as huaweicloud
+
+        config = pulumi.Config()
+        az_name = config.require_object("azName")
+        vpc_id = config.require_object("vpcId")
+        subnet_id = config.require_object("subnetId")
+        security_group_id = config.require_object("securityGroupId")
+        enterprise_project_id = config.require_object("enterpriseProjectId")
+        test = huaweicloud.waf.DedicatedInstance("test",
+            available_zone=az_name,
+            specification_code="waf.instance.professional",
+            vpc_id=vpc_id,
+            subnet_id=subnet_id,
+            enterprise_project_id=enterprise_project_id,
+            res_tenant=True,
+            tags={
+                "foo": "bar",
+                "key": "value",
+            },
             security_groups=[security_group_id])
         ```
 
@@ -595,32 +716,54 @@ class DedicatedInstance(pulumi.CustomResource):
          $ pulumi import huaweicloud:Waf/dedicatedInstance:DedicatedInstance test <id>/<enterprise_project_id>
         ```
 
+         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response. The missing attributes include`res_tenant`, `anti_affinity`, and `tags`. It is generally recommended running `terraform plan` after importing the resource. You can then decide if changes should be applied to the resource, or the resource definition should be updated to align with the resource. Also, you can ignore changes as below. hcl resource "huaweicloud_waf_dedicated_instance" "test" {
+
+         ...
+
+         lifecycle {
+
+         ignore_changes = [
+
+         res_tenant, anti_affinity, tags,
+
+         ]
+
+         } }
+
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[str] available_zone: The available zone names for the dedicated instances. It can be
+        :param pulumi.Input[bool] anti_affinity: Specifies whether to enable anti-affinity. This field is valid only
+               when `res_tenant` is set to **true**. Changing this will create a new instance.
+        :param pulumi.Input[str] available_zone: Specifies the available zone name for the dedicated instance. It can be
                obtained through this data source `get_availability_zones`. Changing this will create a new instance.
-        :param pulumi.Input[str] cpu_architecture: The ECS cpu architecture of instance, Default value is `x86`.
+        :param pulumi.Input[str] cpu_architecture: Specifies the ECS CPU architecture of instance. Defaults to **x86**.
                Changing this will create a new instance.
-        :param pulumi.Input[str] ecs_flavor: The flavor of the ECS used by the WAF instance. Flavors can be obtained
-               through this data source `_ecs.get_flavors`. Changing this will create a new instance.
-        :param pulumi.Input[str] enterprise_project_id: The enterprise project ID of WAF dedicated instance. Changing this
+        :param pulumi.Input[str] ecs_flavor: Specifies the flavor of the ECS used by the WAF instance. Flavors can be
+               obtained through this data source `_ecs.get_flavors`. Changing this will create a new instance.
+               This field is valid and required only when `res_tenant` is set to **false**.
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID of WAF dedicated instance. Changing this
                will migrate the WAF instance to a new enterprise project.
-        :param pulumi.Input[str] group_id: The instance group ID used by the WAF dedicated instance in ELB mode.
+               For enterprise users, if omitted, default enterprise project will be used.
+        :param pulumi.Input[str] group_id: schema: Deprecated;
+        :param pulumi.Input[str] name: Specifies the name of WAF dedicated instance. Duplicate names are allowed, we suggest to
+               keeping the name unique.
+        :param pulumi.Input[str] region: Specifies the region in which to create the WAF dedicated instance.
+               If omitted, the provider-level region will be used. Changing this setting will create a new instance.
+        :param pulumi.Input[bool] res_tenant: Specifies whether this is resource tenant.
                Changing this will create a new instance.
-        :param pulumi.Input[str] name: The name of WAF dedicated instance. Duplicate names are allowed, we suggest to keeping the
-               name unique.
-        :param pulumi.Input[str] region: The region in which to create the WAF dedicated instance. If omitted, the
-               provider-level region will be used. Changing this setting will create a new instance.
-        :param pulumi.Input[bool] res_tenant: schema: Internal; Specifies whether this is resource tenant.
-        :param pulumi.Input[Sequence[pulumi.Input[str]]] security_groups: The security group of the instance. This is an array of security group
-               ids. Changing this will create a new instance.
-        :param pulumi.Input[str] specification_code: The specification code of instance. Different specifications have
-               different throughput. Changing this will create a new instance. Values are:
-               + `waf.instance.professional` - The professional edition, throughput: 100 Mbit/s; QPS: 2,000 (Reference only).
-               + `waf.instance.enterprise` - The enterprise edition, throughput: 500 Mbit/s; QPS: 10,000 (Reference only).
-        :param pulumi.Input[str] subnet_id: The subnet id of WAF dedicated instance VPC. Changing this will create a
-               new instance.
-        :param pulumi.Input[str] vpc_id: The VPC id of WAF dedicated instance. Changing this will create a new
+               + **false**: Common tenant.
+               + **true**: Resource tenant.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] security_groups: Specifies the security group of the instance. This is an array of
+               security group IDs. Changing this will create a new instance.
+        :param pulumi.Input[str] specification_code: Specifies the specification code of instance.
+               Different specifications have different throughput. Changing this will create a new instance.
+               Values are:
+               + **waf.instance.professional**: The professional edition, corresponding to WI-500 on the console.
+               + **waf.instance.enterprise**: The enterprise edition, corresponding to WI-100 on the console.
+        :param pulumi.Input[str] subnet_id: Specifies the subnet ID of WAF dedicated instance VPC. Changing this will
+               create a new instance.
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the WAF dedicated instance.
+        :param pulumi.Input[str] vpc_id: Specifies the VPC ID of WAF dedicated instance. Changing this will create a new
                instance.
         """
         ...
@@ -633,6 +776,7 @@ class DedicatedInstance(pulumi.CustomResource):
         Manages a WAF dedicated instance resource within HuaweiCloud.
 
         ## Example Usage
+        ### Creating with common tenant
 
         ```python
         import pulumi
@@ -645,13 +789,42 @@ class DedicatedInstance(pulumi.CustomResource):
         subnet_id = config.require_object("subnetId")
         security_group_id = config.require_object("securityGroupId")
         enterprise_project_id = config.require_object("enterpriseProjectId")
-        instance1 = huaweicloud.waf.DedicatedInstance("instance1",
+        test = huaweicloud.waf.DedicatedInstance("test",
             available_zone=az_name,
             specification_code="waf.instance.professional",
             ecs_flavor=ecs_flavor_id,
             vpc_id=vpc_id,
             subnet_id=subnet_id,
             enterprise_project_id=enterprise_project_id,
+            tags={
+                "foo": "bar",
+                "key": "value",
+            },
+            security_groups=[security_group_id])
+        ```
+        ### Creating with resource tenant
+
+        ```python
+        import pulumi
+        import pulumi_huaweicloud as huaweicloud
+
+        config = pulumi.Config()
+        az_name = config.require_object("azName")
+        vpc_id = config.require_object("vpcId")
+        subnet_id = config.require_object("subnetId")
+        security_group_id = config.require_object("securityGroupId")
+        enterprise_project_id = config.require_object("enterpriseProjectId")
+        test = huaweicloud.waf.DedicatedInstance("test",
+            available_zone=az_name,
+            specification_code="waf.instance.professional",
+            vpc_id=vpc_id,
+            subnet_id=subnet_id,
+            enterprise_project_id=enterprise_project_id,
+            res_tenant=True,
+            tags={
+                "foo": "bar",
+                "key": "value",
+            },
             security_groups=[security_group_id])
         ```
 
@@ -668,6 +841,20 @@ class DedicatedInstance(pulumi.CustomResource):
         ```sh
          $ pulumi import huaweicloud:Waf/dedicatedInstance:DedicatedInstance test <id>/<enterprise_project_id>
         ```
+
+         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response. The missing attributes include`res_tenant`, `anti_affinity`, and `tags`. It is generally recommended running `terraform plan` after importing the resource. You can then decide if changes should be applied to the resource, or the resource definition should be updated to align with the resource. Also, you can ignore changes as below. hcl resource "huaweicloud_waf_dedicated_instance" "test" {
+
+         ...
+
+         lifecycle {
+
+         ignore_changes = [
+
+         res_tenant, anti_affinity, tags,
+
+         ]
+
+         } }
 
         :param str resource_name: The name of the resource.
         :param DedicatedInstanceArgs args: The arguments to use to populate this resource's properties.
@@ -684,6 +871,7 @@ class DedicatedInstance(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
+                 anti_affinity: Optional[pulumi.Input[bool]] = None,
                  available_zone: Optional[pulumi.Input[str]] = None,
                  cpu_architecture: Optional[pulumi.Input[str]] = None,
                  ecs_flavor: Optional[pulumi.Input[str]] = None,
@@ -695,6 +883,7 @@ class DedicatedInstance(pulumi.CustomResource):
                  security_groups: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  specification_code: Optional[pulumi.Input[str]] = None,
                  subnet_id: Optional[pulumi.Input[str]] = None,
+                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  vpc_id: Optional[pulumi.Input[str]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
@@ -705,12 +894,11 @@ class DedicatedInstance(pulumi.CustomResource):
                 raise TypeError('__props__ is only valid when passed in combination with a valid opts.id to get an existing resource')
             __props__ = DedicatedInstanceArgs.__new__(DedicatedInstanceArgs)
 
+            __props__.__dict__["anti_affinity"] = anti_affinity
             if available_zone is None and not opts.urn:
                 raise TypeError("Missing required property 'available_zone'")
             __props__.__dict__["available_zone"] = available_zone
             __props__.__dict__["cpu_architecture"] = cpu_architecture
-            if ecs_flavor is None and not opts.urn:
-                raise TypeError("Missing required property 'ecs_flavor'")
             __props__.__dict__["ecs_flavor"] = ecs_flavor
             __props__.__dict__["enterprise_project_id"] = enterprise_project_id
             __props__.__dict__["group_id"] = group_id
@@ -726,6 +914,7 @@ class DedicatedInstance(pulumi.CustomResource):
             if subnet_id is None and not opts.urn:
                 raise TypeError("Missing required property 'subnet_id'")
             __props__.__dict__["subnet_id"] = subnet_id
+            __props__.__dict__["tags"] = tags
             if vpc_id is None and not opts.urn:
                 raise TypeError("Missing required property 'vpc_id'")
             __props__.__dict__["vpc_id"] = vpc_id
@@ -745,6 +934,7 @@ class DedicatedInstance(pulumi.CustomResource):
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
             access_status: Optional[pulumi.Input[int]] = None,
+            anti_affinity: Optional[pulumi.Input[bool]] = None,
             available_zone: Optional[pulumi.Input[str]] = None,
             cpu_architecture: Optional[pulumi.Input[str]] = None,
             ecs_flavor: Optional[pulumi.Input[str]] = None,
@@ -759,6 +949,7 @@ class DedicatedInstance(pulumi.CustomResource):
             service_ip: Optional[pulumi.Input[str]] = None,
             specification_code: Optional[pulumi.Input[str]] = None,
             subnet_id: Optional[pulumi.Input[str]] = None,
+            tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
             upgradable: Optional[pulumi.Input[int]] = None,
             vpc_id: Optional[pulumi.Input[str]] = None) -> 'DedicatedInstance':
         """
@@ -769,34 +960,42 @@ class DedicatedInstance(pulumi.CustomResource):
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[int] access_status: The access status of the instance. `0`: inaccessible, `1`: accessible.
-        :param pulumi.Input[str] available_zone: The available zone names for the dedicated instances. It can be
+        :param pulumi.Input[bool] anti_affinity: Specifies whether to enable anti-affinity. This field is valid only
+               when `res_tenant` is set to **true**. Changing this will create a new instance.
+        :param pulumi.Input[str] available_zone: Specifies the available zone name for the dedicated instance. It can be
                obtained through this data source `get_availability_zones`. Changing this will create a new instance.
-        :param pulumi.Input[str] cpu_architecture: The ECS cpu architecture of instance, Default value is `x86`.
+        :param pulumi.Input[str] cpu_architecture: Specifies the ECS CPU architecture of instance. Defaults to **x86**.
                Changing this will create a new instance.
-        :param pulumi.Input[str] ecs_flavor: The flavor of the ECS used by the WAF instance. Flavors can be obtained
-               through this data source `_ecs.get_flavors`. Changing this will create a new instance.
-        :param pulumi.Input[str] enterprise_project_id: The enterprise project ID of WAF dedicated instance. Changing this
+        :param pulumi.Input[str] ecs_flavor: Specifies the flavor of the ECS used by the WAF instance. Flavors can be
+               obtained through this data source `_ecs.get_flavors`. Changing this will create a new instance.
+               This field is valid and required only when `res_tenant` is set to **false**.
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID of WAF dedicated instance. Changing this
                will migrate the WAF instance to a new enterprise project.
-        :param pulumi.Input[str] group_id: The instance group ID used by the WAF dedicated instance in ELB mode.
+               For enterprise users, if omitted, default enterprise project will be used.
+        :param pulumi.Input[str] group_id: schema: Deprecated;
+        :param pulumi.Input[str] name: Specifies the name of WAF dedicated instance. Duplicate names are allowed, we suggest to
+               keeping the name unique.
+        :param pulumi.Input[str] region: Specifies the region in which to create the WAF dedicated instance.
+               If omitted, the provider-level region will be used. Changing this setting will create a new instance.
+        :param pulumi.Input[bool] res_tenant: Specifies whether this is resource tenant.
                Changing this will create a new instance.
-        :param pulumi.Input[str] name: The name of WAF dedicated instance. Duplicate names are allowed, we suggest to keeping the
-               name unique.
-        :param pulumi.Input[str] region: The region in which to create the WAF dedicated instance. If omitted, the
-               provider-level region will be used. Changing this setting will create a new instance.
-        :param pulumi.Input[bool] res_tenant: schema: Internal; Specifies whether this is resource tenant.
+               + **false**: Common tenant.
+               + **true**: Resource tenant.
         :param pulumi.Input[int] run_status: The running status of the instance. Values are:
-        :param pulumi.Input[Sequence[pulumi.Input[str]]] security_groups: The security group of the instance. This is an array of security group
-               ids. Changing this will create a new instance.
-        :param pulumi.Input[str] server_id: The id of the instance server.
-        :param pulumi.Input[str] service_ip: The ip of the instance service.
-        :param pulumi.Input[str] specification_code: The specification code of instance. Different specifications have
-               different throughput. Changing this will create a new instance. Values are:
-               + `waf.instance.professional` - The professional edition, throughput: 100 Mbit/s; QPS: 2,000 (Reference only).
-               + `waf.instance.enterprise` - The enterprise edition, throughput: 500 Mbit/s; QPS: 10,000 (Reference only).
-        :param pulumi.Input[str] subnet_id: The subnet id of WAF dedicated instance VPC. Changing this will create a
-               new instance.
-        :param pulumi.Input[int] upgradable: The instance is to support upgrades. `0`: Cannot be upgraded, `1`: Can be upgraded.
-        :param pulumi.Input[str] vpc_id: The VPC id of WAF dedicated instance. Changing this will create a new
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] security_groups: Specifies the security group of the instance. This is an array of
+               security group IDs. Changing this will create a new instance.
+        :param pulumi.Input[str] server_id: The ID of the ECS hosting the dedicated engine.
+        :param pulumi.Input[str] service_ip: The service plane IP address of the WAF dedicated instance.
+        :param pulumi.Input[str] specification_code: Specifies the specification code of instance.
+               Different specifications have different throughput. Changing this will create a new instance.
+               Values are:
+               + **waf.instance.professional**: The professional edition, corresponding to WI-500 on the console.
+               + **waf.instance.enterprise**: The enterprise edition, corresponding to WI-100 on the console.
+        :param pulumi.Input[str] subnet_id: Specifies the subnet ID of WAF dedicated instance VPC. Changing this will
+               create a new instance.
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the WAF dedicated instance.
+        :param pulumi.Input[int] upgradable: Whether the dedicated engine can be upgraded. `0`: Cannot be upgraded, `1`: Can be upgraded.
+        :param pulumi.Input[str] vpc_id: Specifies the VPC ID of WAF dedicated instance. Changing this will create a new
                instance.
         """
         opts = pulumi.ResourceOptions.merge(opts, pulumi.ResourceOptions(id=id))
@@ -804,6 +1003,7 @@ class DedicatedInstance(pulumi.CustomResource):
         __props__ = _DedicatedInstanceState.__new__(_DedicatedInstanceState)
 
         __props__.__dict__["access_status"] = access_status
+        __props__.__dict__["anti_affinity"] = anti_affinity
         __props__.__dict__["available_zone"] = available_zone
         __props__.__dict__["cpu_architecture"] = cpu_architecture
         __props__.__dict__["ecs_flavor"] = ecs_flavor
@@ -818,6 +1018,7 @@ class DedicatedInstance(pulumi.CustomResource):
         __props__.__dict__["service_ip"] = service_ip
         __props__.__dict__["specification_code"] = specification_code
         __props__.__dict__["subnet_id"] = subnet_id
+        __props__.__dict__["tags"] = tags
         __props__.__dict__["upgradable"] = upgradable
         __props__.__dict__["vpc_id"] = vpc_id
         return DedicatedInstance(resource_name, opts=opts, __props__=__props__)
@@ -831,10 +1032,19 @@ class DedicatedInstance(pulumi.CustomResource):
         return pulumi.get(self, "access_status")
 
     @property
+    @pulumi.getter(name="antiAffinity")
+    def anti_affinity(self) -> pulumi.Output[Optional[bool]]:
+        """
+        Specifies whether to enable anti-affinity. This field is valid only
+        when `res_tenant` is set to **true**. Changing this will create a new instance.
+        """
+        return pulumi.get(self, "anti_affinity")
+
+    @property
     @pulumi.getter(name="availableZone")
     def available_zone(self) -> pulumi.Output[str]:
         """
-        The available zone names for the dedicated instances. It can be
+        Specifies the available zone name for the dedicated instance. It can be
         obtained through this data source `get_availability_zones`. Changing this will create a new instance.
         """
         return pulumi.get(self, "available_zone")
@@ -843,7 +1053,7 @@ class DedicatedInstance(pulumi.CustomResource):
     @pulumi.getter(name="cpuArchitecture")
     def cpu_architecture(self) -> pulumi.Output[Optional[str]]:
         """
-        The ECS cpu architecture of instance, Default value is `x86`.
+        Specifies the ECS CPU architecture of instance. Defaults to **x86**.
         Changing this will create a new instance.
         """
         return pulumi.get(self, "cpu_architecture")
@@ -852,8 +1062,9 @@ class DedicatedInstance(pulumi.CustomResource):
     @pulumi.getter(name="ecsFlavor")
     def ecs_flavor(self) -> pulumi.Output[str]:
         """
-        The flavor of the ECS used by the WAF instance. Flavors can be obtained
-        through this data source `_ecs.get_flavors`. Changing this will create a new instance.
+        Specifies the flavor of the ECS used by the WAF instance. Flavors can be
+        obtained through this data source `_ecs.get_flavors`. Changing this will create a new instance.
+        This field is valid and required only when `res_tenant` is set to **false**.
         """
         return pulumi.get(self, "ecs_flavor")
 
@@ -861,8 +1072,9 @@ class DedicatedInstance(pulumi.CustomResource):
     @pulumi.getter(name="enterpriseProjectId")
     def enterprise_project_id(self) -> pulumi.Output[Optional[str]]:
         """
-        The enterprise project ID of WAF dedicated instance. Changing this
+        Specifies the enterprise project ID of WAF dedicated instance. Changing this
         will migrate the WAF instance to a new enterprise project.
+        For enterprise users, if omitted, default enterprise project will be used.
         """
         return pulumi.get(self, "enterprise_project_id")
 
@@ -870,8 +1082,7 @@ class DedicatedInstance(pulumi.CustomResource):
     @pulumi.getter(name="groupId")
     def group_id(self) -> pulumi.Output[Optional[str]]:
         """
-        The instance group ID used by the WAF dedicated instance in ELB mode.
-        Changing this will create a new instance.
+        schema: Deprecated;
         """
         return pulumi.get(self, "group_id")
 
@@ -879,8 +1090,8 @@ class DedicatedInstance(pulumi.CustomResource):
     @pulumi.getter
     def name(self) -> pulumi.Output[str]:
         """
-        The name of WAF dedicated instance. Duplicate names are allowed, we suggest to keeping the
-        name unique.
+        Specifies the name of WAF dedicated instance. Duplicate names are allowed, we suggest to
+        keeping the name unique.
         """
         return pulumi.get(self, "name")
 
@@ -888,8 +1099,8 @@ class DedicatedInstance(pulumi.CustomResource):
     @pulumi.getter
     def region(self) -> pulumi.Output[str]:
         """
-        The region in which to create the WAF dedicated instance. If omitted, the
-        provider-level region will be used. Changing this setting will create a new instance.
+        Specifies the region in which to create the WAF dedicated instance.
+        If omitted, the provider-level region will be used. Changing this setting will create a new instance.
         """
         return pulumi.get(self, "region")
 
@@ -897,7 +1108,10 @@ class DedicatedInstance(pulumi.CustomResource):
     @pulumi.getter(name="resTenant")
     def res_tenant(self) -> pulumi.Output[Optional[bool]]:
         """
-        schema: Internal; Specifies whether this is resource tenant.
+        Specifies whether this is resource tenant.
+        Changing this will create a new instance.
+        + **false**: Common tenant.
+        + **true**: Resource tenant.
         """
         return pulumi.get(self, "res_tenant")
 
@@ -913,8 +1127,8 @@ class DedicatedInstance(pulumi.CustomResource):
     @pulumi.getter(name="securityGroups")
     def security_groups(self) -> pulumi.Output[Sequence[str]]:
         """
-        The security group of the instance. This is an array of security group
-        ids. Changing this will create a new instance.
+        Specifies the security group of the instance. This is an array of
+        security group IDs. Changing this will create a new instance.
         """
         return pulumi.get(self, "security_groups")
 
@@ -922,7 +1136,7 @@ class DedicatedInstance(pulumi.CustomResource):
     @pulumi.getter(name="serverId")
     def server_id(self) -> pulumi.Output[str]:
         """
-        The id of the instance server.
+        The ID of the ECS hosting the dedicated engine.
         """
         return pulumi.get(self, "server_id")
 
@@ -930,7 +1144,7 @@ class DedicatedInstance(pulumi.CustomResource):
     @pulumi.getter(name="serviceIp")
     def service_ip(self) -> pulumi.Output[str]:
         """
-        The ip of the instance service.
+        The service plane IP address of the WAF dedicated instance.
         """
         return pulumi.get(self, "service_ip")
 
@@ -938,10 +1152,11 @@ class DedicatedInstance(pulumi.CustomResource):
     @pulumi.getter(name="specificationCode")
     def specification_code(self) -> pulumi.Output[str]:
         """
-        The specification code of instance. Different specifications have
-        different throughput. Changing this will create a new instance. Values are:
-        + `waf.instance.professional` - The professional edition, throughput: 100 Mbit/s; QPS: 2,000 (Reference only).
-        + `waf.instance.enterprise` - The enterprise edition, throughput: 500 Mbit/s; QPS: 10,000 (Reference only).
+        Specifies the specification code of instance.
+        Different specifications have different throughput. Changing this will create a new instance.
+        Values are:
+        + **waf.instance.professional**: The professional edition, corresponding to WI-500 on the console.
+        + **waf.instance.enterprise**: The enterprise edition, corresponding to WI-100 on the console.
         """
         return pulumi.get(self, "specification_code")
 
@@ -949,16 +1164,24 @@ class DedicatedInstance(pulumi.CustomResource):
     @pulumi.getter(name="subnetId")
     def subnet_id(self) -> pulumi.Output[str]:
         """
-        The subnet id of WAF dedicated instance VPC. Changing this will create a
-        new instance.
+        Specifies the subnet ID of WAF dedicated instance VPC. Changing this will
+        create a new instance.
         """
         return pulumi.get(self, "subnet_id")
 
     @property
     @pulumi.getter
+    def tags(self) -> pulumi.Output[Optional[Mapping[str, str]]]:
+        """
+        Specifies the key/value pairs to associate with the WAF dedicated instance.
+        """
+        return pulumi.get(self, "tags")
+
+    @property
+    @pulumi.getter
     def upgradable(self) -> pulumi.Output[int]:
         """
-        The instance is to support upgrades. `0`: Cannot be upgraded, `1`: Can be upgraded.
+        Whether the dedicated engine can be upgraded. `0`: Cannot be upgraded, `1`: Can be upgraded.
         """
         return pulumi.get(self, "upgradable")
 
@@ -966,7 +1189,7 @@ class DedicatedInstance(pulumi.CustomResource):
     @pulumi.getter(name="vpcId")
     def vpc_id(self) -> pulumi.Output[str]:
         """
-        The VPC id of WAF dedicated instance. Changing this will create a new
+        Specifies the VPC ID of WAF dedicated instance. Changing this will create a new
         instance.
         """
         return pulumi.get(self, "vpc_id")

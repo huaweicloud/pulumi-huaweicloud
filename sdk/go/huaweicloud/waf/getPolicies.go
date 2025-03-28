@@ -56,11 +56,13 @@ func GetPolicies(ctx *pulumi.Context, args *GetPoliciesArgs, opts ...pulumi.Invo
 // A collection of arguments for invoking getPolicies.
 type GetPoliciesArgs struct {
 	// Specifies the enterprise project ID of WAF policies.
+	// For enterprise users, if omitted, default enterprise project will be used.
 	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
-	// Policy name used for matching. The value is case sensitive and supports fuzzy matching.
+	// Specifies the policy name used for matching. The value is case-sensitive and supports
+	// fuzzy matching.
 	Name *string `pulumi:"name"`
-	// The region in which to obtain the WAF policies. If omitted, the provider-level region
-	// will be used.
+	// Specifies the region in which to obtain the WAF policies. If omitted,
+	// the provider-level region will be used.
 	Region *string `pulumi:"region"`
 }
 
@@ -92,11 +94,13 @@ func GetPoliciesOutput(ctx *pulumi.Context, args GetPoliciesOutputArgs, opts ...
 // A collection of arguments for invoking getPolicies.
 type GetPoliciesOutputArgs struct {
 	// Specifies the enterprise project ID of WAF policies.
+	// For enterprise users, if omitted, default enterprise project will be used.
 	EnterpriseProjectId pulumi.StringPtrInput `pulumi:"enterpriseProjectId"`
-	// Policy name used for matching. The value is case sensitive and supports fuzzy matching.
+	// Specifies the policy name used for matching. The value is case-sensitive and supports
+	// fuzzy matching.
 	Name pulumi.StringPtrInput `pulumi:"name"`
-	// The region in which to obtain the WAF policies. If omitted, the provider-level region
-	// will be used.
+	// Specifies the region in which to obtain the WAF policies. If omitted,
+	// the provider-level region will be used.
 	Region pulumi.StringPtrInput `pulumi:"region"`
 }
 

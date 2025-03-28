@@ -57,6 +57,9 @@ type GetVolumesArgs struct {
 	AvailabilityZone *string `pulumi:"availabilityZone"`
 	// Specifies the enterprise project ID for filtering.
 	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
+	// Specifies the name for the disks. This field will undergo a fuzzy matching query, the
+	// query result is for all disks whose names contain this value.
+	Name *string `pulumi:"name"`
 	// Specifies the region in which to query the disk list.
 	// If omitted, the provider-level region will be used.
 	Region *string `pulumi:"region"`
@@ -81,6 +84,10 @@ type GetVolumesArgs struct {
 	Status *string `pulumi:"status"`
 	// Specifies the included key/value pairs which associated with the desired disk.
 	Tags map[string]string `pulumi:"tags"`
+	// Specifies the ID for the disk.
+	VolumeId *string `pulumi:"volumeId"`
+	// Specifies the type ID for the disks.
+	VolumeTypeId *string `pulumi:"volumeTypeId"`
 }
 
 // A collection of values returned by getVolumes.
@@ -90,7 +97,9 @@ type GetVolumesResult struct {
 	// The ID of the enterprise project associated with the disk.
 	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
 	// The provider-assigned unique ID for this managed resource.
-	Id     string  `pulumi:"id"`
+	Id string `pulumi:"id"`
+	// The disk name.
+	Name   *string `pulumi:"name"`
 	Region *string `pulumi:"region"`
 	// The ID of the server to which the disk is attached.
 	ServerId *string `pulumi:"serverId"`
@@ -99,7 +108,9 @@ type GetVolumesResult struct {
 	// The disk status.
 	Status *string `pulumi:"status"`
 	// The disk tags.
-	Tags map[string]string `pulumi:"tags"`
+	Tags         map[string]string `pulumi:"tags"`
+	VolumeId     *string           `pulumi:"volumeId"`
+	VolumeTypeId *string           `pulumi:"volumeTypeId"`
 	// The detailed information of the disks. Structure is documented below.
 	Volumes []GetVolumesVolume `pulumi:"volumes"`
 }
@@ -123,6 +134,9 @@ type GetVolumesOutputArgs struct {
 	AvailabilityZone pulumi.StringPtrInput `pulumi:"availabilityZone"`
 	// Specifies the enterprise project ID for filtering.
 	EnterpriseProjectId pulumi.StringPtrInput `pulumi:"enterpriseProjectId"`
+	// Specifies the name for the disks. This field will undergo a fuzzy matching query, the
+	// query result is for all disks whose names contain this value.
+	Name pulumi.StringPtrInput `pulumi:"name"`
 	// Specifies the region in which to query the disk list.
 	// If omitted, the provider-level region will be used.
 	Region pulumi.StringPtrInput `pulumi:"region"`
@@ -147,6 +161,10 @@ type GetVolumesOutputArgs struct {
 	Status pulumi.StringPtrInput `pulumi:"status"`
 	// Specifies the included key/value pairs which associated with the desired disk.
 	Tags pulumi.StringMapInput `pulumi:"tags"`
+	// Specifies the ID for the disk.
+	VolumeId pulumi.StringPtrInput `pulumi:"volumeId"`
+	// Specifies the type ID for the disks.
+	VolumeTypeId pulumi.StringPtrInput `pulumi:"volumeTypeId"`
 }
 
 func (GetVolumesOutputArgs) ElementType() reflect.Type {
@@ -183,6 +201,11 @@ func (o GetVolumesResultOutput) Id() pulumi.StringOutput {
 	return o.ApplyT(func(v GetVolumesResult) string { return v.Id }).(pulumi.StringOutput)
 }
 
+// The disk name.
+func (o GetVolumesResultOutput) Name() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v GetVolumesResult) *string { return v.Name }).(pulumi.StringPtrOutput)
+}
+
 func (o GetVolumesResultOutput) Region() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v GetVolumesResult) *string { return v.Region }).(pulumi.StringPtrOutput)
 }
@@ -205,6 +228,14 @@ func (o GetVolumesResultOutput) Status() pulumi.StringPtrOutput {
 // The disk tags.
 func (o GetVolumesResultOutput) Tags() pulumi.StringMapOutput {
 	return o.ApplyT(func(v GetVolumesResult) map[string]string { return v.Tags }).(pulumi.StringMapOutput)
+}
+
+func (o GetVolumesResultOutput) VolumeId() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v GetVolumesResult) *string { return v.VolumeId }).(pulumi.StringPtrOutput)
+}
+
+func (o GetVolumesResultOutput) VolumeTypeId() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v GetVolumesResult) *string { return v.VolumeTypeId }).(pulumi.StringPtrOutput)
 }
 
 // The detailed information of the disks. Structure is documented below.

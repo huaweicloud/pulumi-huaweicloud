@@ -5,7 +5,7 @@ import * as pulumi from "@pulumi/pulumi";
 import * as utilities from "../utilities";
 
 /**
- * Use this data source to get the ID of an available HuaweiCloud dms maintainwindow.
+ * Use this data source to get the ID of an available HuaweiCloud dms maintenance windows.
  *
  * ## Example Usage
  *
@@ -51,7 +51,7 @@ export interface GetMaintainwindowArgs {
      */
     end?: string;
     /**
-     * The region in which to obtain the dms maintainwindows. If omitted, the provider-level
+     * The region in which to obtain the dms maintenance windows. If omitted, the provider-level
      * region will be used.
      */
     region?: string;
@@ -97,7 +97,7 @@ export interface GetMaintainwindowOutputArgs {
      */
     end?: pulumi.Input<string>;
     /**
-     * The region in which to obtain the dms maintainwindows. If omitted, the provider-level
+     * The region in which to obtain the dms maintenance windows. If omitted, the provider-level
      * region will be used.
      */
     region?: pulumi.Input<string>;

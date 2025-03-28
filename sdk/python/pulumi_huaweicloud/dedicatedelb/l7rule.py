@@ -8,6 +8,8 @@ import pulumi
 import pulumi.runtime
 from typing import Any, Mapping, Optional, Sequence, Union, overload
 from .. import _utilities
+from . import outputs
+from ._inputs import *
 
 __all__ = ['L7ruleArgs', 'L7rule']
 
@@ -17,30 +19,69 @@ class L7ruleArgs:
                  compare_type: pulumi.Input[str],
                  l7policy_id: pulumi.Input[str],
                  type: pulumi.Input[str],
-                 value: pulumi.Input[str],
-                 region: Optional[pulumi.Input[str]] = None):
+                 conditions: Optional[pulumi.Input[Sequence[pulumi.Input['L7ruleConditionArgs']]]] = None,
+                 region: Optional[pulumi.Input[str]] = None,
+                 value: Optional[pulumi.Input[str]] = None):
         """
         The set of arguments for constructing a L7rule resource.
-        :param pulumi.Input[str] compare_type: The comparison type for the L7 rule - can either be STARTS_WITH, EQUAL_TO or REGEX
-        :param pulumi.Input[str] l7policy_id: The ID of the L7 Policy. Changing this creates a new L7 Rule.
-        :param pulumi.Input[str] type: The L7 Rule type - can either be HOST_NAME or PATH. Changing this creates a new
-               L7 Rule.
-        :param pulumi.Input[str] value: The value to use for the comparison.
+        :param pulumi.Input[str] compare_type: Specifies how requests are matched with the forwarding rule. Value options:
+               + **EQUAL_TO**: Exact match.
+               + **REGEX**: Regular expression match.
+               + **STARTS_WITH**: Prefix match.
+        :param pulumi.Input[str] l7policy_id: Specifies the ID of the L7 Policy. Changing this creates a new L7 Rule.
+        :param pulumi.Input[str] type: Specifies the L7 Rule type. Value options:
+               + **HOST_NAME**: A domain name will be used for matching.
+               + **PATH**: A URL will be used for matching.
+               + **METHOD**: An HTTP request method will be used for matching.
+               + **HEADER**: The request header will be used for matching.
+               + **QUERY_STRING**: A query string will be used for matching.
+               + **SOURCE_IP**: The source IP address will be used for matching.
+               + **COOKIE**: The cookie will be used for matching.
+        :param pulumi.Input[Sequence[pulumi.Input['L7ruleConditionArgs']]] conditions: Specifies the matching conditions of the forwarding rule. This parameter is available
+               only when `enhance_l7policy_enable` of the listener is set to **true**. If it is specified, parameter `value` will
+               not take effect, and the value will contain all conditions configured for the forwarding rule. The keys in the list
+               must be the same, whereas each value must be unique.
+               The condition structure is documented below.
         :param pulumi.Input[str] region: The region in which to create the L7 Rule resource. If omitted, the
                provider-level region will be used. Changing this creates a new L7 Rule.
+        :param pulumi.Input[str] value: Specifies the value of the match item.
+               + If `type` is set to **HOST_NAME**, it indicates the domain name, which can contain 1 to 128 characters, including
+               letters, digits, hyphens (-), periods (.), and asterisks (), and must start with a letter, digit, or asterisk ().
+               If you want to use a wildcard domain name, enter an asterisk (*) as the leftmost label of the domain name.
+               + If `type` is set to **PATH**, it indicates the request path, which can contain 1 to 128 characters. If
+               `compare_type` is set to **STARTS_WITH** or **EQUAL_TO** for the forwarding rule, the value must start with a
+               slash (/) and can contain only letters, digits, and special characters _~';@^-%#&$.*+?,=!:|/()[]{}.
+               + If `type` is set to **HEADER**, it indicates the value of the HTTP header parameter. The value can contain 1 to 128
+               characters. Asterisks (*) and question marks (?)are allowed, but spaces and double quotation marks are not allowed.
+               An asterisk can match zero or more characters, and a question mark can match 1 character.
+               + If `type` is set to **QUERY_STRING**, it indicates the value of the query parameter. The value is case-sensitive
+               and can contain 1 to 128 characters. Spaces, square brackets ([]), curly brackets ({}), angle brackets (<>),
+               backslashes (), double quotation marks (""), pound signs (#), ampersands (&), vertical bars (|), percent signs (%),
+               and tildes (~) are not supported. Asterisks (*)and question marks (?) are allowed. An asterisk can match zero or
+               more characters, and a question mark can match 1 character.
+               + If `type` is set to **METHOD**, it indicates the HTTP method. The value can be **GET**, **PUT**, **POST**,
+               **DELETE**, **PATCH**, **HEAD**, or **OPTIONS**.
+               + If `type` is set to **SOURCE_IP**, it indicates the source IP address of the request. The value is an **IPv4** or
+               **IPv6** CIDR block, for example, 192.168.0.2/32 or 2049::49/64.
         """
         pulumi.set(__self__, "compare_type", compare_type)
         pulumi.set(__self__, "l7policy_id", l7policy_id)
         pulumi.set(__self__, "type", type)
-        pulumi.set(__self__, "value", value)
+        if conditions is not None:
+            pulumi.set(__self__, "conditions", conditions)
         if region is not None:
             pulumi.set(__self__, "region", region)
+        if value is not None:
+            pulumi.set(__self__, "value", value)
 
     @property
     @pulumi.getter(name="compareType")
     def compare_type(self) -> pulumi.Input[str]:
         """
-        The comparison type for the L7 rule - can either be STARTS_WITH, EQUAL_TO or REGEX
+        Specifies how requests are matched with the forwarding rule. Value options:
+        + **EQUAL_TO**: Exact match.
+        + **REGEX**: Regular expression match.
+        + **STARTS_WITH**: Prefix match.
         """
         return pulumi.get(self, "compare_type")
 
@@ -52,7 +93,7 @@ class L7ruleArgs:
     @pulumi.getter(name="l7policyId")
     def l7policy_id(self) -> pulumi.Input[str]:
         """
-        The ID of the L7 Policy. Changing this creates a new L7 Rule.
+        Specifies the ID of the L7 Policy. Changing this creates a new L7 Rule.
         """
         return pulumi.get(self, "l7policy_id")
 
@@ -64,8 +105,14 @@ class L7ruleArgs:
     @pulumi.getter
     def type(self) -> pulumi.Input[str]:
         """
-        The L7 Rule type - can either be HOST_NAME or PATH. Changing this creates a new
-        L7 Rule.
+        Specifies the L7 Rule type. Value options:
+        + **HOST_NAME**: A domain name will be used for matching.
+        + **PATH**: A URL will be used for matching.
+        + **METHOD**: An HTTP request method will be used for matching.
+        + **HEADER**: The request header will be used for matching.
+        + **QUERY_STRING**: A query string will be used for matching.
+        + **SOURCE_IP**: The source IP address will be used for matching.
+        + **COOKIE**: The cookie will be used for matching.
         """
         return pulumi.get(self, "type")
 
@@ -75,15 +122,19 @@ class L7ruleArgs:
 
     @property
     @pulumi.getter
-    def value(self) -> pulumi.Input[str]:
+    def conditions(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['L7ruleConditionArgs']]]]:
         """
-        The value to use for the comparison.
+        Specifies the matching conditions of the forwarding rule. This parameter is available
+        only when `enhance_l7policy_enable` of the listener is set to **true**. If it is specified, parameter `value` will
+        not take effect, and the value will contain all conditions configured for the forwarding rule. The keys in the list
+        must be the same, whereas each value must be unique.
+        The condition structure is documented below.
         """
-        return pulumi.get(self, "value")
+        return pulumi.get(self, "conditions")
 
-    @value.setter
-    def value(self, value: pulumi.Input[str]):
-        pulumi.set(self, "value", value)
+    @conditions.setter
+    def conditions(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['L7ruleConditionArgs']]]]):
+        pulumi.set(self, "conditions", value)
 
     @property
     @pulumi.getter
@@ -98,33 +149,106 @@ class L7ruleArgs:
     def region(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "region", value)
 
+    @property
+    @pulumi.getter
+    def value(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the value of the match item.
+        + If `type` is set to **HOST_NAME**, it indicates the domain name, which can contain 1 to 128 characters, including
+        letters, digits, hyphens (-), periods (.), and asterisks (), and must start with a letter, digit, or asterisk ().
+        If you want to use a wildcard domain name, enter an asterisk (*) as the leftmost label of the domain name.
+        + If `type` is set to **PATH**, it indicates the request path, which can contain 1 to 128 characters. If
+        `compare_type` is set to **STARTS_WITH** or **EQUAL_TO** for the forwarding rule, the value must start with a
+        slash (/) and can contain only letters, digits, and special characters _~';@^-%#&$.*+?,=!:|/()[]{}.
+        + If `type` is set to **HEADER**, it indicates the value of the HTTP header parameter. The value can contain 1 to 128
+        characters. Asterisks (*) and question marks (?)are allowed, but spaces and double quotation marks are not allowed.
+        An asterisk can match zero or more characters, and a question mark can match 1 character.
+        + If `type` is set to **QUERY_STRING**, it indicates the value of the query parameter. The value is case-sensitive
+        and can contain 1 to 128 characters. Spaces, square brackets ([]), curly brackets ({}), angle brackets (<>),
+        backslashes (), double quotation marks (""), pound signs (#), ampersands (&), vertical bars (|), percent signs (%),
+        and tildes (~) are not supported. Asterisks (*)and question marks (?) are allowed. An asterisk can match zero or
+        more characters, and a question mark can match 1 character.
+        + If `type` is set to **METHOD**, it indicates the HTTP method. The value can be **GET**, **PUT**, **POST**,
+        **DELETE**, **PATCH**, **HEAD**, or **OPTIONS**.
+        + If `type` is set to **SOURCE_IP**, it indicates the source IP address of the request. The value is an **IPv4** or
+        **IPv6** CIDR block, for example, 192.168.0.2/32 or 2049::49/64.
+        """
+        return pulumi.get(self, "value")
+
+    @value.setter
+    def value(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "value", value)
+
 
 @pulumi.input_type
 class _L7ruleState:
     def __init__(__self__, *,
                  compare_type: Optional[pulumi.Input[str]] = None,
+                 conditions: Optional[pulumi.Input[Sequence[pulumi.Input['L7ruleConditionArgs']]]] = None,
+                 created_at: Optional[pulumi.Input[str]] = None,
                  l7policy_id: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
                  type: Optional[pulumi.Input[str]] = None,
+                 updated_at: Optional[pulumi.Input[str]] = None,
                  value: Optional[pulumi.Input[str]] = None):
         """
         Input properties used for looking up and filtering L7rule resources.
-        :param pulumi.Input[str] compare_type: The comparison type for the L7 rule - can either be STARTS_WITH, EQUAL_TO or REGEX
-        :param pulumi.Input[str] l7policy_id: The ID of the L7 Policy. Changing this creates a new L7 Rule.
+        :param pulumi.Input[str] compare_type: Specifies how requests are matched with the forwarding rule. Value options:
+               + **EQUAL_TO**: Exact match.
+               + **REGEX**: Regular expression match.
+               + **STARTS_WITH**: Prefix match.
+        :param pulumi.Input[Sequence[pulumi.Input['L7ruleConditionArgs']]] conditions: Specifies the matching conditions of the forwarding rule. This parameter is available
+               only when `enhance_l7policy_enable` of the listener is set to **true**. If it is specified, parameter `value` will
+               not take effect, and the value will contain all conditions configured for the forwarding rule. The keys in the list
+               must be the same, whereas each value must be unique.
+               The condition structure is documented below.
+        :param pulumi.Input[str] created_at: The create time of the L7 Rule.
+        :param pulumi.Input[str] l7policy_id: Specifies the ID of the L7 Policy. Changing this creates a new L7 Rule.
         :param pulumi.Input[str] region: The region in which to create the L7 Rule resource. If omitted, the
                provider-level region will be used. Changing this creates a new L7 Rule.
-        :param pulumi.Input[str] type: The L7 Rule type - can either be HOST_NAME or PATH. Changing this creates a new
-               L7 Rule.
-        :param pulumi.Input[str] value: The value to use for the comparison.
+        :param pulumi.Input[str] type: Specifies the L7 Rule type. Value options:
+               + **HOST_NAME**: A domain name will be used for matching.
+               + **PATH**: A URL will be used for matching.
+               + **METHOD**: An HTTP request method will be used for matching.
+               + **HEADER**: The request header will be used for matching.
+               + **QUERY_STRING**: A query string will be used for matching.
+               + **SOURCE_IP**: The source IP address will be used for matching.
+               + **COOKIE**: The cookie will be used for matching.
+        :param pulumi.Input[str] updated_at: The update time of the L7 Rule.
+        :param pulumi.Input[str] value: Specifies the value of the match item.
+               + If `type` is set to **HOST_NAME**, it indicates the domain name, which can contain 1 to 128 characters, including
+               letters, digits, hyphens (-), periods (.), and asterisks (), and must start with a letter, digit, or asterisk ().
+               If you want to use a wildcard domain name, enter an asterisk (*) as the leftmost label of the domain name.
+               + If `type` is set to **PATH**, it indicates the request path, which can contain 1 to 128 characters. If
+               `compare_type` is set to **STARTS_WITH** or **EQUAL_TO** for the forwarding rule, the value must start with a
+               slash (/) and can contain only letters, digits, and special characters _~';@^-%#&$.*+?,=!:|/()[]{}.
+               + If `type` is set to **HEADER**, it indicates the value of the HTTP header parameter. The value can contain 1 to 128
+               characters. Asterisks (*) and question marks (?)are allowed, but spaces and double quotation marks are not allowed.
+               An asterisk can match zero or more characters, and a question mark can match 1 character.
+               + If `type` is set to **QUERY_STRING**, it indicates the value of the query parameter. The value is case-sensitive
+               and can contain 1 to 128 characters. Spaces, square brackets ([]), curly brackets ({}), angle brackets (<>),
+               backslashes (), double quotation marks (""), pound signs (#), ampersands (&), vertical bars (|), percent signs (%),
+               and tildes (~) are not supported. Asterisks (*)and question marks (?) are allowed. An asterisk can match zero or
+               more characters, and a question mark can match 1 character.
+               + If `type` is set to **METHOD**, it indicates the HTTP method. The value can be **GET**, **PUT**, **POST**,
+               **DELETE**, **PATCH**, **HEAD**, or **OPTIONS**.
+               + If `type` is set to **SOURCE_IP**, it indicates the source IP address of the request. The value is an **IPv4** or
+               **IPv6** CIDR block, for example, 192.168.0.2/32 or 2049::49/64.
         """
         if compare_type is not None:
             pulumi.set(__self__, "compare_type", compare_type)
+        if conditions is not None:
+            pulumi.set(__self__, "conditions", conditions)
+        if created_at is not None:
+            pulumi.set(__self__, "created_at", created_at)
         if l7policy_id is not None:
             pulumi.set(__self__, "l7policy_id", l7policy_id)
         if region is not None:
             pulumi.set(__self__, "region", region)
         if type is not None:
             pulumi.set(__self__, "type", type)
+        if updated_at is not None:
+            pulumi.set(__self__, "updated_at", updated_at)
         if value is not None:
             pulumi.set(__self__, "value", value)
 
@@ -132,7 +256,10 @@ class _L7ruleState:
     @pulumi.getter(name="compareType")
     def compare_type(self) -> Optional[pulumi.Input[str]]:
         """
-        The comparison type for the L7 rule - can either be STARTS_WITH, EQUAL_TO or REGEX
+        Specifies how requests are matched with the forwarding rule. Value options:
+        + **EQUAL_TO**: Exact match.
+        + **REGEX**: Regular expression match.
+        + **STARTS_WITH**: Prefix match.
         """
         return pulumi.get(self, "compare_type")
 
@@ -141,10 +268,38 @@ class _L7ruleState:
         pulumi.set(self, "compare_type", value)
 
     @property
+    @pulumi.getter
+    def conditions(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['L7ruleConditionArgs']]]]:
+        """
+        Specifies the matching conditions of the forwarding rule. This parameter is available
+        only when `enhance_l7policy_enable` of the listener is set to **true**. If it is specified, parameter `value` will
+        not take effect, and the value will contain all conditions configured for the forwarding rule. The keys in the list
+        must be the same, whereas each value must be unique.
+        The condition structure is documented below.
+        """
+        return pulumi.get(self, "conditions")
+
+    @conditions.setter
+    def conditions(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['L7ruleConditionArgs']]]]):
+        pulumi.set(self, "conditions", value)
+
+    @property
+    @pulumi.getter(name="createdAt")
+    def created_at(self) -> Optional[pulumi.Input[str]]:
+        """
+        The create time of the L7 Rule.
+        """
+        return pulumi.get(self, "created_at")
+
+    @created_at.setter
+    def created_at(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "created_at", value)
+
+    @property
     @pulumi.getter(name="l7policyId")
     def l7policy_id(self) -> Optional[pulumi.Input[str]]:
         """
-        The ID of the L7 Policy. Changing this creates a new L7 Rule.
+        Specifies the ID of the L7 Policy. Changing this creates a new L7 Rule.
         """
         return pulumi.get(self, "l7policy_id")
 
@@ -169,8 +324,14 @@ class _L7ruleState:
     @pulumi.getter
     def type(self) -> Optional[pulumi.Input[str]]:
         """
-        The L7 Rule type - can either be HOST_NAME or PATH. Changing this creates a new
-        L7 Rule.
+        Specifies the L7 Rule type. Value options:
+        + **HOST_NAME**: A domain name will be used for matching.
+        + **PATH**: A URL will be used for matching.
+        + **METHOD**: An HTTP request method will be used for matching.
+        + **HEADER**: The request header will be used for matching.
+        + **QUERY_STRING**: A query string will be used for matching.
+        + **SOURCE_IP**: The source IP address will be used for matching.
+        + **COOKIE**: The cookie will be used for matching.
         """
         return pulumi.get(self, "type")
 
@@ -179,10 +340,40 @@ class _L7ruleState:
         pulumi.set(self, "type", value)
 
     @property
+    @pulumi.getter(name="updatedAt")
+    def updated_at(self) -> Optional[pulumi.Input[str]]:
+        """
+        The update time of the L7 Rule.
+        """
+        return pulumi.get(self, "updated_at")
+
+    @updated_at.setter
+    def updated_at(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "updated_at", value)
+
+    @property
     @pulumi.getter
     def value(self) -> Optional[pulumi.Input[str]]:
         """
-        The value to use for the comparison.
+        Specifies the value of the match item.
+        + If `type` is set to **HOST_NAME**, it indicates the domain name, which can contain 1 to 128 characters, including
+        letters, digits, hyphens (-), periods (.), and asterisks (), and must start with a letter, digit, or asterisk ().
+        If you want to use a wildcard domain name, enter an asterisk (*) as the leftmost label of the domain name.
+        + If `type` is set to **PATH**, it indicates the request path, which can contain 1 to 128 characters. If
+        `compare_type` is set to **STARTS_WITH** or **EQUAL_TO** for the forwarding rule, the value must start with a
+        slash (/) and can contain only letters, digits, and special characters _~';@^-%#&$.*+?,=!:|/()[]{}.
+        + If `type` is set to **HEADER**, it indicates the value of the HTTP header parameter. The value can contain 1 to 128
+        characters. Asterisks (*) and question marks (?)are allowed, but spaces and double quotation marks are not allowed.
+        An asterisk can match zero or more characters, and a question mark can match 1 character.
+        + If `type` is set to **QUERY_STRING**, it indicates the value of the query parameter. The value is case-sensitive
+        and can contain 1 to 128 characters. Spaces, square brackets ([]), curly brackets ({}), angle brackets (<>),
+        backslashes (), double quotation marks (""), pound signs (#), ampersands (&), vertical bars (|), percent signs (%),
+        and tildes (~) are not supported. Asterisks (*)and question marks (?) are allowed. An asterisk can match zero or
+        more characters, and a question mark can match 1 character.
+        + If `type` is set to **METHOD**, it indicates the HTTP method. The value can be **GET**, **PUT**, **POST**,
+        **DELETE**, **PATCH**, **HEAD**, or **OPTIONS**.
+        + If `type` is set to **SOURCE_IP**, it indicates the source IP address of the request. The value is an **IPv4** or
+        **IPv6** CIDR block, for example, 192.168.0.2/32 or 2049::49/64.
         """
         return pulumi.get(self, "value")
 
@@ -197,6 +388,7 @@ class L7rule(pulumi.CustomResource):
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
                  compare_type: Optional[pulumi.Input[str]] = None,
+                 conditions: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['L7ruleConditionArgs']]]]] = None,
                  l7policy_id: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
                  type: Optional[pulumi.Input[str]] = None,
@@ -206,6 +398,7 @@ class L7rule(pulumi.CustomResource):
         Manages an ELB L7 Rule resource within HuaweiCloud.
 
         ## Example Usage
+        ### Create by value
 
         ```python
         import pulumi
@@ -219,24 +412,105 @@ class L7rule(pulumi.CustomResource):
             compare_type="EQUAL_TO",
             value="/api")
         ```
+        ### Create by conditions and type is HOST_NAME
+
+        ```python
+        import pulumi
+        import pulumi_huaweicloud as huaweicloud
+
+        config = pulumi.Config()
+        l7policy_id = config.require_object("l7policyId")
+        l7rule1 = huaweicloud.dedicated_elb.L7rule("l7rule1",
+            l7policy_id=l7policy_id,
+            type="HOST_NAME",
+            compare_type="EQUAL_TO",
+            conditions=[huaweicloud.dedicated_elb.L7ruleConditionArgs(
+                value="test.com",
+            )])
+        ```
+        ### Create by conditions and type is HEADER
+
+        ```python
+        import pulumi
+        import pulumi_huaweicloud as huaweicloud
+
+        config = pulumi.Config()
+        l7policy_id = config.require_object("l7policyId")
+        l7rule1 = huaweicloud.dedicated_elb.L7rule("l7rule1",
+            l7policy_id=l7policy_id,
+            type="HEADER",
+            compare_type="EQUAL_TO",
+            conditions=[huaweicloud.dedicated_elb.L7ruleConditionArgs(
+                key="testKey",
+                value="testValue",
+            )])
+        ```
+        ### Create by conditions and type is SOURCE_IP
+
+        ```python
+        import pulumi
+        import pulumi_huaweicloud as huaweicloud
+
+        config = pulumi.Config()
+        l7policy_id = config.require_object("l7policyId")
+        l7rule1 = huaweicloud.dedicated_elb.L7rule("l7rule1",
+            l7policy_id=l7policy_id,
+            type="SOURCE_IP",
+            compare_type="EQUAL_TO",
+            conditions=[huaweicloud.dedicated_elb.L7ruleConditionArgs(
+                value="192.168.0.2/32",
+            )])
+        ```
 
         ## Import
 
-        ELB L7 rule can be imported using the L7 policy ID and L7 rule ID separated by a slash, e.g.
+        ELB L7 rule can be imported using the `l7policy_id` and `id` separated by a slash, e.g. bash
 
         ```sh
-         $ pulumi import huaweicloud:DedicatedElb/l7rule:L7rule rule_1 e0bd694a-abbe-450e-b329-0931fd1cc5eb/4086b0c9-b18c-4d1c-b6b8-4c56c3ad2a9e
+         $ pulumi import huaweicloud:DedicatedElb/l7rule:L7rule rule_1 <l7policy_id>/<id>
         ```
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[str] compare_type: The comparison type for the L7 rule - can either be STARTS_WITH, EQUAL_TO or REGEX
-        :param pulumi.Input[str] l7policy_id: The ID of the L7 Policy. Changing this creates a new L7 Rule.
+        :param pulumi.Input[str] compare_type: Specifies how requests are matched with the forwarding rule. Value options:
+               + **EQUAL_TO**: Exact match.
+               + **REGEX**: Regular expression match.
+               + **STARTS_WITH**: Prefix match.
+        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['L7ruleConditionArgs']]]] conditions: Specifies the matching conditions of the forwarding rule. This parameter is available
+               only when `enhance_l7policy_enable` of the listener is set to **true**. If it is specified, parameter `value` will
+               not take effect, and the value will contain all conditions configured for the forwarding rule. The keys in the list
+               must be the same, whereas each value must be unique.
+               The condition structure is documented below.
+        :param pulumi.Input[str] l7policy_id: Specifies the ID of the L7 Policy. Changing this creates a new L7 Rule.
         :param pulumi.Input[str] region: The region in which to create the L7 Rule resource. If omitted, the
                provider-level region will be used. Changing this creates a new L7 Rule.
-        :param pulumi.Input[str] type: The L7 Rule type - can either be HOST_NAME or PATH. Changing this creates a new
-               L7 Rule.
-        :param pulumi.Input[str] value: The value to use for the comparison.
+        :param pulumi.Input[str] type: Specifies the L7 Rule type. Value options:
+               + **HOST_NAME**: A domain name will be used for matching.
+               + **PATH**: A URL will be used for matching.
+               + **METHOD**: An HTTP request method will be used for matching.
+               + **HEADER**: The request header will be used for matching.
+               + **QUERY_STRING**: A query string will be used for matching.
+               + **SOURCE_IP**: The source IP address will be used for matching.
+               + **COOKIE**: The cookie will be used for matching.
+        :param pulumi.Input[str] value: Specifies the value of the match item.
+               + If `type` is set to **HOST_NAME**, it indicates the domain name, which can contain 1 to 128 characters, including
+               letters, digits, hyphens (-), periods (.), and asterisks (), and must start with a letter, digit, or asterisk ().
+               If you want to use a wildcard domain name, enter an asterisk (*) as the leftmost label of the domain name.
+               + If `type` is set to **PATH**, it indicates the request path, which can contain 1 to 128 characters. If
+               `compare_type` is set to **STARTS_WITH** or **EQUAL_TO** for the forwarding rule, the value must start with a
+               slash (/) and can contain only letters, digits, and special characters _~';@^-%#&$.*+?,=!:|/()[]{}.
+               + If `type` is set to **HEADER**, it indicates the value of the HTTP header parameter. The value can contain 1 to 128
+               characters. Asterisks (*) and question marks (?)are allowed, but spaces and double quotation marks are not allowed.
+               An asterisk can match zero or more characters, and a question mark can match 1 character.
+               + If `type` is set to **QUERY_STRING**, it indicates the value of the query parameter. The value is case-sensitive
+               and can contain 1 to 128 characters. Spaces, square brackets ([]), curly brackets ({}), angle brackets (<>),
+               backslashes (), double quotation marks (""), pound signs (#), ampersands (&), vertical bars (|), percent signs (%),
+               and tildes (~) are not supported. Asterisks (*)and question marks (?) are allowed. An asterisk can match zero or
+               more characters, and a question mark can match 1 character.
+               + If `type` is set to **METHOD**, it indicates the HTTP method. The value can be **GET**, **PUT**, **POST**,
+               **DELETE**, **PATCH**, **HEAD**, or **OPTIONS**.
+               + If `type` is set to **SOURCE_IP**, it indicates the source IP address of the request. The value is an **IPv4** or
+               **IPv6** CIDR block, for example, 192.168.0.2/32 or 2049::49/64.
         """
         ...
     @overload
@@ -248,6 +522,7 @@ class L7rule(pulumi.CustomResource):
         Manages an ELB L7 Rule resource within HuaweiCloud.
 
         ## Example Usage
+        ### Create by value
 
         ```python
         import pulumi
@@ -261,13 +536,62 @@ class L7rule(pulumi.CustomResource):
             compare_type="EQUAL_TO",
             value="/api")
         ```
+        ### Create by conditions and type is HOST_NAME
+
+        ```python
+        import pulumi
+        import pulumi_huaweicloud as huaweicloud
+
+        config = pulumi.Config()
+        l7policy_id = config.require_object("l7policyId")
+        l7rule1 = huaweicloud.dedicated_elb.L7rule("l7rule1",
+            l7policy_id=l7policy_id,
+            type="HOST_NAME",
+            compare_type="EQUAL_TO",
+            conditions=[huaweicloud.dedicated_elb.L7ruleConditionArgs(
+                value="test.com",
+            )])
+        ```
+        ### Create by conditions and type is HEADER
+
+        ```python
+        import pulumi
+        import pulumi_huaweicloud as huaweicloud
+
+        config = pulumi.Config()
+        l7policy_id = config.require_object("l7policyId")
+        l7rule1 = huaweicloud.dedicated_elb.L7rule("l7rule1",
+            l7policy_id=l7policy_id,
+            type="HEADER",
+            compare_type="EQUAL_TO",
+            conditions=[huaweicloud.dedicated_elb.L7ruleConditionArgs(
+                key="testKey",
+                value="testValue",
+            )])
+        ```
+        ### Create by conditions and type is SOURCE_IP
+
+        ```python
+        import pulumi
+        import pulumi_huaweicloud as huaweicloud
+
+        config = pulumi.Config()
+        l7policy_id = config.require_object("l7policyId")
+        l7rule1 = huaweicloud.dedicated_elb.L7rule("l7rule1",
+            l7policy_id=l7policy_id,
+            type="SOURCE_IP",
+            compare_type="EQUAL_TO",
+            conditions=[huaweicloud.dedicated_elb.L7ruleConditionArgs(
+                value="192.168.0.2/32",
+            )])
+        ```
 
         ## Import
 
-        ELB L7 rule can be imported using the L7 policy ID and L7 rule ID separated by a slash, e.g.
+        ELB L7 rule can be imported using the `l7policy_id` and `id` separated by a slash, e.g. bash
 
         ```sh
-         $ pulumi import huaweicloud:DedicatedElb/l7rule:L7rule rule_1 e0bd694a-abbe-450e-b329-0931fd1cc5eb/4086b0c9-b18c-4d1c-b6b8-4c56c3ad2a9e
+         $ pulumi import huaweicloud:DedicatedElb/l7rule:L7rule rule_1 <l7policy_id>/<id>
         ```
 
         :param str resource_name: The name of the resource.
@@ -286,6 +610,7 @@ class L7rule(pulumi.CustomResource):
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
                  compare_type: Optional[pulumi.Input[str]] = None,
+                 conditions: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['L7ruleConditionArgs']]]]] = None,
                  l7policy_id: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
                  type: Optional[pulumi.Input[str]] = None,
@@ -302,6 +627,7 @@ class L7rule(pulumi.CustomResource):
             if compare_type is None and not opts.urn:
                 raise TypeError("Missing required property 'compare_type'")
             __props__.__dict__["compare_type"] = compare_type
+            __props__.__dict__["conditions"] = conditions
             if l7policy_id is None and not opts.urn:
                 raise TypeError("Missing required property 'l7policy_id'")
             __props__.__dict__["l7policy_id"] = l7policy_id
@@ -309,9 +635,9 @@ class L7rule(pulumi.CustomResource):
             if type is None and not opts.urn:
                 raise TypeError("Missing required property 'type'")
             __props__.__dict__["type"] = type
-            if value is None and not opts.urn:
-                raise TypeError("Missing required property 'value'")
             __props__.__dict__["value"] = value
+            __props__.__dict__["created_at"] = None
+            __props__.__dict__["updated_at"] = None
         super(L7rule, __self__).__init__(
             'huaweicloud:DedicatedElb/l7rule:L7rule',
             resource_name,
@@ -323,9 +649,12 @@ class L7rule(pulumi.CustomResource):
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
             compare_type: Optional[pulumi.Input[str]] = None,
+            conditions: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['L7ruleConditionArgs']]]]] = None,
+            created_at: Optional[pulumi.Input[str]] = None,
             l7policy_id: Optional[pulumi.Input[str]] = None,
             region: Optional[pulumi.Input[str]] = None,
             type: Optional[pulumi.Input[str]] = None,
+            updated_at: Optional[pulumi.Input[str]] = None,
             value: Optional[pulumi.Input[str]] = None) -> 'L7rule':
         """
         Get an existing L7rule resource's state with the given name, id, and optional extra
@@ -334,22 +663,59 @@ class L7rule(pulumi.CustomResource):
         :param str resource_name: The unique name of the resulting resource.
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[str] compare_type: The comparison type for the L7 rule - can either be STARTS_WITH, EQUAL_TO or REGEX
-        :param pulumi.Input[str] l7policy_id: The ID of the L7 Policy. Changing this creates a new L7 Rule.
+        :param pulumi.Input[str] compare_type: Specifies how requests are matched with the forwarding rule. Value options:
+               + **EQUAL_TO**: Exact match.
+               + **REGEX**: Regular expression match.
+               + **STARTS_WITH**: Prefix match.
+        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['L7ruleConditionArgs']]]] conditions: Specifies the matching conditions of the forwarding rule. This parameter is available
+               only when `enhance_l7policy_enable` of the listener is set to **true**. If it is specified, parameter `value` will
+               not take effect, and the value will contain all conditions configured for the forwarding rule. The keys in the list
+               must be the same, whereas each value must be unique.
+               The condition structure is documented below.
+        :param pulumi.Input[str] created_at: The create time of the L7 Rule.
+        :param pulumi.Input[str] l7policy_id: Specifies the ID of the L7 Policy. Changing this creates a new L7 Rule.
         :param pulumi.Input[str] region: The region in which to create the L7 Rule resource. If omitted, the
                provider-level region will be used. Changing this creates a new L7 Rule.
-        :param pulumi.Input[str] type: The L7 Rule type - can either be HOST_NAME or PATH. Changing this creates a new
-               L7 Rule.
-        :param pulumi.Input[str] value: The value to use for the comparison.
+        :param pulumi.Input[str] type: Specifies the L7 Rule type. Value options:
+               + **HOST_NAME**: A domain name will be used for matching.
+               + **PATH**: A URL will be used for matching.
+               + **METHOD**: An HTTP request method will be used for matching.
+               + **HEADER**: The request header will be used for matching.
+               + **QUERY_STRING**: A query string will be used for matching.
+               + **SOURCE_IP**: The source IP address will be used for matching.
+               + **COOKIE**: The cookie will be used for matching.
+        :param pulumi.Input[str] updated_at: The update time of the L7 Rule.
+        :param pulumi.Input[str] value: Specifies the value of the match item.
+               + If `type` is set to **HOST_NAME**, it indicates the domain name, which can contain 1 to 128 characters, including
+               letters, digits, hyphens (-), periods (.), and asterisks (), and must start with a letter, digit, or asterisk ().
+               If you want to use a wildcard domain name, enter an asterisk (*) as the leftmost label of the domain name.
+               + If `type` is set to **PATH**, it indicates the request path, which can contain 1 to 128 characters. If
+               `compare_type` is set to **STARTS_WITH** or **EQUAL_TO** for the forwarding rule, the value must start with a
+               slash (/) and can contain only letters, digits, and special characters _~';@^-%#&$.*+?,=!:|/()[]{}.
+               + If `type` is set to **HEADER**, it indicates the value of the HTTP header parameter. The value can contain 1 to 128
+               characters. Asterisks (*) and question marks (?)are allowed, but spaces and double quotation marks are not allowed.
+               An asterisk can match zero or more characters, and a question mark can match 1 character.
+               + If `type` is set to **QUERY_STRING**, it indicates the value of the query parameter. The value is case-sensitive
+               and can contain 1 to 128 characters. Spaces, square brackets ([]), curly brackets ({}), angle brackets (<>),
+               backslashes (), double quotation marks (""), pound signs (#), ampersands (&), vertical bars (|), percent signs (%),
+               and tildes (~) are not supported. Asterisks (*)and question marks (?) are allowed. An asterisk can match zero or
+               more characters, and a question mark can match 1 character.
+               + If `type` is set to **METHOD**, it indicates the HTTP method. The value can be **GET**, **PUT**, **POST**,
+               **DELETE**, **PATCH**, **HEAD**, or **OPTIONS**.
+               + If `type` is set to **SOURCE_IP**, it indicates the source IP address of the request. The value is an **IPv4** or
+               **IPv6** CIDR block, for example, 192.168.0.2/32 or 2049::49/64.
         """
         opts = pulumi.ResourceOptions.merge(opts, pulumi.ResourceOptions(id=id))
 
         __props__ = _L7ruleState.__new__(_L7ruleState)
 
         __props__.__dict__["compare_type"] = compare_type
+        __props__.__dict__["conditions"] = conditions
+        __props__.__dict__["created_at"] = created_at
         __props__.__dict__["l7policy_id"] = l7policy_id
         __props__.__dict__["region"] = region
         __props__.__dict__["type"] = type
+        __props__.__dict__["updated_at"] = updated_at
         __props__.__dict__["value"] = value
         return L7rule(resource_name, opts=opts, __props__=__props__)
 
@@ -357,15 +723,38 @@ class L7rule(pulumi.CustomResource):
     @pulumi.getter(name="compareType")
     def compare_type(self) -> pulumi.Output[str]:
         """
-        The comparison type for the L7 rule - can either be STARTS_WITH, EQUAL_TO or REGEX
+        Specifies how requests are matched with the forwarding rule. Value options:
+        + **EQUAL_TO**: Exact match.
+        + **REGEX**: Regular expression match.
+        + **STARTS_WITH**: Prefix match.
         """
         return pulumi.get(self, "compare_type")
+
+    @property
+    @pulumi.getter
+    def conditions(self) -> pulumi.Output[Sequence['outputs.L7ruleCondition']]:
+        """
+        Specifies the matching conditions of the forwarding rule. This parameter is available
+        only when `enhance_l7policy_enable` of the listener is set to **true**. If it is specified, parameter `value` will
+        not take effect, and the value will contain all conditions configured for the forwarding rule. The keys in the list
+        must be the same, whereas each value must be unique.
+        The condition structure is documented below.
+        """
+        return pulumi.get(self, "conditions")
+
+    @property
+    @pulumi.getter(name="createdAt")
+    def created_at(self) -> pulumi.Output[str]:
+        """
+        The create time of the L7 Rule.
+        """
+        return pulumi.get(self, "created_at")
 
     @property
     @pulumi.getter(name="l7policyId")
     def l7policy_id(self) -> pulumi.Output[str]:
         """
-        The ID of the L7 Policy. Changing this creates a new L7 Rule.
+        Specifies the ID of the L7 Policy. Changing this creates a new L7 Rule.
         """
         return pulumi.get(self, "l7policy_id")
 
@@ -382,16 +771,48 @@ class L7rule(pulumi.CustomResource):
     @pulumi.getter
     def type(self) -> pulumi.Output[str]:
         """
-        The L7 Rule type - can either be HOST_NAME or PATH. Changing this creates a new
-        L7 Rule.
+        Specifies the L7 Rule type. Value options:
+        + **HOST_NAME**: A domain name will be used for matching.
+        + **PATH**: A URL will be used for matching.
+        + **METHOD**: An HTTP request method will be used for matching.
+        + **HEADER**: The request header will be used for matching.
+        + **QUERY_STRING**: A query string will be used for matching.
+        + **SOURCE_IP**: The source IP address will be used for matching.
+        + **COOKIE**: The cookie will be used for matching.
         """
         return pulumi.get(self, "type")
+
+    @property
+    @pulumi.getter(name="updatedAt")
+    def updated_at(self) -> pulumi.Output[str]:
+        """
+        The update time of the L7 Rule.
+        """
+        return pulumi.get(self, "updated_at")
 
     @property
     @pulumi.getter
     def value(self) -> pulumi.Output[str]:
         """
-        The value to use for the comparison.
+        Specifies the value of the match item.
+        + If `type` is set to **HOST_NAME**, it indicates the domain name, which can contain 1 to 128 characters, including
+        letters, digits, hyphens (-), periods (.), and asterisks (), and must start with a letter, digit, or asterisk ().
+        If you want to use a wildcard domain name, enter an asterisk (*) as the leftmost label of the domain name.
+        + If `type` is set to **PATH**, it indicates the request path, which can contain 1 to 128 characters. If
+        `compare_type` is set to **STARTS_WITH** or **EQUAL_TO** for the forwarding rule, the value must start with a
+        slash (/) and can contain only letters, digits, and special characters _~';@^-%#&$.*+?,=!:|/()[]{}.
+        + If `type` is set to **HEADER**, it indicates the value of the HTTP header parameter. The value can contain 1 to 128
+        characters. Asterisks (*) and question marks (?)are allowed, but spaces and double quotation marks are not allowed.
+        An asterisk can match zero or more characters, and a question mark can match 1 character.
+        + If `type` is set to **QUERY_STRING**, it indicates the value of the query parameter. The value is case-sensitive
+        and can contain 1 to 128 characters. Spaces, square brackets ([]), curly brackets ({}), angle brackets (<>),
+        backslashes (), double quotation marks (""), pound signs (#), ampersands (&), vertical bars (|), percent signs (%),
+        and tildes (~) are not supported. Asterisks (*)and question marks (?) are allowed. An asterisk can match zero or
+        more characters, and a question mark can match 1 character.
+        + If `type` is set to **METHOD**, it indicates the HTTP method. The value can be **GET**, **PUT**, **POST**,
+        **DELETE**, **PATCH**, **HEAD**, or **OPTIONS**.
+        + If `type` is set to **SOURCE_IP**, it indicates the source IP address of the request. The value is an **IPv4** or
+        **IPv6** CIDR block, for example, 192.168.0.2/32 or 2049::49/64.
         """
         return pulumi.get(self, "value")
 

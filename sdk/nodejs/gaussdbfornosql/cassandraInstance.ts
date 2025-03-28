@@ -6,10 +6,10 @@ import { input as inputs, output as outputs } from "../types";
 import * as utilities from "../utilities";
 
 /**
- * GaussDB for Cassandra instance management within HuaweiCoud.
+ * GeminiDB Cassandra instance management within HuaweiCould.
  *
  * ## Example Usage
- * ### create a gaussdb for cassandra instance with tags
+ * ### create a geminidb cassandra instance with tags
  *
  * ```typescript
  * import * as pulumi from "@pulumi/pulumi";
@@ -29,7 +29,7 @@ import * as utilities from "../utilities";
  *     },
  * });
  * ```
- * ### create a gaussdb cassandra instance with backup strategy
+ * ### create a geminidb cassandra instance with backup strategy
  *
  * ```typescript
  * import * as pulumi from "@pulumi/pulumi";
@@ -52,7 +52,7 @@ import * as utilities from "../utilities";
  *
  * ## Import
  *
- * GaussDB Cassandra instance can be imported using the `id`, e.g.
+ * GaussDB Cassandra instance can be imported using the `id`, e.g. bash
  *
  * ```sh
  *  $ pulumi import huaweicloud:GaussDBforNoSQL/cassandraInstance:CassandraInstance instance_1 749112383d5342e9acb6c7825801b452in06
@@ -88,7 +88,7 @@ export class CassandraInstance extends pulumi.CustomResource {
 
     /**
      * Specifies whether auto renew is enabled.
-     * Valid values are "true" and "false".
+     * Valid values are **true** and **false**.
      */
     public readonly autoRenew!: pulumi.Output<string | undefined>;
     /**
@@ -102,8 +102,8 @@ export class CassandraInstance extends pulumi.CustomResource {
      */
     public readonly backupStrategy!: pulumi.Output<outputs.GaussDBforNoSQL.CassandraInstanceBackupStrategy>;
     /**
-     * Specifies the charging mode of the instance. Valid values are *prePaid*
-     * and *postPaid*, defaults to *postPaid*. Changing this will do nothing.
+     * Specifies the charging mode of the instance. Valid values are **prePaid**
+     * and **postPaid**, defaults to **postPaid**. Changing this will do nothing.
      */
     public readonly chargingMode!: pulumi.Output<string | undefined>;
     /**
@@ -125,13 +125,13 @@ export class CassandraInstance extends pulumi.CustomResource {
      */
     public readonly dedicatedResourceId!: pulumi.Output<string>;
     /**
-     * Specifies the dedicated resource name. Changing this parameter
-     * will create a new resource.
+     * Specifies the dedicated resource name.
+     * Changing this parameter will create a new resource.
      */
     public readonly dedicatedResourceName!: pulumi.Output<string>;
     /**
      * Specifies the enterprise project id, Only valid for users who
-     * have enabled the enterprise multi-project service. Changing this parameter will create a new resource.
+     * have enabled the enterprise multi-project service.
      */
     public readonly enterpriseProjectId!: pulumi.Output<string | undefined>;
     /**
@@ -158,12 +158,12 @@ export class CassandraInstance extends pulumi.CustomResource {
     public /*out*/ readonly mode!: pulumi.Output<string>;
     /**
      * Specifies the instance name, which can be the same as an existing instance name. The value
-     * must be 4 to 64 characters in length and start with a letter. It is case-sensitive and can contain only letters,
+     * must be `4` to `64` characters in length and start with a letter. It is case-sensitive and can contain only letters,
      * digits, hyphens (-), and underscores (_).
      */
     public readonly name!: pulumi.Output<string>;
     /**
-     * Specifies the number of nodes, ranges from 3 to 12. Defaults to 3.
+     * Specifies the number of nodes, ranges from `3` to `200`. Defaults to `3`.
      */
     public readonly nodeNum!: pulumi.Output<number | undefined>;
     /**
@@ -171,21 +171,22 @@ export class CassandraInstance extends pulumi.CustomResource {
      */
     public /*out*/ readonly nodes!: pulumi.Output<outputs.GaussDBforNoSQL.CassandraInstanceNode[]>;
     /**
-     * Specifies the database password. The value must be 8 to 32 characters in length,
+     * Specifies the database password. The value must be `8` to `32` characters in length,
      * including uppercase and lowercase letters, digits, and special characters, such as ~!@#%^*-_=+? You are advised to
      * enter a strong password to improve security, preventing security risks such as brute force cracking.
      */
     public readonly password!: pulumi.Output<string>;
     /**
-     * Specifies the charging period of the instance.
-     * If `periodUnit` is set to *month* , the value ranges from 1 to 9. If `periodUnit` is set to *year*, the value
-     * ranges from 1 to 3. This parameter is mandatory if `chargingMode` is set to *prePaid*. Changing this will
-     * do nothing.
+     * Specifies the charging period of the instance.  
+     * If `periodUnit` is set to **month** , the value ranges from `1` to `9`.
+     * If `periodUnit` is set to **year**, the value ranges from `1` to `3`.
+     * This parameter is mandatory if `chargingMode` is set to **prePaid**.
+     * Changing this will do nothing.
      */
     public readonly period!: pulumi.Output<number | undefined>;
     /**
      * Specifies the charging period unit of the instance.
-     * Valid values are *month* and *year*. This parameter is mandatory if `chargingMode` is set to *prePaid*.
+     * Valid values are *month* and *year*. This parameter is mandatory if `chargingMode` is set to **prePaid**.
      * Changing this will do nothing.
      */
     public readonly periodUnit!: pulumi.Output<string | undefined>;
@@ -208,7 +209,7 @@ export class CassandraInstance extends pulumi.CustomResource {
      */
     public readonly securityGroupId!: pulumi.Output<string | undefined>;
     /**
-     * Specifies whether to enable or disable SSL. Defaults to false. Changing this
+     * Specifies whether to enable or disable SSL. Defaults to **false**. Changing this
      * parameter will create a new resource.
      */
     public readonly ssl!: pulumi.Output<boolean | undefined>;
@@ -344,7 +345,7 @@ export class CassandraInstance extends pulumi.CustomResource {
 export interface CassandraInstanceState {
     /**
      * Specifies whether auto renew is enabled.
-     * Valid values are "true" and "false".
+     * Valid values are **true** and **false**.
      */
     autoRenew?: pulumi.Input<string>;
     /**
@@ -358,8 +359,8 @@ export interface CassandraInstanceState {
      */
     backupStrategy?: pulumi.Input<inputs.GaussDBforNoSQL.CassandraInstanceBackupStrategy>;
     /**
-     * Specifies the charging mode of the instance. Valid values are *prePaid*
-     * and *postPaid*, defaults to *postPaid*. Changing this will do nothing.
+     * Specifies the charging mode of the instance. Valid values are **prePaid**
+     * and **postPaid**, defaults to **postPaid**. Changing this will do nothing.
      */
     chargingMode?: pulumi.Input<string>;
     /**
@@ -381,13 +382,13 @@ export interface CassandraInstanceState {
      */
     dedicatedResourceId?: pulumi.Input<string>;
     /**
-     * Specifies the dedicated resource name. Changing this parameter
-     * will create a new resource.
+     * Specifies the dedicated resource name.
+     * Changing this parameter will create a new resource.
      */
     dedicatedResourceName?: pulumi.Input<string>;
     /**
      * Specifies the enterprise project id, Only valid for users who
-     * have enabled the enterprise multi-project service. Changing this parameter will create a new resource.
+     * have enabled the enterprise multi-project service.
      */
     enterpriseProjectId?: pulumi.Input<string>;
     /**
@@ -414,12 +415,12 @@ export interface CassandraInstanceState {
     mode?: pulumi.Input<string>;
     /**
      * Specifies the instance name, which can be the same as an existing instance name. The value
-     * must be 4 to 64 characters in length and start with a letter. It is case-sensitive and can contain only letters,
+     * must be `4` to `64` characters in length and start with a letter. It is case-sensitive and can contain only letters,
      * digits, hyphens (-), and underscores (_).
      */
     name?: pulumi.Input<string>;
     /**
-     * Specifies the number of nodes, ranges from 3 to 12. Defaults to 3.
+     * Specifies the number of nodes, ranges from `3` to `200`. Defaults to `3`.
      */
     nodeNum?: pulumi.Input<number>;
     /**
@@ -427,21 +428,22 @@ export interface CassandraInstanceState {
      */
     nodes?: pulumi.Input<pulumi.Input<inputs.GaussDBforNoSQL.CassandraInstanceNode>[]>;
     /**
-     * Specifies the database password. The value must be 8 to 32 characters in length,
+     * Specifies the database password. The value must be `8` to `32` characters in length,
      * including uppercase and lowercase letters, digits, and special characters, such as ~!@#%^*-_=+? You are advised to
      * enter a strong password to improve security, preventing security risks such as brute force cracking.
      */
     password?: pulumi.Input<string>;
     /**
-     * Specifies the charging period of the instance.
-     * If `periodUnit` is set to *month* , the value ranges from 1 to 9. If `periodUnit` is set to *year*, the value
-     * ranges from 1 to 3. This parameter is mandatory if `chargingMode` is set to *prePaid*. Changing this will
-     * do nothing.
+     * Specifies the charging period of the instance.  
+     * If `periodUnit` is set to **month** , the value ranges from `1` to `9`.
+     * If `periodUnit` is set to **year**, the value ranges from `1` to `3`.
+     * This parameter is mandatory if `chargingMode` is set to **prePaid**.
+     * Changing this will do nothing.
      */
     period?: pulumi.Input<number>;
     /**
      * Specifies the charging period unit of the instance.
-     * Valid values are *month* and *year*. This parameter is mandatory if `chargingMode` is set to *prePaid*.
+     * Valid values are *month* and *year*. This parameter is mandatory if `chargingMode` is set to **prePaid**.
      * Changing this will do nothing.
      */
     periodUnit?: pulumi.Input<string>;
@@ -464,7 +466,7 @@ export interface CassandraInstanceState {
      */
     securityGroupId?: pulumi.Input<string>;
     /**
-     * Specifies whether to enable or disable SSL. Defaults to false. Changing this
+     * Specifies whether to enable or disable SSL. Defaults to **false**. Changing this
      * parameter will create a new resource.
      */
     ssl?: pulumi.Input<boolean>;
@@ -500,7 +502,7 @@ export interface CassandraInstanceState {
 export interface CassandraInstanceArgs {
     /**
      * Specifies whether auto renew is enabled.
-     * Valid values are "true" and "false".
+     * Valid values are **true** and **false**.
      */
     autoRenew?: pulumi.Input<string>;
     /**
@@ -514,8 +516,8 @@ export interface CassandraInstanceArgs {
      */
     backupStrategy?: pulumi.Input<inputs.GaussDBforNoSQL.CassandraInstanceBackupStrategy>;
     /**
-     * Specifies the charging mode of the instance. Valid values are *prePaid*
-     * and *postPaid*, defaults to *postPaid*. Changing this will do nothing.
+     * Specifies the charging mode of the instance. Valid values are **prePaid**
+     * and **postPaid**, defaults to **postPaid**. Changing this will do nothing.
      */
     chargingMode?: pulumi.Input<string>;
     /**
@@ -533,13 +535,13 @@ export interface CassandraInstanceArgs {
      */
     dedicatedResourceId?: pulumi.Input<string>;
     /**
-     * Specifies the dedicated resource name. Changing this parameter
-     * will create a new resource.
+     * Specifies the dedicated resource name.
+     * Changing this parameter will create a new resource.
      */
     dedicatedResourceName?: pulumi.Input<string>;
     /**
      * Specifies the enterprise project id, Only valid for users who
-     * have enabled the enterprise multi-project service. Changing this parameter will create a new resource.
+     * have enabled the enterprise multi-project service.
      */
     enterpriseProjectId?: pulumi.Input<string>;
     /**
@@ -554,30 +556,31 @@ export interface CassandraInstanceArgs {
     forceImport?: pulumi.Input<boolean>;
     /**
      * Specifies the instance name, which can be the same as an existing instance name. The value
-     * must be 4 to 64 characters in length and start with a letter. It is case-sensitive and can contain only letters,
+     * must be `4` to `64` characters in length and start with a letter. It is case-sensitive and can contain only letters,
      * digits, hyphens (-), and underscores (_).
      */
     name?: pulumi.Input<string>;
     /**
-     * Specifies the number of nodes, ranges from 3 to 12. Defaults to 3.
+     * Specifies the number of nodes, ranges from `3` to `200`. Defaults to `3`.
      */
     nodeNum?: pulumi.Input<number>;
     /**
-     * Specifies the database password. The value must be 8 to 32 characters in length,
+     * Specifies the database password. The value must be `8` to `32` characters in length,
      * including uppercase and lowercase letters, digits, and special characters, such as ~!@#%^*-_=+? You are advised to
      * enter a strong password to improve security, preventing security risks such as brute force cracking.
      */
     password: pulumi.Input<string>;
     /**
-     * Specifies the charging period of the instance.
-     * If `periodUnit` is set to *month* , the value ranges from 1 to 9. If `periodUnit` is set to *year*, the value
-     * ranges from 1 to 3. This parameter is mandatory if `chargingMode` is set to *prePaid*. Changing this will
-     * do nothing.
+     * Specifies the charging period of the instance.  
+     * If `periodUnit` is set to **month** , the value ranges from `1` to `9`.
+     * If `periodUnit` is set to **year**, the value ranges from `1` to `3`.
+     * This parameter is mandatory if `chargingMode` is set to **prePaid**.
+     * Changing this will do nothing.
      */
     period?: pulumi.Input<number>;
     /**
      * Specifies the charging period unit of the instance.
-     * Valid values are *month* and *year*. This parameter is mandatory if `chargingMode` is set to *prePaid*.
+     * Valid values are *month* and *year*. This parameter is mandatory if `chargingMode` is set to **prePaid**.
      * Changing this will do nothing.
      */
     periodUnit?: pulumi.Input<string>;
@@ -592,7 +595,7 @@ export interface CassandraInstanceArgs {
      */
     securityGroupId?: pulumi.Input<string>;
     /**
-     * Specifies whether to enable or disable SSL. Defaults to false. Changing this
+     * Specifies whether to enable or disable SSL. Defaults to **false**. Changing this
      * parameter will create a new resource.
      */
     ssl?: pulumi.Input<boolean>;

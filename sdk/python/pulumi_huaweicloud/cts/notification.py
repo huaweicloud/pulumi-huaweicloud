@@ -17,7 +17,9 @@ __all__ = ['NotificationArgs', 'Notification']
 class NotificationArgs:
     def __init__(__self__, *,
                  operation_type: pulumi.Input[str],
+                 agency_name: Optional[pulumi.Input[str]] = None,
                  enabled: Optional[pulumi.Input[bool]] = None,
+                 filter: Optional[pulumi.Input['NotificationFilterArgs']] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  operation_users: Optional[pulumi.Input[Sequence[pulumi.Input['NotificationOperationUserArgs']]]] = None,
                  operations: Optional[pulumi.Input[Sequence[pulumi.Input['NotificationOperationArgs']]]] = None,
@@ -27,22 +29,29 @@ class NotificationArgs:
         The set of arguments for constructing a Notification resource.
         :param pulumi.Input[str] operation_type: Specifies the operation type, possible options include **complete** and
                **customized**.
+        :param pulumi.Input[str] agency_name: Specifies the cloud service agency name. The value can only be **cts_admin_trust**.
         :param pulumi.Input[bool] enabled: Specifies whether notification is enabled, defaults to true.
-        :param pulumi.Input[str] name: Specifies the notification name. The value contains a maximum of 64 characters,
-               and only letters, digits, underscores(_), and Chinese characters are allowed.
+        :param pulumi.Input['NotificationFilterArgs'] filter: Specifies the filtering rules for notification.
+               The filter structure is documented below.
+        :param pulumi.Input[str] name: Specifies the notification name. The value contains a maximum of `64` characters,
+               and only English letters, digits, underscores(_), and Chinese characters are allowed.
         :param pulumi.Input[Sequence[pulumi.Input['NotificationOperationUserArgs']]] operation_users: Specifies an array of users. Notifications will be sent when specified users
                perform specified operations. All users are selected by default.
-               The object structure is documented below.
+               The operation_users structure is documented below.
         :param pulumi.Input[Sequence[pulumi.Input['NotificationOperationArgs']]] operations: Specifies an array of operations that will trigger notifications.
                For details, see [Supported Services and Operations](https://support.huaweicloud.com/intl/en-us/usermanual-cts/cts_03_0022.html).
-               The object structure is documented below.
+               The operations structure is documented below.
         :param pulumi.Input[str] region: Specifies the region in which to manage the CTS notification resource.
                If omitted, the provider-level region will be used. Changing this creates a new resource.
         :param pulumi.Input[str] smn_topic: Specifies the URN of a topic.
         """
         pulumi.set(__self__, "operation_type", operation_type)
+        if agency_name is not None:
+            pulumi.set(__self__, "agency_name", agency_name)
         if enabled is not None:
             pulumi.set(__self__, "enabled", enabled)
+        if filter is not None:
+            pulumi.set(__self__, "filter", filter)
         if name is not None:
             pulumi.set(__self__, "name", name)
         if operation_users is not None:
@@ -68,6 +77,18 @@ class NotificationArgs:
         pulumi.set(self, "operation_type", value)
 
     @property
+    @pulumi.getter(name="agencyName")
+    def agency_name(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the cloud service agency name. The value can only be **cts_admin_trust**.
+        """
+        return pulumi.get(self, "agency_name")
+
+    @agency_name.setter
+    def agency_name(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "agency_name", value)
+
+    @property
     @pulumi.getter
     def enabled(self) -> Optional[pulumi.Input[bool]]:
         """
@@ -81,10 +102,23 @@ class NotificationArgs:
 
     @property
     @pulumi.getter
+    def filter(self) -> Optional[pulumi.Input['NotificationFilterArgs']]:
+        """
+        Specifies the filtering rules for notification.
+        The filter structure is documented below.
+        """
+        return pulumi.get(self, "filter")
+
+    @filter.setter
+    def filter(self, value: Optional[pulumi.Input['NotificationFilterArgs']]):
+        pulumi.set(self, "filter", value)
+
+    @property
+    @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the notification name. The value contains a maximum of 64 characters,
-        and only letters, digits, underscores(_), and Chinese characters are allowed.
+        Specifies the notification name. The value contains a maximum of `64` characters,
+        and only English letters, digits, underscores(_), and Chinese characters are allowed.
         """
         return pulumi.get(self, "name")
 
@@ -98,7 +132,7 @@ class NotificationArgs:
         """
         Specifies an array of users. Notifications will be sent when specified users
         perform specified operations. All users are selected by default.
-        The object structure is documented below.
+        The operation_users structure is documented below.
         """
         return pulumi.get(self, "operation_users")
 
@@ -112,7 +146,7 @@ class NotificationArgs:
         """
         Specifies an array of operations that will trigger notifications.
         For details, see [Supported Services and Operations](https://support.huaweicloud.com/intl/en-us/usermanual-cts/cts_03_0022.html).
-        The object structure is documented below.
+        The operations structure is documented below.
         """
         return pulumi.get(self, "operations")
 
@@ -149,7 +183,10 @@ class NotificationArgs:
 @pulumi.input_type
 class _NotificationState:
     def __init__(__self__, *,
+                 agency_name: Optional[pulumi.Input[str]] = None,
+                 created_at: Optional[pulumi.Input[str]] = None,
                  enabled: Optional[pulumi.Input[bool]] = None,
+                 filter: Optional[pulumi.Input['NotificationFilterArgs']] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  notification_id: Optional[pulumi.Input[str]] = None,
                  operation_type: Optional[pulumi.Input[str]] = None,
@@ -160,25 +197,35 @@ class _NotificationState:
                  status: Optional[pulumi.Input[str]] = None):
         """
         Input properties used for looking up and filtering Notification resources.
+        :param pulumi.Input[str] agency_name: Specifies the cloud service agency name. The value can only be **cts_admin_trust**.
+        :param pulumi.Input[str] created_at: The creation time of the notification.
         :param pulumi.Input[bool] enabled: Specifies whether notification is enabled, defaults to true.
-        :param pulumi.Input[str] name: Specifies the notification name. The value contains a maximum of 64 characters,
-               and only letters, digits, underscores(_), and Chinese characters are allowed.
+        :param pulumi.Input['NotificationFilterArgs'] filter: Specifies the filtering rules for notification.
+               The filter structure is documented below.
+        :param pulumi.Input[str] name: Specifies the notification name. The value contains a maximum of `64` characters,
+               and only English letters, digits, underscores(_), and Chinese characters are allowed.
         :param pulumi.Input[str] notification_id: The notification ID in UUID format.
         :param pulumi.Input[str] operation_type: Specifies the operation type, possible options include **complete** and
                **customized**.
         :param pulumi.Input[Sequence[pulumi.Input['NotificationOperationUserArgs']]] operation_users: Specifies an array of users. Notifications will be sent when specified users
                perform specified operations. All users are selected by default.
-               The object structure is documented below.
+               The operation_users structure is documented below.
         :param pulumi.Input[Sequence[pulumi.Input['NotificationOperationArgs']]] operations: Specifies an array of operations that will trigger notifications.
                For details, see [Supported Services and Operations](https://support.huaweicloud.com/intl/en-us/usermanual-cts/cts_03_0022.html).
-               The object structure is documented below.
+               The operations structure is documented below.
         :param pulumi.Input[str] region: Specifies the region in which to manage the CTS notification resource.
                If omitted, the provider-level region will be used. Changing this creates a new resource.
         :param pulumi.Input[str] smn_topic: Specifies the URN of a topic.
         :param pulumi.Input[str] status: The notification status, the value can be **enabled** or **disabled**.
         """
+        if agency_name is not None:
+            pulumi.set(__self__, "agency_name", agency_name)
+        if created_at is not None:
+            pulumi.set(__self__, "created_at", created_at)
         if enabled is not None:
             pulumi.set(__self__, "enabled", enabled)
+        if filter is not None:
+            pulumi.set(__self__, "filter", filter)
         if name is not None:
             pulumi.set(__self__, "name", name)
         if notification_id is not None:
@@ -197,6 +244,30 @@ class _NotificationState:
             pulumi.set(__self__, "status", status)
 
     @property
+    @pulumi.getter(name="agencyName")
+    def agency_name(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the cloud service agency name. The value can only be **cts_admin_trust**.
+        """
+        return pulumi.get(self, "agency_name")
+
+    @agency_name.setter
+    def agency_name(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "agency_name", value)
+
+    @property
+    @pulumi.getter(name="createdAt")
+    def created_at(self) -> Optional[pulumi.Input[str]]:
+        """
+        The creation time of the notification.
+        """
+        return pulumi.get(self, "created_at")
+
+    @created_at.setter
+    def created_at(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "created_at", value)
+
+    @property
     @pulumi.getter
     def enabled(self) -> Optional[pulumi.Input[bool]]:
         """
@@ -210,10 +281,23 @@ class _NotificationState:
 
     @property
     @pulumi.getter
+    def filter(self) -> Optional[pulumi.Input['NotificationFilterArgs']]:
+        """
+        Specifies the filtering rules for notification.
+        The filter structure is documented below.
+        """
+        return pulumi.get(self, "filter")
+
+    @filter.setter
+    def filter(self, value: Optional[pulumi.Input['NotificationFilterArgs']]):
+        pulumi.set(self, "filter", value)
+
+    @property
+    @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the notification name. The value contains a maximum of 64 characters,
-        and only letters, digits, underscores(_), and Chinese characters are allowed.
+        Specifies the notification name. The value contains a maximum of `64` characters,
+        and only English letters, digits, underscores(_), and Chinese characters are allowed.
         """
         return pulumi.get(self, "name")
 
@@ -252,7 +336,7 @@ class _NotificationState:
         """
         Specifies an array of users. Notifications will be sent when specified users
         perform specified operations. All users are selected by default.
-        The object structure is documented below.
+        The operation_users structure is documented below.
         """
         return pulumi.get(self, "operation_users")
 
@@ -266,7 +350,7 @@ class _NotificationState:
         """
         Specifies an array of operations that will trigger notifications.
         For details, see [Supported Services and Operations](https://support.huaweicloud.com/intl/en-us/usermanual-cts/cts_03_0022.html).
-        The object structure is documented below.
+        The operations structure is documented below.
         """
         return pulumi.get(self, "operations")
 
@@ -317,7 +401,9 @@ class Notification(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
+                 agency_name: Optional[pulumi.Input[str]] = None,
                  enabled: Optional[pulumi.Input[bool]] = None,
+                 filter: Optional[pulumi.Input[pulumi.InputType['NotificationFilterArgs']]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  operation_type: Optional[pulumi.Input[str]] = None,
                  operation_users: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['NotificationOperationUserArgs']]]]] = None,
@@ -340,6 +426,25 @@ class Notification(pulumi.CustomResource):
         notify = huaweicloud.cts.Notification("notify",
             operation_type="complete",
             smn_topic=topic_urn)
+        ```
+        ### Complete Notification and Enable Filtering
+
+        ```python
+        import pulumi
+        import pulumi_huaweicloud as huaweicloud
+
+        config = pulumi.Config()
+        topic_urn = config.require_object("topicUrn")
+        notify = huaweicloud.cts.Notification("notify",
+            operation_type="complete",
+            smn_topic=topic_urn,
+            filter=huaweicloud.cts.NotificationFilterArgs(
+                condition="AND",
+                rules=[
+                    "code = 200",
+                    "resource_name = test",
+                ],
+            ))
         ```
         ### Customized Notification
 
@@ -364,7 +469,7 @@ class Notification(pulumi.CustomResource):
 
         ## Import
 
-        CTS notifications can be imported using `name`, e.g.
+        CTS notifications can be imported using `name`, e.g.bash
 
         ```sh
          $ pulumi import huaweicloud:Cts/notification:Notification tracker your_notification
@@ -372,17 +477,20 @@ class Notification(pulumi.CustomResource):
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
+        :param pulumi.Input[str] agency_name: Specifies the cloud service agency name. The value can only be **cts_admin_trust**.
         :param pulumi.Input[bool] enabled: Specifies whether notification is enabled, defaults to true.
-        :param pulumi.Input[str] name: Specifies the notification name. The value contains a maximum of 64 characters,
-               and only letters, digits, underscores(_), and Chinese characters are allowed.
+        :param pulumi.Input[pulumi.InputType['NotificationFilterArgs']] filter: Specifies the filtering rules for notification.
+               The filter structure is documented below.
+        :param pulumi.Input[str] name: Specifies the notification name. The value contains a maximum of `64` characters,
+               and only English letters, digits, underscores(_), and Chinese characters are allowed.
         :param pulumi.Input[str] operation_type: Specifies the operation type, possible options include **complete** and
                **customized**.
         :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['NotificationOperationUserArgs']]]] operation_users: Specifies an array of users. Notifications will be sent when specified users
                perform specified operations. All users are selected by default.
-               The object structure is documented below.
+               The operation_users structure is documented below.
         :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['NotificationOperationArgs']]]] operations: Specifies an array of operations that will trigger notifications.
                For details, see [Supported Services and Operations](https://support.huaweicloud.com/intl/en-us/usermanual-cts/cts_03_0022.html).
-               The object structure is documented below.
+               The operations structure is documented below.
         :param pulumi.Input[str] region: Specifies the region in which to manage the CTS notification resource.
                If omitted, the provider-level region will be used. Changing this creates a new resource.
         :param pulumi.Input[str] smn_topic: Specifies the URN of a topic.
@@ -409,6 +517,25 @@ class Notification(pulumi.CustomResource):
             operation_type="complete",
             smn_topic=topic_urn)
         ```
+        ### Complete Notification and Enable Filtering
+
+        ```python
+        import pulumi
+        import pulumi_huaweicloud as huaweicloud
+
+        config = pulumi.Config()
+        topic_urn = config.require_object("topicUrn")
+        notify = huaweicloud.cts.Notification("notify",
+            operation_type="complete",
+            smn_topic=topic_urn,
+            filter=huaweicloud.cts.NotificationFilterArgs(
+                condition="AND",
+                rules=[
+                    "code = 200",
+                    "resource_name = test",
+                ],
+            ))
+        ```
         ### Customized Notification
 
         ```python
@@ -432,7 +559,7 @@ class Notification(pulumi.CustomResource):
 
         ## Import
 
-        CTS notifications can be imported using `name`, e.g.
+        CTS notifications can be imported using `name`, e.g.bash
 
         ```sh
          $ pulumi import huaweicloud:Cts/notification:Notification tracker your_notification
@@ -453,7 +580,9 @@ class Notification(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
+                 agency_name: Optional[pulumi.Input[str]] = None,
                  enabled: Optional[pulumi.Input[bool]] = None,
+                 filter: Optional[pulumi.Input[pulumi.InputType['NotificationFilterArgs']]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  operation_type: Optional[pulumi.Input[str]] = None,
                  operation_users: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['NotificationOperationUserArgs']]]]] = None,
@@ -469,7 +598,9 @@ class Notification(pulumi.CustomResource):
                 raise TypeError('__props__ is only valid when passed in combination with a valid opts.id to get an existing resource')
             __props__ = NotificationArgs.__new__(NotificationArgs)
 
+            __props__.__dict__["agency_name"] = agency_name
             __props__.__dict__["enabled"] = enabled
+            __props__.__dict__["filter"] = filter
             __props__.__dict__["name"] = name
             if operation_type is None and not opts.urn:
                 raise TypeError("Missing required property 'operation_type'")
@@ -478,6 +609,7 @@ class Notification(pulumi.CustomResource):
             __props__.__dict__["operations"] = operations
             __props__.__dict__["region"] = region
             __props__.__dict__["smn_topic"] = smn_topic
+            __props__.__dict__["created_at"] = None
             __props__.__dict__["notification_id"] = None
             __props__.__dict__["status"] = None
         super(Notification, __self__).__init__(
@@ -490,7 +622,10 @@ class Notification(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
+            agency_name: Optional[pulumi.Input[str]] = None,
+            created_at: Optional[pulumi.Input[str]] = None,
             enabled: Optional[pulumi.Input[bool]] = None,
+            filter: Optional[pulumi.Input[pulumi.InputType['NotificationFilterArgs']]] = None,
             name: Optional[pulumi.Input[str]] = None,
             notification_id: Optional[pulumi.Input[str]] = None,
             operation_type: Optional[pulumi.Input[str]] = None,
@@ -506,18 +641,22 @@ class Notification(pulumi.CustomResource):
         :param str resource_name: The unique name of the resulting resource.
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
+        :param pulumi.Input[str] agency_name: Specifies the cloud service agency name. The value can only be **cts_admin_trust**.
+        :param pulumi.Input[str] created_at: The creation time of the notification.
         :param pulumi.Input[bool] enabled: Specifies whether notification is enabled, defaults to true.
-        :param pulumi.Input[str] name: Specifies the notification name. The value contains a maximum of 64 characters,
-               and only letters, digits, underscores(_), and Chinese characters are allowed.
+        :param pulumi.Input[pulumi.InputType['NotificationFilterArgs']] filter: Specifies the filtering rules for notification.
+               The filter structure is documented below.
+        :param pulumi.Input[str] name: Specifies the notification name. The value contains a maximum of `64` characters,
+               and only English letters, digits, underscores(_), and Chinese characters are allowed.
         :param pulumi.Input[str] notification_id: The notification ID in UUID format.
         :param pulumi.Input[str] operation_type: Specifies the operation type, possible options include **complete** and
                **customized**.
         :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['NotificationOperationUserArgs']]]] operation_users: Specifies an array of users. Notifications will be sent when specified users
                perform specified operations. All users are selected by default.
-               The object structure is documented below.
+               The operation_users structure is documented below.
         :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['NotificationOperationArgs']]]] operations: Specifies an array of operations that will trigger notifications.
                For details, see [Supported Services and Operations](https://support.huaweicloud.com/intl/en-us/usermanual-cts/cts_03_0022.html).
-               The object structure is documented below.
+               The operations structure is documented below.
         :param pulumi.Input[str] region: Specifies the region in which to manage the CTS notification resource.
                If omitted, the provider-level region will be used. Changing this creates a new resource.
         :param pulumi.Input[str] smn_topic: Specifies the URN of a topic.
@@ -527,7 +666,10 @@ class Notification(pulumi.CustomResource):
 
         __props__ = _NotificationState.__new__(_NotificationState)
 
+        __props__.__dict__["agency_name"] = agency_name
+        __props__.__dict__["created_at"] = created_at
         __props__.__dict__["enabled"] = enabled
+        __props__.__dict__["filter"] = filter
         __props__.__dict__["name"] = name
         __props__.__dict__["notification_id"] = notification_id
         __props__.__dict__["operation_type"] = operation_type
@@ -539,6 +681,22 @@ class Notification(pulumi.CustomResource):
         return Notification(resource_name, opts=opts, __props__=__props__)
 
     @property
+    @pulumi.getter(name="agencyName")
+    def agency_name(self) -> pulumi.Output[Optional[str]]:
+        """
+        Specifies the cloud service agency name. The value can only be **cts_admin_trust**.
+        """
+        return pulumi.get(self, "agency_name")
+
+    @property
+    @pulumi.getter(name="createdAt")
+    def created_at(self) -> pulumi.Output[str]:
+        """
+        The creation time of the notification.
+        """
+        return pulumi.get(self, "created_at")
+
+    @property
     @pulumi.getter
     def enabled(self) -> pulumi.Output[Optional[bool]]:
         """
@@ -548,10 +706,19 @@ class Notification(pulumi.CustomResource):
 
     @property
     @pulumi.getter
+    def filter(self) -> pulumi.Output[Optional['outputs.NotificationFilter']]:
+        """
+        Specifies the filtering rules for notification.
+        The filter structure is documented below.
+        """
+        return pulumi.get(self, "filter")
+
+    @property
+    @pulumi.getter
     def name(self) -> pulumi.Output[str]:
         """
-        Specifies the notification name. The value contains a maximum of 64 characters,
-        and only letters, digits, underscores(_), and Chinese characters are allowed.
+        Specifies the notification name. The value contains a maximum of `64` characters,
+        and only English letters, digits, underscores(_), and Chinese characters are allowed.
         """
         return pulumi.get(self, "name")
 
@@ -578,7 +745,7 @@ class Notification(pulumi.CustomResource):
         """
         Specifies an array of users. Notifications will be sent when specified users
         perform specified operations. All users are selected by default.
-        The object structure is documented below.
+        The operation_users structure is documented below.
         """
         return pulumi.get(self, "operation_users")
 
@@ -588,7 +755,7 @@ class Notification(pulumi.CustomResource):
         """
         Specifies an array of operations that will trigger notifications.
         For details, see [Supported Services and Operations](https://support.huaweicloud.com/intl/en-us/usermanual-cts/cts_03_0022.html).
-        The object structure is documented below.
+        The operations structure is documented below.
         """
         return pulumi.get(self, "operations")
 

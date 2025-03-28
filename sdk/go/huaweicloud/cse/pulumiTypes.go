@@ -132,7 +132,7 @@ type AlarmruleCondition struct {
 	ComparisonOperator string `pulumi:"comparisonOperator"`
 	// Specifies the number of consecutive occurrence times. The value ranges from 1 to 5.
 	Count int `pulumi:"count"`
-	// Specifies the data rollup methods. The value can be max, min, average, sum, and vaiance.
+	// Specifies the data rollup methods. The value can be max, min, average, sum, and variance.
 	Filter string `pulumi:"filter"`
 	// Specifies the metric name of the condition. The value can be a string of
 	// 1 to 64 characters that must start with a letter and contain only letters, digits, and underscores (_).
@@ -183,7 +183,7 @@ type AlarmruleConditionArgs struct {
 	ComparisonOperator pulumi.StringInput `pulumi:"comparisonOperator"`
 	// Specifies the number of consecutive occurrence times. The value ranges from 1 to 5.
 	Count pulumi.IntInput `pulumi:"count"`
-	// Specifies the data rollup methods. The value can be max, min, average, sum, and vaiance.
+	// Specifies the data rollup methods. The value can be max, min, average, sum, and variance.
 	Filter pulumi.StringInput `pulumi:"filter"`
 	// Specifies the metric name of the condition. The value can be a string of
 	// 1 to 64 characters that must start with a letter and contain only letters, digits, and underscores (_).
@@ -282,7 +282,7 @@ func (o AlarmruleConditionOutput) Count() pulumi.IntOutput {
 	return o.ApplyT(func(v AlarmruleCondition) int { return v.Count }).(pulumi.IntOutput)
 }
 
-// Specifies the data rollup methods. The value can be max, min, average, sum, and vaiance.
+// Specifies the data rollup methods. The value can be max, min, average, sum, and variance.
 func (o AlarmruleConditionOutput) Filter() pulumi.StringOutput {
 	return o.ApplyT(func(v AlarmruleCondition) string { return v.Filter }).(pulumi.StringOutput)
 }

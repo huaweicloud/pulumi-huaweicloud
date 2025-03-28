@@ -38,7 +38,7 @@ import (
 //
 // ## Import
 //
-// Organizations can be imported using the `name`, e.g.
+// Organizations can be imported using the `name`, e.g. bash
 //
 // ```sh
 //

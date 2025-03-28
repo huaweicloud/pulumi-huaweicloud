@@ -154,8 +154,8 @@ type Job struct {
 	// Specifies type of job. Changing this parameter will create a new resource.
 	// The options are as follows:
 	JobType pulumi.StringOutput `pulumi:"jobType"`
-	// Specifies job name, which can contains of 1 to 240 characters, starting with a
-	// letter. Only letters, digits, hyphens (-), and underscores (_) are allowed.
+	// Specifies job name, which can contains of `1` to `240` characters, starting with a letter.
+	// Only letters, digits, hyphens (-), and underscores (_) are allowed.
 	Name pulumi.StringOutput `pulumi:"name"`
 	// The region in which to create the job resource. If omitted, the
 	// provider-level region will be used. Changing this parameter will create a new resource.
@@ -244,8 +244,8 @@ type jobState struct {
 	// Specifies type of job. Changing this parameter will create a new resource.
 	// The options are as follows:
 	JobType *string `pulumi:"jobType"`
-	// Specifies job name, which can contains of 1 to 240 characters, starting with a
-	// letter. Only letters, digits, hyphens (-), and underscores (_) are allowed.
+	// Specifies job name, which can contains of `1` to `240` characters, starting with a letter.
+	// Only letters, digits, hyphens (-), and underscores (_) are allowed.
 	Name *string `pulumi:"name"`
 	// The region in which to create the job resource. If omitted, the
 	// provider-level region will be used. Changing this parameter will create a new resource.
@@ -281,8 +281,8 @@ type JobState struct {
 	// Specifies type of job. Changing this parameter will create a new resource.
 	// The options are as follows:
 	JobType pulumi.StringPtrInput
-	// Specifies job name, which can contains of 1 to 240 characters, starting with a
-	// letter. Only letters, digits, hyphens (-), and underscores (_) are allowed.
+	// Specifies job name, which can contains of `1` to `240` characters, starting with a letter.
+	// Only letters, digits, hyphens (-), and underscores (_) are allowed.
 	Name pulumi.StringPtrInput
 	// The region in which to create the job resource. If omitted, the
 	// provider-level region will be used. Changing this parameter will create a new resource.
@@ -322,8 +322,8 @@ type jobArgs struct {
 	// Specifies type of job. Changing this parameter will create a new resource.
 	// The options are as follows:
 	JobType string `pulumi:"jobType"`
-	// Specifies job name, which can contains of 1 to 240 characters, starting with a
-	// letter. Only letters, digits, hyphens (-), and underscores (_) are allowed.
+	// Specifies job name, which can contains of `1` to `240` characters, starting with a letter.
+	// Only letters, digits, hyphens (-), and underscores (_) are allowed.
 	Name *string `pulumi:"name"`
 	// The region in which to create the job resource. If omitted, the
 	// provider-level region will be used. Changing this parameter will create a new resource.
@@ -358,8 +358,8 @@ type JobArgs struct {
 	// Specifies type of job. Changing this parameter will create a new resource.
 	// The options are as follows:
 	JobType pulumi.StringInput
-	// Specifies job name, which can contains of 1 to 240 characters, starting with a
-	// letter. Only letters, digits, hyphens (-), and underscores (_) are allowed.
+	// Specifies job name, which can contains of `1` to `240` characters, starting with a letter.
+	// Only letters, digits, hyphens (-), and underscores (_) are allowed.
 	Name pulumi.StringPtrInput
 	// The region in which to create the job resource. If omitted, the
 	// provider-level region will be used. Changing this parameter will create a new resource.
@@ -497,8 +497,8 @@ func (o JobOutput) JobType() pulumi.StringOutput {
 	return o.ApplyT(func(v *Job) pulumi.StringOutput { return v.JobType }).(pulumi.StringOutput)
 }
 
-// Specifies job name, which can contains of 1 to 240 characters, starting with a
-// letter. Only letters, digits, hyphens (-), and underscores (_) are allowed.
+// Specifies job name, which can contains of `1` to `240` characters, starting with a letter.
+// Only letters, digits, hyphens (-), and underscores (_) are allowed.
 func (o JobOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v *Job) pulumi.StringOutput { return v.Name }).(pulumi.StringOutput)
 }

@@ -29,11 +29,25 @@ import * as utilities from "../utilities";
  *
  * ## Import
  *
- * Users can be imported using the `id`, e.g.
+ * Users can be imported using the `id`, e.g. bash
  *
  * ```sh
- *  $ pulumi import huaweicloud:Workspace/user:User test a96e632a399d452eb29e5091e0af806a
+ *  $ pulumi import huaweicloud:Workspace/user:User test <id>
  * ```
+ *
+ *  Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`password`. It is generally recommended running `terraform plan` after importing the resource. You can then decide if changes should be applied to the user, or the resource definition should be updated to align with the user. Also you can ignore changes as below. hcl resource "huaweicloud_workspace_user" "test" {
+ *
+ *  ...
+ *
+ *  lifecycle {
+ *
+ *  ignore_changes = [
+ *
+ *  password,
+ *
+ *  ]
+ *
+ *  } }
  */
 export class User extends pulumi.CustomResource {
     /**
@@ -65,11 +79,19 @@ export class User extends pulumi.CustomResource {
 
     /**
      * Specifies the user's valid period configuration.
+     * Defaults to "0".
      * + Never expires: **0**.
      * + Expires at a certain time: account expires must in RFC3339 format like `yyyy-MM-ddTHH:mm:ssZ`.
      * The times is in local time, depending on the timezone.
      */
     public readonly accountExpires!: pulumi.Output<string | undefined>;
+    /**
+     * Specifies the activation mode of the user. Defaults to **USER_ACTIVATE**.  
+     * The valid values are as follows:
+     * + **USER_ACTIVATE**: Activated by the user.
+     * + **ADMIN_ACTIVATE**: Activated by the administator.
+     */
+    public readonly activeType!: pulumi.Output<string>;
     /**
      * Specifies the description of user. The maximum length is `255` characters.
      */
@@ -82,7 +104,7 @@ export class User extends pulumi.CustomResource {
     /**
      * Specifies the email address of user. The value can contain `1` to `64` characters.
      */
-    public readonly email!: pulumi.Output<string>;
+    public readonly email!: pulumi.Output<string | undefined>;
     /**
      * Specifies whether to allow password modification.
      * Defaults to **true**.
@@ -105,10 +127,19 @@ export class User extends pulumi.CustomResource {
      */
     public readonly nextLoginChangePassword!: pulumi.Output<boolean | undefined>;
     /**
+     * Specifies the initial passowrd of user.  
+     * This parameter is available and required when `activeType` is set to **ADMIN_ACTIVATE**.
+     */
+    public readonly password!: pulumi.Output<string | undefined>;
+    /**
      * Specifies whether the password will never expires.
      * Defaults to **false**.
      */
     public readonly passwordNeverExpires!: pulumi.Output<boolean | undefined>;
+    /**
+     * Specifies the phone number of user.
+     */
+    public readonly phone!: pulumi.Output<string | undefined>;
     /**
      * The region in which to create the Workspace user resource.
      * If omitted, the provider-level region will be used. Changing this will create a new resource.
@@ -126,13 +157,14 @@ export class User extends pulumi.CustomResource {
      * @param args The arguments to use to populate this resource's properties.
      * @param opts A bag of options that control this resource's behavior.
      */
-    constructor(name: string, args: UserArgs, opts?: pulumi.CustomResourceOptions)
+    constructor(name: string, args?: UserArgs, opts?: pulumi.CustomResourceOptions)
     constructor(name: string, argsOrState?: UserArgs | UserState, opts?: pulumi.CustomResourceOptions) {
         let resourceInputs: pulumi.Inputs = {};
         opts = opts || {};
         if (opts.id) {
             const state = argsOrState as UserState | undefined;
             resourceInputs["accountExpires"] = state ? state.accountExpires : undefined;
+            resourceInputs["activeType"] = state ? state.activeType : undefined;
             resourceInputs["description"] = state ? state.description : undefined;
             resourceInputs["disabled"] = state ? state.disabled : undefined;
             resourceInputs["email"] = state ? state.email : undefined;
@@ -140,22 +172,24 @@ export class User extends pulumi.CustomResource {
             resourceInputs["locked"] = state ? state.locked : undefined;
             resourceInputs["name"] = state ? state.name : undefined;
             resourceInputs["nextLoginChangePassword"] = state ? state.nextLoginChangePassword : undefined;
+            resourceInputs["password"] = state ? state.password : undefined;
             resourceInputs["passwordNeverExpires"] = state ? state.passwordNeverExpires : undefined;
+            resourceInputs["phone"] = state ? state.phone : undefined;
             resourceInputs["region"] = state ? state.region : undefined;
             resourceInputs["totalDesktops"] = state ? state.totalDesktops : undefined;
         } else {
             const args = argsOrState as UserArgs | undefined;
-            if ((!args || args.email === undefined) && !opts.urn) {
-                throw new Error("Missing required property 'email'");
-            }
             resourceInputs["accountExpires"] = args ? args.accountExpires : undefined;
+            resourceInputs["activeType"] = args ? args.activeType : undefined;
             resourceInputs["description"] = args ? args.description : undefined;
             resourceInputs["disabled"] = args ? args.disabled : undefined;
             resourceInputs["email"] = args ? args.email : undefined;
             resourceInputs["enableChangePassword"] = args ? args.enableChangePassword : undefined;
             resourceInputs["name"] = args ? args.name : undefined;
             resourceInputs["nextLoginChangePassword"] = args ? args.nextLoginChangePassword : undefined;
+            resourceInputs["password"] = args ? args.password : undefined;
             resourceInputs["passwordNeverExpires"] = args ? args.passwordNeverExpires : undefined;
+            resourceInputs["phone"] = args ? args.phone : undefined;
             resourceInputs["region"] = args ? args.region : undefined;
             resourceInputs["locked"] = undefined /*out*/;
             resourceInputs["totalDesktops"] = undefined /*out*/;
@@ -171,11 +205,19 @@ export class User extends pulumi.CustomResource {
 export interface UserState {
     /**
      * Specifies the user's valid period configuration.
+     * Defaults to "0".
      * + Never expires: **0**.
      * + Expires at a certain time: account expires must in RFC3339 format like `yyyy-MM-ddTHH:mm:ssZ`.
      * The times is in local time, depending on the timezone.
      */
     accountExpires?: pulumi.Input<string>;
+    /**
+     * Specifies the activation mode of the user. Defaults to **USER_ACTIVATE**.  
+     * The valid values are as follows:
+     * + **USER_ACTIVATE**: Activated by the user.
+     * + **ADMIN_ACTIVATE**: Activated by the administator.
+     */
+    activeType?: pulumi.Input<string>;
     /**
      * Specifies the description of user. The maximum length is `255` characters.
      */
@@ -211,10 +253,19 @@ export interface UserState {
      */
     nextLoginChangePassword?: pulumi.Input<boolean>;
     /**
+     * Specifies the initial passowrd of user.  
+     * This parameter is available and required when `activeType` is set to **ADMIN_ACTIVATE**.
+     */
+    password?: pulumi.Input<string>;
+    /**
      * Specifies whether the password will never expires.
      * Defaults to **false**.
      */
     passwordNeverExpires?: pulumi.Input<boolean>;
+    /**
+     * Specifies the phone number of user.
+     */
+    phone?: pulumi.Input<string>;
     /**
      * The region in which to create the Workspace user resource.
      * If omitted, the provider-level region will be used. Changing this will create a new resource.
@@ -232,11 +283,19 @@ export interface UserState {
 export interface UserArgs {
     /**
      * Specifies the user's valid period configuration.
+     * Defaults to "0".
      * + Never expires: **0**.
      * + Expires at a certain time: account expires must in RFC3339 format like `yyyy-MM-ddTHH:mm:ssZ`.
      * The times is in local time, depending on the timezone.
      */
     accountExpires?: pulumi.Input<string>;
+    /**
+     * Specifies the activation mode of the user. Defaults to **USER_ACTIVATE**.  
+     * The valid values are as follows:
+     * + **USER_ACTIVATE**: Activated by the user.
+     * + **ADMIN_ACTIVATE**: Activated by the administator.
+     */
+    activeType?: pulumi.Input<string>;
     /**
      * Specifies the description of user. The maximum length is `255` characters.
      */
@@ -249,7 +308,7 @@ export interface UserArgs {
     /**
      * Specifies the email address of user. The value can contain `1` to `64` characters.
      */
-    email: pulumi.Input<string>;
+    email?: pulumi.Input<string>;
     /**
      * Specifies whether to allow password modification.
      * Defaults to **true**.
@@ -268,10 +327,19 @@ export interface UserArgs {
      */
     nextLoginChangePassword?: pulumi.Input<boolean>;
     /**
+     * Specifies the initial passowrd of user.  
+     * This parameter is available and required when `activeType` is set to **ADMIN_ACTIVATE**.
+     */
+    password?: pulumi.Input<string>;
+    /**
      * Specifies whether the password will never expires.
      * Defaults to **false**.
      */
     passwordNeverExpires?: pulumi.Input<boolean>;
+    /**
+     * Specifies the phone number of user.
+     */
+    phone?: pulumi.Input<string>;
     /**
      * The region in which to create the Workspace user resource.
      * If omitted, the provider-level region will be used. Changing this will create a new resource.

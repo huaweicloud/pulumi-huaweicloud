@@ -16,6 +16,7 @@ class KafkaUserArgs:
     def __init__(__self__, *,
                  instance_id: pulumi.Input[str],
                  password: pulumi.Input[str],
+                 description: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None):
         """
@@ -25,12 +26,15 @@ class KafkaUserArgs:
         :param pulumi.Input[str] password: Specifies the password of the user. The parameter must be 8 to 32 characters
                long and contain only letters(case-sensitive), digits, and special characters(`~!@#$%^&*()-_=+|[{}]:'",<.>/?).
                The value must be different from name.
+        :param pulumi.Input[str] description: Specifies the description of the user.
         :param pulumi.Input[str] name: Specifies the name of the user. Changing this creates a new resource.
         :param pulumi.Input[str] region: The region in which to create the DMS kafka user resource. If omitted, the
                provider-level region will be used. Changing this creates a new resource.
         """
         pulumi.set(__self__, "instance_id", instance_id)
         pulumi.set(__self__, "password", password)
+        if description is not None:
+            pulumi.set(__self__, "description", description)
         if name is not None:
             pulumi.set(__self__, "name", name)
         if region is not None:
@@ -65,6 +69,18 @@ class KafkaUserArgs:
 
     @property
     @pulumi.getter
+    def description(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the description of the user.
+        """
+        return pulumi.get(self, "description")
+
+    @description.setter
+    def description(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "description", value)
+
+    @property
+    @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the name of the user. Changing this creates a new resource.
@@ -92,12 +108,19 @@ class KafkaUserArgs:
 @pulumi.input_type
 class _KafkaUserState:
     def __init__(__self__, *,
+                 created_at: Optional[pulumi.Input[str]] = None,
+                 default_app: Optional[pulumi.Input[bool]] = None,
+                 description: Optional[pulumi.Input[str]] = None,
                  instance_id: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  password: Optional[pulumi.Input[str]] = None,
-                 region: Optional[pulumi.Input[str]] = None):
+                 region: Optional[pulumi.Input[str]] = None,
+                 role: Optional[pulumi.Input[str]] = None):
         """
         Input properties used for looking up and filtering KafkaUser resources.
+        :param pulumi.Input[str] created_at: Indicates the create time.
+        :param pulumi.Input[bool] default_app: Indicates whether the application is the default application.
+        :param pulumi.Input[str] description: Specifies the description of the user.
         :param pulumi.Input[str] instance_id: Specifies the ID of the DMS kafka instance to which the user belongs.
                Changing this creates a new resource.
         :param pulumi.Input[str] name: Specifies the name of the user. Changing this creates a new resource.
@@ -106,7 +129,14 @@ class _KafkaUserState:
                The value must be different from name.
         :param pulumi.Input[str] region: The region in which to create the DMS kafka user resource. If omitted, the
                provider-level region will be used. Changing this creates a new resource.
+        :param pulumi.Input[str] role: Indicates the user role.
         """
+        if created_at is not None:
+            pulumi.set(__self__, "created_at", created_at)
+        if default_app is not None:
+            pulumi.set(__self__, "default_app", default_app)
+        if description is not None:
+            pulumi.set(__self__, "description", description)
         if instance_id is not None:
             pulumi.set(__self__, "instance_id", instance_id)
         if name is not None:
@@ -115,6 +145,44 @@ class _KafkaUserState:
             pulumi.set(__self__, "password", password)
         if region is not None:
             pulumi.set(__self__, "region", region)
+        if role is not None:
+            pulumi.set(__self__, "role", role)
+
+    @property
+    @pulumi.getter(name="createdAt")
+    def created_at(self) -> Optional[pulumi.Input[str]]:
+        """
+        Indicates the create time.
+        """
+        return pulumi.get(self, "created_at")
+
+    @created_at.setter
+    def created_at(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "created_at", value)
+
+    @property
+    @pulumi.getter(name="defaultApp")
+    def default_app(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Indicates whether the application is the default application.
+        """
+        return pulumi.get(self, "default_app")
+
+    @default_app.setter
+    def default_app(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "default_app", value)
+
+    @property
+    @pulumi.getter
+    def description(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the description of the user.
+        """
+        return pulumi.get(self, "description")
+
+    @description.setter
+    def description(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "description", value)
 
     @property
     @pulumi.getter(name="instanceId")
@@ -168,12 +236,25 @@ class _KafkaUserState:
     def region(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "region", value)
 
+    @property
+    @pulumi.getter
+    def role(self) -> Optional[pulumi.Input[str]]:
+        """
+        Indicates the user role.
+        """
+        return pulumi.get(self, "role")
+
+    @role.setter
+    def role(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "role", value)
+
 
 class KafkaUser(pulumi.CustomResource):
     @overload
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
+                 description: Optional[pulumi.Input[str]] = None,
                  instance_id: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  password: Optional[pulumi.Input[str]] = None,
@@ -190,14 +271,16 @@ class KafkaUser(pulumi.CustomResource):
 
         config = pulumi.Config()
         kafka_instance_id = config.require_object("kafkaInstanceId")
+        user_password = config.require_object("userPassword")
         user = huaweicloud.dms.KafkaUser("user",
             instance_id=kafka_instance_id,
-            password="Test@123")
+            password=user_password,
+            description="test_description")
         ```
 
         ## Import
 
-        DMS kafka users can be imported using the kafka instance ID and user name separated by a slash, e.g.
+        DMS kafka users can be imported using the kafka instance ID and user name separated by a slash, e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:Dms/kafkaUser:KafkaUser user c8057fe5-23a8-46ef-ad83-c0055b4e0c5c/user_1
@@ -205,6 +288,7 @@ class KafkaUser(pulumi.CustomResource):
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
+        :param pulumi.Input[str] description: Specifies the description of the user.
         :param pulumi.Input[str] instance_id: Specifies the ID of the DMS kafka instance to which the user belongs.
                Changing this creates a new resource.
         :param pulumi.Input[str] name: Specifies the name of the user. Changing this creates a new resource.
@@ -231,14 +315,16 @@ class KafkaUser(pulumi.CustomResource):
 
         config = pulumi.Config()
         kafka_instance_id = config.require_object("kafkaInstanceId")
+        user_password = config.require_object("userPassword")
         user = huaweicloud.dms.KafkaUser("user",
             instance_id=kafka_instance_id,
-            password="Test@123")
+            password=user_password,
+            description="test_description")
         ```
 
         ## Import
 
-        DMS kafka users can be imported using the kafka instance ID and user name separated by a slash, e.g.
+        DMS kafka users can be imported using the kafka instance ID and user name separated by a slash, e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:Dms/kafkaUser:KafkaUser user c8057fe5-23a8-46ef-ad83-c0055b4e0c5c/user_1
@@ -259,6 +345,7 @@ class KafkaUser(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
+                 description: Optional[pulumi.Input[str]] = None,
                  instance_id: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  password: Optional[pulumi.Input[str]] = None,
@@ -272,6 +359,7 @@ class KafkaUser(pulumi.CustomResource):
                 raise TypeError('__props__ is only valid when passed in combination with a valid opts.id to get an existing resource')
             __props__ = KafkaUserArgs.__new__(KafkaUserArgs)
 
+            __props__.__dict__["description"] = description
             if instance_id is None and not opts.urn:
                 raise TypeError("Missing required property 'instance_id'")
             __props__.__dict__["instance_id"] = instance_id
@@ -280,6 +368,9 @@ class KafkaUser(pulumi.CustomResource):
                 raise TypeError("Missing required property 'password'")
             __props__.__dict__["password"] = password
             __props__.__dict__["region"] = region
+            __props__.__dict__["created_at"] = None
+            __props__.__dict__["default_app"] = None
+            __props__.__dict__["role"] = None
         super(KafkaUser, __self__).__init__(
             'huaweicloud:Dms/kafkaUser:KafkaUser',
             resource_name,
@@ -290,10 +381,14 @@ class KafkaUser(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
+            created_at: Optional[pulumi.Input[str]] = None,
+            default_app: Optional[pulumi.Input[bool]] = None,
+            description: Optional[pulumi.Input[str]] = None,
             instance_id: Optional[pulumi.Input[str]] = None,
             name: Optional[pulumi.Input[str]] = None,
             password: Optional[pulumi.Input[str]] = None,
-            region: Optional[pulumi.Input[str]] = None) -> 'KafkaUser':
+            region: Optional[pulumi.Input[str]] = None,
+            role: Optional[pulumi.Input[str]] = None) -> 'KafkaUser':
         """
         Get an existing KafkaUser resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.
@@ -301,6 +396,9 @@ class KafkaUser(pulumi.CustomResource):
         :param str resource_name: The unique name of the resulting resource.
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
+        :param pulumi.Input[str] created_at: Indicates the create time.
+        :param pulumi.Input[bool] default_app: Indicates whether the application is the default application.
+        :param pulumi.Input[str] description: Specifies the description of the user.
         :param pulumi.Input[str] instance_id: Specifies the ID of the DMS kafka instance to which the user belongs.
                Changing this creates a new resource.
         :param pulumi.Input[str] name: Specifies the name of the user. Changing this creates a new resource.
@@ -309,16 +407,45 @@ class KafkaUser(pulumi.CustomResource):
                The value must be different from name.
         :param pulumi.Input[str] region: The region in which to create the DMS kafka user resource. If omitted, the
                provider-level region will be used. Changing this creates a new resource.
+        :param pulumi.Input[str] role: Indicates the user role.
         """
         opts = pulumi.ResourceOptions.merge(opts, pulumi.ResourceOptions(id=id))
 
         __props__ = _KafkaUserState.__new__(_KafkaUserState)
 
+        __props__.__dict__["created_at"] = created_at
+        __props__.__dict__["default_app"] = default_app
+        __props__.__dict__["description"] = description
         __props__.__dict__["instance_id"] = instance_id
         __props__.__dict__["name"] = name
         __props__.__dict__["password"] = password
         __props__.__dict__["region"] = region
+        __props__.__dict__["role"] = role
         return KafkaUser(resource_name, opts=opts, __props__=__props__)
+
+    @property
+    @pulumi.getter(name="createdAt")
+    def created_at(self) -> pulumi.Output[str]:
+        """
+        Indicates the create time.
+        """
+        return pulumi.get(self, "created_at")
+
+    @property
+    @pulumi.getter(name="defaultApp")
+    def default_app(self) -> pulumi.Output[bool]:
+        """
+        Indicates whether the application is the default application.
+        """
+        return pulumi.get(self, "default_app")
+
+    @property
+    @pulumi.getter
+    def description(self) -> pulumi.Output[Optional[str]]:
+        """
+        Specifies the description of the user.
+        """
+        return pulumi.get(self, "description")
 
     @property
     @pulumi.getter(name="instanceId")
@@ -355,4 +482,12 @@ class KafkaUser(pulumi.CustomResource):
         provider-level region will be used. Changing this creates a new resource.
         """
         return pulumi.get(self, "region")
+
+    @property
+    @pulumi.getter
+    def role(self) -> pulumi.Output[str]:
+        """
+        Indicates the user role.
+        """
+        return pulumi.get(self, "role")
 

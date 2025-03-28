@@ -66,13 +66,19 @@ type LookupInstanceArgs struct {
 	// The region in which to obtain the instance.
 	// If omitted, the provider-level region will be used.
 	Region *string `pulumi:"region"`
+	// Specifies the tags to qurey the instance.
+	Tags map[string]string `pulumi:"tags"`
 }
 
 // A collection of values returned by getInstance.
 type LookupInstanceResult struct {
 	// The availability zone where the instance is located.
-	AvailabilityZone    string `pulumi:"availabilityZone"`
+	AvailabilityZone string `pulumi:"availabilityZone"`
+	// The charging mode of the instance. Valid values are **prePaid**, **postPaid** and **spot**.
+	ChargingMode        string `pulumi:"chargingMode"`
 	EnterpriseProjectId string `pulumi:"enterpriseProjectId"`
+	// The expired time of prePaid instance, in UTC format.
+	ExpiredTime string `pulumi:"expiredTime"`
 	// The fixed IPv4 address of the instance on this network.
 	FixedIpV4 *string `pulumi:"fixedIpV4"`
 	FlavorId  string  `pulumi:"flavorId"`
@@ -91,7 +97,7 @@ type LookupInstanceResult struct {
 	// An array of one or more networks to attach to the instance.
 	// The network object structure is documented below.
 	Networks []GetInstanceNetwork `pulumi:"networks"`
-	// The EIP address that is associted to the instance.
+	// The EIP address that is associated to the instance.
 	PublicIp string `pulumi:"publicIp"`
 	Region   string `pulumi:"region"`
 	// The scheduler with hints on how the instance should be launched.
@@ -103,10 +109,9 @@ type LookupInstanceResult struct {
 	SecurityGroups []string `pulumi:"securityGroups"`
 	// The status of the instance.
 	Status string `pulumi:"status"`
-	// The system disk voume ID.
-	SystemDiskId string `pulumi:"systemDiskId"`
-	// The key/value pairs to associate with the instance.
-	Tags map[string]string `pulumi:"tags"`
+	// The system disk volume ID.
+	SystemDiskId string            `pulumi:"systemDiskId"`
+	Tags         map[string]string `pulumi:"tags"`
 	// The user data (information after encoding) configured during instance creation.
 	UserData string `pulumi:"userData"`
 	// An array of one or more disks to attach to the instance.
@@ -142,6 +147,8 @@ type LookupInstanceOutputArgs struct {
 	// The region in which to obtain the instance.
 	// If omitted, the provider-level region will be used.
 	Region pulumi.StringPtrInput `pulumi:"region"`
+	// Specifies the tags to qurey the instance.
+	Tags pulumi.StringMapInput `pulumi:"tags"`
 }
 
 func (LookupInstanceOutputArgs) ElementType() reflect.Type {
@@ -168,8 +175,18 @@ func (o LookupInstanceResultOutput) AvailabilityZone() pulumi.StringOutput {
 	return o.ApplyT(func(v LookupInstanceResult) string { return v.AvailabilityZone }).(pulumi.StringOutput)
 }
 
+// The charging mode of the instance. Valid values are **prePaid**, **postPaid** and **spot**.
+func (o LookupInstanceResultOutput) ChargingMode() pulumi.StringOutput {
+	return o.ApplyT(func(v LookupInstanceResult) string { return v.ChargingMode }).(pulumi.StringOutput)
+}
+
 func (o LookupInstanceResultOutput) EnterpriseProjectId() pulumi.StringOutput {
 	return o.ApplyT(func(v LookupInstanceResult) string { return v.EnterpriseProjectId }).(pulumi.StringOutput)
+}
+
+// The expired time of prePaid instance, in UTC format.
+func (o LookupInstanceResultOutput) ExpiredTime() pulumi.StringOutput {
+	return o.ApplyT(func(v LookupInstanceResult) string { return v.ExpiredTime }).(pulumi.StringOutput)
 }
 
 // The fixed IPv4 address of the instance on this network.
@@ -220,7 +237,7 @@ func (o LookupInstanceResultOutput) Networks() GetInstanceNetworkArrayOutput {
 	return o.ApplyT(func(v LookupInstanceResult) []GetInstanceNetwork { return v.Networks }).(GetInstanceNetworkArrayOutput)
 }
 
-// The EIP address that is associted to the instance.
+// The EIP address that is associated to the instance.
 func (o LookupInstanceResultOutput) PublicIp() pulumi.StringOutput {
 	return o.ApplyT(func(v LookupInstanceResult) string { return v.PublicIp }).(pulumi.StringOutput)
 }
@@ -250,12 +267,11 @@ func (o LookupInstanceResultOutput) Status() pulumi.StringOutput {
 	return o.ApplyT(func(v LookupInstanceResult) string { return v.Status }).(pulumi.StringOutput)
 }
 
-// The system disk voume ID.
+// The system disk volume ID.
 func (o LookupInstanceResultOutput) SystemDiskId() pulumi.StringOutput {
 	return o.ApplyT(func(v LookupInstanceResult) string { return v.SystemDiskId }).(pulumi.StringOutput)
 }
 
-// The key/value pairs to associate with the instance.
 func (o LookupInstanceResultOutput) Tags() pulumi.StringMapOutput {
 	return o.ApplyT(func(v LookupInstanceResult) map[string]string { return v.Tags }).(pulumi.StringMapOutput)
 }

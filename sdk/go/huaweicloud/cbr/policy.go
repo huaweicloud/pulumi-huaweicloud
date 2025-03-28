@@ -11,33 +11,103 @@ import (
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
-// Manages a CBR Policy resource within Huaweicloud.
+// Manages a backup policy for backing up vault objects within HuaweiCloud.
 //
 // ## Example Usage
+// ### Create a backup policy (weekly backup)
 //
-// ## Import
+// ```go
+// package main
 //
-// Policies can be imported by their `id`. For example,
+// import (
 //
-// ```sh
+//	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud/Cbr"
+//	"github.com/pulumi/pulumi-huaweicloud/sdk/go/huaweicloud/Cbr"
+//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi/config"
 //
-//	$ pulumi import huaweicloud:Cbr/policy:Policy test 4d2c2939-774f-42ef-ab15-e5b126b11ace
+// )
+//
+//	func main() {
+//		pulumi.Run(func(ctx *pulumi.Context) error {
+//			cfg := config.New(ctx, "")
+//			policyName := cfg.RequireObject("policyName")
+//			_, err := Cbr.NewPolicy(ctx, "test", &Cbr.PolicyArgs{
+//				Type:       pulumi.String("backup"),
+//				TimePeriod: pulumi.Int(20),
+//				TimeZone:   pulumi.String("UTC+08:00"),
+//				LongTermRetention: &cbr.PolicyLongTermRetentionArgs{
+//					Daily:              pulumi.Int(10),
+//					Weekly:             pulumi.Int(10),
+//					Monthly:            pulumi.Int(1),
+//					FullBackupInterval: -1,
+//				},
+//				BackupCycle: &cbr.PolicyBackupCycleArgs{
+//					Days: pulumi.String("SA,SU"),
+//					ExecutionTimes: pulumi.StringArray{
+//						pulumi.String("08:00"),
+//						pulumi.String("20:00"),
+//					},
+//				},
+//			})
+//			if err != nil {
+//				return err
+//			}
+//			return nil
+//		})
+//	}
+//
+// ```
+// ### Create a replication policy (periodic backup)
+//
+// ```go
+// package main
+//
+// import (
+//
+//	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud/Cbr"
+//	"github.com/pulumi/pulumi-huaweicloud/sdk/go/huaweicloud/Cbr"
+//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi/config"
+//
+// )
+//
+//	func main() {
+//		pulumi.Run(func(ctx *pulumi.Context) error {
+//			cfg := config.New(ctx, "")
+//			policyName := cfg.RequireObject("policyName")
+//			destinationRegion := cfg.RequireObject("destinationRegion")
+//			destinationProjectId := cfg.RequireObject("destinationProjectId")
+//			_, err := Cbr.NewPolicy(ctx, "test", &Cbr.PolicyArgs{
+//				Type:                 pulumi.String("replication"),
+//				DestinationRegion:    pulumi.Any(destinationRegion),
+//				DestinationProjectId: pulumi.Any(destinationProjectId),
+//				BackupQuantity:       pulumi.Int(20),
+//				BackupCycle: &cbr.PolicyBackupCycleArgs{
+//					Interval: pulumi.Int(5),
+//					ExecutionTimes: pulumi.StringArray{
+//						pulumi.String("21:00"),
+//					},
+//				},
+//			})
+//			if err != nil {
+//				return err
+//			}
+//			return nil
+//		})
+//	}
 //
 // ```
 //
-//	Note that the imported state may not be identical to your resource definition, due to the attribute missing from the API response. The missing attribute is`enable_acceleration`. It is generally recommended running `terraform plan` after importing a policy. You can then decide if changes should be applied to the policy, or the resource definition should be updated to align with the policy. Also you can ignore changes as below. resource "huaweicloud_cbr_policy" "test" {
+// ## Import
 //
-//	...
+// Policies can be imported by their `id`, e.g. bash
 //
-//	lifecycle {
+// ```sh
 //
-//	ignore_changes = [
+//	$ pulumi import huaweicloud:Cbr/policy:Policy test <id>
 //
-//	enable_acceleration,
-//
-//	]
-//
-//	} }
+// ```
 type Policy struct {
 	pulumi.CustomResourceState
 
@@ -53,9 +123,7 @@ type Policy struct {
 	// Specifies the name of the replication destination region, which is mandatory
 	// for cross-region replication. Required if `protectionType` is **replication**.
 	DestinationRegion pulumi.StringPtrOutput `pulumi:"destinationRegion"`
-	// Specifies whether to enable the acceleration function to shorten
-	// the replication time for cross-region.
-	// Changing this will create a new policy.
+	// Whether to enable the acceleration function to shorten the replication time for cross-region
 	EnableAcceleration pulumi.BoolPtrOutput `pulumi:"enableAcceleration"`
 	// Specifies whether to enable the policy. Default to **true**.
 	Enabled pulumi.BoolPtrOutput `pulumi:"enabled"`
@@ -63,7 +131,7 @@ type Policy struct {
 	// the `backupQuantity`. The object structure is documented below.
 	LongTermRetention PolicyLongTermRetentionPtrOutput `pulumi:"longTermRetention"`
 	// Specifies the policy name.\
-	// This parameter can contain a maximum of 64
+	// This parameter can contain a maximum of `64`
 	// characters, which may consist of chinese characters, letters, digits, underscores(_) and hyphens (-).
 	Name pulumi.StringOutput `pulumi:"name"`
 	// Specifies the region where the policy is located. If omitted, the
@@ -129,9 +197,7 @@ type policyState struct {
 	// Specifies the name of the replication destination region, which is mandatory
 	// for cross-region replication. Required if `protectionType` is **replication**.
 	DestinationRegion *string `pulumi:"destinationRegion"`
-	// Specifies whether to enable the acceleration function to shorten
-	// the replication time for cross-region.
-	// Changing this will create a new policy.
+	// Whether to enable the acceleration function to shorten the replication time for cross-region
 	EnableAcceleration *bool `pulumi:"enableAcceleration"`
 	// Specifies whether to enable the policy. Default to **true**.
 	Enabled *bool `pulumi:"enabled"`
@@ -139,7 +205,7 @@ type policyState struct {
 	// the `backupQuantity`. The object structure is documented below.
 	LongTermRetention *PolicyLongTermRetention `pulumi:"longTermRetention"`
 	// Specifies the policy name.\
-	// This parameter can contain a maximum of 64
+	// This parameter can contain a maximum of `64`
 	// characters, which may consist of chinese characters, letters, digits, underscores(_) and hyphens (-).
 	Name *string `pulumi:"name"`
 	// Specifies the region where the policy is located. If omitted, the
@@ -170,9 +236,7 @@ type PolicyState struct {
 	// Specifies the name of the replication destination region, which is mandatory
 	// for cross-region replication. Required if `protectionType` is **replication**.
 	DestinationRegion pulumi.StringPtrInput
-	// Specifies whether to enable the acceleration function to shorten
-	// the replication time for cross-region.
-	// Changing this will create a new policy.
+	// Whether to enable the acceleration function to shorten the replication time for cross-region
 	EnableAcceleration pulumi.BoolPtrInput
 	// Specifies whether to enable the policy. Default to **true**.
 	Enabled pulumi.BoolPtrInput
@@ -180,7 +244,7 @@ type PolicyState struct {
 	// the `backupQuantity`. The object structure is documented below.
 	LongTermRetention PolicyLongTermRetentionPtrInput
 	// Specifies the policy name.\
-	// This parameter can contain a maximum of 64
+	// This parameter can contain a maximum of `64`
 	// characters, which may consist of chinese characters, letters, digits, underscores(_) and hyphens (-).
 	Name pulumi.StringPtrInput
 	// Specifies the region where the policy is located. If omitted, the
@@ -215,9 +279,7 @@ type policyArgs struct {
 	// Specifies the name of the replication destination region, which is mandatory
 	// for cross-region replication. Required if `protectionType` is **replication**.
 	DestinationRegion *string `pulumi:"destinationRegion"`
-	// Specifies whether to enable the acceleration function to shorten
-	// the replication time for cross-region.
-	// Changing this will create a new policy.
+	// Whether to enable the acceleration function to shorten the replication time for cross-region
 	EnableAcceleration *bool `pulumi:"enableAcceleration"`
 	// Specifies whether to enable the policy. Default to **true**.
 	Enabled *bool `pulumi:"enabled"`
@@ -225,7 +287,7 @@ type policyArgs struct {
 	// the `backupQuantity`. The object structure is documented below.
 	LongTermRetention *PolicyLongTermRetention `pulumi:"longTermRetention"`
 	// Specifies the policy name.\
-	// This parameter can contain a maximum of 64
+	// This parameter can contain a maximum of `64`
 	// characters, which may consist of chinese characters, letters, digits, underscores(_) and hyphens (-).
 	Name *string `pulumi:"name"`
 	// Specifies the region where the policy is located. If omitted, the
@@ -257,9 +319,7 @@ type PolicyArgs struct {
 	// Specifies the name of the replication destination region, which is mandatory
 	// for cross-region replication. Required if `protectionType` is **replication**.
 	DestinationRegion pulumi.StringPtrInput
-	// Specifies whether to enable the acceleration function to shorten
-	// the replication time for cross-region.
-	// Changing this will create a new policy.
+	// Whether to enable the acceleration function to shorten the replication time for cross-region
 	EnableAcceleration pulumi.BoolPtrInput
 	// Specifies whether to enable the policy. Default to **true**.
 	Enabled pulumi.BoolPtrInput
@@ -267,7 +327,7 @@ type PolicyArgs struct {
 	// the `backupQuantity`. The object structure is documented below.
 	LongTermRetention PolicyLongTermRetentionPtrInput
 	// Specifies the policy name.\
-	// This parameter can contain a maximum of 64
+	// This parameter can contain a maximum of `64`
 	// characters, which may consist of chinese characters, letters, digits, underscores(_) and hyphens (-).
 	Name pulumi.StringPtrInput
 	// Specifies the region where the policy is located. If omitted, the
@@ -396,9 +456,7 @@ func (o PolicyOutput) DestinationRegion() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Policy) pulumi.StringPtrOutput { return v.DestinationRegion }).(pulumi.StringPtrOutput)
 }
 
-// Specifies whether to enable the acceleration function to shorten
-// the replication time for cross-region.
-// Changing this will create a new policy.
+// Whether to enable the acceleration function to shorten the replication time for cross-region
 func (o PolicyOutput) EnableAcceleration() pulumi.BoolPtrOutput {
 	return o.ApplyT(func(v *Policy) pulumi.BoolPtrOutput { return v.EnableAcceleration }).(pulumi.BoolPtrOutput)
 }
@@ -415,7 +473,7 @@ func (o PolicyOutput) LongTermRetention() PolicyLongTermRetentionPtrOutput {
 }
 
 // Specifies the policy name.\
-// This parameter can contain a maximum of 64
+// This parameter can contain a maximum of `64`
 // characters, which may consist of chinese characters, letters, digits, underscores(_) and hyphens (-).
 func (o PolicyOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v *Policy) pulumi.StringOutput { return v.Name }).(pulumi.StringOutput)

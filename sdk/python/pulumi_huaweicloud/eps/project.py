@@ -24,7 +24,8 @@ class ProjectArgs:
         :param pulumi.Input[str] description: Specifies the description of the enterprise project.
         :param pulumi.Input[bool] enable: Specifies whether to enable the enterprise project. Defaults to **true**.
         :param pulumi.Input[str] name: Specifies the name of the enterprise project.
-               This parameter can contain `1` to `64` characters. Only letters, digits, underscores (_), and hyphens (-) are allowed.
+               This parameter can contain `1` to `64` characters. Only English letters, Chinese characters, digits, underscores (_),
+               and hyphens (-) are allowed.
                The name must be unique in the domain and cannot include any form of the word "default" ("deFaulT", for instance).
         :param pulumi.Input[bool] skip_disable_on_destroy: Specifies whether to skip disable the enterprise project on destroy.
                Defaults to **false**.
@@ -71,7 +72,8 @@ class ProjectArgs:
     def name(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the name of the enterprise project.
-        This parameter can contain `1` to `64` characters. Only letters, digits, underscores (_), and hyphens (-) are allowed.
+        This parameter can contain `1` to `64` characters. Only English letters, Chinese characters, digits, underscores (_),
+        and hyphens (-) are allowed.
         The name must be unique in the domain and cannot include any form of the word "default" ("deFaulT", for instance).
         """
         return pulumi.get(self, "name")
@@ -120,11 +122,12 @@ class _ProjectState:
                  updated_at: Optional[pulumi.Input[str]] = None):
         """
         Input properties used for looking up and filtering Project resources.
-        :param pulumi.Input[str] created_at: Indicates the time (UTC) when the enterprise project was created. Example: `2018-05-18T06:49:06Z`.
+        :param pulumi.Input[str] created_at: Indicates the time (UTC) when the enterprise project was created. Example: **2018-05-18T06:49:06Z**.
         :param pulumi.Input[str] description: Specifies the description of the enterprise project.
         :param pulumi.Input[bool] enable: Specifies whether to enable the enterprise project. Defaults to **true**.
         :param pulumi.Input[str] name: Specifies the name of the enterprise project.
-               This parameter can contain `1` to `64` characters. Only letters, digits, underscores (_), and hyphens (-) are allowed.
+               This parameter can contain `1` to `64` characters. Only English letters, Chinese characters, digits, underscores (_),
+               and hyphens (-) are allowed.
                The name must be unique in the domain and cannot include any form of the word "default" ("deFaulT", for instance).
         :param pulumi.Input[bool] skip_disable_on_destroy: Specifies whether to skip disable the enterprise project on destroy.
                Defaults to **false**.
@@ -133,7 +136,7 @@ class _ProjectState:
                + **2**: Indicates disabled.
         :param pulumi.Input[str] type: Specifies the type of the enterprise project.
                The valid values are **poc** and **prod**, defaults to **prod**.
-        :param pulumi.Input[str] updated_at: Indicates the time (UTC) when the enterprise project was modified. Example: `2018-05-28T02:21:36Z`.
+        :param pulumi.Input[str] updated_at: Indicates the time (UTC) when the enterprise project was modified. Example: **2018-05-28T02:21:36Z**.
         """
         if created_at is not None:
             pulumi.set(__self__, "created_at", created_at)
@@ -156,7 +159,7 @@ class _ProjectState:
     @pulumi.getter(name="createdAt")
     def created_at(self) -> Optional[pulumi.Input[str]]:
         """
-        Indicates the time (UTC) when the enterprise project was created. Example: `2018-05-18T06:49:06Z`.
+        Indicates the time (UTC) when the enterprise project was created. Example: **2018-05-18T06:49:06Z**.
         """
         return pulumi.get(self, "created_at")
 
@@ -193,7 +196,8 @@ class _ProjectState:
     def name(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the name of the enterprise project.
-        This parameter can contain `1` to `64` characters. Only letters, digits, underscores (_), and hyphens (-) are allowed.
+        This parameter can contain `1` to `64` characters. Only English letters, Chinese characters, digits, underscores (_),
+        and hyphens (-) are allowed.
         The name must be unique in the domain and cannot include any form of the word "default" ("deFaulT", for instance).
         """
         return pulumi.get(self, "name")
@@ -246,7 +250,7 @@ class _ProjectState:
     @pulumi.getter(name="updatedAt")
     def updated_at(self) -> Optional[pulumi.Input[str]]:
         """
-        Indicates the time (UTC) when the enterprise project was modified. Example: `2018-05-28T02:21:36Z`.
+        Indicates the time (UTC) when the enterprise project was modified. Example: **2018-05-28T02:21:36Z**.
         """
         return pulumi.get(self, "updated_at")
 
@@ -286,7 +290,7 @@ class Project(pulumi.CustomResource):
         Enterprise projects can be imported using their `id`, e.g. bash
 
         ```sh
-         $ pulumi import huaweicloud:Eps/project:Project test 88f889c7-270e-4e77-8230-bf7db08d9b0e
+         $ pulumi import huaweicloud:Eps/project:Project test <id>
         ```
 
         :param str resource_name: The name of the resource.
@@ -294,7 +298,8 @@ class Project(pulumi.CustomResource):
         :param pulumi.Input[str] description: Specifies the description of the enterprise project.
         :param pulumi.Input[bool] enable: Specifies whether to enable the enterprise project. Defaults to **true**.
         :param pulumi.Input[str] name: Specifies the name of the enterprise project.
-               This parameter can contain `1` to `64` characters. Only letters, digits, underscores (_), and hyphens (-) are allowed.
+               This parameter can contain `1` to `64` characters. Only English letters, Chinese characters, digits, underscores (_),
+               and hyphens (-) are allowed.
                The name must be unique in the domain and cannot include any form of the word "default" ("deFaulT", for instance).
         :param pulumi.Input[bool] skip_disable_on_destroy: Specifies whether to skip disable the enterprise project on destroy.
                Defaults to **false**.
@@ -327,7 +332,7 @@ class Project(pulumi.CustomResource):
         Enterprise projects can be imported using their `id`, e.g. bash
 
         ```sh
-         $ pulumi import huaweicloud:Eps/project:Project test 88f889c7-270e-4e77-8230-bf7db08d9b0e
+         $ pulumi import huaweicloud:Eps/project:Project test <id>
         ```
 
         :param str resource_name: The name of the resource.
@@ -392,11 +397,12 @@ class Project(pulumi.CustomResource):
         :param str resource_name: The unique name of the resulting resource.
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[str] created_at: Indicates the time (UTC) when the enterprise project was created. Example: `2018-05-18T06:49:06Z`.
+        :param pulumi.Input[str] created_at: Indicates the time (UTC) when the enterprise project was created. Example: **2018-05-18T06:49:06Z**.
         :param pulumi.Input[str] description: Specifies the description of the enterprise project.
         :param pulumi.Input[bool] enable: Specifies whether to enable the enterprise project. Defaults to **true**.
         :param pulumi.Input[str] name: Specifies the name of the enterprise project.
-               This parameter can contain `1` to `64` characters. Only letters, digits, underscores (_), and hyphens (-) are allowed.
+               This parameter can contain `1` to `64` characters. Only English letters, Chinese characters, digits, underscores (_),
+               and hyphens (-) are allowed.
                The name must be unique in the domain and cannot include any form of the word "default" ("deFaulT", for instance).
         :param pulumi.Input[bool] skip_disable_on_destroy: Specifies whether to skip disable the enterprise project on destroy.
                Defaults to **false**.
@@ -405,7 +411,7 @@ class Project(pulumi.CustomResource):
                + **2**: Indicates disabled.
         :param pulumi.Input[str] type: Specifies the type of the enterprise project.
                The valid values are **poc** and **prod**, defaults to **prod**.
-        :param pulumi.Input[str] updated_at: Indicates the time (UTC) when the enterprise project was modified. Example: `2018-05-28T02:21:36Z`.
+        :param pulumi.Input[str] updated_at: Indicates the time (UTC) when the enterprise project was modified. Example: **2018-05-28T02:21:36Z**.
         """
         opts = pulumi.ResourceOptions.merge(opts, pulumi.ResourceOptions(id=id))
 
@@ -425,7 +431,7 @@ class Project(pulumi.CustomResource):
     @pulumi.getter(name="createdAt")
     def created_at(self) -> pulumi.Output[str]:
         """
-        Indicates the time (UTC) when the enterprise project was created. Example: `2018-05-18T06:49:06Z`.
+        Indicates the time (UTC) when the enterprise project was created. Example: **2018-05-18T06:49:06Z**.
         """
         return pulumi.get(self, "created_at")
 
@@ -450,7 +456,8 @@ class Project(pulumi.CustomResource):
     def name(self) -> pulumi.Output[str]:
         """
         Specifies the name of the enterprise project.
-        This parameter can contain `1` to `64` characters. Only letters, digits, underscores (_), and hyphens (-) are allowed.
+        This parameter can contain `1` to `64` characters. Only English letters, Chinese characters, digits, underscores (_),
+        and hyphens (-) are allowed.
         The name must be unique in the domain and cannot include any form of the word "default" ("deFaulT", for instance).
         """
         return pulumi.get(self, "name")
@@ -487,7 +494,7 @@ class Project(pulumi.CustomResource):
     @pulumi.getter(name="updatedAt")
     def updated_at(self) -> pulumi.Output[str]:
         """
-        Indicates the time (UTC) when the enterprise project was modified. Example: `2018-05-28T02:21:36Z`.
+        Indicates the time (UTC) when the enterprise project was modified. Example: **2018-05-28T02:21:36Z**.
         """
         return pulumi.get(self, "updated_at")
 

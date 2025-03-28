@@ -378,7 +378,7 @@ class _ServerState:
         :param pulumi.Input[str] status: The status of IEC server.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] subnet_ids: Specifies an array of one or more subnet ID of Network for the IEC server
                binding. Changing this parameter creates a new IEC server resource.
-        :param pulumi.Input[str] system_disk_id: The system disk voume ID.
+        :param pulumi.Input[str] system_disk_id: The system disk volume ID.
         :param pulumi.Input[int] system_disk_size: Specifies the size of system disk for the IEC server binding. The
                value range is 40 to 100 in GB. Changing this parameter creates a new IEC server resource.
         :param pulumi.Input[str] system_disk_type: Specifies the type of system disk for the IEC server binding. Valid
@@ -704,7 +704,7 @@ class _ServerState:
     @pulumi.getter(name="systemDiskId")
     def system_disk_id(self) -> Optional[pulumi.Input[str]]:
         """
-        The system disk voume ID.
+        The system disk volume ID.
         """
         return pulumi.get(self, "system_disk_id")
 
@@ -1162,7 +1162,7 @@ class Server(pulumi.CustomResource):
         :param pulumi.Input[str] status: The status of IEC server.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] subnet_ids: Specifies an array of one or more subnet ID of Network for the IEC server
                binding. Changing this parameter creates a new IEC server resource.
-        :param pulumi.Input[str] system_disk_id: The system disk voume ID.
+        :param pulumi.Input[str] system_disk_id: The system disk volume ID.
         :param pulumi.Input[int] system_disk_size: Specifies the size of system disk for the IEC server binding. The
                value range is 40 to 100 in GB. Changing this parameter creates a new IEC server resource.
         :param pulumi.Input[str] system_disk_type: Specifies the type of system disk for the IEC server binding. Valid
@@ -1387,7 +1387,7 @@ class Server(pulumi.CustomResource):
     @pulumi.getter(name="systemDiskId")
     def system_disk_id(self) -> pulumi.Output[str]:
         """
-        The system disk voume ID.
+        The system disk volume ID.
         """
         return pulumi.get(self, "system_disk_id")
 

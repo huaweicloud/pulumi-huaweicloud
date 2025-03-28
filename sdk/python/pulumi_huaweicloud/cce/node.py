@@ -18,7 +18,6 @@ class NodeArgs:
     def __init__(__self__, *,
                  availability_zone: pulumi.Input[str],
                  cluster_id: pulumi.Input[str],
-                 data_volumes: pulumi.Input[Sequence[pulumi.Input['NodeDataVolumeArgs']]],
                  flavor_id: pulumi.Input[str],
                  root_volume: pulumi.Input['NodeRootVolumeArgs'],
                  annotations: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
@@ -28,13 +27,20 @@ class NodeArgs:
                  bandwidth_size: Optional[pulumi.Input[int]] = None,
                  billing_mode: Optional[pulumi.Input[int]] = None,
                  charging_mode: Optional[pulumi.Input[str]] = None,
+                 data_volumes: Optional[pulumi.Input[Sequence[pulumi.Input['NodeDataVolumeArgs']]]] = None,
+                 dedicated_host_id: Optional[pulumi.Input[str]] = None,
                  ecs_group_id: Optional[pulumi.Input[str]] = None,
                  ecs_performance_type: Optional[pulumi.Input[str]] = None,
                  eip_id: Optional[pulumi.Input[str]] = None,
                  eip_ids: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
+                 enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  extend_param: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  extend_param_charging_mode: Optional[pulumi.Input[int]] = None,
+                 extend_params: Optional[pulumi.Input['NodeExtendParamsArgs']] = None,
+                 extension_nics: Optional[pulumi.Input[Sequence[pulumi.Input['NodeExtensionNicArgs']]]] = None,
                  fixed_ip: Optional[pulumi.Input[str]] = None,
+                 hostname_config: Optional[pulumi.Input['NodeHostnameConfigArgs']] = None,
+                 initialized_conditions: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  iptype: Optional[pulumi.Input[str]] = None,
                  keep_ecs: Optional[pulumi.Input[bool]] = None,
                  key_pair: Optional[pulumi.Input[str]] = None,
@@ -65,8 +71,6 @@ class NodeArgs:
                parameter will create a new resource.
         :param pulumi.Input[str] cluster_id: Specifies the ID of the cluster.
                Changing this parameter will create a new resource.
-        :param pulumi.Input[Sequence[pulumi.Input['NodeDataVolumeArgs']]] data_volumes: Specifies the configurations of the data disk.
-               Changing this parameter will create a new resource.
         :param pulumi.Input[str] flavor_id: Specifies the flavor ID. Changing this parameter will create a new
                resource.
         :param pulumi.Input['NodeRootVolumeArgs'] root_volume: Specifies the configuration of the system disk.
@@ -79,19 +83,31 @@ class NodeArgs:
                Changing this parameter will create a new resource.
         :param pulumi.Input[str] charging_mode: Specifies the charging mode of the CCE node. Valid values are *prePaid*
                and *postPaid*, defaults to *postPaid*. Changing this creates a new resource.
+        :param pulumi.Input[Sequence[pulumi.Input['NodeDataVolumeArgs']]] data_volumes: Specifies the configurations of the data disk.
+               Changing this parameter will create a new resource.
+        :param pulumi.Input[str] dedicated_host_id: Specifies the ID of the DeH to which the node is scheduled.
+               Changing this parameter will create a new resource.
         :param pulumi.Input[str] ecs_group_id: Specifies the ECS group ID. If specified, the node will be created under
                the cloud server group. Changing this parameter will create a new resource.
-        :param pulumi.Input[str] ecs_performance_type: schema: Internal
+        :param pulumi.Input[str] ecs_performance_type: schema: Deprecated
         :param pulumi.Input[str] eip_id: Specifies the ID of the EIP.
                Changing this parameter will create a new resource.
-        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] extend_param: Specifies the extended parameter.
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID of the CCE node.
                Changing this parameter will create a new resource.
-               The available keys are as follows:
-               + **agency_name**: The agency name to provide temporary credentials for CCE node to access other cloud services.
-               + **alpha.cce/NodeImageID**: The custom image ID used to create the BMS nodes.
-               + **dockerBaseSize**: The available disk space of a single docker container on the node in device mapper mode.
-               + **DockerLVMConfigOverride**: Specifies the data disk configurations of Docker.
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] extend_param: schema: Deprecated
+        :param pulumi.Input['NodeExtendParamsArgs'] extend_params: Specifies the extended parameters.
+               The object structure is documented below.
+               Changing this parameter will create a new resource.
+        :param pulumi.Input[Sequence[pulumi.Input['NodeExtensionNicArgs']]] extension_nics: Specifies extension NICs of the node.
+               The object structure is documented below.
+               Changing this parameter will create a new resource.
         :param pulumi.Input[str] fixed_ip: Specifies the fixed IP of the NIC.
+               Changing this parameter will create a new resource.
+        :param pulumi.Input['NodeHostnameConfigArgs'] hostname_config: Specifies the hostname config of the kubernetes node,
+               which is supported by clusters of v1.23.6-r0 to v1.25 or clusters of v1.25.2-r0 or later versions.
+               The object structure is documented below.
+               Changing this parameter will create a new resource.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] initialized_conditions: Specifies the custom initialization flags.
                Changing this parameter will create a new resource.
         :param pulumi.Input[str] iptype: Specifies the elastic IP type.
                Changing this parameter will create a new resource.
@@ -105,11 +121,14 @@ class NodeArgs:
         :param pulumi.Input[str] name: Specifies the virtual space name. Currently, only **kubernetes**, **runtime**,
                and **user** are supported. Changing this parameter will create a new resource.
         :param pulumi.Input[str] os: Specifies the operating system of the node.
+               The value can be **EulerOS 2.9** and **CentOS 7.6** e.g. For more details,
+               please see [documentation](https://support.huaweicloud.com/intl/en-us/api-cce/node-os.html).
+               This parameter is required when the `node_image_id` in `extend_params` is not specified.
                Changing this parameter will create a new resource.
-               + For VM nodes, clusters of v1.13 and later support *EulerOS 2.5* and *CentOS 7.6*.
-               + For BMS nodes purchased in the yearly/monthly billing mode, only *EulerOS 2.3* is supported.
         :param pulumi.Input[str] partition: schema: Internal
         :param pulumi.Input[str] password: Specifies the root password when logging in to select the password mode.
+               The password consists of 8 to 26 characters and must contain at least three of following: uppercase letters,
+               lowercase letters, digits, special characters(!@$%^-_=+[{}]:,./?~#*).
                This parameter can be plain or salted and is alternative to `key_pair`.
         :param pulumi.Input[int] period: Specifies the charging period of the CCE node. If `period_unit` is set to *month*
                , the value ranges from 1 to 9. If `period_unit` is set to *year*, the value ranges from 1 to 3. This parameter is
@@ -123,8 +142,8 @@ class NodeArgs:
                The input value can be a Base64 encoded string or not. Changing this parameter will create a new resource.
         :param pulumi.Input[str] private_key: Specifies the private key of the in used `key_pair`. This parameter is mandatory
                when replacing or unbinding a keypair if the CCE node is in **Active** state.
-        :param pulumi.Input[str] product_id: schema: Internal
-        :param pulumi.Input[str] public_key: schema: Internal
+        :param pulumi.Input[str] product_id: schema: Deprecated
+        :param pulumi.Input[str] public_key: schema: Deprecated
         :param pulumi.Input[str] region: Specifies the region in which to create the CCE node resource.
                If omitted, the provider-level region will be used. Changing this creates a new CCE node resource.
         :param pulumi.Input[str] runtime: Specifies the runtime of the CCE node. Valid values are *docker* and
@@ -133,7 +152,14 @@ class NodeArgs:
                Changing this parameter will create a new resource.
         :param pulumi.Input['NodeStorageArgs'] storage: Specifies the disk initialization management parameter.
                If omitted, disks are managed based on the DockerLVMConfigOverride parameter in extendParam.
-               This parameter is supported for clusters of v1.15.11 and later. Changing this parameter will create a new resource.
+               This parameter is supported for clusters of v1.15.11 and later.
+               If the node has both local and EVS disks attached,
+               this parameter must be specified, or it may result in unexpected disk partitions.
+               If you want to change the value range of a data disk to **20** to **32768**, this parameter must be specified.
+               If you want to use the shared disk space (with the runtime and Kubernetes partitions cancelled),
+               this parameter must be specified.
+               If you want to store system components in the system disk, this parameter must be specified.
+               Changing this parameter will create a new resource.
         :param pulumi.Input[str] subnet_id: Specifies the ID of the subnet to which the NIC belongs.
                Changing this parameter will create a new resource.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the tags of a VM node, key/value pair format.
@@ -142,7 +168,6 @@ class NodeArgs:
         """
         pulumi.set(__self__, "availability_zone", availability_zone)
         pulumi.set(__self__, "cluster_id", cluster_id)
-        pulumi.set(__self__, "data_volumes", data_volumes)
         pulumi.set(__self__, "flavor_id", flavor_id)
         pulumi.set(__self__, "root_volume", root_volume)
         if annotations is not None:
@@ -165,6 +190,10 @@ class NodeArgs:
             pulumi.set(__self__, "billing_mode", billing_mode)
         if charging_mode is not None:
             pulumi.set(__self__, "charging_mode", charging_mode)
+        if data_volumes is not None:
+            pulumi.set(__self__, "data_volumes", data_volumes)
+        if dedicated_host_id is not None:
+            pulumi.set(__self__, "dedicated_host_id", dedicated_host_id)
         if ecs_group_id is not None:
             pulumi.set(__self__, "ecs_group_id", ecs_group_id)
         if ecs_performance_type is not None:
@@ -176,6 +205,8 @@ class NodeArgs:
             pulumi.log.warn("""eip_ids is deprecated: use eip_id instead""")
         if eip_ids is not None:
             pulumi.set(__self__, "eip_ids", eip_ids)
+        if enterprise_project_id is not None:
+            pulumi.set(__self__, "enterprise_project_id", enterprise_project_id)
         if extend_param is not None:
             pulumi.set(__self__, "extend_param", extend_param)
         if extend_param_charging_mode is not None:
@@ -183,8 +214,16 @@ class NodeArgs:
             pulumi.log.warn("""extend_param_charging_mode is deprecated: use charging_mode instead""")
         if extend_param_charging_mode is not None:
             pulumi.set(__self__, "extend_param_charging_mode", extend_param_charging_mode)
+        if extend_params is not None:
+            pulumi.set(__self__, "extend_params", extend_params)
+        if extension_nics is not None:
+            pulumi.set(__self__, "extension_nics", extension_nics)
         if fixed_ip is not None:
             pulumi.set(__self__, "fixed_ip", fixed_ip)
+        if hostname_config is not None:
+            pulumi.set(__self__, "hostname_config", hostname_config)
+        if initialized_conditions is not None:
+            pulumi.set(__self__, "initialized_conditions", initialized_conditions)
         if iptype is not None:
             pulumi.set(__self__, "iptype", iptype)
         if keep_ecs is not None:
@@ -262,19 +301,6 @@ class NodeArgs:
     @cluster_id.setter
     def cluster_id(self, value: pulumi.Input[str]):
         pulumi.set(self, "cluster_id", value)
-
-    @property
-    @pulumi.getter(name="dataVolumes")
-    def data_volumes(self) -> pulumi.Input[Sequence[pulumi.Input['NodeDataVolumeArgs']]]:
-        """
-        Specifies the configurations of the data disk.
-        Changing this parameter will create a new resource.
-        """
-        return pulumi.get(self, "data_volumes")
-
-    @data_volumes.setter
-    def data_volumes(self, value: pulumi.Input[Sequence[pulumi.Input['NodeDataVolumeArgs']]]):
-        pulumi.set(self, "data_volumes", value)
 
     @property
     @pulumi.getter(name="flavorId")
@@ -384,6 +410,32 @@ class NodeArgs:
         pulumi.set(self, "charging_mode", value)
 
     @property
+    @pulumi.getter(name="dataVolumes")
+    def data_volumes(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['NodeDataVolumeArgs']]]]:
+        """
+        Specifies the configurations of the data disk.
+        Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "data_volumes")
+
+    @data_volumes.setter
+    def data_volumes(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['NodeDataVolumeArgs']]]]):
+        pulumi.set(self, "data_volumes", value)
+
+    @property
+    @pulumi.getter(name="dedicatedHostId")
+    def dedicated_host_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the ID of the DeH to which the node is scheduled.
+        Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "dedicated_host_id")
+
+    @dedicated_host_id.setter
+    def dedicated_host_id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "dedicated_host_id", value)
+
+    @property
     @pulumi.getter(name="ecsGroupId")
     def ecs_group_id(self) -> Optional[pulumi.Input[str]]:
         """
@@ -400,7 +452,7 @@ class NodeArgs:
     @pulumi.getter(name="ecsPerformanceType")
     def ecs_performance_type(self) -> Optional[pulumi.Input[str]]:
         """
-        schema: Internal
+        schema: Deprecated
         """
         return pulumi.get(self, "ecs_performance_type")
 
@@ -431,16 +483,23 @@ class NodeArgs:
         pulumi.set(self, "eip_ids", value)
 
     @property
+    @pulumi.getter(name="enterpriseProjectId")
+    def enterprise_project_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the enterprise project ID of the CCE node.
+        Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "enterprise_project_id")
+
+    @enterprise_project_id.setter
+    def enterprise_project_id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "enterprise_project_id", value)
+
+    @property
     @pulumi.getter(name="extendParam")
     def extend_param(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]:
         """
-        Specifies the extended parameter.
-        Changing this parameter will create a new resource.
-        The available keys are as follows:
-        + **agency_name**: The agency name to provide temporary credentials for CCE node to access other cloud services.
-        + **alpha.cce/NodeImageID**: The custom image ID used to create the BMS nodes.
-        + **dockerBaseSize**: The available disk space of a single docker container on the node in device mapper mode.
-        + **DockerLVMConfigOverride**: Specifies the data disk configurations of Docker.
+        schema: Deprecated
         """
         return pulumi.get(self, "extend_param")
 
@@ -458,6 +517,34 @@ class NodeArgs:
         pulumi.set(self, "extend_param_charging_mode", value)
 
     @property
+    @pulumi.getter(name="extendParams")
+    def extend_params(self) -> Optional[pulumi.Input['NodeExtendParamsArgs']]:
+        """
+        Specifies the extended parameters.
+        The object structure is documented below.
+        Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "extend_params")
+
+    @extend_params.setter
+    def extend_params(self, value: Optional[pulumi.Input['NodeExtendParamsArgs']]):
+        pulumi.set(self, "extend_params", value)
+
+    @property
+    @pulumi.getter(name="extensionNics")
+    def extension_nics(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['NodeExtensionNicArgs']]]]:
+        """
+        Specifies extension NICs of the node.
+        The object structure is documented below.
+        Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "extension_nics")
+
+    @extension_nics.setter
+    def extension_nics(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['NodeExtensionNicArgs']]]]):
+        pulumi.set(self, "extension_nics", value)
+
+    @property
     @pulumi.getter(name="fixedIp")
     def fixed_ip(self) -> Optional[pulumi.Input[str]]:
         """
@@ -469,6 +556,34 @@ class NodeArgs:
     @fixed_ip.setter
     def fixed_ip(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "fixed_ip", value)
+
+    @property
+    @pulumi.getter(name="hostnameConfig")
+    def hostname_config(self) -> Optional[pulumi.Input['NodeHostnameConfigArgs']]:
+        """
+        Specifies the hostname config of the kubernetes node,
+        which is supported by clusters of v1.23.6-r0 to v1.25 or clusters of v1.25.2-r0 or later versions.
+        The object structure is documented below.
+        Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "hostname_config")
+
+    @hostname_config.setter
+    def hostname_config(self, value: Optional[pulumi.Input['NodeHostnameConfigArgs']]):
+        pulumi.set(self, "hostname_config", value)
+
+    @property
+    @pulumi.getter(name="initializedConditions")
+    def initialized_conditions(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]:
+        """
+        Specifies the custom initialization flags.
+        Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "initialized_conditions")
+
+    @initialized_conditions.setter
+    def initialized_conditions(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]):
+        pulumi.set(self, "initialized_conditions", value)
 
     @property
     @pulumi.getter
@@ -561,9 +676,10 @@ class NodeArgs:
     def os(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the operating system of the node.
+        The value can be **EulerOS 2.9** and **CentOS 7.6** e.g. For more details,
+        please see [documentation](https://support.huaweicloud.com/intl/en-us/api-cce/node-os.html).
+        This parameter is required when the `node_image_id` in `extend_params` is not specified.
         Changing this parameter will create a new resource.
-        + For VM nodes, clusters of v1.13 and later support *EulerOS 2.5* and *CentOS 7.6*.
-        + For BMS nodes purchased in the yearly/monthly billing mode, only *EulerOS 2.3* is supported.
         """
         return pulumi.get(self, "os")
 
@@ -588,6 +704,8 @@ class NodeArgs:
     def password(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the root password when logging in to select the password mode.
+        The password consists of 8 to 26 characters and must contain at least three of following: uppercase letters,
+        lowercase letters, digits, special characters(!@$%^-_=+[{}]:,./?~#*).
         This parameter can be plain or salted and is alternative to `key_pair`.
         """
         return pulumi.get(self, "password")
@@ -667,7 +785,7 @@ class NodeArgs:
     @pulumi.getter(name="productId")
     def product_id(self) -> Optional[pulumi.Input[str]]:
         """
-        schema: Internal
+        schema: Deprecated
         """
         return pulumi.get(self, "product_id")
 
@@ -679,7 +797,7 @@ class NodeArgs:
     @pulumi.getter(name="publicKey")
     def public_key(self) -> Optional[pulumi.Input[str]]:
         """
-        schema: Internal
+        schema: Deprecated
         """
         return pulumi.get(self, "public_key")
 
@@ -732,7 +850,14 @@ class NodeArgs:
         """
         Specifies the disk initialization management parameter.
         If omitted, disks are managed based on the DockerLVMConfigOverride parameter in extendParam.
-        This parameter is supported for clusters of v1.15.11 and later. Changing this parameter will create a new resource.
+        This parameter is supported for clusters of v1.15.11 and later.
+        If the node has both local and EVS disks attached,
+        this parameter must be specified, or it may result in unexpected disk partitions.
+        If you want to change the value range of a data disk to **20** to **32768**, this parameter must be specified.
+        If you want to use the shared disk space (with the runtime and Kubernetes partitions cancelled),
+        this parameter must be specified.
+        If you want to store system components in the system disk, this parameter must be specified.
+        Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "storage")
 
@@ -792,14 +917,20 @@ class _NodeState:
                  charging_mode: Optional[pulumi.Input[str]] = None,
                  cluster_id: Optional[pulumi.Input[str]] = None,
                  data_volumes: Optional[pulumi.Input[Sequence[pulumi.Input['NodeDataVolumeArgs']]]] = None,
+                 dedicated_host_id: Optional[pulumi.Input[str]] = None,
                  ecs_group_id: Optional[pulumi.Input[str]] = None,
                  ecs_performance_type: Optional[pulumi.Input[str]] = None,
                  eip_id: Optional[pulumi.Input[str]] = None,
                  eip_ids: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
+                 enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  extend_param: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  extend_param_charging_mode: Optional[pulumi.Input[int]] = None,
+                 extend_params: Optional[pulumi.Input['NodeExtendParamsArgs']] = None,
+                 extension_nics: Optional[pulumi.Input[Sequence[pulumi.Input['NodeExtensionNicArgs']]]] = None,
                  fixed_ip: Optional[pulumi.Input[str]] = None,
                  flavor_id: Optional[pulumi.Input[str]] = None,
+                 hostname_config: Optional[pulumi.Input['NodeHostnameConfigArgs']] = None,
+                 initialized_conditions: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  iptype: Optional[pulumi.Input[str]] = None,
                  keep_ecs: Optional[pulumi.Input[bool]] = None,
                  key_pair: Optional[pulumi.Input[str]] = None,
@@ -845,22 +976,32 @@ class _NodeState:
                Changing this parameter will create a new resource.
         :param pulumi.Input[Sequence[pulumi.Input['NodeDataVolumeArgs']]] data_volumes: Specifies the configurations of the data disk.
                Changing this parameter will create a new resource.
+        :param pulumi.Input[str] dedicated_host_id: Specifies the ID of the DeH to which the node is scheduled.
+               Changing this parameter will create a new resource.
         :param pulumi.Input[str] ecs_group_id: Specifies the ECS group ID. If specified, the node will be created under
                the cloud server group. Changing this parameter will create a new resource.
-        :param pulumi.Input[str] ecs_performance_type: schema: Internal
+        :param pulumi.Input[str] ecs_performance_type: schema: Deprecated
         :param pulumi.Input[str] eip_id: Specifies the ID of the EIP.
                Changing this parameter will create a new resource.
-        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] extend_param: Specifies the extended parameter.
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID of the CCE node.
                Changing this parameter will create a new resource.
-               The available keys are as follows:
-               + **agency_name**: The agency name to provide temporary credentials for CCE node to access other cloud services.
-               + **alpha.cce/NodeImageID**: The custom image ID used to create the BMS nodes.
-               + **dockerBaseSize**: The available disk space of a single docker container on the node in device mapper mode.
-               + **DockerLVMConfigOverride**: Specifies the data disk configurations of Docker.
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] extend_param: schema: Deprecated
+        :param pulumi.Input['NodeExtendParamsArgs'] extend_params: Specifies the extended parameters.
+               The object structure is documented below.
+               Changing this parameter will create a new resource.
+        :param pulumi.Input[Sequence[pulumi.Input['NodeExtensionNicArgs']]] extension_nics: Specifies extension NICs of the node.
+               The object structure is documented below.
+               Changing this parameter will create a new resource.
         :param pulumi.Input[str] fixed_ip: Specifies the fixed IP of the NIC.
                Changing this parameter will create a new resource.
         :param pulumi.Input[str] flavor_id: Specifies the flavor ID. Changing this parameter will create a new
                resource.
+        :param pulumi.Input['NodeHostnameConfigArgs'] hostname_config: Specifies the hostname config of the kubernetes node,
+               which is supported by clusters of v1.23.6-r0 to v1.25 or clusters of v1.25.2-r0 or later versions.
+               The object structure is documented below.
+               Changing this parameter will create a new resource.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] initialized_conditions: Specifies the custom initialization flags.
+               Changing this parameter will create a new resource.
         :param pulumi.Input[str] iptype: Specifies the elastic IP type.
                Changing this parameter will create a new resource.
         :param pulumi.Input[bool] keep_ecs: schema: Internal
@@ -873,11 +1014,14 @@ class _NodeState:
         :param pulumi.Input[str] name: Specifies the virtual space name. Currently, only **kubernetes**, **runtime**,
                and **user** are supported. Changing this parameter will create a new resource.
         :param pulumi.Input[str] os: Specifies the operating system of the node.
+               The value can be **EulerOS 2.9** and **CentOS 7.6** e.g. For more details,
+               please see [documentation](https://support.huaweicloud.com/intl/en-us/api-cce/node-os.html).
+               This parameter is required when the `node_image_id` in `extend_params` is not specified.
                Changing this parameter will create a new resource.
-               + For VM nodes, clusters of v1.13 and later support *EulerOS 2.5* and *CentOS 7.6*.
-               + For BMS nodes purchased in the yearly/monthly billing mode, only *EulerOS 2.3* is supported.
         :param pulumi.Input[str] partition: schema: Internal
         :param pulumi.Input[str] password: Specifies the root password when logging in to select the password mode.
+               The password consists of 8 to 26 characters and must contain at least three of following: uppercase letters,
+               lowercase letters, digits, special characters(!@$%^-_=+[{}]:,./?~#*).
                This parameter can be plain or salted and is alternative to `key_pair`.
         :param pulumi.Input[int] period: Specifies the charging period of the CCE node. If `period_unit` is set to *month*
                , the value ranges from 1 to 9. If `period_unit` is set to *year*, the value ranges from 1 to 3. This parameter is
@@ -892,9 +1036,9 @@ class _NodeState:
         :param pulumi.Input[str] private_ip: Private IP of the CCE node.
         :param pulumi.Input[str] private_key: Specifies the private key of the in used `key_pair`. This parameter is mandatory
                when replacing or unbinding a keypair if the CCE node is in **Active** state.
-        :param pulumi.Input[str] product_id: schema: Internal
+        :param pulumi.Input[str] product_id: schema: Deprecated
         :param pulumi.Input[str] public_ip: Public IP of the CCE node.
-        :param pulumi.Input[str] public_key: schema: Internal
+        :param pulumi.Input[str] public_key: schema: Deprecated
         :param pulumi.Input[str] region: Specifies the region in which to create the CCE node resource.
                If omitted, the provider-level region will be used. Changing this creates a new CCE node resource.
         :param pulumi.Input['NodeRootVolumeArgs'] root_volume: Specifies the configuration of the system disk.
@@ -907,7 +1051,14 @@ class _NodeState:
         :param pulumi.Input[str] status: The status of the CCE node.
         :param pulumi.Input['NodeStorageArgs'] storage: Specifies the disk initialization management parameter.
                If omitted, disks are managed based on the DockerLVMConfigOverride parameter in extendParam.
-               This parameter is supported for clusters of v1.15.11 and later. Changing this parameter will create a new resource.
+               This parameter is supported for clusters of v1.15.11 and later.
+               If the node has both local and EVS disks attached,
+               this parameter must be specified, or it may result in unexpected disk partitions.
+               If you want to change the value range of a data disk to **20** to **32768**, this parameter must be specified.
+               If you want to use the shared disk space (with the runtime and Kubernetes partitions cancelled),
+               this parameter must be specified.
+               If you want to store system components in the system disk, this parameter must be specified.
+               Changing this parameter will create a new resource.
         :param pulumi.Input[str] subnet_id: Specifies the ID of the subnet to which the NIC belongs.
                Changing this parameter will create a new resource.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the tags of a VM node, key/value pair format.
@@ -940,6 +1091,8 @@ class _NodeState:
             pulumi.set(__self__, "cluster_id", cluster_id)
         if data_volumes is not None:
             pulumi.set(__self__, "data_volumes", data_volumes)
+        if dedicated_host_id is not None:
+            pulumi.set(__self__, "dedicated_host_id", dedicated_host_id)
         if ecs_group_id is not None:
             pulumi.set(__self__, "ecs_group_id", ecs_group_id)
         if ecs_performance_type is not None:
@@ -951,6 +1104,8 @@ class _NodeState:
             pulumi.log.warn("""eip_ids is deprecated: use eip_id instead""")
         if eip_ids is not None:
             pulumi.set(__self__, "eip_ids", eip_ids)
+        if enterprise_project_id is not None:
+            pulumi.set(__self__, "enterprise_project_id", enterprise_project_id)
         if extend_param is not None:
             pulumi.set(__self__, "extend_param", extend_param)
         if extend_param_charging_mode is not None:
@@ -958,10 +1113,18 @@ class _NodeState:
             pulumi.log.warn("""extend_param_charging_mode is deprecated: use charging_mode instead""")
         if extend_param_charging_mode is not None:
             pulumi.set(__self__, "extend_param_charging_mode", extend_param_charging_mode)
+        if extend_params is not None:
+            pulumi.set(__self__, "extend_params", extend_params)
+        if extension_nics is not None:
+            pulumi.set(__self__, "extension_nics", extension_nics)
         if fixed_ip is not None:
             pulumi.set(__self__, "fixed_ip", fixed_ip)
         if flavor_id is not None:
             pulumi.set(__self__, "flavor_id", flavor_id)
+        if hostname_config is not None:
+            pulumi.set(__self__, "hostname_config", hostname_config)
+        if initialized_conditions is not None:
+            pulumi.set(__self__, "initialized_conditions", initialized_conditions)
         if iptype is not None:
             pulumi.set(__self__, "iptype", iptype)
         if keep_ecs is not None:
@@ -1145,6 +1308,19 @@ class _NodeState:
         pulumi.set(self, "data_volumes", value)
 
     @property
+    @pulumi.getter(name="dedicatedHostId")
+    def dedicated_host_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the ID of the DeH to which the node is scheduled.
+        Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "dedicated_host_id")
+
+    @dedicated_host_id.setter
+    def dedicated_host_id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "dedicated_host_id", value)
+
+    @property
     @pulumi.getter(name="ecsGroupId")
     def ecs_group_id(self) -> Optional[pulumi.Input[str]]:
         """
@@ -1161,7 +1337,7 @@ class _NodeState:
     @pulumi.getter(name="ecsPerformanceType")
     def ecs_performance_type(self) -> Optional[pulumi.Input[str]]:
         """
-        schema: Internal
+        schema: Deprecated
         """
         return pulumi.get(self, "ecs_performance_type")
 
@@ -1192,16 +1368,23 @@ class _NodeState:
         pulumi.set(self, "eip_ids", value)
 
     @property
+    @pulumi.getter(name="enterpriseProjectId")
+    def enterprise_project_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the enterprise project ID of the CCE node.
+        Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "enterprise_project_id")
+
+    @enterprise_project_id.setter
+    def enterprise_project_id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "enterprise_project_id", value)
+
+    @property
     @pulumi.getter(name="extendParam")
     def extend_param(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]:
         """
-        Specifies the extended parameter.
-        Changing this parameter will create a new resource.
-        The available keys are as follows:
-        + **agency_name**: The agency name to provide temporary credentials for CCE node to access other cloud services.
-        + **alpha.cce/NodeImageID**: The custom image ID used to create the BMS nodes.
-        + **dockerBaseSize**: The available disk space of a single docker container on the node in device mapper mode.
-        + **DockerLVMConfigOverride**: Specifies the data disk configurations of Docker.
+        schema: Deprecated
         """
         return pulumi.get(self, "extend_param")
 
@@ -1217,6 +1400,34 @@ class _NodeState:
     @extend_param_charging_mode.setter
     def extend_param_charging_mode(self, value: Optional[pulumi.Input[int]]):
         pulumi.set(self, "extend_param_charging_mode", value)
+
+    @property
+    @pulumi.getter(name="extendParams")
+    def extend_params(self) -> Optional[pulumi.Input['NodeExtendParamsArgs']]:
+        """
+        Specifies the extended parameters.
+        The object structure is documented below.
+        Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "extend_params")
+
+    @extend_params.setter
+    def extend_params(self, value: Optional[pulumi.Input['NodeExtendParamsArgs']]):
+        pulumi.set(self, "extend_params", value)
+
+    @property
+    @pulumi.getter(name="extensionNics")
+    def extension_nics(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['NodeExtensionNicArgs']]]]:
+        """
+        Specifies extension NICs of the node.
+        The object structure is documented below.
+        Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "extension_nics")
+
+    @extension_nics.setter
+    def extension_nics(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['NodeExtensionNicArgs']]]]):
+        pulumi.set(self, "extension_nics", value)
 
     @property
     @pulumi.getter(name="fixedIp")
@@ -1243,6 +1454,34 @@ class _NodeState:
     @flavor_id.setter
     def flavor_id(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "flavor_id", value)
+
+    @property
+    @pulumi.getter(name="hostnameConfig")
+    def hostname_config(self) -> Optional[pulumi.Input['NodeHostnameConfigArgs']]:
+        """
+        Specifies the hostname config of the kubernetes node,
+        which is supported by clusters of v1.23.6-r0 to v1.25 or clusters of v1.25.2-r0 or later versions.
+        The object structure is documented below.
+        Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "hostname_config")
+
+    @hostname_config.setter
+    def hostname_config(self, value: Optional[pulumi.Input['NodeHostnameConfigArgs']]):
+        pulumi.set(self, "hostname_config", value)
+
+    @property
+    @pulumi.getter(name="initializedConditions")
+    def initialized_conditions(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]:
+        """
+        Specifies the custom initialization flags.
+        Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "initialized_conditions")
+
+    @initialized_conditions.setter
+    def initialized_conditions(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]):
+        pulumi.set(self, "initialized_conditions", value)
 
     @property
     @pulumi.getter
@@ -1335,9 +1574,10 @@ class _NodeState:
     def os(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the operating system of the node.
+        The value can be **EulerOS 2.9** and **CentOS 7.6** e.g. For more details,
+        please see [documentation](https://support.huaweicloud.com/intl/en-us/api-cce/node-os.html).
+        This parameter is required when the `node_image_id` in `extend_params` is not specified.
         Changing this parameter will create a new resource.
-        + For VM nodes, clusters of v1.13 and later support *EulerOS 2.5* and *CentOS 7.6*.
-        + For BMS nodes purchased in the yearly/monthly billing mode, only *EulerOS 2.3* is supported.
         """
         return pulumi.get(self, "os")
 
@@ -1362,6 +1602,8 @@ class _NodeState:
     def password(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the root password when logging in to select the password mode.
+        The password consists of 8 to 26 characters and must contain at least three of following: uppercase letters,
+        lowercase letters, digits, special characters(!@$%^-_=+[{}]:,./?~#*).
         This parameter can be plain or salted and is alternative to `key_pair`.
         """
         return pulumi.get(self, "password")
@@ -1453,7 +1695,7 @@ class _NodeState:
     @pulumi.getter(name="productId")
     def product_id(self) -> Optional[pulumi.Input[str]]:
         """
-        schema: Internal
+        schema: Deprecated
         """
         return pulumi.get(self, "product_id")
 
@@ -1477,7 +1719,7 @@ class _NodeState:
     @pulumi.getter(name="publicKey")
     def public_key(self) -> Optional[pulumi.Input[str]]:
         """
-        schema: Internal
+        schema: Deprecated
         """
         return pulumi.get(self, "public_key")
 
@@ -1567,7 +1809,14 @@ class _NodeState:
         """
         Specifies the disk initialization management parameter.
         If omitted, disks are managed based on the DockerLVMConfigOverride parameter in extendParam.
-        This parameter is supported for clusters of v1.15.11 and later. Changing this parameter will create a new resource.
+        This parameter is supported for clusters of v1.15.11 and later.
+        If the node has both local and EVS disks attached,
+        this parameter must be specified, or it may result in unexpected disk partitions.
+        If you want to change the value range of a data disk to **20** to **32768**, this parameter must be specified.
+        If you want to use the shared disk space (with the runtime and Kubernetes partitions cancelled),
+        this parameter must be specified.
+        If you want to store system components in the system disk, this parameter must be specified.
+        Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "storage")
 
@@ -1629,14 +1878,20 @@ class Node(pulumi.CustomResource):
                  charging_mode: Optional[pulumi.Input[str]] = None,
                  cluster_id: Optional[pulumi.Input[str]] = None,
                  data_volumes: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['NodeDataVolumeArgs']]]]] = None,
+                 dedicated_host_id: Optional[pulumi.Input[str]] = None,
                  ecs_group_id: Optional[pulumi.Input[str]] = None,
                  ecs_performance_type: Optional[pulumi.Input[str]] = None,
                  eip_id: Optional[pulumi.Input[str]] = None,
                  eip_ids: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
+                 enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  extend_param: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  extend_param_charging_mode: Optional[pulumi.Input[int]] = None,
+                 extend_params: Optional[pulumi.Input[pulumi.InputType['NodeExtendParamsArgs']]] = None,
+                 extension_nics: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['NodeExtensionNicArgs']]]]] = None,
                  fixed_ip: Optional[pulumi.Input[str]] = None,
                  flavor_id: Optional[pulumi.Input[str]] = None,
+                 hostname_config: Optional[pulumi.Input[pulumi.InputType['NodeHostnameConfigArgs']]] = None,
+                 initialized_conditions: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  iptype: Optional[pulumi.Input[str]] = None,
                  keep_ecs: Optional[pulumi.Input[bool]] = None,
                  key_pair: Optional[pulumi.Input[str]] = None,
@@ -1870,7 +2125,7 @@ class Node(pulumi.CustomResource):
          $ pulumi import huaweicloud:Cce/node:Node my_node 5c20fdad-7288-11eb-b817-0255ac10158b/e9287dff-7288-11eb-b817-0255ac10158b
         ```
 
-         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`password`, `fixed_ip`, `eip_id`, `preinstall`, `postinstall`, `iptype`, `bandwidth_charge_mode`, `bandwidth_size`, `share_type`, `max_pods`, `extend_param`, `labels`, `taints` and arguments for pre-paid. It is generally recommended running `terraform plan` after importing a node. You can then decide if changes should be applied to the node, or the resource definition should be updated to align with the node. Also you can ignore changes as below. hcl resource "huaweicloud_cce_node" "my_node" {
+         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`password`, `private_key`, `storage`, `fixed_ip`, `extension_nics`, `eip_id`, `iptype`, `bandwidth_charge_mode`, `bandwidth_size`, `share_type`, `extend_params`, `dedicated_host_id`, `initialized_conditions`, `labels`, `taints` and arguments for pre-paid. It is generally recommended running `terraform plan` after importing a node. You can then decide if changes should be applied to the node, or the resource definition should be updated to align with the node. Also you can ignore changes as below. hcl resource "huaweicloud_cce_node" "my_node" {
 
          ...
 
@@ -1878,7 +2133,7 @@ class Node(pulumi.CustomResource):
 
          ignore_changes = [
 
-         extend_param, labels,
+         extend_params, labels,
 
          ]
 
@@ -1900,22 +2155,32 @@ class Node(pulumi.CustomResource):
                Changing this parameter will create a new resource.
         :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['NodeDataVolumeArgs']]]] data_volumes: Specifies the configurations of the data disk.
                Changing this parameter will create a new resource.
+        :param pulumi.Input[str] dedicated_host_id: Specifies the ID of the DeH to which the node is scheduled.
+               Changing this parameter will create a new resource.
         :param pulumi.Input[str] ecs_group_id: Specifies the ECS group ID. If specified, the node will be created under
                the cloud server group. Changing this parameter will create a new resource.
-        :param pulumi.Input[str] ecs_performance_type: schema: Internal
+        :param pulumi.Input[str] ecs_performance_type: schema: Deprecated
         :param pulumi.Input[str] eip_id: Specifies the ID of the EIP.
                Changing this parameter will create a new resource.
-        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] extend_param: Specifies the extended parameter.
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID of the CCE node.
                Changing this parameter will create a new resource.
-               The available keys are as follows:
-               + **agency_name**: The agency name to provide temporary credentials for CCE node to access other cloud services.
-               + **alpha.cce/NodeImageID**: The custom image ID used to create the BMS nodes.
-               + **dockerBaseSize**: The available disk space of a single docker container on the node in device mapper mode.
-               + **DockerLVMConfigOverride**: Specifies the data disk configurations of Docker.
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] extend_param: schema: Deprecated
+        :param pulumi.Input[pulumi.InputType['NodeExtendParamsArgs']] extend_params: Specifies the extended parameters.
+               The object structure is documented below.
+               Changing this parameter will create a new resource.
+        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['NodeExtensionNicArgs']]]] extension_nics: Specifies extension NICs of the node.
+               The object structure is documented below.
+               Changing this parameter will create a new resource.
         :param pulumi.Input[str] fixed_ip: Specifies the fixed IP of the NIC.
                Changing this parameter will create a new resource.
         :param pulumi.Input[str] flavor_id: Specifies the flavor ID. Changing this parameter will create a new
                resource.
+        :param pulumi.Input[pulumi.InputType['NodeHostnameConfigArgs']] hostname_config: Specifies the hostname config of the kubernetes node,
+               which is supported by clusters of v1.23.6-r0 to v1.25 or clusters of v1.25.2-r0 or later versions.
+               The object structure is documented below.
+               Changing this parameter will create a new resource.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] initialized_conditions: Specifies the custom initialization flags.
+               Changing this parameter will create a new resource.
         :param pulumi.Input[str] iptype: Specifies the elastic IP type.
                Changing this parameter will create a new resource.
         :param pulumi.Input[bool] keep_ecs: schema: Internal
@@ -1928,11 +2193,14 @@ class Node(pulumi.CustomResource):
         :param pulumi.Input[str] name: Specifies the virtual space name. Currently, only **kubernetes**, **runtime**,
                and **user** are supported. Changing this parameter will create a new resource.
         :param pulumi.Input[str] os: Specifies the operating system of the node.
+               The value can be **EulerOS 2.9** and **CentOS 7.6** e.g. For more details,
+               please see [documentation](https://support.huaweicloud.com/intl/en-us/api-cce/node-os.html).
+               This parameter is required when the `node_image_id` in `extend_params` is not specified.
                Changing this parameter will create a new resource.
-               + For VM nodes, clusters of v1.13 and later support *EulerOS 2.5* and *CentOS 7.6*.
-               + For BMS nodes purchased in the yearly/monthly billing mode, only *EulerOS 2.3* is supported.
         :param pulumi.Input[str] partition: schema: Internal
         :param pulumi.Input[str] password: Specifies the root password when logging in to select the password mode.
+               The password consists of 8 to 26 characters and must contain at least three of following: uppercase letters,
+               lowercase letters, digits, special characters(!@$%^-_=+[{}]:,./?~#*).
                This parameter can be plain or salted and is alternative to `key_pair`.
         :param pulumi.Input[int] period: Specifies the charging period of the CCE node. If `period_unit` is set to *month*
                , the value ranges from 1 to 9. If `period_unit` is set to *year*, the value ranges from 1 to 3. This parameter is
@@ -1946,8 +2214,8 @@ class Node(pulumi.CustomResource):
                The input value can be a Base64 encoded string or not. Changing this parameter will create a new resource.
         :param pulumi.Input[str] private_key: Specifies the private key of the in used `key_pair`. This parameter is mandatory
                when replacing or unbinding a keypair if the CCE node is in **Active** state.
-        :param pulumi.Input[str] product_id: schema: Internal
-        :param pulumi.Input[str] public_key: schema: Internal
+        :param pulumi.Input[str] product_id: schema: Deprecated
+        :param pulumi.Input[str] public_key: schema: Deprecated
         :param pulumi.Input[str] region: Specifies the region in which to create the CCE node resource.
                If omitted, the provider-level region will be used. Changing this creates a new CCE node resource.
         :param pulumi.Input[pulumi.InputType['NodeRootVolumeArgs']] root_volume: Specifies the configuration of the system disk.
@@ -1958,7 +2226,14 @@ class Node(pulumi.CustomResource):
                Changing this parameter will create a new resource.
         :param pulumi.Input[pulumi.InputType['NodeStorageArgs']] storage: Specifies the disk initialization management parameter.
                If omitted, disks are managed based on the DockerLVMConfigOverride parameter in extendParam.
-               This parameter is supported for clusters of v1.15.11 and later. Changing this parameter will create a new resource.
+               This parameter is supported for clusters of v1.15.11 and later.
+               If the node has both local and EVS disks attached,
+               this parameter must be specified, or it may result in unexpected disk partitions.
+               If you want to change the value range of a data disk to **20** to **32768**, this parameter must be specified.
+               If you want to use the shared disk space (with the runtime and Kubernetes partitions cancelled),
+               this parameter must be specified.
+               If you want to store system components in the system disk, this parameter must be specified.
+               Changing this parameter will create a new resource.
         :param pulumi.Input[str] subnet_id: Specifies the ID of the subnet to which the NIC belongs.
                Changing this parameter will create a new resource.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the tags of a VM node, key/value pair format.
@@ -2178,7 +2453,7 @@ class Node(pulumi.CustomResource):
          $ pulumi import huaweicloud:Cce/node:Node my_node 5c20fdad-7288-11eb-b817-0255ac10158b/e9287dff-7288-11eb-b817-0255ac10158b
         ```
 
-         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`password`, `fixed_ip`, `eip_id`, `preinstall`, `postinstall`, `iptype`, `bandwidth_charge_mode`, `bandwidth_size`, `share_type`, `max_pods`, `extend_param`, `labels`, `taints` and arguments for pre-paid. It is generally recommended running `terraform plan` after importing a node. You can then decide if changes should be applied to the node, or the resource definition should be updated to align with the node. Also you can ignore changes as below. hcl resource "huaweicloud_cce_node" "my_node" {
+         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`password`, `private_key`, `storage`, `fixed_ip`, `extension_nics`, `eip_id`, `iptype`, `bandwidth_charge_mode`, `bandwidth_size`, `share_type`, `extend_params`, `dedicated_host_id`, `initialized_conditions`, `labels`, `taints` and arguments for pre-paid. It is generally recommended running `terraform plan` after importing a node. You can then decide if changes should be applied to the node, or the resource definition should be updated to align with the node. Also you can ignore changes as below. hcl resource "huaweicloud_cce_node" "my_node" {
 
          ...
 
@@ -2186,7 +2461,7 @@ class Node(pulumi.CustomResource):
 
          ignore_changes = [
 
-         extend_param, labels,
+         extend_params, labels,
 
          ]
 
@@ -2217,14 +2492,20 @@ class Node(pulumi.CustomResource):
                  charging_mode: Optional[pulumi.Input[str]] = None,
                  cluster_id: Optional[pulumi.Input[str]] = None,
                  data_volumes: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['NodeDataVolumeArgs']]]]] = None,
+                 dedicated_host_id: Optional[pulumi.Input[str]] = None,
                  ecs_group_id: Optional[pulumi.Input[str]] = None,
                  ecs_performance_type: Optional[pulumi.Input[str]] = None,
                  eip_id: Optional[pulumi.Input[str]] = None,
                  eip_ids: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
+                 enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  extend_param: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  extend_param_charging_mode: Optional[pulumi.Input[int]] = None,
+                 extend_params: Optional[pulumi.Input[pulumi.InputType['NodeExtendParamsArgs']]] = None,
+                 extension_nics: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['NodeExtensionNicArgs']]]]] = None,
                  fixed_ip: Optional[pulumi.Input[str]] = None,
                  flavor_id: Optional[pulumi.Input[str]] = None,
+                 hostname_config: Optional[pulumi.Input[pulumi.InputType['NodeHostnameConfigArgs']]] = None,
+                 initialized_conditions: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  iptype: Optional[pulumi.Input[str]] = None,
                  keep_ecs: Optional[pulumi.Input[bool]] = None,
                  key_pair: Optional[pulumi.Input[str]] = None,
@@ -2278,9 +2559,8 @@ class Node(pulumi.CustomResource):
             if cluster_id is None and not opts.urn:
                 raise TypeError("Missing required property 'cluster_id'")
             __props__.__dict__["cluster_id"] = cluster_id
-            if data_volumes is None and not opts.urn:
-                raise TypeError("Missing required property 'data_volumes'")
             __props__.__dict__["data_volumes"] = data_volumes
+            __props__.__dict__["dedicated_host_id"] = dedicated_host_id
             __props__.__dict__["ecs_group_id"] = ecs_group_id
             __props__.__dict__["ecs_performance_type"] = ecs_performance_type
             __props__.__dict__["eip_id"] = eip_id
@@ -2288,15 +2568,20 @@ class Node(pulumi.CustomResource):
                 warnings.warn("""use eip_id instead""", DeprecationWarning)
                 pulumi.log.warn("""eip_ids is deprecated: use eip_id instead""")
             __props__.__dict__["eip_ids"] = eip_ids
+            __props__.__dict__["enterprise_project_id"] = enterprise_project_id
             __props__.__dict__["extend_param"] = extend_param
             if extend_param_charging_mode is not None and not opts.urn:
                 warnings.warn("""use charging_mode instead""", DeprecationWarning)
                 pulumi.log.warn("""extend_param_charging_mode is deprecated: use charging_mode instead""")
             __props__.__dict__["extend_param_charging_mode"] = extend_param_charging_mode
+            __props__.__dict__["extend_params"] = extend_params
+            __props__.__dict__["extension_nics"] = extension_nics
             __props__.__dict__["fixed_ip"] = fixed_ip
             if flavor_id is None and not opts.urn:
                 raise TypeError("Missing required property 'flavor_id'")
             __props__.__dict__["flavor_id"] = flavor_id
+            __props__.__dict__["hostname_config"] = hostname_config
+            __props__.__dict__["initialized_conditions"] = initialized_conditions
             __props__.__dict__["iptype"] = iptype
             __props__.__dict__["keep_ecs"] = keep_ecs
             __props__.__dict__["key_pair"] = key_pair
@@ -2351,14 +2636,20 @@ class Node(pulumi.CustomResource):
             charging_mode: Optional[pulumi.Input[str]] = None,
             cluster_id: Optional[pulumi.Input[str]] = None,
             data_volumes: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['NodeDataVolumeArgs']]]]] = None,
+            dedicated_host_id: Optional[pulumi.Input[str]] = None,
             ecs_group_id: Optional[pulumi.Input[str]] = None,
             ecs_performance_type: Optional[pulumi.Input[str]] = None,
             eip_id: Optional[pulumi.Input[str]] = None,
             eip_ids: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
+            enterprise_project_id: Optional[pulumi.Input[str]] = None,
             extend_param: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
             extend_param_charging_mode: Optional[pulumi.Input[int]] = None,
+            extend_params: Optional[pulumi.Input[pulumi.InputType['NodeExtendParamsArgs']]] = None,
+            extension_nics: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['NodeExtensionNicArgs']]]]] = None,
             fixed_ip: Optional[pulumi.Input[str]] = None,
             flavor_id: Optional[pulumi.Input[str]] = None,
+            hostname_config: Optional[pulumi.Input[pulumi.InputType['NodeHostnameConfigArgs']]] = None,
+            initialized_conditions: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
             iptype: Optional[pulumi.Input[str]] = None,
             keep_ecs: Optional[pulumi.Input[bool]] = None,
             key_pair: Optional[pulumi.Input[str]] = None,
@@ -2409,22 +2700,32 @@ class Node(pulumi.CustomResource):
                Changing this parameter will create a new resource.
         :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['NodeDataVolumeArgs']]]] data_volumes: Specifies the configurations of the data disk.
                Changing this parameter will create a new resource.
+        :param pulumi.Input[str] dedicated_host_id: Specifies the ID of the DeH to which the node is scheduled.
+               Changing this parameter will create a new resource.
         :param pulumi.Input[str] ecs_group_id: Specifies the ECS group ID. If specified, the node will be created under
                the cloud server group. Changing this parameter will create a new resource.
-        :param pulumi.Input[str] ecs_performance_type: schema: Internal
+        :param pulumi.Input[str] ecs_performance_type: schema: Deprecated
         :param pulumi.Input[str] eip_id: Specifies the ID of the EIP.
                Changing this parameter will create a new resource.
-        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] extend_param: Specifies the extended parameter.
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID of the CCE node.
                Changing this parameter will create a new resource.
-               The available keys are as follows:
-               + **agency_name**: The agency name to provide temporary credentials for CCE node to access other cloud services.
-               + **alpha.cce/NodeImageID**: The custom image ID used to create the BMS nodes.
-               + **dockerBaseSize**: The available disk space of a single docker container on the node in device mapper mode.
-               + **DockerLVMConfigOverride**: Specifies the data disk configurations of Docker.
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] extend_param: schema: Deprecated
+        :param pulumi.Input[pulumi.InputType['NodeExtendParamsArgs']] extend_params: Specifies the extended parameters.
+               The object structure is documented below.
+               Changing this parameter will create a new resource.
+        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['NodeExtensionNicArgs']]]] extension_nics: Specifies extension NICs of the node.
+               The object structure is documented below.
+               Changing this parameter will create a new resource.
         :param pulumi.Input[str] fixed_ip: Specifies the fixed IP of the NIC.
                Changing this parameter will create a new resource.
         :param pulumi.Input[str] flavor_id: Specifies the flavor ID. Changing this parameter will create a new
                resource.
+        :param pulumi.Input[pulumi.InputType['NodeHostnameConfigArgs']] hostname_config: Specifies the hostname config of the kubernetes node,
+               which is supported by clusters of v1.23.6-r0 to v1.25 or clusters of v1.25.2-r0 or later versions.
+               The object structure is documented below.
+               Changing this parameter will create a new resource.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] initialized_conditions: Specifies the custom initialization flags.
+               Changing this parameter will create a new resource.
         :param pulumi.Input[str] iptype: Specifies the elastic IP type.
                Changing this parameter will create a new resource.
         :param pulumi.Input[bool] keep_ecs: schema: Internal
@@ -2437,11 +2738,14 @@ class Node(pulumi.CustomResource):
         :param pulumi.Input[str] name: Specifies the virtual space name. Currently, only **kubernetes**, **runtime**,
                and **user** are supported. Changing this parameter will create a new resource.
         :param pulumi.Input[str] os: Specifies the operating system of the node.
+               The value can be **EulerOS 2.9** and **CentOS 7.6** e.g. For more details,
+               please see [documentation](https://support.huaweicloud.com/intl/en-us/api-cce/node-os.html).
+               This parameter is required when the `node_image_id` in `extend_params` is not specified.
                Changing this parameter will create a new resource.
-               + For VM nodes, clusters of v1.13 and later support *EulerOS 2.5* and *CentOS 7.6*.
-               + For BMS nodes purchased in the yearly/monthly billing mode, only *EulerOS 2.3* is supported.
         :param pulumi.Input[str] partition: schema: Internal
         :param pulumi.Input[str] password: Specifies the root password when logging in to select the password mode.
+               The password consists of 8 to 26 characters and must contain at least three of following: uppercase letters,
+               lowercase letters, digits, special characters(!@$%^-_=+[{}]:,./?~#*).
                This parameter can be plain or salted and is alternative to `key_pair`.
         :param pulumi.Input[int] period: Specifies the charging period of the CCE node. If `period_unit` is set to *month*
                , the value ranges from 1 to 9. If `period_unit` is set to *year*, the value ranges from 1 to 3. This parameter is
@@ -2456,9 +2760,9 @@ class Node(pulumi.CustomResource):
         :param pulumi.Input[str] private_ip: Private IP of the CCE node.
         :param pulumi.Input[str] private_key: Specifies the private key of the in used `key_pair`. This parameter is mandatory
                when replacing or unbinding a keypair if the CCE node is in **Active** state.
-        :param pulumi.Input[str] product_id: schema: Internal
+        :param pulumi.Input[str] product_id: schema: Deprecated
         :param pulumi.Input[str] public_ip: Public IP of the CCE node.
-        :param pulumi.Input[str] public_key: schema: Internal
+        :param pulumi.Input[str] public_key: schema: Deprecated
         :param pulumi.Input[str] region: Specifies the region in which to create the CCE node resource.
                If omitted, the provider-level region will be used. Changing this creates a new CCE node resource.
         :param pulumi.Input[pulumi.InputType['NodeRootVolumeArgs']] root_volume: Specifies the configuration of the system disk.
@@ -2471,7 +2775,14 @@ class Node(pulumi.CustomResource):
         :param pulumi.Input[str] status: The status of the CCE node.
         :param pulumi.Input[pulumi.InputType['NodeStorageArgs']] storage: Specifies the disk initialization management parameter.
                If omitted, disks are managed based on the DockerLVMConfigOverride parameter in extendParam.
-               This parameter is supported for clusters of v1.15.11 and later. Changing this parameter will create a new resource.
+               This parameter is supported for clusters of v1.15.11 and later.
+               If the node has both local and EVS disks attached,
+               this parameter must be specified, or it may result in unexpected disk partitions.
+               If you want to change the value range of a data disk to **20** to **32768**, this parameter must be specified.
+               If you want to use the shared disk space (with the runtime and Kubernetes partitions cancelled),
+               this parameter must be specified.
+               If you want to store system components in the system disk, this parameter must be specified.
+               Changing this parameter will create a new resource.
         :param pulumi.Input[str] subnet_id: Specifies the ID of the subnet to which the NIC belongs.
                Changing this parameter will create a new resource.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the tags of a VM node, key/value pair format.
@@ -2492,14 +2803,20 @@ class Node(pulumi.CustomResource):
         __props__.__dict__["charging_mode"] = charging_mode
         __props__.__dict__["cluster_id"] = cluster_id
         __props__.__dict__["data_volumes"] = data_volumes
+        __props__.__dict__["dedicated_host_id"] = dedicated_host_id
         __props__.__dict__["ecs_group_id"] = ecs_group_id
         __props__.__dict__["ecs_performance_type"] = ecs_performance_type
         __props__.__dict__["eip_id"] = eip_id
         __props__.__dict__["eip_ids"] = eip_ids
+        __props__.__dict__["enterprise_project_id"] = enterprise_project_id
         __props__.__dict__["extend_param"] = extend_param
         __props__.__dict__["extend_param_charging_mode"] = extend_param_charging_mode
+        __props__.__dict__["extend_params"] = extend_params
+        __props__.__dict__["extension_nics"] = extension_nics
         __props__.__dict__["fixed_ip"] = fixed_ip
         __props__.__dict__["flavor_id"] = flavor_id
+        __props__.__dict__["hostname_config"] = hostname_config
+        __props__.__dict__["initialized_conditions"] = initialized_conditions
         __props__.__dict__["iptype"] = iptype
         __props__.__dict__["keep_ecs"] = keep_ecs
         __props__.__dict__["key_pair"] = key_pair
@@ -2612,6 +2929,15 @@ class Node(pulumi.CustomResource):
         return pulumi.get(self, "data_volumes")
 
     @property
+    @pulumi.getter(name="dedicatedHostId")
+    def dedicated_host_id(self) -> pulumi.Output[Optional[str]]:
+        """
+        Specifies the ID of the DeH to which the node is scheduled.
+        Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "dedicated_host_id")
+
+    @property
     @pulumi.getter(name="ecsGroupId")
     def ecs_group_id(self) -> pulumi.Output[Optional[str]]:
         """
@@ -2624,7 +2950,7 @@ class Node(pulumi.CustomResource):
     @pulumi.getter(name="ecsPerformanceType")
     def ecs_performance_type(self) -> pulumi.Output[Optional[str]]:
         """
-        schema: Internal
+        schema: Deprecated
         """
         return pulumi.get(self, "ecs_performance_type")
 
@@ -2643,16 +2969,19 @@ class Node(pulumi.CustomResource):
         return pulumi.get(self, "eip_ids")
 
     @property
+    @pulumi.getter(name="enterpriseProjectId")
+    def enterprise_project_id(self) -> pulumi.Output[str]:
+        """
+        Specifies the enterprise project ID of the CCE node.
+        Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "enterprise_project_id")
+
+    @property
     @pulumi.getter(name="extendParam")
     def extend_param(self) -> pulumi.Output[Optional[Mapping[str, str]]]:
         """
-        Specifies the extended parameter.
-        Changing this parameter will create a new resource.
-        The available keys are as follows:
-        + **agency_name**: The agency name to provide temporary credentials for CCE node to access other cloud services.
-        + **alpha.cce/NodeImageID**: The custom image ID used to create the BMS nodes.
-        + **dockerBaseSize**: The available disk space of a single docker container on the node in device mapper mode.
-        + **DockerLVMConfigOverride**: Specifies the data disk configurations of Docker.
+        schema: Deprecated
         """
         return pulumi.get(self, "extend_param")
 
@@ -2660,6 +2989,26 @@ class Node(pulumi.CustomResource):
     @pulumi.getter(name="extendParamChargingMode")
     def extend_param_charging_mode(self) -> pulumi.Output[Optional[int]]:
         return pulumi.get(self, "extend_param_charging_mode")
+
+    @property
+    @pulumi.getter(name="extendParams")
+    def extend_params(self) -> pulumi.Output[Optional['outputs.NodeExtendParams']]:
+        """
+        Specifies the extended parameters.
+        The object structure is documented below.
+        Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "extend_params")
+
+    @property
+    @pulumi.getter(name="extensionNics")
+    def extension_nics(self) -> pulumi.Output[Optional[Sequence['outputs.NodeExtensionNic']]]:
+        """
+        Specifies extension NICs of the node.
+        The object structure is documented below.
+        Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "extension_nics")
 
     @property
     @pulumi.getter(name="fixedIp")
@@ -2678,6 +3027,26 @@ class Node(pulumi.CustomResource):
         resource.
         """
         return pulumi.get(self, "flavor_id")
+
+    @property
+    @pulumi.getter(name="hostnameConfig")
+    def hostname_config(self) -> pulumi.Output['outputs.NodeHostnameConfig']:
+        """
+        Specifies the hostname config of the kubernetes node,
+        which is supported by clusters of v1.23.6-r0 to v1.25 or clusters of v1.25.2-r0 or later versions.
+        The object structure is documented below.
+        Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "hostname_config")
+
+    @property
+    @pulumi.getter(name="initializedConditions")
+    def initialized_conditions(self) -> pulumi.Output[Sequence[str]]:
+        """
+        Specifies the custom initialization flags.
+        Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "initialized_conditions")
 
     @property
     @pulumi.getter
@@ -2742,9 +3111,10 @@ class Node(pulumi.CustomResource):
     def os(self) -> pulumi.Output[str]:
         """
         Specifies the operating system of the node.
+        The value can be **EulerOS 2.9** and **CentOS 7.6** e.g. For more details,
+        please see [documentation](https://support.huaweicloud.com/intl/en-us/api-cce/node-os.html).
+        This parameter is required when the `node_image_id` in `extend_params` is not specified.
         Changing this parameter will create a new resource.
-        + For VM nodes, clusters of v1.13 and later support *EulerOS 2.5* and *CentOS 7.6*.
-        + For BMS nodes purchased in the yearly/monthly billing mode, only *EulerOS 2.3* is supported.
         """
         return pulumi.get(self, "os")
 
@@ -2761,6 +3131,8 @@ class Node(pulumi.CustomResource):
     def password(self) -> pulumi.Output[Optional[str]]:
         """
         Specifies the root password when logging in to select the password mode.
+        The password consists of 8 to 26 characters and must contain at least three of following: uppercase letters,
+        lowercase letters, digits, special characters(!@$%^-_=+[{}]:,./?~#*).
         This parameter can be plain or salted and is alternative to `key_pair`.
         """
         return pulumi.get(self, "password")
@@ -2824,7 +3196,7 @@ class Node(pulumi.CustomResource):
     @pulumi.getter(name="productId")
     def product_id(self) -> pulumi.Output[Optional[str]]:
         """
-        schema: Internal
+        schema: Deprecated
         """
         return pulumi.get(self, "product_id")
 
@@ -2840,7 +3212,7 @@ class Node(pulumi.CustomResource):
     @pulumi.getter(name="publicKey")
     def public_key(self) -> pulumi.Output[Optional[str]]:
         """
-        schema: Internal
+        schema: Deprecated
         """
         return pulumi.get(self, "public_key")
 
@@ -2902,7 +3274,14 @@ class Node(pulumi.CustomResource):
         """
         Specifies the disk initialization management parameter.
         If omitted, disks are managed based on the DockerLVMConfigOverride parameter in extendParam.
-        This parameter is supported for clusters of v1.15.11 and later. Changing this parameter will create a new resource.
+        This parameter is supported for clusters of v1.15.11 and later.
+        If the node has both local and EVS disks attached,
+        this parameter must be specified, or it may result in unexpected disk partitions.
+        If you want to change the value range of a data disk to **20** to **32768**, this parameter must be specified.
+        If you want to use the shared disk space (with the runtime and Kubernetes partitions cancelled),
+        this parameter must be specified.
+        If you want to store system components in the system disk, this parameter must be specified.
+        Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "storage")
 

@@ -11,42 +11,19 @@ import (
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
-// Manages a Function resource within HuaweiCloud.
+// Manages the function resource within HuaweiCloud.
+//
+// > Since version `1.73.1`, the requests of the function resource will send these parameters:<br>
+//
+//	`enableDynamicMemory`<br>
+//	`isStatefulFunction`<br>
+//	`networkController`<br>
+//	Since version `1.74.0`, the requests of the function resource will send these parameters:<br>
+//	`enableAuthInHeader`<br>
+//	`enableClassIsolation`<br>
+//	For the regions that do not support this parameter, please use the lower version to deploy this resource.
 //
 // ## Example Usage
-// ### With base64 func code
-//
-// ```go
-// package main
-//
-// import (
-//
-//	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud/FunctionGraph"
-//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
-//
-// )
-//
-//	func main() {
-//		pulumi.Run(func(ctx *pulumi.Context) error {
-//			_, err := FunctionGraph.NewFunction(ctx, "f1", &FunctionGraph.FunctionArgs{
-//				Agency:      pulumi.String("test"),
-//				App:         pulumi.String("default"),
-//				CodeType:    pulumi.String("inline"),
-//				Description: pulumi.String("fuction test"),
-//				FuncCode:    pulumi.String("aW1wb3J0IGpzb24KZGVmIGhhbmRsZXIgKGV2ZW50LCBjb250ZXh0KToKICAgIG91dHB1dCA9ICdIZWxsbyBtZXNzYWdlOiAnICsganNvbi5kdW1wcyhldmVudCkKICAgIHJldHVybiBvdXRwdXQ="),
-//				Handler:     pulumi.String("test.handler"),
-//				MemorySize:  pulumi.Int(128),
-//				Runtime:     pulumi.String("Python2.7"),
-//				Timeout:     pulumi.Int(3),
-//			})
-//			if err != nil {
-//				return err
-//			}
-//			return nil
-//		})
-//	}
-//
-// ```
 // ### With text code
 //
 // ```go
@@ -58,16 +35,23 @@ import (
 //
 //	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud/FunctionGraph"
 //	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi/config"
 //
 // )
 //
 //	func main() {
 //		pulumi.Run(func(ctx *pulumi.Context) error {
-//			_, err := FunctionGraph.NewFunction(ctx, "f1", &FunctionGraph.FunctionArgs{
-//				Agency:      pulumi.String("test"),
-//				App:         pulumi.String("default"),
-//				CodeType:    pulumi.String("inline"),
-//				Description: pulumi.String("fuction test"),
+//			cfg := config.New(ctx, "")
+//			functionName := cfg.RequireObject("functionName")
+//			agencyName := cfg.RequireObject("agencyName")
+//			_, err := FunctionGraph.NewFunction(ctx, "test", &FunctionGraph.FunctionArgs{
+//				App:        pulumi.String("default"),
+//				Agency:     pulumi.Any(agencyName),
+//				Handler:    pulumi.String("test.handler"),
+//				MemorySize: pulumi.Int(128),
+//				Timeout:    pulumi.Int(3),
+//				Runtime:    pulumi.String("Python2.7"),
+//				CodeType:   pulumi.String("inline"),
 //				FuncCode: pulumi.String(fmt.Sprintf(`# -*- coding:utf-8 -*-
 //
 // import json
@@ -84,10 +68,6 @@ import (
 //
 // `)),
 //
-//				Handler:    pulumi.String("test.handler"),
-//				MemorySize: pulumi.Int(128),
-//				Runtime:    pulumi.String("Python2.7"),
-//				Timeout:    pulumi.Int(3),
 //			})
 //			if err != nil {
 //				return err
@@ -122,6 +102,7 @@ import (
 //				Handler:    pulumi.String("-"),
 //				App:        pulumi.String("default"),
 //				Runtime:    pulumi.String("Custom Image"),
+//				CodeType:   pulumi.String("Custom-Image-Swr"),
 //				MemorySize: pulumi.Int(128),
 //				Timeout:    pulumi.Int(3),
 //				CustomImage: &functiongraph.FunctionCustomImageArgs{
@@ -136,18 +117,59 @@ import (
 //	}
 //
 // ```
+// ### Create function with Java runtime and corresponding configuration
 //
-// ## Import
+// ```go
+// package main
 //
-// Functions can be imported using the `id`, e.g.
+// import (
 //
-// ```sh
+//	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud/FunctionGraph"
+//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi/config"
 //
-//	$ pulumi import huaweicloud:FunctionGraph/function:Function my-func 7117d38e-4c8f-4624-a505-bd96b97d024c
+// )
+//
+//	func main() {
+//		pulumi.Run(func(ctx *pulumi.Context) error {
+//			cfg := config.New(ctx, "")
+//			functionName := cfg.RequireObject("functionName")
+//			agencyName := cfg.RequireObject("agencyName")
+//			_, err := FunctionGraph.NewFunction(ctx, "test", &FunctionGraph.FunctionArgs{
+//				MemorySize:           pulumi.Int(128),
+//				Runtime:              pulumi.String("Java11"),
+//				Timeout:              pulumi.Int(15),
+//				App:                  pulumi.String("default"),
+//				Handler:              pulumi.String("com.huawei.demo.TriggerTests.apigTest"),
+//				CodeType:             pulumi.String("zip"),
+//				CodeFilename:         pulumi.String("java-demo.zip"),
+//				Agency:               pulumi.Any(agencyName),
+//				EnableClassIsolation: pulumi.Bool(true),
+//				EphemeralStorage:     pulumi.Int(512),
+//				HeartbeatHandler:     pulumi.String("com.huawei.demo.TriggerTests.heartBeat"),
+//				RestoreHookHandler:   pulumi.String("com.huawei.demo.TriggerTests.restoreHook"),
+//				RestoreHookTimeout:   pulumi.Int(10),
+//			})
+//			if err != nil {
+//				return err
+//			}
+//			return nil
+//		})
+//	}
 //
 // ```
 //
-//	Note that the imported state may not be identical to your resource definition, due to the attribute missing from the API response. The missing attributes are`app`, `func_code`, `agency`, `tags"`. It is generally recommended running `terraform plan` after importing a function. You can then decide if changes should be applied to the function, or the resource definition should be updated to align with the function. Also you can ignore changes as below. hcl resource "huaweicloud_fgs_function" "test" {
+// ## Import
+//
+// Functions can be imported using the `id`, e.g. bash
+//
+// ```sh
+//
+//	$ pulumi import huaweicloud:FunctionGraph/function:Function test <id>
+//
+// ```
+//
+//	Note that the imported state may not be identical to your resource definition, due to the attribute missing from the API response. The missing attributes are`func_code`, `encrypted_user_data`, `tags`. It is generally recommended running `terraform plan` after importing a function. You can then decide if changes should be applied to the function, or the resource definition should be updated to align with the function. Also you can ignore changes as below. hcl resource "huaweicloud_fgs_function" "test" {
 //
 //	...
 //
@@ -155,7 +177,7 @@ import (
 //
 //	ignore_changes = [
 //
-//	app, func_code, agency, tags,
+//	app, func_code, tags,
 //
 //	]
 //
@@ -163,90 +185,189 @@ import (
 type Function struct {
 	pulumi.CustomResourceState
 
-	// Specifies the agency. This parameter is mandatory if the function needs to access other
-	// cloud services.
+	// Specifies the agency configuration of the function.\
+	// This parameter is mandatory if the function needs to access other cloud services.
 	Agency pulumi.StringPtrOutput `pulumi:"agency"`
 	// Specifies the group to which the function belongs.
 	App pulumi.StringPtrOutput `pulumi:"app"`
-	// Specifies An execution agency enables you to obtain a token or an AK/SK for
+	// Specifies the execution agency enables you to obtain a token or an AK/SK for
 	// accessing other cloud services.
 	AppAgency pulumi.StringOutput `pulumi:"appAgency"`
-	// Specifies the name of a function file, This field is mandatory only when coeType
-	// is set to jar or zip.
+	// Specifies the name of the function file.\
+	// Required if the `codeType` is set to **jar** or **zip**.
 	CodeFilename pulumi.StringOutput `pulumi:"codeFilename"`
-	// Specifies the function code type, which can be:
+	// Specifies the code type of the function.\
+	// The valid values are as follows:
 	// + **inline**: inline code.
 	// + **zip**: ZIP file.
 	// + **jar**: JAR file or java functions.
 	// + **obs**: function code stored in an OBS bucket.
+	// + **Custom-Image-Swr**: function code comes from the SWR custom image.
 	CodeType pulumi.StringOutput `pulumi:"codeType"`
-	// Specifies the code url. This parameter is mandatory when codeType is set to obs.
+	// Specifies the URL where the function code is stored in OBS.\
+	// Required if the `codeType` is set to **obs**.
 	CodeUrl pulumi.StringPtrOutput `pulumi:"codeUrl"`
-	// Specifies the custom image configuration for creating function.
-	// The object structure is documented below.
+	// Specifies the number of concurrent requests of the function.\
+	// The valid value is range from `1` to `1,000`, the default value is `1`.
+	ConcurrencyNum pulumi.IntOutput `pulumi:"concurrencyNum"`
+	// Specifies the custom image configuration of the function.\
+	// The customImage structure is documented below.
+	// Required if the parameter `codeType` is **Custom-Image-Swr**.
 	CustomImage FunctionCustomImageOutput `pulumi:"customImage"`
-	// Specifies the ID list of the dependencies.
+	// Specifies the list of the dependency version IDs.
 	DependLists pulumi.StringArrayOutput `pulumi:"dependLists"`
-	// Specifies the description of the function.
+	// Specifies the description of the version alias.
 	Description pulumi.StringPtrOutput `pulumi:"description"`
+	// Specifies the private DNS configuration of the function network.\
+	// Private DNS list is associated to the function by a string in the following format:
+	// `[{\"id\":\"ff8080828a07ffea018a17184aa310f5\","domainName":"functiondebug.example1.com."}]`
+	DnsList pulumi.StringOutput `pulumi:"dnsList"`
+	// Specifies whether the authentication in the request header is enabled.\
+	// Defaults to **false**.
+	EnableAuthInHeader pulumi.BoolPtrOutput `pulumi:"enableAuthInHeader"`
+	// Specifies whether the class isolation is enabled for the JAVA runtime
+	// functions.
+	// Defaults to **false**.
+	EnableClassIsolation pulumi.BoolPtrOutput `pulumi:"enableClassIsolation"`
+	// Specifies whether the dynamic memory configuration is enabled.\
+	// Defaults to **false**.
+	EnableDynamicMemory pulumi.BoolPtrOutput `pulumi:"enableDynamicMemory"`
 	// Specifies the key/value information defined to be encrypted for the
-	// function. The format is the same as `userData`.
+	// function.
+	// The format is the same as `userData`.
 	EncryptedUserData pulumi.StringPtrOutput `pulumi:"encryptedUserData"`
-	// Specifies the enterprise project id of the function.
-	// Changing this will create a new resource.
+	// Specifies the ID of the enterprise project to which the
+	// function belongs.
 	EnterpriseProjectId pulumi.StringOutput `pulumi:"enterpriseProjectId"`
-	// Specifies the function code. When codeType is set to inline, zip, or jar, this
-	// parameter is mandatory, and the code can be encoded using Base64 or just with the text code.
+	// Specifies the size of the function ephemeral storage.\
+	// The valid values are as follows:
+	// + **512**
+	// + **10240**
+	EphemeralStorage pulumi.IntOutput `pulumi:"ephemeralStorage"`
+	// Specifies the function code.\
+	// The code value can be encoded using **Base64** or just with the text code.
+	// Required if the `codeType` is set to **inline**, **zip**, or **jar**.
 	FuncCode pulumi.StringPtrOutput `pulumi:"funcCode"`
-	// Specifies the file system list. The `funcMounts` object structure is documented
-	// below.
+	// Specifies the list of function mount configurations.\
+	// The funcMounts structure is documented below.
 	FuncMounts FunctionFuncMountArrayOutput `pulumi:"funcMounts"`
-	// Specifies the FunctionGraph version, defaults to **v1**.
+	// Specifies the version of the function framework.\
+	// The valid values are as follows:
 	// + **v1**: Hosts event-driven functions in a serverless context.
 	// + **v2**: Next-generation function hosting service powered by Huawei YuanRong architecture.
 	FunctiongraphVersion pulumi.StringOutput `pulumi:"functiongraphVersion"`
+	// Specifies the GPU memory size allocated to the function, in MByte (MB).\
+	// The valid value is range form `1,024` to `16,384`, the value must be a multiple of `1,024`.
+	// If not specified, the GPU function is disabled.
+	GpuMemory pulumi.IntPtrOutput `pulumi:"gpuMemory"`
+	// Specifies the GPU type of the function.\
+	// Currently, only **nvidia-t4** is supported.
+	GpuType pulumi.StringPtrOutput `pulumi:"gpuType"`
 	// Specifies the entry point of the function.
 	Handler pulumi.StringOutput `pulumi:"handler"`
+	// Specifies the heartbeat handler of the function.\
+	// The rule is **xx.xx**, such as **com.huawei.demo.TriggerTests.heartBeat**, it must contain periods (.).
+	// The heartbeat function entry must be in the same file as the function execution entry.
+	HeartbeatHandler pulumi.StringPtrOutput `pulumi:"heartbeatHandler"`
 	// Specifies the initializer of the function.
 	InitializerHandler pulumi.StringOutput `pulumi:"initializerHandler"`
-	// Specifies the maximum duration the function can be initialized. Value range:
-	// 1s to 300s.
+	// Specifies the maximum duration the function can be initialized, in seconds.\
+	// The valid value is range from `1` to `300`.
 	InitializerTimeout pulumi.IntOutput `pulumi:"initializerTimeout"`
+	// Specifies whether the function is a stateful function.\
+	// Defaults to **false**.
+	IsStatefulFunction pulumi.BoolPtrOutput `pulumi:"isStatefulFunction"`
+	// Specifies the LTS group ID for collecting logs.
+	LogGroupId pulumi.StringOutput `pulumi:"logGroupId"`
+	// Specifies the LTS group name for collecting logs.
+	LogGroupName pulumi.StringOutput `pulumi:"logGroupName"`
+	// Specifies the LTS stream IID for collecting logs.
+	LogStreamId pulumi.StringOutput `pulumi:"logStreamId"`
+	// Specifies the LTS stream name for collecting logs.
+	LogStreamName pulumi.StringOutput `pulumi:"logStreamName"`
 	// Specifies the maximum number of instances of the function.\
-	// The valid value ranges from `-1` to `1000`, defaults to `400`.
+	// The valid value is range from `-1` to `1,000`, defaults to `400`.
 	// + The minimum value is `-1` and means the number of instances is unlimited.
 	MaxInstanceNum pulumi.StringOutput `pulumi:"maxInstanceNum"`
-	// Specifies the memory size(MB) allocated to the function.
+	// Specifies the memory size allocated to the function, in MByte (MB).
 	MemorySize pulumi.IntOutput `pulumi:"memorySize"`
-	// Specifies the user group ID, a non-0 integer from –1 to 65534. Default to
-	// -1.
+	// Specifies the mount user group ID.\
+	// The valid value is range from `–1` to `65,534`, except `0`.
+	// Defaults to `-1`.
 	MountUserGroupId pulumi.IntOutput `pulumi:"mountUserGroupId"`
-	// Specifies the user ID, a non-0 integer from –1 to 65534. Default to -1.
+	// Specifies the mount user ID.\
+	// The valid value is range from `–1` to `65,534`, except `0`.
+	// Defaults to `-1`.
 	MountUserId pulumi.IntOutput `pulumi:"mountUserId"`
-	// Specifies the name of the function.
-	// Changing this will create a new resource.
+	// Specifies the name of metric policy.\
+	// The valid length is limited from `1` to `60` characters, only letters, digits, hyphens (-), and underscores (_) are
+	// allowed. The name must start with a letter and ending with a letter or digit.
 	Name pulumi.StringOutput `pulumi:"name"`
+	// Specifies the network configuration of the function.\
+	// The networkController structure is documented below.
+	NetworkController FunctionNetworkControllerPtrOutput `pulumi:"networkController"`
 	// Specifies the network ID of subnet.
 	NetworkId pulumi.StringPtrOutput `pulumi:"networkId"`
 	// Deprecated: use app instead
 	Package pulumi.StringPtrOutput `pulumi:"package"`
-	// Specifies the region in which to create the Function resource. If omitted, the
-	// provider-level region will be used. Changing this will create a new resource.
+	// Specifies the VPC cidr blocks used in the function code to detect whether it
+	// conflicts with the VPC cidr blocks used by the service.
+	// The cidr blocks are separated by semicolons and cannot exceed `5`.
+	PeeringCidr pulumi.StringPtrOutput `pulumi:"peeringCidr"`
+	// The pre-stop handler of a function.
+	PreStopHandler pulumi.StringPtrOutput `pulumi:"preStopHandler"`
+	// The maximum duration that the function can be initialized.
+	PreStopTimeout pulumi.IntPtrOutput `pulumi:"preStopTimeout"`
+	// Specifies the region where the function is located.\
+	// If omitted, the provider-level region will be used. Changing this will create a new resource.
 	Region pulumi.StringOutput `pulumi:"region"`
-	// Specifies the environment for executing the function.
-	// If the function is created using an SWR image, set this parameter to `Custom Image`.
-	// Changing this will create a new resource.
+	// Specifies the reserved instance policies of the function.\
+	// The reservedInstances structure is documented below.
+	ReservedInstances FunctionReservedInstanceArrayOutput `pulumi:"reservedInstances"`
+	// Specifies the restore hook handler of the function.
+	RestoreHookHandler pulumi.StringPtrOutput `pulumi:"restoreHookHandler"`
+	// Specifies the timeout of the function restore hook.\
+	// The function will be forcibly stopped if the time is end.
+	// The valid value is range from `1` to `300`, the unit is seconds (s).
+	RestoreHookTimeout pulumi.IntPtrOutput `pulumi:"restoreHookTimeout"`
+	// Specifies the environment for executing the function.\
+	// The valid values are as follows:
+	// + **Java8**
+	// + **Java11**
+	// + **Node.js6.10**
+	// + **Node.js8.10**
+	// + **Node.js10.16**
+	// + **Node.js12.13**
+	// + **Node.js14.18**
+	// + **Node.js16.17**
+	// + **Node.js18.15**
+	// + **Python2.7**
+	// + **Python3.6**
+	// + **Python3.9**
+	// + **Go1.x**
+	// + **C#(.NET Core 2.1)**
+	// + **C#(.NET Core 3.1)**
+	// + **Custom**
+	// + **PHP7.3**
+	// + **http**
+	// + **Custom Image**
+	// + **Cangjie1.0**
 	Runtime pulumi.StringOutput `pulumi:"runtime"`
 	// Specifies the key/value pairs to associate with the function.
 	Tags pulumi.StringMapOutput `pulumi:"tags"`
-	// Specifies the timeout interval of the function, ranges from 3s to 900s.
+	// Specifies the timeout interval of the function, in seconds.\
+	// The value ranges from `3` to `259,200`.
 	Timeout pulumi.IntOutput `pulumi:"timeout"`
-	// Uniform Resource Name
-	Urn      pulumi.StringOutput    `pulumi:"urn"`
+	// The URN (Uniform Resource Name) of the function.
+	Urn pulumi.StringOutput `pulumi:"urn"`
+	// The key/value information defined for the function.
 	UserData pulumi.StringPtrOutput `pulumi:"userData"`
-	// The version of the function
+	// The version of the function.
 	Version pulumi.StringOutput `pulumi:"version"`
-	// Specifies the ID of VPC.
+	// Specifies the versions management of the function.\
+	// The versions structure is documented below.
+	Versions FunctionVersionArrayOutput `pulumi:"versions"`
+	// Specifies the ID of the VPC that can trigger the function.
 	VpcId pulumi.StringPtrOutput `pulumi:"vpcId"`
 	// Deprecated: use agency instead
 	Xrole pulumi.StringPtrOutput `pulumi:"xrole"`
@@ -291,180 +412,378 @@ func GetFunction(ctx *pulumi.Context,
 
 // Input properties used for looking up and filtering Function resources.
 type functionState struct {
-	// Specifies the agency. This parameter is mandatory if the function needs to access other
-	// cloud services.
+	// Specifies the agency configuration of the function.\
+	// This parameter is mandatory if the function needs to access other cloud services.
 	Agency *string `pulumi:"agency"`
 	// Specifies the group to which the function belongs.
 	App *string `pulumi:"app"`
-	// Specifies An execution agency enables you to obtain a token or an AK/SK for
+	// Specifies the execution agency enables you to obtain a token or an AK/SK for
 	// accessing other cloud services.
 	AppAgency *string `pulumi:"appAgency"`
-	// Specifies the name of a function file, This field is mandatory only when coeType
-	// is set to jar or zip.
+	// Specifies the name of the function file.\
+	// Required if the `codeType` is set to **jar** or **zip**.
 	CodeFilename *string `pulumi:"codeFilename"`
-	// Specifies the function code type, which can be:
+	// Specifies the code type of the function.\
+	// The valid values are as follows:
 	// + **inline**: inline code.
 	// + **zip**: ZIP file.
 	// + **jar**: JAR file or java functions.
 	// + **obs**: function code stored in an OBS bucket.
+	// + **Custom-Image-Swr**: function code comes from the SWR custom image.
 	CodeType *string `pulumi:"codeType"`
-	// Specifies the code url. This parameter is mandatory when codeType is set to obs.
+	// Specifies the URL where the function code is stored in OBS.\
+	// Required if the `codeType` is set to **obs**.
 	CodeUrl *string `pulumi:"codeUrl"`
-	// Specifies the custom image configuration for creating function.
-	// The object structure is documented below.
+	// Specifies the number of concurrent requests of the function.\
+	// The valid value is range from `1` to `1,000`, the default value is `1`.
+	ConcurrencyNum *int `pulumi:"concurrencyNum"`
+	// Specifies the custom image configuration of the function.\
+	// The customImage structure is documented below.
+	// Required if the parameter `codeType` is **Custom-Image-Swr**.
 	CustomImage *FunctionCustomImage `pulumi:"customImage"`
-	// Specifies the ID list of the dependencies.
+	// Specifies the list of the dependency version IDs.
 	DependLists []string `pulumi:"dependLists"`
-	// Specifies the description of the function.
+	// Specifies the description of the version alias.
 	Description *string `pulumi:"description"`
+	// Specifies the private DNS configuration of the function network.\
+	// Private DNS list is associated to the function by a string in the following format:
+	// `[{\"id\":\"ff8080828a07ffea018a17184aa310f5\","domainName":"functiondebug.example1.com."}]`
+	DnsList *string `pulumi:"dnsList"`
+	// Specifies whether the authentication in the request header is enabled.\
+	// Defaults to **false**.
+	EnableAuthInHeader *bool `pulumi:"enableAuthInHeader"`
+	// Specifies whether the class isolation is enabled for the JAVA runtime
+	// functions.
+	// Defaults to **false**.
+	EnableClassIsolation *bool `pulumi:"enableClassIsolation"`
+	// Specifies whether the dynamic memory configuration is enabled.\
+	// Defaults to **false**.
+	EnableDynamicMemory *bool `pulumi:"enableDynamicMemory"`
 	// Specifies the key/value information defined to be encrypted for the
-	// function. The format is the same as `userData`.
+	// function.
+	// The format is the same as `userData`.
 	EncryptedUserData *string `pulumi:"encryptedUserData"`
-	// Specifies the enterprise project id of the function.
-	// Changing this will create a new resource.
+	// Specifies the ID of the enterprise project to which the
+	// function belongs.
 	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
-	// Specifies the function code. When codeType is set to inline, zip, or jar, this
-	// parameter is mandatory, and the code can be encoded using Base64 or just with the text code.
+	// Specifies the size of the function ephemeral storage.\
+	// The valid values are as follows:
+	// + **512**
+	// + **10240**
+	EphemeralStorage *int `pulumi:"ephemeralStorage"`
+	// Specifies the function code.\
+	// The code value can be encoded using **Base64** or just with the text code.
+	// Required if the `codeType` is set to **inline**, **zip**, or **jar**.
 	FuncCode *string `pulumi:"funcCode"`
-	// Specifies the file system list. The `funcMounts` object structure is documented
-	// below.
+	// Specifies the list of function mount configurations.\
+	// The funcMounts structure is documented below.
 	FuncMounts []FunctionFuncMount `pulumi:"funcMounts"`
-	// Specifies the FunctionGraph version, defaults to **v1**.
+	// Specifies the version of the function framework.\
+	// The valid values are as follows:
 	// + **v1**: Hosts event-driven functions in a serverless context.
 	// + **v2**: Next-generation function hosting service powered by Huawei YuanRong architecture.
 	FunctiongraphVersion *string `pulumi:"functiongraphVersion"`
+	// Specifies the GPU memory size allocated to the function, in MByte (MB).\
+	// The valid value is range form `1,024` to `16,384`, the value must be a multiple of `1,024`.
+	// If not specified, the GPU function is disabled.
+	GpuMemory *int `pulumi:"gpuMemory"`
+	// Specifies the GPU type of the function.\
+	// Currently, only **nvidia-t4** is supported.
+	GpuType *string `pulumi:"gpuType"`
 	// Specifies the entry point of the function.
 	Handler *string `pulumi:"handler"`
+	// Specifies the heartbeat handler of the function.\
+	// The rule is **xx.xx**, such as **com.huawei.demo.TriggerTests.heartBeat**, it must contain periods (.).
+	// The heartbeat function entry must be in the same file as the function execution entry.
+	HeartbeatHandler *string `pulumi:"heartbeatHandler"`
 	// Specifies the initializer of the function.
 	InitializerHandler *string `pulumi:"initializerHandler"`
-	// Specifies the maximum duration the function can be initialized. Value range:
-	// 1s to 300s.
+	// Specifies the maximum duration the function can be initialized, in seconds.\
+	// The valid value is range from `1` to `300`.
 	InitializerTimeout *int `pulumi:"initializerTimeout"`
+	// Specifies whether the function is a stateful function.\
+	// Defaults to **false**.
+	IsStatefulFunction *bool `pulumi:"isStatefulFunction"`
+	// Specifies the LTS group ID for collecting logs.
+	LogGroupId *string `pulumi:"logGroupId"`
+	// Specifies the LTS group name for collecting logs.
+	LogGroupName *string `pulumi:"logGroupName"`
+	// Specifies the LTS stream IID for collecting logs.
+	LogStreamId *string `pulumi:"logStreamId"`
+	// Specifies the LTS stream name for collecting logs.
+	LogStreamName *string `pulumi:"logStreamName"`
 	// Specifies the maximum number of instances of the function.\
-	// The valid value ranges from `-1` to `1000`, defaults to `400`.
+	// The valid value is range from `-1` to `1,000`, defaults to `400`.
 	// + The minimum value is `-1` and means the number of instances is unlimited.
 	MaxInstanceNum *string `pulumi:"maxInstanceNum"`
-	// Specifies the memory size(MB) allocated to the function.
+	// Specifies the memory size allocated to the function, in MByte (MB).
 	MemorySize *int `pulumi:"memorySize"`
-	// Specifies the user group ID, a non-0 integer from –1 to 65534. Default to
-	// -1.
+	// Specifies the mount user group ID.\
+	// The valid value is range from `–1` to `65,534`, except `0`.
+	// Defaults to `-1`.
 	MountUserGroupId *int `pulumi:"mountUserGroupId"`
-	// Specifies the user ID, a non-0 integer from –1 to 65534. Default to -1.
+	// Specifies the mount user ID.\
+	// The valid value is range from `–1` to `65,534`, except `0`.
+	// Defaults to `-1`.
 	MountUserId *int `pulumi:"mountUserId"`
-	// Specifies the name of the function.
-	// Changing this will create a new resource.
+	// Specifies the name of metric policy.\
+	// The valid length is limited from `1` to `60` characters, only letters, digits, hyphens (-), and underscores (_) are
+	// allowed. The name must start with a letter and ending with a letter or digit.
 	Name *string `pulumi:"name"`
+	// Specifies the network configuration of the function.\
+	// The networkController structure is documented below.
+	NetworkController *FunctionNetworkController `pulumi:"networkController"`
 	// Specifies the network ID of subnet.
 	NetworkId *string `pulumi:"networkId"`
 	// Deprecated: use app instead
 	Package *string `pulumi:"package"`
-	// Specifies the region in which to create the Function resource. If omitted, the
-	// provider-level region will be used. Changing this will create a new resource.
+	// Specifies the VPC cidr blocks used in the function code to detect whether it
+	// conflicts with the VPC cidr blocks used by the service.
+	// The cidr blocks are separated by semicolons and cannot exceed `5`.
+	PeeringCidr *string `pulumi:"peeringCidr"`
+	// The pre-stop handler of a function.
+	PreStopHandler *string `pulumi:"preStopHandler"`
+	// The maximum duration that the function can be initialized.
+	PreStopTimeout *int `pulumi:"preStopTimeout"`
+	// Specifies the region where the function is located.\
+	// If omitted, the provider-level region will be used. Changing this will create a new resource.
 	Region *string `pulumi:"region"`
-	// Specifies the environment for executing the function.
-	// If the function is created using an SWR image, set this parameter to `Custom Image`.
-	// Changing this will create a new resource.
+	// Specifies the reserved instance policies of the function.\
+	// The reservedInstances structure is documented below.
+	ReservedInstances []FunctionReservedInstance `pulumi:"reservedInstances"`
+	// Specifies the restore hook handler of the function.
+	RestoreHookHandler *string `pulumi:"restoreHookHandler"`
+	// Specifies the timeout of the function restore hook.\
+	// The function will be forcibly stopped if the time is end.
+	// The valid value is range from `1` to `300`, the unit is seconds (s).
+	RestoreHookTimeout *int `pulumi:"restoreHookTimeout"`
+	// Specifies the environment for executing the function.\
+	// The valid values are as follows:
+	// + **Java8**
+	// + **Java11**
+	// + **Node.js6.10**
+	// + **Node.js8.10**
+	// + **Node.js10.16**
+	// + **Node.js12.13**
+	// + **Node.js14.18**
+	// + **Node.js16.17**
+	// + **Node.js18.15**
+	// + **Python2.7**
+	// + **Python3.6**
+	// + **Python3.9**
+	// + **Go1.x**
+	// + **C#(.NET Core 2.1)**
+	// + **C#(.NET Core 3.1)**
+	// + **Custom**
+	// + **PHP7.3**
+	// + **http**
+	// + **Custom Image**
+	// + **Cangjie1.0**
 	Runtime *string `pulumi:"runtime"`
 	// Specifies the key/value pairs to associate with the function.
 	Tags map[string]string `pulumi:"tags"`
-	// Specifies the timeout interval of the function, ranges from 3s to 900s.
+	// Specifies the timeout interval of the function, in seconds.\
+	// The value ranges from `3` to `259,200`.
 	Timeout *int `pulumi:"timeout"`
-	// Uniform Resource Name
-	Urn      *string `pulumi:"urn"`
+	// The URN (Uniform Resource Name) of the function.
+	Urn *string `pulumi:"urn"`
+	// The key/value information defined for the function.
 	UserData *string `pulumi:"userData"`
-	// The version of the function
+	// The version of the function.
 	Version *string `pulumi:"version"`
-	// Specifies the ID of VPC.
+	// Specifies the versions management of the function.\
+	// The versions structure is documented below.
+	Versions []FunctionVersion `pulumi:"versions"`
+	// Specifies the ID of the VPC that can trigger the function.
 	VpcId *string `pulumi:"vpcId"`
 	// Deprecated: use agency instead
 	Xrole *string `pulumi:"xrole"`
 }
 
 type FunctionState struct {
-	// Specifies the agency. This parameter is mandatory if the function needs to access other
-	// cloud services.
+	// Specifies the agency configuration of the function.\
+	// This parameter is mandatory if the function needs to access other cloud services.
 	Agency pulumi.StringPtrInput
 	// Specifies the group to which the function belongs.
 	App pulumi.StringPtrInput
-	// Specifies An execution agency enables you to obtain a token or an AK/SK for
+	// Specifies the execution agency enables you to obtain a token or an AK/SK for
 	// accessing other cloud services.
 	AppAgency pulumi.StringPtrInput
-	// Specifies the name of a function file, This field is mandatory only when coeType
-	// is set to jar or zip.
+	// Specifies the name of the function file.\
+	// Required if the `codeType` is set to **jar** or **zip**.
 	CodeFilename pulumi.StringPtrInput
-	// Specifies the function code type, which can be:
+	// Specifies the code type of the function.\
+	// The valid values are as follows:
 	// + **inline**: inline code.
 	// + **zip**: ZIP file.
 	// + **jar**: JAR file or java functions.
 	// + **obs**: function code stored in an OBS bucket.
+	// + **Custom-Image-Swr**: function code comes from the SWR custom image.
 	CodeType pulumi.StringPtrInput
-	// Specifies the code url. This parameter is mandatory when codeType is set to obs.
+	// Specifies the URL where the function code is stored in OBS.\
+	// Required if the `codeType` is set to **obs**.
 	CodeUrl pulumi.StringPtrInput
-	// Specifies the custom image configuration for creating function.
-	// The object structure is documented below.
+	// Specifies the number of concurrent requests of the function.\
+	// The valid value is range from `1` to `1,000`, the default value is `1`.
+	ConcurrencyNum pulumi.IntPtrInput
+	// Specifies the custom image configuration of the function.\
+	// The customImage structure is documented below.
+	// Required if the parameter `codeType` is **Custom-Image-Swr**.
 	CustomImage FunctionCustomImagePtrInput
-	// Specifies the ID list of the dependencies.
+	// Specifies the list of the dependency version IDs.
 	DependLists pulumi.StringArrayInput
-	// Specifies the description of the function.
+	// Specifies the description of the version alias.
 	Description pulumi.StringPtrInput
+	// Specifies the private DNS configuration of the function network.\
+	// Private DNS list is associated to the function by a string in the following format:
+	// `[{\"id\":\"ff8080828a07ffea018a17184aa310f5\","domainName":"functiondebug.example1.com."}]`
+	DnsList pulumi.StringPtrInput
+	// Specifies whether the authentication in the request header is enabled.\
+	// Defaults to **false**.
+	EnableAuthInHeader pulumi.BoolPtrInput
+	// Specifies whether the class isolation is enabled for the JAVA runtime
+	// functions.
+	// Defaults to **false**.
+	EnableClassIsolation pulumi.BoolPtrInput
+	// Specifies whether the dynamic memory configuration is enabled.\
+	// Defaults to **false**.
+	EnableDynamicMemory pulumi.BoolPtrInput
 	// Specifies the key/value information defined to be encrypted for the
-	// function. The format is the same as `userData`.
+	// function.
+	// The format is the same as `userData`.
 	EncryptedUserData pulumi.StringPtrInput
-	// Specifies the enterprise project id of the function.
-	// Changing this will create a new resource.
+	// Specifies the ID of the enterprise project to which the
+	// function belongs.
 	EnterpriseProjectId pulumi.StringPtrInput
-	// Specifies the function code. When codeType is set to inline, zip, or jar, this
-	// parameter is mandatory, and the code can be encoded using Base64 or just with the text code.
+	// Specifies the size of the function ephemeral storage.\
+	// The valid values are as follows:
+	// + **512**
+	// + **10240**
+	EphemeralStorage pulumi.IntPtrInput
+	// Specifies the function code.\
+	// The code value can be encoded using **Base64** or just with the text code.
+	// Required if the `codeType` is set to **inline**, **zip**, or **jar**.
 	FuncCode pulumi.StringPtrInput
-	// Specifies the file system list. The `funcMounts` object structure is documented
-	// below.
+	// Specifies the list of function mount configurations.\
+	// The funcMounts structure is documented below.
 	FuncMounts FunctionFuncMountArrayInput
-	// Specifies the FunctionGraph version, defaults to **v1**.
+	// Specifies the version of the function framework.\
+	// The valid values are as follows:
 	// + **v1**: Hosts event-driven functions in a serverless context.
 	// + **v2**: Next-generation function hosting service powered by Huawei YuanRong architecture.
 	FunctiongraphVersion pulumi.StringPtrInput
+	// Specifies the GPU memory size allocated to the function, in MByte (MB).\
+	// The valid value is range form `1,024` to `16,384`, the value must be a multiple of `1,024`.
+	// If not specified, the GPU function is disabled.
+	GpuMemory pulumi.IntPtrInput
+	// Specifies the GPU type of the function.\
+	// Currently, only **nvidia-t4** is supported.
+	GpuType pulumi.StringPtrInput
 	// Specifies the entry point of the function.
 	Handler pulumi.StringPtrInput
+	// Specifies the heartbeat handler of the function.\
+	// The rule is **xx.xx**, such as **com.huawei.demo.TriggerTests.heartBeat**, it must contain periods (.).
+	// The heartbeat function entry must be in the same file as the function execution entry.
+	HeartbeatHandler pulumi.StringPtrInput
 	// Specifies the initializer of the function.
 	InitializerHandler pulumi.StringPtrInput
-	// Specifies the maximum duration the function can be initialized. Value range:
-	// 1s to 300s.
+	// Specifies the maximum duration the function can be initialized, in seconds.\
+	// The valid value is range from `1` to `300`.
 	InitializerTimeout pulumi.IntPtrInput
+	// Specifies whether the function is a stateful function.\
+	// Defaults to **false**.
+	IsStatefulFunction pulumi.BoolPtrInput
+	// Specifies the LTS group ID for collecting logs.
+	LogGroupId pulumi.StringPtrInput
+	// Specifies the LTS group name for collecting logs.
+	LogGroupName pulumi.StringPtrInput
+	// Specifies the LTS stream IID for collecting logs.
+	LogStreamId pulumi.StringPtrInput
+	// Specifies the LTS stream name for collecting logs.
+	LogStreamName pulumi.StringPtrInput
 	// Specifies the maximum number of instances of the function.\
-	// The valid value ranges from `-1` to `1000`, defaults to `400`.
+	// The valid value is range from `-1` to `1,000`, defaults to `400`.
 	// + The minimum value is `-1` and means the number of instances is unlimited.
 	MaxInstanceNum pulumi.StringPtrInput
-	// Specifies the memory size(MB) allocated to the function.
+	// Specifies the memory size allocated to the function, in MByte (MB).
 	MemorySize pulumi.IntPtrInput
-	// Specifies the user group ID, a non-0 integer from –1 to 65534. Default to
-	// -1.
+	// Specifies the mount user group ID.\
+	// The valid value is range from `–1` to `65,534`, except `0`.
+	// Defaults to `-1`.
 	MountUserGroupId pulumi.IntPtrInput
-	// Specifies the user ID, a non-0 integer from –1 to 65534. Default to -1.
+	// Specifies the mount user ID.\
+	// The valid value is range from `–1` to `65,534`, except `0`.
+	// Defaults to `-1`.
 	MountUserId pulumi.IntPtrInput
-	// Specifies the name of the function.
-	// Changing this will create a new resource.
+	// Specifies the name of metric policy.\
+	// The valid length is limited from `1` to `60` characters, only letters, digits, hyphens (-), and underscores (_) are
+	// allowed. The name must start with a letter and ending with a letter or digit.
 	Name pulumi.StringPtrInput
+	// Specifies the network configuration of the function.\
+	// The networkController structure is documented below.
+	NetworkController FunctionNetworkControllerPtrInput
 	// Specifies the network ID of subnet.
 	NetworkId pulumi.StringPtrInput
 	// Deprecated: use app instead
 	Package pulumi.StringPtrInput
-	// Specifies the region in which to create the Function resource. If omitted, the
-	// provider-level region will be used. Changing this will create a new resource.
+	// Specifies the VPC cidr blocks used in the function code to detect whether it
+	// conflicts with the VPC cidr blocks used by the service.
+	// The cidr blocks are separated by semicolons and cannot exceed `5`.
+	PeeringCidr pulumi.StringPtrInput
+	// The pre-stop handler of a function.
+	PreStopHandler pulumi.StringPtrInput
+	// The maximum duration that the function can be initialized.
+	PreStopTimeout pulumi.IntPtrInput
+	// Specifies the region where the function is located.\
+	// If omitted, the provider-level region will be used. Changing this will create a new resource.
 	Region pulumi.StringPtrInput
-	// Specifies the environment for executing the function.
-	// If the function is created using an SWR image, set this parameter to `Custom Image`.
-	// Changing this will create a new resource.
+	// Specifies the reserved instance policies of the function.\
+	// The reservedInstances structure is documented below.
+	ReservedInstances FunctionReservedInstanceArrayInput
+	// Specifies the restore hook handler of the function.
+	RestoreHookHandler pulumi.StringPtrInput
+	// Specifies the timeout of the function restore hook.\
+	// The function will be forcibly stopped if the time is end.
+	// The valid value is range from `1` to `300`, the unit is seconds (s).
+	RestoreHookTimeout pulumi.IntPtrInput
+	// Specifies the environment for executing the function.\
+	// The valid values are as follows:
+	// + **Java8**
+	// + **Java11**
+	// + **Node.js6.10**
+	// + **Node.js8.10**
+	// + **Node.js10.16**
+	// + **Node.js12.13**
+	// + **Node.js14.18**
+	// + **Node.js16.17**
+	// + **Node.js18.15**
+	// + **Python2.7**
+	// + **Python3.6**
+	// + **Python3.9**
+	// + **Go1.x**
+	// + **C#(.NET Core 2.1)**
+	// + **C#(.NET Core 3.1)**
+	// + **Custom**
+	// + **PHP7.3**
+	// + **http**
+	// + **Custom Image**
+	// + **Cangjie1.0**
 	Runtime pulumi.StringPtrInput
 	// Specifies the key/value pairs to associate with the function.
 	Tags pulumi.StringMapInput
-	// Specifies the timeout interval of the function, ranges from 3s to 900s.
+	// Specifies the timeout interval of the function, in seconds.\
+	// The value ranges from `3` to `259,200`.
 	Timeout pulumi.IntPtrInput
-	// Uniform Resource Name
-	Urn      pulumi.StringPtrInput
+	// The URN (Uniform Resource Name) of the function.
+	Urn pulumi.StringPtrInput
+	// The key/value information defined for the function.
 	UserData pulumi.StringPtrInput
-	// The version of the function
+	// The version of the function.
 	Version pulumi.StringPtrInput
-	// Specifies the ID of VPC.
+	// Specifies the versions management of the function.\
+	// The versions structure is documented below.
+	Versions FunctionVersionArrayInput
+	// Specifies the ID of the VPC that can trigger the function.
 	VpcId pulumi.StringPtrInput
 	// Deprecated: use agency instead
 	Xrole pulumi.StringPtrInput
@@ -475,86 +794,185 @@ func (FunctionState) ElementType() reflect.Type {
 }
 
 type functionArgs struct {
-	// Specifies the agency. This parameter is mandatory if the function needs to access other
-	// cloud services.
+	// Specifies the agency configuration of the function.\
+	// This parameter is mandatory if the function needs to access other cloud services.
 	Agency *string `pulumi:"agency"`
 	// Specifies the group to which the function belongs.
 	App *string `pulumi:"app"`
-	// Specifies An execution agency enables you to obtain a token or an AK/SK for
+	// Specifies the execution agency enables you to obtain a token or an AK/SK for
 	// accessing other cloud services.
 	AppAgency *string `pulumi:"appAgency"`
-	// Specifies the name of a function file, This field is mandatory only when coeType
-	// is set to jar or zip.
+	// Specifies the name of the function file.\
+	// Required if the `codeType` is set to **jar** or **zip**.
 	CodeFilename *string `pulumi:"codeFilename"`
-	// Specifies the function code type, which can be:
+	// Specifies the code type of the function.\
+	// The valid values are as follows:
 	// + **inline**: inline code.
 	// + **zip**: ZIP file.
 	// + **jar**: JAR file or java functions.
 	// + **obs**: function code stored in an OBS bucket.
+	// + **Custom-Image-Swr**: function code comes from the SWR custom image.
 	CodeType *string `pulumi:"codeType"`
-	// Specifies the code url. This parameter is mandatory when codeType is set to obs.
+	// Specifies the URL where the function code is stored in OBS.\
+	// Required if the `codeType` is set to **obs**.
 	CodeUrl *string `pulumi:"codeUrl"`
-	// Specifies the custom image configuration for creating function.
-	// The object structure is documented below.
+	// Specifies the number of concurrent requests of the function.\
+	// The valid value is range from `1` to `1,000`, the default value is `1`.
+	ConcurrencyNum *int `pulumi:"concurrencyNum"`
+	// Specifies the custom image configuration of the function.\
+	// The customImage structure is documented below.
+	// Required if the parameter `codeType` is **Custom-Image-Swr**.
 	CustomImage *FunctionCustomImage `pulumi:"customImage"`
-	// Specifies the ID list of the dependencies.
+	// Specifies the list of the dependency version IDs.
 	DependLists []string `pulumi:"dependLists"`
-	// Specifies the description of the function.
+	// Specifies the description of the version alias.
 	Description *string `pulumi:"description"`
+	// Specifies the private DNS configuration of the function network.\
+	// Private DNS list is associated to the function by a string in the following format:
+	// `[{\"id\":\"ff8080828a07ffea018a17184aa310f5\","domainName":"functiondebug.example1.com."}]`
+	DnsList *string `pulumi:"dnsList"`
+	// Specifies whether the authentication in the request header is enabled.\
+	// Defaults to **false**.
+	EnableAuthInHeader *bool `pulumi:"enableAuthInHeader"`
+	// Specifies whether the class isolation is enabled for the JAVA runtime
+	// functions.
+	// Defaults to **false**.
+	EnableClassIsolation *bool `pulumi:"enableClassIsolation"`
+	// Specifies whether the dynamic memory configuration is enabled.\
+	// Defaults to **false**.
+	EnableDynamicMemory *bool `pulumi:"enableDynamicMemory"`
 	// Specifies the key/value information defined to be encrypted for the
-	// function. The format is the same as `userData`.
+	// function.
+	// The format is the same as `userData`.
 	EncryptedUserData *string `pulumi:"encryptedUserData"`
-	// Specifies the enterprise project id of the function.
-	// Changing this will create a new resource.
+	// Specifies the ID of the enterprise project to which the
+	// function belongs.
 	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
-	// Specifies the function code. When codeType is set to inline, zip, or jar, this
-	// parameter is mandatory, and the code can be encoded using Base64 or just with the text code.
+	// Specifies the size of the function ephemeral storage.\
+	// The valid values are as follows:
+	// + **512**
+	// + **10240**
+	EphemeralStorage *int `pulumi:"ephemeralStorage"`
+	// Specifies the function code.\
+	// The code value can be encoded using **Base64** or just with the text code.
+	// Required if the `codeType` is set to **inline**, **zip**, or **jar**.
 	FuncCode *string `pulumi:"funcCode"`
-	// Specifies the file system list. The `funcMounts` object structure is documented
-	// below.
+	// Specifies the list of function mount configurations.\
+	// The funcMounts structure is documented below.
 	FuncMounts []FunctionFuncMount `pulumi:"funcMounts"`
-	// Specifies the FunctionGraph version, defaults to **v1**.
+	// Specifies the version of the function framework.\
+	// The valid values are as follows:
 	// + **v1**: Hosts event-driven functions in a serverless context.
 	// + **v2**: Next-generation function hosting service powered by Huawei YuanRong architecture.
 	FunctiongraphVersion *string `pulumi:"functiongraphVersion"`
+	// Specifies the GPU memory size allocated to the function, in MByte (MB).\
+	// The valid value is range form `1,024` to `16,384`, the value must be a multiple of `1,024`.
+	// If not specified, the GPU function is disabled.
+	GpuMemory *int `pulumi:"gpuMemory"`
+	// Specifies the GPU type of the function.\
+	// Currently, only **nvidia-t4** is supported.
+	GpuType *string `pulumi:"gpuType"`
 	// Specifies the entry point of the function.
 	Handler *string `pulumi:"handler"`
+	// Specifies the heartbeat handler of the function.\
+	// The rule is **xx.xx**, such as **com.huawei.demo.TriggerTests.heartBeat**, it must contain periods (.).
+	// The heartbeat function entry must be in the same file as the function execution entry.
+	HeartbeatHandler *string `pulumi:"heartbeatHandler"`
 	// Specifies the initializer of the function.
 	InitializerHandler *string `pulumi:"initializerHandler"`
-	// Specifies the maximum duration the function can be initialized. Value range:
-	// 1s to 300s.
+	// Specifies the maximum duration the function can be initialized, in seconds.\
+	// The valid value is range from `1` to `300`.
 	InitializerTimeout *int `pulumi:"initializerTimeout"`
+	// Specifies whether the function is a stateful function.\
+	// Defaults to **false**.
+	IsStatefulFunction *bool `pulumi:"isStatefulFunction"`
+	// Specifies the LTS group ID for collecting logs.
+	LogGroupId *string `pulumi:"logGroupId"`
+	// Specifies the LTS group name for collecting logs.
+	LogGroupName *string `pulumi:"logGroupName"`
+	// Specifies the LTS stream IID for collecting logs.
+	LogStreamId *string `pulumi:"logStreamId"`
+	// Specifies the LTS stream name for collecting logs.
+	LogStreamName *string `pulumi:"logStreamName"`
 	// Specifies the maximum number of instances of the function.\
-	// The valid value ranges from `-1` to `1000`, defaults to `400`.
+	// The valid value is range from `-1` to `1,000`, defaults to `400`.
 	// + The minimum value is `-1` and means the number of instances is unlimited.
 	MaxInstanceNum *string `pulumi:"maxInstanceNum"`
-	// Specifies the memory size(MB) allocated to the function.
+	// Specifies the memory size allocated to the function, in MByte (MB).
 	MemorySize int `pulumi:"memorySize"`
-	// Specifies the user group ID, a non-0 integer from –1 to 65534. Default to
-	// -1.
+	// Specifies the mount user group ID.\
+	// The valid value is range from `–1` to `65,534`, except `0`.
+	// Defaults to `-1`.
 	MountUserGroupId *int `pulumi:"mountUserGroupId"`
-	// Specifies the user ID, a non-0 integer from –1 to 65534. Default to -1.
+	// Specifies the mount user ID.\
+	// The valid value is range from `–1` to `65,534`, except `0`.
+	// Defaults to `-1`.
 	MountUserId *int `pulumi:"mountUserId"`
-	// Specifies the name of the function.
-	// Changing this will create a new resource.
+	// Specifies the name of metric policy.\
+	// The valid length is limited from `1` to `60` characters, only letters, digits, hyphens (-), and underscores (_) are
+	// allowed. The name must start with a letter and ending with a letter or digit.
 	Name *string `pulumi:"name"`
+	// Specifies the network configuration of the function.\
+	// The networkController structure is documented below.
+	NetworkController *FunctionNetworkController `pulumi:"networkController"`
 	// Specifies the network ID of subnet.
 	NetworkId *string `pulumi:"networkId"`
 	// Deprecated: use app instead
 	Package *string `pulumi:"package"`
-	// Specifies the region in which to create the Function resource. If omitted, the
-	// provider-level region will be used. Changing this will create a new resource.
+	// Specifies the VPC cidr blocks used in the function code to detect whether it
+	// conflicts with the VPC cidr blocks used by the service.
+	// The cidr blocks are separated by semicolons and cannot exceed `5`.
+	PeeringCidr *string `pulumi:"peeringCidr"`
+	// The pre-stop handler of a function.
+	PreStopHandler *string `pulumi:"preStopHandler"`
+	// The maximum duration that the function can be initialized.
+	PreStopTimeout *int `pulumi:"preStopTimeout"`
+	// Specifies the region where the function is located.\
+	// If omitted, the provider-level region will be used. Changing this will create a new resource.
 	Region *string `pulumi:"region"`
-	// Specifies the environment for executing the function.
-	// If the function is created using an SWR image, set this parameter to `Custom Image`.
-	// Changing this will create a new resource.
+	// Specifies the reserved instance policies of the function.\
+	// The reservedInstances structure is documented below.
+	ReservedInstances []FunctionReservedInstance `pulumi:"reservedInstances"`
+	// Specifies the restore hook handler of the function.
+	RestoreHookHandler *string `pulumi:"restoreHookHandler"`
+	// Specifies the timeout of the function restore hook.\
+	// The function will be forcibly stopped if the time is end.
+	// The valid value is range from `1` to `300`, the unit is seconds (s).
+	RestoreHookTimeout *int `pulumi:"restoreHookTimeout"`
+	// Specifies the environment for executing the function.\
+	// The valid values are as follows:
+	// + **Java8**
+	// + **Java11**
+	// + **Node.js6.10**
+	// + **Node.js8.10**
+	// + **Node.js10.16**
+	// + **Node.js12.13**
+	// + **Node.js14.18**
+	// + **Node.js16.17**
+	// + **Node.js18.15**
+	// + **Python2.7**
+	// + **Python3.6**
+	// + **Python3.9**
+	// + **Go1.x**
+	// + **C#(.NET Core 2.1)**
+	// + **C#(.NET Core 3.1)**
+	// + **Custom**
+	// + **PHP7.3**
+	// + **http**
+	// + **Custom Image**
+	// + **Cangjie1.0**
 	Runtime string `pulumi:"runtime"`
 	// Specifies the key/value pairs to associate with the function.
 	Tags map[string]string `pulumi:"tags"`
-	// Specifies the timeout interval of the function, ranges from 3s to 900s.
-	Timeout  int     `pulumi:"timeout"`
+	// Specifies the timeout interval of the function, in seconds.\
+	// The value ranges from `3` to `259,200`.
+	Timeout int `pulumi:"timeout"`
+	// The key/value information defined for the function.
 	UserData *string `pulumi:"userData"`
-	// Specifies the ID of VPC.
+	// Specifies the versions management of the function.\
+	// The versions structure is documented below.
+	Versions []FunctionVersion `pulumi:"versions"`
+	// Specifies the ID of the VPC that can trigger the function.
 	VpcId *string `pulumi:"vpcId"`
 	// Deprecated: use agency instead
 	Xrole *string `pulumi:"xrole"`
@@ -562,86 +980,185 @@ type functionArgs struct {
 
 // The set of arguments for constructing a Function resource.
 type FunctionArgs struct {
-	// Specifies the agency. This parameter is mandatory if the function needs to access other
-	// cloud services.
+	// Specifies the agency configuration of the function.\
+	// This parameter is mandatory if the function needs to access other cloud services.
 	Agency pulumi.StringPtrInput
 	// Specifies the group to which the function belongs.
 	App pulumi.StringPtrInput
-	// Specifies An execution agency enables you to obtain a token or an AK/SK for
+	// Specifies the execution agency enables you to obtain a token or an AK/SK for
 	// accessing other cloud services.
 	AppAgency pulumi.StringPtrInput
-	// Specifies the name of a function file, This field is mandatory only when coeType
-	// is set to jar or zip.
+	// Specifies the name of the function file.\
+	// Required if the `codeType` is set to **jar** or **zip**.
 	CodeFilename pulumi.StringPtrInput
-	// Specifies the function code type, which can be:
+	// Specifies the code type of the function.\
+	// The valid values are as follows:
 	// + **inline**: inline code.
 	// + **zip**: ZIP file.
 	// + **jar**: JAR file or java functions.
 	// + **obs**: function code stored in an OBS bucket.
+	// + **Custom-Image-Swr**: function code comes from the SWR custom image.
 	CodeType pulumi.StringPtrInput
-	// Specifies the code url. This parameter is mandatory when codeType is set to obs.
+	// Specifies the URL where the function code is stored in OBS.\
+	// Required if the `codeType` is set to **obs**.
 	CodeUrl pulumi.StringPtrInput
-	// Specifies the custom image configuration for creating function.
-	// The object structure is documented below.
+	// Specifies the number of concurrent requests of the function.\
+	// The valid value is range from `1` to `1,000`, the default value is `1`.
+	ConcurrencyNum pulumi.IntPtrInput
+	// Specifies the custom image configuration of the function.\
+	// The customImage structure is documented below.
+	// Required if the parameter `codeType` is **Custom-Image-Swr**.
 	CustomImage FunctionCustomImagePtrInput
-	// Specifies the ID list of the dependencies.
+	// Specifies the list of the dependency version IDs.
 	DependLists pulumi.StringArrayInput
-	// Specifies the description of the function.
+	// Specifies the description of the version alias.
 	Description pulumi.StringPtrInput
+	// Specifies the private DNS configuration of the function network.\
+	// Private DNS list is associated to the function by a string in the following format:
+	// `[{\"id\":\"ff8080828a07ffea018a17184aa310f5\","domainName":"functiondebug.example1.com."}]`
+	DnsList pulumi.StringPtrInput
+	// Specifies whether the authentication in the request header is enabled.\
+	// Defaults to **false**.
+	EnableAuthInHeader pulumi.BoolPtrInput
+	// Specifies whether the class isolation is enabled for the JAVA runtime
+	// functions.
+	// Defaults to **false**.
+	EnableClassIsolation pulumi.BoolPtrInput
+	// Specifies whether the dynamic memory configuration is enabled.\
+	// Defaults to **false**.
+	EnableDynamicMemory pulumi.BoolPtrInput
 	// Specifies the key/value information defined to be encrypted for the
-	// function. The format is the same as `userData`.
+	// function.
+	// The format is the same as `userData`.
 	EncryptedUserData pulumi.StringPtrInput
-	// Specifies the enterprise project id of the function.
-	// Changing this will create a new resource.
+	// Specifies the ID of the enterprise project to which the
+	// function belongs.
 	EnterpriseProjectId pulumi.StringPtrInput
-	// Specifies the function code. When codeType is set to inline, zip, or jar, this
-	// parameter is mandatory, and the code can be encoded using Base64 or just with the text code.
+	// Specifies the size of the function ephemeral storage.\
+	// The valid values are as follows:
+	// + **512**
+	// + **10240**
+	EphemeralStorage pulumi.IntPtrInput
+	// Specifies the function code.\
+	// The code value can be encoded using **Base64** or just with the text code.
+	// Required if the `codeType` is set to **inline**, **zip**, or **jar**.
 	FuncCode pulumi.StringPtrInput
-	// Specifies the file system list. The `funcMounts` object structure is documented
-	// below.
+	// Specifies the list of function mount configurations.\
+	// The funcMounts structure is documented below.
 	FuncMounts FunctionFuncMountArrayInput
-	// Specifies the FunctionGraph version, defaults to **v1**.
+	// Specifies the version of the function framework.\
+	// The valid values are as follows:
 	// + **v1**: Hosts event-driven functions in a serverless context.
 	// + **v2**: Next-generation function hosting service powered by Huawei YuanRong architecture.
 	FunctiongraphVersion pulumi.StringPtrInput
+	// Specifies the GPU memory size allocated to the function, in MByte (MB).\
+	// The valid value is range form `1,024` to `16,384`, the value must be a multiple of `1,024`.
+	// If not specified, the GPU function is disabled.
+	GpuMemory pulumi.IntPtrInput
+	// Specifies the GPU type of the function.\
+	// Currently, only **nvidia-t4** is supported.
+	GpuType pulumi.StringPtrInput
 	// Specifies the entry point of the function.
 	Handler pulumi.StringPtrInput
+	// Specifies the heartbeat handler of the function.\
+	// The rule is **xx.xx**, such as **com.huawei.demo.TriggerTests.heartBeat**, it must contain periods (.).
+	// The heartbeat function entry must be in the same file as the function execution entry.
+	HeartbeatHandler pulumi.StringPtrInput
 	// Specifies the initializer of the function.
 	InitializerHandler pulumi.StringPtrInput
-	// Specifies the maximum duration the function can be initialized. Value range:
-	// 1s to 300s.
+	// Specifies the maximum duration the function can be initialized, in seconds.\
+	// The valid value is range from `1` to `300`.
 	InitializerTimeout pulumi.IntPtrInput
+	// Specifies whether the function is a stateful function.\
+	// Defaults to **false**.
+	IsStatefulFunction pulumi.BoolPtrInput
+	// Specifies the LTS group ID for collecting logs.
+	LogGroupId pulumi.StringPtrInput
+	// Specifies the LTS group name for collecting logs.
+	LogGroupName pulumi.StringPtrInput
+	// Specifies the LTS stream IID for collecting logs.
+	LogStreamId pulumi.StringPtrInput
+	// Specifies the LTS stream name for collecting logs.
+	LogStreamName pulumi.StringPtrInput
 	// Specifies the maximum number of instances of the function.\
-	// The valid value ranges from `-1` to `1000`, defaults to `400`.
+	// The valid value is range from `-1` to `1,000`, defaults to `400`.
 	// + The minimum value is `-1` and means the number of instances is unlimited.
 	MaxInstanceNum pulumi.StringPtrInput
-	// Specifies the memory size(MB) allocated to the function.
+	// Specifies the memory size allocated to the function, in MByte (MB).
 	MemorySize pulumi.IntInput
-	// Specifies the user group ID, a non-0 integer from –1 to 65534. Default to
-	// -1.
+	// Specifies the mount user group ID.\
+	// The valid value is range from `–1` to `65,534`, except `0`.
+	// Defaults to `-1`.
 	MountUserGroupId pulumi.IntPtrInput
-	// Specifies the user ID, a non-0 integer from –1 to 65534. Default to -1.
+	// Specifies the mount user ID.\
+	// The valid value is range from `–1` to `65,534`, except `0`.
+	// Defaults to `-1`.
 	MountUserId pulumi.IntPtrInput
-	// Specifies the name of the function.
-	// Changing this will create a new resource.
+	// Specifies the name of metric policy.\
+	// The valid length is limited from `1` to `60` characters, only letters, digits, hyphens (-), and underscores (_) are
+	// allowed. The name must start with a letter and ending with a letter or digit.
 	Name pulumi.StringPtrInput
+	// Specifies the network configuration of the function.\
+	// The networkController structure is documented below.
+	NetworkController FunctionNetworkControllerPtrInput
 	// Specifies the network ID of subnet.
 	NetworkId pulumi.StringPtrInput
 	// Deprecated: use app instead
 	Package pulumi.StringPtrInput
-	// Specifies the region in which to create the Function resource. If omitted, the
-	// provider-level region will be used. Changing this will create a new resource.
+	// Specifies the VPC cidr blocks used in the function code to detect whether it
+	// conflicts with the VPC cidr blocks used by the service.
+	// The cidr blocks are separated by semicolons and cannot exceed `5`.
+	PeeringCidr pulumi.StringPtrInput
+	// The pre-stop handler of a function.
+	PreStopHandler pulumi.StringPtrInput
+	// The maximum duration that the function can be initialized.
+	PreStopTimeout pulumi.IntPtrInput
+	// Specifies the region where the function is located.\
+	// If omitted, the provider-level region will be used. Changing this will create a new resource.
 	Region pulumi.StringPtrInput
-	// Specifies the environment for executing the function.
-	// If the function is created using an SWR image, set this parameter to `Custom Image`.
-	// Changing this will create a new resource.
+	// Specifies the reserved instance policies of the function.\
+	// The reservedInstances structure is documented below.
+	ReservedInstances FunctionReservedInstanceArrayInput
+	// Specifies the restore hook handler of the function.
+	RestoreHookHandler pulumi.StringPtrInput
+	// Specifies the timeout of the function restore hook.\
+	// The function will be forcibly stopped if the time is end.
+	// The valid value is range from `1` to `300`, the unit is seconds (s).
+	RestoreHookTimeout pulumi.IntPtrInput
+	// Specifies the environment for executing the function.\
+	// The valid values are as follows:
+	// + **Java8**
+	// + **Java11**
+	// + **Node.js6.10**
+	// + **Node.js8.10**
+	// + **Node.js10.16**
+	// + **Node.js12.13**
+	// + **Node.js14.18**
+	// + **Node.js16.17**
+	// + **Node.js18.15**
+	// + **Python2.7**
+	// + **Python3.6**
+	// + **Python3.9**
+	// + **Go1.x**
+	// + **C#(.NET Core 2.1)**
+	// + **C#(.NET Core 3.1)**
+	// + **Custom**
+	// + **PHP7.3**
+	// + **http**
+	// + **Custom Image**
+	// + **Cangjie1.0**
 	Runtime pulumi.StringInput
 	// Specifies the key/value pairs to associate with the function.
 	Tags pulumi.StringMapInput
-	// Specifies the timeout interval of the function, ranges from 3s to 900s.
-	Timeout  pulumi.IntInput
+	// Specifies the timeout interval of the function, in seconds.\
+	// The value ranges from `3` to `259,200`.
+	Timeout pulumi.IntInput
+	// The key/value information defined for the function.
 	UserData pulumi.StringPtrInput
-	// Specifies the ID of VPC.
+	// Specifies the versions management of the function.\
+	// The versions structure is documented below.
+	Versions FunctionVersionArrayInput
+	// Specifies the ID of the VPC that can trigger the function.
 	VpcId pulumi.StringPtrInput
 	// Deprecated: use agency instead
 	Xrole pulumi.StringPtrInput
@@ -734,8 +1251,8 @@ func (o FunctionOutput) ToFunctionOutputWithContext(ctx context.Context) Functio
 	return o
 }
 
-// Specifies the agency. This parameter is mandatory if the function needs to access other
-// cloud services.
+// Specifies the agency configuration of the function.\
+// This parameter is mandatory if the function needs to access other cloud services.
 func (o FunctionOutput) Agency() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Function) pulumi.StringPtrOutput { return v.Agency }).(pulumi.StringPtrOutput)
 }
@@ -745,77 +1262,137 @@ func (o FunctionOutput) App() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Function) pulumi.StringPtrOutput { return v.App }).(pulumi.StringPtrOutput)
 }
 
-// Specifies An execution agency enables you to obtain a token or an AK/SK for
+// Specifies the execution agency enables you to obtain a token or an AK/SK for
 // accessing other cloud services.
 func (o FunctionOutput) AppAgency() pulumi.StringOutput {
 	return o.ApplyT(func(v *Function) pulumi.StringOutput { return v.AppAgency }).(pulumi.StringOutput)
 }
 
-// Specifies the name of a function file, This field is mandatory only when coeType
-// is set to jar or zip.
+// Specifies the name of the function file.\
+// Required if the `codeType` is set to **jar** or **zip**.
 func (o FunctionOutput) CodeFilename() pulumi.StringOutput {
 	return o.ApplyT(func(v *Function) pulumi.StringOutput { return v.CodeFilename }).(pulumi.StringOutput)
 }
 
-// Specifies the function code type, which can be:
+// Specifies the code type of the function.\
+// The valid values are as follows:
 // + **inline**: inline code.
 // + **zip**: ZIP file.
 // + **jar**: JAR file or java functions.
 // + **obs**: function code stored in an OBS bucket.
+// + **Custom-Image-Swr**: function code comes from the SWR custom image.
 func (o FunctionOutput) CodeType() pulumi.StringOutput {
 	return o.ApplyT(func(v *Function) pulumi.StringOutput { return v.CodeType }).(pulumi.StringOutput)
 }
 
-// Specifies the code url. This parameter is mandatory when codeType is set to obs.
+// Specifies the URL where the function code is stored in OBS.\
+// Required if the `codeType` is set to **obs**.
 func (o FunctionOutput) CodeUrl() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Function) pulumi.StringPtrOutput { return v.CodeUrl }).(pulumi.StringPtrOutput)
 }
 
-// Specifies the custom image configuration for creating function.
-// The object structure is documented below.
+// Specifies the number of concurrent requests of the function.\
+// The valid value is range from `1` to `1,000`, the default value is `1`.
+func (o FunctionOutput) ConcurrencyNum() pulumi.IntOutput {
+	return o.ApplyT(func(v *Function) pulumi.IntOutput { return v.ConcurrencyNum }).(pulumi.IntOutput)
+}
+
+// Specifies the custom image configuration of the function.\
+// The customImage structure is documented below.
+// Required if the parameter `codeType` is **Custom-Image-Swr**.
 func (o FunctionOutput) CustomImage() FunctionCustomImageOutput {
 	return o.ApplyT(func(v *Function) FunctionCustomImageOutput { return v.CustomImage }).(FunctionCustomImageOutput)
 }
 
-// Specifies the ID list of the dependencies.
+// Specifies the list of the dependency version IDs.
 func (o FunctionOutput) DependLists() pulumi.StringArrayOutput {
 	return o.ApplyT(func(v *Function) pulumi.StringArrayOutput { return v.DependLists }).(pulumi.StringArrayOutput)
 }
 
-// Specifies the description of the function.
+// Specifies the description of the version alias.
 func (o FunctionOutput) Description() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Function) pulumi.StringPtrOutput { return v.Description }).(pulumi.StringPtrOutput)
 }
 
+// Specifies the private DNS configuration of the function network.\
+// Private DNS list is associated to the function by a string in the following format:
+// `[{\"id\":\"ff8080828a07ffea018a17184aa310f5\","domainName":"functiondebug.example1.com."}]`
+func (o FunctionOutput) DnsList() pulumi.StringOutput {
+	return o.ApplyT(func(v *Function) pulumi.StringOutput { return v.DnsList }).(pulumi.StringOutput)
+}
+
+// Specifies whether the authentication in the request header is enabled.\
+// Defaults to **false**.
+func (o FunctionOutput) EnableAuthInHeader() pulumi.BoolPtrOutput {
+	return o.ApplyT(func(v *Function) pulumi.BoolPtrOutput { return v.EnableAuthInHeader }).(pulumi.BoolPtrOutput)
+}
+
+// Specifies whether the class isolation is enabled for the JAVA runtime
+// functions.
+// Defaults to **false**.
+func (o FunctionOutput) EnableClassIsolation() pulumi.BoolPtrOutput {
+	return o.ApplyT(func(v *Function) pulumi.BoolPtrOutput { return v.EnableClassIsolation }).(pulumi.BoolPtrOutput)
+}
+
+// Specifies whether the dynamic memory configuration is enabled.\
+// Defaults to **false**.
+func (o FunctionOutput) EnableDynamicMemory() pulumi.BoolPtrOutput {
+	return o.ApplyT(func(v *Function) pulumi.BoolPtrOutput { return v.EnableDynamicMemory }).(pulumi.BoolPtrOutput)
+}
+
 // Specifies the key/value information defined to be encrypted for the
-// function. The format is the same as `userData`.
+// function.
+// The format is the same as `userData`.
 func (o FunctionOutput) EncryptedUserData() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Function) pulumi.StringPtrOutput { return v.EncryptedUserData }).(pulumi.StringPtrOutput)
 }
 
-// Specifies the enterprise project id of the function.
-// Changing this will create a new resource.
+// Specifies the ID of the enterprise project to which the
+// function belongs.
 func (o FunctionOutput) EnterpriseProjectId() pulumi.StringOutput {
 	return o.ApplyT(func(v *Function) pulumi.StringOutput { return v.EnterpriseProjectId }).(pulumi.StringOutput)
 }
 
-// Specifies the function code. When codeType is set to inline, zip, or jar, this
-// parameter is mandatory, and the code can be encoded using Base64 or just with the text code.
+// Specifies the size of the function ephemeral storage.\
+// The valid values are as follows:
+// + **512**
+// + **10240**
+func (o FunctionOutput) EphemeralStorage() pulumi.IntOutput {
+	return o.ApplyT(func(v *Function) pulumi.IntOutput { return v.EphemeralStorage }).(pulumi.IntOutput)
+}
+
+// Specifies the function code.\
+// The code value can be encoded using **Base64** or just with the text code.
+// Required if the `codeType` is set to **inline**, **zip**, or **jar**.
 func (o FunctionOutput) FuncCode() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Function) pulumi.StringPtrOutput { return v.FuncCode }).(pulumi.StringPtrOutput)
 }
 
-// Specifies the file system list. The `funcMounts` object structure is documented
-// below.
+// Specifies the list of function mount configurations.\
+// The funcMounts structure is documented below.
 func (o FunctionOutput) FuncMounts() FunctionFuncMountArrayOutput {
 	return o.ApplyT(func(v *Function) FunctionFuncMountArrayOutput { return v.FuncMounts }).(FunctionFuncMountArrayOutput)
 }
 
-// Specifies the FunctionGraph version, defaults to **v1**.
+// Specifies the version of the function framework.\
+// The valid values are as follows:
 // + **v1**: Hosts event-driven functions in a serverless context.
 // + **v2**: Next-generation function hosting service powered by Huawei YuanRong architecture.
 func (o FunctionOutput) FunctiongraphVersion() pulumi.StringOutput {
 	return o.ApplyT(func(v *Function) pulumi.StringOutput { return v.FunctiongraphVersion }).(pulumi.StringOutput)
+}
+
+// Specifies the GPU memory size allocated to the function, in MByte (MB).\
+// The valid value is range form `1,024` to `16,384`, the value must be a multiple of `1,024`.
+// If not specified, the GPU function is disabled.
+func (o FunctionOutput) GpuMemory() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v *Function) pulumi.IntPtrOutput { return v.GpuMemory }).(pulumi.IntPtrOutput)
+}
+
+// Specifies the GPU type of the function.\
+// Currently, only **nvidia-t4** is supported.
+func (o FunctionOutput) GpuType() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *Function) pulumi.StringPtrOutput { return v.GpuType }).(pulumi.StringPtrOutput)
 }
 
 // Specifies the entry point of the function.
@@ -823,44 +1400,87 @@ func (o FunctionOutput) Handler() pulumi.StringOutput {
 	return o.ApplyT(func(v *Function) pulumi.StringOutput { return v.Handler }).(pulumi.StringOutput)
 }
 
+// Specifies the heartbeat handler of the function.\
+// The rule is **xx.xx**, such as **com.huawei.demo.TriggerTests.heartBeat**, it must contain periods (.).
+// The heartbeat function entry must be in the same file as the function execution entry.
+func (o FunctionOutput) HeartbeatHandler() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *Function) pulumi.StringPtrOutput { return v.HeartbeatHandler }).(pulumi.StringPtrOutput)
+}
+
 // Specifies the initializer of the function.
 func (o FunctionOutput) InitializerHandler() pulumi.StringOutput {
 	return o.ApplyT(func(v *Function) pulumi.StringOutput { return v.InitializerHandler }).(pulumi.StringOutput)
 }
 
-// Specifies the maximum duration the function can be initialized. Value range:
-// 1s to 300s.
+// Specifies the maximum duration the function can be initialized, in seconds.\
+// The valid value is range from `1` to `300`.
 func (o FunctionOutput) InitializerTimeout() pulumi.IntOutput {
 	return o.ApplyT(func(v *Function) pulumi.IntOutput { return v.InitializerTimeout }).(pulumi.IntOutput)
 }
 
+// Specifies whether the function is a stateful function.\
+// Defaults to **false**.
+func (o FunctionOutput) IsStatefulFunction() pulumi.BoolPtrOutput {
+	return o.ApplyT(func(v *Function) pulumi.BoolPtrOutput { return v.IsStatefulFunction }).(pulumi.BoolPtrOutput)
+}
+
+// Specifies the LTS group ID for collecting logs.
+func (o FunctionOutput) LogGroupId() pulumi.StringOutput {
+	return o.ApplyT(func(v *Function) pulumi.StringOutput { return v.LogGroupId }).(pulumi.StringOutput)
+}
+
+// Specifies the LTS group name for collecting logs.
+func (o FunctionOutput) LogGroupName() pulumi.StringOutput {
+	return o.ApplyT(func(v *Function) pulumi.StringOutput { return v.LogGroupName }).(pulumi.StringOutput)
+}
+
+// Specifies the LTS stream IID for collecting logs.
+func (o FunctionOutput) LogStreamId() pulumi.StringOutput {
+	return o.ApplyT(func(v *Function) pulumi.StringOutput { return v.LogStreamId }).(pulumi.StringOutput)
+}
+
+// Specifies the LTS stream name for collecting logs.
+func (o FunctionOutput) LogStreamName() pulumi.StringOutput {
+	return o.ApplyT(func(v *Function) pulumi.StringOutput { return v.LogStreamName }).(pulumi.StringOutput)
+}
+
 // Specifies the maximum number of instances of the function.\
-// The valid value ranges from `-1` to `1000`, defaults to `400`.
+// The valid value is range from `-1` to `1,000`, defaults to `400`.
 // + The minimum value is `-1` and means the number of instances is unlimited.
 func (o FunctionOutput) MaxInstanceNum() pulumi.StringOutput {
 	return o.ApplyT(func(v *Function) pulumi.StringOutput { return v.MaxInstanceNum }).(pulumi.StringOutput)
 }
 
-// Specifies the memory size(MB) allocated to the function.
+// Specifies the memory size allocated to the function, in MByte (MB).
 func (o FunctionOutput) MemorySize() pulumi.IntOutput {
 	return o.ApplyT(func(v *Function) pulumi.IntOutput { return v.MemorySize }).(pulumi.IntOutput)
 }
 
-// Specifies the user group ID, a non-0 integer from –1 to 65534. Default to
-// -1.
+// Specifies the mount user group ID.\
+// The valid value is range from `–1` to `65,534`, except `0`.
+// Defaults to `-1`.
 func (o FunctionOutput) MountUserGroupId() pulumi.IntOutput {
 	return o.ApplyT(func(v *Function) pulumi.IntOutput { return v.MountUserGroupId }).(pulumi.IntOutput)
 }
 
-// Specifies the user ID, a non-0 integer from –1 to 65534. Default to -1.
+// Specifies the mount user ID.\
+// The valid value is range from `–1` to `65,534`, except `0`.
+// Defaults to `-1`.
 func (o FunctionOutput) MountUserId() pulumi.IntOutput {
 	return o.ApplyT(func(v *Function) pulumi.IntOutput { return v.MountUserId }).(pulumi.IntOutput)
 }
 
-// Specifies the name of the function.
-// Changing this will create a new resource.
+// Specifies the name of metric policy.\
+// The valid length is limited from `1` to `60` characters, only letters, digits, hyphens (-), and underscores (_) are
+// allowed. The name must start with a letter and ending with a letter or digit.
 func (o FunctionOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v *Function) pulumi.StringOutput { return v.Name }).(pulumi.StringOutput)
+}
+
+// Specifies the network configuration of the function.\
+// The networkController structure is documented below.
+func (o FunctionOutput) NetworkController() FunctionNetworkControllerPtrOutput {
+	return o.ApplyT(func(v *Function) FunctionNetworkControllerPtrOutput { return v.NetworkController }).(FunctionNetworkControllerPtrOutput)
 }
 
 // Specifies the network ID of subnet.
@@ -873,15 +1493,69 @@ func (o FunctionOutput) Package() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Function) pulumi.StringPtrOutput { return v.Package }).(pulumi.StringPtrOutput)
 }
 
-// Specifies the region in which to create the Function resource. If omitted, the
-// provider-level region will be used. Changing this will create a new resource.
+// Specifies the VPC cidr blocks used in the function code to detect whether it
+// conflicts with the VPC cidr blocks used by the service.
+// The cidr blocks are separated by semicolons and cannot exceed `5`.
+func (o FunctionOutput) PeeringCidr() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *Function) pulumi.StringPtrOutput { return v.PeeringCidr }).(pulumi.StringPtrOutput)
+}
+
+// The pre-stop handler of a function.
+func (o FunctionOutput) PreStopHandler() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *Function) pulumi.StringPtrOutput { return v.PreStopHandler }).(pulumi.StringPtrOutput)
+}
+
+// The maximum duration that the function can be initialized.
+func (o FunctionOutput) PreStopTimeout() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v *Function) pulumi.IntPtrOutput { return v.PreStopTimeout }).(pulumi.IntPtrOutput)
+}
+
+// Specifies the region where the function is located.\
+// If omitted, the provider-level region will be used. Changing this will create a new resource.
 func (o FunctionOutput) Region() pulumi.StringOutput {
 	return o.ApplyT(func(v *Function) pulumi.StringOutput { return v.Region }).(pulumi.StringOutput)
 }
 
-// Specifies the environment for executing the function.
-// If the function is created using an SWR image, set this parameter to `Custom Image`.
-// Changing this will create a new resource.
+// Specifies the reserved instance policies of the function.\
+// The reservedInstances structure is documented below.
+func (o FunctionOutput) ReservedInstances() FunctionReservedInstanceArrayOutput {
+	return o.ApplyT(func(v *Function) FunctionReservedInstanceArrayOutput { return v.ReservedInstances }).(FunctionReservedInstanceArrayOutput)
+}
+
+// Specifies the restore hook handler of the function.
+func (o FunctionOutput) RestoreHookHandler() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *Function) pulumi.StringPtrOutput { return v.RestoreHookHandler }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the timeout of the function restore hook.\
+// The function will be forcibly stopped if the time is end.
+// The valid value is range from `1` to `300`, the unit is seconds (s).
+func (o FunctionOutput) RestoreHookTimeout() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v *Function) pulumi.IntPtrOutput { return v.RestoreHookTimeout }).(pulumi.IntPtrOutput)
+}
+
+// Specifies the environment for executing the function.\
+// The valid values are as follows:
+// + **Java8**
+// + **Java11**
+// + **Node.js6.10**
+// + **Node.js8.10**
+// + **Node.js10.16**
+// + **Node.js12.13**
+// + **Node.js14.18**
+// + **Node.js16.17**
+// + **Node.js18.15**
+// + **Python2.7**
+// + **Python3.6**
+// + **Python3.9**
+// + **Go1.x**
+// + **C#(.NET Core 2.1)**
+// + **C#(.NET Core 3.1)**
+// + **Custom**
+// + **PHP7.3**
+// + **http**
+// + **Custom Image**
+// + **Cangjie1.0**
 func (o FunctionOutput) Runtime() pulumi.StringOutput {
 	return o.ApplyT(func(v *Function) pulumi.StringOutput { return v.Runtime }).(pulumi.StringOutput)
 }
@@ -891,26 +1565,34 @@ func (o FunctionOutput) Tags() pulumi.StringMapOutput {
 	return o.ApplyT(func(v *Function) pulumi.StringMapOutput { return v.Tags }).(pulumi.StringMapOutput)
 }
 
-// Specifies the timeout interval of the function, ranges from 3s to 900s.
+// Specifies the timeout interval of the function, in seconds.\
+// The value ranges from `3` to `259,200`.
 func (o FunctionOutput) Timeout() pulumi.IntOutput {
 	return o.ApplyT(func(v *Function) pulumi.IntOutput { return v.Timeout }).(pulumi.IntOutput)
 }
 
-// Uniform Resource Name
+// The URN (Uniform Resource Name) of the function.
 func (o FunctionOutput) Urn() pulumi.StringOutput {
 	return o.ApplyT(func(v *Function) pulumi.StringOutput { return v.Urn }).(pulumi.StringOutput)
 }
 
+// The key/value information defined for the function.
 func (o FunctionOutput) UserData() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Function) pulumi.StringPtrOutput { return v.UserData }).(pulumi.StringPtrOutput)
 }
 
-// The version of the function
+// The version of the function.
 func (o FunctionOutput) Version() pulumi.StringOutput {
 	return o.ApplyT(func(v *Function) pulumi.StringOutput { return v.Version }).(pulumi.StringOutput)
 }
 
-// Specifies the ID of VPC.
+// Specifies the versions management of the function.\
+// The versions structure is documented below.
+func (o FunctionOutput) Versions() FunctionVersionArrayOutput {
+	return o.ApplyT(func(v *Function) FunctionVersionArrayOutput { return v.Versions }).(FunctionVersionArrayOutput)
+}
+
+// Specifies the ID of the VPC that can trigger the function.
 func (o FunctionOutput) VpcId() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Function) pulumi.StringPtrOutput { return v.VpcId }).(pulumi.StringPtrOutput)
 }

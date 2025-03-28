@@ -620,6 +620,8 @@ class FileSystem(pulumi.CustomResource):
                  tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  __props__=None):
         """
+        !> **WARNING:** It has been deprecated.
+
         Provides a Shared File System (SFS) resource within HuaweiCloud.
 
         ## Example Usage
@@ -689,7 +691,7 @@ class FileSystem(pulumi.CustomResource):
 
         ## Import
 
-        SFS can be imported using the `id`, e.g.
+        SFS can be imported using the `id`, e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:Sfs/fileSystem:FileSystem huaweicloud_sfs_file_system 4779ab1c-7c1a-44b1-a02e-93dfc361b32d
@@ -739,6 +741,8 @@ class FileSystem(pulumi.CustomResource):
                  args: FileSystemArgs,
                  opts: Optional[pulumi.ResourceOptions] = None):
         """
+        !> **WARNING:** It has been deprecated.
+
         Provides a Shared File System (SFS) resource within HuaweiCloud.
 
         ## Example Usage
@@ -808,7 +812,7 @@ class FileSystem(pulumi.CustomResource):
 
         ## Import
 
-        SFS can be imported using the `id`, e.g.
+        SFS can be imported using the `id`, e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:Sfs/fileSystem:FileSystem huaweicloud_sfs_file_system 4779ab1c-7c1a-44b1-a02e-93dfc361b32d

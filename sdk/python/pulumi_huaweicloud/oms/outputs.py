@@ -44,7 +44,7 @@ class MigrationTaskBandwidthPolicy(dict):
         :param str end: Specifies the end time of the traffic limit rule. The format is **hh:mm**,
                e.g. **12:03**.
         :param int max_bandwidth: Specifies the maximum traffic bandwidth allowed in the specified time
-               segment. The unit is byte/s. The value ranges from **1** MB/s to **200** MB/s.
+               segment. The value ranges from `1` to `200`. The unit is MB/s.
         :param str start: Specifies the start time of the traffic limit rule. The format is **hh:mm**,
                e.g. **12:03**.
         """
@@ -66,7 +66,7 @@ class MigrationTaskBandwidthPolicy(dict):
     def max_bandwidth(self) -> int:
         """
         Specifies the maximum traffic bandwidth allowed in the specified time
-        segment. The unit is byte/s. The value ranges from **1** MB/s to **200** MB/s.
+        segment. The value ranges from `1` to `200`. The unit is MB/s.
         """
         return pulumi.get(self, "max_bandwidth")
 
@@ -297,7 +297,8 @@ class MigrationTaskSourceCdn(dict):
                Changing this creates a new resource.
         :param str authentication_type: Specifies the authentication type. Valid values are **NONE**,
                **QINIU_PRIVATE_AUTHENTICATION**, **ALIYUN_OSS_A**, **ALIYUN_OSS_B**, **ALIYUN_OSS_C**,
-               **KSYUN_PRIVATE_AUTHENTICATION**. Default value: **None**. Changing this creates a new resource.
+               **KSYUN_PRIVATE_AUTHENTICATION**, **TENCENT_COS_A**, **TENCENT_COS_B**, **TENCENT_COS_C**,
+               **TENCENT_COS_D**. Default value: **None**. Changing this creates a new resource.
         """
         pulumi.set(__self__, "domain", domain)
         pulumi.set(__self__, "protocol", protocol)
@@ -339,7 +340,8 @@ class MigrationTaskSourceCdn(dict):
         """
         Specifies the authentication type. Valid values are **NONE**,
         **QINIU_PRIVATE_AUTHENTICATION**, **ALIYUN_OSS_A**, **ALIYUN_OSS_B**, **ALIYUN_OSS_C**,
-        **KSYUN_PRIVATE_AUTHENTICATION**. Default value: **None**. Changing this creates a new resource.
+        **KSYUN_PRIVATE_AUTHENTICATION**, **TENCENT_COS_A**, **TENCENT_COS_B**, **TENCENT_COS_C**,
+        **TENCENT_COS_D**. Default value: **None**. Changing this creates a new resource.
         """
         return pulumi.get(self, "authentication_type")
 

@@ -70,34 +70,38 @@ import (
 type Group struct {
 	pulumi.CustomResourceState
 
+	// The creation time of the group, in RFC3339 format.
+	CreatedAt pulumi.StringOutput `pulumi:"createdAt"`
 	// Specifies the group description.\
 	// The description contain a maximum of 255 characters and the angle brackets (< and >) are not allowed.
 	// Chinese characters must be in **UTF-8** or **Unicode** format.
 	Description pulumi.StringPtrOutput `pulumi:"description"`
+	// Specifies whether to use the debugging domain name to access the APIs
+	// within the group. The default value is `false`.
+	DomainAccessEnabled pulumi.BoolOutput `pulumi:"domainAccessEnabled"`
 	// Specifies an array of one or more environments of the associated group.\
 	// The object structure is documented below.
 	Environments GroupEnvironmentArrayOutput `pulumi:"environments"`
+	// Specifies whether to delete all sub-resources (for API) when deleting this group.\
+	// Defaults to **false**.
+	ForceDestroy pulumi.BoolOutput `pulumi:"forceDestroy"`
 	// Specifies the ID of the dedicated instance to which the group belongs.\
 	// Changing this will create a new resource.
 	InstanceId pulumi.StringOutput `pulumi:"instanceId"`
-	// Specifies the variable name.\
-	// The valid length is limited from `3` to `32` characters.
-	// Only letters, digits, hyphens (-), and underscores (_) are allowed, and must start with a letter.
-	// In the definition of an API, `name` (case-sensitive) indicates a variable, such as #Name#.
-	// It is replaced by the actual value when the API is published in an environment.
-	// The variable names are not allowed to be repeated for an API group.
+	// Specifies the domain name. The valid must comply with the domian name specifications.
 	Name pulumi.StringOutput `pulumi:"name"`
 	// Specifies the region where the APIG (API) group is located.\
 	// If omitted, the provider-level region will be used. Changing this will create a new resource.
 	Region pulumi.StringOutput `pulumi:"region"`
-	// The registration time, in RFC-3339 format.
+	// The registration time.
 	RegistrationTime pulumi.StringOutput `pulumi:"registrationTime"`
-	// schema: Deprecated; The latest update time of the group.
-	//
-	// Deprecated: Use 'updated_at' instead
+	// The latest update time of the group.
 	UpdateTime pulumi.StringOutput `pulumi:"updateTime"`
-	// The time when the API group was last modified, in RFC-3339 format.
+	// The latest update time of the group, in RFC3339 format.
 	UpdatedAt pulumi.StringOutput `pulumi:"updatedAt"`
+	// Specifies independent domain names of the associated with group.\
+	// The urlDomains structure is documented below.
+	UrlDomains GroupUrlDomainArrayOutput `pulumi:"urlDomains"`
 }
 
 // NewGroup registers a new resource with the given unique name, arguments, and options.
@@ -133,65 +137,73 @@ func GetGroup(ctx *pulumi.Context,
 
 // Input properties used for looking up and filtering Group resources.
 type groupState struct {
+	// The creation time of the group, in RFC3339 format.
+	CreatedAt *string `pulumi:"createdAt"`
 	// Specifies the group description.\
 	// The description contain a maximum of 255 characters and the angle brackets (< and >) are not allowed.
 	// Chinese characters must be in **UTF-8** or **Unicode** format.
 	Description *string `pulumi:"description"`
+	// Specifies whether to use the debugging domain name to access the APIs
+	// within the group. The default value is `false`.
+	DomainAccessEnabled *bool `pulumi:"domainAccessEnabled"`
 	// Specifies an array of one or more environments of the associated group.\
 	// The object structure is documented below.
 	Environments []GroupEnvironment `pulumi:"environments"`
+	// Specifies whether to delete all sub-resources (for API) when deleting this group.\
+	// Defaults to **false**.
+	ForceDestroy *bool `pulumi:"forceDestroy"`
 	// Specifies the ID of the dedicated instance to which the group belongs.\
 	// Changing this will create a new resource.
 	InstanceId *string `pulumi:"instanceId"`
-	// Specifies the variable name.\
-	// The valid length is limited from `3` to `32` characters.
-	// Only letters, digits, hyphens (-), and underscores (_) are allowed, and must start with a letter.
-	// In the definition of an API, `name` (case-sensitive) indicates a variable, such as #Name#.
-	// It is replaced by the actual value when the API is published in an environment.
-	// The variable names are not allowed to be repeated for an API group.
+	// Specifies the domain name. The valid must comply with the domian name specifications.
 	Name *string `pulumi:"name"`
 	// Specifies the region where the APIG (API) group is located.\
 	// If omitted, the provider-level region will be used. Changing this will create a new resource.
 	Region *string `pulumi:"region"`
-	// The registration time, in RFC-3339 format.
+	// The registration time.
 	RegistrationTime *string `pulumi:"registrationTime"`
-	// schema: Deprecated; The latest update time of the group.
-	//
-	// Deprecated: Use 'updated_at' instead
+	// The latest update time of the group.
 	UpdateTime *string `pulumi:"updateTime"`
-	// The time when the API group was last modified, in RFC-3339 format.
+	// The latest update time of the group, in RFC3339 format.
 	UpdatedAt *string `pulumi:"updatedAt"`
+	// Specifies independent domain names of the associated with group.\
+	// The urlDomains structure is documented below.
+	UrlDomains []GroupUrlDomain `pulumi:"urlDomains"`
 }
 
 type GroupState struct {
+	// The creation time of the group, in RFC3339 format.
+	CreatedAt pulumi.StringPtrInput
 	// Specifies the group description.\
 	// The description contain a maximum of 255 characters and the angle brackets (< and >) are not allowed.
 	// Chinese characters must be in **UTF-8** or **Unicode** format.
 	Description pulumi.StringPtrInput
+	// Specifies whether to use the debugging domain name to access the APIs
+	// within the group. The default value is `false`.
+	DomainAccessEnabled pulumi.BoolPtrInput
 	// Specifies an array of one or more environments of the associated group.\
 	// The object structure is documented below.
 	Environments GroupEnvironmentArrayInput
+	// Specifies whether to delete all sub-resources (for API) when deleting this group.\
+	// Defaults to **false**.
+	ForceDestroy pulumi.BoolPtrInput
 	// Specifies the ID of the dedicated instance to which the group belongs.\
 	// Changing this will create a new resource.
 	InstanceId pulumi.StringPtrInput
-	// Specifies the variable name.\
-	// The valid length is limited from `3` to `32` characters.
-	// Only letters, digits, hyphens (-), and underscores (_) are allowed, and must start with a letter.
-	// In the definition of an API, `name` (case-sensitive) indicates a variable, such as #Name#.
-	// It is replaced by the actual value when the API is published in an environment.
-	// The variable names are not allowed to be repeated for an API group.
+	// Specifies the domain name. The valid must comply with the domian name specifications.
 	Name pulumi.StringPtrInput
 	// Specifies the region where the APIG (API) group is located.\
 	// If omitted, the provider-level region will be used. Changing this will create a new resource.
 	Region pulumi.StringPtrInput
-	// The registration time, in RFC-3339 format.
+	// The registration time.
 	RegistrationTime pulumi.StringPtrInput
-	// schema: Deprecated; The latest update time of the group.
-	//
-	// Deprecated: Use 'updated_at' instead
+	// The latest update time of the group.
 	UpdateTime pulumi.StringPtrInput
-	// The time when the API group was last modified, in RFC-3339 format.
+	// The latest update time of the group, in RFC3339 format.
 	UpdatedAt pulumi.StringPtrInput
+	// Specifies independent domain names of the associated with group.\
+	// The urlDomains structure is documented below.
+	UrlDomains GroupUrlDomainArrayInput
 }
 
 func (GroupState) ElementType() reflect.Type {
@@ -203,22 +215,26 @@ type groupArgs struct {
 	// The description contain a maximum of 255 characters and the angle brackets (< and >) are not allowed.
 	// Chinese characters must be in **UTF-8** or **Unicode** format.
 	Description *string `pulumi:"description"`
+	// Specifies whether to use the debugging domain name to access the APIs
+	// within the group. The default value is `false`.
+	DomainAccessEnabled *bool `pulumi:"domainAccessEnabled"`
 	// Specifies an array of one or more environments of the associated group.\
 	// The object structure is documented below.
 	Environments []GroupEnvironment `pulumi:"environments"`
+	// Specifies whether to delete all sub-resources (for API) when deleting this group.\
+	// Defaults to **false**.
+	ForceDestroy *bool `pulumi:"forceDestroy"`
 	// Specifies the ID of the dedicated instance to which the group belongs.\
 	// Changing this will create a new resource.
 	InstanceId string `pulumi:"instanceId"`
-	// Specifies the variable name.\
-	// The valid length is limited from `3` to `32` characters.
-	// Only letters, digits, hyphens (-), and underscores (_) are allowed, and must start with a letter.
-	// In the definition of an API, `name` (case-sensitive) indicates a variable, such as #Name#.
-	// It is replaced by the actual value when the API is published in an environment.
-	// The variable names are not allowed to be repeated for an API group.
+	// Specifies the domain name. The valid must comply with the domian name specifications.
 	Name *string `pulumi:"name"`
 	// Specifies the region where the APIG (API) group is located.\
 	// If omitted, the provider-level region will be used. Changing this will create a new resource.
 	Region *string `pulumi:"region"`
+	// Specifies independent domain names of the associated with group.\
+	// The urlDomains structure is documented below.
+	UrlDomains []GroupUrlDomain `pulumi:"urlDomains"`
 }
 
 // The set of arguments for constructing a Group resource.
@@ -227,22 +243,26 @@ type GroupArgs struct {
 	// The description contain a maximum of 255 characters and the angle brackets (< and >) are not allowed.
 	// Chinese characters must be in **UTF-8** or **Unicode** format.
 	Description pulumi.StringPtrInput
+	// Specifies whether to use the debugging domain name to access the APIs
+	// within the group. The default value is `false`.
+	DomainAccessEnabled pulumi.BoolPtrInput
 	// Specifies an array of one or more environments of the associated group.\
 	// The object structure is documented below.
 	Environments GroupEnvironmentArrayInput
+	// Specifies whether to delete all sub-resources (for API) when deleting this group.\
+	// Defaults to **false**.
+	ForceDestroy pulumi.BoolPtrInput
 	// Specifies the ID of the dedicated instance to which the group belongs.\
 	// Changing this will create a new resource.
 	InstanceId pulumi.StringInput
-	// Specifies the variable name.\
-	// The valid length is limited from `3` to `32` characters.
-	// Only letters, digits, hyphens (-), and underscores (_) are allowed, and must start with a letter.
-	// In the definition of an API, `name` (case-sensitive) indicates a variable, such as #Name#.
-	// It is replaced by the actual value when the API is published in an environment.
-	// The variable names are not allowed to be repeated for an API group.
+	// Specifies the domain name. The valid must comply with the domian name specifications.
 	Name pulumi.StringPtrInput
 	// Specifies the region where the APIG (API) group is located.\
 	// If omitted, the provider-level region will be used. Changing this will create a new resource.
 	Region pulumi.StringPtrInput
+	// Specifies independent domain names of the associated with group.\
+	// The urlDomains structure is documented below.
+	UrlDomains GroupUrlDomainArrayInput
 }
 
 func (GroupArgs) ElementType() reflect.Type {
@@ -332,11 +352,22 @@ func (o GroupOutput) ToGroupOutputWithContext(ctx context.Context) GroupOutput {
 	return o
 }
 
+// The creation time of the group, in RFC3339 format.
+func (o GroupOutput) CreatedAt() pulumi.StringOutput {
+	return o.ApplyT(func(v *Group) pulumi.StringOutput { return v.CreatedAt }).(pulumi.StringOutput)
+}
+
 // Specifies the group description.\
 // The description contain a maximum of 255 characters and the angle brackets (< and >) are not allowed.
 // Chinese characters must be in **UTF-8** or **Unicode** format.
 func (o GroupOutput) Description() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Group) pulumi.StringPtrOutput { return v.Description }).(pulumi.StringPtrOutput)
+}
+
+// Specifies whether to use the debugging domain name to access the APIs
+// within the group. The default value is `false`.
+func (o GroupOutput) DomainAccessEnabled() pulumi.BoolOutput {
+	return o.ApplyT(func(v *Group) pulumi.BoolOutput { return v.DomainAccessEnabled }).(pulumi.BoolOutput)
 }
 
 // Specifies an array of one or more environments of the associated group.\
@@ -345,18 +376,19 @@ func (o GroupOutput) Environments() GroupEnvironmentArrayOutput {
 	return o.ApplyT(func(v *Group) GroupEnvironmentArrayOutput { return v.Environments }).(GroupEnvironmentArrayOutput)
 }
 
+// Specifies whether to delete all sub-resources (for API) when deleting this group.\
+// Defaults to **false**.
+func (o GroupOutput) ForceDestroy() pulumi.BoolOutput {
+	return o.ApplyT(func(v *Group) pulumi.BoolOutput { return v.ForceDestroy }).(pulumi.BoolOutput)
+}
+
 // Specifies the ID of the dedicated instance to which the group belongs.\
 // Changing this will create a new resource.
 func (o GroupOutput) InstanceId() pulumi.StringOutput {
 	return o.ApplyT(func(v *Group) pulumi.StringOutput { return v.InstanceId }).(pulumi.StringOutput)
 }
 
-// Specifies the variable name.\
-// The valid length is limited from `3` to `32` characters.
-// Only letters, digits, hyphens (-), and underscores (_) are allowed, and must start with a letter.
-// In the definition of an API, `name` (case-sensitive) indicates a variable, such as #Name#.
-// It is replaced by the actual value when the API is published in an environment.
-// The variable names are not allowed to be repeated for an API group.
+// Specifies the domain name. The valid must comply with the domian name specifications.
 func (o GroupOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v *Group) pulumi.StringOutput { return v.Name }).(pulumi.StringOutput)
 }
@@ -367,21 +399,25 @@ func (o GroupOutput) Region() pulumi.StringOutput {
 	return o.ApplyT(func(v *Group) pulumi.StringOutput { return v.Region }).(pulumi.StringOutput)
 }
 
-// The registration time, in RFC-3339 format.
+// The registration time.
 func (o GroupOutput) RegistrationTime() pulumi.StringOutput {
 	return o.ApplyT(func(v *Group) pulumi.StringOutput { return v.RegistrationTime }).(pulumi.StringOutput)
 }
 
-// schema: Deprecated; The latest update time of the group.
-//
-// Deprecated: Use 'updated_at' instead
+// The latest update time of the group.
 func (o GroupOutput) UpdateTime() pulumi.StringOutput {
 	return o.ApplyT(func(v *Group) pulumi.StringOutput { return v.UpdateTime }).(pulumi.StringOutput)
 }
 
-// The time when the API group was last modified, in RFC-3339 format.
+// The latest update time of the group, in RFC3339 format.
 func (o GroupOutput) UpdatedAt() pulumi.StringOutput {
 	return o.ApplyT(func(v *Group) pulumi.StringOutput { return v.UpdatedAt }).(pulumi.StringOutput)
+}
+
+// Specifies independent domain names of the associated with group.\
+// The urlDomains structure is documented below.
+func (o GroupOutput) UrlDomains() GroupUrlDomainArrayOutput {
+	return o.ApplyT(func(v *Group) GroupUrlDomainArrayOutput { return v.UrlDomains }).(GroupUrlDomainArrayOutput)
 }
 
 type GroupArrayOutput struct{ *pulumi.OutputState }

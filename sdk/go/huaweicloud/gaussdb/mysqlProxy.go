@@ -11,10 +11,9 @@ import (
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
-// GaussDB mysql proxy management within HuaweiCoud.
+// Manages GaussDB mysql proxy resource within HuaweiCloud.
 //
 // ## Example Usage
-// ### create a proxy
 //
 // ```go
 // package main
@@ -31,9 +30,9 @@ import (
 //		pulumi.Run(func(ctx *pulumi.Context) error {
 //			cfg := config.New(ctx, "")
 //			instanceId := cfg.RequireObject("instanceId")
-//			_, err := GaussDB.NewMysqlProxy(ctx, "proxy1", &GaussDB.MysqlProxyArgs{
+//			_, err := GaussDB.NewMysqlProxy(ctx, "test", &GaussDB.MysqlProxyArgs{
 //				InstanceId: pulumi.Any(instanceId),
-//				Flavor:     pulumi.String("gaussdb.proxy.xlarge.arm.2"),
+//				Flavor:     pulumi.String("gaussdb.proxy.xlarge.x86.2"),
 //				NodeNum:    pulumi.Int(3),
 //			})
 //			if err != nil {
@@ -47,31 +46,111 @@ import (
 //
 // ## Import
 //
-// GaussDB instance can be imported using the instance `id`, e.g.
+// The GaussDB MySQL proxy can be imported using the `instance_id` and `id` separated by a slash, e.g. bash
 //
 // ```sh
 //
-//	$ pulumi import huaweicloud:GaussDB/mysqlProxy:MysqlProxy proxy_1 ee678f40-ce8e-4d0c-8221-38dead426f06
+//	$ pulumi import huaweicloud:GaussDB/mysqlProxy:MysqlProxy test <instance_id>/<id>
 //
 // ```
+//
+//	Note that the imported state may not be identical to your resource definition, due to the attribute missing from the API response. The missing attribute is`new_node_weight`, `proxy_mode`, `readonly_nodes_weight` and `parameters`. It is generally recommended running `terraform plan` after importing a GaussDB MySQL proxy. You can then decide if changes should be applied to the GaussDB MySQL proxy, or the resource definition should be updated to align with the GaussDB MySQL proxy. Also you can ignore changes as below. hcl resource "huaweicloud_gaussdb_mysql_proxy" "test" {
+//
+//	...
+//
+//	lifecycle {
+//
+//	ignore_changes = [
+//
+//	new_node_weight, proxy_mode, readonly_nodes_weight, parameters,
+//
+//	]
+//
+//	} }
 type MysqlProxy struct {
 	pulumi.CustomResourceState
 
+	// Specifies the list of IP addresses that control access. A maximum of
+	// `300` IP addresses or CIDR blocks can be added.
+	// The accessControlIpList structure is documented below.
+	AccessControlIpLists MysqlProxyAccessControlIpListArrayOutput `pulumi:"accessControlIpLists"`
+	// Specifies the access control mode. Value options:
+	// + **white**: indicates the whitelist.
+	// + **black**: indicates the blacklist.
+	AccessControlType pulumi.StringOutput `pulumi:"accessControlType"`
 	// Indicates the address of the proxy.
 	Address pulumi.StringOutput `pulumi:"address"`
-	// Specifies the flavor of the proxy.
-	// Changing this parameter will create a new resource.
+	// Indicates whether the proxy can be upgrade.
+	CanUpgrade pulumi.BoolOutput `pulumi:"canUpgrade"`
+	// Specifies the connection pool type. Value options:
+	// + **CLOSED**: The connection pool is not used.
+	// + **SESSION**: The session-level connection pool is used.
+	ConnectionPoolType pulumi.StringOutput `pulumi:"connectionPoolType"`
+	// Specifies the consistency mode of the proxy. Value options:
+	// + **session**: session consistency.
+	// + **global**: global consistency.
+	// + **eventual**: eventual consistency.
+	ConsistenceMode pulumi.StringOutput `pulumi:"consistenceMode"`
+	// Indicates the current version of the proxy.
+	CurrentVersion pulumi.StringOutput `pulumi:"currentVersion"`
+	// Specifies the flavor of the proxy. Changing this parameter will create a new
+	// resource.
 	Flavor pulumi.StringOutput `pulumi:"flavor"`
-	// Specifies the instance ID of the proxy.
-	// Changing this parameter will create a new resource.
+	// Specifies the ID of the GaussDB MySQL instance. Changing this parameter
+	// will create a new resource.
 	InstanceId pulumi.StringOutput `pulumi:"instanceId"`
+	// Specifies the read weight of the master node.
+	// The masterNodeWeight structure is documented below.
+	MasterNodeWeight MysqlProxyMasterNodeWeightOutput `pulumi:"masterNodeWeight"`
+	// Specifies whether new nodes are automatically associate with proxy.
+	// Value options:
+	// + **ON**: New nodes are automatically associate with proxy.
+	// + **OFF**: New nodes are not automatically associate with proxy.
+	NewNodeAutoAddStatus pulumi.StringOutput `pulumi:"newNodeAutoAddStatus"`
+	// Specifies the read weight of the new node.
+	// + If `routeMode` is `0` and `newNodeAutoAddStatus` is **ON**, the value of this parameter ranges from `0` to `1,000`.
+	// + If `routeMode` is not `0` and `newNodeAutoAddStatus` is **OFF**, this parameter is unavailable.
+	NewNodeWeight pulumi.IntPtrOutput `pulumi:"newNodeWeight"`
 	// Specifies the node count of the proxy.
 	NodeNum pulumi.IntOutput `pulumi:"nodeNum"`
-	// Indicates the port of the proxy.
+	// Indicates the node information of the proxy.
+	// The nodes structure is documented below.
+	Nodes MysqlProxyNodeArrayOutput `pulumi:"nodes"`
+	// Specifies whether to enable access control.
+	OpenAccessControl pulumi.BoolOutput `pulumi:"openAccessControl"`
+	// Specifies the list of parameters to be set to the GaussDB MySQL proxy after launched.
+	// The parameters structure is documented below.
+	Parameters MysqlProxyParameterArrayOutput `pulumi:"parameters"`
+	// Specifies the port of the proxy.
 	Port pulumi.IntOutput `pulumi:"port"`
+	// Specifies the type of the proxy. Changing this creates a new resource.
+	// Value options:
+	// + **readwrite**: read and write.
+	// + **readonly**: read-only.
+	ProxyMode pulumi.StringPtrOutput `pulumi:"proxyMode"`
+	// Specifies the name of the proxy. The name consists of `4` to `64` characters and
+	// starts with a letter. It is case-sensitive and can contain only letters, digits, hyphens (-), and underscores (_).
+	ProxyName pulumi.StringOutput `pulumi:"proxyName"`
+	// Specifies the read weight of the read-only node.
+	// The readonlyNodesWeight structure is documented below.
+	ReadonlyNodesWeights MysqlProxyReadonlyNodesWeightArrayOutput `pulumi:"readonlyNodesWeights"`
 	// The region in which to create the GaussDB mysql proxy resource. If omitted,
 	// the provider-level region will be used. Changing this creates a new resource.
 	Region pulumi.StringOutput `pulumi:"region"`
+	// Specifies the routing policy of the proxy. Changing this creates a new
+	// resource. Value options:
+	// + **0**: weighted load balancing.
+	// + **1**: load balancing (The primary node does not process read requests).
+	// + **2**: load balancing (The primary node processes read requests).
+	RouteMode pulumi.IntOutput `pulumi:"routeMode"`
+	// Specifies the network ID of a subnet. Changing this creates a new resource.
+	SubnetId pulumi.StringOutput `pulumi:"subnetId"`
+	// Indicates whether the proxy supports session-level connection pool.
+	SwitchConnectionPoolTypeEnabled pulumi.BoolOutput `pulumi:"switchConnectionPoolTypeEnabled"`
+	// Specifies whether the proxy transaction splitting is enabled. Value options:
+	// + **ON**: Transaction splitting is enabled.
+	// + **OFF**: Transaction splitting is disabled.
+	TransactionSplit pulumi.StringOutput `pulumi:"transactionSplit"`
 }
 
 // NewMysqlProxy registers a new resource with the given unique name, arguments, and options.
@@ -113,39 +192,171 @@ func GetMysqlProxy(ctx *pulumi.Context,
 
 // Input properties used for looking up and filtering MysqlProxy resources.
 type mysqlProxyState struct {
+	// Specifies the list of IP addresses that control access. A maximum of
+	// `300` IP addresses or CIDR blocks can be added.
+	// The accessControlIpList structure is documented below.
+	AccessControlIpLists []MysqlProxyAccessControlIpList `pulumi:"accessControlIpLists"`
+	// Specifies the access control mode. Value options:
+	// + **white**: indicates the whitelist.
+	// + **black**: indicates the blacklist.
+	AccessControlType *string `pulumi:"accessControlType"`
 	// Indicates the address of the proxy.
 	Address *string `pulumi:"address"`
-	// Specifies the flavor of the proxy.
-	// Changing this parameter will create a new resource.
+	// Indicates whether the proxy can be upgrade.
+	CanUpgrade *bool `pulumi:"canUpgrade"`
+	// Specifies the connection pool type. Value options:
+	// + **CLOSED**: The connection pool is not used.
+	// + **SESSION**: The session-level connection pool is used.
+	ConnectionPoolType *string `pulumi:"connectionPoolType"`
+	// Specifies the consistency mode of the proxy. Value options:
+	// + **session**: session consistency.
+	// + **global**: global consistency.
+	// + **eventual**: eventual consistency.
+	ConsistenceMode *string `pulumi:"consistenceMode"`
+	// Indicates the current version of the proxy.
+	CurrentVersion *string `pulumi:"currentVersion"`
+	// Specifies the flavor of the proxy. Changing this parameter will create a new
+	// resource.
 	Flavor *string `pulumi:"flavor"`
-	// Specifies the instance ID of the proxy.
-	// Changing this parameter will create a new resource.
+	// Specifies the ID of the GaussDB MySQL instance. Changing this parameter
+	// will create a new resource.
 	InstanceId *string `pulumi:"instanceId"`
+	// Specifies the read weight of the master node.
+	// The masterNodeWeight structure is documented below.
+	MasterNodeWeight *MysqlProxyMasterNodeWeight `pulumi:"masterNodeWeight"`
+	// Specifies whether new nodes are automatically associate with proxy.
+	// Value options:
+	// + **ON**: New nodes are automatically associate with proxy.
+	// + **OFF**: New nodes are not automatically associate with proxy.
+	NewNodeAutoAddStatus *string `pulumi:"newNodeAutoAddStatus"`
+	// Specifies the read weight of the new node.
+	// + If `routeMode` is `0` and `newNodeAutoAddStatus` is **ON**, the value of this parameter ranges from `0` to `1,000`.
+	// + If `routeMode` is not `0` and `newNodeAutoAddStatus` is **OFF**, this parameter is unavailable.
+	NewNodeWeight *int `pulumi:"newNodeWeight"`
 	// Specifies the node count of the proxy.
 	NodeNum *int `pulumi:"nodeNum"`
-	// Indicates the port of the proxy.
+	// Indicates the node information of the proxy.
+	// The nodes structure is documented below.
+	Nodes []MysqlProxyNode `pulumi:"nodes"`
+	// Specifies whether to enable access control.
+	OpenAccessControl *bool `pulumi:"openAccessControl"`
+	// Specifies the list of parameters to be set to the GaussDB MySQL proxy after launched.
+	// The parameters structure is documented below.
+	Parameters []MysqlProxyParameter `pulumi:"parameters"`
+	// Specifies the port of the proxy.
 	Port *int `pulumi:"port"`
+	// Specifies the type of the proxy. Changing this creates a new resource.
+	// Value options:
+	// + **readwrite**: read and write.
+	// + **readonly**: read-only.
+	ProxyMode *string `pulumi:"proxyMode"`
+	// Specifies the name of the proxy. The name consists of `4` to `64` characters and
+	// starts with a letter. It is case-sensitive and can contain only letters, digits, hyphens (-), and underscores (_).
+	ProxyName *string `pulumi:"proxyName"`
+	// Specifies the read weight of the read-only node.
+	// The readonlyNodesWeight structure is documented below.
+	ReadonlyNodesWeights []MysqlProxyReadonlyNodesWeight `pulumi:"readonlyNodesWeights"`
 	// The region in which to create the GaussDB mysql proxy resource. If omitted,
 	// the provider-level region will be used. Changing this creates a new resource.
 	Region *string `pulumi:"region"`
+	// Specifies the routing policy of the proxy. Changing this creates a new
+	// resource. Value options:
+	// + **0**: weighted load balancing.
+	// + **1**: load balancing (The primary node does not process read requests).
+	// + **2**: load balancing (The primary node processes read requests).
+	RouteMode *int `pulumi:"routeMode"`
+	// Specifies the network ID of a subnet. Changing this creates a new resource.
+	SubnetId *string `pulumi:"subnetId"`
+	// Indicates whether the proxy supports session-level connection pool.
+	SwitchConnectionPoolTypeEnabled *bool `pulumi:"switchConnectionPoolTypeEnabled"`
+	// Specifies whether the proxy transaction splitting is enabled. Value options:
+	// + **ON**: Transaction splitting is enabled.
+	// + **OFF**: Transaction splitting is disabled.
+	TransactionSplit *string `pulumi:"transactionSplit"`
 }
 
 type MysqlProxyState struct {
+	// Specifies the list of IP addresses that control access. A maximum of
+	// `300` IP addresses or CIDR blocks can be added.
+	// The accessControlIpList structure is documented below.
+	AccessControlIpLists MysqlProxyAccessControlIpListArrayInput
+	// Specifies the access control mode. Value options:
+	// + **white**: indicates the whitelist.
+	// + **black**: indicates the blacklist.
+	AccessControlType pulumi.StringPtrInput
 	// Indicates the address of the proxy.
 	Address pulumi.StringPtrInput
-	// Specifies the flavor of the proxy.
-	// Changing this parameter will create a new resource.
+	// Indicates whether the proxy can be upgrade.
+	CanUpgrade pulumi.BoolPtrInput
+	// Specifies the connection pool type. Value options:
+	// + **CLOSED**: The connection pool is not used.
+	// + **SESSION**: The session-level connection pool is used.
+	ConnectionPoolType pulumi.StringPtrInput
+	// Specifies the consistency mode of the proxy. Value options:
+	// + **session**: session consistency.
+	// + **global**: global consistency.
+	// + **eventual**: eventual consistency.
+	ConsistenceMode pulumi.StringPtrInput
+	// Indicates the current version of the proxy.
+	CurrentVersion pulumi.StringPtrInput
+	// Specifies the flavor of the proxy. Changing this parameter will create a new
+	// resource.
 	Flavor pulumi.StringPtrInput
-	// Specifies the instance ID of the proxy.
-	// Changing this parameter will create a new resource.
+	// Specifies the ID of the GaussDB MySQL instance. Changing this parameter
+	// will create a new resource.
 	InstanceId pulumi.StringPtrInput
+	// Specifies the read weight of the master node.
+	// The masterNodeWeight structure is documented below.
+	MasterNodeWeight MysqlProxyMasterNodeWeightPtrInput
+	// Specifies whether new nodes are automatically associate with proxy.
+	// Value options:
+	// + **ON**: New nodes are automatically associate with proxy.
+	// + **OFF**: New nodes are not automatically associate with proxy.
+	NewNodeAutoAddStatus pulumi.StringPtrInput
+	// Specifies the read weight of the new node.
+	// + If `routeMode` is `0` and `newNodeAutoAddStatus` is **ON**, the value of this parameter ranges from `0` to `1,000`.
+	// + If `routeMode` is not `0` and `newNodeAutoAddStatus` is **OFF**, this parameter is unavailable.
+	NewNodeWeight pulumi.IntPtrInput
 	// Specifies the node count of the proxy.
 	NodeNum pulumi.IntPtrInput
-	// Indicates the port of the proxy.
+	// Indicates the node information of the proxy.
+	// The nodes structure is documented below.
+	Nodes MysqlProxyNodeArrayInput
+	// Specifies whether to enable access control.
+	OpenAccessControl pulumi.BoolPtrInput
+	// Specifies the list of parameters to be set to the GaussDB MySQL proxy after launched.
+	// The parameters structure is documented below.
+	Parameters MysqlProxyParameterArrayInput
+	// Specifies the port of the proxy.
 	Port pulumi.IntPtrInput
+	// Specifies the type of the proxy. Changing this creates a new resource.
+	// Value options:
+	// + **readwrite**: read and write.
+	// + **readonly**: read-only.
+	ProxyMode pulumi.StringPtrInput
+	// Specifies the name of the proxy. The name consists of `4` to `64` characters and
+	// starts with a letter. It is case-sensitive and can contain only letters, digits, hyphens (-), and underscores (_).
+	ProxyName pulumi.StringPtrInput
+	// Specifies the read weight of the read-only node.
+	// The readonlyNodesWeight structure is documented below.
+	ReadonlyNodesWeights MysqlProxyReadonlyNodesWeightArrayInput
 	// The region in which to create the GaussDB mysql proxy resource. If omitted,
 	// the provider-level region will be used. Changing this creates a new resource.
 	Region pulumi.StringPtrInput
+	// Specifies the routing policy of the proxy. Changing this creates a new
+	// resource. Value options:
+	// + **0**: weighted load balancing.
+	// + **1**: load balancing (The primary node does not process read requests).
+	// + **2**: load balancing (The primary node processes read requests).
+	RouteMode pulumi.IntPtrInput
+	// Specifies the network ID of a subnet. Changing this creates a new resource.
+	SubnetId pulumi.StringPtrInput
+	// Indicates whether the proxy supports session-level connection pool.
+	SwitchConnectionPoolTypeEnabled pulumi.BoolPtrInput
+	// Specifies whether the proxy transaction splitting is enabled. Value options:
+	// + **ON**: Transaction splitting is enabled.
+	// + **OFF**: Transaction splitting is disabled.
+	TransactionSplit pulumi.StringPtrInput
 }
 
 func (MysqlProxyState) ElementType() reflect.Type {
@@ -153,32 +364,150 @@ func (MysqlProxyState) ElementType() reflect.Type {
 }
 
 type mysqlProxyArgs struct {
-	// Specifies the flavor of the proxy.
-	// Changing this parameter will create a new resource.
+	// Specifies the list of IP addresses that control access. A maximum of
+	// `300` IP addresses or CIDR blocks can be added.
+	// The accessControlIpList structure is documented below.
+	AccessControlIpLists []MysqlProxyAccessControlIpList `pulumi:"accessControlIpLists"`
+	// Specifies the access control mode. Value options:
+	// + **white**: indicates the whitelist.
+	// + **black**: indicates the blacklist.
+	AccessControlType *string `pulumi:"accessControlType"`
+	// Specifies the connection pool type. Value options:
+	// + **CLOSED**: The connection pool is not used.
+	// + **SESSION**: The session-level connection pool is used.
+	ConnectionPoolType *string `pulumi:"connectionPoolType"`
+	// Specifies the consistency mode of the proxy. Value options:
+	// + **session**: session consistency.
+	// + **global**: global consistency.
+	// + **eventual**: eventual consistency.
+	ConsistenceMode *string `pulumi:"consistenceMode"`
+	// Specifies the flavor of the proxy. Changing this parameter will create a new
+	// resource.
 	Flavor string `pulumi:"flavor"`
-	// Specifies the instance ID of the proxy.
-	// Changing this parameter will create a new resource.
+	// Specifies the ID of the GaussDB MySQL instance. Changing this parameter
+	// will create a new resource.
 	InstanceId string `pulumi:"instanceId"`
+	// Specifies the read weight of the master node.
+	// The masterNodeWeight structure is documented below.
+	MasterNodeWeight *MysqlProxyMasterNodeWeight `pulumi:"masterNodeWeight"`
+	// Specifies whether new nodes are automatically associate with proxy.
+	// Value options:
+	// + **ON**: New nodes are automatically associate with proxy.
+	// + **OFF**: New nodes are not automatically associate with proxy.
+	NewNodeAutoAddStatus *string `pulumi:"newNodeAutoAddStatus"`
+	// Specifies the read weight of the new node.
+	// + If `routeMode` is `0` and `newNodeAutoAddStatus` is **ON**, the value of this parameter ranges from `0` to `1,000`.
+	// + If `routeMode` is not `0` and `newNodeAutoAddStatus` is **OFF**, this parameter is unavailable.
+	NewNodeWeight *int `pulumi:"newNodeWeight"`
 	// Specifies the node count of the proxy.
 	NodeNum int `pulumi:"nodeNum"`
+	// Specifies whether to enable access control.
+	OpenAccessControl *bool `pulumi:"openAccessControl"`
+	// Specifies the list of parameters to be set to the GaussDB MySQL proxy after launched.
+	// The parameters structure is documented below.
+	Parameters []MysqlProxyParameter `pulumi:"parameters"`
+	// Specifies the port of the proxy.
+	Port *int `pulumi:"port"`
+	// Specifies the type of the proxy. Changing this creates a new resource.
+	// Value options:
+	// + **readwrite**: read and write.
+	// + **readonly**: read-only.
+	ProxyMode *string `pulumi:"proxyMode"`
+	// Specifies the name of the proxy. The name consists of `4` to `64` characters and
+	// starts with a letter. It is case-sensitive and can contain only letters, digits, hyphens (-), and underscores (_).
+	ProxyName *string `pulumi:"proxyName"`
+	// Specifies the read weight of the read-only node.
+	// The readonlyNodesWeight structure is documented below.
+	ReadonlyNodesWeights []MysqlProxyReadonlyNodesWeight `pulumi:"readonlyNodesWeights"`
 	// The region in which to create the GaussDB mysql proxy resource. If omitted,
 	// the provider-level region will be used. Changing this creates a new resource.
 	Region *string `pulumi:"region"`
+	// Specifies the routing policy of the proxy. Changing this creates a new
+	// resource. Value options:
+	// + **0**: weighted load balancing.
+	// + **1**: load balancing (The primary node does not process read requests).
+	// + **2**: load balancing (The primary node processes read requests).
+	RouteMode *int `pulumi:"routeMode"`
+	// Specifies the network ID of a subnet. Changing this creates a new resource.
+	SubnetId *string `pulumi:"subnetId"`
+	// Specifies whether the proxy transaction splitting is enabled. Value options:
+	// + **ON**: Transaction splitting is enabled.
+	// + **OFF**: Transaction splitting is disabled.
+	TransactionSplit *string `pulumi:"transactionSplit"`
 }
 
 // The set of arguments for constructing a MysqlProxy resource.
 type MysqlProxyArgs struct {
-	// Specifies the flavor of the proxy.
-	// Changing this parameter will create a new resource.
+	// Specifies the list of IP addresses that control access. A maximum of
+	// `300` IP addresses or CIDR blocks can be added.
+	// The accessControlIpList structure is documented below.
+	AccessControlIpLists MysqlProxyAccessControlIpListArrayInput
+	// Specifies the access control mode. Value options:
+	// + **white**: indicates the whitelist.
+	// + **black**: indicates the blacklist.
+	AccessControlType pulumi.StringPtrInput
+	// Specifies the connection pool type. Value options:
+	// + **CLOSED**: The connection pool is not used.
+	// + **SESSION**: The session-level connection pool is used.
+	ConnectionPoolType pulumi.StringPtrInput
+	// Specifies the consistency mode of the proxy. Value options:
+	// + **session**: session consistency.
+	// + **global**: global consistency.
+	// + **eventual**: eventual consistency.
+	ConsistenceMode pulumi.StringPtrInput
+	// Specifies the flavor of the proxy. Changing this parameter will create a new
+	// resource.
 	Flavor pulumi.StringInput
-	// Specifies the instance ID of the proxy.
-	// Changing this parameter will create a new resource.
+	// Specifies the ID of the GaussDB MySQL instance. Changing this parameter
+	// will create a new resource.
 	InstanceId pulumi.StringInput
+	// Specifies the read weight of the master node.
+	// The masterNodeWeight structure is documented below.
+	MasterNodeWeight MysqlProxyMasterNodeWeightPtrInput
+	// Specifies whether new nodes are automatically associate with proxy.
+	// Value options:
+	// + **ON**: New nodes are automatically associate with proxy.
+	// + **OFF**: New nodes are not automatically associate with proxy.
+	NewNodeAutoAddStatus pulumi.StringPtrInput
+	// Specifies the read weight of the new node.
+	// + If `routeMode` is `0` and `newNodeAutoAddStatus` is **ON**, the value of this parameter ranges from `0` to `1,000`.
+	// + If `routeMode` is not `0` and `newNodeAutoAddStatus` is **OFF**, this parameter is unavailable.
+	NewNodeWeight pulumi.IntPtrInput
 	// Specifies the node count of the proxy.
 	NodeNum pulumi.IntInput
+	// Specifies whether to enable access control.
+	OpenAccessControl pulumi.BoolPtrInput
+	// Specifies the list of parameters to be set to the GaussDB MySQL proxy after launched.
+	// The parameters structure is documented below.
+	Parameters MysqlProxyParameterArrayInput
+	// Specifies the port of the proxy.
+	Port pulumi.IntPtrInput
+	// Specifies the type of the proxy. Changing this creates a new resource.
+	// Value options:
+	// + **readwrite**: read and write.
+	// + **readonly**: read-only.
+	ProxyMode pulumi.StringPtrInput
+	// Specifies the name of the proxy. The name consists of `4` to `64` characters and
+	// starts with a letter. It is case-sensitive and can contain only letters, digits, hyphens (-), and underscores (_).
+	ProxyName pulumi.StringPtrInput
+	// Specifies the read weight of the read-only node.
+	// The readonlyNodesWeight structure is documented below.
+	ReadonlyNodesWeights MysqlProxyReadonlyNodesWeightArrayInput
 	// The region in which to create the GaussDB mysql proxy resource. If omitted,
 	// the provider-level region will be used. Changing this creates a new resource.
 	Region pulumi.StringPtrInput
+	// Specifies the routing policy of the proxy. Changing this creates a new
+	// resource. Value options:
+	// + **0**: weighted load balancing.
+	// + **1**: load balancing (The primary node does not process read requests).
+	// + **2**: load balancing (The primary node processes read requests).
+	RouteMode pulumi.IntPtrInput
+	// Specifies the network ID of a subnet. Changing this creates a new resource.
+	SubnetId pulumi.StringPtrInput
+	// Specifies whether the proxy transaction splitting is enabled. Value options:
+	// + **ON**: Transaction splitting is enabled.
+	// + **OFF**: Transaction splitting is disabled.
+	TransactionSplit pulumi.StringPtrInput
 }
 
 func (MysqlProxyArgs) ElementType() reflect.Type {
@@ -268,21 +597,81 @@ func (o MysqlProxyOutput) ToMysqlProxyOutputWithContext(ctx context.Context) Mys
 	return o
 }
 
+// Specifies the list of IP addresses that control access. A maximum of
+// `300` IP addresses or CIDR blocks can be added.
+// The accessControlIpList structure is documented below.
+func (o MysqlProxyOutput) AccessControlIpLists() MysqlProxyAccessControlIpListArrayOutput {
+	return o.ApplyT(func(v *MysqlProxy) MysqlProxyAccessControlIpListArrayOutput { return v.AccessControlIpLists }).(MysqlProxyAccessControlIpListArrayOutput)
+}
+
+// Specifies the access control mode. Value options:
+// + **white**: indicates the whitelist.
+// + **black**: indicates the blacklist.
+func (o MysqlProxyOutput) AccessControlType() pulumi.StringOutput {
+	return o.ApplyT(func(v *MysqlProxy) pulumi.StringOutput { return v.AccessControlType }).(pulumi.StringOutput)
+}
+
 // Indicates the address of the proxy.
 func (o MysqlProxyOutput) Address() pulumi.StringOutput {
 	return o.ApplyT(func(v *MysqlProxy) pulumi.StringOutput { return v.Address }).(pulumi.StringOutput)
 }
 
-// Specifies the flavor of the proxy.
-// Changing this parameter will create a new resource.
+// Indicates whether the proxy can be upgrade.
+func (o MysqlProxyOutput) CanUpgrade() pulumi.BoolOutput {
+	return o.ApplyT(func(v *MysqlProxy) pulumi.BoolOutput { return v.CanUpgrade }).(pulumi.BoolOutput)
+}
+
+// Specifies the connection pool type. Value options:
+// + **CLOSED**: The connection pool is not used.
+// + **SESSION**: The session-level connection pool is used.
+func (o MysqlProxyOutput) ConnectionPoolType() pulumi.StringOutput {
+	return o.ApplyT(func(v *MysqlProxy) pulumi.StringOutput { return v.ConnectionPoolType }).(pulumi.StringOutput)
+}
+
+// Specifies the consistency mode of the proxy. Value options:
+// + **session**: session consistency.
+// + **global**: global consistency.
+// + **eventual**: eventual consistency.
+func (o MysqlProxyOutput) ConsistenceMode() pulumi.StringOutput {
+	return o.ApplyT(func(v *MysqlProxy) pulumi.StringOutput { return v.ConsistenceMode }).(pulumi.StringOutput)
+}
+
+// Indicates the current version of the proxy.
+func (o MysqlProxyOutput) CurrentVersion() pulumi.StringOutput {
+	return o.ApplyT(func(v *MysqlProxy) pulumi.StringOutput { return v.CurrentVersion }).(pulumi.StringOutput)
+}
+
+// Specifies the flavor of the proxy. Changing this parameter will create a new
+// resource.
 func (o MysqlProxyOutput) Flavor() pulumi.StringOutput {
 	return o.ApplyT(func(v *MysqlProxy) pulumi.StringOutput { return v.Flavor }).(pulumi.StringOutput)
 }
 
-// Specifies the instance ID of the proxy.
-// Changing this parameter will create a new resource.
+// Specifies the ID of the GaussDB MySQL instance. Changing this parameter
+// will create a new resource.
 func (o MysqlProxyOutput) InstanceId() pulumi.StringOutput {
 	return o.ApplyT(func(v *MysqlProxy) pulumi.StringOutput { return v.InstanceId }).(pulumi.StringOutput)
+}
+
+// Specifies the read weight of the master node.
+// The masterNodeWeight structure is documented below.
+func (o MysqlProxyOutput) MasterNodeWeight() MysqlProxyMasterNodeWeightOutput {
+	return o.ApplyT(func(v *MysqlProxy) MysqlProxyMasterNodeWeightOutput { return v.MasterNodeWeight }).(MysqlProxyMasterNodeWeightOutput)
+}
+
+// Specifies whether new nodes are automatically associate with proxy.
+// Value options:
+// + **ON**: New nodes are automatically associate with proxy.
+// + **OFF**: New nodes are not automatically associate with proxy.
+func (o MysqlProxyOutput) NewNodeAutoAddStatus() pulumi.StringOutput {
+	return o.ApplyT(func(v *MysqlProxy) pulumi.StringOutput { return v.NewNodeAutoAddStatus }).(pulumi.StringOutput)
+}
+
+// Specifies the read weight of the new node.
+// + If `routeMode` is `0` and `newNodeAutoAddStatus` is **ON**, the value of this parameter ranges from `0` to `1,000`.
+// + If `routeMode` is not `0` and `newNodeAutoAddStatus` is **OFF**, this parameter is unavailable.
+func (o MysqlProxyOutput) NewNodeWeight() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v *MysqlProxy) pulumi.IntPtrOutput { return v.NewNodeWeight }).(pulumi.IntPtrOutput)
 }
 
 // Specifies the node count of the proxy.
@@ -290,15 +679,78 @@ func (o MysqlProxyOutput) NodeNum() pulumi.IntOutput {
 	return o.ApplyT(func(v *MysqlProxy) pulumi.IntOutput { return v.NodeNum }).(pulumi.IntOutput)
 }
 
-// Indicates the port of the proxy.
+// Indicates the node information of the proxy.
+// The nodes structure is documented below.
+func (o MysqlProxyOutput) Nodes() MysqlProxyNodeArrayOutput {
+	return o.ApplyT(func(v *MysqlProxy) MysqlProxyNodeArrayOutput { return v.Nodes }).(MysqlProxyNodeArrayOutput)
+}
+
+// Specifies whether to enable access control.
+func (o MysqlProxyOutput) OpenAccessControl() pulumi.BoolOutput {
+	return o.ApplyT(func(v *MysqlProxy) pulumi.BoolOutput { return v.OpenAccessControl }).(pulumi.BoolOutput)
+}
+
+// Specifies the list of parameters to be set to the GaussDB MySQL proxy after launched.
+// The parameters structure is documented below.
+func (o MysqlProxyOutput) Parameters() MysqlProxyParameterArrayOutput {
+	return o.ApplyT(func(v *MysqlProxy) MysqlProxyParameterArrayOutput { return v.Parameters }).(MysqlProxyParameterArrayOutput)
+}
+
+// Specifies the port of the proxy.
 func (o MysqlProxyOutput) Port() pulumi.IntOutput {
 	return o.ApplyT(func(v *MysqlProxy) pulumi.IntOutput { return v.Port }).(pulumi.IntOutput)
+}
+
+// Specifies the type of the proxy. Changing this creates a new resource.
+// Value options:
+// + **readwrite**: read and write.
+// + **readonly**: read-only.
+func (o MysqlProxyOutput) ProxyMode() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *MysqlProxy) pulumi.StringPtrOutput { return v.ProxyMode }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the name of the proxy. The name consists of `4` to `64` characters and
+// starts with a letter. It is case-sensitive and can contain only letters, digits, hyphens (-), and underscores (_).
+func (o MysqlProxyOutput) ProxyName() pulumi.StringOutput {
+	return o.ApplyT(func(v *MysqlProxy) pulumi.StringOutput { return v.ProxyName }).(pulumi.StringOutput)
+}
+
+// Specifies the read weight of the read-only node.
+// The readonlyNodesWeight structure is documented below.
+func (o MysqlProxyOutput) ReadonlyNodesWeights() MysqlProxyReadonlyNodesWeightArrayOutput {
+	return o.ApplyT(func(v *MysqlProxy) MysqlProxyReadonlyNodesWeightArrayOutput { return v.ReadonlyNodesWeights }).(MysqlProxyReadonlyNodesWeightArrayOutput)
 }
 
 // The region in which to create the GaussDB mysql proxy resource. If omitted,
 // the provider-level region will be used. Changing this creates a new resource.
 func (o MysqlProxyOutput) Region() pulumi.StringOutput {
 	return o.ApplyT(func(v *MysqlProxy) pulumi.StringOutput { return v.Region }).(pulumi.StringOutput)
+}
+
+// Specifies the routing policy of the proxy. Changing this creates a new
+// resource. Value options:
+// + **0**: weighted load balancing.
+// + **1**: load balancing (The primary node does not process read requests).
+// + **2**: load balancing (The primary node processes read requests).
+func (o MysqlProxyOutput) RouteMode() pulumi.IntOutput {
+	return o.ApplyT(func(v *MysqlProxy) pulumi.IntOutput { return v.RouteMode }).(pulumi.IntOutput)
+}
+
+// Specifies the network ID of a subnet. Changing this creates a new resource.
+func (o MysqlProxyOutput) SubnetId() pulumi.StringOutput {
+	return o.ApplyT(func(v *MysqlProxy) pulumi.StringOutput { return v.SubnetId }).(pulumi.StringOutput)
+}
+
+// Indicates whether the proxy supports session-level connection pool.
+func (o MysqlProxyOutput) SwitchConnectionPoolTypeEnabled() pulumi.BoolOutput {
+	return o.ApplyT(func(v *MysqlProxy) pulumi.BoolOutput { return v.SwitchConnectionPoolTypeEnabled }).(pulumi.BoolOutput)
+}
+
+// Specifies whether the proxy transaction splitting is enabled. Value options:
+// + **ON**: Transaction splitting is enabled.
+// + **OFF**: Transaction splitting is disabled.
+func (o MysqlProxyOutput) TransactionSplit() pulumi.StringOutput {
+	return o.ApplyT(func(v *MysqlProxy) pulumi.StringOutput { return v.TransactionSplit }).(pulumi.StringOutput)
 }
 
 type MysqlProxyArrayOutput struct{ *pulumi.OutputState }

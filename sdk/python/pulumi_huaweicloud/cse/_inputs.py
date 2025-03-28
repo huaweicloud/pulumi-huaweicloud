@@ -81,7 +81,7 @@ class AlarmruleConditionArgs:
         :param pulumi.Input[str] comparison_operator: Specifies the comparison condition of alarm thresholds. The value can be >,
                =, <, >=, or <=.
         :param pulumi.Input[int] count: Specifies the number of consecutive occurrence times. The value ranges from 1 to 5.
-        :param pulumi.Input[str] filter: Specifies the data rollup methods. The value can be max, min, average, sum, and vaiance.
+        :param pulumi.Input[str] filter: Specifies the data rollup methods. The value can be max, min, average, sum, and variance.
         :param pulumi.Input[int] period: Specifies the alarm checking period in seconds. The value can be 0, 1, 300, 1200, 3600, 14400,
                and 86400.
         :param pulumi.Input[float] value: Specifies the alarm threshold. The value ranges from 0 to Number of
@@ -150,7 +150,7 @@ class AlarmruleConditionArgs:
     @pulumi.getter
     def filter(self) -> pulumi.Input[str]:
         """
-        Specifies the data rollup methods. The value can be max, min, average, sum, and vaiance.
+        Specifies the data rollup methods. The value can be max, min, average, sum, and variance.
         """
         return pulumi.get(self, "filter")
 

@@ -43,20 +43,20 @@ type GetVpcsArgs struct {
 
 // A collection of values returned by getVpcs.
 type GetVpcsResult struct {
-	// Indicates the cidr block of the VPC.
+	// The cidr block of the VPC.
 	Cidr *string `pulumi:"cidr"`
-	// Indicates the the enterprise project ID of the VPC.
+	// The the enterprise project ID of the VPC.
 	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
-	// Indicates the ID of the VPC.
+	// The ID of the VPC.
 	Id string `pulumi:"id"`
-	// Indicates the name of the VPC.
+	// The name of the VPC.
 	Name   *string `pulumi:"name"`
 	Region string  `pulumi:"region"`
-	// Indicates the current status of the VPC.
+	// The current status of the VPC.
 	Status *string `pulumi:"status"`
-	// Indicates the key/value pairs which associated with the VPC.
+	// The key/value pairs which associated with the VPC.
 	Tags map[string]string `pulumi:"tags"`
-	// Indicates a list of all VPCs found. Structure is documented below.
+	// The list of all VPCs found. Structure is documented below.
 	Vpcs []GetVpcsVpc `pulumi:"vpcs"`
 }
 
@@ -112,22 +112,22 @@ func (o GetVpcsResultOutput) ToGetVpcsResultOutputWithContext(ctx context.Contex
 	return o
 }
 
-// Indicates the cidr block of the VPC.
+// The cidr block of the VPC.
 func (o GetVpcsResultOutput) Cidr() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v GetVpcsResult) *string { return v.Cidr }).(pulumi.StringPtrOutput)
 }
 
-// Indicates the the enterprise project ID of the VPC.
+// The the enterprise project ID of the VPC.
 func (o GetVpcsResultOutput) EnterpriseProjectId() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v GetVpcsResult) *string { return v.EnterpriseProjectId }).(pulumi.StringPtrOutput)
 }
 
-// Indicates the ID of the VPC.
+// The ID of the VPC.
 func (o GetVpcsResultOutput) Id() pulumi.StringOutput {
 	return o.ApplyT(func(v GetVpcsResult) string { return v.Id }).(pulumi.StringOutput)
 }
 
-// Indicates the name of the VPC.
+// The name of the VPC.
 func (o GetVpcsResultOutput) Name() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v GetVpcsResult) *string { return v.Name }).(pulumi.StringPtrOutput)
 }
@@ -136,17 +136,17 @@ func (o GetVpcsResultOutput) Region() pulumi.StringOutput {
 	return o.ApplyT(func(v GetVpcsResult) string { return v.Region }).(pulumi.StringOutput)
 }
 
-// Indicates the current status of the VPC.
+// The current status of the VPC.
 func (o GetVpcsResultOutput) Status() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v GetVpcsResult) *string { return v.Status }).(pulumi.StringPtrOutput)
 }
 
-// Indicates the key/value pairs which associated with the VPC.
+// The key/value pairs which associated with the VPC.
 func (o GetVpcsResultOutput) Tags() pulumi.StringMapOutput {
 	return o.ApplyT(func(v GetVpcsResult) map[string]string { return v.Tags }).(pulumi.StringMapOutput)
 }
 
-// Indicates a list of all VPCs found. Structure is documented below.
+// The list of all VPCs found. Structure is documented below.
 func (o GetVpcsResultOutput) Vpcs() GetVpcsVpcArrayOutput {
 	return o.ApplyT(func(v GetVpcsResult) []GetVpcsVpc { return v.Vpcs }).(GetVpcsVpcArrayOutput)
 }

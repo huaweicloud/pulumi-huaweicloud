@@ -65,6 +65,10 @@ export interface GetEipResult {
      */
     readonly bandwidthId: string;
     /**
+     * The bandwidth name of the EIP.
+     */
+    readonly bandwidthName: string;
+    /**
      * The bandwidth share type of the EIP.
      */
     readonly bandwidthShareType: string;
@@ -72,6 +76,10 @@ export interface GetEipResult {
      * The bandwidth size of the EIP.
      */
     readonly bandwidthSize: number;
+    /**
+     * The create time of the EIP.
+     */
+    readonly createdAt: string;
     readonly enterpriseProjectId: string;
     /**
      * The provider-assigned unique ID for this managed resource.
@@ -85,6 +93,10 @@ export interface GetEipResult {
      * The IPv6 address of the EIP.
      */
     readonly ipv6Address: string;
+    /**
+     * The name of the EIP.
+     */
+    readonly name: string;
     readonly portId: string;
     /**
      * The private ip of the EIP.

@@ -97,9 +97,9 @@ class CertificateTarget(dict):
                  service: str,
                  projects: Optional[Sequence[str]] = None):
         """
-        :param str service: Service to which the certificate is pushed. The options include `CDN`,`WAF`
-               and `Enhance_ELB`.
-        :param Sequence[str] projects: The project where the service you want to push a certificate to. The same certificate
+        :param str service: Specifies the service to which the certificate is pushed. The options include `CDN`,`WAF`
+               and `ELB`.
+        :param Sequence[str] projects: Specifies the project where the service you want to push a certificate to. The same certificate
                can be pushed repeatedly to the same WAF or ELB service in the same `project`, but the CDN service can only be pushed
                once.
         """
@@ -111,8 +111,8 @@ class CertificateTarget(dict):
     @pulumi.getter
     def service(self) -> str:
         """
-        Service to which the certificate is pushed. The options include `CDN`,`WAF`
-        and `Enhance_ELB`.
+        Specifies the service to which the certificate is pushed. The options include `CDN`,`WAF`
+        and `ELB`.
         """
         return pulumi.get(self, "service")
 
@@ -120,7 +120,7 @@ class CertificateTarget(dict):
     @pulumi.getter
     def projects(self) -> Optional[Sequence[str]]:
         """
-        The project where the service you want to push a certificate to. The same certificate
+        Specifies the project where the service you want to push a certificate to. The same certificate
         can be pushed repeatedly to the same WAF or ELB service in the same `project`, but the CDN service can only be pushed
         once.
         """

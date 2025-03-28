@@ -93,13 +93,14 @@ type Cluster struct {
 	// Create time. The format is: `YYYY-MM-DDThh:mm:ss`.
 	Created pulumi.StringOutput `pulumi:"created"`
 	// Specifies email address for receiving notifications when a table/file migration
-	// job fails or an EIP exception occurs. The max number is 5. Changing this parameter will create a new resource.
+	// job fails or an EIP exception occurs. The max number is 20.
 	Emails pulumi.StringArrayOutput `pulumi:"emails"`
 	// Specifies the enterprise project id.
-	// Changing this parameter will create a new resource.
-	EnterpriseProjectId pulumi.StringPtrOutput `pulumi:"enterpriseProjectId"`
+	EnterpriseProjectId pulumi.StringOutput `pulumi:"enterpriseProjectId"`
 	// Specifies flavor id. Changing this parameter will create a new resource.
 	FlavorId pulumi.StringOutput `pulumi:"flavorId"`
+	// The flavor name. Format is `cdm.<flavor_type>`
+	FlavorName pulumi.StringOutput `pulumi:"flavorName"`
 	// Instance list. Structure is documented below.
 	Instances ClusterInstanceArrayOutput `pulumi:"instances"`
 	// Specifies Whether to enable auto shutdown. The auto shutdown and scheduled
@@ -110,7 +111,7 @@ type Cluster struct {
 	// Specifies cluster name. Changing this parameter will create a new resource.
 	Name pulumi.StringOutput `pulumi:"name"`
 	// Specifies phone number for receiving notifications when a table/file
-	// migration job fails or an EIP exception occurs. The max number is 5. Changing this parameter will create a new resource.
+	// migration job fails or an EIP exception occurs. The max number is 20.
 	PhoneNums pulumi.StringArrayOutput `pulumi:"phoneNums"`
 	// EIP bound to the cluster.
 	PublicEndpoint pulumi.StringOutput `pulumi:"publicEndpoint"`
@@ -192,13 +193,14 @@ type clusterState struct {
 	// Create time. The format is: `YYYY-MM-DDThh:mm:ss`.
 	Created *string `pulumi:"created"`
 	// Specifies email address for receiving notifications when a table/file migration
-	// job fails or an EIP exception occurs. The max number is 5. Changing this parameter will create a new resource.
+	// job fails or an EIP exception occurs. The max number is 20.
 	Emails []string `pulumi:"emails"`
 	// Specifies the enterprise project id.
-	// Changing this parameter will create a new resource.
 	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
 	// Specifies flavor id. Changing this parameter will create a new resource.
 	FlavorId *string `pulumi:"flavorId"`
+	// The flavor name. Format is `cdm.<flavor_type>`
+	FlavorName *string `pulumi:"flavorName"`
 	// Instance list. Structure is documented below.
 	Instances []ClusterInstance `pulumi:"instances"`
 	// Specifies Whether to enable auto shutdown. The auto shutdown and scheduled
@@ -209,7 +211,7 @@ type clusterState struct {
 	// Specifies cluster name. Changing this parameter will create a new resource.
 	Name *string `pulumi:"name"`
 	// Specifies phone number for receiving notifications when a table/file
-	// migration job fails or an EIP exception occurs. The max number is 5. Changing this parameter will create a new resource.
+	// migration job fails or an EIP exception occurs. The max number is 20.
 	PhoneNums []string `pulumi:"phoneNums"`
 	// EIP bound to the cluster.
 	PublicEndpoint *string `pulumi:"publicEndpoint"`
@@ -247,13 +249,14 @@ type ClusterState struct {
 	// Create time. The format is: `YYYY-MM-DDThh:mm:ss`.
 	Created pulumi.StringPtrInput
 	// Specifies email address for receiving notifications when a table/file migration
-	// job fails or an EIP exception occurs. The max number is 5. Changing this parameter will create a new resource.
+	// job fails or an EIP exception occurs. The max number is 20.
 	Emails pulumi.StringArrayInput
 	// Specifies the enterprise project id.
-	// Changing this parameter will create a new resource.
 	EnterpriseProjectId pulumi.StringPtrInput
 	// Specifies flavor id. Changing this parameter will create a new resource.
 	FlavorId pulumi.StringPtrInput
+	// The flavor name. Format is `cdm.<flavor_type>`
+	FlavorName pulumi.StringPtrInput
 	// Instance list. Structure is documented below.
 	Instances ClusterInstanceArrayInput
 	// Specifies Whether to enable auto shutdown. The auto shutdown and scheduled
@@ -264,7 +267,7 @@ type ClusterState struct {
 	// Specifies cluster name. Changing this parameter will create a new resource.
 	Name pulumi.StringPtrInput
 	// Specifies phone number for receiving notifications when a table/file
-	// migration job fails or an EIP exception occurs. The max number is 5. Changing this parameter will create a new resource.
+	// migration job fails or an EIP exception occurs. The max number is 20.
 	PhoneNums pulumi.StringArrayInput
 	// EIP bound to the cluster.
 	PublicEndpoint pulumi.StringPtrInput
@@ -304,10 +307,9 @@ type clusterArgs struct {
 	// Changing this parameter will create a new resource.
 	AvailabilityZone string `pulumi:"availabilityZone"`
 	// Specifies email address for receiving notifications when a table/file migration
-	// job fails or an EIP exception occurs. The max number is 5. Changing this parameter will create a new resource.
+	// job fails or an EIP exception occurs. The max number is 20.
 	Emails []string `pulumi:"emails"`
 	// Specifies the enterprise project id.
-	// Changing this parameter will create a new resource.
 	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
 	// Specifies flavor id. Changing this parameter will create a new resource.
 	FlavorId string `pulumi:"flavorId"`
@@ -319,7 +321,7 @@ type clusterArgs struct {
 	// Specifies cluster name. Changing this parameter will create a new resource.
 	Name *string `pulumi:"name"`
 	// Specifies phone number for receiving notifications when a table/file
-	// migration job fails or an EIP exception occurs. The max number is 5. Changing this parameter will create a new resource.
+	// migration job fails or an EIP exception occurs. The max number is 20.
 	PhoneNums []string `pulumi:"phoneNums"`
 	// The region in which to create the cluster resource. If omitted, the
 	// provider-level region will be used. Changing this parameter will create a new resource.
@@ -350,10 +352,9 @@ type ClusterArgs struct {
 	// Changing this parameter will create a new resource.
 	AvailabilityZone pulumi.StringInput
 	// Specifies email address for receiving notifications when a table/file migration
-	// job fails or an EIP exception occurs. The max number is 5. Changing this parameter will create a new resource.
+	// job fails or an EIP exception occurs. The max number is 20.
 	Emails pulumi.StringArrayInput
 	// Specifies the enterprise project id.
-	// Changing this parameter will create a new resource.
 	EnterpriseProjectId pulumi.StringPtrInput
 	// Specifies flavor id. Changing this parameter will create a new resource.
 	FlavorId pulumi.StringInput
@@ -365,7 +366,7 @@ type ClusterArgs struct {
 	// Specifies cluster name. Changing this parameter will create a new resource.
 	Name pulumi.StringPtrInput
 	// Specifies phone number for receiving notifications when a table/file
-	// migration job fails or an EIP exception occurs. The max number is 5. Changing this parameter will create a new resource.
+	// migration job fails or an EIP exception occurs. The max number is 20.
 	PhoneNums pulumi.StringArrayInput
 	// The region in which to create the cluster resource. If omitted, the
 	// provider-level region will be used. Changing this parameter will create a new resource.
@@ -489,20 +490,24 @@ func (o ClusterOutput) Created() pulumi.StringOutput {
 }
 
 // Specifies email address for receiving notifications when a table/file migration
-// job fails or an EIP exception occurs. The max number is 5. Changing this parameter will create a new resource.
+// job fails or an EIP exception occurs. The max number is 20.
 func (o ClusterOutput) Emails() pulumi.StringArrayOutput {
 	return o.ApplyT(func(v *Cluster) pulumi.StringArrayOutput { return v.Emails }).(pulumi.StringArrayOutput)
 }
 
 // Specifies the enterprise project id.
-// Changing this parameter will create a new resource.
-func (o ClusterOutput) EnterpriseProjectId() pulumi.StringPtrOutput {
-	return o.ApplyT(func(v *Cluster) pulumi.StringPtrOutput { return v.EnterpriseProjectId }).(pulumi.StringPtrOutput)
+func (o ClusterOutput) EnterpriseProjectId() pulumi.StringOutput {
+	return o.ApplyT(func(v *Cluster) pulumi.StringOutput { return v.EnterpriseProjectId }).(pulumi.StringOutput)
 }
 
 // Specifies flavor id. Changing this parameter will create a new resource.
 func (o ClusterOutput) FlavorId() pulumi.StringOutput {
 	return o.ApplyT(func(v *Cluster) pulumi.StringOutput { return v.FlavorId }).(pulumi.StringOutput)
+}
+
+// The flavor name. Format is `cdm.<flavor_type>`
+func (o ClusterOutput) FlavorName() pulumi.StringOutput {
+	return o.ApplyT(func(v *Cluster) pulumi.StringOutput { return v.FlavorName }).(pulumi.StringOutput)
 }
 
 // Instance list. Structure is documented below.
@@ -524,7 +529,7 @@ func (o ClusterOutput) Name() pulumi.StringOutput {
 }
 
 // Specifies phone number for receiving notifications when a table/file
-// migration job fails or an EIP exception occurs. The max number is 5. Changing this parameter will create a new resource.
+// migration job fails or an EIP exception occurs. The max number is 20.
 func (o ClusterOutput) PhoneNums() pulumi.StringArrayOutput {
 	return o.ApplyT(func(v *Cluster) pulumi.StringArrayOutput { return v.PhoneNums }).(pulumi.StringArrayOutput)
 }

@@ -34,7 +34,7 @@ import * as utilities from "../utilities";
  *
  * ## Import
  *
- * SMN topic can be imported using the `id` (topic urn), e.g.
+ * SMN topic can be imported using the `id` (topic urn), e.g. bash
  *
  * ```sh
  *  $ pulumi import huaweicloud:Smn/topic:Topic topic_1 urn:smn:cn-north-4:0970dd7a1300f5672ff2c003c60ae115:topic_1
@@ -68,6 +68,10 @@ export class Topic extends pulumi.CustomResource {
         return obj['__pulumiType'] === Topic.__pulumiType;
     }
 
+    /**
+     * schema: Internal
+     */
+    public readonly accessPolicy!: pulumi.Output<string | undefined>;
     /**
      * Time when the topic was created.
      */
@@ -142,6 +146,7 @@ export class Topic extends pulumi.CustomResource {
         opts = opts || {};
         if (opts.id) {
             const state = argsOrState as TopicState | undefined;
+            resourceInputs["accessPolicy"] = state ? state.accessPolicy : undefined;
             resourceInputs["createTime"] = state ? state.createTime : undefined;
             resourceInputs["displayName"] = state ? state.displayName : undefined;
             resourceInputs["enterpriseProjectId"] = state ? state.enterpriseProjectId : undefined;
@@ -156,6 +161,7 @@ export class Topic extends pulumi.CustomResource {
             resourceInputs["usersPublishAllowed"] = state ? state.usersPublishAllowed : undefined;
         } else {
             const args = argsOrState as TopicArgs | undefined;
+            resourceInputs["accessPolicy"] = args ? args.accessPolicy : undefined;
             resourceInputs["displayName"] = args ? args.displayName : undefined;
             resourceInputs["enterpriseProjectId"] = args ? args.enterpriseProjectId : undefined;
             resourceInputs["introduction"] = args ? args.introduction : undefined;
@@ -178,6 +184,10 @@ export class Topic extends pulumi.CustomResource {
  * Input properties used for looking up and filtering Topic resources.
  */
 export interface TopicState {
+    /**
+     * schema: Internal
+     */
+    accessPolicy?: pulumi.Input<string>;
     /**
      * Time when the topic was created.
      */
@@ -244,6 +254,10 @@ export interface TopicState {
  * The set of arguments for constructing a Topic resource.
  */
 export interface TopicArgs {
+    /**
+     * schema: Internal
+     */
+    accessPolicy?: pulumi.Input<string>;
     /**
      * Specifies the topic display name, which is presented as the name of the email
      * sender in an email message. The name can contains of 0 to 192 characters.

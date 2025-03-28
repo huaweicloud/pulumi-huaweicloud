@@ -30,9 +30,9 @@ class RepoPasswordAuthorizationArgs:
                The format for each type is as follows:
                + **devcloud**: `{domain name}/{tenant name}`
                + **bitbucket**: `{account name}`
-        :param pulumi.Input[str] name: Specified the authorization name. The name can contain of 4 to 63 characters,
-               only letters, digits, underscores (_), hyphens (-) and dots (.) are allowed.
-               Changing this parameter will create a new authorization.
+        :param pulumi.Input[str] name: Specified the authorization name.  
+               The name can contain of `4` to `63` characters, only letters, digits, underscores (_), hyphens (-) and dots (.) are
+               allowed. Changing this parameter will create a new authorization.
         :param pulumi.Input[str] region: Specified the region in which to create the repository authorization.
                If omitted, the provider-level region will be used. Changing this parameter will create a new authorization.
         """
@@ -90,9 +90,9 @@ class RepoPasswordAuthorizationArgs:
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        Specified the authorization name. The name can contain of 4 to 63 characters,
-        only letters, digits, underscores (_), hyphens (-) and dots (.) are allowed.
-        Changing this parameter will create a new authorization.
+        Specified the authorization name.  
+        The name can contain of `4` to `63` characters, only letters, digits, underscores (_), hyphens (-) and dots (.) are
+        allowed. Changing this parameter will create a new authorization.
         """
         return pulumi.get(self, "name")
 
@@ -124,9 +124,9 @@ class _RepoPasswordAuthorizationState:
                  user_name: Optional[pulumi.Input[str]] = None):
         """
         Input properties used for looking up and filtering RepoPasswordAuthorization resources.
-        :param pulumi.Input[str] name: Specified the authorization name. The name can contain of 4 to 63 characters,
-               only letters, digits, underscores (_), hyphens (-) and dots (.) are allowed.
-               Changing this parameter will create a new authorization.
+        :param pulumi.Input[str] name: Specified the authorization name.  
+               The name can contain of `4` to `63` characters, only letters, digits, underscores (_), hyphens (-) and dots (.) are
+               allowed. Changing this parameter will create a new authorization.
         :param pulumi.Input[str] password: Specified the repository password.
                Changing this parameter will create a new authorization.
         :param pulumi.Input[str] region: Specified the region in which to create the repository authorization.
@@ -154,9 +154,9 @@ class _RepoPasswordAuthorizationState:
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        Specified the authorization name. The name can contain of 4 to 63 characters,
-        only letters, digits, underscores (_), hyphens (-) and dots (.) are allowed.
-        Changing this parameter will create a new authorization.
+        Specified the authorization name.  
+        The name can contain of `4` to `63` characters, only letters, digits, underscores (_), hyphens (-) and dots (.) are
+        allowed. Changing this parameter will create a new authorization.
         """
         return pulumi.get(self, "name")
 
@@ -237,7 +237,7 @@ class RepoPasswordAuthorization(pulumi.CustomResource):
 
         ## Import
 
-        Authorizations can be imported using their `id` or `name`, e.g.
+        Authorizations can be imported using their `id` or `name`, e.g.bash
 
         ```sh
          $ pulumi import huaweicloud:ServiceStage/repoPasswordAuthorization:RepoPasswordAuthorization test terraform-test
@@ -245,9 +245,9 @@ class RepoPasswordAuthorization(pulumi.CustomResource):
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[str] name: Specified the authorization name. The name can contain of 4 to 63 characters,
-               only letters, digits, underscores (_), hyphens (-) and dots (.) are allowed.
-               Changing this parameter will create a new authorization.
+        :param pulumi.Input[str] name: Specified the authorization name.  
+               The name can contain of `4` to `63` characters, only letters, digits, underscores (_), hyphens (-) and dots (.) are
+               allowed. Changing this parameter will create a new authorization.
         :param pulumi.Input[str] password: Specified the repository password.
                Changing this parameter will create a new authorization.
         :param pulumi.Input[str] region: Specified the region in which to create the repository authorization.
@@ -272,7 +272,7 @@ class RepoPasswordAuthorization(pulumi.CustomResource):
 
         ## Import
 
-        Authorizations can be imported using their `id` or `name`, e.g.
+        Authorizations can be imported using their `id` or `name`, e.g.bash
 
         ```sh
          $ pulumi import huaweicloud:ServiceStage/repoPasswordAuthorization:RepoPasswordAuthorization test terraform-test
@@ -340,9 +340,9 @@ class RepoPasswordAuthorization(pulumi.CustomResource):
         :param str resource_name: The unique name of the resulting resource.
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[str] name: Specified the authorization name. The name can contain of 4 to 63 characters,
-               only letters, digits, underscores (_), hyphens (-) and dots (.) are allowed.
-               Changing this parameter will create a new authorization.
+        :param pulumi.Input[str] name: Specified the authorization name.  
+               The name can contain of `4` to `63` characters, only letters, digits, underscores (_), hyphens (-) and dots (.) are
+               allowed. Changing this parameter will create a new authorization.
         :param pulumi.Input[str] password: Specified the repository password.
                Changing this parameter will create a new authorization.
         :param pulumi.Input[str] region: Specified the region in which to create the repository authorization.
@@ -370,9 +370,9 @@ class RepoPasswordAuthorization(pulumi.CustomResource):
     @pulumi.getter
     def name(self) -> pulumi.Output[str]:
         """
-        Specified the authorization name. The name can contain of 4 to 63 characters,
-        only letters, digits, underscores (_), hyphens (-) and dots (.) are allowed.
-        Changing this parameter will create a new authorization.
+        Specified the authorization name.  
+        The name can contain of `4` to `63` characters, only letters, digits, underscores (_), hyphens (-) and dots (.) are
+        allowed. Changing this parameter will create a new authorization.
         """
         return pulumi.get(self, "name")
 

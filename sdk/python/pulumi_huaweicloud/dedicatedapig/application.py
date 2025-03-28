@@ -31,11 +31,11 @@ class ApplicationArgs:
                The application code must start with a letter, digit, plus sign (+) or slash (/).
                Only letters, digits and following special special characters are allowed: `!@#$%+-_/=`.
         :param pulumi.Input[str] description: Specifies the application description.  
-               The description contain a maximum of 255 characters and the angle brackets (< and >) are not allowed.
+               The description contain a maximum of `255` characters and the angle brackets (< and >) are not allowed.
         :param pulumi.Input[str] name: Specifies the application name.  
-               The valid length is limited from can contain `3` to `64`, only Chinese and English letters, digits and hyphens (-)
+               The valid length is limited from `3` to `64`, only Chinese characters, English letters, digits and hyphens (-)
                are allowed.
-               The name must start with a Chinese or English letter.
+               The name must start with a Chinese character or English letter.
         :param pulumi.Input[str] region: Specifies the region where the application is located.  
                If omitted, the provider-level region will be used. Changing this will create a new resource.
         :param pulumi.Input[str] secret_action: Specifies the secret action to be done for the application.  
@@ -88,7 +88,7 @@ class ApplicationArgs:
     def description(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the application description.  
-        The description contain a maximum of 255 characters and the angle brackets (< and >) are not allowed.
+        The description contain a maximum of `255` characters and the angle brackets (< and >) are not allowed.
         """
         return pulumi.get(self, "description")
 
@@ -101,9 +101,9 @@ class ApplicationArgs:
     def name(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the application name.  
-        The valid length is limited from can contain `3` to `64`, only Chinese and English letters, digits and hyphens (-)
+        The valid length is limited from `3` to `64`, only Chinese characters, English letters, digits and hyphens (-)
         are allowed.
-        The name must start with a Chinese or English letter.
+        The name must start with a Chinese character or English letter.
         """
         return pulumi.get(self, "name")
 
@@ -161,14 +161,14 @@ class _ApplicationState:
         :param pulumi.Input[str] app_key: App key.
         :param pulumi.Input[str] app_secret: App secret.
         :param pulumi.Input[str] description: Specifies the application description.  
-               The description contain a maximum of 255 characters and the angle brackets (< and >) are not allowed.
+               The description contain a maximum of `255` characters and the angle brackets (< and >) are not allowed.
         :param pulumi.Input[str] instance_id: Specifies the ID of the dedicated instance to which the application
                belongs.
                Changing this will create a new resource.
         :param pulumi.Input[str] name: Specifies the application name.  
-               The valid length is limited from can contain `3` to `64`, only Chinese and English letters, digits and hyphens (-)
+               The valid length is limited from `3` to `64`, only Chinese characters, English letters, digits and hyphens (-)
                are allowed.
-               The name must start with a Chinese or English letter.
+               The name must start with a Chinese character or English letter.
         :param pulumi.Input[str] region: Specifies the region where the application is located.  
                If omitted, the provider-level region will be used. Changing this will create a new resource.
         :param pulumi.Input[str] registration_time: the registration time.
@@ -242,7 +242,7 @@ class _ApplicationState:
     def description(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the application description.  
-        The description contain a maximum of 255 characters and the angle brackets (< and >) are not allowed.
+        The description contain a maximum of `255` characters and the angle brackets (< and >) are not allowed.
         """
         return pulumi.get(self, "description")
 
@@ -269,9 +269,9 @@ class _ApplicationState:
     def name(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the application name.  
-        The valid length is limited from can contain `3` to `64`, only Chinese and English letters, digits and hyphens (-)
+        The valid length is limited from `3` to `64`, only Chinese characters, English letters, digits and hyphens (-)
         are allowed.
-        The name must start with a Chinese or English letter.
+        The name must start with a Chinese character or English letter.
         """
         return pulumi.get(self, "name")
 
@@ -377,14 +377,14 @@ class Application(pulumi.CustomResource):
                The application code must start with a letter, digit, plus sign (+) or slash (/).
                Only letters, digits and following special special characters are allowed: `!@#$%+-_/=`.
         :param pulumi.Input[str] description: Specifies the application description.  
-               The description contain a maximum of 255 characters and the angle brackets (< and >) are not allowed.
+               The description contain a maximum of `255` characters and the angle brackets (< and >) are not allowed.
         :param pulumi.Input[str] instance_id: Specifies the ID of the dedicated instance to which the application
                belongs.
                Changing this will create a new resource.
         :param pulumi.Input[str] name: Specifies the application name.  
-               The valid length is limited from can contain `3` to `64`, only Chinese and English letters, digits and hyphens (-)
+               The valid length is limited from `3` to `64`, only Chinese characters, English letters, digits and hyphens (-)
                are allowed.
-               The name must start with a Chinese or English letter.
+               The name must start with a Chinese character or English letter.
         :param pulumi.Input[str] region: Specifies the region where the application is located.  
                If omitted, the provider-level region will be used. Changing this will create a new resource.
         :param pulumi.Input[str] secret_action: Specifies the secret action to be done for the application.  
@@ -500,14 +500,14 @@ class Application(pulumi.CustomResource):
         :param pulumi.Input[str] app_key: App key.
         :param pulumi.Input[str] app_secret: App secret.
         :param pulumi.Input[str] description: Specifies the application description.  
-               The description contain a maximum of 255 characters and the angle brackets (< and >) are not allowed.
+               The description contain a maximum of `255` characters and the angle brackets (< and >) are not allowed.
         :param pulumi.Input[str] instance_id: Specifies the ID of the dedicated instance to which the application
                belongs.
                Changing this will create a new resource.
         :param pulumi.Input[str] name: Specifies the application name.  
-               The valid length is limited from can contain `3` to `64`, only Chinese and English letters, digits and hyphens (-)
+               The valid length is limited from `3` to `64`, only Chinese characters, English letters, digits and hyphens (-)
                are allowed.
-               The name must start with a Chinese or English letter.
+               The name must start with a Chinese character or English letter.
         :param pulumi.Input[str] region: Specifies the region where the application is located.  
                If omitted, the provider-level region will be used. Changing this will create a new resource.
         :param pulumi.Input[str] registration_time: the registration time.
@@ -533,7 +533,7 @@ class Application(pulumi.CustomResource):
 
     @property
     @pulumi.getter(name="appCodes")
-    def app_codes(self) -> pulumi.Output[Optional[Sequence[str]]]:
+    def app_codes(self) -> pulumi.Output[Sequence[str]]:
         """
         Specifies an array of one or more application codes that the application has.  
         Up to five application codes can be created.
@@ -564,7 +564,7 @@ class Application(pulumi.CustomResource):
     def description(self) -> pulumi.Output[str]:
         """
         Specifies the application description.  
-        The description contain a maximum of 255 characters and the angle brackets (< and >) are not allowed.
+        The description contain a maximum of `255` characters and the angle brackets (< and >) are not allowed.
         """
         return pulumi.get(self, "description")
 
@@ -583,9 +583,9 @@ class Application(pulumi.CustomResource):
     def name(self) -> pulumi.Output[str]:
         """
         Specifies the application name.  
-        The valid length is limited from can contain `3` to `64`, only Chinese and English letters, digits and hyphens (-)
+        The valid length is limited from `3` to `64`, only Chinese characters, English letters, digits and hyphens (-)
         are allowed.
-        The name must start with a Chinese or English letter.
+        The name must start with a Chinese character or English letter.
         """
         return pulumi.get(self, "name")
 

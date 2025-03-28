@@ -46,11 +46,11 @@ class PolicyBackupCycle(dict):
         :param Sequence[str] execution_times: Specifies the backup time. Automated backups will be triggered at the backup
                time. The current time is in the UTC format (HH:MM). The minutes in the list must be set to **00** and the hours
                cannot be repeated. In the replication policy, you are advised to set one time point for one day.
-        :param str days: Specifies the weekly backup day of backup schedule. It supports seven days a week (MO, TU,
-               WE, TH, FR, SA, SU) and this parameter is separated by a comma (,) without spaces, between date and date during the
-               configuration.
-        :param int interval: Specifies the interval (in days) of backup schedule. The value range is `1` to `30`. This
-               parameter and `days` are alternative.
+        :param str days: Specifies the weekly backup day of backup schedule.  
+               It supports seven days a week (MO, TU, WE, TH, FR, SA, SU) and this parameter is separated by a comma (,) without
+               spaces, between date and date during the configuration.
+        :param int interval: Specifies the interval (in days) of backup schedule.  
+               The valid value ranges from `1` to `30`.
         """
         pulumi.set(__self__, "execution_times", execution_times)
         if days is not None:
@@ -72,9 +72,9 @@ class PolicyBackupCycle(dict):
     @pulumi.getter
     def days(self) -> Optional[str]:
         """
-        Specifies the weekly backup day of backup schedule. It supports seven days a week (MO, TU,
-        WE, TH, FR, SA, SU) and this parameter is separated by a comma (,) without spaces, between date and date during the
-        configuration.
+        Specifies the weekly backup day of backup schedule.  
+        It supports seven days a week (MO, TU, WE, TH, FR, SA, SU) and this parameter is separated by a comma (,) without
+        spaces, between date and date during the configuration.
         """
         return pulumi.get(self, "days")
 
@@ -82,8 +82,8 @@ class PolicyBackupCycle(dict):
     @pulumi.getter
     def interval(self) -> Optional[int]:
         """
-        Specifies the interval (in days) of backup schedule. The value range is `1` to `30`. This
-        parameter and `days` are alternative.
+        Specifies the interval (in days) of backup schedule.  
+        The valid value ranges from `1` to `30`.
         """
         return pulumi.get(self, "interval")
 
@@ -293,7 +293,9 @@ class VaultResource(dict):
 class GetVaultsVaultResult(dict):
     def __init__(__self__, *,
                  allocated: float,
+                 auto_bind: bool,
                  auto_expand_enabled: bool,
+                 bind_rules: Mapping[str, str],
                  consistent_level: str,
                  enterprise_project_id: str,
                  id: str,
@@ -310,8 +312,10 @@ class GetVaultsVaultResult(dict):
                  used: float):
         """
         :param float allocated: The allocated capacity of the vault, in GB.
+        :param bool auto_bind: Whether automatic association is enabled. Defaults to **false**.
         :param bool auto_expand_enabled: Specifies whether to enable automatic expansion of the backup protection
                type vault. Defaults to **false**.
+        :param Mapping[str, str] bind_rules: The tags to filter resources for automatic association with **auto_bind**.
         :param str consistent_level: Specifies the consistent level (specification) of the vault.
                The valid values are as follows:
                + **[crash_consistent](https://support.huaweicloud.com/intl/en-us/usermanual-cbr/cbr_03_0109.html)**
@@ -326,19 +330,21 @@ class GetVaultsVaultResult(dict):
                The valid values are **backup** and **replication**. Vaults of type **disk** don't support **replication**.
         :param Sequence['GetVaultsVaultResourceArgs'] resources: The array of one or more resources to attach to the vault.
                The object structure is documented below.
-        :param int size: Specifies the vault sapacity, in GB. The valid value range is `1` to `10,485,760`.
+        :param int size: Specifies the vault capacity, in GB. The valid value range is `1` to `10,485,760`.
         :param str spec_code: The specification code.
         :param str status: Specifies the vault status, including **available**, **lock**, **frozen** and **error**.
         :param str storage: The name of the bucket for the vault.
         :param Mapping[str, str] tags: The key/value pairs to associate with the vault.
-        :param str type: Specifies the object type of the vault. The vaild values are as follows:
+        :param str type: Specifies the object type of the vault. The valid values are as follows:
                + **server** (Cloud Servers)
                + **disk** (EVS Disks)
                + **turbo** (SFS Turbo file systems)
         :param float used: The used capacity, in GB.
         """
         pulumi.set(__self__, "allocated", allocated)
+        pulumi.set(__self__, "auto_bind", auto_bind)
         pulumi.set(__self__, "auto_expand_enabled", auto_expand_enabled)
+        pulumi.set(__self__, "bind_rules", bind_rules)
         pulumi.set(__self__, "consistent_level", consistent_level)
         pulumi.set(__self__, "enterprise_project_id", enterprise_project_id)
         pulumi.set(__self__, "id", id)
@@ -363,6 +369,14 @@ class GetVaultsVaultResult(dict):
         return pulumi.get(self, "allocated")
 
     @property
+    @pulumi.getter(name="autoBind")
+    def auto_bind(self) -> bool:
+        """
+        Whether automatic association is enabled. Defaults to **false**.
+        """
+        return pulumi.get(self, "auto_bind")
+
+    @property
     @pulumi.getter(name="autoExpandEnabled")
     def auto_expand_enabled(self) -> bool:
         """
@@ -370,6 +384,14 @@ class GetVaultsVaultResult(dict):
         type vault. Defaults to **false**.
         """
         return pulumi.get(self, "auto_expand_enabled")
+
+    @property
+    @pulumi.getter(name="bindRules")
+    def bind_rules(self) -> Mapping[str, str]:
+        """
+        The tags to filter resources for automatic association with **auto_bind**.
+        """
+        return pulumi.get(self, "bind_rules")
 
     @property
     @pulumi.getter(name="consistentLevel")
@@ -438,7 +460,7 @@ class GetVaultsVaultResult(dict):
     @pulumi.getter
     def size(self) -> int:
         """
-        Specifies the vault sapacity, in GB. The valid value range is `1` to `10,485,760`.
+        Specifies the vault capacity, in GB. The valid value range is `1` to `10,485,760`.
         """
         return pulumi.get(self, "size")
 
@@ -478,7 +500,7 @@ class GetVaultsVaultResult(dict):
     @pulumi.getter
     def type(self) -> str:
         """
-        Specifies the object type of the vault. The vaild values are as follows:
+        Specifies the object type of the vault. The valid values are as follows:
         + **server** (Cloud Servers)
         + **disk** (EVS Disks)
         + **turbo** (SFS Turbo file systems)

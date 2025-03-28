@@ -13,6 +13,13 @@ import (
 
 // Manages an IoTDA device within HuaweiCloud.
 //
+// > When accessing an IoTDA **standard** or **enterprise** edition instance, you need to specify the IoTDA service
+// endpoint in `provider` block.
+// You can login to the IoTDA console, choose the instance **Overview** and click **Access Details**
+// to view the HTTPS application access address. An example of the access address might be
+// **9bc34xxxxx.st1.iotda-app.ap-southeast-1.myhuaweicloud.com**, then you need to configure the
+// `provider` block as follows:
+//
 // ## Example Usage
 // ### Create a directly connected device and an indirectly connected device
 //
@@ -63,13 +70,27 @@ import (
 //
 // ## Import
 //
-// Devices can be imported using the `id`, e.g.
+// Devices can be imported using the `id`, e.g. bash
 //
 // ```sh
 //
 //	$ pulumi import huaweicloud:IoTDA/device:Device test 10022532f4f94f26b01daa1e424853e1
 //
 // ```
+//
+//	Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`force_disconnect`, `extension_info`, `shadow`. It is generally recommended running `terraform plan` after importing a resource. You can then decide if changes should be applied to the resource, or the resource definition should be updated to align with the resource. Also you can ignore changes as below. hcl resource "huaweicloud_iotda_device" "test" {
+//
+// ...
+//
+//	lifecycle {
+//
+//	ignore_changes = [
+//
+//	force_disconnect, extension_info, shadow,
+//
+//	]
+//
+//	} }
 type Device struct {
 	pulumi.CustomResourceState
 
@@ -77,28 +98,34 @@ type Device struct {
 	// + **SECRET**: Use a secret for identity authentication.
 	// + **CERTIFICATES**: Use an x.509 certificate for identity authentication.
 	AuthType pulumi.StringOutput `pulumi:"authType"`
-	// Specifies the description of device. The description contains a maximum of 2048
+	// Specifies the description of device. The description contains a maximum of `2,048`
 	// characters. Only letters, Chinese characters, digits, hyphens (-), underscore (_) and the following special characters
 	// are allowed: `?'#().,&%@!`.
 	Description pulumi.StringPtrOutput `pulumi:"description"`
-	// Specifies the device ID, which contains 4 to 256 characters.
+	// Specifies the device ID, which contains `4` to `256` characters.
 	// Only letters, digits, hyphens (-) and underscore (_) are allowed. If omitted, the platform will automatically allocate
 	// a device ID. Changing this parameter will create a new resource.
 	DeviceId pulumi.StringOutput `pulumi:"deviceId"`
-	// Specifies a fingerprint of X.509 certificate for identity authentication,
+	// Specifies the extended information of the device.
+	// The users can be customized the content. The maximum size of the value is `1` KB.
+	ExtensionInfo pulumi.StringMapOutput `pulumi:"extensionInfo"`
+	// Specifies a primary fingerprint of X.509 certificate for identity authentication,
 	// which is a 40-digit or 64-digit hexadecimal string. For more detail, please see
 	// [Registering a Device Authenticated by an X.509 Certificate](https://support.huaweicloud.com/en-us/usermanual-iothub/iot_01_0055.html).
 	Fingerprint pulumi.StringOutput `pulumi:"fingerprint"`
-	// Specifies whether to freeze the device. Defaults to `false`.
+	// Specifies whether to force device disconnection when resetting secrets or
+	// fingerprints, currently, only long connections are allowed. The default value is **false**.
+	ForceDisconnect pulumi.BoolPtrOutput `pulumi:"forceDisconnect"`
+	// Specifies whether to freeze the device. Defaults to **false**.
 	Frozen pulumi.BoolOutput `pulumi:"frozen"`
 	// Specifies the gateway ID which is the device ID of the parent device.
 	// The child device is not directly connected to the platform. If omitted, it means to create a device directly connected
 	// to the platform, the `deviceId` of the device is the same as the `gatewayId`.
 	GatewayId pulumi.StringOutput `pulumi:"gatewayId"`
-	// Specifies the device name, which contains 4 to 256 characters. Only letters,
+	// Specifies the device name, which contains `4` to `256` characters. Only letters,
 	// Chinese characters, digits, hyphens (-), underscore (_) and the following special characters are allowed: `?'#().,&%@!`.
 	Name pulumi.StringOutput `pulumi:"name"`
-	// Specifies the node ID, which contains 4 to 256 characters.
+	// Specifies the node ID, which contains `4` to `256` characters.
 	// The node ID can be IMEI, MAC address, or serial number. Changing this parameter will create a new resource.
 	NodeId pulumi.StringOutput `pulumi:"nodeId"`
 	// The node type of device. The options are as follows:
@@ -112,9 +139,29 @@ type Device struct {
 	// Specifies the region in which to create the IoTDA device resource.
 	// If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
 	Region pulumi.StringOutput `pulumi:"region"`
-	// Specifies a secret for identity authentication, which contains 8 to 32 characters.
+	// Specifies a secondary fingerprint of X.509 certificate for identity
+	// authentication. When primary fingerprint verification fails, secondary fingerprint verification will be enabled, and
+	// the secondary fingerprint has the same effectiveness as the primary fingerprint.
+	// Which is a 40-digit or 64-digit hexadecimal string. For more detail, please see
+	// [Registering a Device Authenticated by an X.509 Certificate](https://support.huaweicloud.com/en-us/usermanual-iothub/iot_01_0055.html).
+	SecondaryFingerprint pulumi.StringOutput `pulumi:"secondaryFingerprint"`
+	// Specifies a secondary secret for identity authentication.
+	// When the primary secret verification fails, the secondary secret verification will be enabled, and the secondary
+	// secret has the same effect as the primary secret; The secondary secret is not effective for devices connected to the
+	// COAP protocol. Which contains `8` to `32` characters.
 	// Only letters, digits, hyphens (-) and underscore (_) are allowed.
+	SecondarySecret pulumi.StringOutput `pulumi:"secondarySecret"`
+	// Specifies a primary secret for identity authentication, which contains `8` to `32`
+	// characters. Only letters, digits, hyphens (-) and underscore (_) are allowed.
 	Secret pulumi.StringOutput `pulumi:"secret"`
+	// Specifies whether the device is connected through a secure protocol.
+	// This parameter is only valid when `secret` or `fingerprint` is specified, and suggest setting it to **true**.
+	// If ignored, it means accessing through insecure protocols, and the device is susceptible to security risks such as
+	// counterfeiting, please be cautious with this configuration.
+	SecureAccess pulumi.BoolOutput `pulumi:"secureAccess"`
+	// Specifies the initial configuration of the device.
+	// The shadow structure is documented below.
+	Shadows DeviceShadowArrayOutput `pulumi:"shadows"`
 	// Specifies the resource space ID which the device belongs to.
 	// Changing this parameter will create a new resource.
 	SpaceId pulumi.StringOutput `pulumi:"spaceId"`
@@ -167,28 +214,34 @@ type deviceState struct {
 	// + **SECRET**: Use a secret for identity authentication.
 	// + **CERTIFICATES**: Use an x.509 certificate for identity authentication.
 	AuthType *string `pulumi:"authType"`
-	// Specifies the description of device. The description contains a maximum of 2048
+	// Specifies the description of device. The description contains a maximum of `2,048`
 	// characters. Only letters, Chinese characters, digits, hyphens (-), underscore (_) and the following special characters
 	// are allowed: `?'#().,&%@!`.
 	Description *string `pulumi:"description"`
-	// Specifies the device ID, which contains 4 to 256 characters.
+	// Specifies the device ID, which contains `4` to `256` characters.
 	// Only letters, digits, hyphens (-) and underscore (_) are allowed. If omitted, the platform will automatically allocate
 	// a device ID. Changing this parameter will create a new resource.
 	DeviceId *string `pulumi:"deviceId"`
-	// Specifies a fingerprint of X.509 certificate for identity authentication,
+	// Specifies the extended information of the device.
+	// The users can be customized the content. The maximum size of the value is `1` KB.
+	ExtensionInfo map[string]string `pulumi:"extensionInfo"`
+	// Specifies a primary fingerprint of X.509 certificate for identity authentication,
 	// which is a 40-digit or 64-digit hexadecimal string. For more detail, please see
 	// [Registering a Device Authenticated by an X.509 Certificate](https://support.huaweicloud.com/en-us/usermanual-iothub/iot_01_0055.html).
 	Fingerprint *string `pulumi:"fingerprint"`
-	// Specifies whether to freeze the device. Defaults to `false`.
+	// Specifies whether to force device disconnection when resetting secrets or
+	// fingerprints, currently, only long connections are allowed. The default value is **false**.
+	ForceDisconnect *bool `pulumi:"forceDisconnect"`
+	// Specifies whether to freeze the device. Defaults to **false**.
 	Frozen *bool `pulumi:"frozen"`
 	// Specifies the gateway ID which is the device ID of the parent device.
 	// The child device is not directly connected to the platform. If omitted, it means to create a device directly connected
 	// to the platform, the `deviceId` of the device is the same as the `gatewayId`.
 	GatewayId *string `pulumi:"gatewayId"`
-	// Specifies the device name, which contains 4 to 256 characters. Only letters,
+	// Specifies the device name, which contains `4` to `256` characters. Only letters,
 	// Chinese characters, digits, hyphens (-), underscore (_) and the following special characters are allowed: `?'#().,&%@!`.
 	Name *string `pulumi:"name"`
-	// Specifies the node ID, which contains 4 to 256 characters.
+	// Specifies the node ID, which contains `4` to `256` characters.
 	// The node ID can be IMEI, MAC address, or serial number. Changing this parameter will create a new resource.
 	NodeId *string `pulumi:"nodeId"`
 	// The node type of device. The options are as follows:
@@ -202,9 +255,29 @@ type deviceState struct {
 	// Specifies the region in which to create the IoTDA device resource.
 	// If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
 	Region *string `pulumi:"region"`
-	// Specifies a secret for identity authentication, which contains 8 to 32 characters.
+	// Specifies a secondary fingerprint of X.509 certificate for identity
+	// authentication. When primary fingerprint verification fails, secondary fingerprint verification will be enabled, and
+	// the secondary fingerprint has the same effectiveness as the primary fingerprint.
+	// Which is a 40-digit or 64-digit hexadecimal string. For more detail, please see
+	// [Registering a Device Authenticated by an X.509 Certificate](https://support.huaweicloud.com/en-us/usermanual-iothub/iot_01_0055.html).
+	SecondaryFingerprint *string `pulumi:"secondaryFingerprint"`
+	// Specifies a secondary secret for identity authentication.
+	// When the primary secret verification fails, the secondary secret verification will be enabled, and the secondary
+	// secret has the same effect as the primary secret; The secondary secret is not effective for devices connected to the
+	// COAP protocol. Which contains `8` to `32` characters.
 	// Only letters, digits, hyphens (-) and underscore (_) are allowed.
+	SecondarySecret *string `pulumi:"secondarySecret"`
+	// Specifies a primary secret for identity authentication, which contains `8` to `32`
+	// characters. Only letters, digits, hyphens (-) and underscore (_) are allowed.
 	Secret *string `pulumi:"secret"`
+	// Specifies whether the device is connected through a secure protocol.
+	// This parameter is only valid when `secret` or `fingerprint` is specified, and suggest setting it to **true**.
+	// If ignored, it means accessing through insecure protocols, and the device is susceptible to security risks such as
+	// counterfeiting, please be cautious with this configuration.
+	SecureAccess *bool `pulumi:"secureAccess"`
+	// Specifies the initial configuration of the device.
+	// The shadow structure is documented below.
+	Shadows []DeviceShadow `pulumi:"shadows"`
 	// Specifies the resource space ID which the device belongs to.
 	// Changing this parameter will create a new resource.
 	SpaceId *string `pulumi:"spaceId"`
@@ -219,28 +292,34 @@ type DeviceState struct {
 	// + **SECRET**: Use a secret for identity authentication.
 	// + **CERTIFICATES**: Use an x.509 certificate for identity authentication.
 	AuthType pulumi.StringPtrInput
-	// Specifies the description of device. The description contains a maximum of 2048
+	// Specifies the description of device. The description contains a maximum of `2,048`
 	// characters. Only letters, Chinese characters, digits, hyphens (-), underscore (_) and the following special characters
 	// are allowed: `?'#().,&%@!`.
 	Description pulumi.StringPtrInput
-	// Specifies the device ID, which contains 4 to 256 characters.
+	// Specifies the device ID, which contains `4` to `256` characters.
 	// Only letters, digits, hyphens (-) and underscore (_) are allowed. If omitted, the platform will automatically allocate
 	// a device ID. Changing this parameter will create a new resource.
 	DeviceId pulumi.StringPtrInput
-	// Specifies a fingerprint of X.509 certificate for identity authentication,
+	// Specifies the extended information of the device.
+	// The users can be customized the content. The maximum size of the value is `1` KB.
+	ExtensionInfo pulumi.StringMapInput
+	// Specifies a primary fingerprint of X.509 certificate for identity authentication,
 	// which is a 40-digit or 64-digit hexadecimal string. For more detail, please see
 	// [Registering a Device Authenticated by an X.509 Certificate](https://support.huaweicloud.com/en-us/usermanual-iothub/iot_01_0055.html).
 	Fingerprint pulumi.StringPtrInput
-	// Specifies whether to freeze the device. Defaults to `false`.
+	// Specifies whether to force device disconnection when resetting secrets or
+	// fingerprints, currently, only long connections are allowed. The default value is **false**.
+	ForceDisconnect pulumi.BoolPtrInput
+	// Specifies whether to freeze the device. Defaults to **false**.
 	Frozen pulumi.BoolPtrInput
 	// Specifies the gateway ID which is the device ID of the parent device.
 	// The child device is not directly connected to the platform. If omitted, it means to create a device directly connected
 	// to the platform, the `deviceId` of the device is the same as the `gatewayId`.
 	GatewayId pulumi.StringPtrInput
-	// Specifies the device name, which contains 4 to 256 characters. Only letters,
+	// Specifies the device name, which contains `4` to `256` characters. Only letters,
 	// Chinese characters, digits, hyphens (-), underscore (_) and the following special characters are allowed: `?'#().,&%@!`.
 	Name pulumi.StringPtrInput
-	// Specifies the node ID, which contains 4 to 256 characters.
+	// Specifies the node ID, which contains `4` to `256` characters.
 	// The node ID can be IMEI, MAC address, or serial number. Changing this parameter will create a new resource.
 	NodeId pulumi.StringPtrInput
 	// The node type of device. The options are as follows:
@@ -254,9 +333,29 @@ type DeviceState struct {
 	// Specifies the region in which to create the IoTDA device resource.
 	// If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
 	Region pulumi.StringPtrInput
-	// Specifies a secret for identity authentication, which contains 8 to 32 characters.
+	// Specifies a secondary fingerprint of X.509 certificate for identity
+	// authentication. When primary fingerprint verification fails, secondary fingerprint verification will be enabled, and
+	// the secondary fingerprint has the same effectiveness as the primary fingerprint.
+	// Which is a 40-digit or 64-digit hexadecimal string. For more detail, please see
+	// [Registering a Device Authenticated by an X.509 Certificate](https://support.huaweicloud.com/en-us/usermanual-iothub/iot_01_0055.html).
+	SecondaryFingerprint pulumi.StringPtrInput
+	// Specifies a secondary secret for identity authentication.
+	// When the primary secret verification fails, the secondary secret verification will be enabled, and the secondary
+	// secret has the same effect as the primary secret; The secondary secret is not effective for devices connected to the
+	// COAP protocol. Which contains `8` to `32` characters.
 	// Only letters, digits, hyphens (-) and underscore (_) are allowed.
+	SecondarySecret pulumi.StringPtrInput
+	// Specifies a primary secret for identity authentication, which contains `8` to `32`
+	// characters. Only letters, digits, hyphens (-) and underscore (_) are allowed.
 	Secret pulumi.StringPtrInput
+	// Specifies whether the device is connected through a secure protocol.
+	// This parameter is only valid when `secret` or `fingerprint` is specified, and suggest setting it to **true**.
+	// If ignored, it means accessing through insecure protocols, and the device is susceptible to security risks such as
+	// counterfeiting, please be cautious with this configuration.
+	SecureAccess pulumi.BoolPtrInput
+	// Specifies the initial configuration of the device.
+	// The shadow structure is documented below.
+	Shadows DeviceShadowArrayInput
 	// Specifies the resource space ID which the device belongs to.
 	// Changing this parameter will create a new resource.
 	SpaceId pulumi.StringPtrInput
@@ -271,28 +370,34 @@ func (DeviceState) ElementType() reflect.Type {
 }
 
 type deviceArgs struct {
-	// Specifies the description of device. The description contains a maximum of 2048
+	// Specifies the description of device. The description contains a maximum of `2,048`
 	// characters. Only letters, Chinese characters, digits, hyphens (-), underscore (_) and the following special characters
 	// are allowed: `?'#().,&%@!`.
 	Description *string `pulumi:"description"`
-	// Specifies the device ID, which contains 4 to 256 characters.
+	// Specifies the device ID, which contains `4` to `256` characters.
 	// Only letters, digits, hyphens (-) and underscore (_) are allowed. If omitted, the platform will automatically allocate
 	// a device ID. Changing this parameter will create a new resource.
 	DeviceId *string `pulumi:"deviceId"`
-	// Specifies a fingerprint of X.509 certificate for identity authentication,
+	// Specifies the extended information of the device.
+	// The users can be customized the content. The maximum size of the value is `1` KB.
+	ExtensionInfo map[string]string `pulumi:"extensionInfo"`
+	// Specifies a primary fingerprint of X.509 certificate for identity authentication,
 	// which is a 40-digit or 64-digit hexadecimal string. For more detail, please see
 	// [Registering a Device Authenticated by an X.509 Certificate](https://support.huaweicloud.com/en-us/usermanual-iothub/iot_01_0055.html).
 	Fingerprint *string `pulumi:"fingerprint"`
-	// Specifies whether to freeze the device. Defaults to `false`.
+	// Specifies whether to force device disconnection when resetting secrets or
+	// fingerprints, currently, only long connections are allowed. The default value is **false**.
+	ForceDisconnect *bool `pulumi:"forceDisconnect"`
+	// Specifies whether to freeze the device. Defaults to **false**.
 	Frozen *bool `pulumi:"frozen"`
 	// Specifies the gateway ID which is the device ID of the parent device.
 	// The child device is not directly connected to the platform. If omitted, it means to create a device directly connected
 	// to the platform, the `deviceId` of the device is the same as the `gatewayId`.
 	GatewayId *string `pulumi:"gatewayId"`
-	// Specifies the device name, which contains 4 to 256 characters. Only letters,
+	// Specifies the device name, which contains `4` to `256` characters. Only letters,
 	// Chinese characters, digits, hyphens (-), underscore (_) and the following special characters are allowed: `?'#().,&%@!`.
 	Name *string `pulumi:"name"`
-	// Specifies the node ID, which contains 4 to 256 characters.
+	// Specifies the node ID, which contains `4` to `256` characters.
 	// The node ID can be IMEI, MAC address, or serial number. Changing this parameter will create a new resource.
 	NodeId string `pulumi:"nodeId"`
 	// Specifies the product ID which the device belongs to.
@@ -301,9 +406,29 @@ type deviceArgs struct {
 	// Specifies the region in which to create the IoTDA device resource.
 	// If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
 	Region *string `pulumi:"region"`
-	// Specifies a secret for identity authentication, which contains 8 to 32 characters.
+	// Specifies a secondary fingerprint of X.509 certificate for identity
+	// authentication. When primary fingerprint verification fails, secondary fingerprint verification will be enabled, and
+	// the secondary fingerprint has the same effectiveness as the primary fingerprint.
+	// Which is a 40-digit or 64-digit hexadecimal string. For more detail, please see
+	// [Registering a Device Authenticated by an X.509 Certificate](https://support.huaweicloud.com/en-us/usermanual-iothub/iot_01_0055.html).
+	SecondaryFingerprint *string `pulumi:"secondaryFingerprint"`
+	// Specifies a secondary secret for identity authentication.
+	// When the primary secret verification fails, the secondary secret verification will be enabled, and the secondary
+	// secret has the same effect as the primary secret; The secondary secret is not effective for devices connected to the
+	// COAP protocol. Which contains `8` to `32` characters.
 	// Only letters, digits, hyphens (-) and underscore (_) are allowed.
+	SecondarySecret *string `pulumi:"secondarySecret"`
+	// Specifies a primary secret for identity authentication, which contains `8` to `32`
+	// characters. Only letters, digits, hyphens (-) and underscore (_) are allowed.
 	Secret *string `pulumi:"secret"`
+	// Specifies whether the device is connected through a secure protocol.
+	// This parameter is only valid when `secret` or `fingerprint` is specified, and suggest setting it to **true**.
+	// If ignored, it means accessing through insecure protocols, and the device is susceptible to security risks such as
+	// counterfeiting, please be cautious with this configuration.
+	SecureAccess *bool `pulumi:"secureAccess"`
+	// Specifies the initial configuration of the device.
+	// The shadow structure is documented below.
+	Shadows []DeviceShadow `pulumi:"shadows"`
 	// Specifies the resource space ID which the device belongs to.
 	// Changing this parameter will create a new resource.
 	SpaceId string `pulumi:"spaceId"`
@@ -313,28 +438,34 @@ type deviceArgs struct {
 
 // The set of arguments for constructing a Device resource.
 type DeviceArgs struct {
-	// Specifies the description of device. The description contains a maximum of 2048
+	// Specifies the description of device. The description contains a maximum of `2,048`
 	// characters. Only letters, Chinese characters, digits, hyphens (-), underscore (_) and the following special characters
 	// are allowed: `?'#().,&%@!`.
 	Description pulumi.StringPtrInput
-	// Specifies the device ID, which contains 4 to 256 characters.
+	// Specifies the device ID, which contains `4` to `256` characters.
 	// Only letters, digits, hyphens (-) and underscore (_) are allowed. If omitted, the platform will automatically allocate
 	// a device ID. Changing this parameter will create a new resource.
 	DeviceId pulumi.StringPtrInput
-	// Specifies a fingerprint of X.509 certificate for identity authentication,
+	// Specifies the extended information of the device.
+	// The users can be customized the content. The maximum size of the value is `1` KB.
+	ExtensionInfo pulumi.StringMapInput
+	// Specifies a primary fingerprint of X.509 certificate for identity authentication,
 	// which is a 40-digit or 64-digit hexadecimal string. For more detail, please see
 	// [Registering a Device Authenticated by an X.509 Certificate](https://support.huaweicloud.com/en-us/usermanual-iothub/iot_01_0055.html).
 	Fingerprint pulumi.StringPtrInput
-	// Specifies whether to freeze the device. Defaults to `false`.
+	// Specifies whether to force device disconnection when resetting secrets or
+	// fingerprints, currently, only long connections are allowed. The default value is **false**.
+	ForceDisconnect pulumi.BoolPtrInput
+	// Specifies whether to freeze the device. Defaults to **false**.
 	Frozen pulumi.BoolPtrInput
 	// Specifies the gateway ID which is the device ID of the parent device.
 	// The child device is not directly connected to the platform. If omitted, it means to create a device directly connected
 	// to the platform, the `deviceId` of the device is the same as the `gatewayId`.
 	GatewayId pulumi.StringPtrInput
-	// Specifies the device name, which contains 4 to 256 characters. Only letters,
+	// Specifies the device name, which contains `4` to `256` characters. Only letters,
 	// Chinese characters, digits, hyphens (-), underscore (_) and the following special characters are allowed: `?'#().,&%@!`.
 	Name pulumi.StringPtrInput
-	// Specifies the node ID, which contains 4 to 256 characters.
+	// Specifies the node ID, which contains `4` to `256` characters.
 	// The node ID can be IMEI, MAC address, or serial number. Changing this parameter will create a new resource.
 	NodeId pulumi.StringInput
 	// Specifies the product ID which the device belongs to.
@@ -343,9 +474,29 @@ type DeviceArgs struct {
 	// Specifies the region in which to create the IoTDA device resource.
 	// If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
 	Region pulumi.StringPtrInput
-	// Specifies a secret for identity authentication, which contains 8 to 32 characters.
+	// Specifies a secondary fingerprint of X.509 certificate for identity
+	// authentication. When primary fingerprint verification fails, secondary fingerprint verification will be enabled, and
+	// the secondary fingerprint has the same effectiveness as the primary fingerprint.
+	// Which is a 40-digit or 64-digit hexadecimal string. For more detail, please see
+	// [Registering a Device Authenticated by an X.509 Certificate](https://support.huaweicloud.com/en-us/usermanual-iothub/iot_01_0055.html).
+	SecondaryFingerprint pulumi.StringPtrInput
+	// Specifies a secondary secret for identity authentication.
+	// When the primary secret verification fails, the secondary secret verification will be enabled, and the secondary
+	// secret has the same effect as the primary secret; The secondary secret is not effective for devices connected to the
+	// COAP protocol. Which contains `8` to `32` characters.
 	// Only letters, digits, hyphens (-) and underscore (_) are allowed.
+	SecondarySecret pulumi.StringPtrInput
+	// Specifies a primary secret for identity authentication, which contains `8` to `32`
+	// characters. Only letters, digits, hyphens (-) and underscore (_) are allowed.
 	Secret pulumi.StringPtrInput
+	// Specifies whether the device is connected through a secure protocol.
+	// This parameter is only valid when `secret` or `fingerprint` is specified, and suggest setting it to **true**.
+	// If ignored, it means accessing through insecure protocols, and the device is susceptible to security risks such as
+	// counterfeiting, please be cautious with this configuration.
+	SecureAccess pulumi.BoolPtrInput
+	// Specifies the initial configuration of the device.
+	// The shadow structure is documented below.
+	Shadows DeviceShadowArrayInput
 	// Specifies the resource space ID which the device belongs to.
 	// Changing this parameter will create a new resource.
 	SpaceId pulumi.StringInput
@@ -447,28 +598,40 @@ func (o DeviceOutput) AuthType() pulumi.StringOutput {
 	return o.ApplyT(func(v *Device) pulumi.StringOutput { return v.AuthType }).(pulumi.StringOutput)
 }
 
-// Specifies the description of device. The description contains a maximum of 2048
+// Specifies the description of device. The description contains a maximum of `2,048`
 // characters. Only letters, Chinese characters, digits, hyphens (-), underscore (_) and the following special characters
 // are allowed: `?'#().,&%@!`.
 func (o DeviceOutput) Description() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Device) pulumi.StringPtrOutput { return v.Description }).(pulumi.StringPtrOutput)
 }
 
-// Specifies the device ID, which contains 4 to 256 characters.
+// Specifies the device ID, which contains `4` to `256` characters.
 // Only letters, digits, hyphens (-) and underscore (_) are allowed. If omitted, the platform will automatically allocate
 // a device ID. Changing this parameter will create a new resource.
 func (o DeviceOutput) DeviceId() pulumi.StringOutput {
 	return o.ApplyT(func(v *Device) pulumi.StringOutput { return v.DeviceId }).(pulumi.StringOutput)
 }
 
-// Specifies a fingerprint of X.509 certificate for identity authentication,
+// Specifies the extended information of the device.
+// The users can be customized the content. The maximum size of the value is `1` KB.
+func (o DeviceOutput) ExtensionInfo() pulumi.StringMapOutput {
+	return o.ApplyT(func(v *Device) pulumi.StringMapOutput { return v.ExtensionInfo }).(pulumi.StringMapOutput)
+}
+
+// Specifies a primary fingerprint of X.509 certificate for identity authentication,
 // which is a 40-digit or 64-digit hexadecimal string. For more detail, please see
 // [Registering a Device Authenticated by an X.509 Certificate](https://support.huaweicloud.com/en-us/usermanual-iothub/iot_01_0055.html).
 func (o DeviceOutput) Fingerprint() pulumi.StringOutput {
 	return o.ApplyT(func(v *Device) pulumi.StringOutput { return v.Fingerprint }).(pulumi.StringOutput)
 }
 
-// Specifies whether to freeze the device. Defaults to `false`.
+// Specifies whether to force device disconnection when resetting secrets or
+// fingerprints, currently, only long connections are allowed. The default value is **false**.
+func (o DeviceOutput) ForceDisconnect() pulumi.BoolPtrOutput {
+	return o.ApplyT(func(v *Device) pulumi.BoolPtrOutput { return v.ForceDisconnect }).(pulumi.BoolPtrOutput)
+}
+
+// Specifies whether to freeze the device. Defaults to **false**.
 func (o DeviceOutput) Frozen() pulumi.BoolOutput {
 	return o.ApplyT(func(v *Device) pulumi.BoolOutput { return v.Frozen }).(pulumi.BoolOutput)
 }
@@ -480,13 +643,13 @@ func (o DeviceOutput) GatewayId() pulumi.StringOutput {
 	return o.ApplyT(func(v *Device) pulumi.StringOutput { return v.GatewayId }).(pulumi.StringOutput)
 }
 
-// Specifies the device name, which contains 4 to 256 characters. Only letters,
+// Specifies the device name, which contains `4` to `256` characters. Only letters,
 // Chinese characters, digits, hyphens (-), underscore (_) and the following special characters are allowed: `?'#().,&%@!`.
 func (o DeviceOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v *Device) pulumi.StringOutput { return v.Name }).(pulumi.StringOutput)
 }
 
-// Specifies the node ID, which contains 4 to 256 characters.
+// Specifies the node ID, which contains `4` to `256` characters.
 // The node ID can be IMEI, MAC address, or serial number. Changing this parameter will create a new resource.
 func (o DeviceOutput) NodeId() pulumi.StringOutput {
 	return o.ApplyT(func(v *Device) pulumi.StringOutput { return v.NodeId }).(pulumi.StringOutput)
@@ -512,10 +675,42 @@ func (o DeviceOutput) Region() pulumi.StringOutput {
 	return o.ApplyT(func(v *Device) pulumi.StringOutput { return v.Region }).(pulumi.StringOutput)
 }
 
-// Specifies a secret for identity authentication, which contains 8 to 32 characters.
+// Specifies a secondary fingerprint of X.509 certificate for identity
+// authentication. When primary fingerprint verification fails, secondary fingerprint verification will be enabled, and
+// the secondary fingerprint has the same effectiveness as the primary fingerprint.
+// Which is a 40-digit or 64-digit hexadecimal string. For more detail, please see
+// [Registering a Device Authenticated by an X.509 Certificate](https://support.huaweicloud.com/en-us/usermanual-iothub/iot_01_0055.html).
+func (o DeviceOutput) SecondaryFingerprint() pulumi.StringOutput {
+	return o.ApplyT(func(v *Device) pulumi.StringOutput { return v.SecondaryFingerprint }).(pulumi.StringOutput)
+}
+
+// Specifies a secondary secret for identity authentication.
+// When the primary secret verification fails, the secondary secret verification will be enabled, and the secondary
+// secret has the same effect as the primary secret; The secondary secret is not effective for devices connected to the
+// COAP protocol. Which contains `8` to `32` characters.
 // Only letters, digits, hyphens (-) and underscore (_) are allowed.
+func (o DeviceOutput) SecondarySecret() pulumi.StringOutput {
+	return o.ApplyT(func(v *Device) pulumi.StringOutput { return v.SecondarySecret }).(pulumi.StringOutput)
+}
+
+// Specifies a primary secret for identity authentication, which contains `8` to `32`
+// characters. Only letters, digits, hyphens (-) and underscore (_) are allowed.
 func (o DeviceOutput) Secret() pulumi.StringOutput {
 	return o.ApplyT(func(v *Device) pulumi.StringOutput { return v.Secret }).(pulumi.StringOutput)
+}
+
+// Specifies whether the device is connected through a secure protocol.
+// This parameter is only valid when `secret` or `fingerprint` is specified, and suggest setting it to **true**.
+// If ignored, it means accessing through insecure protocols, and the device is susceptible to security risks such as
+// counterfeiting, please be cautious with this configuration.
+func (o DeviceOutput) SecureAccess() pulumi.BoolOutput {
+	return o.ApplyT(func(v *Device) pulumi.BoolOutput { return v.SecureAccess }).(pulumi.BoolOutput)
+}
+
+// Specifies the initial configuration of the device.
+// The shadow structure is documented below.
+func (o DeviceOutput) Shadows() DeviceShadowArrayOutput {
+	return o.ApplyT(func(v *Device) DeviceShadowArrayOutput { return v.Shadows }).(DeviceShadowArrayOutput)
 }
 
 // Specifies the resource space ID which the device belongs to.

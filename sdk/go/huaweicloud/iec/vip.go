@@ -44,7 +44,7 @@ import (
 //
 // ## Import
 //
-// IEC VIP can be imported using the `id`, e.g.
+// IEC VIP can be imported using the `id`, e.g. bash
 //
 // ```sh
 //

@@ -6,10 +6,10 @@ import { input as inputs, output as outputs } from "../types";
 import * as utilities from "../utilities";
 
 /**
- * Manages a ACL resource within HuaweiCloud IAM service. The ACL allowing user access only from specified IP address
+ * Manages an ACL resource within HuaweiCloud IAM service. The ACL allowing user access only from specified IP address
  * ranges and IPv4 CIDR blocks. The ACL take effect for IAM users under the Domain account rather than the account itself.
  *
- * Note: You *must* have admin privileges in your HuaweiCloud cloud to use this resource.
+ * > **NOTE:** You *must* have admin privileges to use this resource.
  *
  * ## Example Usage
  *
@@ -60,17 +60,17 @@ export class Acl extends pulumi.CustomResource {
 
     /**
      * Specifies the IPv4 CIDR blocks from which console access or api access is allowed.
-     * The `ipCidrs` cannot repeat. The structure is documented below.
+     * The `ipCidrs` cannot repeat. The object structure is documented below.
      */
     public readonly ipCidrs!: pulumi.Output<outputs.Iam.AclIpCidr[] | undefined>;
     /**
      * Specifies the IP address ranges from which console access or api access is allowed.
-     * The `ipRanges` cannot repeat. The structure is documented below.
+     * The `ipRanges` cannot repeat. The object structure is documented below.
      */
     public readonly ipRanges!: pulumi.Output<outputs.Iam.AclIpRange[] | undefined>;
     /**
-     * Specifies the ACL is created through the Console or API. valid value are '
-     * console' and 'api'. Changing this parameter will create a new ACL.
+     * Specifies the ACL is created through the Console or API.
+     * Valid values are **console** and **api**. Changing this parameter will create a new ACL.
      */
     public readonly type!: pulumi.Output<string>;
 
@@ -110,17 +110,17 @@ export class Acl extends pulumi.CustomResource {
 export interface AclState {
     /**
      * Specifies the IPv4 CIDR blocks from which console access or api access is allowed.
-     * The `ipCidrs` cannot repeat. The structure is documented below.
+     * The `ipCidrs` cannot repeat. The object structure is documented below.
      */
     ipCidrs?: pulumi.Input<pulumi.Input<inputs.Iam.AclIpCidr>[]>;
     /**
      * Specifies the IP address ranges from which console access or api access is allowed.
-     * The `ipRanges` cannot repeat. The structure is documented below.
+     * The `ipRanges` cannot repeat. The object structure is documented below.
      */
     ipRanges?: pulumi.Input<pulumi.Input<inputs.Iam.AclIpRange>[]>;
     /**
-     * Specifies the ACL is created through the Console or API. valid value are '
-     * console' and 'api'. Changing this parameter will create a new ACL.
+     * Specifies the ACL is created through the Console or API.
+     * Valid values are **console** and **api**. Changing this parameter will create a new ACL.
      */
     type?: pulumi.Input<string>;
 }
@@ -131,17 +131,17 @@ export interface AclState {
 export interface AclArgs {
     /**
      * Specifies the IPv4 CIDR blocks from which console access or api access is allowed.
-     * The `ipCidrs` cannot repeat. The structure is documented below.
+     * The `ipCidrs` cannot repeat. The object structure is documented below.
      */
     ipCidrs?: pulumi.Input<pulumi.Input<inputs.Iam.AclIpCidr>[]>;
     /**
      * Specifies the IP address ranges from which console access or api access is allowed.
-     * The `ipRanges` cannot repeat. The structure is documented below.
+     * The `ipRanges` cannot repeat. The object structure is documented below.
      */
     ipRanges?: pulumi.Input<pulumi.Input<inputs.Iam.AclIpRange>[]>;
     /**
-     * Specifies the ACL is created through the Console or API. valid value are '
-     * console' and 'api'. Changing this parameter will create a new ACL.
+     * Specifies the ACL is created through the Console or API.
+     * Valid values are **console** and **api**. Changing this parameter will create a new ACL.
      */
     type: pulumi.Input<string>;
 }

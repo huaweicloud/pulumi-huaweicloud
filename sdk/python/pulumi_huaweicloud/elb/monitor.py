@@ -45,7 +45,7 @@ class MonitorArgs:
         :param pulumi.Input[str] http_method: Specifies the HTTP request method. Required for HTTP type.
                The default value is *GET*.
         :param pulumi.Input[str] name: Specifies the health check name. The value contains a maximum of 255 characters.
-        :param pulumi.Input[int] port: Specifies the health check port. The port number ranges from 1 to 65535. If not specified,
+        :param pulumi.Input[int] port: Specifies the health check port. The port number ranges from `1` to `65,535`. If not specified,
                the port of the backend server will be used as the health check port.
         :param pulumi.Input[str] region: The region in which to create the ELB monitor resource. If omitted, the
                provider-level region will be used. Changing this creates a new monitor.
@@ -194,7 +194,7 @@ class MonitorArgs:
     @pulumi.getter
     def port(self) -> Optional[pulumi.Input[int]]:
         """
-        Specifies the health check port. The port number ranges from 1 to 65535. If not specified,
+        Specifies the health check port. The port number ranges from `1` to `65,535`. If not specified,
         the port of the backend server will be used as the health check port.
         """
         return pulumi.get(self, "port")
@@ -268,7 +268,7 @@ class _MonitorState:
         :param pulumi.Input[str] name: Specifies the health check name. The value contains a maximum of 255 characters.
         :param pulumi.Input[str] pool_id: Specifies the id of the pool that this monitor will be assigned to. Changing
                this creates a new monitor.
-        :param pulumi.Input[int] port: Specifies the health check port. The port number ranges from 1 to 65535. If not specified,
+        :param pulumi.Input[int] port: Specifies the health check port. The port number ranges from `1` to `65,535`. If not specified,
                the port of the backend server will be used as the health check port.
         :param pulumi.Input[str] region: The region in which to create the ELB monitor resource. If omitted, the
                provider-level region will be used. Changing this creates a new monitor.
@@ -400,7 +400,7 @@ class _MonitorState:
     @pulumi.getter
     def port(self) -> Optional[pulumi.Input[int]]:
         """
-        Specifies the health check port. The port number ranges from 1 to 65535. If not specified,
+        Specifies the health check port. The port number ranges from `1` to `65,535`. If not specified,
         the port of the backend server will be used as the health check port.
         """
         return pulumi.get(self, "port")
@@ -539,7 +539,7 @@ class Monitor(pulumi.CustomResource):
 
         ## Import
 
-        ELB monitor can be imported using the monitor ID, e.g.
+        ELB monitor can be imported using the monitor ID, e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:Elb/monitor:Monitor monitor_1 5c20fdad-7288-11eb-b817-0255ac10158b
@@ -558,7 +558,7 @@ class Monitor(pulumi.CustomResource):
         :param pulumi.Input[str] name: Specifies the health check name. The value contains a maximum of 255 characters.
         :param pulumi.Input[str] pool_id: Specifies the id of the pool that this monitor will be assigned to. Changing
                this creates a new monitor.
-        :param pulumi.Input[int] port: Specifies the health check port. The port number ranges from 1 to 65535. If not specified,
+        :param pulumi.Input[int] port: Specifies the health check port. The port number ranges from `1` to `65,535`. If not specified,
                the port of the backend server will be used as the health check port.
         :param pulumi.Input[str] region: The region in which to create the ELB monitor resource. If omitted, the
                provider-level region will be used. Changing this creates a new monitor.
@@ -624,7 +624,7 @@ class Monitor(pulumi.CustomResource):
 
         ## Import
 
-        ELB monitor can be imported using the monitor ID, e.g.
+        ELB monitor can be imported using the monitor ID, e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:Elb/monitor:Monitor monitor_1 5c20fdad-7288-11eb-b817-0255ac10158b
@@ -734,7 +734,7 @@ class Monitor(pulumi.CustomResource):
         :param pulumi.Input[str] name: Specifies the health check name. The value contains a maximum of 255 characters.
         :param pulumi.Input[str] pool_id: Specifies the id of the pool that this monitor will be assigned to. Changing
                this creates a new monitor.
-        :param pulumi.Input[int] port: Specifies the health check port. The port number ranges from 1 to 65535. If not specified,
+        :param pulumi.Input[int] port: Specifies the health check port. The port number ranges from `1` to `65,535`. If not specified,
                the port of the backend server will be used as the health check port.
         :param pulumi.Input[str] region: The region in which to create the ELB monitor resource. If omitted, the
                provider-level region will be used. Changing this creates a new monitor.
@@ -827,7 +827,7 @@ class Monitor(pulumi.CustomResource):
     @pulumi.getter
     def port(self) -> pulumi.Output[Optional[int]]:
         """
-        Specifies the health check port. The port number ranges from 1 to 65535. If not specified,
+        Specifies the health check port. The port number ranges from `1` to `65,535`. If not specified,
         the port of the backend server will be used as the health check port.
         """
         return pulumi.get(self, "port")

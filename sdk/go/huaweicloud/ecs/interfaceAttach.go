@@ -44,6 +44,38 @@ import (
 //	}
 //
 // ```
+// ### Attach a port (under the specified network) to the ECS instance and use the custom security groups
+//
+// ```go
+// package main
+//
+// import (
+//
+//	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud/Ecs"
+//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi/config"
+//
+// )
+//
+//	func main() {
+//		pulumi.Run(func(ctx *pulumi.Context) error {
+//			cfg := config.New(ctx, "")
+//			instanceId := cfg.RequireObject("instanceId")
+//			networkId := cfg.RequireObject("networkId")
+//			securityGroupIds := cfg.Require("securityGroupIds")
+//			_, err := Ecs.NewInterfaceAttach(ctx, "test", &Ecs.InterfaceAttachArgs{
+//				InstanceId:       pulumi.Any(instanceId),
+//				NetworkId:        pulumi.Any(networkId),
+//				SecurityGroupIds: securityGroupIds,
+//			})
+//			if err != nil {
+//				return err
+//			}
+//			return nil
+//		})
+//	}
+//
+// ```
 // ### Attach a custom port to the ECS instance
 //
 // ```go
@@ -119,10 +151,16 @@ import (
 type InterfaceAttach struct {
 	pulumi.CustomResourceState
 
-	// An IP address to assosciate with the port.
+	// An IP address to associate with the port.
 	FixedIp pulumi.StringOutput `pulumi:"fixedIp"`
+	// The IPv6 address.
+	FixedIpv6 pulumi.StringOutput `pulumi:"fixedIpv6"`
 	// The ID of the Instance to attach the Port or Network to.
 	InstanceId pulumi.StringOutput `pulumi:"instanceId"`
+	// Specifies the shared bandwidth ID to which the IPv6 NIC attaches.
+	Ipv6BandwidthId pulumi.StringPtrOutput `pulumi:"ipv6BandwidthId"`
+	// Specifies if the NIC supporting IPv6 or not.
+	Ipv6Enable pulumi.BoolOutput `pulumi:"ipv6Enable"`
 	// The MAC address of the NIC.
 	Mac pulumi.StringOutput `pulumi:"mac"`
 	// The ID of the Network to attach to an Instance. A port will be created
@@ -177,10 +215,16 @@ func GetInterfaceAttach(ctx *pulumi.Context,
 
 // Input properties used for looking up and filtering InterfaceAttach resources.
 type interfaceAttachState struct {
-	// An IP address to assosciate with the port.
+	// An IP address to associate with the port.
 	FixedIp *string `pulumi:"fixedIp"`
+	// The IPv6 address.
+	FixedIpv6 *string `pulumi:"fixedIpv6"`
 	// The ID of the Instance to attach the Port or Network to.
 	InstanceId *string `pulumi:"instanceId"`
+	// Specifies the shared bandwidth ID to which the IPv6 NIC attaches.
+	Ipv6BandwidthId *string `pulumi:"ipv6BandwidthId"`
+	// Specifies if the NIC supporting IPv6 or not.
+	Ipv6Enable *bool `pulumi:"ipv6Enable"`
 	// The MAC address of the NIC.
 	Mac *string `pulumi:"mac"`
 	// The ID of the Network to attach to an Instance. A port will be created
@@ -203,10 +247,16 @@ type interfaceAttachState struct {
 }
 
 type InterfaceAttachState struct {
-	// An IP address to assosciate with the port.
+	// An IP address to associate with the port.
 	FixedIp pulumi.StringPtrInput
+	// The IPv6 address.
+	FixedIpv6 pulumi.StringPtrInput
 	// The ID of the Instance to attach the Port or Network to.
 	InstanceId pulumi.StringPtrInput
+	// Specifies the shared bandwidth ID to which the IPv6 NIC attaches.
+	Ipv6BandwidthId pulumi.StringPtrInput
+	// Specifies if the NIC supporting IPv6 or not.
+	Ipv6Enable pulumi.BoolPtrInput
 	// The MAC address of the NIC.
 	Mac pulumi.StringPtrInput
 	// The ID of the Network to attach to an Instance. A port will be created
@@ -233,10 +283,14 @@ func (InterfaceAttachState) ElementType() reflect.Type {
 }
 
 type interfaceAttachArgs struct {
-	// An IP address to assosciate with the port.
+	// An IP address to associate with the port.
 	FixedIp *string `pulumi:"fixedIp"`
 	// The ID of the Instance to attach the Port or Network to.
 	InstanceId string `pulumi:"instanceId"`
+	// Specifies the shared bandwidth ID to which the IPv6 NIC attaches.
+	Ipv6BandwidthId *string `pulumi:"ipv6BandwidthId"`
+	// Specifies if the NIC supporting IPv6 or not.
+	Ipv6Enable *bool `pulumi:"ipv6Enable"`
 	// The ID of the Network to attach to an Instance. A port will be created
 	// automatically.
 	// This option and `portId` are mutually exclusive.
@@ -258,10 +312,14 @@ type interfaceAttachArgs struct {
 
 // The set of arguments for constructing a InterfaceAttach resource.
 type InterfaceAttachArgs struct {
-	// An IP address to assosciate with the port.
+	// An IP address to associate with the port.
 	FixedIp pulumi.StringPtrInput
 	// The ID of the Instance to attach the Port or Network to.
 	InstanceId pulumi.StringInput
+	// Specifies the shared bandwidth ID to which the IPv6 NIC attaches.
+	Ipv6BandwidthId pulumi.StringPtrInput
+	// Specifies if the NIC supporting IPv6 or not.
+	Ipv6Enable pulumi.BoolPtrInput
 	// The ID of the Network to attach to an Instance. A port will be created
 	// automatically.
 	// This option and `portId` are mutually exclusive.
@@ -368,14 +426,29 @@ func (o InterfaceAttachOutput) ToInterfaceAttachOutputWithContext(ctx context.Co
 	return o
 }
 
-// An IP address to assosciate with the port.
+// An IP address to associate with the port.
 func (o InterfaceAttachOutput) FixedIp() pulumi.StringOutput {
 	return o.ApplyT(func(v *InterfaceAttach) pulumi.StringOutput { return v.FixedIp }).(pulumi.StringOutput)
+}
+
+// The IPv6 address.
+func (o InterfaceAttachOutput) FixedIpv6() pulumi.StringOutput {
+	return o.ApplyT(func(v *InterfaceAttach) pulumi.StringOutput { return v.FixedIpv6 }).(pulumi.StringOutput)
 }
 
 // The ID of the Instance to attach the Port or Network to.
 func (o InterfaceAttachOutput) InstanceId() pulumi.StringOutput {
 	return o.ApplyT(func(v *InterfaceAttach) pulumi.StringOutput { return v.InstanceId }).(pulumi.StringOutput)
+}
+
+// Specifies the shared bandwidth ID to which the IPv6 NIC attaches.
+func (o InterfaceAttachOutput) Ipv6BandwidthId() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *InterfaceAttach) pulumi.StringPtrOutput { return v.Ipv6BandwidthId }).(pulumi.StringPtrOutput)
+}
+
+// Specifies if the NIC supporting IPv6 or not.
+func (o InterfaceAttachOutput) Ipv6Enable() pulumi.BoolOutput {
+	return o.ApplyT(func(v *InterfaceAttach) pulumi.BoolOutput { return v.Ipv6Enable }).(pulumi.BoolOutput)
 }
 
 // The MAC address of the NIC.

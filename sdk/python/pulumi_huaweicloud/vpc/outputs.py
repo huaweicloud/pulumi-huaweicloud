@@ -8,24 +8,81 @@ import pulumi
 import pulumi.runtime
 from typing import Any, Mapping, Optional, Sequence, Union, overload
 from .. import _utilities
+from . import outputs
 
 __all__ = [
+    'AddressGroupIpExtraSet',
     'BandwidthPublicip',
     'EipBandwidth',
     'EipPublicip',
+    'NetworkAclAssociatedSubnet',
+    'NetworkAclEgressRule',
+    'NetworkAclIngressRule',
     'PortAllowedAddressPair',
     'PortExtraDhcpOption',
     'PortFixedIp',
     'RouteTableRoute',
     'SecgroupRule',
     'VpcRoute',
+    'GetAddressGroupsAddressGroupResult',
+    'GetAddressGroupsAddressGroupIpExtraSetResult',
+    'GetFlowLogsFlowLogResult',
+    'GetNetworkAclsNetworkAclResult',
+    'GetNetworkAclsNetworkAclAssociatedSubnetResult',
+    'GetNetworkAclsNetworkAclEgressRuleResult',
+    'GetNetworkAclsNetworkAclIngressRuleResult',
+    'GetQuotasQuotaResult',
+    'GetQuotasQuotaResourceResult',
     'GetRouteTableRouteResult',
+    'GetRoutesRouteResult',
     'GetSecgroupRuleResult',
+    'GetSecgroupRulesRuleResult',
     'GetSecgroupsSecurityGroupResult',
+    'GetSubNetworkInterfacesSubNetworkInterfaceResult',
+    'GetSubnetIpAvailabilitiesNetworkIpAvailabilityResult',
+    'GetSubnetIpAvailabilitiesNetworkIpAvailabilitySubnetIpAvailabilityResult',
+    'GetSubnetPrivateIpsPrivateIpResult',
     'GetSubnetsSubnetResult',
+    'GetTrafficMirrorFilterRulesTrafficMirrorFilterRuleResult',
+    'GetTrafficMirrorFiltersTrafficMirrorFilterResult',
+    'GetTrafficMirrorFiltersTrafficMirrorFilterEgressRuleResult',
+    'GetTrafficMirrorFiltersTrafficMirrorFilterIngressRuleResult',
+    'GetTrafficMirrorSessionsTrafficMirrorSessionResult',
     'GetVpcRouteResult',
     'GetVpcsVpcResult',
 ]
+
+@pulumi.output_type
+class AddressGroupIpExtraSet(dict):
+    def __init__(__self__, *,
+                 ip: str,
+                 remarks: Optional[str] = None):
+        """
+        :param str ip: Specifies the IP address, IP address range, or CIDR block.
+        :param str remarks: Specifies the supplementary information about the IP address,
+               IP address range, or CIDR block.
+        """
+        pulumi.set(__self__, "ip", ip)
+        if remarks is not None:
+            pulumi.set(__self__, "remarks", remarks)
+
+    @property
+    @pulumi.getter
+    def ip(self) -> str:
+        """
+        Specifies the IP address, IP address range, or CIDR block.
+        """
+        return pulumi.get(self, "ip")
+
+    @property
+    @pulumi.getter
+    def remarks(self) -> Optional[str]:
+        """
+        Specifies the supplementary information about the IP address,
+        IP address range, or CIDR block.
+        """
+        return pulumi.get(self, "remarks")
+
 
 @pulumi.output_type
 class BandwidthPublicip(dict):
@@ -134,7 +191,7 @@ class EipBandwidth(dict):
                + **PER**: Dedicated bandwidth
                + **WHOLE**: Shared bandwidth
         :param str charge_mode: Specifies whether the bandwidth is billed by traffic or by bandwidth
-               size. The value can be **traffic** or **bandwidth**. Changing this will create a new resource.
+               size. The value can be **traffic** or **bandwidth**. If the `charging_mode` is **prePaid**, only **bandwidth** is valid.
         :param str id: The shared bandwidth ID.  
                This parameter is mandatory when `share_type` is set to **WHOLE**. Changing this will create a new resource.
         :param str name: Specifies the bandwidth name.  
@@ -169,7 +226,7 @@ class EipBandwidth(dict):
     def charge_mode(self) -> Optional[str]:
         """
         Specifies whether the bandwidth is billed by traffic or by bandwidth
-        size. The value can be **traffic** or **bandwidth**. Changing this will create a new resource.
+        size. The value can be **traffic** or **bandwidth**. If the `charging_mode` is **prePaid**, only **bandwidth** is valid.
         """
         return pulumi.get(self, "charge_mode")
 
@@ -282,6 +339,439 @@ class EipPublicip(dict):
         and **5_sbgp** (static BGP), the default value is **5_bgp**. Changing this will create a new resource.
         """
         return pulumi.get(self, "type")
+
+
+@pulumi.output_type
+class NetworkAclAssociatedSubnet(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "subnetId":
+            suggest = "subnet_id"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in NetworkAclAssociatedSubnet. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        NetworkAclAssociatedSubnet.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        NetworkAclAssociatedSubnet.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 subnet_id: str):
+        """
+        :param str subnet_id: Specifies the ID of the subnet to associate with the network ACL.
+        """
+        pulumi.set(__self__, "subnet_id", subnet_id)
+
+    @property
+    @pulumi.getter(name="subnetId")
+    def subnet_id(self) -> str:
+        """
+        Specifies the ID of the subnet to associate with the network ACL.
+        """
+        return pulumi.get(self, "subnet_id")
+
+
+@pulumi.output_type
+class NetworkAclEgressRule(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "ipVersion":
+            suggest = "ip_version"
+        elif key == "destinationIpAddress":
+            suggest = "destination_ip_address"
+        elif key == "destinationIpAddressGroupId":
+            suggest = "destination_ip_address_group_id"
+        elif key == "destinationPort":
+            suggest = "destination_port"
+        elif key == "ruleId":
+            suggest = "rule_id"
+        elif key == "sourceIpAddress":
+            suggest = "source_ip_address"
+        elif key == "sourceIpAddressGroupId":
+            suggest = "source_ip_address_group_id"
+        elif key == "sourcePort":
+            suggest = "source_port"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in NetworkAclEgressRule. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        NetworkAclEgressRule.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        NetworkAclEgressRule.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 action: str,
+                 ip_version: int,
+                 protocol: str,
+                 description: Optional[str] = None,
+                 destination_ip_address: Optional[str] = None,
+                 destination_ip_address_group_id: Optional[str] = None,
+                 destination_port: Optional[str] = None,
+                 name: Optional[str] = None,
+                 rule_id: Optional[str] = None,
+                 source_ip_address: Optional[str] = None,
+                 source_ip_address_group_id: Optional[str] = None,
+                 source_port: Optional[str] = None):
+        """
+        :param str action: Specifies the rule action. The value can be: **allow** and **deny**.
+        :param int ip_version: Specifies the IP version of a network ACL rule.
+               The value can be **4** (IPv4) and **6** (IPv6).
+        :param str protocol: Specifies the rule protocol The value can be **tcp**, **udp**, **icmp**, **icmpv6**,
+               or an IP protocol number (0–255). The value **any** indicates all protocols.
+        :param str description: Specifies the network ACL rule description. The value can contain no more
+               than 255 characters. The value cannot contain angle brackets (< or >).
+        :param str destination_ip_address: Specifies the destination IP address or CIDR block of a network ACL rule.
+               The `destination_ip_address` and `destination_address_group_id` cannot be configured at the same time.
+        :param str destination_ip_address_group_id: Specifies the destination IP address group ID of a network ACL rule.
+               The `destination_ip_address` and `destination_address_group_id` cannot be configured at the same time.
+        :param str destination_port: Specifies the destination ports of a network ACL rule.
+               You can specify a single port or a port range. Separate every two entries with a comma.
+        :param str name: Specifies the network ACL rule name. The value can contain no more than 64 characters,
+               including letters, digits, underscores (_), hyphens (-), and periods (.).
+        :param str rule_id: The ID of the rule.
+        :param str source_ip_address: Specifies the source IP address or CIDR block of a network ACL rule.
+               The `source_ip_address` and `source_address_group_id` cannot be configured at the same time.
+        :param str source_ip_address_group_id: Specifies the source IP address group ID of a network ACL rule.
+               `source_ip_address` and `source_address_group_id` cannot be configured at the same time.
+        :param str source_port: Specifies the source ports of a network ACL rule.
+               You can specify a single port or a port range. Separate every two entries with a comma.
+        """
+        pulumi.set(__self__, "action", action)
+        pulumi.set(__self__, "ip_version", ip_version)
+        pulumi.set(__self__, "protocol", protocol)
+        if description is not None:
+            pulumi.set(__self__, "description", description)
+        if destination_ip_address is not None:
+            pulumi.set(__self__, "destination_ip_address", destination_ip_address)
+        if destination_ip_address_group_id is not None:
+            pulumi.set(__self__, "destination_ip_address_group_id", destination_ip_address_group_id)
+        if destination_port is not None:
+            pulumi.set(__self__, "destination_port", destination_port)
+        if name is not None:
+            pulumi.set(__self__, "name", name)
+        if rule_id is not None:
+            pulumi.set(__self__, "rule_id", rule_id)
+        if source_ip_address is not None:
+            pulumi.set(__self__, "source_ip_address", source_ip_address)
+        if source_ip_address_group_id is not None:
+            pulumi.set(__self__, "source_ip_address_group_id", source_ip_address_group_id)
+        if source_port is not None:
+            pulumi.set(__self__, "source_port", source_port)
+
+    @property
+    @pulumi.getter
+    def action(self) -> str:
+        """
+        Specifies the rule action. The value can be: **allow** and **deny**.
+        """
+        return pulumi.get(self, "action")
+
+    @property
+    @pulumi.getter(name="ipVersion")
+    def ip_version(self) -> int:
+        """
+        Specifies the IP version of a network ACL rule.
+        The value can be **4** (IPv4) and **6** (IPv6).
+        """
+        return pulumi.get(self, "ip_version")
+
+    @property
+    @pulumi.getter
+    def protocol(self) -> str:
+        """
+        Specifies the rule protocol The value can be **tcp**, **udp**, **icmp**, **icmpv6**,
+        or an IP protocol number (0–255). The value **any** indicates all protocols.
+        """
+        return pulumi.get(self, "protocol")
+
+    @property
+    @pulumi.getter
+    def description(self) -> Optional[str]:
+        """
+        Specifies the network ACL rule description. The value can contain no more
+        than 255 characters. The value cannot contain angle brackets (< or >).
+        """
+        return pulumi.get(self, "description")
+
+    @property
+    @pulumi.getter(name="destinationIpAddress")
+    def destination_ip_address(self) -> Optional[str]:
+        """
+        Specifies the destination IP address or CIDR block of a network ACL rule.
+        The `destination_ip_address` and `destination_address_group_id` cannot be configured at the same time.
+        """
+        return pulumi.get(self, "destination_ip_address")
+
+    @property
+    @pulumi.getter(name="destinationIpAddressGroupId")
+    def destination_ip_address_group_id(self) -> Optional[str]:
+        """
+        Specifies the destination IP address group ID of a network ACL rule.
+        The `destination_ip_address` and `destination_address_group_id` cannot be configured at the same time.
+        """
+        return pulumi.get(self, "destination_ip_address_group_id")
+
+    @property
+    @pulumi.getter(name="destinationPort")
+    def destination_port(self) -> Optional[str]:
+        """
+        Specifies the destination ports of a network ACL rule.
+        You can specify a single port or a port range. Separate every two entries with a comma.
+        """
+        return pulumi.get(self, "destination_port")
+
+    @property
+    @pulumi.getter
+    def name(self) -> Optional[str]:
+        """
+        Specifies the network ACL rule name. The value can contain no more than 64 characters,
+        including letters, digits, underscores (_), hyphens (-), and periods (.).
+        """
+        return pulumi.get(self, "name")
+
+    @property
+    @pulumi.getter(name="ruleId")
+    def rule_id(self) -> Optional[str]:
+        """
+        The ID of the rule.
+        """
+        return pulumi.get(self, "rule_id")
+
+    @property
+    @pulumi.getter(name="sourceIpAddress")
+    def source_ip_address(self) -> Optional[str]:
+        """
+        Specifies the source IP address or CIDR block of a network ACL rule.
+        The `source_ip_address` and `source_address_group_id` cannot be configured at the same time.
+        """
+        return pulumi.get(self, "source_ip_address")
+
+    @property
+    @pulumi.getter(name="sourceIpAddressGroupId")
+    def source_ip_address_group_id(self) -> Optional[str]:
+        """
+        Specifies the source IP address group ID of a network ACL rule.
+        `source_ip_address` and `source_address_group_id` cannot be configured at the same time.
+        """
+        return pulumi.get(self, "source_ip_address_group_id")
+
+    @property
+    @pulumi.getter(name="sourcePort")
+    def source_port(self) -> Optional[str]:
+        """
+        Specifies the source ports of a network ACL rule.
+        You can specify a single port or a port range. Separate every two entries with a comma.
+        """
+        return pulumi.get(self, "source_port")
+
+
+@pulumi.output_type
+class NetworkAclIngressRule(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "ipVersion":
+            suggest = "ip_version"
+        elif key == "destinationIpAddress":
+            suggest = "destination_ip_address"
+        elif key == "destinationIpAddressGroupId":
+            suggest = "destination_ip_address_group_id"
+        elif key == "destinationPort":
+            suggest = "destination_port"
+        elif key == "ruleId":
+            suggest = "rule_id"
+        elif key == "sourceIpAddress":
+            suggest = "source_ip_address"
+        elif key == "sourceIpAddressGroupId":
+            suggest = "source_ip_address_group_id"
+        elif key == "sourcePort":
+            suggest = "source_port"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in NetworkAclIngressRule. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        NetworkAclIngressRule.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        NetworkAclIngressRule.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 action: str,
+                 ip_version: int,
+                 protocol: str,
+                 description: Optional[str] = None,
+                 destination_ip_address: Optional[str] = None,
+                 destination_ip_address_group_id: Optional[str] = None,
+                 destination_port: Optional[str] = None,
+                 name: Optional[str] = None,
+                 rule_id: Optional[str] = None,
+                 source_ip_address: Optional[str] = None,
+                 source_ip_address_group_id: Optional[str] = None,
+                 source_port: Optional[str] = None):
+        """
+        :param str action: Specifies the rule action. The value can be: **allow** and **deny**.
+        :param int ip_version: Specifies the IP version of a network ACL rule.
+               The value can be **4** (IPv4) and **6** (IPv6).
+        :param str protocol: Specifies the rule protocol The value can be **tcp**, **udp**, **icmp**, **icmpv6**,
+               or an IP protocol number (0–255). The value **any** indicates all protocols.
+        :param str description: Specifies the network ACL rule description. The value can contain no more
+               than 255 characters. The value cannot contain angle brackets (< or >).
+        :param str destination_ip_address: Specifies the destination IP address or CIDR block of a network ACL rule.
+               The `destination_ip_address` and `destination_address_group_id` cannot be configured at the same time.
+        :param str destination_ip_address_group_id: Specifies the destination IP address group ID of a network ACL rule.
+               The `destination_ip_address` and `destination_address_group_id` cannot be configured at the same time.
+        :param str destination_port: Specifies the destination ports of a network ACL rule.
+               You can specify a single port or a port range. Separate every two entries with a comma.
+        :param str name: Specifies the network ACL rule name. The value can contain no more than 64 characters,
+               including letters, digits, underscores (_), hyphens (-), and periods (.).
+        :param str rule_id: The ID of the rule.
+        :param str source_ip_address: Specifies the source IP address or CIDR block of a network ACL rule.
+               The `source_ip_address` and `source_address_group_id` cannot be configured at the same time.
+        :param str source_ip_address_group_id: Specifies the source IP address group ID of a network ACL rule.
+               `source_ip_address` and `source_address_group_id` cannot be configured at the same time.
+        :param str source_port: Specifies the source ports of a network ACL rule.
+               You can specify a single port or a port range. Separate every two entries with a comma.
+        """
+        pulumi.set(__self__, "action", action)
+        pulumi.set(__self__, "ip_version", ip_version)
+        pulumi.set(__self__, "protocol", protocol)
+        if description is not None:
+            pulumi.set(__self__, "description", description)
+        if destination_ip_address is not None:
+            pulumi.set(__self__, "destination_ip_address", destination_ip_address)
+        if destination_ip_address_group_id is not None:
+            pulumi.set(__self__, "destination_ip_address_group_id", destination_ip_address_group_id)
+        if destination_port is not None:
+            pulumi.set(__self__, "destination_port", destination_port)
+        if name is not None:
+            pulumi.set(__self__, "name", name)
+        if rule_id is not None:
+            pulumi.set(__self__, "rule_id", rule_id)
+        if source_ip_address is not None:
+            pulumi.set(__self__, "source_ip_address", source_ip_address)
+        if source_ip_address_group_id is not None:
+            pulumi.set(__self__, "source_ip_address_group_id", source_ip_address_group_id)
+        if source_port is not None:
+            pulumi.set(__self__, "source_port", source_port)
+
+    @property
+    @pulumi.getter
+    def action(self) -> str:
+        """
+        Specifies the rule action. The value can be: **allow** and **deny**.
+        """
+        return pulumi.get(self, "action")
+
+    @property
+    @pulumi.getter(name="ipVersion")
+    def ip_version(self) -> int:
+        """
+        Specifies the IP version of a network ACL rule.
+        The value can be **4** (IPv4) and **6** (IPv6).
+        """
+        return pulumi.get(self, "ip_version")
+
+    @property
+    @pulumi.getter
+    def protocol(self) -> str:
+        """
+        Specifies the rule protocol The value can be **tcp**, **udp**, **icmp**, **icmpv6**,
+        or an IP protocol number (0–255). The value **any** indicates all protocols.
+        """
+        return pulumi.get(self, "protocol")
+
+    @property
+    @pulumi.getter
+    def description(self) -> Optional[str]:
+        """
+        Specifies the network ACL rule description. The value can contain no more
+        than 255 characters. The value cannot contain angle brackets (< or >).
+        """
+        return pulumi.get(self, "description")
+
+    @property
+    @pulumi.getter(name="destinationIpAddress")
+    def destination_ip_address(self) -> Optional[str]:
+        """
+        Specifies the destination IP address or CIDR block of a network ACL rule.
+        The `destination_ip_address` and `destination_address_group_id` cannot be configured at the same time.
+        """
+        return pulumi.get(self, "destination_ip_address")
+
+    @property
+    @pulumi.getter(name="destinationIpAddressGroupId")
+    def destination_ip_address_group_id(self) -> Optional[str]:
+        """
+        Specifies the destination IP address group ID of a network ACL rule.
+        The `destination_ip_address` and `destination_address_group_id` cannot be configured at the same time.
+        """
+        return pulumi.get(self, "destination_ip_address_group_id")
+
+    @property
+    @pulumi.getter(name="destinationPort")
+    def destination_port(self) -> Optional[str]:
+        """
+        Specifies the destination ports of a network ACL rule.
+        You can specify a single port or a port range. Separate every two entries with a comma.
+        """
+        return pulumi.get(self, "destination_port")
+
+    @property
+    @pulumi.getter
+    def name(self) -> Optional[str]:
+        """
+        Specifies the network ACL rule name. The value can contain no more than 64 characters,
+        including letters, digits, underscores (_), hyphens (-), and periods (.).
+        """
+        return pulumi.get(self, "name")
+
+    @property
+    @pulumi.getter(name="ruleId")
+    def rule_id(self) -> Optional[str]:
+        """
+        The ID of the rule.
+        """
+        return pulumi.get(self, "rule_id")
+
+    @property
+    @pulumi.getter(name="sourceIpAddress")
+    def source_ip_address(self) -> Optional[str]:
+        """
+        Specifies the source IP address or CIDR block of a network ACL rule.
+        The `source_ip_address` and `source_address_group_id` cannot be configured at the same time.
+        """
+        return pulumi.get(self, "source_ip_address")
+
+    @property
+    @pulumi.getter(name="sourceIpAddressGroupId")
+    def source_ip_address_group_id(self) -> Optional[str]:
+        """
+        Specifies the source IP address group ID of a network ACL rule.
+        `source_ip_address` and `source_address_group_id` cannot be configured at the same time.
+        """
+        return pulumi.get(self, "source_ip_address_group_id")
+
+    @property
+    @pulumi.getter(name="sourcePort")
+    def source_port(self) -> Optional[str]:
+        """
+        Specifies the source ports of a network ACL rule.
+        You can specify a single port or a port range. Separate every two entries with a comma.
+        """
+        return pulumi.get(self, "source_port")
 
 
 @pulumi.output_type
@@ -426,8 +916,10 @@ class RouteTableRoute(dict):
                + If the route type is **vpn**, the value is a VPN gateway ID.
                + If the route type is **dc**, the value is a Direct Connect gateway ID.
                + If the route type is **cc**, the value is a Cloud Connection ID.
+               + If the route type is **egw**, the value is a VPCEP endpoint ID.
+               + If the route type is **er**, the value is a ER instance ID.
         :param str type: Specifies the route type. Currently, the value can be:
-               **ecs**, **eni**, **vip**, **nat**, **peering**, **vpn**, **dc** and **cc**.
+               **ecs**, **eni**, **vip**, **nat**, **peering**, **vpn**, **dc**, **cc**, **egw** and **er**.
         :param str description: Specifies the supplementary information about the route.
                The value is a string of no more than 255 characters and cannot contain angle brackets (< or >).
         """
@@ -460,6 +952,8 @@ class RouteTableRoute(dict):
         + If the route type is **vpn**, the value is a VPN gateway ID.
         + If the route type is **dc**, the value is a Direct Connect gateway ID.
         + If the route type is **cc**, the value is a Cloud Connection ID.
+        + If the route type is **egw**, the value is a VPCEP endpoint ID.
+        + If the route type is **er**, the value is a ER instance ID.
         """
         return pulumi.get(self, "nexthop")
 
@@ -468,7 +962,7 @@ class RouteTableRoute(dict):
     def type(self) -> str:
         """
         Specifies the route type. Currently, the value can be:
-        **ecs**, **eni**, **vip**, **nat**, **peering**, **vpn**, **dc** and **cc**.
+        **ecs**, **eni**, **vip**, **nat**, **peering**, **vpn**, **dc**, **cc**, **egw** and **er**.
         """
         return pulumi.get(self, "type")
 
@@ -684,6 +1178,854 @@ class VpcRoute(dict):
 
 
 @pulumi.output_type
+class GetAddressGroupsAddressGroupResult(dict):
+    def __init__(__self__, *,
+                 addresses: Sequence[str],
+                 created_at: str,
+                 description: str,
+                 enterprise_project_id: str,
+                 id: str,
+                 ip_extra_sets: Sequence['outputs.GetAddressGroupsAddressGroupIpExtraSetResult'],
+                 ip_version: int,
+                 max_capacity: int,
+                 name: str,
+                 status: str,
+                 status_message: str,
+                 updated_at: str):
+        """
+        :param Sequence[str] addresses: IP address sets in an IP address group.
+               Value range: a single IP address, IP address range, or CIDR block.
+        :param str created_at: Time when the IP address group is created.
+        :param str description: Provides supplementary information about an IP address group,
+               which can be used to filter the IP address group.
+        :param str enterprise_project_id: Enterprise project ID.
+        :param str id: IP address group ID, which uniquely identifies the IP address group.
+        :param Sequence['GetAddressGroupsAddressGroupIpExtraSetArgs'] ip_extra_sets: IP addresses and their remarks in an IP address group.
+        :param int ip_version: Version of IP addresses in an IP address group,
+               which can be used to filter the IP address group.
+        :param int max_capacity: Maximum number of entries in an address group,
+               which limits the number of addresses that can be contained in an address group.
+        :param str name: Name of an IP address group, which can be used to filter the IP address group.
+        :param str status: The status of IP address group.
+               Valid values are:
+               + `NORMAL`: normal status.
+               + `UPDATING`: updating.
+               + `UPDATE_FAILED`: update failed.
+               When the status of IP address group is `UPDATING`, the IP address group cannot be updated again.
+        :param str status_message: The status details of IP address group.
+        :param str updated_at: Time when the IP address group was last updated.
+        """
+        pulumi.set(__self__, "addresses", addresses)
+        pulumi.set(__self__, "created_at", created_at)
+        pulumi.set(__self__, "description", description)
+        pulumi.set(__self__, "enterprise_project_id", enterprise_project_id)
+        pulumi.set(__self__, "id", id)
+        pulumi.set(__self__, "ip_extra_sets", ip_extra_sets)
+        pulumi.set(__self__, "ip_version", ip_version)
+        pulumi.set(__self__, "max_capacity", max_capacity)
+        pulumi.set(__self__, "name", name)
+        pulumi.set(__self__, "status", status)
+        pulumi.set(__self__, "status_message", status_message)
+        pulumi.set(__self__, "updated_at", updated_at)
+
+    @property
+    @pulumi.getter
+    def addresses(self) -> Sequence[str]:
+        """
+        IP address sets in an IP address group.
+        Value range: a single IP address, IP address range, or CIDR block.
+        """
+        return pulumi.get(self, "addresses")
+
+    @property
+    @pulumi.getter(name="createdAt")
+    def created_at(self) -> str:
+        """
+        Time when the IP address group is created.
+        """
+        return pulumi.get(self, "created_at")
+
+    @property
+    @pulumi.getter
+    def description(self) -> str:
+        """
+        Provides supplementary information about an IP address group,
+        which can be used to filter the IP address group.
+        """
+        return pulumi.get(self, "description")
+
+    @property
+    @pulumi.getter(name="enterpriseProjectId")
+    def enterprise_project_id(self) -> str:
+        """
+        Enterprise project ID.
+        """
+        return pulumi.get(self, "enterprise_project_id")
+
+    @property
+    @pulumi.getter
+    def id(self) -> str:
+        """
+        IP address group ID, which uniquely identifies the IP address group.
+        """
+        return pulumi.get(self, "id")
+
+    @property
+    @pulumi.getter(name="ipExtraSets")
+    def ip_extra_sets(self) -> Sequence['outputs.GetAddressGroupsAddressGroupIpExtraSetResult']:
+        """
+        IP addresses and their remarks in an IP address group.
+        """
+        return pulumi.get(self, "ip_extra_sets")
+
+    @property
+    @pulumi.getter(name="ipVersion")
+    def ip_version(self) -> int:
+        """
+        Version of IP addresses in an IP address group,
+        which can be used to filter the IP address group.
+        """
+        return pulumi.get(self, "ip_version")
+
+    @property
+    @pulumi.getter(name="maxCapacity")
+    def max_capacity(self) -> int:
+        """
+        Maximum number of entries in an address group,
+        which limits the number of addresses that can be contained in an address group.
+        """
+        return pulumi.get(self, "max_capacity")
+
+    @property
+    @pulumi.getter
+    def name(self) -> str:
+        """
+        Name of an IP address group, which can be used to filter the IP address group.
+        """
+        return pulumi.get(self, "name")
+
+    @property
+    @pulumi.getter
+    def status(self) -> str:
+        """
+        The status of IP address group.
+        Valid values are:
+        + `NORMAL`: normal status.
+        + `UPDATING`: updating.
+        + `UPDATE_FAILED`: update failed.
+        When the status of IP address group is `UPDATING`, the IP address group cannot be updated again.
+        """
+        return pulumi.get(self, "status")
+
+    @property
+    @pulumi.getter(name="statusMessage")
+    def status_message(self) -> str:
+        """
+        The status details of IP address group.
+        """
+        return pulumi.get(self, "status_message")
+
+    @property
+    @pulumi.getter(name="updatedAt")
+    def updated_at(self) -> str:
+        """
+        Time when the IP address group was last updated.
+        """
+        return pulumi.get(self, "updated_at")
+
+
+@pulumi.output_type
+class GetAddressGroupsAddressGroupIpExtraSetResult(dict):
+    def __init__(__self__, *,
+                 ip: str,
+                 remarks: str):
+        """
+        :param str ip: An IP address, IP address range, or CIDR block.
+        :param str remarks: Provides supplementary information about the IP address, IP address range, or CIDR block.
+        """
+        pulumi.set(__self__, "ip", ip)
+        pulumi.set(__self__, "remarks", remarks)
+
+    @property
+    @pulumi.getter
+    def ip(self) -> str:
+        """
+        An IP address, IP address range, or CIDR block.
+        """
+        return pulumi.get(self, "ip")
+
+    @property
+    @pulumi.getter
+    def remarks(self) -> str:
+        """
+        Provides supplementary information about the IP address, IP address range, or CIDR block.
+        """
+        return pulumi.get(self, "remarks")
+
+
+@pulumi.output_type
+class GetFlowLogsFlowLogResult(dict):
+    def __init__(__self__, *,
+                 created_at: str,
+                 description: str,
+                 enabled: bool,
+                 id: str,
+                 log_group_id: str,
+                 log_stream_id: str,
+                 name: str,
+                 resource_id: str,
+                 resource_type: str,
+                 status: str,
+                 traffic_type: str,
+                 updated_at: str):
+        """
+        :param str created_at: The time when the resource is created.
+        :param str description: The VPC flow log description.
+        :param bool enabled: Whether to enable the VPC flow log.
+        :param str id: The ID of a VPC flow log
+        :param str log_group_id: Specifies the LTS log group ID.
+        :param str log_stream_id: Specifies the LTS log stream ID.
+        :param str name: Specifies the VPC flow log name.
+               The value can contain no more than 64 characters,
+               including letters, digits, underscores (_), hyphens (-), and periods (.).
+        :param str resource_id: Specifies the resource ID for which that the logs to be collected.
+        :param str resource_type: Specifies the resource type for which that the logs to be collected.
+               The value can be: **port**, **network,** and **vpc**.
+        :param str status: Specifies the status of the flow log.
+               The value can be **ACTIVE**, **DOWN** or **ERROR**.
+        :param str traffic_type: Specifies the type of traffic to log.
+               The value can be: **all**, **accept** and **reject**.
+        :param str updated_at: The time when the resource is last updated.
+        """
+        pulumi.set(__self__, "created_at", created_at)
+        pulumi.set(__self__, "description", description)
+        pulumi.set(__self__, "enabled", enabled)
+        pulumi.set(__self__, "id", id)
+        pulumi.set(__self__, "log_group_id", log_group_id)
+        pulumi.set(__self__, "log_stream_id", log_stream_id)
+        pulumi.set(__self__, "name", name)
+        pulumi.set(__self__, "resource_id", resource_id)
+        pulumi.set(__self__, "resource_type", resource_type)
+        pulumi.set(__self__, "status", status)
+        pulumi.set(__self__, "traffic_type", traffic_type)
+        pulumi.set(__self__, "updated_at", updated_at)
+
+    @property
+    @pulumi.getter(name="createdAt")
+    def created_at(self) -> str:
+        """
+        The time when the resource is created.
+        """
+        return pulumi.get(self, "created_at")
+
+    @property
+    @pulumi.getter
+    def description(self) -> str:
+        """
+        The VPC flow log description.
+        """
+        return pulumi.get(self, "description")
+
+    @property
+    @pulumi.getter
+    def enabled(self) -> bool:
+        """
+        Whether to enable the VPC flow log.
+        """
+        return pulumi.get(self, "enabled")
+
+    @property
+    @pulumi.getter
+    def id(self) -> str:
+        """
+        The ID of a VPC flow log
+        """
+        return pulumi.get(self, "id")
+
+    @property
+    @pulumi.getter(name="logGroupId")
+    def log_group_id(self) -> str:
+        """
+        Specifies the LTS log group ID.
+        """
+        return pulumi.get(self, "log_group_id")
+
+    @property
+    @pulumi.getter(name="logStreamId")
+    def log_stream_id(self) -> str:
+        """
+        Specifies the LTS log stream ID.
+        """
+        return pulumi.get(self, "log_stream_id")
+
+    @property
+    @pulumi.getter
+    def name(self) -> str:
+        """
+        Specifies the VPC flow log name.
+        The value can contain no more than 64 characters,
+        including letters, digits, underscores (_), hyphens (-), and periods (.).
+        """
+        return pulumi.get(self, "name")
+
+    @property
+    @pulumi.getter(name="resourceId")
+    def resource_id(self) -> str:
+        """
+        Specifies the resource ID for which that the logs to be collected.
+        """
+        return pulumi.get(self, "resource_id")
+
+    @property
+    @pulumi.getter(name="resourceType")
+    def resource_type(self) -> str:
+        """
+        Specifies the resource type for which that the logs to be collected.
+        The value can be: **port**, **network,** and **vpc**.
+        """
+        return pulumi.get(self, "resource_type")
+
+    @property
+    @pulumi.getter
+    def status(self) -> str:
+        """
+        Specifies the status of the flow log.
+        The value can be **ACTIVE**, **DOWN** or **ERROR**.
+        """
+        return pulumi.get(self, "status")
+
+    @property
+    @pulumi.getter(name="trafficType")
+    def traffic_type(self) -> str:
+        """
+        Specifies the type of traffic to log.
+        The value can be: **all**, **accept** and **reject**.
+        """
+        return pulumi.get(self, "traffic_type")
+
+    @property
+    @pulumi.getter(name="updatedAt")
+    def updated_at(self) -> str:
+        """
+        The time when the resource is last updated.
+        """
+        return pulumi.get(self, "updated_at")
+
+
+@pulumi.output_type
+class GetNetworkAclsNetworkAclResult(dict):
+    def __init__(__self__, *,
+                 associated_subnets: Sequence['outputs.GetNetworkAclsNetworkAclAssociatedSubnetResult'],
+                 created_at: str,
+                 description: str,
+                 egress_rules: Sequence['outputs.GetNetworkAclsNetworkAclEgressRuleResult'],
+                 enabled: bool,
+                 enterprise_project_id: str,
+                 id: str,
+                 ingress_rules: Sequence['outputs.GetNetworkAclsNetworkAclIngressRuleResult'],
+                 name: str,
+                 status: str,
+                 updated_at: str):
+        """
+        :param Sequence['GetNetworkAclsNetworkAclAssociatedSubnetArgs'] associated_subnets: The associated subnets of the network ACL.
+               The associated_subnets structure is documented below.
+        :param str created_at: The created time of the ACL.
+        :param str description: The network ACL rule description.
+        :param Sequence['GetNetworkAclsNetworkAclEgressRuleArgs'] egress_rules: The egress rules of the network ACL.
+               The rules structure is documented below.
+        :param bool enabled: Specifies whether the network ACL is enabled. The value can be **true** or **false**.
+        :param str enterprise_project_id: Specifies the enterprise project ID of the network ACL.
+        :param str id: The network ACL ID.
+        :param Sequence['GetNetworkAclsNetworkAclIngressRuleArgs'] ingress_rules: The ingress rules of the network ACL.
+               The rules structure is documented below.
+        :param str name: Specifies the network ACL name. The value can contain no more than 64 characters,
+               including letters, digits, underscores (_), hyphens (-), and periods (.).
+        :param str status: Specifies the status of the network ACL.
+        :param str updated_at: The updated time of the ACL.
+        """
+        pulumi.set(__self__, "associated_subnets", associated_subnets)
+        pulumi.set(__self__, "created_at", created_at)
+        pulumi.set(__self__, "description", description)
+        pulumi.set(__self__, "egress_rules", egress_rules)
+        pulumi.set(__self__, "enabled", enabled)
+        pulumi.set(__self__, "enterprise_project_id", enterprise_project_id)
+        pulumi.set(__self__, "id", id)
+        pulumi.set(__self__, "ingress_rules", ingress_rules)
+        pulumi.set(__self__, "name", name)
+        pulumi.set(__self__, "status", status)
+        pulumi.set(__self__, "updated_at", updated_at)
+
+    @property
+    @pulumi.getter(name="associatedSubnets")
+    def associated_subnets(self) -> Sequence['outputs.GetNetworkAclsNetworkAclAssociatedSubnetResult']:
+        """
+        The associated subnets of the network ACL.
+        The associated_subnets structure is documented below.
+        """
+        return pulumi.get(self, "associated_subnets")
+
+    @property
+    @pulumi.getter(name="createdAt")
+    def created_at(self) -> str:
+        """
+        The created time of the ACL.
+        """
+        return pulumi.get(self, "created_at")
+
+    @property
+    @pulumi.getter
+    def description(self) -> str:
+        """
+        The network ACL rule description.
+        """
+        return pulumi.get(self, "description")
+
+    @property
+    @pulumi.getter(name="egressRules")
+    def egress_rules(self) -> Sequence['outputs.GetNetworkAclsNetworkAclEgressRuleResult']:
+        """
+        The egress rules of the network ACL.
+        The rules structure is documented below.
+        """
+        return pulumi.get(self, "egress_rules")
+
+    @property
+    @pulumi.getter
+    def enabled(self) -> bool:
+        """
+        Specifies whether the network ACL is enabled. The value can be **true** or **false**.
+        """
+        return pulumi.get(self, "enabled")
+
+    @property
+    @pulumi.getter(name="enterpriseProjectId")
+    def enterprise_project_id(self) -> str:
+        """
+        Specifies the enterprise project ID of the network ACL.
+        """
+        return pulumi.get(self, "enterprise_project_id")
+
+    @property
+    @pulumi.getter
+    def id(self) -> str:
+        """
+        The network ACL ID.
+        """
+        return pulumi.get(self, "id")
+
+    @property
+    @pulumi.getter(name="ingressRules")
+    def ingress_rules(self) -> Sequence['outputs.GetNetworkAclsNetworkAclIngressRuleResult']:
+        """
+        The ingress rules of the network ACL.
+        The rules structure is documented below.
+        """
+        return pulumi.get(self, "ingress_rules")
+
+    @property
+    @pulumi.getter
+    def name(self) -> str:
+        """
+        Specifies the network ACL name. The value can contain no more than 64 characters,
+        including letters, digits, underscores (_), hyphens (-), and periods (.).
+        """
+        return pulumi.get(self, "name")
+
+    @property
+    @pulumi.getter
+    def status(self) -> str:
+        """
+        Specifies the status of the network ACL.
+        """
+        return pulumi.get(self, "status")
+
+    @property
+    @pulumi.getter(name="updatedAt")
+    def updated_at(self) -> str:
+        """
+        The updated time of the ACL.
+        """
+        return pulumi.get(self, "updated_at")
+
+
+@pulumi.output_type
+class GetNetworkAclsNetworkAclAssociatedSubnetResult(dict):
+    def __init__(__self__, *,
+                 subnet_id: str):
+        """
+        :param str subnet_id: The ID of the subnet to associate with the network ACL.
+        """
+        pulumi.set(__self__, "subnet_id", subnet_id)
+
+    @property
+    @pulumi.getter(name="subnetId")
+    def subnet_id(self) -> str:
+        """
+        The ID of the subnet to associate with the network ACL.
+        """
+        return pulumi.get(self, "subnet_id")
+
+
+@pulumi.output_type
+class GetNetworkAclsNetworkAclEgressRuleResult(dict):
+    def __init__(__self__, *,
+                 action: str,
+                 description: str,
+                 destination_ip_address: str,
+                 destination_ip_address_group_id: str,
+                 destination_port: str,
+                 ip_version: int,
+                 name: str,
+                 protocol: str,
+                 rule_id: str,
+                 source_ip_address: str,
+                 source_ip_address_group_id: str,
+                 source_port: str):
+        """
+        :param str action: The rule action.
+        :param str description: The network ACL rule description.
+        :param str destination_ip_address: The destination IP address or CIDR block of a network ACL rule.
+        :param str destination_ip_address_group_id: The destination IP address group ID of a network ACL rule.
+        :param str destination_port: The destination ports of a network ACL rule.
+        :param int ip_version: The IP version of a network ACL rule.
+        :param str name: Specifies the network ACL name. The value can contain no more than 64 characters,
+               including letters, digits, underscores (_), hyphens (-), and periods (.).
+        :param str protocol: The rule protocol.
+        :param str rule_id: The ID of the rule.
+        :param str source_ip_address: The source IP address or CIDR block of a network ACL rule.
+        :param str source_ip_address_group_id: The source IP address group ID of a network ACL rule.
+        :param str source_port: The source ports of a network ACL rule.
+        """
+        pulumi.set(__self__, "action", action)
+        pulumi.set(__self__, "description", description)
+        pulumi.set(__self__, "destination_ip_address", destination_ip_address)
+        pulumi.set(__self__, "destination_ip_address_group_id", destination_ip_address_group_id)
+        pulumi.set(__self__, "destination_port", destination_port)
+        pulumi.set(__self__, "ip_version", ip_version)
+        pulumi.set(__self__, "name", name)
+        pulumi.set(__self__, "protocol", protocol)
+        pulumi.set(__self__, "rule_id", rule_id)
+        pulumi.set(__self__, "source_ip_address", source_ip_address)
+        pulumi.set(__self__, "source_ip_address_group_id", source_ip_address_group_id)
+        pulumi.set(__self__, "source_port", source_port)
+
+    @property
+    @pulumi.getter
+    def action(self) -> str:
+        """
+        The rule action.
+        """
+        return pulumi.get(self, "action")
+
+    @property
+    @pulumi.getter
+    def description(self) -> str:
+        """
+        The network ACL rule description.
+        """
+        return pulumi.get(self, "description")
+
+    @property
+    @pulumi.getter(name="destinationIpAddress")
+    def destination_ip_address(self) -> str:
+        """
+        The destination IP address or CIDR block of a network ACL rule.
+        """
+        return pulumi.get(self, "destination_ip_address")
+
+    @property
+    @pulumi.getter(name="destinationIpAddressGroupId")
+    def destination_ip_address_group_id(self) -> str:
+        """
+        The destination IP address group ID of a network ACL rule.
+        """
+        return pulumi.get(self, "destination_ip_address_group_id")
+
+    @property
+    @pulumi.getter(name="destinationPort")
+    def destination_port(self) -> str:
+        """
+        The destination ports of a network ACL rule.
+        """
+        return pulumi.get(self, "destination_port")
+
+    @property
+    @pulumi.getter(name="ipVersion")
+    def ip_version(self) -> int:
+        """
+        The IP version of a network ACL rule.
+        """
+        return pulumi.get(self, "ip_version")
+
+    @property
+    @pulumi.getter
+    def name(self) -> str:
+        """
+        Specifies the network ACL name. The value can contain no more than 64 characters,
+        including letters, digits, underscores (_), hyphens (-), and periods (.).
+        """
+        return pulumi.get(self, "name")
+
+    @property
+    @pulumi.getter
+    def protocol(self) -> str:
+        """
+        The rule protocol.
+        """
+        return pulumi.get(self, "protocol")
+
+    @property
+    @pulumi.getter(name="ruleId")
+    def rule_id(self) -> str:
+        """
+        The ID of the rule.
+        """
+        return pulumi.get(self, "rule_id")
+
+    @property
+    @pulumi.getter(name="sourceIpAddress")
+    def source_ip_address(self) -> str:
+        """
+        The source IP address or CIDR block of a network ACL rule.
+        """
+        return pulumi.get(self, "source_ip_address")
+
+    @property
+    @pulumi.getter(name="sourceIpAddressGroupId")
+    def source_ip_address_group_id(self) -> str:
+        """
+        The source IP address group ID of a network ACL rule.
+        """
+        return pulumi.get(self, "source_ip_address_group_id")
+
+    @property
+    @pulumi.getter(name="sourcePort")
+    def source_port(self) -> str:
+        """
+        The source ports of a network ACL rule.
+        """
+        return pulumi.get(self, "source_port")
+
+
+@pulumi.output_type
+class GetNetworkAclsNetworkAclIngressRuleResult(dict):
+    def __init__(__self__, *,
+                 action: str,
+                 description: str,
+                 destination_ip_address: str,
+                 destination_ip_address_group_id: str,
+                 destination_port: str,
+                 ip_version: int,
+                 name: str,
+                 protocol: str,
+                 rule_id: str,
+                 source_ip_address: str,
+                 source_ip_address_group_id: str,
+                 source_port: str):
+        """
+        :param str action: The rule action.
+        :param str description: The network ACL rule description.
+        :param str destination_ip_address: The destination IP address or CIDR block of a network ACL rule.
+        :param str destination_ip_address_group_id: The destination IP address group ID of a network ACL rule.
+        :param str destination_port: The destination ports of a network ACL rule.
+        :param int ip_version: The IP version of a network ACL rule.
+        :param str name: Specifies the network ACL name. The value can contain no more than 64 characters,
+               including letters, digits, underscores (_), hyphens (-), and periods (.).
+        :param str protocol: The rule protocol.
+        :param str rule_id: The ID of the rule.
+        :param str source_ip_address: The source IP address or CIDR block of a network ACL rule.
+        :param str source_ip_address_group_id: The source IP address group ID of a network ACL rule.
+        :param str source_port: The source ports of a network ACL rule.
+        """
+        pulumi.set(__self__, "action", action)
+        pulumi.set(__self__, "description", description)
+        pulumi.set(__self__, "destination_ip_address", destination_ip_address)
+        pulumi.set(__self__, "destination_ip_address_group_id", destination_ip_address_group_id)
+        pulumi.set(__self__, "destination_port", destination_port)
+        pulumi.set(__self__, "ip_version", ip_version)
+        pulumi.set(__self__, "name", name)
+        pulumi.set(__self__, "protocol", protocol)
+        pulumi.set(__self__, "rule_id", rule_id)
+        pulumi.set(__self__, "source_ip_address", source_ip_address)
+        pulumi.set(__self__, "source_ip_address_group_id", source_ip_address_group_id)
+        pulumi.set(__self__, "source_port", source_port)
+
+    @property
+    @pulumi.getter
+    def action(self) -> str:
+        """
+        The rule action.
+        """
+        return pulumi.get(self, "action")
+
+    @property
+    @pulumi.getter
+    def description(self) -> str:
+        """
+        The network ACL rule description.
+        """
+        return pulumi.get(self, "description")
+
+    @property
+    @pulumi.getter(name="destinationIpAddress")
+    def destination_ip_address(self) -> str:
+        """
+        The destination IP address or CIDR block of a network ACL rule.
+        """
+        return pulumi.get(self, "destination_ip_address")
+
+    @property
+    @pulumi.getter(name="destinationIpAddressGroupId")
+    def destination_ip_address_group_id(self) -> str:
+        """
+        The destination IP address group ID of a network ACL rule.
+        """
+        return pulumi.get(self, "destination_ip_address_group_id")
+
+    @property
+    @pulumi.getter(name="destinationPort")
+    def destination_port(self) -> str:
+        """
+        The destination ports of a network ACL rule.
+        """
+        return pulumi.get(self, "destination_port")
+
+    @property
+    @pulumi.getter(name="ipVersion")
+    def ip_version(self) -> int:
+        """
+        The IP version of a network ACL rule.
+        """
+        return pulumi.get(self, "ip_version")
+
+    @property
+    @pulumi.getter
+    def name(self) -> str:
+        """
+        Specifies the network ACL name. The value can contain no more than 64 characters,
+        including letters, digits, underscores (_), hyphens (-), and periods (.).
+        """
+        return pulumi.get(self, "name")
+
+    @property
+    @pulumi.getter
+    def protocol(self) -> str:
+        """
+        The rule protocol.
+        """
+        return pulumi.get(self, "protocol")
+
+    @property
+    @pulumi.getter(name="ruleId")
+    def rule_id(self) -> str:
+        """
+        The ID of the rule.
+        """
+        return pulumi.get(self, "rule_id")
+
+    @property
+    @pulumi.getter(name="sourceIpAddress")
+    def source_ip_address(self) -> str:
+        """
+        The source IP address or CIDR block of a network ACL rule.
+        """
+        return pulumi.get(self, "source_ip_address")
+
+    @property
+    @pulumi.getter(name="sourceIpAddressGroupId")
+    def source_ip_address_group_id(self) -> str:
+        """
+        The source IP address group ID of a network ACL rule.
+        """
+        return pulumi.get(self, "source_ip_address_group_id")
+
+    @property
+    @pulumi.getter(name="sourcePort")
+    def source_port(self) -> str:
+        """
+        The source ports of a network ACL rule.
+        """
+        return pulumi.get(self, "source_port")
+
+
+@pulumi.output_type
+class GetQuotasQuotaResult(dict):
+    def __init__(__self__, *,
+                 resources: Sequence['outputs.GetQuotasQuotaResourceResult']):
+        """
+        :param Sequence['GetQuotasQuotaResourceArgs'] resources: The resource objects.
+        """
+        pulumi.set(__self__, "resources", resources)
+
+    @property
+    @pulumi.getter
+    def resources(self) -> Sequence['outputs.GetQuotasQuotaResourceResult']:
+        """
+        The resource objects.
+        """
+        return pulumi.get(self, "resources")
+
+
+@pulumi.output_type
+class GetQuotasQuotaResourceResult(dict):
+    def __init__(__self__, *,
+                 min: int,
+                 quota: int,
+                 type: str,
+                 used: int):
+        """
+        :param int min: The minimum quota value allowed.
+        :param int quota: The maximum quota values for the resources.
+        :param str type: Specifies the type of resource to filter quotas.
+               The value can be **vpc**, **subnet**, **securityGroup**, **securityGroupRule**, **publicIp**,
+               **vpn**, **vpngw**, **vpcPeer**, **firewall**, **shareBandwidth**, **shareBandwidthIP**,
+               **loadbalancer**, **listener**, **physicalConnect**, **virtualInterface**,
+               **vpcContainRoutetable**, and **routetableContainRoutes**.
+        :param int used: The number of created resources.
+        """
+        pulumi.set(__self__, "min", min)
+        pulumi.set(__self__, "quota", quota)
+        pulumi.set(__self__, "type", type)
+        pulumi.set(__self__, "used", used)
+
+    @property
+    @pulumi.getter
+    def min(self) -> int:
+        """
+        The minimum quota value allowed.
+        """
+        return pulumi.get(self, "min")
+
+    @property
+    @pulumi.getter
+    def quota(self) -> int:
+        """
+        The maximum quota values for the resources.
+        """
+        return pulumi.get(self, "quota")
+
+    @property
+    @pulumi.getter
+    def type(self) -> str:
+        """
+        Specifies the type of resource to filter quotas.
+        The value can be **vpc**, **subnet**, **securityGroup**, **securityGroupRule**, **publicIp**,
+        **vpn**, **vpngw**, **vpcPeer**, **firewall**, **shareBandwidth**, **shareBandwidthIP**,
+        **loadbalancer**, **listener**, **physicalConnect**, **virtualInterface**,
+        **vpcContainRoutetable**, and **routetableContainRoutes**.
+        """
+        return pulumi.get(self, "type")
+
+    @property
+    @pulumi.getter
+    def used(self) -> int:
+        """
+        The number of created resources.
+        """
+        return pulumi.get(self, "used")
+
+
+@pulumi.output_type
 class GetRouteTableRouteResult(dict):
     def __init__(__self__, *,
                  description: str,
@@ -732,6 +2074,68 @@ class GetRouteTableRouteResult(dict):
         The route type.
         """
         return pulumi.get(self, "type")
+
+
+@pulumi.output_type
+class GetRoutesRouteResult(dict):
+    def __init__(__self__, *,
+                 destination: str,
+                 id: str,
+                 nexthop: str,
+                 type: str,
+                 vpc_id: str):
+        """
+        :param str destination: Specifies the route destination.
+        :param str id: The route ID.
+        :param str nexthop: The next hop of the route.
+        :param str type: Specifies the route type.
+        :param str vpc_id: Specifies the ID of the VPC to which the route belongs.
+        """
+        pulumi.set(__self__, "destination", destination)
+        pulumi.set(__self__, "id", id)
+        pulumi.set(__self__, "nexthop", nexthop)
+        pulumi.set(__self__, "type", type)
+        pulumi.set(__self__, "vpc_id", vpc_id)
+
+    @property
+    @pulumi.getter
+    def destination(self) -> str:
+        """
+        Specifies the route destination.
+        """
+        return pulumi.get(self, "destination")
+
+    @property
+    @pulumi.getter
+    def id(self) -> str:
+        """
+        The route ID.
+        """
+        return pulumi.get(self, "id")
+
+    @property
+    @pulumi.getter
+    def nexthop(self) -> str:
+        """
+        The next hop of the route.
+        """
+        return pulumi.get(self, "nexthop")
+
+    @property
+    @pulumi.getter
+    def type(self) -> str:
+        """
+        Specifies the route type.
+        """
+        return pulumi.get(self, "type")
+
+    @property
+    @pulumi.getter(name="vpcId")
+    def vpc_id(self) -> str:
+        """
+        Specifies the ID of the VPC to which the route belongs.
+        """
+        return pulumi.get(self, "vpc_id")
 
 
 @pulumi.output_type
@@ -877,6 +2281,191 @@ class GetSecgroupRuleResult(dict):
 
 
 @pulumi.output_type
+class GetSecgroupRulesRuleResult(dict):
+    def __init__(__self__, *,
+                 action: str,
+                 created_at: str,
+                 description: str,
+                 direction: str,
+                 ethertype: str,
+                 id: str,
+                 ports: str,
+                 priority: int,
+                 protocol: str,
+                 remote_address_group_id: str,
+                 remote_group_id: str,
+                 remote_ip_prefix: str,
+                 security_group_id: str,
+                 updated_at: str):
+        """
+        :param str action: Specifies the effective policy of the security group rule used for query.  
+               The valid values are as follows:
+               + **allow**
+               + **deny**
+        :param str created_at: The creation time, in UTC format.
+        :param str description: Specifies the security group rule description used for query.
+        :param str direction: Specifies the direction of the security group rule used for query.  
+               The valid values are as follows:
+               + **ingress**
+               + **egress**
+        :param str ethertype: The security group rule IP address protocol type. The value can be **IPv4** or **IPv6**.
+        :param str id: The ID of the security group rule.
+        :param str ports: The range of port values for security group rule. Which supports single port (80), continuous port (1-30)
+               and discontinuous port (22, 3389, 80).
+        :param int priority: The priority of security group rule. The valid value ranges from `1` to `100`, `1` represents the
+               highest priority.
+        :param str protocol: Specifies the security group rule protocol type used for query.  
+               The value can be **tcp**, **udp**, **icmp**, **icmpv6** or IP protocol number, if empty, it indicates support for
+               all protocols.
+        :param str remote_address_group_id: The remote address group ID.  
+               This field is mutually exclusive with `remote_group_id` and `remote_ip_prefix`.
+        :param str remote_group_id: Specifies the remote security group ID used for query.
+        :param str remote_ip_prefix: The remote IP address. The value can be in the CIDR format or IP addresses.  
+               This field is mutually exclusive with `remote_group_id` and `remote_address_group_id`.
+        :param str security_group_id: Specifies the security group ID that the rule should belong to.
+        :param str updated_at: The latest update time, in UTC format.
+        """
+        pulumi.set(__self__, "action", action)
+        pulumi.set(__self__, "created_at", created_at)
+        pulumi.set(__self__, "description", description)
+        pulumi.set(__self__, "direction", direction)
+        pulumi.set(__self__, "ethertype", ethertype)
+        pulumi.set(__self__, "id", id)
+        pulumi.set(__self__, "ports", ports)
+        pulumi.set(__self__, "priority", priority)
+        pulumi.set(__self__, "protocol", protocol)
+        pulumi.set(__self__, "remote_address_group_id", remote_address_group_id)
+        pulumi.set(__self__, "remote_group_id", remote_group_id)
+        pulumi.set(__self__, "remote_ip_prefix", remote_ip_prefix)
+        pulumi.set(__self__, "security_group_id", security_group_id)
+        pulumi.set(__self__, "updated_at", updated_at)
+
+    @property
+    @pulumi.getter
+    def action(self) -> str:
+        """
+        Specifies the effective policy of the security group rule used for query.  
+        The valid values are as follows:
+        + **allow**
+        + **deny**
+        """
+        return pulumi.get(self, "action")
+
+    @property
+    @pulumi.getter(name="createdAt")
+    def created_at(self) -> str:
+        """
+        The creation time, in UTC format.
+        """
+        return pulumi.get(self, "created_at")
+
+    @property
+    @pulumi.getter
+    def description(self) -> str:
+        """
+        Specifies the security group rule description used for query.
+        """
+        return pulumi.get(self, "description")
+
+    @property
+    @pulumi.getter
+    def direction(self) -> str:
+        """
+        Specifies the direction of the security group rule used for query.  
+        The valid values are as follows:
+        + **ingress**
+        + **egress**
+        """
+        return pulumi.get(self, "direction")
+
+    @property
+    @pulumi.getter
+    def ethertype(self) -> str:
+        """
+        The security group rule IP address protocol type. The value can be **IPv4** or **IPv6**.
+        """
+        return pulumi.get(self, "ethertype")
+
+    @property
+    @pulumi.getter
+    def id(self) -> str:
+        """
+        The ID of the security group rule.
+        """
+        return pulumi.get(self, "id")
+
+    @property
+    @pulumi.getter
+    def ports(self) -> str:
+        """
+        The range of port values for security group rule. Which supports single port (80), continuous port (1-30)
+        and discontinuous port (22, 3389, 80).
+        """
+        return pulumi.get(self, "ports")
+
+    @property
+    @pulumi.getter
+    def priority(self) -> int:
+        """
+        The priority of security group rule. The valid value ranges from `1` to `100`, `1` represents the
+        highest priority.
+        """
+        return pulumi.get(self, "priority")
+
+    @property
+    @pulumi.getter
+    def protocol(self) -> str:
+        """
+        Specifies the security group rule protocol type used for query.  
+        The value can be **tcp**, **udp**, **icmp**, **icmpv6** or IP protocol number, if empty, it indicates support for
+        all protocols.
+        """
+        return pulumi.get(self, "protocol")
+
+    @property
+    @pulumi.getter(name="remoteAddressGroupId")
+    def remote_address_group_id(self) -> str:
+        """
+        The remote address group ID.  
+        This field is mutually exclusive with `remote_group_id` and `remote_ip_prefix`.
+        """
+        return pulumi.get(self, "remote_address_group_id")
+
+    @property
+    @pulumi.getter(name="remoteGroupId")
+    def remote_group_id(self) -> str:
+        """
+        Specifies the remote security group ID used for query.
+        """
+        return pulumi.get(self, "remote_group_id")
+
+    @property
+    @pulumi.getter(name="remoteIpPrefix")
+    def remote_ip_prefix(self) -> str:
+        """
+        The remote IP address. The value can be in the CIDR format or IP addresses.  
+        This field is mutually exclusive with `remote_group_id` and `remote_address_group_id`.
+        """
+        return pulumi.get(self, "remote_ip_prefix")
+
+    @property
+    @pulumi.getter(name="securityGroupId")
+    def security_group_id(self) -> str:
+        """
+        Specifies the security group ID that the rule should belong to.
+        """
+        return pulumi.get(self, "security_group_id")
+
+    @property
+    @pulumi.getter(name="updatedAt")
+    def updated_at(self) -> str:
+        """
+        The latest update time, in UTC format.
+        """
+        return pulumi.get(self, "updated_at")
+
+
+@pulumi.output_type
 class GetSecgroupsSecurityGroupResult(dict):
     def __init__(__self__, *,
                  created_at: str,
@@ -949,6 +2538,389 @@ class GetSecgroupsSecurityGroupResult(dict):
         The last update time, in UTC format.
         """
         return pulumi.get(self, "updated_at")
+
+
+@pulumi.output_type
+class GetSubNetworkInterfacesSubNetworkInterfaceResult(dict):
+    def __init__(__self__, *,
+                 created_at: str,
+                 description: str,
+                 id: str,
+                 ip_address: str,
+                 ipv6_ip_address: str,
+                 mac_address: str,
+                 parent_device_id: str,
+                 parent_id: str,
+                 project_id: str,
+                 security_enabled: bool,
+                 security_groups: Sequence[str],
+                 subnet_id: str,
+                 tags: Sequence[str],
+                 vlan_id: int,
+                 vpc_id: str):
+        """
+        :param str created_at: The time when the supplementary network interface is created.
+        :param str description: Specifies the description of the supplementary network interface.
+        :param str id: The ID of supplementary network interface.
+        :param str ip_address: Specifies the private IPv4 address of the supplementary network interface.
+        :param str ipv6_ip_address: The IPv6 address of the supplementary network interface.
+        :param str mac_address: Specifies the MAC address of the supplementary network interface.
+        :param str parent_device_id: The ID of the parent device.
+        :param str parent_id: Specifies the ID of the elastic network interface
+               to which the supplementary network interface belongs.
+        :param str project_id: The ID of the project to which the supplementary network interface belongs.
+        :param bool security_enabled: Whether the IPv6 address is it enabled of the supplementary network interface.
+        :param Sequence[str] security_groups: The list of the security groups IDs to which the supplementary network interface belongs.
+        :param str subnet_id: Specifies the ID of the subnet to which the supplementary network interface belongs.
+        :param Sequence[str] tags: The tags of a supplementary network interface.
+        :param int vlan_id: The vlan ID of the supplementary network interface.
+        :param str vpc_id: Specifies the ID of the VPC to which the supplementary network interface belongs.
+        """
+        pulumi.set(__self__, "created_at", created_at)
+        pulumi.set(__self__, "description", description)
+        pulumi.set(__self__, "id", id)
+        pulumi.set(__self__, "ip_address", ip_address)
+        pulumi.set(__self__, "ipv6_ip_address", ipv6_ip_address)
+        pulumi.set(__self__, "mac_address", mac_address)
+        pulumi.set(__self__, "parent_device_id", parent_device_id)
+        pulumi.set(__self__, "parent_id", parent_id)
+        pulumi.set(__self__, "project_id", project_id)
+        pulumi.set(__self__, "security_enabled", security_enabled)
+        pulumi.set(__self__, "security_groups", security_groups)
+        pulumi.set(__self__, "subnet_id", subnet_id)
+        pulumi.set(__self__, "tags", tags)
+        pulumi.set(__self__, "vlan_id", vlan_id)
+        pulumi.set(__self__, "vpc_id", vpc_id)
+
+    @property
+    @pulumi.getter(name="createdAt")
+    def created_at(self) -> str:
+        """
+        The time when the supplementary network interface is created.
+        """
+        return pulumi.get(self, "created_at")
+
+    @property
+    @pulumi.getter
+    def description(self) -> str:
+        """
+        Specifies the description of the supplementary network interface.
+        """
+        return pulumi.get(self, "description")
+
+    @property
+    @pulumi.getter
+    def id(self) -> str:
+        """
+        The ID of supplementary network interface.
+        """
+        return pulumi.get(self, "id")
+
+    @property
+    @pulumi.getter(name="ipAddress")
+    def ip_address(self) -> str:
+        """
+        Specifies the private IPv4 address of the supplementary network interface.
+        """
+        return pulumi.get(self, "ip_address")
+
+    @property
+    @pulumi.getter(name="ipv6IpAddress")
+    def ipv6_ip_address(self) -> str:
+        """
+        The IPv6 address of the supplementary network interface.
+        """
+        return pulumi.get(self, "ipv6_ip_address")
+
+    @property
+    @pulumi.getter(name="macAddress")
+    def mac_address(self) -> str:
+        """
+        Specifies the MAC address of the supplementary network interface.
+        """
+        return pulumi.get(self, "mac_address")
+
+    @property
+    @pulumi.getter(name="parentDeviceId")
+    def parent_device_id(self) -> str:
+        """
+        The ID of the parent device.
+        """
+        return pulumi.get(self, "parent_device_id")
+
+    @property
+    @pulumi.getter(name="parentId")
+    def parent_id(self) -> str:
+        """
+        Specifies the ID of the elastic network interface
+        to which the supplementary network interface belongs.
+        """
+        return pulumi.get(self, "parent_id")
+
+    @property
+    @pulumi.getter(name="projectId")
+    def project_id(self) -> str:
+        """
+        The ID of the project to which the supplementary network interface belongs.
+        """
+        return pulumi.get(self, "project_id")
+
+    @property
+    @pulumi.getter(name="securityEnabled")
+    def security_enabled(self) -> bool:
+        """
+        Whether the IPv6 address is it enabled of the supplementary network interface.
+        """
+        return pulumi.get(self, "security_enabled")
+
+    @property
+    @pulumi.getter(name="securityGroups")
+    def security_groups(self) -> Sequence[str]:
+        """
+        The list of the security groups IDs to which the supplementary network interface belongs.
+        """
+        return pulumi.get(self, "security_groups")
+
+    @property
+    @pulumi.getter(name="subnetId")
+    def subnet_id(self) -> str:
+        """
+        Specifies the ID of the subnet to which the supplementary network interface belongs.
+        """
+        return pulumi.get(self, "subnet_id")
+
+    @property
+    @pulumi.getter
+    def tags(self) -> Sequence[str]:
+        """
+        The tags of a supplementary network interface.
+        """
+        return pulumi.get(self, "tags")
+
+    @property
+    @pulumi.getter(name="vlanId")
+    def vlan_id(self) -> int:
+        """
+        The vlan ID of the supplementary network interface.
+        """
+        return pulumi.get(self, "vlan_id")
+
+    @property
+    @pulumi.getter(name="vpcId")
+    def vpc_id(self) -> str:
+        """
+        Specifies the ID of the VPC to which the supplementary network interface belongs.
+        """
+        return pulumi.get(self, "vpc_id")
+
+
+@pulumi.output_type
+class GetSubnetIpAvailabilitiesNetworkIpAvailabilityResult(dict):
+    def __init__(__self__, *,
+                 network_id: str,
+                 network_name: str,
+                 subnet_ip_availabilities: Sequence['outputs.GetSubnetIpAvailabilitiesNetworkIpAvailabilitySubnetIpAvailabilityResult'],
+                 total_ips: int,
+                 used_ips: int):
+        """
+        :param str network_id: Specifies the subnet ID.
+        :param str network_name: The network name.
+        :param Sequence['GetSubnetIpAvailabilitiesNetworkIpAvailabilitySubnetIpAvailabilityArgs'] subnet_ip_availabilities: The subnet IP address usage objects.
+        :param int total_ips: The total number of IP addresses on a subnet.
+               The reserved IP addresses are not included.
+        :param int used_ips: The number of in-use IP addresses on a subnet.
+               The reserved IP addresses are not included.
+        """
+        pulumi.set(__self__, "network_id", network_id)
+        pulumi.set(__self__, "network_name", network_name)
+        pulumi.set(__self__, "subnet_ip_availabilities", subnet_ip_availabilities)
+        pulumi.set(__self__, "total_ips", total_ips)
+        pulumi.set(__self__, "used_ips", used_ips)
+
+    @property
+    @pulumi.getter(name="networkId")
+    def network_id(self) -> str:
+        """
+        Specifies the subnet ID.
+        """
+        return pulumi.get(self, "network_id")
+
+    @property
+    @pulumi.getter(name="networkName")
+    def network_name(self) -> str:
+        """
+        The network name.
+        """
+        return pulumi.get(self, "network_name")
+
+    @property
+    @pulumi.getter(name="subnetIpAvailabilities")
+    def subnet_ip_availabilities(self) -> Sequence['outputs.GetSubnetIpAvailabilitiesNetworkIpAvailabilitySubnetIpAvailabilityResult']:
+        """
+        The subnet IP address usage objects.
+        """
+        return pulumi.get(self, "subnet_ip_availabilities")
+
+    @property
+    @pulumi.getter(name="totalIps")
+    def total_ips(self) -> int:
+        """
+        The total number of IP addresses on a subnet.
+        The reserved IP addresses are not included.
+        """
+        return pulumi.get(self, "total_ips")
+
+    @property
+    @pulumi.getter(name="usedIps")
+    def used_ips(self) -> int:
+        """
+        The number of in-use IP addresses on a subnet.
+        The reserved IP addresses are not included.
+        """
+        return pulumi.get(self, "used_ips")
+
+
+@pulumi.output_type
+class GetSubnetIpAvailabilitiesNetworkIpAvailabilitySubnetIpAvailabilityResult(dict):
+    def __init__(__self__, *,
+                 cidr: str,
+                 ip_version: int,
+                 subnet_id: str,
+                 subnet_name: str,
+                 total_ips: int,
+                 used_ips: int):
+        """
+        :param str cidr: The subnet CIDR block.
+        :param int ip_version: The IP version of the subnet.
+               The value can be **4** or **6**.
+        :param str subnet_id: The subnet ID.
+        :param str subnet_name: The subnet name.
+        :param int total_ips: The total number of IP addresses on a subnet.
+               The reserved IP addresses are not included.
+        :param int used_ips: The number of in-use IP addresses on a subnet.
+               The reserved IP addresses are not included.
+        """
+        pulumi.set(__self__, "cidr", cidr)
+        pulumi.set(__self__, "ip_version", ip_version)
+        pulumi.set(__self__, "subnet_id", subnet_id)
+        pulumi.set(__self__, "subnet_name", subnet_name)
+        pulumi.set(__self__, "total_ips", total_ips)
+        pulumi.set(__self__, "used_ips", used_ips)
+
+    @property
+    @pulumi.getter
+    def cidr(self) -> str:
+        """
+        The subnet CIDR block.
+        """
+        return pulumi.get(self, "cidr")
+
+    @property
+    @pulumi.getter(name="ipVersion")
+    def ip_version(self) -> int:
+        """
+        The IP version of the subnet.
+        The value can be **4** or **6**.
+        """
+        return pulumi.get(self, "ip_version")
+
+    @property
+    @pulumi.getter(name="subnetId")
+    def subnet_id(self) -> str:
+        """
+        The subnet ID.
+        """
+        return pulumi.get(self, "subnet_id")
+
+    @property
+    @pulumi.getter(name="subnetName")
+    def subnet_name(self) -> str:
+        """
+        The subnet name.
+        """
+        return pulumi.get(self, "subnet_name")
+
+    @property
+    @pulumi.getter(name="totalIps")
+    def total_ips(self) -> int:
+        """
+        The total number of IP addresses on a subnet.
+        The reserved IP addresses are not included.
+        """
+        return pulumi.get(self, "total_ips")
+
+    @property
+    @pulumi.getter(name="usedIps")
+    def used_ips(self) -> int:
+        """
+        The number of in-use IP addresses on a subnet.
+        The reserved IP addresses are not included.
+        """
+        return pulumi.get(self, "used_ips")
+
+
+@pulumi.output_type
+class GetSubnetPrivateIpsPrivateIpResult(dict):
+    def __init__(__self__, *,
+                 device_owner: str,
+                 id: str,
+                 ip_address: str,
+                 status: str,
+                 subnet_id: str):
+        """
+        :param str device_owner: The resource using the private IP address. The parameter is left blank if it is not used.
+        :param str id: The private IP address ID
+        :param str ip_address: The private IP address.
+        :param str status: The status of the private IP address.
+               Possible values are **ACTIVE** and **DOWN**.
+        :param str subnet_id: Specifies the ID of the subnet that the private IP address belongs to.
+        """
+        pulumi.set(__self__, "device_owner", device_owner)
+        pulumi.set(__self__, "id", id)
+        pulumi.set(__self__, "ip_address", ip_address)
+        pulumi.set(__self__, "status", status)
+        pulumi.set(__self__, "subnet_id", subnet_id)
+
+    @property
+    @pulumi.getter(name="deviceOwner")
+    def device_owner(self) -> str:
+        """
+        The resource using the private IP address. The parameter is left blank if it is not used.
+        """
+        return pulumi.get(self, "device_owner")
+
+    @property
+    @pulumi.getter
+    def id(self) -> str:
+        """
+        The private IP address ID
+        """
+        return pulumi.get(self, "id")
+
+    @property
+    @pulumi.getter(name="ipAddress")
+    def ip_address(self) -> str:
+        """
+        The private IP address.
+        """
+        return pulumi.get(self, "ip_address")
+
+    @property
+    @pulumi.getter
+    def status(self) -> str:
+        """
+        The status of the private IP address.
+        Possible values are **ACTIVE** and **DOWN**.
+        """
+        return pulumi.get(self, "status")
+
+    @property
+    @pulumi.getter(name="subnetId")
+    def subnet_id(self) -> str:
+        """
+        Specifies the ID of the subnet that the private IP address belongs to.
+        """
+        return pulumi.get(self, "subnet_id")
 
 
 @pulumi.output_type
@@ -1134,6 +3106,813 @@ class GetSubnetsSubnetResult(dict):
 
 
 @pulumi.output_type
+class GetTrafficMirrorFilterRulesTrafficMirrorFilterRuleResult(dict):
+    def __init__(__self__, *,
+                 action: str,
+                 created_at: str,
+                 description: str,
+                 destination_cidr_block: str,
+                 destination_port_range: str,
+                 direction: str,
+                 ethertype: str,
+                 id: str,
+                 priority: int,
+                 project_id: str,
+                 protocol: str,
+                 source_cidr_block: str,
+                 source_port_range: str,
+                 traffic_mirror_filter_id: str,
+                 updated_at: str):
+        """
+        :param str action: The policy of in the traffic mirror filter rule.
+               Valid values are **accept** or **reject**.
+        :param str created_at: Time when a traffic mirror filter rule is created.
+        :param str description: Description of a traffic mirror filter rule.
+        :param str destination_cidr_block: The destination IP address of the traffic mirror filter rule.
+        :param str destination_port_range: The destination port number range of the traffic mirror filter rule.
+               The value ranges from `1` to `65,535`, enter two port numbers connected by a hyphen (-). For example, **80-200**.
+        :param str direction: The direction of the traffic mirror filter rule.
+               Valid values are **ingress** or **egress**.
+        :param str ethertype: IP address version of the mirrored traffic.
+        :param str id: Traffic mirror filter rule ID.
+        :param int priority: The priority number of the traffic mirror filter rule.
+               Valid value ranges from `1` to `65,535`.
+        :param str project_id: Project ID.
+        :param str protocol: The protocol of the traffic mirror filter rule.
+               Valid value are **tcp**, **udp**, **icmp**, **icmpv6**, **all**.
+        :param str source_cidr_block: The source IP address of the traffic mirror filter rule.
+        :param str source_port_range: The source port number range of the traffic mirror filter rule.
+               The value ranges from `1` to `65,535`, enter two port numbers connected by a hyphen (-). For example, **80-200**.
+        :param str traffic_mirror_filter_id: The traffic mirror filter ID used as the query filter.
+        :param str updated_at: Time when a traffic mirror filter rule is updated.
+        """
+        pulumi.set(__self__, "action", action)
+        pulumi.set(__self__, "created_at", created_at)
+        pulumi.set(__self__, "description", description)
+        pulumi.set(__self__, "destination_cidr_block", destination_cidr_block)
+        pulumi.set(__self__, "destination_port_range", destination_port_range)
+        pulumi.set(__self__, "direction", direction)
+        pulumi.set(__self__, "ethertype", ethertype)
+        pulumi.set(__self__, "id", id)
+        pulumi.set(__self__, "priority", priority)
+        pulumi.set(__self__, "project_id", project_id)
+        pulumi.set(__self__, "protocol", protocol)
+        pulumi.set(__self__, "source_cidr_block", source_cidr_block)
+        pulumi.set(__self__, "source_port_range", source_port_range)
+        pulumi.set(__self__, "traffic_mirror_filter_id", traffic_mirror_filter_id)
+        pulumi.set(__self__, "updated_at", updated_at)
+
+    @property
+    @pulumi.getter
+    def action(self) -> str:
+        """
+        The policy of in the traffic mirror filter rule.
+        Valid values are **accept** or **reject**.
+        """
+        return pulumi.get(self, "action")
+
+    @property
+    @pulumi.getter(name="createdAt")
+    def created_at(self) -> str:
+        """
+        Time when a traffic mirror filter rule is created.
+        """
+        return pulumi.get(self, "created_at")
+
+    @property
+    @pulumi.getter
+    def description(self) -> str:
+        """
+        Description of a traffic mirror filter rule.
+        """
+        return pulumi.get(self, "description")
+
+    @property
+    @pulumi.getter(name="destinationCidrBlock")
+    def destination_cidr_block(self) -> str:
+        """
+        The destination IP address of the traffic mirror filter rule.
+        """
+        return pulumi.get(self, "destination_cidr_block")
+
+    @property
+    @pulumi.getter(name="destinationPortRange")
+    def destination_port_range(self) -> str:
+        """
+        The destination port number range of the traffic mirror filter rule.
+        The value ranges from `1` to `65,535`, enter two port numbers connected by a hyphen (-). For example, **80-200**.
+        """
+        return pulumi.get(self, "destination_port_range")
+
+    @property
+    @pulumi.getter
+    def direction(self) -> str:
+        """
+        The direction of the traffic mirror filter rule.
+        Valid values are **ingress** or **egress**.
+        """
+        return pulumi.get(self, "direction")
+
+    @property
+    @pulumi.getter
+    def ethertype(self) -> str:
+        """
+        IP address version of the mirrored traffic.
+        """
+        return pulumi.get(self, "ethertype")
+
+    @property
+    @pulumi.getter
+    def id(self) -> str:
+        """
+        Traffic mirror filter rule ID.
+        """
+        return pulumi.get(self, "id")
+
+    @property
+    @pulumi.getter
+    def priority(self) -> int:
+        """
+        The priority number of the traffic mirror filter rule.
+        Valid value ranges from `1` to `65,535`.
+        """
+        return pulumi.get(self, "priority")
+
+    @property
+    @pulumi.getter(name="projectId")
+    def project_id(self) -> str:
+        """
+        Project ID.
+        """
+        return pulumi.get(self, "project_id")
+
+    @property
+    @pulumi.getter
+    def protocol(self) -> str:
+        """
+        The protocol of the traffic mirror filter rule.
+        Valid value are **tcp**, **udp**, **icmp**, **icmpv6**, **all**.
+        """
+        return pulumi.get(self, "protocol")
+
+    @property
+    @pulumi.getter(name="sourceCidrBlock")
+    def source_cidr_block(self) -> str:
+        """
+        The source IP address of the traffic mirror filter rule.
+        """
+        return pulumi.get(self, "source_cidr_block")
+
+    @property
+    @pulumi.getter(name="sourcePortRange")
+    def source_port_range(self) -> str:
+        """
+        The source port number range of the traffic mirror filter rule.
+        The value ranges from `1` to `65,535`, enter two port numbers connected by a hyphen (-). For example, **80-200**.
+        """
+        return pulumi.get(self, "source_port_range")
+
+    @property
+    @pulumi.getter(name="trafficMirrorFilterId")
+    def traffic_mirror_filter_id(self) -> str:
+        """
+        The traffic mirror filter ID used as the query filter.
+        """
+        return pulumi.get(self, "traffic_mirror_filter_id")
+
+    @property
+    @pulumi.getter(name="updatedAt")
+    def updated_at(self) -> str:
+        """
+        Time when a traffic mirror filter rule is updated.
+        """
+        return pulumi.get(self, "updated_at")
+
+
+@pulumi.output_type
+class GetTrafficMirrorFiltersTrafficMirrorFilterResult(dict):
+    def __init__(__self__, *,
+                 created_at: str,
+                 description: str,
+                 egress_rules: Sequence['outputs.GetTrafficMirrorFiltersTrafficMirrorFilterEgressRuleResult'],
+                 id: str,
+                 ingress_rules: Sequence['outputs.GetTrafficMirrorFiltersTrafficMirrorFilterIngressRuleResult'],
+                 name: str,
+                 project_id: str,
+                 updated_at: str):
+        """
+        :param str created_at: Time when a traffic mirror filter rule is created.
+        :param str description: Description of a traffic mirror filter rule.
+        :param Sequence['GetTrafficMirrorFiltersTrafficMirrorFilterEgressRuleArgs'] egress_rules: Outbound mirror filter rules.
+        :param str id: Traffic mirror filter rule ID.
+        :param Sequence['GetTrafficMirrorFiltersTrafficMirrorFilterIngressRuleArgs'] ingress_rules: Inbound mirror filter rules.
+        :param str name: Specifies the name of the traffic mirror filter.
+        :param str project_id: Project ID.
+        :param str updated_at: Time when a traffic mirror filter rule is updated.
+        """
+        pulumi.set(__self__, "created_at", created_at)
+        pulumi.set(__self__, "description", description)
+        pulumi.set(__self__, "egress_rules", egress_rules)
+        pulumi.set(__self__, "id", id)
+        pulumi.set(__self__, "ingress_rules", ingress_rules)
+        pulumi.set(__self__, "name", name)
+        pulumi.set(__self__, "project_id", project_id)
+        pulumi.set(__self__, "updated_at", updated_at)
+
+    @property
+    @pulumi.getter(name="createdAt")
+    def created_at(self) -> str:
+        """
+        Time when a traffic mirror filter rule is created.
+        """
+        return pulumi.get(self, "created_at")
+
+    @property
+    @pulumi.getter
+    def description(self) -> str:
+        """
+        Description of a traffic mirror filter rule.
+        """
+        return pulumi.get(self, "description")
+
+    @property
+    @pulumi.getter(name="egressRules")
+    def egress_rules(self) -> Sequence['outputs.GetTrafficMirrorFiltersTrafficMirrorFilterEgressRuleResult']:
+        """
+        Outbound mirror filter rules.
+        """
+        return pulumi.get(self, "egress_rules")
+
+    @property
+    @pulumi.getter
+    def id(self) -> str:
+        """
+        Traffic mirror filter rule ID.
+        """
+        return pulumi.get(self, "id")
+
+    @property
+    @pulumi.getter(name="ingressRules")
+    def ingress_rules(self) -> Sequence['outputs.GetTrafficMirrorFiltersTrafficMirrorFilterIngressRuleResult']:
+        """
+        Inbound mirror filter rules.
+        """
+        return pulumi.get(self, "ingress_rules")
+
+    @property
+    @pulumi.getter
+    def name(self) -> str:
+        """
+        Specifies the name of the traffic mirror filter.
+        """
+        return pulumi.get(self, "name")
+
+    @property
+    @pulumi.getter(name="projectId")
+    def project_id(self) -> str:
+        """
+        Project ID.
+        """
+        return pulumi.get(self, "project_id")
+
+    @property
+    @pulumi.getter(name="updatedAt")
+    def updated_at(self) -> str:
+        """
+        Time when a traffic mirror filter rule is updated.
+        """
+        return pulumi.get(self, "updated_at")
+
+
+@pulumi.output_type
+class GetTrafficMirrorFiltersTrafficMirrorFilterEgressRuleResult(dict):
+    def __init__(__self__, *,
+                 action: str,
+                 created_at: str,
+                 description: str,
+                 destination_cidr_block: str,
+                 destination_port_range: str,
+                 direction: str,
+                 ethertype: str,
+                 id: str,
+                 priority: int,
+                 project_id: str,
+                 protocol: str,
+                 source_cidr_block: str,
+                 source_port_range: str,
+                 traffic_mirror_filter_id: str,
+                 updated_at: str):
+        """
+        :param str action: Whether to accept or reject traffic.
+        :param str created_at: Time when a traffic mirror filter rule is created.
+        :param str description: Description of a traffic mirror filter rule.
+        :param str destination_cidr_block: Destination CIDR block of the mirrored traffic.
+        :param str destination_port_range: Source port range.
+        :param str direction: Traffic direction.
+        :param str ethertype: IP address version of the mirrored traffic.
+        :param str id: Traffic mirror filter rule ID.
+        :param int priority: Mirror filter rule priority.
+        :param str project_id: Project ID.
+        :param str protocol: Protocol of the mirrored traffic.
+        :param str source_cidr_block: Source CIDR block of the mirrored traffic.
+        :param str source_port_range: Source port range.
+        :param str traffic_mirror_filter_id: Specifies the ID of the traffic mirror filter.
+        :param str updated_at: Time when a traffic mirror filter rule is updated.
+        """
+        pulumi.set(__self__, "action", action)
+        pulumi.set(__self__, "created_at", created_at)
+        pulumi.set(__self__, "description", description)
+        pulumi.set(__self__, "destination_cidr_block", destination_cidr_block)
+        pulumi.set(__self__, "destination_port_range", destination_port_range)
+        pulumi.set(__self__, "direction", direction)
+        pulumi.set(__self__, "ethertype", ethertype)
+        pulumi.set(__self__, "id", id)
+        pulumi.set(__self__, "priority", priority)
+        pulumi.set(__self__, "project_id", project_id)
+        pulumi.set(__self__, "protocol", protocol)
+        pulumi.set(__self__, "source_cidr_block", source_cidr_block)
+        pulumi.set(__self__, "source_port_range", source_port_range)
+        pulumi.set(__self__, "traffic_mirror_filter_id", traffic_mirror_filter_id)
+        pulumi.set(__self__, "updated_at", updated_at)
+
+    @property
+    @pulumi.getter
+    def action(self) -> str:
+        """
+        Whether to accept or reject traffic.
+        """
+        return pulumi.get(self, "action")
+
+    @property
+    @pulumi.getter(name="createdAt")
+    def created_at(self) -> str:
+        """
+        Time when a traffic mirror filter rule is created.
+        """
+        return pulumi.get(self, "created_at")
+
+    @property
+    @pulumi.getter
+    def description(self) -> str:
+        """
+        Description of a traffic mirror filter rule.
+        """
+        return pulumi.get(self, "description")
+
+    @property
+    @pulumi.getter(name="destinationCidrBlock")
+    def destination_cidr_block(self) -> str:
+        """
+        Destination CIDR block of the mirrored traffic.
+        """
+        return pulumi.get(self, "destination_cidr_block")
+
+    @property
+    @pulumi.getter(name="destinationPortRange")
+    def destination_port_range(self) -> str:
+        """
+        Source port range.
+        """
+        return pulumi.get(self, "destination_port_range")
+
+    @property
+    @pulumi.getter
+    def direction(self) -> str:
+        """
+        Traffic direction.
+        """
+        return pulumi.get(self, "direction")
+
+    @property
+    @pulumi.getter
+    def ethertype(self) -> str:
+        """
+        IP address version of the mirrored traffic.
+        """
+        return pulumi.get(self, "ethertype")
+
+    @property
+    @pulumi.getter
+    def id(self) -> str:
+        """
+        Traffic mirror filter rule ID.
+        """
+        return pulumi.get(self, "id")
+
+    @property
+    @pulumi.getter
+    def priority(self) -> int:
+        """
+        Mirror filter rule priority.
+        """
+        return pulumi.get(self, "priority")
+
+    @property
+    @pulumi.getter(name="projectId")
+    def project_id(self) -> str:
+        """
+        Project ID.
+        """
+        return pulumi.get(self, "project_id")
+
+    @property
+    @pulumi.getter
+    def protocol(self) -> str:
+        """
+        Protocol of the mirrored traffic.
+        """
+        return pulumi.get(self, "protocol")
+
+    @property
+    @pulumi.getter(name="sourceCidrBlock")
+    def source_cidr_block(self) -> str:
+        """
+        Source CIDR block of the mirrored traffic.
+        """
+        return pulumi.get(self, "source_cidr_block")
+
+    @property
+    @pulumi.getter(name="sourcePortRange")
+    def source_port_range(self) -> str:
+        """
+        Source port range.
+        """
+        return pulumi.get(self, "source_port_range")
+
+    @property
+    @pulumi.getter(name="trafficMirrorFilterId")
+    def traffic_mirror_filter_id(self) -> str:
+        """
+        Specifies the ID of the traffic mirror filter.
+        """
+        return pulumi.get(self, "traffic_mirror_filter_id")
+
+    @property
+    @pulumi.getter(name="updatedAt")
+    def updated_at(self) -> str:
+        """
+        Time when a traffic mirror filter rule is updated.
+        """
+        return pulumi.get(self, "updated_at")
+
+
+@pulumi.output_type
+class GetTrafficMirrorFiltersTrafficMirrorFilterIngressRuleResult(dict):
+    def __init__(__self__, *,
+                 action: str,
+                 created_at: str,
+                 description: str,
+                 destination_cidr_block: str,
+                 destination_port_range: str,
+                 direction: str,
+                 ethertype: str,
+                 id: str,
+                 priority: int,
+                 project_id: str,
+                 protocol: str,
+                 source_cidr_block: str,
+                 source_port_range: str,
+                 traffic_mirror_filter_id: str,
+                 updated_at: str):
+        """
+        :param str action: Whether to accept or reject traffic.
+        :param str created_at: Time when a traffic mirror filter rule is created.
+        :param str description: Description of a traffic mirror filter rule.
+        :param str destination_cidr_block: Destination CIDR block of the mirrored traffic.
+        :param str destination_port_range: Source port range.
+        :param str direction: Traffic direction.
+        :param str ethertype: IP address version of the mirrored traffic.
+        :param str id: Traffic mirror filter rule ID.
+        :param int priority: Mirror filter rule priority.
+        :param str project_id: Project ID.
+        :param str protocol: Protocol of the mirrored traffic.
+        :param str source_cidr_block: Source CIDR block of the mirrored traffic.
+        :param str source_port_range: Source port range.
+        :param str traffic_mirror_filter_id: Specifies the ID of the traffic mirror filter.
+        :param str updated_at: Time when a traffic mirror filter rule is updated.
+        """
+        pulumi.set(__self__, "action", action)
+        pulumi.set(__self__, "created_at", created_at)
+        pulumi.set(__self__, "description", description)
+        pulumi.set(__self__, "destination_cidr_block", destination_cidr_block)
+        pulumi.set(__self__, "destination_port_range", destination_port_range)
+        pulumi.set(__self__, "direction", direction)
+        pulumi.set(__self__, "ethertype", ethertype)
+        pulumi.set(__self__, "id", id)
+        pulumi.set(__self__, "priority", priority)
+        pulumi.set(__self__, "project_id", project_id)
+        pulumi.set(__self__, "protocol", protocol)
+        pulumi.set(__self__, "source_cidr_block", source_cidr_block)
+        pulumi.set(__self__, "source_port_range", source_port_range)
+        pulumi.set(__self__, "traffic_mirror_filter_id", traffic_mirror_filter_id)
+        pulumi.set(__self__, "updated_at", updated_at)
+
+    @property
+    @pulumi.getter
+    def action(self) -> str:
+        """
+        Whether to accept or reject traffic.
+        """
+        return pulumi.get(self, "action")
+
+    @property
+    @pulumi.getter(name="createdAt")
+    def created_at(self) -> str:
+        """
+        Time when a traffic mirror filter rule is created.
+        """
+        return pulumi.get(self, "created_at")
+
+    @property
+    @pulumi.getter
+    def description(self) -> str:
+        """
+        Description of a traffic mirror filter rule.
+        """
+        return pulumi.get(self, "description")
+
+    @property
+    @pulumi.getter(name="destinationCidrBlock")
+    def destination_cidr_block(self) -> str:
+        """
+        Destination CIDR block of the mirrored traffic.
+        """
+        return pulumi.get(self, "destination_cidr_block")
+
+    @property
+    @pulumi.getter(name="destinationPortRange")
+    def destination_port_range(self) -> str:
+        """
+        Source port range.
+        """
+        return pulumi.get(self, "destination_port_range")
+
+    @property
+    @pulumi.getter
+    def direction(self) -> str:
+        """
+        Traffic direction.
+        """
+        return pulumi.get(self, "direction")
+
+    @property
+    @pulumi.getter
+    def ethertype(self) -> str:
+        """
+        IP address version of the mirrored traffic.
+        """
+        return pulumi.get(self, "ethertype")
+
+    @property
+    @pulumi.getter
+    def id(self) -> str:
+        """
+        Traffic mirror filter rule ID.
+        """
+        return pulumi.get(self, "id")
+
+    @property
+    @pulumi.getter
+    def priority(self) -> int:
+        """
+        Mirror filter rule priority.
+        """
+        return pulumi.get(self, "priority")
+
+    @property
+    @pulumi.getter(name="projectId")
+    def project_id(self) -> str:
+        """
+        Project ID.
+        """
+        return pulumi.get(self, "project_id")
+
+    @property
+    @pulumi.getter
+    def protocol(self) -> str:
+        """
+        Protocol of the mirrored traffic.
+        """
+        return pulumi.get(self, "protocol")
+
+    @property
+    @pulumi.getter(name="sourceCidrBlock")
+    def source_cidr_block(self) -> str:
+        """
+        Source CIDR block of the mirrored traffic.
+        """
+        return pulumi.get(self, "source_cidr_block")
+
+    @property
+    @pulumi.getter(name="sourcePortRange")
+    def source_port_range(self) -> str:
+        """
+        Source port range.
+        """
+        return pulumi.get(self, "source_port_range")
+
+    @property
+    @pulumi.getter(name="trafficMirrorFilterId")
+    def traffic_mirror_filter_id(self) -> str:
+        """
+        Specifies the ID of the traffic mirror filter.
+        """
+        return pulumi.get(self, "traffic_mirror_filter_id")
+
+    @property
+    @pulumi.getter(name="updatedAt")
+    def updated_at(self) -> str:
+        """
+        Time when a traffic mirror filter rule is updated.
+        """
+        return pulumi.get(self, "updated_at")
+
+
+@pulumi.output_type
+class GetTrafficMirrorSessionsTrafficMirrorSessionResult(dict):
+    def __init__(__self__, *,
+                 created_at: str,
+                 description: str,
+                 enabled: bool,
+                 id: str,
+                 name: str,
+                 packet_length: int,
+                 priority: int,
+                 project_id: str,
+                 traffic_mirror_filter_id: str,
+                 traffic_mirror_sources: Sequence[str],
+                 traffic_mirror_target_id: str,
+                 traffic_mirror_target_type: str,
+                 type: str,
+                 updated_at: str,
+                 virtual_network_id: int):
+        """
+        :param str created_at: Time when a traffic mirror session is created.
+        :param str description: Description of a traffic mirror session.
+        :param bool enabled: Specifies whether the mirror session is enabled. Defaults to **true**.
+        :param str id: Traffic mirror session ID.
+        :param str name: Specifies the traffic mirror session name used to query.
+        :param int packet_length: Specifies the maximum transmission unit (MTU).
+               The value range is **1-1460**, defaults to **96**.
+        :param int priority: Specifies the mirror session priority. The value range is **1-32766**.
+               A smaller value indicates a higher priority.
+        :param str project_id: Project ID.
+        :param str traffic_mirror_filter_id: Specifies the traffic mirror filter ID used in the session.
+        :param Sequence[str] traffic_mirror_sources: Mirror source IDs. An elastic network interface can be used as a mirror source.
+               Each mirror session can have up to 10 mirror sources by default.
+        :param str traffic_mirror_target_id: Specifies the traffic mirror target ID.
+        :param str traffic_mirror_target_type: Specifies the mirror target type. The value can be:
+               + **eni**: elastic network interface;
+               + **elb**: private network load balancer;
+        :param str type: Specifies the mirror source type. The value can be **eni**(elastic network interface).
+        :param str updated_at: Time when the traffic mirror session is updated.
+        :param int virtual_network_id: Specifies the VNI, which is used to distinguish mirrored traffic of different
+               sessions. The value range is **0-16777215**, defaults to **1**.
+        """
+        pulumi.set(__self__, "created_at", created_at)
+        pulumi.set(__self__, "description", description)
+        pulumi.set(__self__, "enabled", enabled)
+        pulumi.set(__self__, "id", id)
+        pulumi.set(__self__, "name", name)
+        pulumi.set(__self__, "packet_length", packet_length)
+        pulumi.set(__self__, "priority", priority)
+        pulumi.set(__self__, "project_id", project_id)
+        pulumi.set(__self__, "traffic_mirror_filter_id", traffic_mirror_filter_id)
+        pulumi.set(__self__, "traffic_mirror_sources", traffic_mirror_sources)
+        pulumi.set(__self__, "traffic_mirror_target_id", traffic_mirror_target_id)
+        pulumi.set(__self__, "traffic_mirror_target_type", traffic_mirror_target_type)
+        pulumi.set(__self__, "type", type)
+        pulumi.set(__self__, "updated_at", updated_at)
+        pulumi.set(__self__, "virtual_network_id", virtual_network_id)
+
+    @property
+    @pulumi.getter(name="createdAt")
+    def created_at(self) -> str:
+        """
+        Time when a traffic mirror session is created.
+        """
+        return pulumi.get(self, "created_at")
+
+    @property
+    @pulumi.getter
+    def description(self) -> str:
+        """
+        Description of a traffic mirror session.
+        """
+        return pulumi.get(self, "description")
+
+    @property
+    @pulumi.getter
+    def enabled(self) -> bool:
+        """
+        Specifies whether the mirror session is enabled. Defaults to **true**.
+        """
+        return pulumi.get(self, "enabled")
+
+    @property
+    @pulumi.getter
+    def id(self) -> str:
+        """
+        Traffic mirror session ID.
+        """
+        return pulumi.get(self, "id")
+
+    @property
+    @pulumi.getter
+    def name(self) -> str:
+        """
+        Specifies the traffic mirror session name used to query.
+        """
+        return pulumi.get(self, "name")
+
+    @property
+    @pulumi.getter(name="packetLength")
+    def packet_length(self) -> int:
+        """
+        Specifies the maximum transmission unit (MTU).
+        The value range is **1-1460**, defaults to **96**.
+        """
+        return pulumi.get(self, "packet_length")
+
+    @property
+    @pulumi.getter
+    def priority(self) -> int:
+        """
+        Specifies the mirror session priority. The value range is **1-32766**.
+        A smaller value indicates a higher priority.
+        """
+        return pulumi.get(self, "priority")
+
+    @property
+    @pulumi.getter(name="projectId")
+    def project_id(self) -> str:
+        """
+        Project ID.
+        """
+        return pulumi.get(self, "project_id")
+
+    @property
+    @pulumi.getter(name="trafficMirrorFilterId")
+    def traffic_mirror_filter_id(self) -> str:
+        """
+        Specifies the traffic mirror filter ID used in the session.
+        """
+        return pulumi.get(self, "traffic_mirror_filter_id")
+
+    @property
+    @pulumi.getter(name="trafficMirrorSources")
+    def traffic_mirror_sources(self) -> Sequence[str]:
+        """
+        Mirror source IDs. An elastic network interface can be used as a mirror source.
+        Each mirror session can have up to 10 mirror sources by default.
+        """
+        return pulumi.get(self, "traffic_mirror_sources")
+
+    @property
+    @pulumi.getter(name="trafficMirrorTargetId")
+    def traffic_mirror_target_id(self) -> str:
+        """
+        Specifies the traffic mirror target ID.
+        """
+        return pulumi.get(self, "traffic_mirror_target_id")
+
+    @property
+    @pulumi.getter(name="trafficMirrorTargetType")
+    def traffic_mirror_target_type(self) -> str:
+        """
+        Specifies the mirror target type. The value can be:
+        + **eni**: elastic network interface;
+        + **elb**: private network load balancer;
+        """
+        return pulumi.get(self, "traffic_mirror_target_type")
+
+    @property
+    @pulumi.getter
+    def type(self) -> str:
+        """
+        Specifies the mirror source type. The value can be **eni**(elastic network interface).
+        """
+        return pulumi.get(self, "type")
+
+    @property
+    @pulumi.getter(name="updatedAt")
+    def updated_at(self) -> str:
+        """
+        Time when the traffic mirror session is updated.
+        """
+        return pulumi.get(self, "updated_at")
+
+    @property
+    @pulumi.getter(name="virtualNetworkId")
+    def virtual_network_id(self) -> int:
+        """
+        Specifies the VNI, which is used to distinguish mirrored traffic of different
+        sessions. The value range is **0-16777215**, defaults to **1**.
+        """
+        return pulumi.get(self, "virtual_network_id")
+
+
+@pulumi.output_type
 class GetVpcRouteResult(dict):
     def __init__(__self__, *,
                  destination: str,
@@ -1160,15 +3939,17 @@ class GetVpcsVpcResult(dict):
                  enterprise_project_id: str,
                  id: str,
                  name: str,
+                 secondary_cidrs: Sequence[str],
                  status: str,
                  tags: Mapping[str, str]):
         """
         :param str cidr: Specifies the cidr block of the desired VPC.
-        :param str description: Indicates the description of the VPC.
+        :param str description: The description of the VPC.
         :param str enterprise_project_id: Specifies the enterprise project ID which the desired VPC belongs to.
         :param str id: Specifies the id of the desired VPC.
         :param str name: Specifies the name of the desired VPC. The value is a string of no more than 64 characters
                and can contain digits, letters, underscores (_) and hyphens (-).
+        :param Sequence[str] secondary_cidrs: The secondary CIDR blocks of the VPC.
         :param str status: Specifies the current status of the desired VPC. The value can be CREATING, OK or ERROR.
         :param Mapping[str, str] tags: Specifies the included key/value pairs which associated with the desired VPC.
         """
@@ -1177,6 +3958,7 @@ class GetVpcsVpcResult(dict):
         pulumi.set(__self__, "enterprise_project_id", enterprise_project_id)
         pulumi.set(__self__, "id", id)
         pulumi.set(__self__, "name", name)
+        pulumi.set(__self__, "secondary_cidrs", secondary_cidrs)
         pulumi.set(__self__, "status", status)
         pulumi.set(__self__, "tags", tags)
 
@@ -1192,7 +3974,7 @@ class GetVpcsVpcResult(dict):
     @pulumi.getter
     def description(self) -> str:
         """
-        Indicates the description of the VPC.
+        The description of the VPC.
         """
         return pulumi.get(self, "description")
 
@@ -1220,6 +4002,14 @@ class GetVpcsVpcResult(dict):
         and can contain digits, letters, underscores (_) and hyphens (-).
         """
         return pulumi.get(self, "name")
+
+    @property
+    @pulumi.getter(name="secondaryCidrs")
+    def secondary_cidrs(self) -> Sequence[str]:
+        """
+        The secondary CIDR blocks of the VPC.
+        """
+        return pulumi.get(self, "secondary_cidrs")
 
     @property
     @pulumi.getter

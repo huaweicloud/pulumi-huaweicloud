@@ -69,7 +69,7 @@ import (
 //
 // ## Import
 //
-// SMN topic can be imported using the `id` (topic urn), e.g.
+// SMN topic can be imported using the `id` (topic urn), e.g. bash
 //
 // ```sh
 //
@@ -79,6 +79,8 @@ import (
 type Topic struct {
 	pulumi.CustomResourceState
 
+	// schema: Internal
+	AccessPolicy pulumi.StringPtrOutput `pulumi:"accessPolicy"`
 	// Time when the topic was created.
 	CreateTime pulumi.StringOutput `pulumi:"createTime"`
 	// Specifies the topic display name, which is presented as the name of the email
@@ -147,6 +149,8 @@ func GetTopic(ctx *pulumi.Context,
 
 // Input properties used for looking up and filtering Topic resources.
 type topicState struct {
+	// schema: Internal
+	AccessPolicy *string `pulumi:"accessPolicy"`
 	// Time when the topic was created.
 	CreateTime *string `pulumi:"createTime"`
 	// Specifies the topic display name, which is presented as the name of the email
@@ -186,6 +190,8 @@ type topicState struct {
 }
 
 type TopicState struct {
+	// schema: Internal
+	AccessPolicy pulumi.StringPtrInput
 	// Time when the topic was created.
 	CreateTime pulumi.StringPtrInput
 	// Specifies the topic display name, which is presented as the name of the email
@@ -229,6 +235,8 @@ func (TopicState) ElementType() reflect.Type {
 }
 
 type topicArgs struct {
+	// schema: Internal
+	AccessPolicy *string `pulumi:"accessPolicy"`
 	// Specifies the topic display name, which is presented as the name of the email
 	// sender in an email message. The name can contains of 0 to 192 characters.
 	DisplayName *string `pulumi:"displayName"`
@@ -259,6 +267,8 @@ type topicArgs struct {
 
 // The set of arguments for constructing a Topic resource.
 type TopicArgs struct {
+	// schema: Internal
+	AccessPolicy pulumi.StringPtrInput
 	// Specifies the topic display name, which is presented as the name of the email
 	// sender in an email message. The name can contains of 0 to 192 characters.
 	DisplayName pulumi.StringPtrInput
@@ -372,6 +382,11 @@ func (o TopicOutput) ToTopicOutput() TopicOutput {
 
 func (o TopicOutput) ToTopicOutputWithContext(ctx context.Context) TopicOutput {
 	return o
+}
+
+// schema: Internal
+func (o TopicOutput) AccessPolicy() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *Topic) pulumi.StringPtrOutput { return v.AccessPolicy }).(pulumi.StringPtrOutput)
 }
 
 // Time when the topic was created.

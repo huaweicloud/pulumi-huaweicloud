@@ -30,7 +30,7 @@ class AddonArgs:
         :param pulumi.Input[str] region: Specifies the region in which to create the CCE add-on resource.
                If omitted, the provider-level region will be used. Changing this creates a new CCE add-on resource.
         :param pulumi.Input['AddonValuesArgs'] values: Specifies the add-on template installation parameters.
-               These parameters vary depending on the add-on. Structure is documented below.
+               These parameters vary depending on the add-on. The structure is documented below.
         :param pulumi.Input[str] version: Specifies the version of the add-on.
         """
         pulumi.set(__self__, "cluster_id", cluster_id)
@@ -86,7 +86,7 @@ class AddonArgs:
     def values(self) -> Optional[pulumi.Input['AddonValuesArgs']]:
         """
         Specifies the add-on template installation parameters.
-        These parameters vary depending on the add-on. Structure is documented below.
+        These parameters vary depending on the add-on. The structure is documented below.
         """
         return pulumi.get(self, "values")
 
@@ -128,7 +128,7 @@ class _AddonState:
         :param pulumi.Input[str] template_name: Specifies the name of the add-on template.
                Changing this parameter will create a new resource.
         :param pulumi.Input['AddonValuesArgs'] values: Specifies the add-on template installation parameters.
-               These parameters vary depending on the add-on. Structure is documented below.
+               These parameters vary depending on the add-on. The structure is documented below.
         :param pulumi.Input[str] version: Specifies the version of the add-on.
         """
         if cluster_id is not None:
@@ -214,7 +214,7 @@ class _AddonState:
     def values(self) -> Optional[pulumi.Input['AddonValuesArgs']]:
         """
         Specifies the add-on template installation parameters.
-        These parameters vary depending on the add-on. Structure is documented below.
+        These parameters vary depending on the add-on. The structure is documented below.
         """
         return pulumi.get(self, "values")
 
@@ -247,28 +247,12 @@ class Addon(pulumi.CustomResource):
                  version: Optional[pulumi.Input[str]] = None,
                  __props__=None):
         """
-        Provides a CCE add-on resource within HuaweiCloud.
-
-        ## Example Usage
-
-        ```python
-        import pulumi
-        import pulumi_huaweicloud as huaweicloud
-
-        config = pulumi.Config()
-        cluster_id = config.require_object("clusterId")
-        addon_test = huaweicloud.cce.Addon("addonTest",
-            cluster_id=cluster_id,
-            template_name="metrics-server",
-            version="1.0.0")
-        ```
-
         ## Import
 
-        CCE add-on can be imported using the cluster ID and add-on ID separated by a slash, e.g.
+        CCE add-on can be imported using the cluster ID and add-on ID separated by a slash, e.g.bash
 
         ```sh
-         $ pulumi import huaweicloud:Cce/addon:Addon my_addon bb6923e4-b16e-11eb-b0cd-0255ac101da1/c7ecb230-b16f-11eb-b3b6-0255ac1015a3
+         $ pulumi import huaweicloud:Cce/addon:Addon my_addon <cluster_id>/<id>
         ```
 
         :param str resource_name: The name of the resource.
@@ -280,7 +264,7 @@ class Addon(pulumi.CustomResource):
         :param pulumi.Input[str] template_name: Specifies the name of the add-on template.
                Changing this parameter will create a new resource.
         :param pulumi.Input[pulumi.InputType['AddonValuesArgs']] values: Specifies the add-on template installation parameters.
-               These parameters vary depending on the add-on. Structure is documented below.
+               These parameters vary depending on the add-on. The structure is documented below.
         :param pulumi.Input[str] version: Specifies the version of the add-on.
         """
         ...
@@ -290,28 +274,12 @@ class Addon(pulumi.CustomResource):
                  args: AddonArgs,
                  opts: Optional[pulumi.ResourceOptions] = None):
         """
-        Provides a CCE add-on resource within HuaweiCloud.
-
-        ## Example Usage
-
-        ```python
-        import pulumi
-        import pulumi_huaweicloud as huaweicloud
-
-        config = pulumi.Config()
-        cluster_id = config.require_object("clusterId")
-        addon_test = huaweicloud.cce.Addon("addonTest",
-            cluster_id=cluster_id,
-            template_name="metrics-server",
-            version="1.0.0")
-        ```
-
         ## Import
 
-        CCE add-on can be imported using the cluster ID and add-on ID separated by a slash, e.g.
+        CCE add-on can be imported using the cluster ID and add-on ID separated by a slash, e.g.bash
 
         ```sh
-         $ pulumi import huaweicloud:Cce/addon:Addon my_addon bb6923e4-b16e-11eb-b0cd-0255ac101da1/c7ecb230-b16f-11eb-b3b6-0255ac1015a3
+         $ pulumi import huaweicloud:Cce/addon:Addon my_addon <cluster_id>/<id>
         ```
 
         :param str resource_name: The name of the resource.
@@ -387,7 +355,7 @@ class Addon(pulumi.CustomResource):
         :param pulumi.Input[str] template_name: Specifies the name of the add-on template.
                Changing this parameter will create a new resource.
         :param pulumi.Input[pulumi.InputType['AddonValuesArgs']] values: Specifies the add-on template installation parameters.
-               These parameters vary depending on the add-on. Structure is documented below.
+               These parameters vary depending on the add-on. The structure is documented below.
         :param pulumi.Input[str] version: Specifies the version of the add-on.
         """
         opts = pulumi.ResourceOptions.merge(opts, pulumi.ResourceOptions(id=id))
@@ -451,7 +419,7 @@ class Addon(pulumi.CustomResource):
     def values(self) -> pulumi.Output[Optional['outputs.AddonValues']]:
         """
         Specifies the add-on template installation parameters.
-        These parameters vary depending on the add-on. Structure is documented below.
+        These parameters vary depending on the add-on. The structure is documented below.
         """
         return pulumi.get(self, "values")
 

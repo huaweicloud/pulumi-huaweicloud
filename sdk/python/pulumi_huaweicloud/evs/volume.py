@@ -28,65 +28,69 @@ class VolumeArgs:
                  device_type: Optional[pulumi.Input[str]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  image_id: Optional[pulumi.Input[str]] = None,
+                 iops: Optional[pulumi.Input[int]] = None,
                  kms_id: Optional[pulumi.Input[str]] = None,
                  multiattach: Optional[pulumi.Input[bool]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  period: Optional[pulumi.Input[int]] = None,
                  period_unit: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
+                 server_id: Optional[pulumi.Input[str]] = None,
                  size: Optional[pulumi.Input[int]] = None,
                  snapshot_id: Optional[pulumi.Input[str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None):
+                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
+                 throughput: Optional[pulumi.Input[int]] = None):
         """
         The set of arguments for constructing a Volume resource.
-        :param pulumi.Input[str] availability_zone: Specifies the availability zone for the disk. Changing this creates
-               a new disk.
-        :param pulumi.Input[str] volume_type: Specifies the disk type. Currently, the value can be SAS, SSD, GPSSD or
-               ESSD.
-               + SAS: specifies the high I/O disk type.
-               + SSD: specifies the ultra-high I/O disk type.
-               + GPSSD: specifies the general purpose SSD disk type.
-               + ESSD: Extreme SSD type.
-        :param pulumi.Input[str] auto_renew: Specifies whether auto renew is enabled.
-               Valid values are **true** and **false**.
-        :param pulumi.Input[str] backup_id: Specifies the backup ID from which to create the disk. Changing this
-               creates a new disk.
-        :param pulumi.Input[bool] cascade: Specifies the delete mode of snapshot. The default value is false. All snapshot
-               associated with the disk will also be deleted when the parameter is set to true.
+        :param pulumi.Input[str] availability_zone: Specifies the availability zone for the disk.
+        :param pulumi.Input[str] volume_type: Specifies the disk type. Valid values are as follows:
+               + **SAS**: High I/O type.
+               + **SSD**: Ultra-high I/O type.
+               + **GPSSD**: General purpose SSD type.
+               + **ESSD**: Extreme SSD type.
+               + **GPSSD2**: General purpose SSD V2 type.
+               + **ESSD2**: Extreme SSD V2 type.
+        :param pulumi.Input[str] auto_renew: Specifies whether auto-renew is enabled.
+               Valid values are **true** and **false**. Defaults to **false**.
+        :param pulumi.Input[str] backup_id: Specifies the backup ID from which to create the disk.
+        :param pulumi.Input[bool] cascade: Specifies the delete mode of snapshot. The default value is **false**. All snapshot
+               associated with the disk will also be deleted when the parameter is set to **true**.
         :param pulumi.Input[str] charging_mode: Specifies the charging mode of the disk.
                The valid values are as follows:
                + **prePaid**: the yearly/monthly billing mode.
                + **postPaid**: the pay-per-use billing mode.
-               Changing this creates a new disk.
         :param pulumi.Input[str] dedicated_storage_id: Specifies the ID of the DSS storage pool accommodating the disk.
-        :param pulumi.Input[str] description: Specifies the disk description. The value can contain a maximum of 255 bytes.
-        :param pulumi.Input[str] device_type: Specifies the device type of disk to create. Valid options are VBD and
-               SCSI. Defaults to VBD. Changing this creates a new disk.
-        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project id of the disk. Changing this
-               creates a new disk.
-        :param pulumi.Input[str] image_id: Specifies the image ID from which to create the disk. Changing this creates
-               a new disk.
-        :param pulumi.Input[str] kms_id: Specifies the Encryption KMS ID to create the disk. Changing this creates a
-               new disk.
-        :param pulumi.Input[bool] multiattach: Specifies whether the disk is shareable. The default value is false.
-               Changing this creates a new disk.
-        :param pulumi.Input[str] name: Specifies the disk name. The value can contain a maximum of 255 bytes.
+        :param pulumi.Input[str] description: Specifies the disk description. You can enter up to `85` characters.
+        :param pulumi.Input[str] device_type: Specifies the device type of disk to create. Valid options are **VBD** and
+               **SCSI**. Defaults to **VBD**.
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID of the disk.
+               For enterprise users, if omitted, default enterprise project will be used.
+        :param pulumi.Input[str] image_id: Specifies the image ID from which to create the disk.
+        :param pulumi.Input[int] iops: Specifies the IOPS(Input/Output Operations Per Second) for the volume.
+               The field is valid and required when `volume_type` is set to **GPSSD2** or **ESSD2**.
+               This field can be changed only when the disk status is Available or In-use.
+        :param pulumi.Input[str] kms_id: Specifies the Encryption KMS ID to create the disk.
+        :param pulumi.Input[bool] multiattach: Specifies whether the disk is shareable. Defaults to **false**.
+        :param pulumi.Input[str] name: Specifies the disk name. You can enter up to `64` characters.
         :param pulumi.Input[int] period: Specifies the charging period of the disk.
-               If `period_unit` is set to **month**, the value ranges from 1 to 9.
-               If `period_unit` is set to **year**, the valid value is 1.
-               This parameter is mandatory if `charging_mode` is set to **prePaid**.
-               Changing this creates a new disk.
+               + If `period_unit` is set to **month**, the value ranges from `1` to `9`.
+               + If `period_unit` is set to **year**, the valid value is `1`.
         :param pulumi.Input[str] period_unit: Specifies the charging period unit of the disk.
                Valid values are **month** and **year**. This parameter is mandatory if `charging_mode` is set to **prePaid**.
-               Changing this creates a new disk.
         :param pulumi.Input[str] region: Specifies the region in which to create the disk. If omitted, the
-               provider-level region will be used. Changing this creates a new disk.
-        :param pulumi.Input[int] size: Specifies the disk size, in GB. The valid value is range from:
-               + System disk: 1 GB to 1024 GB
-               + Data disk: 10 GB to 32768 GB
-        :param pulumi.Input[str] snapshot_id: Specifies the snapshot ID from which to create the disk. Changing this
-               creates a new disk.
+               provider-level region will be used. Changing this parameter will create a new resource.
+        :param pulumi.Input[str] server_id: Specifies the server ID to which the cloud volume is to be mounted.
+               After specifying the value of this field, the cloud volume will be automatically attached on the cloud server.
+               The charging_mode of the created cloud volume will be consistent with that of the cloud server.
+               Currently, only ECS cloud-servers are supported, and BMS bare metal cloud-servers are not supported yet.
+        :param pulumi.Input[int] size: Specifies the disk size, in GB.
+               For system disk, the valid value ranges from `1` GB to `1,024` GB.
+               For data disk, the valid value ranges from `10` GB to `32,768` GB.
+        :param pulumi.Input[str] snapshot_id: Specifies the snapshot ID from which to create the disk.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the disk.
+        :param pulumi.Input[int] throughput: Specifies the throughput for the volume. The Unit is MiB/s.
+               The field is valid and required when `volume_type` is set to **GPSSD2**.
+               This field can be changed only when the disk status is Available or In-use.
         """
         pulumi.set(__self__, "availability_zone", availability_zone)
         pulumi.set(__self__, "volume_type", volume_type)
@@ -113,6 +117,8 @@ class VolumeArgs:
             pulumi.set(__self__, "enterprise_project_id", enterprise_project_id)
         if image_id is not None:
             pulumi.set(__self__, "image_id", image_id)
+        if iops is not None:
+            pulumi.set(__self__, "iops", iops)
         if kms_id is not None:
             pulumi.set(__self__, "kms_id", kms_id)
         if multiattach is not None:
@@ -125,19 +131,22 @@ class VolumeArgs:
             pulumi.set(__self__, "period_unit", period_unit)
         if region is not None:
             pulumi.set(__self__, "region", region)
+        if server_id is not None:
+            pulumi.set(__self__, "server_id", server_id)
         if size is not None:
             pulumi.set(__self__, "size", size)
         if snapshot_id is not None:
             pulumi.set(__self__, "snapshot_id", snapshot_id)
         if tags is not None:
             pulumi.set(__self__, "tags", tags)
+        if throughput is not None:
+            pulumi.set(__self__, "throughput", throughput)
 
     @property
     @pulumi.getter(name="availabilityZone")
     def availability_zone(self) -> pulumi.Input[str]:
         """
-        Specifies the availability zone for the disk. Changing this creates
-        a new disk.
+        Specifies the availability zone for the disk.
         """
         return pulumi.get(self, "availability_zone")
 
@@ -149,12 +158,13 @@ class VolumeArgs:
     @pulumi.getter(name="volumeType")
     def volume_type(self) -> pulumi.Input[str]:
         """
-        Specifies the disk type. Currently, the value can be SAS, SSD, GPSSD or
-        ESSD.
-        + SAS: specifies the high I/O disk type.
-        + SSD: specifies the ultra-high I/O disk type.
-        + GPSSD: specifies the general purpose SSD disk type.
-        + ESSD: Extreme SSD type.
+        Specifies the disk type. Valid values are as follows:
+        + **SAS**: High I/O type.
+        + **SSD**: Ultra-high I/O type.
+        + **GPSSD**: General purpose SSD type.
+        + **ESSD**: Extreme SSD type.
+        + **GPSSD2**: General purpose SSD V2 type.
+        + **ESSD2**: Extreme SSD V2 type.
         """
         return pulumi.get(self, "volume_type")
 
@@ -175,8 +185,8 @@ class VolumeArgs:
     @pulumi.getter(name="autoRenew")
     def auto_renew(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies whether auto renew is enabled.
-        Valid values are **true** and **false**.
+        Specifies whether auto-renew is enabled.
+        Valid values are **true** and **false**. Defaults to **false**.
         """
         return pulumi.get(self, "auto_renew")
 
@@ -188,8 +198,7 @@ class VolumeArgs:
     @pulumi.getter(name="backupId")
     def backup_id(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the backup ID from which to create the disk. Changing this
-        creates a new disk.
+        Specifies the backup ID from which to create the disk.
         """
         return pulumi.get(self, "backup_id")
 
@@ -201,8 +210,8 @@ class VolumeArgs:
     @pulumi.getter
     def cascade(self) -> Optional[pulumi.Input[bool]]:
         """
-        Specifies the delete mode of snapshot. The default value is false. All snapshot
-        associated with the disk will also be deleted when the parameter is set to true.
+        Specifies the delete mode of snapshot. The default value is **false**. All snapshot
+        associated with the disk will also be deleted when the parameter is set to **true**.
         """
         return pulumi.get(self, "cascade")
 
@@ -218,7 +227,6 @@ class VolumeArgs:
         The valid values are as follows:
         + **prePaid**: the yearly/monthly billing mode.
         + **postPaid**: the pay-per-use billing mode.
-        Changing this creates a new disk.
         """
         return pulumi.get(self, "charging_mode")
 
@@ -242,7 +250,7 @@ class VolumeArgs:
     @pulumi.getter
     def description(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the disk description. The value can contain a maximum of 255 bytes.
+        Specifies the disk description. You can enter up to `85` characters.
         """
         return pulumi.get(self, "description")
 
@@ -254,8 +262,8 @@ class VolumeArgs:
     @pulumi.getter(name="deviceType")
     def device_type(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the device type of disk to create. Valid options are VBD and
-        SCSI. Defaults to VBD. Changing this creates a new disk.
+        Specifies the device type of disk to create. Valid options are **VBD** and
+        **SCSI**. Defaults to **VBD**.
         """
         return pulumi.get(self, "device_type")
 
@@ -267,8 +275,8 @@ class VolumeArgs:
     @pulumi.getter(name="enterpriseProjectId")
     def enterprise_project_id(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the enterprise project id of the disk. Changing this
-        creates a new disk.
+        Specifies the enterprise project ID of the disk.
+        For enterprise users, if omitted, default enterprise project will be used.
         """
         return pulumi.get(self, "enterprise_project_id")
 
@@ -280,8 +288,7 @@ class VolumeArgs:
     @pulumi.getter(name="imageId")
     def image_id(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the image ID from which to create the disk. Changing this creates
-        a new disk.
+        Specifies the image ID from which to create the disk.
         """
         return pulumi.get(self, "image_id")
 
@@ -290,11 +297,24 @@ class VolumeArgs:
         pulumi.set(self, "image_id", value)
 
     @property
+    @pulumi.getter
+    def iops(self) -> Optional[pulumi.Input[int]]:
+        """
+        Specifies the IOPS(Input/Output Operations Per Second) for the volume.
+        The field is valid and required when `volume_type` is set to **GPSSD2** or **ESSD2**.
+        This field can be changed only when the disk status is Available or In-use.
+        """
+        return pulumi.get(self, "iops")
+
+    @iops.setter
+    def iops(self, value: Optional[pulumi.Input[int]]):
+        pulumi.set(self, "iops", value)
+
+    @property
     @pulumi.getter(name="kmsId")
     def kms_id(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the Encryption KMS ID to create the disk. Changing this creates a
-        new disk.
+        Specifies the Encryption KMS ID to create the disk.
         """
         return pulumi.get(self, "kms_id")
 
@@ -306,8 +326,7 @@ class VolumeArgs:
     @pulumi.getter
     def multiattach(self) -> Optional[pulumi.Input[bool]]:
         """
-        Specifies whether the disk is shareable. The default value is false.
-        Changing this creates a new disk.
+        Specifies whether the disk is shareable. Defaults to **false**.
         """
         return pulumi.get(self, "multiattach")
 
@@ -319,7 +338,7 @@ class VolumeArgs:
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the disk name. The value can contain a maximum of 255 bytes.
+        Specifies the disk name. You can enter up to `64` characters.
         """
         return pulumi.get(self, "name")
 
@@ -332,10 +351,8 @@ class VolumeArgs:
     def period(self) -> Optional[pulumi.Input[int]]:
         """
         Specifies the charging period of the disk.
-        If `period_unit` is set to **month**, the value ranges from 1 to 9.
-        If `period_unit` is set to **year**, the valid value is 1.
-        This parameter is mandatory if `charging_mode` is set to **prePaid**.
-        Changing this creates a new disk.
+        + If `period_unit` is set to **month**, the value ranges from `1` to `9`.
+        + If `period_unit` is set to **year**, the valid value is `1`.
         """
         return pulumi.get(self, "period")
 
@@ -349,7 +366,6 @@ class VolumeArgs:
         """
         Specifies the charging period unit of the disk.
         Valid values are **month** and **year**. This parameter is mandatory if `charging_mode` is set to **prePaid**.
-        Changing this creates a new disk.
         """
         return pulumi.get(self, "period_unit")
 
@@ -362,7 +378,7 @@ class VolumeArgs:
     def region(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the region in which to create the disk. If omitted, the
-        provider-level region will be used. Changing this creates a new disk.
+        provider-level region will be used. Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "region")
 
@@ -371,12 +387,27 @@ class VolumeArgs:
         pulumi.set(self, "region", value)
 
     @property
+    @pulumi.getter(name="serverId")
+    def server_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the server ID to which the cloud volume is to be mounted.
+        After specifying the value of this field, the cloud volume will be automatically attached on the cloud server.
+        The charging_mode of the created cloud volume will be consistent with that of the cloud server.
+        Currently, only ECS cloud-servers are supported, and BMS bare metal cloud-servers are not supported yet.
+        """
+        return pulumi.get(self, "server_id")
+
+    @server_id.setter
+    def server_id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "server_id", value)
+
+    @property
     @pulumi.getter
     def size(self) -> Optional[pulumi.Input[int]]:
         """
-        Specifies the disk size, in GB. The valid value is range from:
-        + System disk: 1 GB to 1024 GB
-        + Data disk: 10 GB to 32768 GB
+        Specifies the disk size, in GB.
+        For system disk, the valid value ranges from `1` GB to `1,024` GB.
+        For data disk, the valid value ranges from `10` GB to `32,768` GB.
         """
         return pulumi.get(self, "size")
 
@@ -388,8 +419,7 @@ class VolumeArgs:
     @pulumi.getter(name="snapshotId")
     def snapshot_id(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the snapshot ID from which to create the disk. Changing this
-        creates a new disk.
+        Specifies the snapshot ID from which to create the disk.
         """
         return pulumi.get(self, "snapshot_id")
 
@@ -409,6 +439,20 @@ class VolumeArgs:
     def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]):
         pulumi.set(self, "tags", value)
 
+    @property
+    @pulumi.getter
+    def throughput(self) -> Optional[pulumi.Input[int]]:
+        """
+        Specifies the throughput for the volume. The Unit is MiB/s.
+        The field is valid and required when `volume_type` is set to **GPSSD2**.
+        This field can be changed only when the disk status is Available or In-use.
+        """
+        return pulumi.get(self, "throughput")
+
+    @throughput.setter
+    def throughput(self, value: Optional[pulumi.Input[int]]):
+        pulumi.set(self, "throughput", value)
+
 
 @pulumi.input_type
 class _VolumeState:
@@ -426,70 +470,77 @@ class _VolumeState:
                  device_type: Optional[pulumi.Input[str]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  image_id: Optional[pulumi.Input[str]] = None,
+                 iops: Optional[pulumi.Input[int]] = None,
                  kms_id: Optional[pulumi.Input[str]] = None,
                  multiattach: Optional[pulumi.Input[bool]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  period: Optional[pulumi.Input[int]] = None,
                  period_unit: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
+                 server_id: Optional[pulumi.Input[str]] = None,
                  size: Optional[pulumi.Input[int]] = None,
                  snapshot_id: Optional[pulumi.Input[str]] = None,
+                 status: Optional[pulumi.Input[str]] = None,
                  tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
+                 throughput: Optional[pulumi.Input[int]] = None,
                  volume_type: Optional[pulumi.Input[str]] = None,
                  wwn: Optional[pulumi.Input[str]] = None):
         """
         Input properties used for looking up and filtering Volume resources.
-        :param pulumi.Input[Sequence[pulumi.Input['VolumeAttachmentArgs']]] attachments: If a disk is attached to an instance, this attribute will display the Attachment ID, Instance ID, and
-               the Device as the Instance sees it. The object structure is documented below.
-        :param pulumi.Input[str] auto_renew: Specifies whether auto renew is enabled.
-               Valid values are **true** and **false**.
-        :param pulumi.Input[str] availability_zone: Specifies the availability zone for the disk. Changing this creates
-               a new disk.
-        :param pulumi.Input[str] backup_id: Specifies the backup ID from which to create the disk. Changing this
-               creates a new disk.
-        :param pulumi.Input[bool] cascade: Specifies the delete mode of snapshot. The default value is false. All snapshot
-               associated with the disk will also be deleted when the parameter is set to true.
+        :param pulumi.Input[Sequence[pulumi.Input['VolumeAttachmentArgs']]] attachments: If a disk is attached to an instance, this attribute will display the attachment ID, instance ID, and
+               the device as the instance sees it. The attachment structure is documented below.
+        :param pulumi.Input[str] auto_renew: Specifies whether auto-renew is enabled.
+               Valid values are **true** and **false**. Defaults to **false**.
+        :param pulumi.Input[str] availability_zone: Specifies the availability zone for the disk.
+        :param pulumi.Input[str] backup_id: Specifies the backup ID from which to create the disk.
+        :param pulumi.Input[bool] cascade: Specifies the delete mode of snapshot. The default value is **false**. All snapshot
+               associated with the disk will also be deleted when the parameter is set to **true**.
         :param pulumi.Input[str] charging_mode: Specifies the charging mode of the disk.
                The valid values are as follows:
                + **prePaid**: the yearly/monthly billing mode.
                + **postPaid**: the pay-per-use billing mode.
-               Changing this creates a new disk.
         :param pulumi.Input[str] dedicated_storage_id: Specifies the ID of the DSS storage pool accommodating the disk.
         :param pulumi.Input[str] dedicated_storage_name: The name of the DSS storage pool accommodating the disk.
-        :param pulumi.Input[str] description: Specifies the disk description. The value can contain a maximum of 255 bytes.
-        :param pulumi.Input[str] device_type: Specifies the device type of disk to create. Valid options are VBD and
-               SCSI. Defaults to VBD. Changing this creates a new disk.
-        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project id of the disk. Changing this
-               creates a new disk.
-        :param pulumi.Input[str] image_id: Specifies the image ID from which to create the disk. Changing this creates
-               a new disk.
-        :param pulumi.Input[str] kms_id: Specifies the Encryption KMS ID to create the disk. Changing this creates a
-               new disk.
-        :param pulumi.Input[bool] multiattach: Specifies whether the disk is shareable. The default value is false.
-               Changing this creates a new disk.
-        :param pulumi.Input[str] name: Specifies the disk name. The value can contain a maximum of 255 bytes.
+        :param pulumi.Input[str] description: Specifies the disk description. You can enter up to `85` characters.
+        :param pulumi.Input[str] device_type: Specifies the device type of disk to create. Valid options are **VBD** and
+               **SCSI**. Defaults to **VBD**.
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID of the disk.
+               For enterprise users, if omitted, default enterprise project will be used.
+        :param pulumi.Input[str] image_id: Specifies the image ID from which to create the disk.
+        :param pulumi.Input[int] iops: Specifies the IOPS(Input/Output Operations Per Second) for the volume.
+               The field is valid and required when `volume_type` is set to **GPSSD2** or **ESSD2**.
+               This field can be changed only when the disk status is Available or In-use.
+        :param pulumi.Input[str] kms_id: Specifies the Encryption KMS ID to create the disk.
+        :param pulumi.Input[bool] multiattach: Specifies whether the disk is shareable. Defaults to **false**.
+        :param pulumi.Input[str] name: Specifies the disk name. You can enter up to `64` characters.
         :param pulumi.Input[int] period: Specifies the charging period of the disk.
-               If `period_unit` is set to **month**, the value ranges from 1 to 9.
-               If `period_unit` is set to **year**, the valid value is 1.
-               This parameter is mandatory if `charging_mode` is set to **prePaid**.
-               Changing this creates a new disk.
+               + If `period_unit` is set to **month**, the value ranges from `1` to `9`.
+               + If `period_unit` is set to **year**, the valid value is `1`.
         :param pulumi.Input[str] period_unit: Specifies the charging period unit of the disk.
                Valid values are **month** and **year**. This parameter is mandatory if `charging_mode` is set to **prePaid**.
-               Changing this creates a new disk.
         :param pulumi.Input[str] region: Specifies the region in which to create the disk. If omitted, the
-               provider-level region will be used. Changing this creates a new disk.
-        :param pulumi.Input[int] size: Specifies the disk size, in GB. The valid value is range from:
-               + System disk: 1 GB to 1024 GB
-               + Data disk: 10 GB to 32768 GB
-        :param pulumi.Input[str] snapshot_id: Specifies the snapshot ID from which to create the disk. Changing this
-               creates a new disk.
+               provider-level region will be used. Changing this parameter will create a new resource.
+        :param pulumi.Input[str] server_id: Specifies the server ID to which the cloud volume is to be mounted.
+               After specifying the value of this field, the cloud volume will be automatically attached on the cloud server.
+               The charging_mode of the created cloud volume will be consistent with that of the cloud server.
+               Currently, only ECS cloud-servers are supported, and BMS bare metal cloud-servers are not supported yet.
+        :param pulumi.Input[int] size: Specifies the disk size, in GB.
+               For system disk, the valid value ranges from `1` GB to `1,024` GB.
+               For data disk, the valid value ranges from `10` GB to `32,768` GB.
+        :param pulumi.Input[str] snapshot_id: Specifies the snapshot ID from which to create the disk.
+        :param pulumi.Input[str] status: The disk status.
+               Please refer to [EVS Disk Status](https://support.huaweicloud.com/intl/en-us/api-evs/evs_04_0040.html).
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the disk.
-        :param pulumi.Input[str] volume_type: Specifies the disk type. Currently, the value can be SAS, SSD, GPSSD or
-               ESSD.
-               + SAS: specifies the high I/O disk type.
-               + SSD: specifies the ultra-high I/O disk type.
-               + GPSSD: specifies the general purpose SSD disk type.
-               + ESSD: Extreme SSD type.
+        :param pulumi.Input[int] throughput: Specifies the throughput for the volume. The Unit is MiB/s.
+               The field is valid and required when `volume_type` is set to **GPSSD2**.
+               This field can be changed only when the disk status is Available or In-use.
+        :param pulumi.Input[str] volume_type: Specifies the disk type. Valid values are as follows:
+               + **SAS**: High I/O type.
+               + **SSD**: Ultra-high I/O type.
+               + **GPSSD**: General purpose SSD type.
+               + **ESSD**: Extreme SSD type.
+               + **GPSSD2**: General purpose SSD V2 type.
+               + **ESSD2**: Extreme SSD V2 type.
         :param pulumi.Input[str] wwn: The unique identifier used for mounting the EVS disk.
         """
         if attachments is not None:
@@ -521,6 +572,8 @@ class _VolumeState:
             pulumi.set(__self__, "enterprise_project_id", enterprise_project_id)
         if image_id is not None:
             pulumi.set(__self__, "image_id", image_id)
+        if iops is not None:
+            pulumi.set(__self__, "iops", iops)
         if kms_id is not None:
             pulumi.set(__self__, "kms_id", kms_id)
         if multiattach is not None:
@@ -533,12 +586,18 @@ class _VolumeState:
             pulumi.set(__self__, "period_unit", period_unit)
         if region is not None:
             pulumi.set(__self__, "region", region)
+        if server_id is not None:
+            pulumi.set(__self__, "server_id", server_id)
         if size is not None:
             pulumi.set(__self__, "size", size)
         if snapshot_id is not None:
             pulumi.set(__self__, "snapshot_id", snapshot_id)
+        if status is not None:
+            pulumi.set(__self__, "status", status)
         if tags is not None:
             pulumi.set(__self__, "tags", tags)
+        if throughput is not None:
+            pulumi.set(__self__, "throughput", throughput)
         if volume_type is not None:
             pulumi.set(__self__, "volume_type", volume_type)
         if wwn is not None:
@@ -548,8 +607,8 @@ class _VolumeState:
     @pulumi.getter
     def attachments(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['VolumeAttachmentArgs']]]]:
         """
-        If a disk is attached to an instance, this attribute will display the Attachment ID, Instance ID, and
-        the Device as the Instance sees it. The object structure is documented below.
+        If a disk is attached to an instance, this attribute will display the attachment ID, instance ID, and
+        the device as the instance sees it. The attachment structure is documented below.
         """
         return pulumi.get(self, "attachments")
 
@@ -570,8 +629,8 @@ class _VolumeState:
     @pulumi.getter(name="autoRenew")
     def auto_renew(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies whether auto renew is enabled.
-        Valid values are **true** and **false**.
+        Specifies whether auto-renew is enabled.
+        Valid values are **true** and **false**. Defaults to **false**.
         """
         return pulumi.get(self, "auto_renew")
 
@@ -583,8 +642,7 @@ class _VolumeState:
     @pulumi.getter(name="availabilityZone")
     def availability_zone(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the availability zone for the disk. Changing this creates
-        a new disk.
+        Specifies the availability zone for the disk.
         """
         return pulumi.get(self, "availability_zone")
 
@@ -596,8 +654,7 @@ class _VolumeState:
     @pulumi.getter(name="backupId")
     def backup_id(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the backup ID from which to create the disk. Changing this
-        creates a new disk.
+        Specifies the backup ID from which to create the disk.
         """
         return pulumi.get(self, "backup_id")
 
@@ -609,8 +666,8 @@ class _VolumeState:
     @pulumi.getter
     def cascade(self) -> Optional[pulumi.Input[bool]]:
         """
-        Specifies the delete mode of snapshot. The default value is false. All snapshot
-        associated with the disk will also be deleted when the parameter is set to true.
+        Specifies the delete mode of snapshot. The default value is **false**. All snapshot
+        associated with the disk will also be deleted when the parameter is set to **true**.
         """
         return pulumi.get(self, "cascade")
 
@@ -626,7 +683,6 @@ class _VolumeState:
         The valid values are as follows:
         + **prePaid**: the yearly/monthly billing mode.
         + **postPaid**: the pay-per-use billing mode.
-        Changing this creates a new disk.
         """
         return pulumi.get(self, "charging_mode")
 
@@ -662,7 +718,7 @@ class _VolumeState:
     @pulumi.getter
     def description(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the disk description. The value can contain a maximum of 255 bytes.
+        Specifies the disk description. You can enter up to `85` characters.
         """
         return pulumi.get(self, "description")
 
@@ -674,8 +730,8 @@ class _VolumeState:
     @pulumi.getter(name="deviceType")
     def device_type(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the device type of disk to create. Valid options are VBD and
-        SCSI. Defaults to VBD. Changing this creates a new disk.
+        Specifies the device type of disk to create. Valid options are **VBD** and
+        **SCSI**. Defaults to **VBD**.
         """
         return pulumi.get(self, "device_type")
 
@@ -687,8 +743,8 @@ class _VolumeState:
     @pulumi.getter(name="enterpriseProjectId")
     def enterprise_project_id(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the enterprise project id of the disk. Changing this
-        creates a new disk.
+        Specifies the enterprise project ID of the disk.
+        For enterprise users, if omitted, default enterprise project will be used.
         """
         return pulumi.get(self, "enterprise_project_id")
 
@@ -700,8 +756,7 @@ class _VolumeState:
     @pulumi.getter(name="imageId")
     def image_id(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the image ID from which to create the disk. Changing this creates
-        a new disk.
+        Specifies the image ID from which to create the disk.
         """
         return pulumi.get(self, "image_id")
 
@@ -710,11 +765,24 @@ class _VolumeState:
         pulumi.set(self, "image_id", value)
 
     @property
+    @pulumi.getter
+    def iops(self) -> Optional[pulumi.Input[int]]:
+        """
+        Specifies the IOPS(Input/Output Operations Per Second) for the volume.
+        The field is valid and required when `volume_type` is set to **GPSSD2** or **ESSD2**.
+        This field can be changed only when the disk status is Available or In-use.
+        """
+        return pulumi.get(self, "iops")
+
+    @iops.setter
+    def iops(self, value: Optional[pulumi.Input[int]]):
+        pulumi.set(self, "iops", value)
+
+    @property
     @pulumi.getter(name="kmsId")
     def kms_id(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the Encryption KMS ID to create the disk. Changing this creates a
-        new disk.
+        Specifies the Encryption KMS ID to create the disk.
         """
         return pulumi.get(self, "kms_id")
 
@@ -726,8 +794,7 @@ class _VolumeState:
     @pulumi.getter
     def multiattach(self) -> Optional[pulumi.Input[bool]]:
         """
-        Specifies whether the disk is shareable. The default value is false.
-        Changing this creates a new disk.
+        Specifies whether the disk is shareable. Defaults to **false**.
         """
         return pulumi.get(self, "multiattach")
 
@@ -739,7 +806,7 @@ class _VolumeState:
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the disk name. The value can contain a maximum of 255 bytes.
+        Specifies the disk name. You can enter up to `64` characters.
         """
         return pulumi.get(self, "name")
 
@@ -752,10 +819,8 @@ class _VolumeState:
     def period(self) -> Optional[pulumi.Input[int]]:
         """
         Specifies the charging period of the disk.
-        If `period_unit` is set to **month**, the value ranges from 1 to 9.
-        If `period_unit` is set to **year**, the valid value is 1.
-        This parameter is mandatory if `charging_mode` is set to **prePaid**.
-        Changing this creates a new disk.
+        + If `period_unit` is set to **month**, the value ranges from `1` to `9`.
+        + If `period_unit` is set to **year**, the valid value is `1`.
         """
         return pulumi.get(self, "period")
 
@@ -769,7 +834,6 @@ class _VolumeState:
         """
         Specifies the charging period unit of the disk.
         Valid values are **month** and **year**. This parameter is mandatory if `charging_mode` is set to **prePaid**.
-        Changing this creates a new disk.
         """
         return pulumi.get(self, "period_unit")
 
@@ -782,7 +846,7 @@ class _VolumeState:
     def region(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the region in which to create the disk. If omitted, the
-        provider-level region will be used. Changing this creates a new disk.
+        provider-level region will be used. Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "region")
 
@@ -791,12 +855,27 @@ class _VolumeState:
         pulumi.set(self, "region", value)
 
     @property
+    @pulumi.getter(name="serverId")
+    def server_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the server ID to which the cloud volume is to be mounted.
+        After specifying the value of this field, the cloud volume will be automatically attached on the cloud server.
+        The charging_mode of the created cloud volume will be consistent with that of the cloud server.
+        Currently, only ECS cloud-servers are supported, and BMS bare metal cloud-servers are not supported yet.
+        """
+        return pulumi.get(self, "server_id")
+
+    @server_id.setter
+    def server_id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "server_id", value)
+
+    @property
     @pulumi.getter
     def size(self) -> Optional[pulumi.Input[int]]:
         """
-        Specifies the disk size, in GB. The valid value is range from:
-        + System disk: 1 GB to 1024 GB
-        + Data disk: 10 GB to 32768 GB
+        Specifies the disk size, in GB.
+        For system disk, the valid value ranges from `1` GB to `1,024` GB.
+        For data disk, the valid value ranges from `10` GB to `32,768` GB.
         """
         return pulumi.get(self, "size")
 
@@ -808,14 +887,26 @@ class _VolumeState:
     @pulumi.getter(name="snapshotId")
     def snapshot_id(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the snapshot ID from which to create the disk. Changing this
-        creates a new disk.
+        Specifies the snapshot ID from which to create the disk.
         """
         return pulumi.get(self, "snapshot_id")
 
     @snapshot_id.setter
     def snapshot_id(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "snapshot_id", value)
+
+    @property
+    @pulumi.getter
+    def status(self) -> Optional[pulumi.Input[str]]:
+        """
+        The disk status.
+        Please refer to [EVS Disk Status](https://support.huaweicloud.com/intl/en-us/api-evs/evs_04_0040.html).
+        """
+        return pulumi.get(self, "status")
+
+    @status.setter
+    def status(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "status", value)
 
     @property
     @pulumi.getter
@@ -830,15 +921,30 @@ class _VolumeState:
         pulumi.set(self, "tags", value)
 
     @property
+    @pulumi.getter
+    def throughput(self) -> Optional[pulumi.Input[int]]:
+        """
+        Specifies the throughput for the volume. The Unit is MiB/s.
+        The field is valid and required when `volume_type` is set to **GPSSD2**.
+        This field can be changed only when the disk status is Available or In-use.
+        """
+        return pulumi.get(self, "throughput")
+
+    @throughput.setter
+    def throughput(self, value: Optional[pulumi.Input[int]]):
+        pulumi.set(self, "throughput", value)
+
+    @property
     @pulumi.getter(name="volumeType")
     def volume_type(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the disk type. Currently, the value can be SAS, SSD, GPSSD or
-        ESSD.
-        + SAS: specifies the high I/O disk type.
-        + SSD: specifies the ultra-high I/O disk type.
-        + GPSSD: specifies the general purpose SSD disk type.
-        + ESSD: Extreme SSD type.
+        Specifies the disk type. Valid values are as follows:
+        + **SAS**: High I/O type.
+        + **SSD**: Ultra-high I/O type.
+        + **GPSSD**: General purpose SSD type.
+        + **ESSD**: Extreme SSD type.
+        + **GPSSD2**: General purpose SSD V2 type.
+        + **ESSD2**: Extreme SSD V2 type.
         """
         return pulumi.get(self, "volume_type")
 
@@ -875,15 +981,18 @@ class Volume(pulumi.CustomResource):
                  device_type: Optional[pulumi.Input[str]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  image_id: Optional[pulumi.Input[str]] = None,
+                 iops: Optional[pulumi.Input[int]] = None,
                  kms_id: Optional[pulumi.Input[str]] = None,
                  multiattach: Optional[pulumi.Input[bool]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  period: Optional[pulumi.Input[int]] = None,
                  period_unit: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
+                 server_id: Optional[pulumi.Input[str]] = None,
                  size: Optional[pulumi.Input[int]] = None,
                  snapshot_id: Optional[pulumi.Input[str]] = None,
                  tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
+                 throughput: Optional[pulumi.Input[int]] = None,
                  volume_type: Optional[pulumi.Input[str]] = None,
                  __props__=None):
         """
@@ -895,15 +1004,17 @@ class Volume(pulumi.CustomResource):
         import pulumi
         import pulumi_huaweicloud as huaweicloud
 
+        config = pulumi.Config()
+        availability_zone = config.require_object("availabilityZone")
         volume = huaweicloud.evs.Volume("volume",
-            availability_zone="cn-north-4a",
             description="my volume",
+            volume_type="SAS",
             size=20,
+            availability_zone=availability_zone,
             tags={
                 "foo": "bar",
                 "key": "value",
-            },
-            volume_type="SAS")
+            })
         ```
         ### With KMS Encryption
 
@@ -911,12 +1022,47 @@ class Volume(pulumi.CustomResource):
         import pulumi
         import pulumi_huaweicloud as huaweicloud
 
+        config = pulumi.Config()
+        availability_zone = config.require_object("availabilityZone")
         volume = huaweicloud.evs.Volume("volume",
             description="my volume",
             volume_type="SAS",
             size=20,
             kms_id=var["kms_id"],
-            availability_zone="cn-north-4a",
+            availability_zone=availability_zone,
+            tags={
+                "foo": "bar",
+                "key": "value",
+            })
+        ```
+        ### With Server_id
+
+        ```python
+        import pulumi
+        import pulumi_huaweicloud as huaweicloud
+
+        config = pulumi.Config()
+        image_id = config.require_object("imageId")
+        flavor_id = config.require_object("flavorId")
+        key_pair = config.require_object("keyPair")
+        security_group_id = config.require_object("securityGroupId")
+        availability_zone = config.require_object("availabilityZone")
+        subnet_id = config.require_object("subnetId")
+        myinstance = huaweicloud.ecs.Instance("myinstance",
+            image_id=image_id,
+            flavor_id=flavor_id,
+            key_pair=key_pair,
+            security_group_ids=[security_group_id],
+            availability_zone=availability_zone,
+            networks=[huaweicloud.ecs.InstanceNetworkArgs(
+                uuid=subnet_id,
+            )])
+        volume = huaweicloud.evs.Volume("volume",
+            description="my volume",
+            volume_type="SAS",
+            size=20,
+            availability_zone=availability_zone,
+            server_id=myinstance.id,
             tags={
                 "foo": "bar",
                 "key": "value",
@@ -925,13 +1071,13 @@ class Volume(pulumi.CustomResource):
 
         ## Import
 
-        Volumes can be imported using the `id`, e.g.
+        Volumes can be imported using the `id`, e.g. bash
 
         ```sh
-         $ pulumi import huaweicloud:Evs/volume:Volume volume_1 14a80bc7-c12c-4fe0-a38a-cb77eeac9bd6
+         $ pulumi import huaweicloud:Evs/volume:Volume test <id>
         ```
 
-         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include**cascade**, **period_unit**, **period** and **auto_renew**. It is generally recommended running terraform plan after importing an disk. You can then decide if changes should be applied to the disk, or the resource definition should be updated to align with the disk. Also you can ignore changes as below. resource "huaweicloud_evs_volume" "volume_1" {
+         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`cascade`, `period_unit`, `period`, `server_id`, `auto_renew`, and `charging_mode`. It is generally recommended running terraform plan after importing a disk. You can then decide if changes should be applied to the disk, or the resource definition should be updated to align with the disk. Also, you can ignore changes as below. hcl resource "huaweicloud_evs_volume" "test" {
 
          ...
 
@@ -939,62 +1085,63 @@ class Volume(pulumi.CustomResource):
 
          ignore_changes = [
 
-         cascade,
+         cascade, period_unit, period, server_id, auto_renew, charging_mode,
 
-         ]
+        ]
 
          } }
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[str] auto_renew: Specifies whether auto renew is enabled.
-               Valid values are **true** and **false**.
-        :param pulumi.Input[str] availability_zone: Specifies the availability zone for the disk. Changing this creates
-               a new disk.
-        :param pulumi.Input[str] backup_id: Specifies the backup ID from which to create the disk. Changing this
-               creates a new disk.
-        :param pulumi.Input[bool] cascade: Specifies the delete mode of snapshot. The default value is false. All snapshot
-               associated with the disk will also be deleted when the parameter is set to true.
+        :param pulumi.Input[str] auto_renew: Specifies whether auto-renew is enabled.
+               Valid values are **true** and **false**. Defaults to **false**.
+        :param pulumi.Input[str] availability_zone: Specifies the availability zone for the disk.
+        :param pulumi.Input[str] backup_id: Specifies the backup ID from which to create the disk.
+        :param pulumi.Input[bool] cascade: Specifies the delete mode of snapshot. The default value is **false**. All snapshot
+               associated with the disk will also be deleted when the parameter is set to **true**.
         :param pulumi.Input[str] charging_mode: Specifies the charging mode of the disk.
                The valid values are as follows:
                + **prePaid**: the yearly/monthly billing mode.
                + **postPaid**: the pay-per-use billing mode.
-               Changing this creates a new disk.
         :param pulumi.Input[str] dedicated_storage_id: Specifies the ID of the DSS storage pool accommodating the disk.
-        :param pulumi.Input[str] description: Specifies the disk description. The value can contain a maximum of 255 bytes.
-        :param pulumi.Input[str] device_type: Specifies the device type of disk to create. Valid options are VBD and
-               SCSI. Defaults to VBD. Changing this creates a new disk.
-        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project id of the disk. Changing this
-               creates a new disk.
-        :param pulumi.Input[str] image_id: Specifies the image ID from which to create the disk. Changing this creates
-               a new disk.
-        :param pulumi.Input[str] kms_id: Specifies the Encryption KMS ID to create the disk. Changing this creates a
-               new disk.
-        :param pulumi.Input[bool] multiattach: Specifies whether the disk is shareable. The default value is false.
-               Changing this creates a new disk.
-        :param pulumi.Input[str] name: Specifies the disk name. The value can contain a maximum of 255 bytes.
+        :param pulumi.Input[str] description: Specifies the disk description. You can enter up to `85` characters.
+        :param pulumi.Input[str] device_type: Specifies the device type of disk to create. Valid options are **VBD** and
+               **SCSI**. Defaults to **VBD**.
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID of the disk.
+               For enterprise users, if omitted, default enterprise project will be used.
+        :param pulumi.Input[str] image_id: Specifies the image ID from which to create the disk.
+        :param pulumi.Input[int] iops: Specifies the IOPS(Input/Output Operations Per Second) for the volume.
+               The field is valid and required when `volume_type` is set to **GPSSD2** or **ESSD2**.
+               This field can be changed only when the disk status is Available or In-use.
+        :param pulumi.Input[str] kms_id: Specifies the Encryption KMS ID to create the disk.
+        :param pulumi.Input[bool] multiattach: Specifies whether the disk is shareable. Defaults to **false**.
+        :param pulumi.Input[str] name: Specifies the disk name. You can enter up to `64` characters.
         :param pulumi.Input[int] period: Specifies the charging period of the disk.
-               If `period_unit` is set to **month**, the value ranges from 1 to 9.
-               If `period_unit` is set to **year**, the valid value is 1.
-               This parameter is mandatory if `charging_mode` is set to **prePaid**.
-               Changing this creates a new disk.
+               + If `period_unit` is set to **month**, the value ranges from `1` to `9`.
+               + If `period_unit` is set to **year**, the valid value is `1`.
         :param pulumi.Input[str] period_unit: Specifies the charging period unit of the disk.
                Valid values are **month** and **year**. This parameter is mandatory if `charging_mode` is set to **prePaid**.
-               Changing this creates a new disk.
         :param pulumi.Input[str] region: Specifies the region in which to create the disk. If omitted, the
-               provider-level region will be used. Changing this creates a new disk.
-        :param pulumi.Input[int] size: Specifies the disk size, in GB. The valid value is range from:
-               + System disk: 1 GB to 1024 GB
-               + Data disk: 10 GB to 32768 GB
-        :param pulumi.Input[str] snapshot_id: Specifies the snapshot ID from which to create the disk. Changing this
-               creates a new disk.
+               provider-level region will be used. Changing this parameter will create a new resource.
+        :param pulumi.Input[str] server_id: Specifies the server ID to which the cloud volume is to be mounted.
+               After specifying the value of this field, the cloud volume will be automatically attached on the cloud server.
+               The charging_mode of the created cloud volume will be consistent with that of the cloud server.
+               Currently, only ECS cloud-servers are supported, and BMS bare metal cloud-servers are not supported yet.
+        :param pulumi.Input[int] size: Specifies the disk size, in GB.
+               For system disk, the valid value ranges from `1` GB to `1,024` GB.
+               For data disk, the valid value ranges from `10` GB to `32,768` GB.
+        :param pulumi.Input[str] snapshot_id: Specifies the snapshot ID from which to create the disk.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the disk.
-        :param pulumi.Input[str] volume_type: Specifies the disk type. Currently, the value can be SAS, SSD, GPSSD or
-               ESSD.
-               + SAS: specifies the high I/O disk type.
-               + SSD: specifies the ultra-high I/O disk type.
-               + GPSSD: specifies the general purpose SSD disk type.
-               + ESSD: Extreme SSD type.
+        :param pulumi.Input[int] throughput: Specifies the throughput for the volume. The Unit is MiB/s.
+               The field is valid and required when `volume_type` is set to **GPSSD2**.
+               This field can be changed only when the disk status is Available or In-use.
+        :param pulumi.Input[str] volume_type: Specifies the disk type. Valid values are as follows:
+               + **SAS**: High I/O type.
+               + **SSD**: Ultra-high I/O type.
+               + **GPSSD**: General purpose SSD type.
+               + **ESSD**: Extreme SSD type.
+               + **GPSSD2**: General purpose SSD V2 type.
+               + **ESSD2**: Extreme SSD V2 type.
         """
         ...
     @overload
@@ -1011,15 +1158,17 @@ class Volume(pulumi.CustomResource):
         import pulumi
         import pulumi_huaweicloud as huaweicloud
 
+        config = pulumi.Config()
+        availability_zone = config.require_object("availabilityZone")
         volume = huaweicloud.evs.Volume("volume",
-            availability_zone="cn-north-4a",
             description="my volume",
+            volume_type="SAS",
             size=20,
+            availability_zone=availability_zone,
             tags={
                 "foo": "bar",
                 "key": "value",
-            },
-            volume_type="SAS")
+            })
         ```
         ### With KMS Encryption
 
@@ -1027,12 +1176,47 @@ class Volume(pulumi.CustomResource):
         import pulumi
         import pulumi_huaweicloud as huaweicloud
 
+        config = pulumi.Config()
+        availability_zone = config.require_object("availabilityZone")
         volume = huaweicloud.evs.Volume("volume",
             description="my volume",
             volume_type="SAS",
             size=20,
             kms_id=var["kms_id"],
-            availability_zone="cn-north-4a",
+            availability_zone=availability_zone,
+            tags={
+                "foo": "bar",
+                "key": "value",
+            })
+        ```
+        ### With Server_id
+
+        ```python
+        import pulumi
+        import pulumi_huaweicloud as huaweicloud
+
+        config = pulumi.Config()
+        image_id = config.require_object("imageId")
+        flavor_id = config.require_object("flavorId")
+        key_pair = config.require_object("keyPair")
+        security_group_id = config.require_object("securityGroupId")
+        availability_zone = config.require_object("availabilityZone")
+        subnet_id = config.require_object("subnetId")
+        myinstance = huaweicloud.ecs.Instance("myinstance",
+            image_id=image_id,
+            flavor_id=flavor_id,
+            key_pair=key_pair,
+            security_group_ids=[security_group_id],
+            availability_zone=availability_zone,
+            networks=[huaweicloud.ecs.InstanceNetworkArgs(
+                uuid=subnet_id,
+            )])
+        volume = huaweicloud.evs.Volume("volume",
+            description="my volume",
+            volume_type="SAS",
+            size=20,
+            availability_zone=availability_zone,
+            server_id=myinstance.id,
             tags={
                 "foo": "bar",
                 "key": "value",
@@ -1041,13 +1225,13 @@ class Volume(pulumi.CustomResource):
 
         ## Import
 
-        Volumes can be imported using the `id`, e.g.
+        Volumes can be imported using the `id`, e.g. bash
 
         ```sh
-         $ pulumi import huaweicloud:Evs/volume:Volume volume_1 14a80bc7-c12c-4fe0-a38a-cb77eeac9bd6
+         $ pulumi import huaweicloud:Evs/volume:Volume test <id>
         ```
 
-         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include**cascade**, **period_unit**, **period** and **auto_renew**. It is generally recommended running terraform plan after importing an disk. You can then decide if changes should be applied to the disk, or the resource definition should be updated to align with the disk. Also you can ignore changes as below. resource "huaweicloud_evs_volume" "volume_1" {
+         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`cascade`, `period_unit`, `period`, `server_id`, `auto_renew`, and `charging_mode`. It is generally recommended running terraform plan after importing a disk. You can then decide if changes should be applied to the disk, or the resource definition should be updated to align with the disk. Also, you can ignore changes as below. hcl resource "huaweicloud_evs_volume" "test" {
 
          ...
 
@@ -1055,9 +1239,9 @@ class Volume(pulumi.CustomResource):
 
          ignore_changes = [
 
-         cascade,
+         cascade, period_unit, period, server_id, auto_renew, charging_mode,
 
-         ]
+        ]
 
          } }
 
@@ -1087,15 +1271,18 @@ class Volume(pulumi.CustomResource):
                  device_type: Optional[pulumi.Input[str]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  image_id: Optional[pulumi.Input[str]] = None,
+                 iops: Optional[pulumi.Input[int]] = None,
                  kms_id: Optional[pulumi.Input[str]] = None,
                  multiattach: Optional[pulumi.Input[bool]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  period: Optional[pulumi.Input[int]] = None,
                  period_unit: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
+                 server_id: Optional[pulumi.Input[str]] = None,
                  size: Optional[pulumi.Input[int]] = None,
                  snapshot_id: Optional[pulumi.Input[str]] = None,
                  tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
+                 throughput: Optional[pulumi.Input[int]] = None,
                  volume_type: Optional[pulumi.Input[str]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
@@ -1122,20 +1309,24 @@ class Volume(pulumi.CustomResource):
             __props__.__dict__["device_type"] = device_type
             __props__.__dict__["enterprise_project_id"] = enterprise_project_id
             __props__.__dict__["image_id"] = image_id
+            __props__.__dict__["iops"] = iops
             __props__.__dict__["kms_id"] = kms_id
             __props__.__dict__["multiattach"] = multiattach
             __props__.__dict__["name"] = name
             __props__.__dict__["period"] = period
             __props__.__dict__["period_unit"] = period_unit
             __props__.__dict__["region"] = region
+            __props__.__dict__["server_id"] = server_id
             __props__.__dict__["size"] = size
             __props__.__dict__["snapshot_id"] = snapshot_id
             __props__.__dict__["tags"] = tags
+            __props__.__dict__["throughput"] = throughput
             if volume_type is None and not opts.urn:
                 raise TypeError("Missing required property 'volume_type'")
             __props__.__dict__["volume_type"] = volume_type
             __props__.__dict__["attachments"] = None
             __props__.__dict__["dedicated_storage_name"] = None
+            __props__.__dict__["status"] = None
             __props__.__dict__["wwn"] = None
         super(Volume, __self__).__init__(
             'huaweicloud:Evs/volume:Volume',
@@ -1160,15 +1351,19 @@ class Volume(pulumi.CustomResource):
             device_type: Optional[pulumi.Input[str]] = None,
             enterprise_project_id: Optional[pulumi.Input[str]] = None,
             image_id: Optional[pulumi.Input[str]] = None,
+            iops: Optional[pulumi.Input[int]] = None,
             kms_id: Optional[pulumi.Input[str]] = None,
             multiattach: Optional[pulumi.Input[bool]] = None,
             name: Optional[pulumi.Input[str]] = None,
             period: Optional[pulumi.Input[int]] = None,
             period_unit: Optional[pulumi.Input[str]] = None,
             region: Optional[pulumi.Input[str]] = None,
+            server_id: Optional[pulumi.Input[str]] = None,
             size: Optional[pulumi.Input[int]] = None,
             snapshot_id: Optional[pulumi.Input[str]] = None,
+            status: Optional[pulumi.Input[str]] = None,
             tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
+            throughput: Optional[pulumi.Input[int]] = None,
             volume_type: Optional[pulumi.Input[str]] = None,
             wwn: Optional[pulumi.Input[str]] = None) -> 'Volume':
         """
@@ -1178,57 +1373,60 @@ class Volume(pulumi.CustomResource):
         :param str resource_name: The unique name of the resulting resource.
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['VolumeAttachmentArgs']]]] attachments: If a disk is attached to an instance, this attribute will display the Attachment ID, Instance ID, and
-               the Device as the Instance sees it. The object structure is documented below.
-        :param pulumi.Input[str] auto_renew: Specifies whether auto renew is enabled.
-               Valid values are **true** and **false**.
-        :param pulumi.Input[str] availability_zone: Specifies the availability zone for the disk. Changing this creates
-               a new disk.
-        :param pulumi.Input[str] backup_id: Specifies the backup ID from which to create the disk. Changing this
-               creates a new disk.
-        :param pulumi.Input[bool] cascade: Specifies the delete mode of snapshot. The default value is false. All snapshot
-               associated with the disk will also be deleted when the parameter is set to true.
+        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['VolumeAttachmentArgs']]]] attachments: If a disk is attached to an instance, this attribute will display the attachment ID, instance ID, and
+               the device as the instance sees it. The attachment structure is documented below.
+        :param pulumi.Input[str] auto_renew: Specifies whether auto-renew is enabled.
+               Valid values are **true** and **false**. Defaults to **false**.
+        :param pulumi.Input[str] availability_zone: Specifies the availability zone for the disk.
+        :param pulumi.Input[str] backup_id: Specifies the backup ID from which to create the disk.
+        :param pulumi.Input[bool] cascade: Specifies the delete mode of snapshot. The default value is **false**. All snapshot
+               associated with the disk will also be deleted when the parameter is set to **true**.
         :param pulumi.Input[str] charging_mode: Specifies the charging mode of the disk.
                The valid values are as follows:
                + **prePaid**: the yearly/monthly billing mode.
                + **postPaid**: the pay-per-use billing mode.
-               Changing this creates a new disk.
         :param pulumi.Input[str] dedicated_storage_id: Specifies the ID of the DSS storage pool accommodating the disk.
         :param pulumi.Input[str] dedicated_storage_name: The name of the DSS storage pool accommodating the disk.
-        :param pulumi.Input[str] description: Specifies the disk description. The value can contain a maximum of 255 bytes.
-        :param pulumi.Input[str] device_type: Specifies the device type of disk to create. Valid options are VBD and
-               SCSI. Defaults to VBD. Changing this creates a new disk.
-        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project id of the disk. Changing this
-               creates a new disk.
-        :param pulumi.Input[str] image_id: Specifies the image ID from which to create the disk. Changing this creates
-               a new disk.
-        :param pulumi.Input[str] kms_id: Specifies the Encryption KMS ID to create the disk. Changing this creates a
-               new disk.
-        :param pulumi.Input[bool] multiattach: Specifies whether the disk is shareable. The default value is false.
-               Changing this creates a new disk.
-        :param pulumi.Input[str] name: Specifies the disk name. The value can contain a maximum of 255 bytes.
+        :param pulumi.Input[str] description: Specifies the disk description. You can enter up to `85` characters.
+        :param pulumi.Input[str] device_type: Specifies the device type of disk to create. Valid options are **VBD** and
+               **SCSI**. Defaults to **VBD**.
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID of the disk.
+               For enterprise users, if omitted, default enterprise project will be used.
+        :param pulumi.Input[str] image_id: Specifies the image ID from which to create the disk.
+        :param pulumi.Input[int] iops: Specifies the IOPS(Input/Output Operations Per Second) for the volume.
+               The field is valid and required when `volume_type` is set to **GPSSD2** or **ESSD2**.
+               This field can be changed only when the disk status is Available or In-use.
+        :param pulumi.Input[str] kms_id: Specifies the Encryption KMS ID to create the disk.
+        :param pulumi.Input[bool] multiattach: Specifies whether the disk is shareable. Defaults to **false**.
+        :param pulumi.Input[str] name: Specifies the disk name. You can enter up to `64` characters.
         :param pulumi.Input[int] period: Specifies the charging period of the disk.
-               If `period_unit` is set to **month**, the value ranges from 1 to 9.
-               If `period_unit` is set to **year**, the valid value is 1.
-               This parameter is mandatory if `charging_mode` is set to **prePaid**.
-               Changing this creates a new disk.
+               + If `period_unit` is set to **month**, the value ranges from `1` to `9`.
+               + If `period_unit` is set to **year**, the valid value is `1`.
         :param pulumi.Input[str] period_unit: Specifies the charging period unit of the disk.
                Valid values are **month** and **year**. This parameter is mandatory if `charging_mode` is set to **prePaid**.
-               Changing this creates a new disk.
         :param pulumi.Input[str] region: Specifies the region in which to create the disk. If omitted, the
-               provider-level region will be used. Changing this creates a new disk.
-        :param pulumi.Input[int] size: Specifies the disk size, in GB. The valid value is range from:
-               + System disk: 1 GB to 1024 GB
-               + Data disk: 10 GB to 32768 GB
-        :param pulumi.Input[str] snapshot_id: Specifies the snapshot ID from which to create the disk. Changing this
-               creates a new disk.
+               provider-level region will be used. Changing this parameter will create a new resource.
+        :param pulumi.Input[str] server_id: Specifies the server ID to which the cloud volume is to be mounted.
+               After specifying the value of this field, the cloud volume will be automatically attached on the cloud server.
+               The charging_mode of the created cloud volume will be consistent with that of the cloud server.
+               Currently, only ECS cloud-servers are supported, and BMS bare metal cloud-servers are not supported yet.
+        :param pulumi.Input[int] size: Specifies the disk size, in GB.
+               For system disk, the valid value ranges from `1` GB to `1,024` GB.
+               For data disk, the valid value ranges from `10` GB to `32,768` GB.
+        :param pulumi.Input[str] snapshot_id: Specifies the snapshot ID from which to create the disk.
+        :param pulumi.Input[str] status: The disk status.
+               Please refer to [EVS Disk Status](https://support.huaweicloud.com/intl/en-us/api-evs/evs_04_0040.html).
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the disk.
-        :param pulumi.Input[str] volume_type: Specifies the disk type. Currently, the value can be SAS, SSD, GPSSD or
-               ESSD.
-               + SAS: specifies the high I/O disk type.
-               + SSD: specifies the ultra-high I/O disk type.
-               + GPSSD: specifies the general purpose SSD disk type.
-               + ESSD: Extreme SSD type.
+        :param pulumi.Input[int] throughput: Specifies the throughput for the volume. The Unit is MiB/s.
+               The field is valid and required when `volume_type` is set to **GPSSD2**.
+               This field can be changed only when the disk status is Available or In-use.
+        :param pulumi.Input[str] volume_type: Specifies the disk type. Valid values are as follows:
+               + **SAS**: High I/O type.
+               + **SSD**: Ultra-high I/O type.
+               + **GPSSD**: General purpose SSD type.
+               + **ESSD**: Extreme SSD type.
+               + **GPSSD2**: General purpose SSD V2 type.
+               + **ESSD2**: Extreme SSD V2 type.
         :param pulumi.Input[str] wwn: The unique identifier used for mounting the EVS disk.
         """
         opts = pulumi.ResourceOptions.merge(opts, pulumi.ResourceOptions(id=id))
@@ -1248,15 +1446,19 @@ class Volume(pulumi.CustomResource):
         __props__.__dict__["device_type"] = device_type
         __props__.__dict__["enterprise_project_id"] = enterprise_project_id
         __props__.__dict__["image_id"] = image_id
+        __props__.__dict__["iops"] = iops
         __props__.__dict__["kms_id"] = kms_id
         __props__.__dict__["multiattach"] = multiattach
         __props__.__dict__["name"] = name
         __props__.__dict__["period"] = period
         __props__.__dict__["period_unit"] = period_unit
         __props__.__dict__["region"] = region
+        __props__.__dict__["server_id"] = server_id
         __props__.__dict__["size"] = size
         __props__.__dict__["snapshot_id"] = snapshot_id
+        __props__.__dict__["status"] = status
         __props__.__dict__["tags"] = tags
+        __props__.__dict__["throughput"] = throughput
         __props__.__dict__["volume_type"] = volume_type
         __props__.__dict__["wwn"] = wwn
         return Volume(resource_name, opts=opts, __props__=__props__)
@@ -1265,8 +1467,8 @@ class Volume(pulumi.CustomResource):
     @pulumi.getter
     def attachments(self) -> pulumi.Output[Sequence['outputs.VolumeAttachment']]:
         """
-        If a disk is attached to an instance, this attribute will display the Attachment ID, Instance ID, and
-        the Device as the Instance sees it. The object structure is documented below.
+        If a disk is attached to an instance, this attribute will display the attachment ID, instance ID, and
+        the device as the instance sees it. The attachment structure is documented below.
         """
         return pulumi.get(self, "attachments")
 
@@ -1279,8 +1481,8 @@ class Volume(pulumi.CustomResource):
     @pulumi.getter(name="autoRenew")
     def auto_renew(self) -> pulumi.Output[Optional[str]]:
         """
-        Specifies whether auto renew is enabled.
-        Valid values are **true** and **false**.
+        Specifies whether auto-renew is enabled.
+        Valid values are **true** and **false**. Defaults to **false**.
         """
         return pulumi.get(self, "auto_renew")
 
@@ -1288,8 +1490,7 @@ class Volume(pulumi.CustomResource):
     @pulumi.getter(name="availabilityZone")
     def availability_zone(self) -> pulumi.Output[str]:
         """
-        Specifies the availability zone for the disk. Changing this creates
-        a new disk.
+        Specifies the availability zone for the disk.
         """
         return pulumi.get(self, "availability_zone")
 
@@ -1297,8 +1498,7 @@ class Volume(pulumi.CustomResource):
     @pulumi.getter(name="backupId")
     def backup_id(self) -> pulumi.Output[Optional[str]]:
         """
-        Specifies the backup ID from which to create the disk. Changing this
-        creates a new disk.
+        Specifies the backup ID from which to create the disk.
         """
         return pulumi.get(self, "backup_id")
 
@@ -1306,8 +1506,8 @@ class Volume(pulumi.CustomResource):
     @pulumi.getter
     def cascade(self) -> pulumi.Output[Optional[bool]]:
         """
-        Specifies the delete mode of snapshot. The default value is false. All snapshot
-        associated with the disk will also be deleted when the parameter is set to true.
+        Specifies the delete mode of snapshot. The default value is **false**. All snapshot
+        associated with the disk will also be deleted when the parameter is set to **true**.
         """
         return pulumi.get(self, "cascade")
 
@@ -1319,7 +1519,6 @@ class Volume(pulumi.CustomResource):
         The valid values are as follows:
         + **prePaid**: the yearly/monthly billing mode.
         + **postPaid**: the pay-per-use billing mode.
-        Changing this creates a new disk.
         """
         return pulumi.get(self, "charging_mode")
 
@@ -1343,7 +1542,7 @@ class Volume(pulumi.CustomResource):
     @pulumi.getter
     def description(self) -> pulumi.Output[Optional[str]]:
         """
-        Specifies the disk description. The value can contain a maximum of 255 bytes.
+        Specifies the disk description. You can enter up to `85` characters.
         """
         return pulumi.get(self, "description")
 
@@ -1351,8 +1550,8 @@ class Volume(pulumi.CustomResource):
     @pulumi.getter(name="deviceType")
     def device_type(self) -> pulumi.Output[Optional[str]]:
         """
-        Specifies the device type of disk to create. Valid options are VBD and
-        SCSI. Defaults to VBD. Changing this creates a new disk.
+        Specifies the device type of disk to create. Valid options are **VBD** and
+        **SCSI**. Defaults to **VBD**.
         """
         return pulumi.get(self, "device_type")
 
@@ -1360,8 +1559,8 @@ class Volume(pulumi.CustomResource):
     @pulumi.getter(name="enterpriseProjectId")
     def enterprise_project_id(self) -> pulumi.Output[str]:
         """
-        Specifies the enterprise project id of the disk. Changing this
-        creates a new disk.
+        Specifies the enterprise project ID of the disk.
+        For enterprise users, if omitted, default enterprise project will be used.
         """
         return pulumi.get(self, "enterprise_project_id")
 
@@ -1369,17 +1568,25 @@ class Volume(pulumi.CustomResource):
     @pulumi.getter(name="imageId")
     def image_id(self) -> pulumi.Output[Optional[str]]:
         """
-        Specifies the image ID from which to create the disk. Changing this creates
-        a new disk.
+        Specifies the image ID from which to create the disk.
         """
         return pulumi.get(self, "image_id")
+
+    @property
+    @pulumi.getter
+    def iops(self) -> pulumi.Output[int]:
+        """
+        Specifies the IOPS(Input/Output Operations Per Second) for the volume.
+        The field is valid and required when `volume_type` is set to **GPSSD2** or **ESSD2**.
+        This field can be changed only when the disk status is Available or In-use.
+        """
+        return pulumi.get(self, "iops")
 
     @property
     @pulumi.getter(name="kmsId")
     def kms_id(self) -> pulumi.Output[Optional[str]]:
         """
-        Specifies the Encryption KMS ID to create the disk. Changing this creates a
-        new disk.
+        Specifies the Encryption KMS ID to create the disk.
         """
         return pulumi.get(self, "kms_id")
 
@@ -1387,8 +1594,7 @@ class Volume(pulumi.CustomResource):
     @pulumi.getter
     def multiattach(self) -> pulumi.Output[Optional[bool]]:
         """
-        Specifies whether the disk is shareable. The default value is false.
-        Changing this creates a new disk.
+        Specifies whether the disk is shareable. Defaults to **false**.
         """
         return pulumi.get(self, "multiattach")
 
@@ -1396,7 +1602,7 @@ class Volume(pulumi.CustomResource):
     @pulumi.getter
     def name(self) -> pulumi.Output[str]:
         """
-        Specifies the disk name. The value can contain a maximum of 255 bytes.
+        Specifies the disk name. You can enter up to `64` characters.
         """
         return pulumi.get(self, "name")
 
@@ -1405,10 +1611,8 @@ class Volume(pulumi.CustomResource):
     def period(self) -> pulumi.Output[Optional[int]]:
         """
         Specifies the charging period of the disk.
-        If `period_unit` is set to **month**, the value ranges from 1 to 9.
-        If `period_unit` is set to **year**, the valid value is 1.
-        This parameter is mandatory if `charging_mode` is set to **prePaid**.
-        Changing this creates a new disk.
+        + If `period_unit` is set to **month**, the value ranges from `1` to `9`.
+        + If `period_unit` is set to **year**, the valid value is `1`.
         """
         return pulumi.get(self, "period")
 
@@ -1418,7 +1622,6 @@ class Volume(pulumi.CustomResource):
         """
         Specifies the charging period unit of the disk.
         Valid values are **month** and **year**. This parameter is mandatory if `charging_mode` is set to **prePaid**.
-        Changing this creates a new disk.
         """
         return pulumi.get(self, "period_unit")
 
@@ -1427,17 +1630,28 @@ class Volume(pulumi.CustomResource):
     def region(self) -> pulumi.Output[str]:
         """
         Specifies the region in which to create the disk. If omitted, the
-        provider-level region will be used. Changing this creates a new disk.
+        provider-level region will be used. Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "region")
+
+    @property
+    @pulumi.getter(name="serverId")
+    def server_id(self) -> pulumi.Output[Optional[str]]:
+        """
+        Specifies the server ID to which the cloud volume is to be mounted.
+        After specifying the value of this field, the cloud volume will be automatically attached on the cloud server.
+        The charging_mode of the created cloud volume will be consistent with that of the cloud server.
+        Currently, only ECS cloud-servers are supported, and BMS bare metal cloud-servers are not supported yet.
+        """
+        return pulumi.get(self, "server_id")
 
     @property
     @pulumi.getter
     def size(self) -> pulumi.Output[int]:
         """
-        Specifies the disk size, in GB. The valid value is range from:
-        + System disk: 1 GB to 1024 GB
-        + Data disk: 10 GB to 32768 GB
+        Specifies the disk size, in GB.
+        For system disk, the valid value ranges from `1` GB to `1,024` GB.
+        For data disk, the valid value ranges from `10` GB to `32,768` GB.
         """
         return pulumi.get(self, "size")
 
@@ -1445,10 +1659,18 @@ class Volume(pulumi.CustomResource):
     @pulumi.getter(name="snapshotId")
     def snapshot_id(self) -> pulumi.Output[Optional[str]]:
         """
-        Specifies the snapshot ID from which to create the disk. Changing this
-        creates a new disk.
+        Specifies the snapshot ID from which to create the disk.
         """
         return pulumi.get(self, "snapshot_id")
+
+    @property
+    @pulumi.getter
+    def status(self) -> pulumi.Output[str]:
+        """
+        The disk status.
+        Please refer to [EVS Disk Status](https://support.huaweicloud.com/intl/en-us/api-evs/evs_04_0040.html).
+        """
+        return pulumi.get(self, "status")
 
     @property
     @pulumi.getter
@@ -1459,15 +1681,26 @@ class Volume(pulumi.CustomResource):
         return pulumi.get(self, "tags")
 
     @property
+    @pulumi.getter
+    def throughput(self) -> pulumi.Output[int]:
+        """
+        Specifies the throughput for the volume. The Unit is MiB/s.
+        The field is valid and required when `volume_type` is set to **GPSSD2**.
+        This field can be changed only when the disk status is Available or In-use.
+        """
+        return pulumi.get(self, "throughput")
+
+    @property
     @pulumi.getter(name="volumeType")
     def volume_type(self) -> pulumi.Output[str]:
         """
-        Specifies the disk type. Currently, the value can be SAS, SSD, GPSSD or
-        ESSD.
-        + SAS: specifies the high I/O disk type.
-        + SSD: specifies the ultra-high I/O disk type.
-        + GPSSD: specifies the general purpose SSD disk type.
-        + ESSD: Extreme SSD type.
+        Specifies the disk type. Valid values are as follows:
+        + **SAS**: High I/O type.
+        + **SSD**: Ultra-high I/O type.
+        + **GPSSD**: General purpose SSD type.
+        + **ESSD**: Extreme SSD type.
+        + **GPSSD2**: General purpose SSD V2 type.
+        + **ESSD2**: Extreme SSD V2 type.
         """
         return pulumi.get(self, "volume_type")
 

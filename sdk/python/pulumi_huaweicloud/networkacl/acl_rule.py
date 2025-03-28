@@ -35,7 +35,7 @@ class AclRuleArgs:
         :param pulumi.Input[str] destination_ip_address: Specifies the destination IP address to which the traffic is allowed.
                The default value is *0.0.0.0/0*. For example: xxx.xxx.xxx.xxx (IP address), xxx.xxx.xxx.0/24 (CIDR block).
         :param pulumi.Input[str] destination_port: Specifies the destination port number or port number range. The value ranges
-               from 1 to 65535. For a port number range, enter two port numbers connected by a colon(:). For example, 1:100.
+               from `1` to `65,535`. For a port number range, enter two port numbers connected by a colon(:). For example, 1:100.
         :param pulumi.Input[bool] enabled: Enabled status for the network ACL rule. Defaults to true.
         :param pulumi.Input[int] ip_version: Specifies the IP version, either 4 (default) or 6. This parameter is available after
                the IPv6 function is enabled.
@@ -124,7 +124,7 @@ class AclRuleArgs:
     def destination_port(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the destination port number or port number range. The value ranges
-        from 1 to 65535. For a port number range, enter two port numbers connected by a colon(:). For example, 1:100.
+        from `1` to `65,535`. For a port number range, enter two port numbers connected by a colon(:). For example, 1:100.
         """
         return pulumi.get(self, "destination_port")
 
@@ -231,7 +231,7 @@ class _AclRuleState:
         :param pulumi.Input[str] destination_ip_address: Specifies the destination IP address to which the traffic is allowed.
                The default value is *0.0.0.0/0*. For example: xxx.xxx.xxx.xxx (IP address), xxx.xxx.xxx.0/24 (CIDR block).
         :param pulumi.Input[str] destination_port: Specifies the destination port number or port number range. The value ranges
-               from 1 to 65535. For a port number range, enter two port numbers connected by a colon(:). For example, 1:100.
+               from `1` to `65,535`. For a port number range, enter two port numbers connected by a colon(:). For example, 1:100.
         :param pulumi.Input[bool] enabled: Enabled status for the network ACL rule. Defaults to true.
         :param pulumi.Input[int] ip_version: Specifies the IP version, either 4 (default) or 6. This parameter is available after
                the IPv6 function is enabled.
@@ -311,7 +311,7 @@ class _AclRuleState:
     def destination_port(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the destination port number or port number range. The value ranges
-        from 1 to 65535. For a port number range, enter two port numbers connected by a colon(:). For example, 1:100.
+        from `1` to `65,535`. For a port number range, enter two port numbers connected by a colon(:). For example, 1:100.
         """
         return pulumi.get(self, "destination_port")
 
@@ -427,6 +427,8 @@ class AclRule(pulumi.CustomResource):
                  source_port: Optional[pulumi.Input[str]] = None,
                  __props__=None):
         """
+        !> **WARNING:** It has been deprecated, use `Vpc.NetworkAcl` instead.
+
         Manages a network ACL rule resource within HuaweiCloud.
 
         ## Example Usage
@@ -446,7 +448,7 @@ class AclRule(pulumi.CustomResource):
 
         ## Import
 
-        network ACL rules can be imported using the `id`, e.g.
+        network ACL rules can be imported using the `id`, e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:NetworkAcl/aclRule:AclRule rule_1 89a84b28-4cc2-4859-9885-c67e802a46a3
@@ -460,7 +462,7 @@ class AclRule(pulumi.CustomResource):
         :param pulumi.Input[str] destination_ip_address: Specifies the destination IP address to which the traffic is allowed.
                The default value is *0.0.0.0/0*. For example: xxx.xxx.xxx.xxx (IP address), xxx.xxx.xxx.0/24 (CIDR block).
         :param pulumi.Input[str] destination_port: Specifies the destination port number or port number range. The value ranges
-               from 1 to 65535. For a port number range, enter two port numbers connected by a colon(:). For example, 1:100.
+               from `1` to `65,535`. For a port number range, enter two port numbers connected by a colon(:). For example, 1:100.
         :param pulumi.Input[bool] enabled: Enabled status for the network ACL rule. Defaults to true.
         :param pulumi.Input[int] ip_version: Specifies the IP version, either 4 (default) or 6. This parameter is available after
                the IPv6 function is enabled.
@@ -481,6 +483,8 @@ class AclRule(pulumi.CustomResource):
                  args: AclRuleArgs,
                  opts: Optional[pulumi.ResourceOptions] = None):
         """
+        !> **WARNING:** It has been deprecated, use `Vpc.NetworkAcl` instead.
+
         Manages a network ACL rule resource within HuaweiCloud.
 
         ## Example Usage
@@ -500,7 +504,7 @@ class AclRule(pulumi.CustomResource):
 
         ## Import
 
-        network ACL rules can be imported using the `id`, e.g.
+        network ACL rules can be imported using the `id`, e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:NetworkAcl/aclRule:AclRule rule_1 89a84b28-4cc2-4859-9885-c67e802a46a3
@@ -590,7 +594,7 @@ class AclRule(pulumi.CustomResource):
         :param pulumi.Input[str] destination_ip_address: Specifies the destination IP address to which the traffic is allowed.
                The default value is *0.0.0.0/0*. For example: xxx.xxx.xxx.xxx (IP address), xxx.xxx.xxx.0/24 (CIDR block).
         :param pulumi.Input[str] destination_port: Specifies the destination port number or port number range. The value ranges
-               from 1 to 65535. For a port number range, enter two port numbers connected by a colon(:). For example, 1:100.
+               from `1` to `65,535`. For a port number range, enter two port numbers connected by a colon(:). For example, 1:100.
         :param pulumi.Input[bool] enabled: Enabled status for the network ACL rule. Defaults to true.
         :param pulumi.Input[int] ip_version: Specifies the IP version, either 4 (default) or 6. This parameter is available after
                the IPv6 function is enabled.
@@ -652,7 +656,7 @@ class AclRule(pulumi.CustomResource):
     def destination_port(self) -> pulumi.Output[Optional[str]]:
         """
         Specifies the destination port number or port number range. The value ranges
-        from 1 to 65535. For a port number range, enter two port numbers connected by a colon(:). For example, 1:100.
+        from `1` to `65,535`. For a port number range, enter two port numbers connected by a colon(:). For example, 1:100.
         """
         return pulumi.get(self, "destination_port")
 

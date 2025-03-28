@@ -22,13 +22,19 @@ class GetInstanceResult:
     """
     A collection of values returned by getInstance.
     """
-    def __init__(__self__, availability_zone=None, enterprise_project_id=None, fixed_ip_v4=None, flavor_id=None, flavor_name=None, id=None, image_id=None, image_name=None, instance_id=None, key_pair=None, name=None, networks=None, public_ip=None, region=None, scheduler_hints=None, security_group_ids=None, security_groups=None, status=None, system_disk_id=None, tags=None, user_data=None, volume_attacheds=None):
+    def __init__(__self__, availability_zone=None, charging_mode=None, enterprise_project_id=None, expired_time=None, fixed_ip_v4=None, flavor_id=None, flavor_name=None, id=None, image_id=None, image_name=None, instance_id=None, key_pair=None, name=None, networks=None, public_ip=None, region=None, scheduler_hints=None, security_group_ids=None, security_groups=None, status=None, system_disk_id=None, tags=None, user_data=None, volume_attacheds=None):
         if availability_zone and not isinstance(availability_zone, str):
             raise TypeError("Expected argument 'availability_zone' to be a str")
         pulumi.set(__self__, "availability_zone", availability_zone)
+        if charging_mode and not isinstance(charging_mode, str):
+            raise TypeError("Expected argument 'charging_mode' to be a str")
+        pulumi.set(__self__, "charging_mode", charging_mode)
         if enterprise_project_id and not isinstance(enterprise_project_id, str):
             raise TypeError("Expected argument 'enterprise_project_id' to be a str")
         pulumi.set(__self__, "enterprise_project_id", enterprise_project_id)
+        if expired_time and not isinstance(expired_time, str):
+            raise TypeError("Expected argument 'expired_time' to be a str")
+        pulumi.set(__self__, "expired_time", expired_time)
         if fixed_ip_v4 and not isinstance(fixed_ip_v4, str):
             raise TypeError("Expected argument 'fixed_ip_v4' to be a str")
         pulumi.set(__self__, "fixed_ip_v4", fixed_ip_v4)
@@ -99,9 +105,25 @@ class GetInstanceResult:
         return pulumi.get(self, "availability_zone")
 
     @property
+    @pulumi.getter(name="chargingMode")
+    def charging_mode(self) -> str:
+        """
+        The charging mode of the instance. Valid values are **prePaid**, **postPaid** and **spot**.
+        """
+        return pulumi.get(self, "charging_mode")
+
+    @property
     @pulumi.getter(name="enterpriseProjectId")
     def enterprise_project_id(self) -> str:
         return pulumi.get(self, "enterprise_project_id")
+
+    @property
+    @pulumi.getter(name="expiredTime")
+    def expired_time(self) -> str:
+        """
+        The expired time of prePaid instance, in UTC format.
+        """
+        return pulumi.get(self, "expired_time")
 
     @property
     @pulumi.getter(name="fixedIpV4")
@@ -179,7 +201,7 @@ class GetInstanceResult:
     @pulumi.getter(name="publicIp")
     def public_ip(self) -> str:
         """
-        The EIP address that is associted to the instance.
+        The EIP address that is associated to the instance.
         """
         return pulumi.get(self, "public_ip")
 
@@ -225,16 +247,13 @@ class GetInstanceResult:
     @pulumi.getter(name="systemDiskId")
     def system_disk_id(self) -> str:
         """
-        The system disk voume ID.
+        The system disk volume ID.
         """
         return pulumi.get(self, "system_disk_id")
 
     @property
     @pulumi.getter
-    def tags(self) -> Mapping[str, str]:
-        """
-        The key/value pairs to associate with the instance.
-        """
+    def tags(self) -> Optional[Mapping[str, str]]:
         return pulumi.get(self, "tags")
 
     @property
@@ -262,7 +281,9 @@ class AwaitableGetInstanceResult(GetInstanceResult):
             yield self
         return GetInstanceResult(
             availability_zone=self.availability_zone,
+            charging_mode=self.charging_mode,
             enterprise_project_id=self.enterprise_project_id,
+            expired_time=self.expired_time,
             fixed_ip_v4=self.fixed_ip_v4,
             flavor_id=self.flavor_id,
             flavor_name=self.flavor_name,
@@ -291,6 +312,7 @@ def get_instance(enterprise_project_id: Optional[str] = None,
                  instance_id: Optional[str] = None,
                  name: Optional[str] = None,
                  region: Optional[str] = None,
+                 tags: Optional[Mapping[str, str]] = None,
                  opts: Optional[pulumi.InvokeOptions] = None) -> AwaitableGetInstanceResult:
     """
     Use this data source to get the details of a specified compute instance.
@@ -314,6 +336,7 @@ def get_instance(enterprise_project_id: Optional[str] = None,
     :param str name: Specifies the ECS name, which can be queried with a regular expression.
     :param str region: The region in which to obtain the instance.
            If omitted, the provider-level region will be used.
+    :param Mapping[str, str] tags: Specifies the tags to qurey the instance.
     """
     __args__ = dict()
     __args__['enterpriseProjectId'] = enterprise_project_id
@@ -322,12 +345,15 @@ def get_instance(enterprise_project_id: Optional[str] = None,
     __args__['instanceId'] = instance_id
     __args__['name'] = name
     __args__['region'] = region
+    __args__['tags'] = tags
     opts = pulumi.InvokeOptions.merge(_utilities.get_invoke_opts_defaults(), opts)
     __ret__ = pulumi.runtime.invoke('huaweicloud:Ecs/getInstance:getInstance', __args__, opts=opts, typ=GetInstanceResult).value
 
     return AwaitableGetInstanceResult(
         availability_zone=__ret__.availability_zone,
+        charging_mode=__ret__.charging_mode,
         enterprise_project_id=__ret__.enterprise_project_id,
+        expired_time=__ret__.expired_time,
         fixed_ip_v4=__ret__.fixed_ip_v4,
         flavor_id=__ret__.flavor_id,
         flavor_name=__ret__.flavor_name,
@@ -357,6 +383,7 @@ def get_instance_output(enterprise_project_id: Optional[pulumi.Input[Optional[st
                         instance_id: Optional[pulumi.Input[Optional[str]]] = None,
                         name: Optional[pulumi.Input[Optional[str]]] = None,
                         region: Optional[pulumi.Input[Optional[str]]] = None,
+                        tags: Optional[pulumi.Input[Optional[Mapping[str, str]]]] = None,
                         opts: Optional[pulumi.InvokeOptions] = None) -> pulumi.Output[GetInstanceResult]:
     """
     Use this data source to get the details of a specified compute instance.
@@ -380,5 +407,6 @@ def get_instance_output(enterprise_project_id: Optional[pulumi.Input[Optional[st
     :param str name: Specifies the ECS name, which can be queried with a regular expression.
     :param str region: The region in which to obtain the instance.
            If omitted, the provider-level region will be used.
+    :param Mapping[str, str] tags: Specifies the tags to qurey the instance.
     """
     ...

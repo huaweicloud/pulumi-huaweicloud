@@ -20,7 +20,9 @@ class NodeAttachArgs:
                  os: pulumi.Input[str],
                  server_id: pulumi.Input[str],
                  docker_base_size: Optional[pulumi.Input[int]] = None,
+                 hostname_config: Optional[pulumi.Input['NodeAttachHostnameConfigArgs']] = None,
                  image_id: Optional[pulumi.Input[str]] = None,
+                 initialized_conditions: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  key_pair: Optional[pulumi.Input[str]] = None,
                  labels: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  lvm_config: Optional[pulumi.Input[str]] = None,
@@ -31,7 +33,11 @@ class NodeAttachArgs:
                  password: Optional[pulumi.Input[str]] = None,
                  postinstall: Optional[pulumi.Input[str]] = None,
                  preinstall: Optional[pulumi.Input[str]] = None,
+                 private_key: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
+                 runtime: Optional[pulumi.Input[str]] = None,
+                 storage: Optional[pulumi.Input['NodeAttachStorageArgs']] = None,
+                 system_disk_kms_key_id: Optional[pulumi.Input[str]] = None,
                  tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  taints: Optional[pulumi.Input[Sequence[pulumi.Input['NodeAttachTaintArgs']]]] = None):
         """
@@ -39,43 +45,67 @@ class NodeAttachArgs:
         :param pulumi.Input[str] cluster_id: Specifies the ID of the cluster. Changing this parameter will create a new
                resource.
         :param pulumi.Input[str] os: Specifies the operating System of the node. Changing this parameter will reset the node.
-               + For VM nodes, clusters of v1.13 and later support *EulerOS 2.5* and *CentOS 7.6*.
+               The value can be **EulerOS 2.9** and **CentOS 7.6** e.g. For more details,
+               please see [documentation](https://support.huaweicloud.com/intl/en-us/api-cce/node-os.html).
         :param pulumi.Input[str] server_id: Specifies the ecs server ID. Changing this parameter will create a new
                resource.
         :param pulumi.Input[int] docker_base_size: Specifies the available disk space of a single docker container on the
-               node in device mapper mode. Changing this parameter will create a new resource.
-        :param pulumi.Input[str] image_id: schema: Internal
-        :param pulumi.Input[str] key_pair: Specifies the key pair name when logging in to select the key pair mode.
-               This parameter and `password` are alternative. Changing this parameter will reset the node.
-        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] labels: Specifies the tags of a Kubernetes node, key/value pair format.
+               node in device mapper mode. Changing this parameter will reset the node.
+        :param pulumi.Input['NodeAttachHostnameConfigArgs'] hostname_config: Specifies the hostname config of the kubernetes node,
+               which is supported by clusters of v1.23.6-r0 to v1.25 or clusters of v1.25.2-r0 or later versions.
+               The object structure is documented below.
                Changing this parameter will create a new resource.
-        :param pulumi.Input[str] lvm_config: Specifies the docker data disk configurations. The following is an
+        :param pulumi.Input[str] image_id: schema: Internal
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] initialized_conditions: Specifies the custom initialization flags.
+               Changing this parameter will reset the node.
+        :param pulumi.Input[str] key_pair: Specifies the key pair name when logging in to select the key pair mode.
+               This parameter and `password` are alternative.
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] labels: Specifies the tags of a Kubernetes node, key/value pair format.
+               Changing this parameter will reset the node.
+        :param pulumi.Input[str] lvm_config: Specifies the docker data disk configurations.
+               This parameter is alternative to `storage`, and it's recommended to use `storage`.
+               The following is an
                example:
         :param pulumi.Input[int] max_pods: Specifies the the maximum number of instances a node is allowed to create.
-               Changing this parameter will create a new resource.
-        :param pulumi.Input[str] name: Specifies the Node Name.
+               Changing this parameter will reset the node.
+        :param pulumi.Input[str] name: Specifies the virtual space name. Currently, only **kubernetes**, **runtime**,
+               and **user** are supported. Changing this parameter will reset the node.
         :param pulumi.Input[str] nic_multi_queue: schema: Internal
         :param pulumi.Input[str] nic_threshold: schema: Internal
         :param pulumi.Input[str] password: Specifies the root password when logging in to select the password mode.
+               The password consists of 8 to 26 characters and must contain at least three of following: uppercase letters,
+               lowercase letters, digits, special characters(!@$%^-_=+[{}]:,./?~#*).
                This parameter can be plain or salted and is alternative to `key_pair`.
-               Changing this parameter will reset the node.
         :param pulumi.Input[str] postinstall: Specifies the script required after installation. The input value can be
-               a Base64 encoded string or not. Changing this parameter will create a new resource.
+               a Base64 encoded string or not. Changing this parameter will reset the node.
         :param pulumi.Input[str] preinstall: Specifies the script required before installation. The input value can be
-               a Base64 encoded string or not. Changing this parameter will create a new resource.
+               a Base64 encoded string or not. Changing this parameter will reset the node.
+        :param pulumi.Input[str] private_key: Specifies the private key of the in used `key_pair`. This parameter is mandatory
+               when replacing or unbinding a keypair if the CCE node is in **Active** state.
         :param pulumi.Input[str] region: The region in which to create the CCE node attach resource. If omitted, the
                provider-level region will be used. Changing this creates a new CCE node attach resource.
+        :param pulumi.Input[str] runtime: Specifies the runtime of the CCE node. Valid values are *docker* and
+               *containerd*. Changing this parameter will reset the node.
+        :param pulumi.Input['NodeAttachStorageArgs'] storage: Specifies the disk initialization management parameter.
+               This parameter is alternative to `lvm_config` and supported for clusters of v1.15.11 and later.
+               Changing this parameter will reset the node.
+        :param pulumi.Input[str] system_disk_kms_key_id: Specifies the KMS key ID. This is used to encrypt the root volume.
+               Changing this parameter will reset the node.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the tags of a VM node, key/value pair format.
         :param pulumi.Input[Sequence[pulumi.Input['NodeAttachTaintArgs']]] taints: Specifies the taints configuration of the nodes to set anti-affinity.
-               Changing this parameter will create a new resource. Each taint contains the following parameters:
+               Changing this parameter will reset the node. Each taint contains the following parameters:
         """
         pulumi.set(__self__, "cluster_id", cluster_id)
         pulumi.set(__self__, "os", os)
         pulumi.set(__self__, "server_id", server_id)
         if docker_base_size is not None:
             pulumi.set(__self__, "docker_base_size", docker_base_size)
+        if hostname_config is not None:
+            pulumi.set(__self__, "hostname_config", hostname_config)
         if image_id is not None:
             pulumi.set(__self__, "image_id", image_id)
+        if initialized_conditions is not None:
+            pulumi.set(__self__, "initialized_conditions", initialized_conditions)
         if key_pair is not None:
             pulumi.set(__self__, "key_pair", key_pair)
         if labels is not None:
@@ -96,8 +126,16 @@ class NodeAttachArgs:
             pulumi.set(__self__, "postinstall", postinstall)
         if preinstall is not None:
             pulumi.set(__self__, "preinstall", preinstall)
+        if private_key is not None:
+            pulumi.set(__self__, "private_key", private_key)
         if region is not None:
             pulumi.set(__self__, "region", region)
+        if runtime is not None:
+            pulumi.set(__self__, "runtime", runtime)
+        if storage is not None:
+            pulumi.set(__self__, "storage", storage)
+        if system_disk_kms_key_id is not None:
+            pulumi.set(__self__, "system_disk_kms_key_id", system_disk_kms_key_id)
         if tags is not None:
             pulumi.set(__self__, "tags", tags)
         if taints is not None:
@@ -121,7 +159,8 @@ class NodeAttachArgs:
     def os(self) -> pulumi.Input[str]:
         """
         Specifies the operating System of the node. Changing this parameter will reset the node.
-        + For VM nodes, clusters of v1.13 and later support *EulerOS 2.5* and *CentOS 7.6*.
+        The value can be **EulerOS 2.9** and **CentOS 7.6** e.g. For more details,
+        please see [documentation](https://support.huaweicloud.com/intl/en-us/api-cce/node-os.html).
         """
         return pulumi.get(self, "os")
 
@@ -147,13 +186,28 @@ class NodeAttachArgs:
     def docker_base_size(self) -> Optional[pulumi.Input[int]]:
         """
         Specifies the available disk space of a single docker container on the
-        node in device mapper mode. Changing this parameter will create a new resource.
+        node in device mapper mode. Changing this parameter will reset the node.
         """
         return pulumi.get(self, "docker_base_size")
 
     @docker_base_size.setter
     def docker_base_size(self, value: Optional[pulumi.Input[int]]):
         pulumi.set(self, "docker_base_size", value)
+
+    @property
+    @pulumi.getter(name="hostnameConfig")
+    def hostname_config(self) -> Optional[pulumi.Input['NodeAttachHostnameConfigArgs']]:
+        """
+        Specifies the hostname config of the kubernetes node,
+        which is supported by clusters of v1.23.6-r0 to v1.25 or clusters of v1.25.2-r0 or later versions.
+        The object structure is documented below.
+        Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "hostname_config")
+
+    @hostname_config.setter
+    def hostname_config(self, value: Optional[pulumi.Input['NodeAttachHostnameConfigArgs']]):
+        pulumi.set(self, "hostname_config", value)
 
     @property
     @pulumi.getter(name="imageId")
@@ -168,11 +222,24 @@ class NodeAttachArgs:
         pulumi.set(self, "image_id", value)
 
     @property
+    @pulumi.getter(name="initializedConditions")
+    def initialized_conditions(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]:
+        """
+        Specifies the custom initialization flags.
+        Changing this parameter will reset the node.
+        """
+        return pulumi.get(self, "initialized_conditions")
+
+    @initialized_conditions.setter
+    def initialized_conditions(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]):
+        pulumi.set(self, "initialized_conditions", value)
+
+    @property
     @pulumi.getter(name="keyPair")
     def key_pair(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the key pair name when logging in to select the key pair mode.
-        This parameter and `password` are alternative. Changing this parameter will reset the node.
+        This parameter and `password` are alternative.
         """
         return pulumi.get(self, "key_pair")
 
@@ -185,7 +252,7 @@ class NodeAttachArgs:
     def labels(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]:
         """
         Specifies the tags of a Kubernetes node, key/value pair format.
-        Changing this parameter will create a new resource.
+        Changing this parameter will reset the node.
         """
         return pulumi.get(self, "labels")
 
@@ -197,7 +264,9 @@ class NodeAttachArgs:
     @pulumi.getter(name="lvmConfig")
     def lvm_config(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the docker data disk configurations. The following is an
+        Specifies the docker data disk configurations.
+        This parameter is alternative to `storage`, and it's recommended to use `storage`.
+        The following is an
         example:
         """
         return pulumi.get(self, "lvm_config")
@@ -211,7 +280,7 @@ class NodeAttachArgs:
     def max_pods(self) -> Optional[pulumi.Input[int]]:
         """
         Specifies the the maximum number of instances a node is allowed to create.
-        Changing this parameter will create a new resource.
+        Changing this parameter will reset the node.
         """
         return pulumi.get(self, "max_pods")
 
@@ -223,7 +292,8 @@ class NodeAttachArgs:
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the Node Name.
+        Specifies the virtual space name. Currently, only **kubernetes**, **runtime**,
+        and **user** are supported. Changing this parameter will reset the node.
         """
         return pulumi.get(self, "name")
 
@@ -260,8 +330,9 @@ class NodeAttachArgs:
     def password(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the root password when logging in to select the password mode.
+        The password consists of 8 to 26 characters and must contain at least three of following: uppercase letters,
+        lowercase letters, digits, special characters(!@$%^-_=+[{}]:,./?~#*).
         This parameter can be plain or salted and is alternative to `key_pair`.
-        Changing this parameter will reset the node.
         """
         return pulumi.get(self, "password")
 
@@ -274,7 +345,7 @@ class NodeAttachArgs:
     def postinstall(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the script required after installation. The input value can be
-        a Base64 encoded string or not. Changing this parameter will create a new resource.
+        a Base64 encoded string or not. Changing this parameter will reset the node.
         """
         return pulumi.get(self, "postinstall")
 
@@ -287,13 +358,26 @@ class NodeAttachArgs:
     def preinstall(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the script required before installation. The input value can be
-        a Base64 encoded string or not. Changing this parameter will create a new resource.
+        a Base64 encoded string or not. Changing this parameter will reset the node.
         """
         return pulumi.get(self, "preinstall")
 
     @preinstall.setter
     def preinstall(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "preinstall", value)
+
+    @property
+    @pulumi.getter(name="privateKey")
+    def private_key(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the private key of the in used `key_pair`. This parameter is mandatory
+        when replacing or unbinding a keypair if the CCE node is in **Active** state.
+        """
+        return pulumi.get(self, "private_key")
+
+    @private_key.setter
+    def private_key(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "private_key", value)
 
     @property
     @pulumi.getter
@@ -307,6 +391,46 @@ class NodeAttachArgs:
     @region.setter
     def region(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "region", value)
+
+    @property
+    @pulumi.getter
+    def runtime(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the runtime of the CCE node. Valid values are *docker* and
+        *containerd*. Changing this parameter will reset the node.
+        """
+        return pulumi.get(self, "runtime")
+
+    @runtime.setter
+    def runtime(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "runtime", value)
+
+    @property
+    @pulumi.getter
+    def storage(self) -> Optional[pulumi.Input['NodeAttachStorageArgs']]:
+        """
+        Specifies the disk initialization management parameter.
+        This parameter is alternative to `lvm_config` and supported for clusters of v1.15.11 and later.
+        Changing this parameter will reset the node.
+        """
+        return pulumi.get(self, "storage")
+
+    @storage.setter
+    def storage(self, value: Optional[pulumi.Input['NodeAttachStorageArgs']]):
+        pulumi.set(self, "storage", value)
+
+    @property
+    @pulumi.getter(name="systemDiskKmsKeyId")
+    def system_disk_kms_key_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the KMS key ID. This is used to encrypt the root volume.
+        Changing this parameter will reset the node.
+        """
+        return pulumi.get(self, "system_disk_kms_key_id")
+
+    @system_disk_kms_key_id.setter
+    def system_disk_kms_key_id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "system_disk_kms_key_id", value)
 
     @property
     @pulumi.getter
@@ -325,7 +449,7 @@ class NodeAttachArgs:
     def taints(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['NodeAttachTaintArgs']]]]:
         """
         Specifies the taints configuration of the nodes to set anti-affinity.
-        Changing this parameter will create a new resource. Each taint contains the following parameters:
+        Changing this parameter will reset the node. Each taint contains the following parameters:
         """
         return pulumi.get(self, "taints")
 
@@ -343,8 +467,11 @@ class _NodeAttachState:
                  data_volumes: Optional[pulumi.Input[Sequence[pulumi.Input['NodeAttachDataVolumeArgs']]]] = None,
                  docker_base_size: Optional[pulumi.Input[int]] = None,
                  ecs_group_id: Optional[pulumi.Input[str]] = None,
+                 enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  flavor_id: Optional[pulumi.Input[str]] = None,
+                 hostname_config: Optional[pulumi.Input['NodeAttachHostnameConfigArgs']] = None,
                  image_id: Optional[pulumi.Input[str]] = None,
+                 initialized_conditions: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  key_pair: Optional[pulumi.Input[str]] = None,
                  labels: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  lvm_config: Optional[pulumi.Input[str]] = None,
@@ -357,13 +484,16 @@ class _NodeAttachState:
                  postinstall: Optional[pulumi.Input[str]] = None,
                  preinstall: Optional[pulumi.Input[str]] = None,
                  private_ip: Optional[pulumi.Input[str]] = None,
+                 private_key: Optional[pulumi.Input[str]] = None,
                  public_ip: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
                  root_volumes: Optional[pulumi.Input[Sequence[pulumi.Input['NodeAttachRootVolumeArgs']]]] = None,
                  runtime: Optional[pulumi.Input[str]] = None,
                  server_id: Optional[pulumi.Input[str]] = None,
                  status: Optional[pulumi.Input[str]] = None,
+                 storage: Optional[pulumi.Input['NodeAttachStorageArgs']] = None,
                  subnet_id: Optional[pulumi.Input[str]] = None,
+                 system_disk_kms_key_id: Optional[pulumi.Input[str]] = None,
                  tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  taints: Optional[pulumi.Input[Sequence[pulumi.Input['NodeAttachTaintArgs']]]] = None):
         """
@@ -374,43 +504,63 @@ class _NodeAttachState:
                resource.
         :param pulumi.Input[Sequence[pulumi.Input['NodeAttachDataVolumeArgs']]] data_volumes: The configurations of the data disk.
         :param pulumi.Input[int] docker_base_size: Specifies the available disk space of a single docker container on the
-               node in device mapper mode. Changing this parameter will create a new resource.
+               node in device mapper mode. Changing this parameter will reset the node.
         :param pulumi.Input[str] ecs_group_id: The Ecs group ID.
+        :param pulumi.Input[str] enterprise_project_id: The enterprise project ID of the CCE node.
         :param pulumi.Input[str] flavor_id: The flavor ID of the CCE node.
-        :param pulumi.Input[str] image_id: schema: Internal
-        :param pulumi.Input[str] key_pair: Specifies the key pair name when logging in to select the key pair mode.
-               This parameter and `password` are alternative. Changing this parameter will reset the node.
-        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] labels: Specifies the tags of a Kubernetes node, key/value pair format.
+        :param pulumi.Input['NodeAttachHostnameConfigArgs'] hostname_config: Specifies the hostname config of the kubernetes node,
+               which is supported by clusters of v1.23.6-r0 to v1.25 or clusters of v1.25.2-r0 or later versions.
+               The object structure is documented below.
                Changing this parameter will create a new resource.
-        :param pulumi.Input[str] lvm_config: Specifies the docker data disk configurations. The following is an
+        :param pulumi.Input[str] image_id: schema: Internal
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] initialized_conditions: Specifies the custom initialization flags.
+               Changing this parameter will reset the node.
+        :param pulumi.Input[str] key_pair: Specifies the key pair name when logging in to select the key pair mode.
+               This parameter and `password` are alternative.
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] labels: Specifies the tags of a Kubernetes node, key/value pair format.
+               Changing this parameter will reset the node.
+        :param pulumi.Input[str] lvm_config: Specifies the docker data disk configurations.
+               This parameter is alternative to `storage`, and it's recommended to use `storage`.
+               The following is an
                example:
         :param pulumi.Input[int] max_pods: Specifies the the maximum number of instances a node is allowed to create.
-               Changing this parameter will create a new resource.
-        :param pulumi.Input[str] name: Specifies the Node Name.
+               Changing this parameter will reset the node.
+        :param pulumi.Input[str] name: Specifies the virtual space name. Currently, only **kubernetes**, **runtime**,
+               and **user** are supported. Changing this parameter will reset the node.
         :param pulumi.Input[str] nic_multi_queue: schema: Internal
         :param pulumi.Input[str] nic_threshold: schema: Internal
         :param pulumi.Input[str] os: Specifies the operating System of the node. Changing this parameter will reset the node.
-               + For VM nodes, clusters of v1.13 and later support *EulerOS 2.5* and *CentOS 7.6*.
+               The value can be **EulerOS 2.9** and **CentOS 7.6** e.g. For more details,
+               please see [documentation](https://support.huaweicloud.com/intl/en-us/api-cce/node-os.html).
         :param pulumi.Input[str] password: Specifies the root password when logging in to select the password mode.
+               The password consists of 8 to 26 characters and must contain at least three of following: uppercase letters,
+               lowercase letters, digits, special characters(!@$%^-_=+[{}]:,./?~#*).
                This parameter can be plain or salted and is alternative to `key_pair`.
-               Changing this parameter will reset the node.
         :param pulumi.Input[str] postinstall: Specifies the script required after installation. The input value can be
-               a Base64 encoded string or not. Changing this parameter will create a new resource.
+               a Base64 encoded string or not. Changing this parameter will reset the node.
         :param pulumi.Input[str] preinstall: Specifies the script required before installation. The input value can be
-               a Base64 encoded string or not. Changing this parameter will create a new resource.
+               a Base64 encoded string or not. Changing this parameter will reset the node.
         :param pulumi.Input[str] private_ip: Private IP of the CCE node.
+        :param pulumi.Input[str] private_key: Specifies the private key of the in used `key_pair`. This parameter is mandatory
+               when replacing or unbinding a keypair if the CCE node is in **Active** state.
         :param pulumi.Input[str] public_ip: Public IP of the CCE node.
         :param pulumi.Input[str] region: The region in which to create the CCE node attach resource. If omitted, the
                provider-level region will be used. Changing this creates a new CCE node attach resource.
         :param pulumi.Input[Sequence[pulumi.Input['NodeAttachRootVolumeArgs']]] root_volumes: The configuration of the system disk.
-        :param pulumi.Input[str] runtime: The runtime of the CCE node.
+        :param pulumi.Input[str] runtime: Specifies the runtime of the CCE node. Valid values are *docker* and
+               *containerd*. Changing this parameter will reset the node.
         :param pulumi.Input[str] server_id: Specifies the ecs server ID. Changing this parameter will create a new
                resource.
         :param pulumi.Input[str] status: Node status information.
+        :param pulumi.Input['NodeAttachStorageArgs'] storage: Specifies the disk initialization management parameter.
+               This parameter is alternative to `lvm_config` and supported for clusters of v1.15.11 and later.
+               Changing this parameter will reset the node.
         :param pulumi.Input[str] subnet_id: The ID of the subnet to which the NIC belongs.
+        :param pulumi.Input[str] system_disk_kms_key_id: Specifies the KMS key ID. This is used to encrypt the root volume.
+               Changing this parameter will reset the node.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the tags of a VM node, key/value pair format.
         :param pulumi.Input[Sequence[pulumi.Input['NodeAttachTaintArgs']]] taints: Specifies the taints configuration of the nodes to set anti-affinity.
-               Changing this parameter will create a new resource. Each taint contains the following parameters:
+               Changing this parameter will reset the node. Each taint contains the following parameters:
         """
         if availability_zone is not None:
             pulumi.set(__self__, "availability_zone", availability_zone)
@@ -424,10 +574,16 @@ class _NodeAttachState:
             pulumi.set(__self__, "docker_base_size", docker_base_size)
         if ecs_group_id is not None:
             pulumi.set(__self__, "ecs_group_id", ecs_group_id)
+        if enterprise_project_id is not None:
+            pulumi.set(__self__, "enterprise_project_id", enterprise_project_id)
         if flavor_id is not None:
             pulumi.set(__self__, "flavor_id", flavor_id)
+        if hostname_config is not None:
+            pulumi.set(__self__, "hostname_config", hostname_config)
         if image_id is not None:
             pulumi.set(__self__, "image_id", image_id)
+        if initialized_conditions is not None:
+            pulumi.set(__self__, "initialized_conditions", initialized_conditions)
         if key_pair is not None:
             pulumi.set(__self__, "key_pair", key_pair)
         if labels is not None:
@@ -452,6 +608,8 @@ class _NodeAttachState:
             pulumi.set(__self__, "preinstall", preinstall)
         if private_ip is not None:
             pulumi.set(__self__, "private_ip", private_ip)
+        if private_key is not None:
+            pulumi.set(__self__, "private_key", private_key)
         if public_ip is not None:
             pulumi.set(__self__, "public_ip", public_ip)
         if region is not None:
@@ -464,8 +622,12 @@ class _NodeAttachState:
             pulumi.set(__self__, "server_id", server_id)
         if status is not None:
             pulumi.set(__self__, "status", status)
+        if storage is not None:
+            pulumi.set(__self__, "storage", storage)
         if subnet_id is not None:
             pulumi.set(__self__, "subnet_id", subnet_id)
+        if system_disk_kms_key_id is not None:
+            pulumi.set(__self__, "system_disk_kms_key_id", system_disk_kms_key_id)
         if tags is not None:
             pulumi.set(__self__, "tags", tags)
         if taints is not None:
@@ -525,7 +687,7 @@ class _NodeAttachState:
     def docker_base_size(self) -> Optional[pulumi.Input[int]]:
         """
         Specifies the available disk space of a single docker container on the
-        node in device mapper mode. Changing this parameter will create a new resource.
+        node in device mapper mode. Changing this parameter will reset the node.
         """
         return pulumi.get(self, "docker_base_size")
 
@@ -546,6 +708,18 @@ class _NodeAttachState:
         pulumi.set(self, "ecs_group_id", value)
 
     @property
+    @pulumi.getter(name="enterpriseProjectId")
+    def enterprise_project_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        The enterprise project ID of the CCE node.
+        """
+        return pulumi.get(self, "enterprise_project_id")
+
+    @enterprise_project_id.setter
+    def enterprise_project_id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "enterprise_project_id", value)
+
+    @property
     @pulumi.getter(name="flavorId")
     def flavor_id(self) -> Optional[pulumi.Input[str]]:
         """
@@ -556,6 +730,21 @@ class _NodeAttachState:
     @flavor_id.setter
     def flavor_id(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "flavor_id", value)
+
+    @property
+    @pulumi.getter(name="hostnameConfig")
+    def hostname_config(self) -> Optional[pulumi.Input['NodeAttachHostnameConfigArgs']]:
+        """
+        Specifies the hostname config of the kubernetes node,
+        which is supported by clusters of v1.23.6-r0 to v1.25 or clusters of v1.25.2-r0 or later versions.
+        The object structure is documented below.
+        Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "hostname_config")
+
+    @hostname_config.setter
+    def hostname_config(self, value: Optional[pulumi.Input['NodeAttachHostnameConfigArgs']]):
+        pulumi.set(self, "hostname_config", value)
 
     @property
     @pulumi.getter(name="imageId")
@@ -570,11 +759,24 @@ class _NodeAttachState:
         pulumi.set(self, "image_id", value)
 
     @property
+    @pulumi.getter(name="initializedConditions")
+    def initialized_conditions(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]:
+        """
+        Specifies the custom initialization flags.
+        Changing this parameter will reset the node.
+        """
+        return pulumi.get(self, "initialized_conditions")
+
+    @initialized_conditions.setter
+    def initialized_conditions(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]):
+        pulumi.set(self, "initialized_conditions", value)
+
+    @property
     @pulumi.getter(name="keyPair")
     def key_pair(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the key pair name when logging in to select the key pair mode.
-        This parameter and `password` are alternative. Changing this parameter will reset the node.
+        This parameter and `password` are alternative.
         """
         return pulumi.get(self, "key_pair")
 
@@ -587,7 +789,7 @@ class _NodeAttachState:
     def labels(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]:
         """
         Specifies the tags of a Kubernetes node, key/value pair format.
-        Changing this parameter will create a new resource.
+        Changing this parameter will reset the node.
         """
         return pulumi.get(self, "labels")
 
@@ -599,7 +801,9 @@ class _NodeAttachState:
     @pulumi.getter(name="lvmConfig")
     def lvm_config(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the docker data disk configurations. The following is an
+        Specifies the docker data disk configurations.
+        This parameter is alternative to `storage`, and it's recommended to use `storage`.
+        The following is an
         example:
         """
         return pulumi.get(self, "lvm_config")
@@ -613,7 +817,7 @@ class _NodeAttachState:
     def max_pods(self) -> Optional[pulumi.Input[int]]:
         """
         Specifies the the maximum number of instances a node is allowed to create.
-        Changing this parameter will create a new resource.
+        Changing this parameter will reset the node.
         """
         return pulumi.get(self, "max_pods")
 
@@ -625,7 +829,8 @@ class _NodeAttachState:
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the Node Name.
+        Specifies the virtual space name. Currently, only **kubernetes**, **runtime**,
+        and **user** are supported. Changing this parameter will reset the node.
         """
         return pulumi.get(self, "name")
 
@@ -662,7 +867,8 @@ class _NodeAttachState:
     def os(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the operating System of the node. Changing this parameter will reset the node.
-        + For VM nodes, clusters of v1.13 and later support *EulerOS 2.5* and *CentOS 7.6*.
+        The value can be **EulerOS 2.9** and **CentOS 7.6** e.g. For more details,
+        please see [documentation](https://support.huaweicloud.com/intl/en-us/api-cce/node-os.html).
         """
         return pulumi.get(self, "os")
 
@@ -675,8 +881,9 @@ class _NodeAttachState:
     def password(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the root password when logging in to select the password mode.
+        The password consists of 8 to 26 characters and must contain at least three of following: uppercase letters,
+        lowercase letters, digits, special characters(!@$%^-_=+[{}]:,./?~#*).
         This parameter can be plain or salted and is alternative to `key_pair`.
-        Changing this parameter will reset the node.
         """
         return pulumi.get(self, "password")
 
@@ -689,7 +896,7 @@ class _NodeAttachState:
     def postinstall(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the script required after installation. The input value can be
-        a Base64 encoded string or not. Changing this parameter will create a new resource.
+        a Base64 encoded string or not. Changing this parameter will reset the node.
         """
         return pulumi.get(self, "postinstall")
 
@@ -702,7 +909,7 @@ class _NodeAttachState:
     def preinstall(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the script required before installation. The input value can be
-        a Base64 encoded string or not. Changing this parameter will create a new resource.
+        a Base64 encoded string or not. Changing this parameter will reset the node.
         """
         return pulumi.get(self, "preinstall")
 
@@ -721,6 +928,19 @@ class _NodeAttachState:
     @private_ip.setter
     def private_ip(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "private_ip", value)
+
+    @property
+    @pulumi.getter(name="privateKey")
+    def private_key(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the private key of the in used `key_pair`. This parameter is mandatory
+        when replacing or unbinding a keypair if the CCE node is in **Active** state.
+        """
+        return pulumi.get(self, "private_key")
+
+    @private_key.setter
+    def private_key(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "private_key", value)
 
     @property
     @pulumi.getter(name="publicIp")
@@ -763,7 +983,8 @@ class _NodeAttachState:
     @pulumi.getter
     def runtime(self) -> Optional[pulumi.Input[str]]:
         """
-        The runtime of the CCE node.
+        Specifies the runtime of the CCE node. Valid values are *docker* and
+        *containerd*. Changing this parameter will reset the node.
         """
         return pulumi.get(self, "runtime")
 
@@ -797,6 +1018,20 @@ class _NodeAttachState:
         pulumi.set(self, "status", value)
 
     @property
+    @pulumi.getter
+    def storage(self) -> Optional[pulumi.Input['NodeAttachStorageArgs']]:
+        """
+        Specifies the disk initialization management parameter.
+        This parameter is alternative to `lvm_config` and supported for clusters of v1.15.11 and later.
+        Changing this parameter will reset the node.
+        """
+        return pulumi.get(self, "storage")
+
+    @storage.setter
+    def storage(self, value: Optional[pulumi.Input['NodeAttachStorageArgs']]):
+        pulumi.set(self, "storage", value)
+
+    @property
     @pulumi.getter(name="subnetId")
     def subnet_id(self) -> Optional[pulumi.Input[str]]:
         """
@@ -807,6 +1042,19 @@ class _NodeAttachState:
     @subnet_id.setter
     def subnet_id(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "subnet_id", value)
+
+    @property
+    @pulumi.getter(name="systemDiskKmsKeyId")
+    def system_disk_kms_key_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the KMS key ID. This is used to encrypt the root volume.
+        Changing this parameter will reset the node.
+        """
+        return pulumi.get(self, "system_disk_kms_key_id")
+
+    @system_disk_kms_key_id.setter
+    def system_disk_kms_key_id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "system_disk_kms_key_id", value)
 
     @property
     @pulumi.getter
@@ -825,7 +1073,7 @@ class _NodeAttachState:
     def taints(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['NodeAttachTaintArgs']]]]:
         """
         Specifies the taints configuration of the nodes to set anti-affinity.
-        Changing this parameter will create a new resource. Each taint contains the following parameters:
+        Changing this parameter will reset the node. Each taint contains the following parameters:
         """
         return pulumi.get(self, "taints")
 
@@ -841,7 +1089,9 @@ class NodeAttach(pulumi.CustomResource):
                  opts: Optional[pulumi.ResourceOptions] = None,
                  cluster_id: Optional[pulumi.Input[str]] = None,
                  docker_base_size: Optional[pulumi.Input[int]] = None,
+                 hostname_config: Optional[pulumi.Input[pulumi.InputType['NodeAttachHostnameConfigArgs']]] = None,
                  image_id: Optional[pulumi.Input[str]] = None,
+                 initialized_conditions: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  key_pair: Optional[pulumi.Input[str]] = None,
                  labels: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  lvm_config: Optional[pulumi.Input[str]] = None,
@@ -853,13 +1103,17 @@ class NodeAttach(pulumi.CustomResource):
                  password: Optional[pulumi.Input[str]] = None,
                  postinstall: Optional[pulumi.Input[str]] = None,
                  preinstall: Optional[pulumi.Input[str]] = None,
+                 private_key: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
+                 runtime: Optional[pulumi.Input[str]] = None,
                  server_id: Optional[pulumi.Input[str]] = None,
+                 storage: Optional[pulumi.Input[pulumi.InputType['NodeAttachStorageArgs']]] = None,
+                 system_disk_kms_key_id: Optional[pulumi.Input[str]] = None,
                  tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  taints: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['NodeAttachTaintArgs']]]]] = None,
                  __props__=None):
         """
-        Add a node from an existing ecs server to a CCE cluster.
+        Add a node from an existing ECS server to a CCE cluster.
 
         ## Basic Usage
 
@@ -867,10 +1121,14 @@ class NodeAttach(pulumi.CustomResource):
         import pulumi
         import pulumi_huaweicloud as huaweicloud
 
+        config = pulumi.Config()
+        cluster_id = config.require_object("clusterId")
+        server_id = config.require_object("serverId")
+        keypair_name = config.require_object("keypairName")
         test = huaweicloud.cce.NodeAttach("test",
-            cluster_id=var["cluster_id"],
-            server_id=var["server_id"],
-            key_pair=var["keypair_name"],
+            cluster_id=cluster_id,
+            server_id=server_id,
+            key_pair=keypair_name,
             os="EulerOS 2.5",
             tags={
                 "foo": "bar",
@@ -883,35 +1141,55 @@ class NodeAttach(pulumi.CustomResource):
         :param pulumi.Input[str] cluster_id: Specifies the ID of the cluster. Changing this parameter will create a new
                resource.
         :param pulumi.Input[int] docker_base_size: Specifies the available disk space of a single docker container on the
-               node in device mapper mode. Changing this parameter will create a new resource.
-        :param pulumi.Input[str] image_id: schema: Internal
-        :param pulumi.Input[str] key_pair: Specifies the key pair name when logging in to select the key pair mode.
-               This parameter and `password` are alternative. Changing this parameter will reset the node.
-        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] labels: Specifies the tags of a Kubernetes node, key/value pair format.
+               node in device mapper mode. Changing this parameter will reset the node.
+        :param pulumi.Input[pulumi.InputType['NodeAttachHostnameConfigArgs']] hostname_config: Specifies the hostname config of the kubernetes node,
+               which is supported by clusters of v1.23.6-r0 to v1.25 or clusters of v1.25.2-r0 or later versions.
+               The object structure is documented below.
                Changing this parameter will create a new resource.
-        :param pulumi.Input[str] lvm_config: Specifies the docker data disk configurations. The following is an
+        :param pulumi.Input[str] image_id: schema: Internal
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] initialized_conditions: Specifies the custom initialization flags.
+               Changing this parameter will reset the node.
+        :param pulumi.Input[str] key_pair: Specifies the key pair name when logging in to select the key pair mode.
+               This parameter and `password` are alternative.
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] labels: Specifies the tags of a Kubernetes node, key/value pair format.
+               Changing this parameter will reset the node.
+        :param pulumi.Input[str] lvm_config: Specifies the docker data disk configurations.
+               This parameter is alternative to `storage`, and it's recommended to use `storage`.
+               The following is an
                example:
         :param pulumi.Input[int] max_pods: Specifies the the maximum number of instances a node is allowed to create.
-               Changing this parameter will create a new resource.
-        :param pulumi.Input[str] name: Specifies the Node Name.
+               Changing this parameter will reset the node.
+        :param pulumi.Input[str] name: Specifies the virtual space name. Currently, only **kubernetes**, **runtime**,
+               and **user** are supported. Changing this parameter will reset the node.
         :param pulumi.Input[str] nic_multi_queue: schema: Internal
         :param pulumi.Input[str] nic_threshold: schema: Internal
         :param pulumi.Input[str] os: Specifies the operating System of the node. Changing this parameter will reset the node.
-               + For VM nodes, clusters of v1.13 and later support *EulerOS 2.5* and *CentOS 7.6*.
+               The value can be **EulerOS 2.9** and **CentOS 7.6** e.g. For more details,
+               please see [documentation](https://support.huaweicloud.com/intl/en-us/api-cce/node-os.html).
         :param pulumi.Input[str] password: Specifies the root password when logging in to select the password mode.
+               The password consists of 8 to 26 characters and must contain at least three of following: uppercase letters,
+               lowercase letters, digits, special characters(!@$%^-_=+[{}]:,./?~#*).
                This parameter can be plain or salted and is alternative to `key_pair`.
-               Changing this parameter will reset the node.
         :param pulumi.Input[str] postinstall: Specifies the script required after installation. The input value can be
-               a Base64 encoded string or not. Changing this parameter will create a new resource.
+               a Base64 encoded string or not. Changing this parameter will reset the node.
         :param pulumi.Input[str] preinstall: Specifies the script required before installation. The input value can be
-               a Base64 encoded string or not. Changing this parameter will create a new resource.
+               a Base64 encoded string or not. Changing this parameter will reset the node.
+        :param pulumi.Input[str] private_key: Specifies the private key of the in used `key_pair`. This parameter is mandatory
+               when replacing or unbinding a keypair if the CCE node is in **Active** state.
         :param pulumi.Input[str] region: The region in which to create the CCE node attach resource. If omitted, the
                provider-level region will be used. Changing this creates a new CCE node attach resource.
+        :param pulumi.Input[str] runtime: Specifies the runtime of the CCE node. Valid values are *docker* and
+               *containerd*. Changing this parameter will reset the node.
         :param pulumi.Input[str] server_id: Specifies the ecs server ID. Changing this parameter will create a new
                resource.
+        :param pulumi.Input[pulumi.InputType['NodeAttachStorageArgs']] storage: Specifies the disk initialization management parameter.
+               This parameter is alternative to `lvm_config` and supported for clusters of v1.15.11 and later.
+               Changing this parameter will reset the node.
+        :param pulumi.Input[str] system_disk_kms_key_id: Specifies the KMS key ID. This is used to encrypt the root volume.
+               Changing this parameter will reset the node.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the tags of a VM node, key/value pair format.
         :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['NodeAttachTaintArgs']]]] taints: Specifies the taints configuration of the nodes to set anti-affinity.
-               Changing this parameter will create a new resource. Each taint contains the following parameters:
+               Changing this parameter will reset the node. Each taint contains the following parameters:
         """
         ...
     @overload
@@ -920,7 +1198,7 @@ class NodeAttach(pulumi.CustomResource):
                  args: NodeAttachArgs,
                  opts: Optional[pulumi.ResourceOptions] = None):
         """
-        Add a node from an existing ecs server to a CCE cluster.
+        Add a node from an existing ECS server to a CCE cluster.
 
         ## Basic Usage
 
@@ -928,10 +1206,14 @@ class NodeAttach(pulumi.CustomResource):
         import pulumi
         import pulumi_huaweicloud as huaweicloud
 
+        config = pulumi.Config()
+        cluster_id = config.require_object("clusterId")
+        server_id = config.require_object("serverId")
+        keypair_name = config.require_object("keypairName")
         test = huaweicloud.cce.NodeAttach("test",
-            cluster_id=var["cluster_id"],
-            server_id=var["server_id"],
-            key_pair=var["keypair_name"],
+            cluster_id=cluster_id,
+            server_id=server_id,
+            key_pair=keypair_name,
             os="EulerOS 2.5",
             tags={
                 "foo": "bar",
@@ -956,7 +1238,9 @@ class NodeAttach(pulumi.CustomResource):
                  opts: Optional[pulumi.ResourceOptions] = None,
                  cluster_id: Optional[pulumi.Input[str]] = None,
                  docker_base_size: Optional[pulumi.Input[int]] = None,
+                 hostname_config: Optional[pulumi.Input[pulumi.InputType['NodeAttachHostnameConfigArgs']]] = None,
                  image_id: Optional[pulumi.Input[str]] = None,
+                 initialized_conditions: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  key_pair: Optional[pulumi.Input[str]] = None,
                  labels: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  lvm_config: Optional[pulumi.Input[str]] = None,
@@ -968,8 +1252,12 @@ class NodeAttach(pulumi.CustomResource):
                  password: Optional[pulumi.Input[str]] = None,
                  postinstall: Optional[pulumi.Input[str]] = None,
                  preinstall: Optional[pulumi.Input[str]] = None,
+                 private_key: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
+                 runtime: Optional[pulumi.Input[str]] = None,
                  server_id: Optional[pulumi.Input[str]] = None,
+                 storage: Optional[pulumi.Input[pulumi.InputType['NodeAttachStorageArgs']]] = None,
+                 system_disk_kms_key_id: Optional[pulumi.Input[str]] = None,
                  tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  taints: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['NodeAttachTaintArgs']]]]] = None,
                  __props__=None):
@@ -985,7 +1273,9 @@ class NodeAttach(pulumi.CustomResource):
                 raise TypeError("Missing required property 'cluster_id'")
             __props__.__dict__["cluster_id"] = cluster_id
             __props__.__dict__["docker_base_size"] = docker_base_size
+            __props__.__dict__["hostname_config"] = hostname_config
             __props__.__dict__["image_id"] = image_id
+            __props__.__dict__["initialized_conditions"] = initialized_conditions
             __props__.__dict__["key_pair"] = key_pair
             __props__.__dict__["labels"] = labels
             __props__.__dict__["lvm_config"] = lvm_config
@@ -999,21 +1289,25 @@ class NodeAttach(pulumi.CustomResource):
             __props__.__dict__["password"] = password
             __props__.__dict__["postinstall"] = postinstall
             __props__.__dict__["preinstall"] = preinstall
+            __props__.__dict__["private_key"] = private_key
             __props__.__dict__["region"] = region
+            __props__.__dict__["runtime"] = runtime
             if server_id is None and not opts.urn:
                 raise TypeError("Missing required property 'server_id'")
             __props__.__dict__["server_id"] = server_id
+            __props__.__dict__["storage"] = storage
+            __props__.__dict__["system_disk_kms_key_id"] = system_disk_kms_key_id
             __props__.__dict__["tags"] = tags
             __props__.__dict__["taints"] = taints
             __props__.__dict__["availability_zone"] = None
             __props__.__dict__["charging_mode"] = None
             __props__.__dict__["data_volumes"] = None
             __props__.__dict__["ecs_group_id"] = None
+            __props__.__dict__["enterprise_project_id"] = None
             __props__.__dict__["flavor_id"] = None
             __props__.__dict__["private_ip"] = None
             __props__.__dict__["public_ip"] = None
             __props__.__dict__["root_volumes"] = None
-            __props__.__dict__["runtime"] = None
             __props__.__dict__["status"] = None
             __props__.__dict__["subnet_id"] = None
         super(NodeAttach, __self__).__init__(
@@ -1032,8 +1326,11 @@ class NodeAttach(pulumi.CustomResource):
             data_volumes: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['NodeAttachDataVolumeArgs']]]]] = None,
             docker_base_size: Optional[pulumi.Input[int]] = None,
             ecs_group_id: Optional[pulumi.Input[str]] = None,
+            enterprise_project_id: Optional[pulumi.Input[str]] = None,
             flavor_id: Optional[pulumi.Input[str]] = None,
+            hostname_config: Optional[pulumi.Input[pulumi.InputType['NodeAttachHostnameConfigArgs']]] = None,
             image_id: Optional[pulumi.Input[str]] = None,
+            initialized_conditions: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
             key_pair: Optional[pulumi.Input[str]] = None,
             labels: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
             lvm_config: Optional[pulumi.Input[str]] = None,
@@ -1046,13 +1343,16 @@ class NodeAttach(pulumi.CustomResource):
             postinstall: Optional[pulumi.Input[str]] = None,
             preinstall: Optional[pulumi.Input[str]] = None,
             private_ip: Optional[pulumi.Input[str]] = None,
+            private_key: Optional[pulumi.Input[str]] = None,
             public_ip: Optional[pulumi.Input[str]] = None,
             region: Optional[pulumi.Input[str]] = None,
             root_volumes: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['NodeAttachRootVolumeArgs']]]]] = None,
             runtime: Optional[pulumi.Input[str]] = None,
             server_id: Optional[pulumi.Input[str]] = None,
             status: Optional[pulumi.Input[str]] = None,
+            storage: Optional[pulumi.Input[pulumi.InputType['NodeAttachStorageArgs']]] = None,
             subnet_id: Optional[pulumi.Input[str]] = None,
+            system_disk_kms_key_id: Optional[pulumi.Input[str]] = None,
             tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
             taints: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['NodeAttachTaintArgs']]]]] = None) -> 'NodeAttach':
         """
@@ -1068,43 +1368,63 @@ class NodeAttach(pulumi.CustomResource):
                resource.
         :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['NodeAttachDataVolumeArgs']]]] data_volumes: The configurations of the data disk.
         :param pulumi.Input[int] docker_base_size: Specifies the available disk space of a single docker container on the
-               node in device mapper mode. Changing this parameter will create a new resource.
+               node in device mapper mode. Changing this parameter will reset the node.
         :param pulumi.Input[str] ecs_group_id: The Ecs group ID.
+        :param pulumi.Input[str] enterprise_project_id: The enterprise project ID of the CCE node.
         :param pulumi.Input[str] flavor_id: The flavor ID of the CCE node.
-        :param pulumi.Input[str] image_id: schema: Internal
-        :param pulumi.Input[str] key_pair: Specifies the key pair name when logging in to select the key pair mode.
-               This parameter and `password` are alternative. Changing this parameter will reset the node.
-        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] labels: Specifies the tags of a Kubernetes node, key/value pair format.
+        :param pulumi.Input[pulumi.InputType['NodeAttachHostnameConfigArgs']] hostname_config: Specifies the hostname config of the kubernetes node,
+               which is supported by clusters of v1.23.6-r0 to v1.25 or clusters of v1.25.2-r0 or later versions.
+               The object structure is documented below.
                Changing this parameter will create a new resource.
-        :param pulumi.Input[str] lvm_config: Specifies the docker data disk configurations. The following is an
+        :param pulumi.Input[str] image_id: schema: Internal
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] initialized_conditions: Specifies the custom initialization flags.
+               Changing this parameter will reset the node.
+        :param pulumi.Input[str] key_pair: Specifies the key pair name when logging in to select the key pair mode.
+               This parameter and `password` are alternative.
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] labels: Specifies the tags of a Kubernetes node, key/value pair format.
+               Changing this parameter will reset the node.
+        :param pulumi.Input[str] lvm_config: Specifies the docker data disk configurations.
+               This parameter is alternative to `storage`, and it's recommended to use `storage`.
+               The following is an
                example:
         :param pulumi.Input[int] max_pods: Specifies the the maximum number of instances a node is allowed to create.
-               Changing this parameter will create a new resource.
-        :param pulumi.Input[str] name: Specifies the Node Name.
+               Changing this parameter will reset the node.
+        :param pulumi.Input[str] name: Specifies the virtual space name. Currently, only **kubernetes**, **runtime**,
+               and **user** are supported. Changing this parameter will reset the node.
         :param pulumi.Input[str] nic_multi_queue: schema: Internal
         :param pulumi.Input[str] nic_threshold: schema: Internal
         :param pulumi.Input[str] os: Specifies the operating System of the node. Changing this parameter will reset the node.
-               + For VM nodes, clusters of v1.13 and later support *EulerOS 2.5* and *CentOS 7.6*.
+               The value can be **EulerOS 2.9** and **CentOS 7.6** e.g. For more details,
+               please see [documentation](https://support.huaweicloud.com/intl/en-us/api-cce/node-os.html).
         :param pulumi.Input[str] password: Specifies the root password when logging in to select the password mode.
+               The password consists of 8 to 26 characters and must contain at least three of following: uppercase letters,
+               lowercase letters, digits, special characters(!@$%^-_=+[{}]:,./?~#*).
                This parameter can be plain or salted and is alternative to `key_pair`.
-               Changing this parameter will reset the node.
         :param pulumi.Input[str] postinstall: Specifies the script required after installation. The input value can be
-               a Base64 encoded string or not. Changing this parameter will create a new resource.
+               a Base64 encoded string or not. Changing this parameter will reset the node.
         :param pulumi.Input[str] preinstall: Specifies the script required before installation. The input value can be
-               a Base64 encoded string or not. Changing this parameter will create a new resource.
+               a Base64 encoded string or not. Changing this parameter will reset the node.
         :param pulumi.Input[str] private_ip: Private IP of the CCE node.
+        :param pulumi.Input[str] private_key: Specifies the private key of the in used `key_pair`. This parameter is mandatory
+               when replacing or unbinding a keypair if the CCE node is in **Active** state.
         :param pulumi.Input[str] public_ip: Public IP of the CCE node.
         :param pulumi.Input[str] region: The region in which to create the CCE node attach resource. If omitted, the
                provider-level region will be used. Changing this creates a new CCE node attach resource.
         :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['NodeAttachRootVolumeArgs']]]] root_volumes: The configuration of the system disk.
-        :param pulumi.Input[str] runtime: The runtime of the CCE node.
+        :param pulumi.Input[str] runtime: Specifies the runtime of the CCE node. Valid values are *docker* and
+               *containerd*. Changing this parameter will reset the node.
         :param pulumi.Input[str] server_id: Specifies the ecs server ID. Changing this parameter will create a new
                resource.
         :param pulumi.Input[str] status: Node status information.
+        :param pulumi.Input[pulumi.InputType['NodeAttachStorageArgs']] storage: Specifies the disk initialization management parameter.
+               This parameter is alternative to `lvm_config` and supported for clusters of v1.15.11 and later.
+               Changing this parameter will reset the node.
         :param pulumi.Input[str] subnet_id: The ID of the subnet to which the NIC belongs.
+        :param pulumi.Input[str] system_disk_kms_key_id: Specifies the KMS key ID. This is used to encrypt the root volume.
+               Changing this parameter will reset the node.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the tags of a VM node, key/value pair format.
         :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['NodeAttachTaintArgs']]]] taints: Specifies the taints configuration of the nodes to set anti-affinity.
-               Changing this parameter will create a new resource. Each taint contains the following parameters:
+               Changing this parameter will reset the node. Each taint contains the following parameters:
         """
         opts = pulumi.ResourceOptions.merge(opts, pulumi.ResourceOptions(id=id))
 
@@ -1116,8 +1436,11 @@ class NodeAttach(pulumi.CustomResource):
         __props__.__dict__["data_volumes"] = data_volumes
         __props__.__dict__["docker_base_size"] = docker_base_size
         __props__.__dict__["ecs_group_id"] = ecs_group_id
+        __props__.__dict__["enterprise_project_id"] = enterprise_project_id
         __props__.__dict__["flavor_id"] = flavor_id
+        __props__.__dict__["hostname_config"] = hostname_config
         __props__.__dict__["image_id"] = image_id
+        __props__.__dict__["initialized_conditions"] = initialized_conditions
         __props__.__dict__["key_pair"] = key_pair
         __props__.__dict__["labels"] = labels
         __props__.__dict__["lvm_config"] = lvm_config
@@ -1130,13 +1453,16 @@ class NodeAttach(pulumi.CustomResource):
         __props__.__dict__["postinstall"] = postinstall
         __props__.__dict__["preinstall"] = preinstall
         __props__.__dict__["private_ip"] = private_ip
+        __props__.__dict__["private_key"] = private_key
         __props__.__dict__["public_ip"] = public_ip
         __props__.__dict__["region"] = region
         __props__.__dict__["root_volumes"] = root_volumes
         __props__.__dict__["runtime"] = runtime
         __props__.__dict__["server_id"] = server_id
         __props__.__dict__["status"] = status
+        __props__.__dict__["storage"] = storage
         __props__.__dict__["subnet_id"] = subnet_id
+        __props__.__dict__["system_disk_kms_key_id"] = system_disk_kms_key_id
         __props__.__dict__["tags"] = tags
         __props__.__dict__["taints"] = taints
         return NodeAttach(resource_name, opts=opts, __props__=__props__)
@@ -1179,7 +1505,7 @@ class NodeAttach(pulumi.CustomResource):
     def docker_base_size(self) -> pulumi.Output[Optional[int]]:
         """
         Specifies the available disk space of a single docker container on the
-        node in device mapper mode. Changing this parameter will create a new resource.
+        node in device mapper mode. Changing this parameter will reset the node.
         """
         return pulumi.get(self, "docker_base_size")
 
@@ -1192,12 +1518,31 @@ class NodeAttach(pulumi.CustomResource):
         return pulumi.get(self, "ecs_group_id")
 
     @property
+    @pulumi.getter(name="enterpriseProjectId")
+    def enterprise_project_id(self) -> pulumi.Output[str]:
+        """
+        The enterprise project ID of the CCE node.
+        """
+        return pulumi.get(self, "enterprise_project_id")
+
+    @property
     @pulumi.getter(name="flavorId")
     def flavor_id(self) -> pulumi.Output[str]:
         """
         The flavor ID of the CCE node.
         """
         return pulumi.get(self, "flavor_id")
+
+    @property
+    @pulumi.getter(name="hostnameConfig")
+    def hostname_config(self) -> pulumi.Output['outputs.NodeAttachHostnameConfig']:
+        """
+        Specifies the hostname config of the kubernetes node,
+        which is supported by clusters of v1.23.6-r0 to v1.25 or clusters of v1.25.2-r0 or later versions.
+        The object structure is documented below.
+        Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "hostname_config")
 
     @property
     @pulumi.getter(name="imageId")
@@ -1208,11 +1553,20 @@ class NodeAttach(pulumi.CustomResource):
         return pulumi.get(self, "image_id")
 
     @property
+    @pulumi.getter(name="initializedConditions")
+    def initialized_conditions(self) -> pulumi.Output[Sequence[str]]:
+        """
+        Specifies the custom initialization flags.
+        Changing this parameter will reset the node.
+        """
+        return pulumi.get(self, "initialized_conditions")
+
+    @property
     @pulumi.getter(name="keyPair")
     def key_pair(self) -> pulumi.Output[Optional[str]]:
         """
         Specifies the key pair name when logging in to select the key pair mode.
-        This parameter and `password` are alternative. Changing this parameter will reset the node.
+        This parameter and `password` are alternative.
         """
         return pulumi.get(self, "key_pair")
 
@@ -1221,7 +1575,7 @@ class NodeAttach(pulumi.CustomResource):
     def labels(self) -> pulumi.Output[Optional[Mapping[str, str]]]:
         """
         Specifies the tags of a Kubernetes node, key/value pair format.
-        Changing this parameter will create a new resource.
+        Changing this parameter will reset the node.
         """
         return pulumi.get(self, "labels")
 
@@ -1229,7 +1583,9 @@ class NodeAttach(pulumi.CustomResource):
     @pulumi.getter(name="lvmConfig")
     def lvm_config(self) -> pulumi.Output[Optional[str]]:
         """
-        Specifies the docker data disk configurations. The following is an
+        Specifies the docker data disk configurations.
+        This parameter is alternative to `storage`, and it's recommended to use `storage`.
+        The following is an
         example:
         """
         return pulumi.get(self, "lvm_config")
@@ -1239,7 +1595,7 @@ class NodeAttach(pulumi.CustomResource):
     def max_pods(self) -> pulumi.Output[Optional[int]]:
         """
         Specifies the the maximum number of instances a node is allowed to create.
-        Changing this parameter will create a new resource.
+        Changing this parameter will reset the node.
         """
         return pulumi.get(self, "max_pods")
 
@@ -1247,7 +1603,8 @@ class NodeAttach(pulumi.CustomResource):
     @pulumi.getter
     def name(self) -> pulumi.Output[str]:
         """
-        Specifies the Node Name.
+        Specifies the virtual space name. Currently, only **kubernetes**, **runtime**,
+        and **user** are supported. Changing this parameter will reset the node.
         """
         return pulumi.get(self, "name")
 
@@ -1272,7 +1629,8 @@ class NodeAttach(pulumi.CustomResource):
     def os(self) -> pulumi.Output[str]:
         """
         Specifies the operating System of the node. Changing this parameter will reset the node.
-        + For VM nodes, clusters of v1.13 and later support *EulerOS 2.5* and *CentOS 7.6*.
+        The value can be **EulerOS 2.9** and **CentOS 7.6** e.g. For more details,
+        please see [documentation](https://support.huaweicloud.com/intl/en-us/api-cce/node-os.html).
         """
         return pulumi.get(self, "os")
 
@@ -1281,8 +1639,9 @@ class NodeAttach(pulumi.CustomResource):
     def password(self) -> pulumi.Output[Optional[str]]:
         """
         Specifies the root password when logging in to select the password mode.
+        The password consists of 8 to 26 characters and must contain at least three of following: uppercase letters,
+        lowercase letters, digits, special characters(!@$%^-_=+[{}]:,./?~#*).
         This parameter can be plain or salted and is alternative to `key_pair`.
-        Changing this parameter will reset the node.
         """
         return pulumi.get(self, "password")
 
@@ -1291,7 +1650,7 @@ class NodeAttach(pulumi.CustomResource):
     def postinstall(self) -> pulumi.Output[Optional[str]]:
         """
         Specifies the script required after installation. The input value can be
-        a Base64 encoded string or not. Changing this parameter will create a new resource.
+        a Base64 encoded string or not. Changing this parameter will reset the node.
         """
         return pulumi.get(self, "postinstall")
 
@@ -1300,7 +1659,7 @@ class NodeAttach(pulumi.CustomResource):
     def preinstall(self) -> pulumi.Output[Optional[str]]:
         """
         Specifies the script required before installation. The input value can be
-        a Base64 encoded string or not. Changing this parameter will create a new resource.
+        a Base64 encoded string or not. Changing this parameter will reset the node.
         """
         return pulumi.get(self, "preinstall")
 
@@ -1311,6 +1670,15 @@ class NodeAttach(pulumi.CustomResource):
         Private IP of the CCE node.
         """
         return pulumi.get(self, "private_ip")
+
+    @property
+    @pulumi.getter(name="privateKey")
+    def private_key(self) -> pulumi.Output[Optional[str]]:
+        """
+        Specifies the private key of the in used `key_pair`. This parameter is mandatory
+        when replacing or unbinding a keypair if the CCE node is in **Active** state.
+        """
+        return pulumi.get(self, "private_key")
 
     @property
     @pulumi.getter(name="publicIp")
@@ -1341,7 +1709,8 @@ class NodeAttach(pulumi.CustomResource):
     @pulumi.getter
     def runtime(self) -> pulumi.Output[str]:
         """
-        The runtime of the CCE node.
+        Specifies the runtime of the CCE node. Valid values are *docker* and
+        *containerd*. Changing this parameter will reset the node.
         """
         return pulumi.get(self, "runtime")
 
@@ -1363,12 +1732,31 @@ class NodeAttach(pulumi.CustomResource):
         return pulumi.get(self, "status")
 
     @property
+    @pulumi.getter
+    def storage(self) -> pulumi.Output[Optional['outputs.NodeAttachStorage']]:
+        """
+        Specifies the disk initialization management parameter.
+        This parameter is alternative to `lvm_config` and supported for clusters of v1.15.11 and later.
+        Changing this parameter will reset the node.
+        """
+        return pulumi.get(self, "storage")
+
+    @property
     @pulumi.getter(name="subnetId")
     def subnet_id(self) -> pulumi.Output[str]:
         """
         The ID of the subnet to which the NIC belongs.
         """
         return pulumi.get(self, "subnet_id")
+
+    @property
+    @pulumi.getter(name="systemDiskKmsKeyId")
+    def system_disk_kms_key_id(self) -> pulumi.Output[Optional[str]]:
+        """
+        Specifies the KMS key ID. This is used to encrypt the root volume.
+        Changing this parameter will reset the node.
+        """
+        return pulumi.get(self, "system_disk_kms_key_id")
 
     @property
     @pulumi.getter
@@ -1383,7 +1771,7 @@ class NodeAttach(pulumi.CustomResource):
     def taints(self) -> pulumi.Output[Optional[Sequence['outputs.NodeAttachTaint']]]:
         """
         Specifies the taints configuration of the nodes to set anti-affinity.
-        Changing this parameter will create a new resource. Each taint contains the following parameters:
+        Changing this parameter will reset the node. Each taint contains the following parameters:
         """
         return pulumi.get(self, "taints")
 

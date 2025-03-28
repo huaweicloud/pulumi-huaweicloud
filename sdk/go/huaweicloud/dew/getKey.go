@@ -58,7 +58,7 @@ type LookupKeyArgs struct {
 	// Identification of a Master Key. The value "1" indicates a Default Master Key,
 	// and the value "0" indicates a key. Changing this gets a new key.
 	DefaultKeyFlag *string `pulumi:"defaultKeyFlag"`
-	// - ID of a user domain for the key. Changing this gets a new key.
+	// The ID of a user domain for the key. Changing this gets a new key.
 	DomainId *string `pulumi:"domainId"`
 	// The enterprise project id of the kms key.
 	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
@@ -125,7 +125,7 @@ type LookupKeyOutputArgs struct {
 	// Identification of a Master Key. The value "1" indicates a Default Master Key,
 	// and the value "0" indicates a key. Changing this gets a new key.
 	DefaultKeyFlag pulumi.StringPtrInput `pulumi:"defaultKeyFlag"`
-	// - ID of a user domain for the key. Changing this gets a new key.
+	// The ID of a user domain for the key. Changing this gets a new key.
 	DomainId pulumi.StringPtrInput `pulumi:"domainId"`
 	// The enterprise project id of the kms key.
 	EnterpriseProjectId pulumi.StringPtrInput `pulumi:"enterpriseProjectId"`

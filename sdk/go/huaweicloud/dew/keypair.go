@@ -12,7 +12,7 @@ import (
 
 // Manages a keypair resource within HuaweiCloud.
 //
-// By default, key pairs use the SSH-2 (RSA, 2048) algorithm for encryption and decryption.
+// By default, keypair use the SSH-2 (RSA, 2048) algorithm for encryption and decryption.
 //
 // Keys imported support the following cryptographic algorithms:
 //
@@ -21,7 +21,7 @@ import (
 //   - RSA-4096
 //
 // ## Example Usage
-// ### Create a new keypair which scope is Tenant-level and the private key is managed by HuaweiCloud
+// ### Create a new KPS keypair
 //
 // ```go
 // package main
@@ -30,21 +30,23 @@ import (
 //
 //	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud/Dew"
 //	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi/config"
 //
 // )
 //
 //	func main() {
 //		pulumi.Run(func(ctx *pulumi.Context) error {
-//			test, err := Dew.NewKey(ctx, "test", &Dew.KeyArgs{
-//				KeyAlias: pulumi.String("kms_test"),
-//			})
-//			if err != nil {
-//				return err
-//			}
-//			_, err = Dew.NewKeypair(ctx, "test-keypair", &Dew.KeypairArgs{
-//				Scope:          pulumi.String("account"),
+//			cfg := config.New(ctx, "")
+//			kmsKeyId := cfg.RequireObject("kmsKeyId")
+//			kmsKeyName := cfg.RequireObject("kmsKeyName")
+//			keyFile := cfg.RequireObject("keyFile")
+//			_, err := Dew.NewKeypair(ctx, "test", &Dew.KeypairArgs{
+//				Scope:          pulumi.String("user"),
 //				EncryptionType: pulumi.String("kms"),
-//				KmsKeyName:     test.KeyAlias,
+//				KmsKeyId:       pulumi.Any(kmsKeyId),
+//				KmsKeyName:     pulumi.Any(kmsKeyName),
+//				Description:    pulumi.String("test description"),
+//				KeyFile:        pulumi.Any(keyFile),
 //			})
 //			if err != nil {
 //				return err
@@ -54,7 +56,7 @@ import (
 //	}
 //
 // ```
-// ### Create a new keypair and export private key to current folder
+// ### Import an existing KPS keypair
 //
 // ```go
 // package main
@@ -63,13 +65,21 @@ import (
 //
 //	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud/Dew"
 //	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi/config"
 //
 // )
 //
 //	func main() {
 //		pulumi.Run(func(ctx *pulumi.Context) error {
-//			_, err := Dew.NewKeypair(ctx, "test-keypair", &Dew.KeypairArgs{
-//				KeyFile: pulumi.String("private_key.pem"),
+//			cfg := config.New(ctx, "")
+//			publicKey := cfg.RequireObject("publicKey")
+//			privateKey := cfg.RequireObject("privateKey")
+//			_, err := Dew.NewKeypair(ctx, "test", &Dew.KeypairArgs{
+//				Scope:          pulumi.String("account"),
+//				EncryptionType: pulumi.String("default"),
+//				Description:    pulumi.String("test description"),
+//				PublicKey:      pulumi.Any(publicKey),
+//				PrivateKey:     pulumi.Any(privateKey),
 //			})
 //			if err != nil {
 //				return err
@@ -79,7 +89,7 @@ import (
 //	}
 //
 // ```
-// ### Import an existing keypair
+// ### Import an existing KPS keypair without private key
 //
 // ```go
 // package main
@@ -88,13 +98,18 @@ import (
 //
 //	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud/Dew"
 //	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi/config"
 //
 // )
 //
 //	func main() {
 //		pulumi.Run(func(ctx *pulumi.Context) error {
-//			_, err := Dew.NewKeypair(ctx, "test-keypair", &Dew.KeypairArgs{
-//				PublicKey: pulumi.String("ssh-rsa AAAAB3NzaC1yc2EAAAlJq5Pu+eizhou7nFFDxXofr2ySF8k/yuA9OnJdVF9Fbf85Z59CWNZBvcAT... root@terra-dev"),
+//			cfg := config.New(ctx, "")
+//			publicKey := cfg.RequireObject("publicKey")
+//			_, err := Dew.NewKeypair(ctx, "test", &Dew.KeypairArgs{
+//				Scope:       pulumi.String("account"),
+//				Description: pulumi.String("test description"),
+//				PublicKey:   pulumi.Any(publicKey),
 //			})
 //			if err != nil {
 //				return err
@@ -107,15 +122,15 @@ import (
 //
 // ## Import
 //
-// Keypairs can be imported using the `name`, e.g.
+// Keypair can be imported using the `name`, e.g. bash
 //
 // ```sh
 //
-//	$ pulumi import huaweicloud:Dew/keypair:Keypair my-keypair test-keypair
+//	$ pulumi import huaweicloud:Dew/keypair:Keypair test <name>
 //
 // ```
 //
-//	Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`encryption_type`, and `kms_key_name`. It is generally recommended running `terraform plan` after importing a key pair. You can then decide if changes should be applied to the key pair, or the resource definition should be updated to align with the key pair. Also you can ignore changes as below. resource "huaweicloud_kps_keypair" "test" {
+//	Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`encryption_type`, `kms_key_id`, `kms_key_name`, `key_file` and `private_key`. It is generally recommended running `terraform plan` after importing a keypair. You can then decide if changes should be applied to the keypair, or the resource definition should be updated to align with the keypair. Also, you can ignore changes as below. hcl resource "huaweicloud_kps_keypair" "test" {
 //
 //	...
 //
@@ -123,7 +138,7 @@ import (
 //
 //	ignore_changes = [
 //
-//	encryption_type, kms_key_name,
+//	encryption_type, kms_key_id, kms_key_name, key_file, private_key
 //
 //	]
 //
@@ -131,40 +146,44 @@ import (
 type Keypair struct {
 	pulumi.CustomResourceState
 
-	// The key pair creation time.
+	// The keypair creation time.
 	CreatedAt pulumi.StringOutput `pulumi:"createdAt"`
-	// Specifies the description of key pair.
+	// Specifies the description of keypair.
 	Description pulumi.StringPtrOutput `pulumi:"description"`
-	// Specifies encryption mode if manages the private key by HuaweiCloud.
-	// The options are as follows:
-	// - **default**: The default encryption mode. Applicable to sites where KMS is not deployed.
-	// - **kms**: KMS encryption mode.
+	// Specifies encryption mode. The options are as follows:
+	// + **default**: The default encryption mode. Applicable to sites where KMS is not deployed.
+	// + **kms**: KMS encryption mode.
 	EncryptionType pulumi.StringOutput `pulumi:"encryptionType"`
-	// Fingerprint information about an key pair.
+	// Fingerprint information about a keypair.
 	Fingerprint pulumi.StringOutput `pulumi:"fingerprint"`
 	// Whether the private key is managed by HuaweiCloud.
 	IsManaged pulumi.BoolOutput `pulumi:"isManaged"`
 	// Specifies the path of the created private key.
-	// The private key file (**.pem**) is created only after the resource is created.
-	// Changing this parameter will create a new resource.
+	// The private key file (**.pem**) is created only when creating a KPS keypair.
+	// Importing an existing keypair will not obtain the private key information.
 	KeyFile pulumi.StringOutput `pulumi:"keyFile"`
+	// Specifies the KMS key ID to encrypt private keys.
+	KmsKeyId pulumi.StringPtrOutput `pulumi:"kmsKeyId"`
 	// Specifies the KMS key name to encrypt private keys.
-	// It's mandatory when the `encryptionType` is `kms`. Changing this parameter will create a new resource.
 	KmsKeyName pulumi.StringPtrOutput `pulumi:"kmsKeyName"`
-	// Specifies a unique name for the keypair. The name can contain a maximum of 64
+	// Specifies a unique name for the keypair. The name can contain a maximum of `64`
 	// characters, including letters, digits, underscores (_) and hyphens (-).
 	// Changing this parameter will create a new resource.
 	Name pulumi.StringOutput `pulumi:"name"`
+	// Specifies the imported OpenSSH-formatted private key.
+	PrivateKey pulumi.StringPtrOutput `pulumi:"privateKey"`
 	// Specifies the imported OpenSSH-formatted public key.
-	// Changing this parameter will create a new resource.
+	// It is required when import keypair. Changing this parameter will create a new resource.
 	PublicKey pulumi.StringOutput `pulumi:"publicKey"`
 	// Specifies the region in which to create the keypair resource. If omitted, the
 	// provider-level region will be used. Changing this parameter will create a new resource.
 	Region pulumi.StringOutput `pulumi:"region"`
-	// Specifies the scope of key pair. The options are as follows:
-	// - **account**: Tenant-level, available to all users under the same account.
-	// - **user**: User-level, only available to that user.
+	// Specifies the scope of keypair. The options are as follows:
+	// + **account**: Tenant-level, available to all users under the same account.
+	// + **user**: User-level, only available to user.
 	Scope pulumi.StringOutput `pulumi:"scope"`
+	// Specifies the user ID to which the keypair belongs.
+	UserId pulumi.StringOutput `pulumi:"userId"`
 }
 
 // NewKeypair registers a new resource with the given unique name, arguments, and options.
@@ -197,77 +216,85 @@ func GetKeypair(ctx *pulumi.Context,
 
 // Input properties used for looking up and filtering Keypair resources.
 type keypairState struct {
-	// The key pair creation time.
+	// The keypair creation time.
 	CreatedAt *string `pulumi:"createdAt"`
-	// Specifies the description of key pair.
+	// Specifies the description of keypair.
 	Description *string `pulumi:"description"`
-	// Specifies encryption mode if manages the private key by HuaweiCloud.
-	// The options are as follows:
-	// - **default**: The default encryption mode. Applicable to sites where KMS is not deployed.
-	// - **kms**: KMS encryption mode.
+	// Specifies encryption mode. The options are as follows:
+	// + **default**: The default encryption mode. Applicable to sites where KMS is not deployed.
+	// + **kms**: KMS encryption mode.
 	EncryptionType *string `pulumi:"encryptionType"`
-	// Fingerprint information about an key pair.
+	// Fingerprint information about a keypair.
 	Fingerprint *string `pulumi:"fingerprint"`
 	// Whether the private key is managed by HuaweiCloud.
 	IsManaged *bool `pulumi:"isManaged"`
 	// Specifies the path of the created private key.
-	// The private key file (**.pem**) is created only after the resource is created.
-	// Changing this parameter will create a new resource.
+	// The private key file (**.pem**) is created only when creating a KPS keypair.
+	// Importing an existing keypair will not obtain the private key information.
 	KeyFile *string `pulumi:"keyFile"`
+	// Specifies the KMS key ID to encrypt private keys.
+	KmsKeyId *string `pulumi:"kmsKeyId"`
 	// Specifies the KMS key name to encrypt private keys.
-	// It's mandatory when the `encryptionType` is `kms`. Changing this parameter will create a new resource.
 	KmsKeyName *string `pulumi:"kmsKeyName"`
-	// Specifies a unique name for the keypair. The name can contain a maximum of 64
+	// Specifies a unique name for the keypair. The name can contain a maximum of `64`
 	// characters, including letters, digits, underscores (_) and hyphens (-).
 	// Changing this parameter will create a new resource.
 	Name *string `pulumi:"name"`
+	// Specifies the imported OpenSSH-formatted private key.
+	PrivateKey *string `pulumi:"privateKey"`
 	// Specifies the imported OpenSSH-formatted public key.
-	// Changing this parameter will create a new resource.
+	// It is required when import keypair. Changing this parameter will create a new resource.
 	PublicKey *string `pulumi:"publicKey"`
 	// Specifies the region in which to create the keypair resource. If omitted, the
 	// provider-level region will be used. Changing this parameter will create a new resource.
 	Region *string `pulumi:"region"`
-	// Specifies the scope of key pair. The options are as follows:
-	// - **account**: Tenant-level, available to all users under the same account.
-	// - **user**: User-level, only available to that user.
+	// Specifies the scope of keypair. The options are as follows:
+	// + **account**: Tenant-level, available to all users under the same account.
+	// + **user**: User-level, only available to user.
 	Scope *string `pulumi:"scope"`
+	// Specifies the user ID to which the keypair belongs.
+	UserId *string `pulumi:"userId"`
 }
 
 type KeypairState struct {
-	// The key pair creation time.
+	// The keypair creation time.
 	CreatedAt pulumi.StringPtrInput
-	// Specifies the description of key pair.
+	// Specifies the description of keypair.
 	Description pulumi.StringPtrInput
-	// Specifies encryption mode if manages the private key by HuaweiCloud.
-	// The options are as follows:
-	// - **default**: The default encryption mode. Applicable to sites where KMS is not deployed.
-	// - **kms**: KMS encryption mode.
+	// Specifies encryption mode. The options are as follows:
+	// + **default**: The default encryption mode. Applicable to sites where KMS is not deployed.
+	// + **kms**: KMS encryption mode.
 	EncryptionType pulumi.StringPtrInput
-	// Fingerprint information about an key pair.
+	// Fingerprint information about a keypair.
 	Fingerprint pulumi.StringPtrInput
 	// Whether the private key is managed by HuaweiCloud.
 	IsManaged pulumi.BoolPtrInput
 	// Specifies the path of the created private key.
-	// The private key file (**.pem**) is created only after the resource is created.
-	// Changing this parameter will create a new resource.
+	// The private key file (**.pem**) is created only when creating a KPS keypair.
+	// Importing an existing keypair will not obtain the private key information.
 	KeyFile pulumi.StringPtrInput
+	// Specifies the KMS key ID to encrypt private keys.
+	KmsKeyId pulumi.StringPtrInput
 	// Specifies the KMS key name to encrypt private keys.
-	// It's mandatory when the `encryptionType` is `kms`. Changing this parameter will create a new resource.
 	KmsKeyName pulumi.StringPtrInput
-	// Specifies a unique name for the keypair. The name can contain a maximum of 64
+	// Specifies a unique name for the keypair. The name can contain a maximum of `64`
 	// characters, including letters, digits, underscores (_) and hyphens (-).
 	// Changing this parameter will create a new resource.
 	Name pulumi.StringPtrInput
+	// Specifies the imported OpenSSH-formatted private key.
+	PrivateKey pulumi.StringPtrInput
 	// Specifies the imported OpenSSH-formatted public key.
-	// Changing this parameter will create a new resource.
+	// It is required when import keypair. Changing this parameter will create a new resource.
 	PublicKey pulumi.StringPtrInput
 	// Specifies the region in which to create the keypair resource. If omitted, the
 	// provider-level region will be used. Changing this parameter will create a new resource.
 	Region pulumi.StringPtrInput
-	// Specifies the scope of key pair. The options are as follows:
-	// - **account**: Tenant-level, available to all users under the same account.
-	// - **user**: User-level, only available to that user.
+	// Specifies the scope of keypair. The options are as follows:
+	// + **account**: Tenant-level, available to all users under the same account.
+	// + **user**: User-level, only available to user.
 	Scope pulumi.StringPtrInput
+	// Specifies the user ID to which the keypair belongs.
+	UserId pulumi.StringPtrInput
 }
 
 func (KeypairState) ElementType() reflect.Type {
@@ -275,66 +302,74 @@ func (KeypairState) ElementType() reflect.Type {
 }
 
 type keypairArgs struct {
-	// Specifies the description of key pair.
+	// Specifies the description of keypair.
 	Description *string `pulumi:"description"`
-	// Specifies encryption mode if manages the private key by HuaweiCloud.
-	// The options are as follows:
-	// - **default**: The default encryption mode. Applicable to sites where KMS is not deployed.
-	// - **kms**: KMS encryption mode.
+	// Specifies encryption mode. The options are as follows:
+	// + **default**: The default encryption mode. Applicable to sites where KMS is not deployed.
+	// + **kms**: KMS encryption mode.
 	EncryptionType *string `pulumi:"encryptionType"`
 	// Specifies the path of the created private key.
-	// The private key file (**.pem**) is created only after the resource is created.
-	// Changing this parameter will create a new resource.
+	// The private key file (**.pem**) is created only when creating a KPS keypair.
+	// Importing an existing keypair will not obtain the private key information.
 	KeyFile *string `pulumi:"keyFile"`
+	// Specifies the KMS key ID to encrypt private keys.
+	KmsKeyId *string `pulumi:"kmsKeyId"`
 	// Specifies the KMS key name to encrypt private keys.
-	// It's mandatory when the `encryptionType` is `kms`. Changing this parameter will create a new resource.
 	KmsKeyName *string `pulumi:"kmsKeyName"`
-	// Specifies a unique name for the keypair. The name can contain a maximum of 64
+	// Specifies a unique name for the keypair. The name can contain a maximum of `64`
 	// characters, including letters, digits, underscores (_) and hyphens (-).
 	// Changing this parameter will create a new resource.
 	Name *string `pulumi:"name"`
+	// Specifies the imported OpenSSH-formatted private key.
+	PrivateKey *string `pulumi:"privateKey"`
 	// Specifies the imported OpenSSH-formatted public key.
-	// Changing this parameter will create a new resource.
+	// It is required when import keypair. Changing this parameter will create a new resource.
 	PublicKey *string `pulumi:"publicKey"`
 	// Specifies the region in which to create the keypair resource. If omitted, the
 	// provider-level region will be used. Changing this parameter will create a new resource.
 	Region *string `pulumi:"region"`
-	// Specifies the scope of key pair. The options are as follows:
-	// - **account**: Tenant-level, available to all users under the same account.
-	// - **user**: User-level, only available to that user.
+	// Specifies the scope of keypair. The options are as follows:
+	// + **account**: Tenant-level, available to all users under the same account.
+	// + **user**: User-level, only available to user.
 	Scope *string `pulumi:"scope"`
+	// Specifies the user ID to which the keypair belongs.
+	UserId *string `pulumi:"userId"`
 }
 
 // The set of arguments for constructing a Keypair resource.
 type KeypairArgs struct {
-	// Specifies the description of key pair.
+	// Specifies the description of keypair.
 	Description pulumi.StringPtrInput
-	// Specifies encryption mode if manages the private key by HuaweiCloud.
-	// The options are as follows:
-	// - **default**: The default encryption mode. Applicable to sites where KMS is not deployed.
-	// - **kms**: KMS encryption mode.
+	// Specifies encryption mode. The options are as follows:
+	// + **default**: The default encryption mode. Applicable to sites where KMS is not deployed.
+	// + **kms**: KMS encryption mode.
 	EncryptionType pulumi.StringPtrInput
 	// Specifies the path of the created private key.
-	// The private key file (**.pem**) is created only after the resource is created.
-	// Changing this parameter will create a new resource.
+	// The private key file (**.pem**) is created only when creating a KPS keypair.
+	// Importing an existing keypair will not obtain the private key information.
 	KeyFile pulumi.StringPtrInput
+	// Specifies the KMS key ID to encrypt private keys.
+	KmsKeyId pulumi.StringPtrInput
 	// Specifies the KMS key name to encrypt private keys.
-	// It's mandatory when the `encryptionType` is `kms`. Changing this parameter will create a new resource.
 	KmsKeyName pulumi.StringPtrInput
-	// Specifies a unique name for the keypair. The name can contain a maximum of 64
+	// Specifies a unique name for the keypair. The name can contain a maximum of `64`
 	// characters, including letters, digits, underscores (_) and hyphens (-).
 	// Changing this parameter will create a new resource.
 	Name pulumi.StringPtrInput
+	// Specifies the imported OpenSSH-formatted private key.
+	PrivateKey pulumi.StringPtrInput
 	// Specifies the imported OpenSSH-formatted public key.
-	// Changing this parameter will create a new resource.
+	// It is required when import keypair. Changing this parameter will create a new resource.
 	PublicKey pulumi.StringPtrInput
 	// Specifies the region in which to create the keypair resource. If omitted, the
 	// provider-level region will be used. Changing this parameter will create a new resource.
 	Region pulumi.StringPtrInput
-	// Specifies the scope of key pair. The options are as follows:
-	// - **account**: Tenant-level, available to all users under the same account.
-	// - **user**: User-level, only available to that user.
+	// Specifies the scope of keypair. The options are as follows:
+	// + **account**: Tenant-level, available to all users under the same account.
+	// + **user**: User-level, only available to user.
 	Scope pulumi.StringPtrInput
+	// Specifies the user ID to which the keypair belongs.
+	UserId pulumi.StringPtrInput
 }
 
 func (KeypairArgs) ElementType() reflect.Type {
@@ -424,25 +459,24 @@ func (o KeypairOutput) ToKeypairOutputWithContext(ctx context.Context) KeypairOu
 	return o
 }
 
-// The key pair creation time.
+// The keypair creation time.
 func (o KeypairOutput) CreatedAt() pulumi.StringOutput {
 	return o.ApplyT(func(v *Keypair) pulumi.StringOutput { return v.CreatedAt }).(pulumi.StringOutput)
 }
 
-// Specifies the description of key pair.
+// Specifies the description of keypair.
 func (o KeypairOutput) Description() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Keypair) pulumi.StringPtrOutput { return v.Description }).(pulumi.StringPtrOutput)
 }
 
-// Specifies encryption mode if manages the private key by HuaweiCloud.
-// The options are as follows:
-// - **default**: The default encryption mode. Applicable to sites where KMS is not deployed.
-// - **kms**: KMS encryption mode.
+// Specifies encryption mode. The options are as follows:
+// + **default**: The default encryption mode. Applicable to sites where KMS is not deployed.
+// + **kms**: KMS encryption mode.
 func (o KeypairOutput) EncryptionType() pulumi.StringOutput {
 	return o.ApplyT(func(v *Keypair) pulumi.StringOutput { return v.EncryptionType }).(pulumi.StringOutput)
 }
 
-// Fingerprint information about an key pair.
+// Fingerprint information about a keypair.
 func (o KeypairOutput) Fingerprint() pulumi.StringOutput {
 	return o.ApplyT(func(v *Keypair) pulumi.StringOutput { return v.Fingerprint }).(pulumi.StringOutput)
 }
@@ -453,27 +487,36 @@ func (o KeypairOutput) IsManaged() pulumi.BoolOutput {
 }
 
 // Specifies the path of the created private key.
-// The private key file (**.pem**) is created only after the resource is created.
-// Changing this parameter will create a new resource.
+// The private key file (**.pem**) is created only when creating a KPS keypair.
+// Importing an existing keypair will not obtain the private key information.
 func (o KeypairOutput) KeyFile() pulumi.StringOutput {
 	return o.ApplyT(func(v *Keypair) pulumi.StringOutput { return v.KeyFile }).(pulumi.StringOutput)
 }
 
+// Specifies the KMS key ID to encrypt private keys.
+func (o KeypairOutput) KmsKeyId() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *Keypair) pulumi.StringPtrOutput { return v.KmsKeyId }).(pulumi.StringPtrOutput)
+}
+
 // Specifies the KMS key name to encrypt private keys.
-// It's mandatory when the `encryptionType` is `kms`. Changing this parameter will create a new resource.
 func (o KeypairOutput) KmsKeyName() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Keypair) pulumi.StringPtrOutput { return v.KmsKeyName }).(pulumi.StringPtrOutput)
 }
 
-// Specifies a unique name for the keypair. The name can contain a maximum of 64
+// Specifies a unique name for the keypair. The name can contain a maximum of `64`
 // characters, including letters, digits, underscores (_) and hyphens (-).
 // Changing this parameter will create a new resource.
 func (o KeypairOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v *Keypair) pulumi.StringOutput { return v.Name }).(pulumi.StringOutput)
 }
 
+// Specifies the imported OpenSSH-formatted private key.
+func (o KeypairOutput) PrivateKey() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *Keypair) pulumi.StringPtrOutput { return v.PrivateKey }).(pulumi.StringPtrOutput)
+}
+
 // Specifies the imported OpenSSH-formatted public key.
-// Changing this parameter will create a new resource.
+// It is required when import keypair. Changing this parameter will create a new resource.
 func (o KeypairOutput) PublicKey() pulumi.StringOutput {
 	return o.ApplyT(func(v *Keypair) pulumi.StringOutput { return v.PublicKey }).(pulumi.StringOutput)
 }
@@ -484,11 +527,16 @@ func (o KeypairOutput) Region() pulumi.StringOutput {
 	return o.ApplyT(func(v *Keypair) pulumi.StringOutput { return v.Region }).(pulumi.StringOutput)
 }
 
-// Specifies the scope of key pair. The options are as follows:
-// - **account**: Tenant-level, available to all users under the same account.
-// - **user**: User-level, only available to that user.
+// Specifies the scope of keypair. The options are as follows:
+// + **account**: Tenant-level, available to all users under the same account.
+// + **user**: User-level, only available to user.
 func (o KeypairOutput) Scope() pulumi.StringOutput {
 	return o.ApplyT(func(v *Keypair) pulumi.StringOutput { return v.Scope }).(pulumi.StringOutput)
+}
+
+// Specifies the user ID to which the keypair belongs.
+func (o KeypairOutput) UserId() pulumi.StringOutput {
+	return o.ApplyT(func(v *Keypair) pulumi.StringOutput { return v.UserId }).(pulumi.StringOutput)
 }
 
 type KeypairArrayOutput struct{ *pulumi.OutputState }

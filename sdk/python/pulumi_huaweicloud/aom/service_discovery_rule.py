@@ -20,6 +20,7 @@ class ServiceDiscoveryRuleArgs:
                  log_file_suffixes: pulumi.Input[Sequence[pulumi.Input[str]]],
                  name_rules: pulumi.Input['ServiceDiscoveryRuleNameRulesArgs'],
                  service_type: pulumi.Input[str],
+                 description: Optional[pulumi.Input[str]] = None,
                  detect_log_enabled: Optional[pulumi.Input[bool]] = None,
                  discovery_rule_enabled: Optional[pulumi.Input[bool]] = None,
                  is_default_rule: Optional[pulumi.Input[bool]] = None,
@@ -43,6 +44,7 @@ class ServiceDiscoveryRuleArgs:
                The object structure is documented below.
         :param pulumi.Input[str] service_type: Specifies the service type, which is used only for rule classification and UI display.
                You can enter any field. For example, enter Java or Python by technology stack, or enter collector or database by function.
+        :param pulumi.Input[str] description: Specifies the rule description.
         :param pulumi.Input[bool] detect_log_enabled: Specifies whether to enable log collection. The default value is true.
         :param pulumi.Input[bool] discovery_rule_enabled: Specifies whether the rule is enabled. The default value is true.
         :param pulumi.Input[bool] is_default_rule: Specifies whether the rule is the default one. The default value is false.
@@ -50,7 +52,7 @@ class ServiceDiscoveryRuleArgs:
                logs in the specified log path or log file are collected. Otherwise, only the files whose names end with
                .log or .trace are collected. If the value of `name_type` is **cmdLineHash**, args is in the format of ["00001"] and
                value is in the format of ["/xxx/xx.log"], indicating that the log path is /xxx/xx.log when the startup command is 00001.
-        :param pulumi.Input[str] name: Specifies the rule name, which contains 4 to 63 characters. It must start
+        :param pulumi.Input[str] name: Specifies the rule name, which contains `4` to `63` characters. It must start
                with a lowercase letter but cannot end with a hyphen (-). Only digits, lowercase letters, and hyphens are allowed.
         :param pulumi.Input[int] priority: Specifies the rule priority. Value range: 1 to 9999. The default value is 9999.
         :param pulumi.Input[str] region: The region in which to create the service discovery rule resource. If omitted,
@@ -60,6 +62,8 @@ class ServiceDiscoveryRuleArgs:
         pulumi.set(__self__, "log_file_suffixes", log_file_suffixes)
         pulumi.set(__self__, "name_rules", name_rules)
         pulumi.set(__self__, "service_type", service_type)
+        if description is not None:
+            pulumi.set(__self__, "description", description)
         if detect_log_enabled is not None:
             pulumi.set(__self__, "detect_log_enabled", detect_log_enabled)
         if discovery_rule_enabled is not None:
@@ -134,6 +138,18 @@ class ServiceDiscoveryRuleArgs:
         pulumi.set(self, "service_type", value)
 
     @property
+    @pulumi.getter
+    def description(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the rule description.
+        """
+        return pulumi.get(self, "description")
+
+    @description.setter
+    def description(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "description", value)
+
+    @property
     @pulumi.getter(name="detectLogEnabled")
     def detect_log_enabled(self) -> Optional[pulumi.Input[bool]]:
         """
@@ -188,7 +204,7 @@ class ServiceDiscoveryRuleArgs:
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the rule name, which contains 4 to 63 characters. It must start
+        Specifies the rule name, which contains `4` to `63` characters. It must start
         with a lowercase letter but cannot end with a hyphen (-). Only digits, lowercase letters, and hyphens are allowed.
         """
         return pulumi.get(self, "name")
@@ -226,6 +242,8 @@ class ServiceDiscoveryRuleArgs:
 @pulumi.input_type
 class _ServiceDiscoveryRuleState:
     def __init__(__self__, *,
+                 created_at: Optional[pulumi.Input[str]] = None,
+                 description: Optional[pulumi.Input[str]] = None,
                  detect_log_enabled: Optional[pulumi.Input[bool]] = None,
                  discovery_rule_enabled: Optional[pulumi.Input[bool]] = None,
                  discovery_rules: Optional[pulumi.Input[Sequence[pulumi.Input['ServiceDiscoveryRuleDiscoveryRuleArgs']]]] = None,
@@ -240,6 +258,8 @@ class _ServiceDiscoveryRuleState:
                  service_type: Optional[pulumi.Input[str]] = None):
         """
         Input properties used for looking up and filtering ServiceDiscoveryRule resources.
+        :param pulumi.Input[str] created_at: The rule create time.
+        :param pulumi.Input[str] description: Specifies the rule description.
         :param pulumi.Input[bool] detect_log_enabled: Specifies whether to enable log collection. The default value is true.
         :param pulumi.Input[bool] discovery_rule_enabled: Specifies whether the rule is enabled. The default value is true.
         :param pulumi.Input[Sequence[pulumi.Input['ServiceDiscoveryRuleDiscoveryRuleArgs']]] discovery_rules: Specifies the discovery rule. If the array contains multiple conditions, only the
@@ -257,7 +277,7 @@ class _ServiceDiscoveryRuleState:
                logs in the specified log path or log file are collected. Otherwise, only the files whose names end with
                .log or .trace are collected. If the value of `name_type` is **cmdLineHash**, args is in the format of ["00001"] and
                value is in the format of ["/xxx/xx.log"], indicating that the log path is /xxx/xx.log when the startup command is 00001.
-        :param pulumi.Input[str] name: Specifies the rule name, which contains 4 to 63 characters. It must start
+        :param pulumi.Input[str] name: Specifies the rule name, which contains `4` to `63` characters. It must start
                with a lowercase letter but cannot end with a hyphen (-). Only digits, lowercase letters, and hyphens are allowed.
         :param pulumi.Input['ServiceDiscoveryRuleNameRulesArgs'] name_rules: Specifies the naming rules for discovered services and applications.
                The object structure is documented below.
@@ -268,6 +288,10 @@ class _ServiceDiscoveryRuleState:
         :param pulumi.Input[str] service_type: Specifies the service type, which is used only for rule classification and UI display.
                You can enter any field. For example, enter Java or Python by technology stack, or enter collector or database by function.
         """
+        if created_at is not None:
+            pulumi.set(__self__, "created_at", created_at)
+        if description is not None:
+            pulumi.set(__self__, "description", description)
         if detect_log_enabled is not None:
             pulumi.set(__self__, "detect_log_enabled", detect_log_enabled)
         if discovery_rule_enabled is not None:
@@ -292,6 +316,30 @@ class _ServiceDiscoveryRuleState:
             pulumi.set(__self__, "rule_id", rule_id)
         if service_type is not None:
             pulumi.set(__self__, "service_type", service_type)
+
+    @property
+    @pulumi.getter(name="createdAt")
+    def created_at(self) -> Optional[pulumi.Input[str]]:
+        """
+        The rule create time.
+        """
+        return pulumi.get(self, "created_at")
+
+    @created_at.setter
+    def created_at(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "created_at", value)
+
+    @property
+    @pulumi.getter
+    def description(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the rule description.
+        """
+        return pulumi.get(self, "description")
+
+    @description.setter
+    def description(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "description", value)
 
     @property
     @pulumi.getter(name="detectLogEnabled")
@@ -380,7 +428,7 @@ class _ServiceDiscoveryRuleState:
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the rule name, which contains 4 to 63 characters. It must start
+        Specifies the rule name, which contains `4` to `63` characters. It must start
         with a lowercase letter but cannot end with a hyphen (-). Only digits, lowercase letters, and hyphens are allowed.
         """
         return pulumi.get(self, "name")
@@ -458,6 +506,7 @@ class ServiceDiscoveryRule(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
+                 description: Optional[pulumi.Input[str]] = None,
                  detect_log_enabled: Optional[pulumi.Input[bool]] = None,
                  discovery_rule_enabled: Optional[pulumi.Input[bool]] = None,
                  discovery_rules: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ServiceDiscoveryRuleDiscoveryRuleArgs']]]]] = None,
@@ -511,14 +560,15 @@ class ServiceDiscoveryRule(pulumi.CustomResource):
 
         ## Import
 
-        AOM service discovery rules can be imported using the `name`, e.g.
+        AOM service discovery rules can be imported using the `name`, e.g. bash
 
         ```sh
-         $ pulumi import huaweicloud:Aom/serviceDiscoveryRule:ServiceDiscoveryRule alarm_rule rule_name
+         $ pulumi import huaweicloud:Aom/serviceDiscoveryRule:ServiceDiscoveryRule alarm_rule <name>
         ```
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
+        :param pulumi.Input[str] description: Specifies the rule description.
         :param pulumi.Input[bool] detect_log_enabled: Specifies whether to enable log collection. The default value is true.
         :param pulumi.Input[bool] discovery_rule_enabled: Specifies whether the rule is enabled. The default value is true.
         :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ServiceDiscoveryRuleDiscoveryRuleArgs']]]] discovery_rules: Specifies the discovery rule. If the array contains multiple conditions, only the
@@ -536,7 +586,7 @@ class ServiceDiscoveryRule(pulumi.CustomResource):
                logs in the specified log path or log file are collected. Otherwise, only the files whose names end with
                .log or .trace are collected. If the value of `name_type` is **cmdLineHash**, args is in the format of ["00001"] and
                value is in the format of ["/xxx/xx.log"], indicating that the log path is /xxx/xx.log when the startup command is 00001.
-        :param pulumi.Input[str] name: Specifies the rule name, which contains 4 to 63 characters. It must start
+        :param pulumi.Input[str] name: Specifies the rule name, which contains `4` to `63` characters. It must start
                with a lowercase letter but cannot end with a hyphen (-). Only digits, lowercase letters, and hyphens are allowed.
         :param pulumi.Input[pulumi.InputType['ServiceDiscoveryRuleNameRulesArgs']] name_rules: Specifies the naming rules for discovered services and applications.
                The object structure is documented below.
@@ -593,10 +643,10 @@ class ServiceDiscoveryRule(pulumi.CustomResource):
 
         ## Import
 
-        AOM service discovery rules can be imported using the `name`, e.g.
+        AOM service discovery rules can be imported using the `name`, e.g. bash
 
         ```sh
-         $ pulumi import huaweicloud:Aom/serviceDiscoveryRule:ServiceDiscoveryRule alarm_rule rule_name
+         $ pulumi import huaweicloud:Aom/serviceDiscoveryRule:ServiceDiscoveryRule alarm_rule <name>
         ```
 
         :param str resource_name: The name of the resource.
@@ -614,6 +664,7 @@ class ServiceDiscoveryRule(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
+                 description: Optional[pulumi.Input[str]] = None,
                  detect_log_enabled: Optional[pulumi.Input[bool]] = None,
                  discovery_rule_enabled: Optional[pulumi.Input[bool]] = None,
                  discovery_rules: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ServiceDiscoveryRuleDiscoveryRuleArgs']]]]] = None,
@@ -634,6 +685,7 @@ class ServiceDiscoveryRule(pulumi.CustomResource):
                 raise TypeError('__props__ is only valid when passed in combination with a valid opts.id to get an existing resource')
             __props__ = ServiceDiscoveryRuleArgs.__new__(ServiceDiscoveryRuleArgs)
 
+            __props__.__dict__["description"] = description
             __props__.__dict__["detect_log_enabled"] = detect_log_enabled
             __props__.__dict__["discovery_rule_enabled"] = discovery_rule_enabled
             if discovery_rules is None and not opts.urn:
@@ -653,6 +705,7 @@ class ServiceDiscoveryRule(pulumi.CustomResource):
             if service_type is None and not opts.urn:
                 raise TypeError("Missing required property 'service_type'")
             __props__.__dict__["service_type"] = service_type
+            __props__.__dict__["created_at"] = None
             __props__.__dict__["rule_id"] = None
         super(ServiceDiscoveryRule, __self__).__init__(
             'huaweicloud:Aom/serviceDiscoveryRule:ServiceDiscoveryRule',
@@ -664,6 +717,8 @@ class ServiceDiscoveryRule(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
+            created_at: Optional[pulumi.Input[str]] = None,
+            description: Optional[pulumi.Input[str]] = None,
             detect_log_enabled: Optional[pulumi.Input[bool]] = None,
             discovery_rule_enabled: Optional[pulumi.Input[bool]] = None,
             discovery_rules: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ServiceDiscoveryRuleDiscoveryRuleArgs']]]]] = None,
@@ -683,6 +738,8 @@ class ServiceDiscoveryRule(pulumi.CustomResource):
         :param str resource_name: The unique name of the resulting resource.
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
+        :param pulumi.Input[str] created_at: The rule create time.
+        :param pulumi.Input[str] description: Specifies the rule description.
         :param pulumi.Input[bool] detect_log_enabled: Specifies whether to enable log collection. The default value is true.
         :param pulumi.Input[bool] discovery_rule_enabled: Specifies whether the rule is enabled. The default value is true.
         :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ServiceDiscoveryRuleDiscoveryRuleArgs']]]] discovery_rules: Specifies the discovery rule. If the array contains multiple conditions, only the
@@ -700,7 +757,7 @@ class ServiceDiscoveryRule(pulumi.CustomResource):
                logs in the specified log path or log file are collected. Otherwise, only the files whose names end with
                .log or .trace are collected. If the value of `name_type` is **cmdLineHash**, args is in the format of ["00001"] and
                value is in the format of ["/xxx/xx.log"], indicating that the log path is /xxx/xx.log when the startup command is 00001.
-        :param pulumi.Input[str] name: Specifies the rule name, which contains 4 to 63 characters. It must start
+        :param pulumi.Input[str] name: Specifies the rule name, which contains `4` to `63` characters. It must start
                with a lowercase letter but cannot end with a hyphen (-). Only digits, lowercase letters, and hyphens are allowed.
         :param pulumi.Input[pulumi.InputType['ServiceDiscoveryRuleNameRulesArgs']] name_rules: Specifies the naming rules for discovered services and applications.
                The object structure is documented below.
@@ -715,6 +772,8 @@ class ServiceDiscoveryRule(pulumi.CustomResource):
 
         __props__ = _ServiceDiscoveryRuleState.__new__(_ServiceDiscoveryRuleState)
 
+        __props__.__dict__["created_at"] = created_at
+        __props__.__dict__["description"] = description
         __props__.__dict__["detect_log_enabled"] = detect_log_enabled
         __props__.__dict__["discovery_rule_enabled"] = discovery_rule_enabled
         __props__.__dict__["discovery_rules"] = discovery_rules
@@ -728,6 +787,22 @@ class ServiceDiscoveryRule(pulumi.CustomResource):
         __props__.__dict__["rule_id"] = rule_id
         __props__.__dict__["service_type"] = service_type
         return ServiceDiscoveryRule(resource_name, opts=opts, __props__=__props__)
+
+    @property
+    @pulumi.getter(name="createdAt")
+    def created_at(self) -> pulumi.Output[str]:
+        """
+        The rule create time.
+        """
+        return pulumi.get(self, "created_at")
+
+    @property
+    @pulumi.getter
+    def description(self) -> pulumi.Output[Optional[str]]:
+        """
+        Specifies the rule description.
+        """
+        return pulumi.get(self, "description")
 
     @property
     @pulumi.getter(name="detectLogEnabled")
@@ -792,7 +867,7 @@ class ServiceDiscoveryRule(pulumi.CustomResource):
     @pulumi.getter
     def name(self) -> pulumi.Output[str]:
         """
-        Specifies the rule name, which contains 4 to 63 characters. It must start
+        Specifies the rule name, which contains `4` to `63` characters. It must start
         with a lowercase letter but cannot end with a hyphen (-). Only digits, lowercase letters, and hyphens are allowed.
         """
         return pulumi.get(self, "name")

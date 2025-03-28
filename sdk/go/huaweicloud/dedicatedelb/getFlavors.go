@@ -27,18 +27,12 @@ import (
 //
 //	func main() {
 //		pulumi.Run(func(ctx *pulumi.Context) error {
-//			flavors, err := DedicatedElb.GetFlavors(ctx, &dedicatedelb.GetFlavorsArgs{
-//				Type:           pulumi.StringRef("L7"),
-//				MaxConnections: pulumi.IntRef(200000),
-//				Cps:            pulumi.IntRef(2000),
+//			_, err := DedicatedElb.GetFlavors(ctx, &dedicatedelb.GetFlavorsArgs{
 //				Bandwidth:      pulumi.IntRef(50),
+//				Cps:            pulumi.IntRef(2000),
+//				MaxConnections: pulumi.IntRef(200000),
+//				Type:           pulumi.StringRef("L7"),
 //			}, nil)
-//			if err != nil {
-//				return err
-//			}
-//			_, err = DedicatedElb.NewLoadbalancer(ctx, "lb", &DedicatedElb.LoadbalancerArgs{
-//				L7FlavorId: pulumi.String(flavors.Ids[0]),
-//			})
 //			if err != nil {
 //				return err
 //			}
@@ -65,12 +59,20 @@ type GetFlavorsArgs struct {
 	Cps *int `pulumi:"cps"`
 	// Specifies the maximum connections in the flavor.
 	MaxConnections *int `pulumi:"maxConnections"`
+	// Specifies the flavor name.
+	Name *string `pulumi:"name"`
 	// Specifies the qps in the L7 flavor.
 	Qps *int `pulumi:"qps"`
 	// The region in which to obtain the flavors. If omitted, the provider-level region will be
 	// used.
 	Region *string `pulumi:"region"`
-	// Specifies the flavor type. Valid values are L4 and L7.
+	// Specifies the flavor type. Values options:
+	// + **L4**: indicates Layer-4 flavor.
+	// + **L7**: indicates Layer-7 flavor.
+	// + **L4_elastic**: indicates minimum Layer-4 flavor for elastic scaling.
+	// + **L7_elastic**: indicates minimum Layer-7 flavor for elastic scaling.
+	// + **L4_elastic_max**: indicates maximum Layer-4 flavor for elastic scaling.
+	// + **L7_elastic_max**: indicates maximum Layer-7 flavor for elastic scaling
 	Type *string `pulumi:"type"`
 }
 
@@ -88,6 +90,8 @@ type GetFlavorsResult struct {
 	Ids []string `pulumi:"ids"`
 	// Maximum connections of the flavor.
 	MaxConnections *int `pulumi:"maxConnections"`
+	// Name of the flavor.
+	Name *string `pulumi:"name"`
 	// Qps of the L7 flavor.
 	Qps    *int   `pulumi:"qps"`
 	Region string `pulumi:"region"`
@@ -116,12 +120,20 @@ type GetFlavorsOutputArgs struct {
 	Cps pulumi.IntPtrInput `pulumi:"cps"`
 	// Specifies the maximum connections in the flavor.
 	MaxConnections pulumi.IntPtrInput `pulumi:"maxConnections"`
+	// Specifies the flavor name.
+	Name pulumi.StringPtrInput `pulumi:"name"`
 	// Specifies the qps in the L7 flavor.
 	Qps pulumi.IntPtrInput `pulumi:"qps"`
 	// The region in which to obtain the flavors. If omitted, the provider-level region will be
 	// used.
 	Region pulumi.StringPtrInput `pulumi:"region"`
-	// Specifies the flavor type. Valid values are L4 and L7.
+	// Specifies the flavor type. Values options:
+	// + **L4**: indicates Layer-4 flavor.
+	// + **L7**: indicates Layer-7 flavor.
+	// + **L4_elastic**: indicates minimum Layer-4 flavor for elastic scaling.
+	// + **L7_elastic**: indicates minimum Layer-7 flavor for elastic scaling.
+	// + **L4_elastic_max**: indicates maximum Layer-4 flavor for elastic scaling.
+	// + **L7_elastic_max**: indicates maximum Layer-7 flavor for elastic scaling
 	Type pulumi.StringPtrInput `pulumi:"type"`
 }
 
@@ -172,6 +184,11 @@ func (o GetFlavorsResultOutput) Ids() pulumi.StringArrayOutput {
 // Maximum connections of the flavor.
 func (o GetFlavorsResultOutput) MaxConnections() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v GetFlavorsResult) *int { return v.MaxConnections }).(pulumi.IntPtrOutput)
+}
+
+// Name of the flavor.
+func (o GetFlavorsResultOutput) Name() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v GetFlavorsResult) *string { return v.Name }).(pulumi.StringPtrOutput)
 }
 
 // Qps of the L7 flavor.

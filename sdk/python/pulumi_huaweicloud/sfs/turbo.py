@@ -20,12 +20,15 @@ class TurboArgs:
                  subnet_id: pulumi.Input[str],
                  vpc_id: pulumi.Input[str],
                  auto_renew: Optional[pulumi.Input[str]] = None,
+                 backup_id: Optional[pulumi.Input[str]] = None,
                  charging_mode: Optional[pulumi.Input[str]] = None,
                  crypt_key_id: Optional[pulumi.Input[str]] = None,
                  dedicated_flavor: Optional[pulumi.Input[str]] = None,
                  dedicated_storage_id: Optional[pulumi.Input[str]] = None,
                  enhanced: Optional[pulumi.Input[bool]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
+                 hpc_bandwidth: Optional[pulumi.Input[str]] = None,
+                 hpc_cache_bandwidth: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  period: Optional[pulumi.Input[int]] = None,
                  period_unit: Optional[pulumi.Input[str]] = None,
@@ -37,15 +40,16 @@ class TurboArgs:
         The set of arguments for constructing a Turbo resource.
         :param pulumi.Input[str] availability_zone: Specifies the availability zone where the file system is located.
                Changing this will create a new resource.
-        :param pulumi.Input[str] security_group_id: Specifies the security group ID. Changing this will create a new
-               resource.
-        :param pulumi.Input[int] size: Specifies the capacity of a common file system, in GB. The value ranges from 500 to 32768,
-               and must be large than 10240 for an enhanced file system.
+        :param pulumi.Input[str] security_group_id: Specifies the security group ID.
+        :param pulumi.Input[int] size: Specifies the capacity of a sharing file system, in GB.
+               + If `share_type` is set to **STANDARD** or **PERFORMANCE**, the value ranges from `500` to `32,768`, and ranges from
+               `10,240` to `327,680` for an enhanced file system.
         :param pulumi.Input[str] subnet_id: Specifies the network ID of the subnet. Changing this will create a new
                resource.
         :param pulumi.Input[str] vpc_id: Specifies the VPC ID. Changing this will create a new resource.
         :param pulumi.Input[str] auto_renew: Specifies whether auto renew is enabled.  
                The valid values are **true** and **false**.
+        :param pulumi.Input[str] backup_id: Specifies the backup ID.
         :param pulumi.Input[str] charging_mode: Specifies the charging mode of the SFS Turbo.
                Valid values are **prePaid** and **postPaid**, defaults to **postPaid**.
                Changing this parameter will create a new cluster resource.
@@ -58,8 +62,14 @@ class TurboArgs:
                create a new resource.
         :param pulumi.Input[str] enterprise_project_id: The enterprise project id of the file system. Changing this
                will create a new resource.
-        :param pulumi.Input[str] name: Specifies the name of an SFS Turbo file system. The value contains 4 to 64
-               characters and must start with a letter. Changing this will create a new resource.
+        :param pulumi.Input[str] hpc_bandwidth: Specifies the HPC bandwidth. Changing this will create a new resource.
+               This parameter is valid and required when `share_type` is set to **HPC**.
+               Valid values are: **20M**, **40M**, **125M**, **250M**, **500M** and **1000M**.
+        :param pulumi.Input[str] hpc_cache_bandwidth: Specifies the HPC cache bandwidth(GB/s).
+               This parameter is valid and required when `share_type` is set to **HPC_CACHE**.
+               Valid values are: **2G**, **4G**, **8G**, **16G**, **24G**, **32G** and **48G**.
+        :param pulumi.Input[str] name: Specifies the name of an SFS Turbo file system. The value contains `4` to `64`
+               characters and must start with a letter.
         :param pulumi.Input[int] period: Specifies the charging period of the SFS Turbo.
                If `period_unit` is set to **month**, the value ranges from `1` to `11`.
                If `period_unit` is set to **year**, the value ranges from `1` to `3`.
@@ -72,8 +82,9 @@ class TurboArgs:
                provider-level region will be used. Changing this creates a new SFS Turbo resource.
         :param pulumi.Input[str] share_proto: Specifies the protocol for sharing file systems. The valid value is NFS.
                Changing this will create a new resource.
-        :param pulumi.Input[str] share_type: Specifies the file system type. The valid values are STANDARD and
-               PERFORMANCE Changing this will create a new resource.
+        :param pulumi.Input[str] share_type: Specifies the file system type. Changing this will create a new resource.
+               Valid values are **STANDARD**, **PERFORMANCE**, **HPC** and **HPC_CACHE**.
+               Defaults to **STANDARD**.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the SFS Turbo.
         """
         pulumi.set(__self__, "availability_zone", availability_zone)
@@ -83,6 +94,8 @@ class TurboArgs:
         pulumi.set(__self__, "vpc_id", vpc_id)
         if auto_renew is not None:
             pulumi.set(__self__, "auto_renew", auto_renew)
+        if backup_id is not None:
+            pulumi.set(__self__, "backup_id", backup_id)
         if charging_mode is not None:
             pulumi.set(__self__, "charging_mode", charging_mode)
         if crypt_key_id is not None:
@@ -95,6 +108,10 @@ class TurboArgs:
             pulumi.set(__self__, "enhanced", enhanced)
         if enterprise_project_id is not None:
             pulumi.set(__self__, "enterprise_project_id", enterprise_project_id)
+        if hpc_bandwidth is not None:
+            pulumi.set(__self__, "hpc_bandwidth", hpc_bandwidth)
+        if hpc_cache_bandwidth is not None:
+            pulumi.set(__self__, "hpc_cache_bandwidth", hpc_cache_bandwidth)
         if name is not None:
             pulumi.set(__self__, "name", name)
         if period is not None:
@@ -127,8 +144,7 @@ class TurboArgs:
     @pulumi.getter(name="securityGroupId")
     def security_group_id(self) -> pulumi.Input[str]:
         """
-        Specifies the security group ID. Changing this will create a new
-        resource.
+        Specifies the security group ID.
         """
         return pulumi.get(self, "security_group_id")
 
@@ -140,8 +156,9 @@ class TurboArgs:
     @pulumi.getter
     def size(self) -> pulumi.Input[int]:
         """
-        Specifies the capacity of a common file system, in GB. The value ranges from 500 to 32768,
-        and must be large than 10240 for an enhanced file system.
+        Specifies the capacity of a sharing file system, in GB.
+        + If `share_type` is set to **STANDARD** or **PERFORMANCE**, the value ranges from `500` to `32,768`, and ranges from
+        `10,240` to `327,680` for an enhanced file system.
         """
         return pulumi.get(self, "size")
 
@@ -186,6 +203,18 @@ class TurboArgs:
     @auto_renew.setter
     def auto_renew(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "auto_renew", value)
+
+    @property
+    @pulumi.getter(name="backupId")
+    def backup_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the backup ID.
+        """
+        return pulumi.get(self, "backup_id")
+
+    @backup_id.setter
+    def backup_id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "backup_id", value)
 
     @property
     @pulumi.getter(name="chargingMode")
@@ -266,11 +295,39 @@ class TurboArgs:
         pulumi.set(self, "enterprise_project_id", value)
 
     @property
+    @pulumi.getter(name="hpcBandwidth")
+    def hpc_bandwidth(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the HPC bandwidth. Changing this will create a new resource.
+        This parameter is valid and required when `share_type` is set to **HPC**.
+        Valid values are: **20M**, **40M**, **125M**, **250M**, **500M** and **1000M**.
+        """
+        return pulumi.get(self, "hpc_bandwidth")
+
+    @hpc_bandwidth.setter
+    def hpc_bandwidth(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "hpc_bandwidth", value)
+
+    @property
+    @pulumi.getter(name="hpcCacheBandwidth")
+    def hpc_cache_bandwidth(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the HPC cache bandwidth(GB/s).
+        This parameter is valid and required when `share_type` is set to **HPC_CACHE**.
+        Valid values are: **2G**, **4G**, **8G**, **16G**, **24G**, **32G** and **48G**.
+        """
+        return pulumi.get(self, "hpc_cache_bandwidth")
+
+    @hpc_cache_bandwidth.setter
+    def hpc_cache_bandwidth(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "hpc_cache_bandwidth", value)
+
+    @property
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the name of an SFS Turbo file system. The value contains 4 to 64
-        characters and must start with a letter. Changing this will create a new resource.
+        Specifies the name of an SFS Turbo file system. The value contains `4` to `64`
+        characters and must start with a letter.
         """
         return pulumi.get(self, "name")
 
@@ -338,8 +395,9 @@ class TurboArgs:
     @pulumi.getter(name="shareType")
     def share_type(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the file system type. The valid values are STANDARD and
-        PERFORMANCE Changing this will create a new resource.
+        Specifies the file system type. Changing this will create a new resource.
+        Valid values are **STANDARD**, **PERFORMANCE**, **HPC** and **HPC_CACHE**.
+        Defaults to **STANDARD**.
         """
         return pulumi.get(self, "share_type")
 
@@ -366,6 +424,7 @@ class _TurboState:
                  auto_renew: Optional[pulumi.Input[str]] = None,
                  availability_zone: Optional[pulumi.Input[str]] = None,
                  available_capacity: Optional[pulumi.Input[str]] = None,
+                 backup_id: Optional[pulumi.Input[str]] = None,
                  charging_mode: Optional[pulumi.Input[str]] = None,
                  crypt_key_id: Optional[pulumi.Input[str]] = None,
                  dedicated_flavor: Optional[pulumi.Input[str]] = None,
@@ -373,6 +432,8 @@ class _TurboState:
                  enhanced: Optional[pulumi.Input[bool]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  export_location: Optional[pulumi.Input[str]] = None,
+                 hpc_bandwidth: Optional[pulumi.Input[str]] = None,
+                 hpc_cache_bandwidth: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  period: Optional[pulumi.Input[int]] = None,
                  period_unit: Optional[pulumi.Input[str]] = None,
@@ -393,6 +454,7 @@ class _TurboState:
         :param pulumi.Input[str] availability_zone: Specifies the availability zone where the file system is located.
                Changing this will create a new resource.
         :param pulumi.Input[str] available_capacity: The available capacity of the SFS Turbo file system in the unit of GB.
+        :param pulumi.Input[str] backup_id: Specifies the backup ID.
         :param pulumi.Input[str] charging_mode: Specifies the charging mode of the SFS Turbo.
                Valid values are **prePaid** and **postPaid**, defaults to **postPaid**.
                Changing this parameter will create a new cluster resource.
@@ -405,9 +467,15 @@ class _TurboState:
                create a new resource.
         :param pulumi.Input[str] enterprise_project_id: The enterprise project id of the file system. Changing this
                will create a new resource.
-        :param pulumi.Input[str] export_location: Tthe mount point of the SFS Turbo file system.
-        :param pulumi.Input[str] name: Specifies the name of an SFS Turbo file system. The value contains 4 to 64
-               characters and must start with a letter. Changing this will create a new resource.
+        :param pulumi.Input[str] export_location: The mount point of the SFS Turbo file system.
+        :param pulumi.Input[str] hpc_bandwidth: Specifies the HPC bandwidth. Changing this will create a new resource.
+               This parameter is valid and required when `share_type` is set to **HPC**.
+               Valid values are: **20M**, **40M**, **125M**, **250M**, **500M** and **1000M**.
+        :param pulumi.Input[str] hpc_cache_bandwidth: Specifies the HPC cache bandwidth(GB/s).
+               This parameter is valid and required when `share_type` is set to **HPC_CACHE**.
+               Valid values are: **2G**, **4G**, **8G**, **16G**, **24G**, **32G** and **48G**.
+        :param pulumi.Input[str] name: Specifies the name of an SFS Turbo file system. The value contains `4` to `64`
+               characters and must start with a letter.
         :param pulumi.Input[int] period: Specifies the charging period of the SFS Turbo.
                If `period_unit` is set to **month**, the value ranges from `1` to `11`.
                If `period_unit` is set to **year**, the value ranges from `1` to `3`.
@@ -418,14 +486,15 @@ class _TurboState:
                Changing this parameter will create a new cluster resource.
         :param pulumi.Input[str] region: The region in which to create the SFS Turbo resource. If omitted, the
                provider-level region will be used. Changing this creates a new SFS Turbo resource.
-        :param pulumi.Input[str] security_group_id: Specifies the security group ID. Changing this will create a new
-               resource.
+        :param pulumi.Input[str] security_group_id: Specifies the security group ID.
         :param pulumi.Input[str] share_proto: Specifies the protocol for sharing file systems. The valid value is NFS.
                Changing this will create a new resource.
-        :param pulumi.Input[str] share_type: Specifies the file system type. The valid values are STANDARD and
-               PERFORMANCE Changing this will create a new resource.
-        :param pulumi.Input[int] size: Specifies the capacity of a common file system, in GB. The value ranges from 500 to 32768,
-               and must be large than 10240 for an enhanced file system.
+        :param pulumi.Input[str] share_type: Specifies the file system type. Changing this will create a new resource.
+               Valid values are **STANDARD**, **PERFORMANCE**, **HPC** and **HPC_CACHE**.
+               Defaults to **STANDARD**.
+        :param pulumi.Input[int] size: Specifies the capacity of a sharing file system, in GB.
+               + If `share_type` is set to **STANDARD** or **PERFORMANCE**, the value ranges from `500` to `32,768`, and ranges from
+               `10,240` to `327,680` for an enhanced file system.
         :param pulumi.Input[str] status: The status of the SFS Turbo file system.
         :param pulumi.Input[str] subnet_id: Specifies the network ID of the subnet. Changing this will create a new
                resource.
@@ -439,6 +508,8 @@ class _TurboState:
             pulumi.set(__self__, "availability_zone", availability_zone)
         if available_capacity is not None:
             pulumi.set(__self__, "available_capacity", available_capacity)
+        if backup_id is not None:
+            pulumi.set(__self__, "backup_id", backup_id)
         if charging_mode is not None:
             pulumi.set(__self__, "charging_mode", charging_mode)
         if crypt_key_id is not None:
@@ -453,6 +524,10 @@ class _TurboState:
             pulumi.set(__self__, "enterprise_project_id", enterprise_project_id)
         if export_location is not None:
             pulumi.set(__self__, "export_location", export_location)
+        if hpc_bandwidth is not None:
+            pulumi.set(__self__, "hpc_bandwidth", hpc_bandwidth)
+        if hpc_cache_bandwidth is not None:
+            pulumi.set(__self__, "hpc_cache_bandwidth", hpc_cache_bandwidth)
         if name is not None:
             pulumi.set(__self__, "name", name)
         if period is not None:
@@ -517,6 +592,18 @@ class _TurboState:
     @available_capacity.setter
     def available_capacity(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "available_capacity", value)
+
+    @property
+    @pulumi.getter(name="backupId")
+    def backup_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the backup ID.
+        """
+        return pulumi.get(self, "backup_id")
+
+    @backup_id.setter
+    def backup_id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "backup_id", value)
 
     @property
     @pulumi.getter(name="chargingMode")
@@ -600,7 +687,7 @@ class _TurboState:
     @pulumi.getter(name="exportLocation")
     def export_location(self) -> Optional[pulumi.Input[str]]:
         """
-        Tthe mount point of the SFS Turbo file system.
+        The mount point of the SFS Turbo file system.
         """
         return pulumi.get(self, "export_location")
 
@@ -609,11 +696,39 @@ class _TurboState:
         pulumi.set(self, "export_location", value)
 
     @property
+    @pulumi.getter(name="hpcBandwidth")
+    def hpc_bandwidth(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the HPC bandwidth. Changing this will create a new resource.
+        This parameter is valid and required when `share_type` is set to **HPC**.
+        Valid values are: **20M**, **40M**, **125M**, **250M**, **500M** and **1000M**.
+        """
+        return pulumi.get(self, "hpc_bandwidth")
+
+    @hpc_bandwidth.setter
+    def hpc_bandwidth(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "hpc_bandwidth", value)
+
+    @property
+    @pulumi.getter(name="hpcCacheBandwidth")
+    def hpc_cache_bandwidth(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the HPC cache bandwidth(GB/s).
+        This parameter is valid and required when `share_type` is set to **HPC_CACHE**.
+        Valid values are: **2G**, **4G**, **8G**, **16G**, **24G**, **32G** and **48G**.
+        """
+        return pulumi.get(self, "hpc_cache_bandwidth")
+
+    @hpc_cache_bandwidth.setter
+    def hpc_cache_bandwidth(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "hpc_cache_bandwidth", value)
+
+    @property
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the name of an SFS Turbo file system. The value contains 4 to 64
-        characters and must start with a letter. Changing this will create a new resource.
+        Specifies the name of an SFS Turbo file system. The value contains `4` to `64`
+        characters and must start with a letter.
         """
         return pulumi.get(self, "name")
 
@@ -668,8 +783,7 @@ class _TurboState:
     @pulumi.getter(name="securityGroupId")
     def security_group_id(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the security group ID. Changing this will create a new
-        resource.
+        Specifies the security group ID.
         """
         return pulumi.get(self, "security_group_id")
 
@@ -694,8 +808,9 @@ class _TurboState:
     @pulumi.getter(name="shareType")
     def share_type(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the file system type. The valid values are STANDARD and
-        PERFORMANCE Changing this will create a new resource.
+        Specifies the file system type. Changing this will create a new resource.
+        Valid values are **STANDARD**, **PERFORMANCE**, **HPC** and **HPC_CACHE**.
+        Defaults to **STANDARD**.
         """
         return pulumi.get(self, "share_type")
 
@@ -707,8 +822,9 @@ class _TurboState:
     @pulumi.getter
     def size(self) -> Optional[pulumi.Input[int]]:
         """
-        Specifies the capacity of a common file system, in GB. The value ranges from 500 to 32768,
-        and must be large than 10240 for an enhanced file system.
+        Specifies the capacity of a sharing file system, in GB.
+        + If `share_type` is set to **STANDARD** or **PERFORMANCE**, the value ranges from `500` to `32,768`, and ranges from
+        `10,240` to `327,680` for an enhanced file system.
         """
         return pulumi.get(self, "size")
 
@@ -785,12 +901,15 @@ class Turbo(pulumi.CustomResource):
                  opts: Optional[pulumi.ResourceOptions] = None,
                  auto_renew: Optional[pulumi.Input[str]] = None,
                  availability_zone: Optional[pulumi.Input[str]] = None,
+                 backup_id: Optional[pulumi.Input[str]] = None,
                  charging_mode: Optional[pulumi.Input[str]] = None,
                  crypt_key_id: Optional[pulumi.Input[str]] = None,
                  dedicated_flavor: Optional[pulumi.Input[str]] = None,
                  dedicated_storage_id: Optional[pulumi.Input[str]] = None,
                  enhanced: Optional[pulumi.Input[bool]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
+                 hpc_bandwidth: Optional[pulumi.Input[str]] = None,
+                 hpc_cache_bandwidth: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  period: Optional[pulumi.Input[int]] = None,
                  period_unit: Optional[pulumi.Input[str]] = None,
@@ -804,9 +923,10 @@ class Turbo(pulumi.CustomResource):
                  vpc_id: Optional[pulumi.Input[str]] = None,
                  __props__=None):
         """
-        Provides an Shared File System (SFS) Turbo resource.
+        Manages a SFS Turbo resource within HuaweiCloud.
 
         ## Example Usage
+        ### Create a STANDARD Shared File System (SFS) Turbo
 
         ```python
         import pulumi
@@ -817,7 +937,7 @@ class Turbo(pulumi.CustomResource):
         subnet_id = config.require_object("subnetId")
         secgroup_id = config.require_object("secgroupId")
         test_az = config.require_object("testAz")
-        sfs_turbo_1 = huaweicloud.sfs.Turbo("sfs-turbo-1",
+        test = huaweicloud.sfs.Turbo("test",
             size=500,
             share_proto="NFS",
             vpc_id=vpc_id,
@@ -829,13 +949,55 @@ class Turbo(pulumi.CustomResource):
                 "key": "value",
             })
         ```
+        ### Create an HPC Shared File System (SFS) Turbo
+
+        ```python
+        import pulumi
+        import pulumi_huaweicloud as huaweicloud
+
+        config = pulumi.Config()
+        vpc_id = config.require_object("vpcId")
+        subnet_id = config.require_object("subnetId")
+        secgroup_id = config.require_object("secgroupId")
+        test_az = config.require_object("testAz")
+        test = huaweicloud.sfs.Turbo("test",
+            size=3686,
+            share_proto="NFS",
+            share_type="HPC",
+            hpc_bandwidth="40M",
+            vpc_id=vpc_id,
+            subnet_id=subnet_id,
+            security_group_id=secgroup_id,
+            availability_zone=test_az)
+        ```
+        ### Create an HPC CACHE Shared File System (SFS) Turbo
+
+        ```python
+        import pulumi
+        import pulumi_huaweicloud as huaweicloud
+
+        config = pulumi.Config()
+        vpc_id = config.require_object("vpcId")
+        subnet_id = config.require_object("subnetId")
+        secgroup_id = config.require_object("secgroupId")
+        test_az = config.require_object("testAz")
+        test = huaweicloud.sfs.Turbo("test",
+            size=4096,
+            share_proto="NFS",
+            share_type="HPC_CACHE",
+            hpc_cache_bandwidth="2G",
+            vpc_id=vpc_id,
+            subnet_id=subnet_id,
+            security_group_id=secgroup_id,
+            availability_zone=test_az)
+        ```
 
         ## Import
 
-        SFS Turbo can be imported using the `id`, e.g.
+        The resource can be imported using the `id`, e.g. bash
 
         ```sh
-         $ pulumi import huaweicloud:Sfs/turbo:Turbo huaweicloud_sfs_turbo 1e3d5306-24c9-4316-9185-70e9787d71ab
+         $ pulumi import huaweicloud:Sfs/turbo:Turbo test <id>
         ```
 
          Note that the imported state may not be identical to your resource definition, due to payment attributes missing from the API response. The missing attributes include`charging_mode`, `period_unit`, `period`, `auto_renew`. It is generally recommended running `terraform plan` after importing an instance. You can ignore changes as below. hcl resource "huaweicloud_sfs_turbo" "test" {
@@ -858,6 +1020,7 @@ class Turbo(pulumi.CustomResource):
                The valid values are **true** and **false**.
         :param pulumi.Input[str] availability_zone: Specifies the availability zone where the file system is located.
                Changing this will create a new resource.
+        :param pulumi.Input[str] backup_id: Specifies the backup ID.
         :param pulumi.Input[str] charging_mode: Specifies the charging mode of the SFS Turbo.
                Valid values are **prePaid** and **postPaid**, defaults to **postPaid**.
                Changing this parameter will create a new cluster resource.
@@ -870,8 +1033,14 @@ class Turbo(pulumi.CustomResource):
                create a new resource.
         :param pulumi.Input[str] enterprise_project_id: The enterprise project id of the file system. Changing this
                will create a new resource.
-        :param pulumi.Input[str] name: Specifies the name of an SFS Turbo file system. The value contains 4 to 64
-               characters and must start with a letter. Changing this will create a new resource.
+        :param pulumi.Input[str] hpc_bandwidth: Specifies the HPC bandwidth. Changing this will create a new resource.
+               This parameter is valid and required when `share_type` is set to **HPC**.
+               Valid values are: **20M**, **40M**, **125M**, **250M**, **500M** and **1000M**.
+        :param pulumi.Input[str] hpc_cache_bandwidth: Specifies the HPC cache bandwidth(GB/s).
+               This parameter is valid and required when `share_type` is set to **HPC_CACHE**.
+               Valid values are: **2G**, **4G**, **8G**, **16G**, **24G**, **32G** and **48G**.
+        :param pulumi.Input[str] name: Specifies the name of an SFS Turbo file system. The value contains `4` to `64`
+               characters and must start with a letter.
         :param pulumi.Input[int] period: Specifies the charging period of the SFS Turbo.
                If `period_unit` is set to **month**, the value ranges from `1` to `11`.
                If `period_unit` is set to **year**, the value ranges from `1` to `3`.
@@ -882,14 +1051,15 @@ class Turbo(pulumi.CustomResource):
                Changing this parameter will create a new cluster resource.
         :param pulumi.Input[str] region: The region in which to create the SFS Turbo resource. If omitted, the
                provider-level region will be used. Changing this creates a new SFS Turbo resource.
-        :param pulumi.Input[str] security_group_id: Specifies the security group ID. Changing this will create a new
-               resource.
+        :param pulumi.Input[str] security_group_id: Specifies the security group ID.
         :param pulumi.Input[str] share_proto: Specifies the protocol for sharing file systems. The valid value is NFS.
                Changing this will create a new resource.
-        :param pulumi.Input[str] share_type: Specifies the file system type. The valid values are STANDARD and
-               PERFORMANCE Changing this will create a new resource.
-        :param pulumi.Input[int] size: Specifies the capacity of a common file system, in GB. The value ranges from 500 to 32768,
-               and must be large than 10240 for an enhanced file system.
+        :param pulumi.Input[str] share_type: Specifies the file system type. Changing this will create a new resource.
+               Valid values are **STANDARD**, **PERFORMANCE**, **HPC** and **HPC_CACHE**.
+               Defaults to **STANDARD**.
+        :param pulumi.Input[int] size: Specifies the capacity of a sharing file system, in GB.
+               + If `share_type` is set to **STANDARD** or **PERFORMANCE**, the value ranges from `500` to `32,768`, and ranges from
+               `10,240` to `327,680` for an enhanced file system.
         :param pulumi.Input[str] subnet_id: Specifies the network ID of the subnet. Changing this will create a new
                resource.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the SFS Turbo.
@@ -902,9 +1072,10 @@ class Turbo(pulumi.CustomResource):
                  args: TurboArgs,
                  opts: Optional[pulumi.ResourceOptions] = None):
         """
-        Provides an Shared File System (SFS) Turbo resource.
+        Manages a SFS Turbo resource within HuaweiCloud.
 
         ## Example Usage
+        ### Create a STANDARD Shared File System (SFS) Turbo
 
         ```python
         import pulumi
@@ -915,7 +1086,7 @@ class Turbo(pulumi.CustomResource):
         subnet_id = config.require_object("subnetId")
         secgroup_id = config.require_object("secgroupId")
         test_az = config.require_object("testAz")
-        sfs_turbo_1 = huaweicloud.sfs.Turbo("sfs-turbo-1",
+        test = huaweicloud.sfs.Turbo("test",
             size=500,
             share_proto="NFS",
             vpc_id=vpc_id,
@@ -927,13 +1098,55 @@ class Turbo(pulumi.CustomResource):
                 "key": "value",
             })
         ```
+        ### Create an HPC Shared File System (SFS) Turbo
+
+        ```python
+        import pulumi
+        import pulumi_huaweicloud as huaweicloud
+
+        config = pulumi.Config()
+        vpc_id = config.require_object("vpcId")
+        subnet_id = config.require_object("subnetId")
+        secgroup_id = config.require_object("secgroupId")
+        test_az = config.require_object("testAz")
+        test = huaweicloud.sfs.Turbo("test",
+            size=3686,
+            share_proto="NFS",
+            share_type="HPC",
+            hpc_bandwidth="40M",
+            vpc_id=vpc_id,
+            subnet_id=subnet_id,
+            security_group_id=secgroup_id,
+            availability_zone=test_az)
+        ```
+        ### Create an HPC CACHE Shared File System (SFS) Turbo
+
+        ```python
+        import pulumi
+        import pulumi_huaweicloud as huaweicloud
+
+        config = pulumi.Config()
+        vpc_id = config.require_object("vpcId")
+        subnet_id = config.require_object("subnetId")
+        secgroup_id = config.require_object("secgroupId")
+        test_az = config.require_object("testAz")
+        test = huaweicloud.sfs.Turbo("test",
+            size=4096,
+            share_proto="NFS",
+            share_type="HPC_CACHE",
+            hpc_cache_bandwidth="2G",
+            vpc_id=vpc_id,
+            subnet_id=subnet_id,
+            security_group_id=secgroup_id,
+            availability_zone=test_az)
+        ```
 
         ## Import
 
-        SFS Turbo can be imported using the `id`, e.g.
+        The resource can be imported using the `id`, e.g. bash
 
         ```sh
-         $ pulumi import huaweicloud:Sfs/turbo:Turbo huaweicloud_sfs_turbo 1e3d5306-24c9-4316-9185-70e9787d71ab
+         $ pulumi import huaweicloud:Sfs/turbo:Turbo test <id>
         ```
 
          Note that the imported state may not be identical to your resource definition, due to payment attributes missing from the API response. The missing attributes include`charging_mode`, `period_unit`, `period`, `auto_renew`. It is generally recommended running `terraform plan` after importing an instance. You can ignore changes as below. hcl resource "huaweicloud_sfs_turbo" "test" {
@@ -967,12 +1180,15 @@ class Turbo(pulumi.CustomResource):
                  opts: Optional[pulumi.ResourceOptions] = None,
                  auto_renew: Optional[pulumi.Input[str]] = None,
                  availability_zone: Optional[pulumi.Input[str]] = None,
+                 backup_id: Optional[pulumi.Input[str]] = None,
                  charging_mode: Optional[pulumi.Input[str]] = None,
                  crypt_key_id: Optional[pulumi.Input[str]] = None,
                  dedicated_flavor: Optional[pulumi.Input[str]] = None,
                  dedicated_storage_id: Optional[pulumi.Input[str]] = None,
                  enhanced: Optional[pulumi.Input[bool]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
+                 hpc_bandwidth: Optional[pulumi.Input[str]] = None,
+                 hpc_cache_bandwidth: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  period: Optional[pulumi.Input[int]] = None,
                  period_unit: Optional[pulumi.Input[str]] = None,
@@ -997,12 +1213,15 @@ class Turbo(pulumi.CustomResource):
             if availability_zone is None and not opts.urn:
                 raise TypeError("Missing required property 'availability_zone'")
             __props__.__dict__["availability_zone"] = availability_zone
+            __props__.__dict__["backup_id"] = backup_id
             __props__.__dict__["charging_mode"] = charging_mode
             __props__.__dict__["crypt_key_id"] = crypt_key_id
             __props__.__dict__["dedicated_flavor"] = dedicated_flavor
             __props__.__dict__["dedicated_storage_id"] = dedicated_storage_id
             __props__.__dict__["enhanced"] = enhanced
             __props__.__dict__["enterprise_project_id"] = enterprise_project_id
+            __props__.__dict__["hpc_bandwidth"] = hpc_bandwidth
+            __props__.__dict__["hpc_cache_bandwidth"] = hpc_cache_bandwidth
             __props__.__dict__["name"] = name
             __props__.__dict__["period"] = period
             __props__.__dict__["period_unit"] = period_unit
@@ -1039,6 +1258,7 @@ class Turbo(pulumi.CustomResource):
             auto_renew: Optional[pulumi.Input[str]] = None,
             availability_zone: Optional[pulumi.Input[str]] = None,
             available_capacity: Optional[pulumi.Input[str]] = None,
+            backup_id: Optional[pulumi.Input[str]] = None,
             charging_mode: Optional[pulumi.Input[str]] = None,
             crypt_key_id: Optional[pulumi.Input[str]] = None,
             dedicated_flavor: Optional[pulumi.Input[str]] = None,
@@ -1046,6 +1266,8 @@ class Turbo(pulumi.CustomResource):
             enhanced: Optional[pulumi.Input[bool]] = None,
             enterprise_project_id: Optional[pulumi.Input[str]] = None,
             export_location: Optional[pulumi.Input[str]] = None,
+            hpc_bandwidth: Optional[pulumi.Input[str]] = None,
+            hpc_cache_bandwidth: Optional[pulumi.Input[str]] = None,
             name: Optional[pulumi.Input[str]] = None,
             period: Optional[pulumi.Input[int]] = None,
             period_unit: Optional[pulumi.Input[str]] = None,
@@ -1071,6 +1293,7 @@ class Turbo(pulumi.CustomResource):
         :param pulumi.Input[str] availability_zone: Specifies the availability zone where the file system is located.
                Changing this will create a new resource.
         :param pulumi.Input[str] available_capacity: The available capacity of the SFS Turbo file system in the unit of GB.
+        :param pulumi.Input[str] backup_id: Specifies the backup ID.
         :param pulumi.Input[str] charging_mode: Specifies the charging mode of the SFS Turbo.
                Valid values are **prePaid** and **postPaid**, defaults to **postPaid**.
                Changing this parameter will create a new cluster resource.
@@ -1083,9 +1306,15 @@ class Turbo(pulumi.CustomResource):
                create a new resource.
         :param pulumi.Input[str] enterprise_project_id: The enterprise project id of the file system. Changing this
                will create a new resource.
-        :param pulumi.Input[str] export_location: Tthe mount point of the SFS Turbo file system.
-        :param pulumi.Input[str] name: Specifies the name of an SFS Turbo file system. The value contains 4 to 64
-               characters and must start with a letter. Changing this will create a new resource.
+        :param pulumi.Input[str] export_location: The mount point of the SFS Turbo file system.
+        :param pulumi.Input[str] hpc_bandwidth: Specifies the HPC bandwidth. Changing this will create a new resource.
+               This parameter is valid and required when `share_type` is set to **HPC**.
+               Valid values are: **20M**, **40M**, **125M**, **250M**, **500M** and **1000M**.
+        :param pulumi.Input[str] hpc_cache_bandwidth: Specifies the HPC cache bandwidth(GB/s).
+               This parameter is valid and required when `share_type` is set to **HPC_CACHE**.
+               Valid values are: **2G**, **4G**, **8G**, **16G**, **24G**, **32G** and **48G**.
+        :param pulumi.Input[str] name: Specifies the name of an SFS Turbo file system. The value contains `4` to `64`
+               characters and must start with a letter.
         :param pulumi.Input[int] period: Specifies the charging period of the SFS Turbo.
                If `period_unit` is set to **month**, the value ranges from `1` to `11`.
                If `period_unit` is set to **year**, the value ranges from `1` to `3`.
@@ -1096,14 +1325,15 @@ class Turbo(pulumi.CustomResource):
                Changing this parameter will create a new cluster resource.
         :param pulumi.Input[str] region: The region in which to create the SFS Turbo resource. If omitted, the
                provider-level region will be used. Changing this creates a new SFS Turbo resource.
-        :param pulumi.Input[str] security_group_id: Specifies the security group ID. Changing this will create a new
-               resource.
+        :param pulumi.Input[str] security_group_id: Specifies the security group ID.
         :param pulumi.Input[str] share_proto: Specifies the protocol for sharing file systems. The valid value is NFS.
                Changing this will create a new resource.
-        :param pulumi.Input[str] share_type: Specifies the file system type. The valid values are STANDARD and
-               PERFORMANCE Changing this will create a new resource.
-        :param pulumi.Input[int] size: Specifies the capacity of a common file system, in GB. The value ranges from 500 to 32768,
-               and must be large than 10240 for an enhanced file system.
+        :param pulumi.Input[str] share_type: Specifies the file system type. Changing this will create a new resource.
+               Valid values are **STANDARD**, **PERFORMANCE**, **HPC** and **HPC_CACHE**.
+               Defaults to **STANDARD**.
+        :param pulumi.Input[int] size: Specifies the capacity of a sharing file system, in GB.
+               + If `share_type` is set to **STANDARD** or **PERFORMANCE**, the value ranges from `500` to `32,768`, and ranges from
+               `10,240` to `327,680` for an enhanced file system.
         :param pulumi.Input[str] status: The status of the SFS Turbo file system.
         :param pulumi.Input[str] subnet_id: Specifies the network ID of the subnet. Changing this will create a new
                resource.
@@ -1118,6 +1348,7 @@ class Turbo(pulumi.CustomResource):
         __props__.__dict__["auto_renew"] = auto_renew
         __props__.__dict__["availability_zone"] = availability_zone
         __props__.__dict__["available_capacity"] = available_capacity
+        __props__.__dict__["backup_id"] = backup_id
         __props__.__dict__["charging_mode"] = charging_mode
         __props__.__dict__["crypt_key_id"] = crypt_key_id
         __props__.__dict__["dedicated_flavor"] = dedicated_flavor
@@ -1125,6 +1356,8 @@ class Turbo(pulumi.CustomResource):
         __props__.__dict__["enhanced"] = enhanced
         __props__.__dict__["enterprise_project_id"] = enterprise_project_id
         __props__.__dict__["export_location"] = export_location
+        __props__.__dict__["hpc_bandwidth"] = hpc_bandwidth
+        __props__.__dict__["hpc_cache_bandwidth"] = hpc_cache_bandwidth
         __props__.__dict__["name"] = name
         __props__.__dict__["period"] = period
         __props__.__dict__["period_unit"] = period_unit
@@ -1165,6 +1398,14 @@ class Turbo(pulumi.CustomResource):
         The available capacity of the SFS Turbo file system in the unit of GB.
         """
         return pulumi.get(self, "available_capacity")
+
+    @property
+    @pulumi.getter(name="backupId")
+    def backup_id(self) -> pulumi.Output[str]:
+        """
+        Specifies the backup ID.
+        """
+        return pulumi.get(self, "backup_id")
 
     @property
     @pulumi.getter(name="chargingMode")
@@ -1224,16 +1465,36 @@ class Turbo(pulumi.CustomResource):
     @pulumi.getter(name="exportLocation")
     def export_location(self) -> pulumi.Output[str]:
         """
-        Tthe mount point of the SFS Turbo file system.
+        The mount point of the SFS Turbo file system.
         """
         return pulumi.get(self, "export_location")
+
+    @property
+    @pulumi.getter(name="hpcBandwidth")
+    def hpc_bandwidth(self) -> pulumi.Output[str]:
+        """
+        Specifies the HPC bandwidth. Changing this will create a new resource.
+        This parameter is valid and required when `share_type` is set to **HPC**.
+        Valid values are: **20M**, **40M**, **125M**, **250M**, **500M** and **1000M**.
+        """
+        return pulumi.get(self, "hpc_bandwidth")
+
+    @property
+    @pulumi.getter(name="hpcCacheBandwidth")
+    def hpc_cache_bandwidth(self) -> pulumi.Output[str]:
+        """
+        Specifies the HPC cache bandwidth(GB/s).
+        This parameter is valid and required when `share_type` is set to **HPC_CACHE**.
+        Valid values are: **2G**, **4G**, **8G**, **16G**, **24G**, **32G** and **48G**.
+        """
+        return pulumi.get(self, "hpc_cache_bandwidth")
 
     @property
     @pulumi.getter
     def name(self) -> pulumi.Output[str]:
         """
-        Specifies the name of an SFS Turbo file system. The value contains 4 to 64
-        characters and must start with a letter. Changing this will create a new resource.
+        Specifies the name of an SFS Turbo file system. The value contains `4` to `64`
+        characters and must start with a letter.
         """
         return pulumi.get(self, "name")
 
@@ -1272,8 +1533,7 @@ class Turbo(pulumi.CustomResource):
     @pulumi.getter(name="securityGroupId")
     def security_group_id(self) -> pulumi.Output[str]:
         """
-        Specifies the security group ID. Changing this will create a new
-        resource.
+        Specifies the security group ID.
         """
         return pulumi.get(self, "security_group_id")
 
@@ -1290,8 +1550,9 @@ class Turbo(pulumi.CustomResource):
     @pulumi.getter(name="shareType")
     def share_type(self) -> pulumi.Output[Optional[str]]:
         """
-        Specifies the file system type. The valid values are STANDARD and
-        PERFORMANCE Changing this will create a new resource.
+        Specifies the file system type. Changing this will create a new resource.
+        Valid values are **STANDARD**, **PERFORMANCE**, **HPC** and **HPC_CACHE**.
+        Defaults to **STANDARD**.
         """
         return pulumi.get(self, "share_type")
 
@@ -1299,8 +1560,9 @@ class Turbo(pulumi.CustomResource):
     @pulumi.getter
     def size(self) -> pulumi.Output[int]:
         """
-        Specifies the capacity of a common file system, in GB. The value ranges from 500 to 32768,
-        and must be large than 10240 for an enhanced file system.
+        Specifies the capacity of a sharing file system, in GB.
+        + If `share_type` is set to **STANDARD** or **PERFORMANCE**, the value ranges from `500` to `32,768`, and ranges from
+        `10,240` to `327,680` for an enhanced file system.
         """
         return pulumi.get(self, "size")
 

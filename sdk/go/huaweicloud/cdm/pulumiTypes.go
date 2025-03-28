@@ -189,7 +189,7 @@ type JobConfig struct {
 	// + **NONE**: The job will not be deleted after it is executed.
 	// + **DELETE_AFTER_SUCCEED**: The job will be deleted only after it is successfully executed. It is applicable to
 	//   massive one-time jobs.
-	// + **DELETE**: Thejob will be deleted after it is executed, regardless of the execution result.
+	// + **DELETE**: The job will be deleted after it is executed, regardless of the execution result.
 	SchedulerDisposableType *string `pulumi:"schedulerDisposableType"`
 	// Specifies whether to enable a scheduled task.  Default value is `false`.
 	SchedulerEnabled *bool `pulumi:"schedulerEnabled"`
@@ -261,7 +261,7 @@ type JobConfigArgs struct {
 	// + **NONE**: The job will not be deleted after it is executed.
 	// + **DELETE_AFTER_SUCCEED**: The job will be deleted only after it is successfully executed. It is applicable to
 	//   massive one-time jobs.
-	// + **DELETE**: Thejob will be deleted after it is executed, regardless of the execution result.
+	// + **DELETE**: The job will be deleted after it is executed, regardless of the execution result.
 	SchedulerDisposableType pulumi.StringPtrInput `pulumi:"schedulerDisposableType"`
 	// Specifies whether to enable a scheduled task.  Default value is `false`.
 	SchedulerEnabled pulumi.BoolPtrInput `pulumi:"schedulerEnabled"`
@@ -410,7 +410,7 @@ func (o JobConfigOutput) SchedulerCycleType() pulumi.StringPtrOutput {
 //   - **NONE**: The job will not be deleted after it is executed.
 //   - **DELETE_AFTER_SUCCEED**: The job will be deleted only after it is successfully executed. It is applicable to
 //     massive one-time jobs.
-//   - **DELETE**: Thejob will be deleted after it is executed, regardless of the execution result.
+//   - **DELETE**: The job will be deleted after it is executed, regardless of the execution result.
 func (o JobConfigOutput) SchedulerDisposableType() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v JobConfig) *string { return v.SchedulerDisposableType }).(pulumi.StringPtrOutput)
 }
@@ -560,7 +560,7 @@ func (o JobConfigPtrOutput) SchedulerCycleType() pulumi.StringPtrOutput {
 //   - **NONE**: The job will not be deleted after it is executed.
 //   - **DELETE_AFTER_SUCCEED**: The job will be deleted only after it is successfully executed. It is applicable to
 //     massive one-time jobs.
-//   - **DELETE**: Thejob will be deleted after it is executed, regardless of the execution result.
+//   - **DELETE**: The job will be deleted after it is executed, regardless of the execution result.
 func (o JobConfigPtrOutput) SchedulerDisposableType() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *JobConfig) *string {
 		if v == nil {
@@ -697,9 +697,13 @@ func (o JobConfigPtrOutput) ThrottlingRecordDirtyData() pulumi.BoolPtrOutput {
 }
 
 type GetFlavorsFlavor struct {
-	// The id of the CDM flavor.
+	// The numbers of CDM cluster vCPUs.
+	Cpu string `pulumi:"cpu"`
+	// The ID of the CDM flavor.
 	Id string `pulumi:"id"`
-	// The name of the CDM flavor.
+	// The memory size in GB.
+	Memory string `pulumi:"memory"`
+	// The name of the CDM flavor. Format is `cdm.<flavor_type>`.
 	Name string `pulumi:"name"`
 }
 
@@ -715,9 +719,13 @@ type GetFlavorsFlavorInput interface {
 }
 
 type GetFlavorsFlavorArgs struct {
-	// The id of the CDM flavor.
+	// The numbers of CDM cluster vCPUs.
+	Cpu pulumi.StringInput `pulumi:"cpu"`
+	// The ID of the CDM flavor.
 	Id pulumi.StringInput `pulumi:"id"`
-	// The name of the CDM flavor.
+	// The memory size in GB.
+	Memory pulumi.StringInput `pulumi:"memory"`
+	// The name of the CDM flavor. Format is `cdm.<flavor_type>`.
 	Name pulumi.StringInput `pulumi:"name"`
 }
 
@@ -772,12 +780,22 @@ func (o GetFlavorsFlavorOutput) ToGetFlavorsFlavorOutputWithContext(ctx context.
 	return o
 }
 
-// The id of the CDM flavor.
+// The numbers of CDM cluster vCPUs.
+func (o GetFlavorsFlavorOutput) Cpu() pulumi.StringOutput {
+	return o.ApplyT(func(v GetFlavorsFlavor) string { return v.Cpu }).(pulumi.StringOutput)
+}
+
+// The ID of the CDM flavor.
 func (o GetFlavorsFlavorOutput) Id() pulumi.StringOutput {
 	return o.ApplyT(func(v GetFlavorsFlavor) string { return v.Id }).(pulumi.StringOutput)
 }
 
-// The name of the CDM flavor.
+// The memory size in GB.
+func (o GetFlavorsFlavorOutput) Memory() pulumi.StringOutput {
+	return o.ApplyT(func(v GetFlavorsFlavor) string { return v.Memory }).(pulumi.StringOutput)
+}
+
+// The name of the CDM flavor. Format is `cdm.<flavor_type>`.
 func (o GetFlavorsFlavorOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v GetFlavorsFlavor) string { return v.Name }).(pulumi.StringOutput)
 }

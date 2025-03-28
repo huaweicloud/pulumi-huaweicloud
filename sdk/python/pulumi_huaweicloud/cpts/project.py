@@ -20,8 +20,8 @@ class ProjectArgs:
         """
         The set of arguments for constructing a Project resource.
         :param pulumi.Input[str] description: Specifies the description of the project, which can contain a maximum of
-               50 characters.
-        :param pulumi.Input[str] name: Specifies a name for the project, which can contain a maximum of 42 characters.
+               `50` characters.
+        :param pulumi.Input[str] name: Specifies a name for the project, which can contain a maximum of `42` characters.
         :param pulumi.Input[str] region: Specifies the region in which to create the project resource. If omitted, the
                provider-level region will be used. Changing this parameter will create a new resource.
         """
@@ -37,7 +37,7 @@ class ProjectArgs:
     def description(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the description of the project, which can contain a maximum of
-        50 characters.
+        `50` characters.
         """
         return pulumi.get(self, "description")
 
@@ -49,7 +49,7 @@ class ProjectArgs:
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies a name for the project, which can contain a maximum of 42 characters.
+        Specifies a name for the project, which can contain a maximum of `42` characters.
         """
         return pulumi.get(self, "name")
 
@@ -83,8 +83,8 @@ class _ProjectState:
         Input properties used for looking up and filtering Project resources.
         :param pulumi.Input[str] created_at: The creation time, in UTC format.
         :param pulumi.Input[str] description: Specifies the description of the project, which can contain a maximum of
-               50 characters.
-        :param pulumi.Input[str] name: Specifies a name for the project, which can contain a maximum of 42 characters.
+               `50` characters.
+        :param pulumi.Input[str] name: Specifies a name for the project, which can contain a maximum of `42` characters.
         :param pulumi.Input[str] region: Specifies the region in which to create the project resource. If omitted, the
                provider-level region will be used. Changing this parameter will create a new resource.
         :param pulumi.Input[str] updated_at: The last update time, in UTC format.
@@ -117,7 +117,7 @@ class _ProjectState:
     def description(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the description of the project, which can contain a maximum of
-        50 characters.
+        `50` characters.
         """
         return pulumi.get(self, "description")
 
@@ -129,7 +129,7 @@ class _ProjectState:
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies a name for the project, which can contain a maximum of 42 characters.
+        Specifies a name for the project, which can contain a maximum of `42` characters.
         """
         return pulumi.get(self, "name")
 
@@ -186,7 +186,7 @@ class Project(pulumi.CustomResource):
 
         ## Import
 
-        Projects can be imported using the `id`, e.g.
+        Projects can be imported using the `id`, e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:Cpts/project:Project test 1090
@@ -195,8 +195,8 @@ class Project(pulumi.CustomResource):
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[str] description: Specifies the description of the project, which can contain a maximum of
-               50 characters.
-        :param pulumi.Input[str] name: Specifies a name for the project, which can contain a maximum of 42 characters.
+               `50` characters.
+        :param pulumi.Input[str] name: Specifies a name for the project, which can contain a maximum of `42` characters.
         :param pulumi.Input[str] region: Specifies the region in which to create the project resource. If omitted, the
                provider-level region will be used. Changing this parameter will create a new resource.
         """
@@ -220,7 +220,7 @@ class Project(pulumi.CustomResource):
 
         ## Import
 
-        Projects can be imported using the `id`, e.g.
+        Projects can be imported using the `id`, e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:Cpts/project:Project test 1090
@@ -282,8 +282,8 @@ class Project(pulumi.CustomResource):
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[str] created_at: The creation time, in UTC format.
         :param pulumi.Input[str] description: Specifies the description of the project, which can contain a maximum of
-               50 characters.
-        :param pulumi.Input[str] name: Specifies a name for the project, which can contain a maximum of 42 characters.
+               `50` characters.
+        :param pulumi.Input[str] name: Specifies a name for the project, which can contain a maximum of `42` characters.
         :param pulumi.Input[str] region: Specifies the region in which to create the project resource. If omitted, the
                provider-level region will be used. Changing this parameter will create a new resource.
         :param pulumi.Input[str] updated_at: The last update time, in UTC format.
@@ -312,7 +312,7 @@ class Project(pulumi.CustomResource):
     def description(self) -> pulumi.Output[Optional[str]]:
         """
         Specifies the description of the project, which can contain a maximum of
-        50 characters.
+        `50` characters.
         """
         return pulumi.get(self, "description")
 
@@ -320,7 +320,7 @@ class Project(pulumi.CustomResource):
     @pulumi.getter
     def name(self) -> pulumi.Output[str]:
         """
-        Specifies a name for the project, which can contain a maximum of 42 characters.
+        Specifies a name for the project, which can contain a maximum of `42` characters.
         """
         return pulumi.get(self, "name")
 

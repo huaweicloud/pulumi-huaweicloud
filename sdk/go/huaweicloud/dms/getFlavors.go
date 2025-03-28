@@ -82,9 +82,9 @@ type GetFlavorsArgs struct {
 	// Specifies the list of availability zones with available resources.
 	AvailabilityZones []string `pulumi:"availabilityZones"`
 	// Specifies the flavor billing mode.
-	// The valid valus are **prePaid** and **postPaid**.
+	// The valid values are **prePaid** and **postPaid**.
 	ChargingMode *string `pulumi:"chargingMode"`
-	// Specifies the DMS flvaor ID, e.g. **c6.2u4g.cluster**.
+	// Specifies the DMS flavor ID, e.g. **c6.2u4g.cluster**.
 	FlavorId *string `pulumi:"flavorId"`
 	// Specifies the region in which to obtain the dms kafka flavors.
 	// If omitted, the provider-level region will be used.
@@ -93,7 +93,7 @@ type GetFlavorsArgs struct {
 	// + **dms.physical.storage.high.v2**: Type of the disk that uses high I/O.
 	// + **dms.physical.storage.ultra.v2**: Type of the disk that uses ultra-high I/O.
 	StorageSpecCode *string `pulumi:"storageSpecCode"`
-	// Specifies flavor type. The valid values are **single** and **cluster**.
+	// Specifies flavor type. The valid values are **single**, **cluster** and **cluster.small**.
 	Type *string `pulumi:"type"`
 }
 
@@ -108,8 +108,8 @@ type GetFlavorsResult struct {
 	// The object structure is documented below.
 	Flavors []GetFlavorsFlavor `pulumi:"flavors"`
 	// The provider-assigned unique ID for this managed resource.
-	Id     string  `pulumi:"id"`
-	Region *string `pulumi:"region"`
+	Id     string `pulumi:"id"`
+	Region string `pulumi:"region"`
 	// The disk IO encoding.
 	StorageSpecCode *string `pulumi:"storageSpecCode"`
 	// The disk type.
@@ -138,9 +138,9 @@ type GetFlavorsOutputArgs struct {
 	// Specifies the list of availability zones with available resources.
 	AvailabilityZones pulumi.StringArrayInput `pulumi:"availabilityZones"`
 	// Specifies the flavor billing mode.
-	// The valid valus are **prePaid** and **postPaid**.
+	// The valid values are **prePaid** and **postPaid**.
 	ChargingMode pulumi.StringPtrInput `pulumi:"chargingMode"`
-	// Specifies the DMS flvaor ID, e.g. **c6.2u4g.cluster**.
+	// Specifies the DMS flavor ID, e.g. **c6.2u4g.cluster**.
 	FlavorId pulumi.StringPtrInput `pulumi:"flavorId"`
 	// Specifies the region in which to obtain the dms kafka flavors.
 	// If omitted, the provider-level region will be used.
@@ -149,7 +149,7 @@ type GetFlavorsOutputArgs struct {
 	// + **dms.physical.storage.high.v2**: Type of the disk that uses high I/O.
 	// + **dms.physical.storage.ultra.v2**: Type of the disk that uses ultra-high I/O.
 	StorageSpecCode pulumi.StringPtrInput `pulumi:"storageSpecCode"`
-	// Specifies flavor type. The valid values are **single** and **cluster**.
+	// Specifies flavor type. The valid values are **single**, **cluster** and **cluster.small**.
 	Type pulumi.StringPtrInput `pulumi:"type"`
 }
 
@@ -200,8 +200,8 @@ func (o GetFlavorsResultOutput) Id() pulumi.StringOutput {
 	return o.ApplyT(func(v GetFlavorsResult) string { return v.Id }).(pulumi.StringOutput)
 }
 
-func (o GetFlavorsResultOutput) Region() pulumi.StringPtrOutput {
-	return o.ApplyT(func(v GetFlavorsResult) *string { return v.Region }).(pulumi.StringPtrOutput)
+func (o GetFlavorsResultOutput) Region() pulumi.StringOutput {
+	return o.ApplyT(func(v GetFlavorsResult) string { return v.Region }).(pulumi.StringOutput)
 }
 
 // The disk IO encoding.

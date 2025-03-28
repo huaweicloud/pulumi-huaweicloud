@@ -14,6 +14,7 @@ import (
 // Manages ModelArts notebook resource within HuaweiCloud.
 //
 // ## Example Usage
+// ### Create a notebook with the EVS storage type
 //
 // ```go
 // package main
@@ -32,16 +33,58 @@ import (
 //			cfg := config.New(ctx, "")
 //			notebookName := cfg.RequireObject("notebookName")
 //			keyPairName := cfg.RequireObject("keyPairName")
-//			ip := cfg.RequireObject("ip")
-//			_, err := ModelArts.NewNotebook(ctx, "notebook", &ModelArts.NotebookArgs{
-//				FlavorId: pulumi.String("modelarts.vm.cpu.2u"),
-//				ImageId:  pulumi.String("e1a07296-22a8-4f05-8bc8-e936c8e54090"),
-//				AllowedAccessIps: pulumi.StringArray{
-//					pulumi.Any(ip),
-//				},
-//				KeyPair: pulumi.Any(keyPairName),
+//			imageId := cfg.RequireObject("imageId")
+//			allowedIpAddresses := cfg.Require("allowedIpAddresses")
+//			keyPairNameInput := cfg.RequireObject("keyPairNameInput")
+//			_, err := ModelArts.NewNotebook(ctx, "test", &ModelArts.NotebookArgs{
+//				FlavorId:         pulumi.String("modelarts.vm.cpu.2u"),
+//				ImageId:          pulumi.Any(imageId),
+//				AllowedAccessIps: allowedIpAddresses,
+//				KeyPair:          pulumi.Any(keyPairName),
 //				Volume: &modelarts.NotebookVolumeArgs{
-//					Type: pulumi.String("EFS"),
+//					Type: pulumi.String("EVS"),
+//					Size: pulumi.Int(5),
+//				},
+//			})
+//			if err != nil {
+//				return err
+//			}
+//			return nil
+//		})
+//	}
+//
+// ```
+// ### Create a notebook with the EFS storage type
+//
+// ```go
+// package main
+//
+// import (
+//
+//	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud/ModelArts"
+//	"github.com/pulumi/pulumi-huaweicloud/sdk/go/huaweicloud/ModelArts"
+//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi/config"
+//
+// )
+//
+//	func main() {
+//		pulumi.Run(func(ctx *pulumi.Context) error {
+//			cfg := config.New(ctx, "")
+//			notebookName := cfg.RequireObject("notebookName")
+//			imageId := cfg.RequireObject("imageId")
+//			resourcePoolId := cfg.RequireObject("resourcePoolId")
+//			sfsExportLocation := cfg.RequireObject("sfsExportLocation")
+//			sfsTurboId := cfg.RequireObject("sfsTurboId")
+//			_, err := ModelArts.NewNotebook(ctx, "test", &ModelArts.NotebookArgs{
+//				FlavorId: pulumi.String("modelarts.vm.cpu.2u"),
+//				ImageId:  pulumi.Any(imageId),
+//				PoolId:   pulumi.Any(resourcePoolId),
+//				Volume: &modelarts.NotebookVolumeArgs{
+//					Type:      pulumi.String("EFS"),
+//					Ownership: pulumi.String("DEDICATED"),
+//					Uri:       pulumi.Any(sfsExportLocation),
+//					Id:        pulumi.Any(sfsTurboId),
 //				},
 //			})
 //			if err != nil {
@@ -55,7 +98,7 @@ import (
 //
 // ## Import
 //
-// The notebook can be imported by `id`.
+// The notebook can be imported by `id`. bash
 //
 // ```sh
 //
@@ -72,7 +115,7 @@ type Notebook struct {
 	AutoStopEnabled pulumi.BoolOutput `pulumi:"autoStopEnabled"`
 	// The notebook creation time.
 	CreatedAt pulumi.StringOutput `pulumi:"createdAt"`
-	// Specifies the description of notebook. It contains a maximum of 512 characters and
+	// Specifies the description of notebook. It contains a maximum of `512` characters and
 	// cannot contain special characters `&<>"'/`.
 	Description pulumi.StringPtrOutput `pulumi:"description"`
 	// Specifies the flavor ID. The options are as follows:
@@ -175,7 +218,7 @@ type notebookState struct {
 	AutoStopEnabled *bool `pulumi:"autoStopEnabled"`
 	// The notebook creation time.
 	CreatedAt *string `pulumi:"createdAt"`
-	// Specifies the description of notebook. It contains a maximum of 512 characters and
+	// Specifies the description of notebook. It contains a maximum of `512` characters and
 	// cannot contain special characters `&<>"'/`.
 	Description *string `pulumi:"description"`
 	// Specifies the flavor ID. The options are as follows:
@@ -240,7 +283,7 @@ type NotebookState struct {
 	AutoStopEnabled pulumi.BoolPtrInput
 	// The notebook creation time.
 	CreatedAt pulumi.StringPtrInput
-	// Specifies the description of notebook. It contains a maximum of 512 characters and
+	// Specifies the description of notebook. It contains a maximum of `512` characters and
 	// cannot contain special characters `&<>"'/`.
 	Description pulumi.StringPtrInput
 	// Specifies the flavor ID. The options are as follows:
@@ -305,7 +348,7 @@ type notebookArgs struct {
 	// Specifies public IP addresses that are allowed for remote SSH access.
 	// If the parameter is not specified, all IP addresses will be allowed for remote SSH access.
 	AllowedAccessIps []string `pulumi:"allowedAccessIps"`
-	// Specifies the description of notebook. It contains a maximum of 512 characters and
+	// Specifies the description of notebook. It contains a maximum of `512` characters and
 	// cannot contain special characters `&<>"'/`.
 	Description *string `pulumi:"description"`
 	// Specifies the flavor ID. The options are as follows:
@@ -348,7 +391,7 @@ type NotebookArgs struct {
 	// Specifies public IP addresses that are allowed for remote SSH access.
 	// If the parameter is not specified, all IP addresses will be allowed for remote SSH access.
 	AllowedAccessIps pulumi.StringArrayInput
-	// Specifies the description of notebook. It contains a maximum of 512 characters and
+	// Specifies the description of notebook. It contains a maximum of `512` characters and
 	// cannot contain special characters `&<>"'/`.
 	Description pulumi.StringPtrInput
 	// Specifies the flavor ID. The options are as follows:
@@ -489,7 +532,7 @@ func (o NotebookOutput) CreatedAt() pulumi.StringOutput {
 	return o.ApplyT(func(v *Notebook) pulumi.StringOutput { return v.CreatedAt }).(pulumi.StringOutput)
 }
 
-// Specifies the description of notebook. It contains a maximum of 512 characters and
+// Specifies the description of notebook. It contains a maximum of `512` characters and
 // cannot contain special characters `&<>"'/`.
 func (o NotebookOutput) Description() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Notebook) pulumi.StringPtrOutput { return v.Description }).(pulumi.StringPtrOutput)

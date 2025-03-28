@@ -49,7 +49,7 @@ class FlinkjarJobArgs:
                uploaded to the DLI.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] dependency_jars: Specifies other dependency jars. It is the name of the package that
                has been uploaded to the DLI.
-        :param pulumi.Input[str] description: Specifies job description. Length range: 1 to 512 characters.
+        :param pulumi.Input[str] description: Specifies job description. Length range: `1` to `512` characters.
         :param pulumi.Input[str] entrypoint: Specifies the JAR file where the job main class is located. It is the name of the
                package that has been uploaded to the DLI.
         :param pulumi.Input[str] entrypoint_args: Specifies job entry arguments. Multiple arguments are separated by spaces.
@@ -70,7 +70,7 @@ class FlinkjarJobArgs:
                of the application.
         :param pulumi.Input[int] manager_cu_num: Specifies number of CUs in the JobManager selected for a job.
                The default value is `1`.
-        :param pulumi.Input[str] name: Specifies the name of the job. Length range: 1 to 57 characters.
+        :param pulumi.Input[str] name: Specifies the name of the job. Length range: `1` to `57` characters.
                Which may consist of letters, digits, underscores (_) and hyphens (-).
         :param pulumi.Input[str] obs_bucket: Specifies OBS path. OBS path where users are authorized to save the log.
                This parameter is valid only when `log_enabled` is set to `true`.
@@ -89,7 +89,6 @@ class FlinkjarJobArgs:
         :param pulumi.Input[str] smn_topic: Specifies SMN topic. If a job fails, the system will send a message to users
                subscribed to the SMN topic.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the resource.
-               Changing this parameter will create a new resource.
         :param pulumi.Input[int] tm_cu_num: Specifies number of CUs for each TaskManager. The default value is `1`.
         :param pulumi.Input[int] tm_slot_num: Specifies number of slots in each TaskManager.
                The default value is `(parallel_num * tm_cu_num) / (cu_num - manager_cu_num)`.
@@ -202,7 +201,7 @@ class FlinkjarJobArgs:
     @pulumi.getter
     def description(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies job description. Length range: 1 to 512 characters.
+        Specifies job description. Length range: `1` to `512` characters.
         """
         return pulumi.get(self, "description")
 
@@ -322,7 +321,7 @@ class FlinkjarJobArgs:
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the name of the job. Length range: 1 to 57 characters.
+        Specifies the name of the job. Length range: `1` to `57` characters.
         Which may consist of letters, digits, underscores (_) and hyphens (-).
         """
         return pulumi.get(self, "name")
@@ -451,7 +450,6 @@ class FlinkjarJobArgs:
     def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]:
         """
         Specifies the key/value pairs to associate with the resource.
-        Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "tags")
 
@@ -524,7 +522,7 @@ class _FlinkjarJobState:
                uploaded to the DLI.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] dependency_jars: Specifies other dependency jars. It is the name of the package that
                has been uploaded to the DLI.
-        :param pulumi.Input[str] description: Specifies job description. Length range: 1 to 512 characters.
+        :param pulumi.Input[str] description: Specifies job description. Length range: `1` to `512` characters.
         :param pulumi.Input[str] entrypoint: Specifies the JAR file where the job main class is located. It is the name of the
                package that has been uploaded to the DLI.
         :param pulumi.Input[str] entrypoint_args: Specifies job entry arguments. Multiple arguments are separated by spaces.
@@ -545,7 +543,7 @@ class _FlinkjarJobState:
                of the application.
         :param pulumi.Input[int] manager_cu_num: Specifies number of CUs in the JobManager selected for a job.
                The default value is `1`.
-        :param pulumi.Input[str] name: Specifies the name of the job. Length range: 1 to 57 characters.
+        :param pulumi.Input[str] name: Specifies the name of the job. Length range: `1` to `57` characters.
                Which may consist of letters, digits, underscores (_) and hyphens (-).
         :param pulumi.Input[str] obs_bucket: Specifies OBS path. OBS path where users are authorized to save the log.
                This parameter is valid only when `log_enabled` is set to `true`.
@@ -565,7 +563,6 @@ class _FlinkjarJobState:
                subscribed to the SMN topic.
         :param pulumi.Input[str] status: The Job status.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the resource.
-               Changing this parameter will create a new resource.
         :param pulumi.Input[int] tm_cu_num: Specifies number of CUs for each TaskManager. The default value is `1`.
         :param pulumi.Input[int] tm_slot_num: Specifies number of slots in each TaskManager.
                The default value is `(parallel_num * tm_cu_num) / (cu_num - manager_cu_num)`.
@@ -680,7 +677,7 @@ class _FlinkjarJobState:
     @pulumi.getter
     def description(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies job description. Length range: 1 to 512 characters.
+        Specifies job description. Length range: `1` to `512` characters.
         """
         return pulumi.get(self, "description")
 
@@ -800,7 +797,7 @@ class _FlinkjarJobState:
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the name of the job. Length range: 1 to 57 characters.
+        Specifies the name of the job. Length range: `1` to `57` characters.
         Which may consist of letters, digits, underscores (_) and hyphens (-).
         """
         return pulumi.get(self, "name")
@@ -941,7 +938,6 @@ class _FlinkjarJobState:
     def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]:
         """
         Specifies the key/value pairs to associate with the resource.
-        Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "tags")
 
@@ -1038,7 +1034,7 @@ class FlinkjarJob(pulumi.CustomResource):
 
         ## Import
 
-        The job can be imported by `id`. For example,
+        The job can be imported by `id`. For example, bash
 
         ```sh
          $ pulumi import huaweicloud:Dli/flinkjarJob:FlinkjarJob test 12345
@@ -1053,7 +1049,7 @@ class FlinkjarJob(pulumi.CustomResource):
                uploaded to the DLI.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] dependency_jars: Specifies other dependency jars. It is the name of the package that
                has been uploaded to the DLI.
-        :param pulumi.Input[str] description: Specifies job description. Length range: 1 to 512 characters.
+        :param pulumi.Input[str] description: Specifies job description. Length range: `1` to `512` characters.
         :param pulumi.Input[str] entrypoint: Specifies the JAR file where the job main class is located. It is the name of the
                package that has been uploaded to the DLI.
         :param pulumi.Input[str] entrypoint_args: Specifies job entry arguments. Multiple arguments are separated by spaces.
@@ -1074,7 +1070,7 @@ class FlinkjarJob(pulumi.CustomResource):
                of the application.
         :param pulumi.Input[int] manager_cu_num: Specifies number of CUs in the JobManager selected for a job.
                The default value is `1`.
-        :param pulumi.Input[str] name: Specifies the name of the job. Length range: 1 to 57 characters.
+        :param pulumi.Input[str] name: Specifies the name of the job. Length range: `1` to `57` characters.
                Which may consist of letters, digits, underscores (_) and hyphens (-).
         :param pulumi.Input[str] obs_bucket: Specifies OBS path. OBS path where users are authorized to save the log.
                This parameter is valid only when `log_enabled` is set to `true`.
@@ -1093,7 +1089,6 @@ class FlinkjarJob(pulumi.CustomResource):
         :param pulumi.Input[str] smn_topic: Specifies SMN topic. If a job fails, the system will send a message to users
                subscribed to the SMN topic.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the resource.
-               Changing this parameter will create a new resource.
         :param pulumi.Input[int] tm_cu_num: Specifies number of CUs for each TaskManager. The default value is `1`.
         :param pulumi.Input[int] tm_slot_num: Specifies number of slots in each TaskManager.
                The default value is `(parallel_num * tm_cu_num) / (cu_num - manager_cu_num)`.
@@ -1135,7 +1130,7 @@ class FlinkjarJob(pulumi.CustomResource):
 
         ## Import
 
-        The job can be imported by `id`. For example,
+        The job can be imported by `id`. For example, bash
 
         ```sh
          $ pulumi import huaweicloud:Dli/flinkjarJob:FlinkjarJob test 12345
@@ -1269,7 +1264,7 @@ class FlinkjarJob(pulumi.CustomResource):
                uploaded to the DLI.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] dependency_jars: Specifies other dependency jars. It is the name of the package that
                has been uploaded to the DLI.
-        :param pulumi.Input[str] description: Specifies job description. Length range: 1 to 512 characters.
+        :param pulumi.Input[str] description: Specifies job description. Length range: `1` to `512` characters.
         :param pulumi.Input[str] entrypoint: Specifies the JAR file where the job main class is located. It is the name of the
                package that has been uploaded to the DLI.
         :param pulumi.Input[str] entrypoint_args: Specifies job entry arguments. Multiple arguments are separated by spaces.
@@ -1290,7 +1285,7 @@ class FlinkjarJob(pulumi.CustomResource):
                of the application.
         :param pulumi.Input[int] manager_cu_num: Specifies number of CUs in the JobManager selected for a job.
                The default value is `1`.
-        :param pulumi.Input[str] name: Specifies the name of the job. Length range: 1 to 57 characters.
+        :param pulumi.Input[str] name: Specifies the name of the job. Length range: `1` to `57` characters.
                Which may consist of letters, digits, underscores (_) and hyphens (-).
         :param pulumi.Input[str] obs_bucket: Specifies OBS path. OBS path where users are authorized to save the log.
                This parameter is valid only when `log_enabled` is set to `true`.
@@ -1310,7 +1305,6 @@ class FlinkjarJob(pulumi.CustomResource):
                subscribed to the SMN topic.
         :param pulumi.Input[str] status: The Job status.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the resource.
-               Changing this parameter will create a new resource.
         :param pulumi.Input[int] tm_cu_num: Specifies number of CUs for each TaskManager. The default value is `1`.
         :param pulumi.Input[int] tm_slot_num: Specifies number of slots in each TaskManager.
                The default value is `(parallel_num * tm_cu_num) / (cu_num - manager_cu_num)`.
@@ -1387,7 +1381,7 @@ class FlinkjarJob(pulumi.CustomResource):
     @pulumi.getter
     def description(self) -> pulumi.Output[Optional[str]]:
         """
-        Specifies job description. Length range: 1 to 512 characters.
+        Specifies job description. Length range: `1` to `512` characters.
         """
         return pulumi.get(self, "description")
 
@@ -1471,7 +1465,7 @@ class FlinkjarJob(pulumi.CustomResource):
     @pulumi.getter
     def name(self) -> pulumi.Output[str]:
         """
-        Specifies the name of the job. Length range: 1 to 57 characters.
+        Specifies the name of the job. Length range: `1` to `57` characters.
         Which may consist of letters, digits, underscores (_) and hyphens (-).
         """
         return pulumi.get(self, "name")
@@ -1568,7 +1562,6 @@ class FlinkjarJob(pulumi.CustomResource):
     def tags(self) -> pulumi.Output[Optional[Mapping[str, str]]]:
         """
         Specifies the key/value pairs to associate with the resource.
-        Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "tags")
 

@@ -9,3 +9,5 @@ from .dnat_rule import *
 from .gateway import *
 from .get_gateway import *
 from .snat_rule import *
+from ._inputs import *
+from . import outputs

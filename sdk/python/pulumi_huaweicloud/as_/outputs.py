@@ -217,16 +217,20 @@ class ConfigurationInstanceConfig(dict):
     @staticmethod
     def __key_warning(key: str):
         suggest = None
-        if key == "keyName":
-            suggest = "key_name"
+        if key == "adminPass":
+            suggest = "admin_pass"
         elif key == "chargingMode":
             suggest = "charging_mode"
+        elif key == "dedicatedHostId":
+            suggest = "dedicated_host_id"
         elif key == "ecsGroupId":
             suggest = "ecs_group_id"
         elif key == "flavorPriorityPolicy":
             suggest = "flavor_priority_policy"
         elif key == "instanceId":
             suggest = "instance_id"
+        elif key == "keyName":
+            suggest = "key_name"
         elif key == "publicIp":
             suggest = "public_ip"
         elif key == "securityGroupIds":
@@ -246,53 +250,69 @@ class ConfigurationInstanceConfig(dict):
         return super().get(key, default)
 
     def __init__(__self__, *,
-                 key_name: str,
+                 admin_pass: Optional[str] = None,
                  charging_mode: Optional[str] = None,
+                 dedicated_host_id: Optional[str] = None,
                  disks: Optional[Sequence['outputs.ConfigurationInstanceConfigDisk']] = None,
                  ecs_group_id: Optional[str] = None,
                  flavor: Optional[str] = None,
                  flavor_priority_policy: Optional[str] = None,
                  image: Optional[str] = None,
                  instance_id: Optional[str] = None,
+                 key_name: Optional[str] = None,
                  metadata: Optional[Mapping[str, str]] = None,
                  personalities: Optional[Sequence['outputs.ConfigurationInstanceConfigPersonality']] = None,
                  public_ip: Optional['outputs.ConfigurationInstanceConfigPublicIp'] = None,
                  security_group_ids: Optional[Sequence[str]] = None,
+                 tenancy: Optional[str] = None,
                  user_data: Optional[str] = None):
         """
-        :param str key_name: Specifies the name of the SSH key pair used to log in to the instance.
+        :param str admin_pass: Specifies the initial login password of the administrator account for
+               logging in to an ECS using password authentication. The Windows administrator is `Administrator`.
+        :param str charging_mode: Specifies the bandwidth billing type.
+               Changing this creates a new resource. The valid values are as follows:
+               + **bandwidth**: Billing by bandwidth.
+               + **traffic**: Billing by traffic.
+        :param str dedicated_host_id: Specifies the ID of the DEH.
                Changing this will create a new resource.
-        :param str charging_mode: Specifies whether the bandwidth is billed by traffic or by bandwidth
-               size. The value can be **traffic** or **bandwidth**. Changing this creates a new resource.
         :param Sequence['ConfigurationInstanceConfigDiskArgs'] disks: Specifies the disk group information. System disks are mandatory and
-               data disks are optional. The object structure is documented below.
+               data disks are optional. The disk structure is documented below.
                Changing this will create a new resource.
         :param str ecs_group_id: Specifies the ECS group ID. Changing this will create a new resource.
-        :param str flavor: Specifies the ECS flavor name. A maximum of 10 flavors can be selected.
+        :param str flavor: Specifies the ECS flavor name. A maximum of `10` flavors can be selected.
                Use a comma (,) to separate multiple flavor names. Changing this will create a new resource.
         :param str flavor_priority_policy: Specifies the priority policy used when there are multiple flavors
                and instances to be created using an AS configuration. The value can be `PICK_FIRST` and `COST_FIRST`.
         :param str image: Specifies the ECS image ID. Changing this will create a new resource.
         :param str instance_id: Specifies the ECS instance ID when using its specification
-               as the template to create AS configurations. In this case, `flavor`, `image`, and `disk` arguments do not take effect.
+               as the template to create AS configurations. In this case, `flavor`, `image`, `disk`, `security_group_ids`, `tenancy`
+               and `dedicated_host_id` arguments do not take effect.
                If this argument is not specified, `flavor`, `image`, and `disk` arguments are mandatory.
+               Changing this will create a new resource.
+        :param str key_name: Specifies the name of the SSH key pair used to log in to the instance.
                Changing this will create a new resource.
         :param Mapping[str, str] metadata: Specifies the key/value pairs to make available from within the instance.
                Changing this will create a new resource.
         :param Sequence['ConfigurationInstanceConfigPersonalityArgs'] personalities: Specifies the customize personality of an instance by defining one or
-               more files and their contents. The object structure is documented below.
+               more files and their contents. The personality structure is documented below.
                Changing this will create a new resource.
         :param 'ConfigurationInstanceConfigPublicIpArgs' public_ip: Specifies the EIP of the ECS instance.
-               The object structure is documented below.
+               The public_ip structure is documented below.
                Changing this will create a new resource.
         :param Sequence[str] security_group_ids: Specifies an array of one or more security group IDs.
                Changing this will create a new resource.
-        :param str user_data: Specifies the user data to provide when launching the instance.
-               The file content must be encoded with Base64. Changing this will create a new resource.
+        :param str tenancy: Configure this field to **dedicated** to create ECS instances on DeHs.
+               Before configuring this field, prepare DeHs. Changing this will create a new resource.
+        :param str user_data: Specifies the user data to be injected during the ECS creation process.
+               Changing this will create a new resource. For more information, see
+               [Passing User Data to ECSs](https://support.huaweicloud.com/intl/en-us/usermanual-ecs/en-us_topic_0032380449.html).
         """
-        pulumi.set(__self__, "key_name", key_name)
+        if admin_pass is not None:
+            pulumi.set(__self__, "admin_pass", admin_pass)
         if charging_mode is not None:
             pulumi.set(__self__, "charging_mode", charging_mode)
+        if dedicated_host_id is not None:
+            pulumi.set(__self__, "dedicated_host_id", dedicated_host_id)
         if disks is not None:
             pulumi.set(__self__, "disks", disks)
         if ecs_group_id is not None:
@@ -305,6 +325,8 @@ class ConfigurationInstanceConfig(dict):
             pulumi.set(__self__, "image", image)
         if instance_id is not None:
             pulumi.set(__self__, "instance_id", instance_id)
+        if key_name is not None:
+            pulumi.set(__self__, "key_name", key_name)
         if metadata is not None:
             pulumi.set(__self__, "metadata", metadata)
         if personalities is not None:
@@ -313,33 +335,46 @@ class ConfigurationInstanceConfig(dict):
             pulumi.set(__self__, "public_ip", public_ip)
         if security_group_ids is not None:
             pulumi.set(__self__, "security_group_ids", security_group_ids)
+        if tenancy is not None:
+            pulumi.set(__self__, "tenancy", tenancy)
         if user_data is not None:
             pulumi.set(__self__, "user_data", user_data)
 
     @property
-    @pulumi.getter(name="keyName")
-    def key_name(self) -> str:
+    @pulumi.getter(name="adminPass")
+    def admin_pass(self) -> Optional[str]:
         """
-        Specifies the name of the SSH key pair used to log in to the instance.
-        Changing this will create a new resource.
+        Specifies the initial login password of the administrator account for
+        logging in to an ECS using password authentication. The Windows administrator is `Administrator`.
         """
-        return pulumi.get(self, "key_name")
+        return pulumi.get(self, "admin_pass")
 
     @property
     @pulumi.getter(name="chargingMode")
     def charging_mode(self) -> Optional[str]:
         """
-        Specifies whether the bandwidth is billed by traffic or by bandwidth
-        size. The value can be **traffic** or **bandwidth**. Changing this creates a new resource.
+        Specifies the bandwidth billing type.
+        Changing this creates a new resource. The valid values are as follows:
+        + **bandwidth**: Billing by bandwidth.
+        + **traffic**: Billing by traffic.
         """
         return pulumi.get(self, "charging_mode")
+
+    @property
+    @pulumi.getter(name="dedicatedHostId")
+    def dedicated_host_id(self) -> Optional[str]:
+        """
+        Specifies the ID of the DEH.
+        Changing this will create a new resource.
+        """
+        return pulumi.get(self, "dedicated_host_id")
 
     @property
     @pulumi.getter
     def disks(self) -> Optional[Sequence['outputs.ConfigurationInstanceConfigDisk']]:
         """
         Specifies the disk group information. System disks are mandatory and
-        data disks are optional. The object structure is documented below.
+        data disks are optional. The disk structure is documented below.
         Changing this will create a new resource.
         """
         return pulumi.get(self, "disks")
@@ -356,7 +391,7 @@ class ConfigurationInstanceConfig(dict):
     @pulumi.getter
     def flavor(self) -> Optional[str]:
         """
-        Specifies the ECS flavor name. A maximum of 10 flavors can be selected.
+        Specifies the ECS flavor name. A maximum of `10` flavors can be selected.
         Use a comma (,) to separate multiple flavor names. Changing this will create a new resource.
         """
         return pulumi.get(self, "flavor")
@@ -383,11 +418,21 @@ class ConfigurationInstanceConfig(dict):
     def instance_id(self) -> Optional[str]:
         """
         Specifies the ECS instance ID when using its specification
-        as the template to create AS configurations. In this case, `flavor`, `image`, and `disk` arguments do not take effect.
+        as the template to create AS configurations. In this case, `flavor`, `image`, `disk`, `security_group_ids`, `tenancy`
+        and `dedicated_host_id` arguments do not take effect.
         If this argument is not specified, `flavor`, `image`, and `disk` arguments are mandatory.
         Changing this will create a new resource.
         """
         return pulumi.get(self, "instance_id")
+
+    @property
+    @pulumi.getter(name="keyName")
+    def key_name(self) -> Optional[str]:
+        """
+        Specifies the name of the SSH key pair used to log in to the instance.
+        Changing this will create a new resource.
+        """
+        return pulumi.get(self, "key_name")
 
     @property
     @pulumi.getter
@@ -403,7 +448,7 @@ class ConfigurationInstanceConfig(dict):
     def personalities(self) -> Optional[Sequence['outputs.ConfigurationInstanceConfigPersonality']]:
         """
         Specifies the customize personality of an instance by defining one or
-        more files and their contents. The object structure is documented below.
+        more files and their contents. The personality structure is documented below.
         Changing this will create a new resource.
         """
         return pulumi.get(self, "personalities")
@@ -413,7 +458,7 @@ class ConfigurationInstanceConfig(dict):
     def public_ip(self) -> Optional['outputs.ConfigurationInstanceConfigPublicIp']:
         """
         Specifies the EIP of the ECS instance.
-        The object structure is documented below.
+        The public_ip structure is documented below.
         Changing this will create a new resource.
         """
         return pulumi.get(self, "public_ip")
@@ -428,11 +473,21 @@ class ConfigurationInstanceConfig(dict):
         return pulumi.get(self, "security_group_ids")
 
     @property
+    @pulumi.getter
+    def tenancy(self) -> Optional[str]:
+        """
+        Configure this field to **dedicated** to create ECS instances on DeHs.
+        Before configuring this field, prepare DeHs. Changing this will create a new resource.
+        """
+        return pulumi.get(self, "tenancy")
+
+    @property
     @pulumi.getter(name="userData")
     def user_data(self) -> Optional[str]:
         """
-        Specifies the user data to provide when launching the instance.
-        The file content must be encoded with Base64. Changing this will create a new resource.
+        Specifies the user data to be injected during the ECS creation process.
+        Changing this will create a new resource. For more information, see
+        [Passing User Data to ECSs](https://support.huaweicloud.com/intl/en-us/usermanual-ecs/en-us_topic_0032380449.html).
         """
         return pulumi.get(self, "user_data")
 
@@ -446,8 +501,14 @@ class ConfigurationInstanceConfigDisk(dict):
             suggest = "disk_type"
         elif key == "volumeType":
             suggest = "volume_type"
+        elif key == "dataDiskImageId":
+            suggest = "data_disk_image_id"
+        elif key == "dedicatedStorageId":
+            suggest = "dedicated_storage_id"
         elif key == "kmsId":
             suggest = "kms_id"
+        elif key == "snapshotId":
+            suggest = "snapshot_id"
 
         if suggest:
             pulumi.log.warn(f"Key '{key}' not found in ConfigurationInstanceConfigDisk. Access the value via the '{suggest}' property getter instead.")
@@ -464,27 +525,55 @@ class ConfigurationInstanceConfigDisk(dict):
                  disk_type: str,
                  size: int,
                  volume_type: str,
-                 kms_id: Optional[str] = None):
+                 data_disk_image_id: Optional[str] = None,
+                 dedicated_storage_id: Optional[str] = None,
+                 iops: Optional[int] = None,
+                 kms_id: Optional[str] = None,
+                 snapshot_id: Optional[str] = None,
+                 throughput: Optional[int] = None):
         """
         :param str disk_type: Specifies whether the disk is a system disk or a data disk.
                Option **DATA** indicates a data disk, option **SYS** indicates a system disk.
                Changing this will create a new resource.
         :param int size: Specifies the bandwidth (Mbit/s). The value range for bandwidth billed by bandwidth
-               is 1 to 2000 and that for bandwidth billed by traffic is 1 to 300.
+               is `1` to `2,000` and that for bandwidth billed by traffic is `1` to `300`.
                Changing this creates a new resource.
         :param str volume_type: Specifies the disk type. Changing this will create a new resource.
                Available options are:
-               + `SAS`: high I/O disk type.
-               + `SSD`: ultra-high I/O disk type.
-               + `GPSSD`: general purpose SSD disk type.
+               + **SSD**: The ultra-high I/O type.
+               + **SAS**: The high I/O EVS type.
+               + **SATA**: The common I/O type.
+               + **GPSSD**: The general purpose SSD type.
+               + **ESSD**: The extreme SSD type.
+               + **GPSSD2**: The general purpose SSD V2 type.
+               + **ESSD2**: The extreme SSD V2 type.
+        :param str data_disk_image_id: Specifies the ID of a data disk image used to export data disks of
+               an ECS.
+        :param str dedicated_storage_id: Specifies a DSS device ID for creating an ECS disk.
+        :param int iops: Specifies the IOPS configured for an EVS disk.
+               Changing this will create a new resource.
         :param str kms_id: Specifies the encryption KMS ID of the **DATA** disk.
+               Changing this will create a new resource.
+        :param str snapshot_id: Specifies the disk backup snapshot ID for restoring the system disk and
+               data disks using a full-ECS backup when a full-ECS image is used.
+        :param int throughput: Specifies the throughput of an EVS disk. The unit is MiB/s.
                Changing this will create a new resource.
         """
         pulumi.set(__self__, "disk_type", disk_type)
         pulumi.set(__self__, "size", size)
         pulumi.set(__self__, "volume_type", volume_type)
+        if data_disk_image_id is not None:
+            pulumi.set(__self__, "data_disk_image_id", data_disk_image_id)
+        if dedicated_storage_id is not None:
+            pulumi.set(__self__, "dedicated_storage_id", dedicated_storage_id)
+        if iops is not None:
+            pulumi.set(__self__, "iops", iops)
         if kms_id is not None:
             pulumi.set(__self__, "kms_id", kms_id)
+        if snapshot_id is not None:
+            pulumi.set(__self__, "snapshot_id", snapshot_id)
+        if throughput is not None:
+            pulumi.set(__self__, "throughput", throughput)
 
     @property
     @pulumi.getter(name="diskType")
@@ -501,7 +590,7 @@ class ConfigurationInstanceConfigDisk(dict):
     def size(self) -> int:
         """
         Specifies the bandwidth (Mbit/s). The value range for bandwidth billed by bandwidth
-        is 1 to 2000 and that for bandwidth billed by traffic is 1 to 300.
+        is `1` to `2,000` and that for bandwidth billed by traffic is `1` to `300`.
         Changing this creates a new resource.
         """
         return pulumi.get(self, "size")
@@ -512,11 +601,41 @@ class ConfigurationInstanceConfigDisk(dict):
         """
         Specifies the disk type. Changing this will create a new resource.
         Available options are:
-        + `SAS`: high I/O disk type.
-        + `SSD`: ultra-high I/O disk type.
-        + `GPSSD`: general purpose SSD disk type.
+        + **SSD**: The ultra-high I/O type.
+        + **SAS**: The high I/O EVS type.
+        + **SATA**: The common I/O type.
+        + **GPSSD**: The general purpose SSD type.
+        + **ESSD**: The extreme SSD type.
+        + **GPSSD2**: The general purpose SSD V2 type.
+        + **ESSD2**: The extreme SSD V2 type.
         """
         return pulumi.get(self, "volume_type")
+
+    @property
+    @pulumi.getter(name="dataDiskImageId")
+    def data_disk_image_id(self) -> Optional[str]:
+        """
+        Specifies the ID of a data disk image used to export data disks of
+        an ECS.
+        """
+        return pulumi.get(self, "data_disk_image_id")
+
+    @property
+    @pulumi.getter(name="dedicatedStorageId")
+    def dedicated_storage_id(self) -> Optional[str]:
+        """
+        Specifies a DSS device ID for creating an ECS disk.
+        """
+        return pulumi.get(self, "dedicated_storage_id")
+
+    @property
+    @pulumi.getter
+    def iops(self) -> Optional[int]:
+        """
+        Specifies the IOPS configured for an EVS disk.
+        Changing this will create a new resource.
+        """
+        return pulumi.get(self, "iops")
 
     @property
     @pulumi.getter(name="kmsId")
@@ -526,6 +645,24 @@ class ConfigurationInstanceConfigDisk(dict):
         Changing this will create a new resource.
         """
         return pulumi.get(self, "kms_id")
+
+    @property
+    @pulumi.getter(name="snapshotId")
+    def snapshot_id(self) -> Optional[str]:
+        """
+        Specifies the disk backup snapshot ID for restoring the system disk and
+        data disks using a full-ECS backup when a full-ECS image is used.
+        """
+        return pulumi.get(self, "snapshot_id")
+
+    @property
+    @pulumi.getter
+    def throughput(self) -> Optional[int]:
+        """
+        Specifies the throughput of an EVS disk. The unit is MiB/s.
+        Changing this will create a new resource.
+        """
+        return pulumi.get(self, "throughput")
 
 
 @pulumi.output_type
@@ -537,6 +674,9 @@ class ConfigurationInstanceConfigPersonality(dict):
         :param str content: Specifies the content of the injected file, which must be encoded with base64.
                Changing this creates a new resource.
         :param str path: Specifies the path of the injected file. Changing this creates a new resource.
+               + For Linux OSs, specify the path, for example, **/etc/foo.txt**, for storing the injected file.
+               + For Windows, the injected file is automatically stored in the root directory of drive `C`. You only need to specify
+               the file name, for example, **foo**. The file name contains only letters and digits.
         """
         pulumi.set(__self__, "content", content)
         pulumi.set(__self__, "path", path)
@@ -555,6 +695,9 @@ class ConfigurationInstanceConfigPersonality(dict):
     def path(self) -> str:
         """
         Specifies the path of the injected file. Changing this creates a new resource.
+        + For Linux OSs, specify the path, for example, **/etc/foo.txt**, for storing the injected file.
+        + For Windows, the injected file is automatically stored in the root directory of drive `C`. You only need to specify
+        the file name, for example, **foo**. The file name contains only letters and digits.
         """
         return pulumi.get(self, "path")
 
@@ -634,10 +777,10 @@ class ConfigurationInstanceConfigPublicIpEipBandwidth(dict):
     @staticmethod
     def __key_warning(key: str):
         suggest = None
-        if key == "chargingMode":
-            suggest = "charging_mode"
-        elif key == "shareType":
+        if key == "shareType":
             suggest = "share_type"
+        elif key == "chargingMode":
+            suggest = "charging_mode"
 
         if suggest:
             pulumi.log.warn(f"Key '{key}' not found in ConfigurationInstanceConfigPublicIpEipBandwidth. Access the value via the '{suggest}' property getter instead.")
@@ -651,46 +794,68 @@ class ConfigurationInstanceConfigPublicIpEipBandwidth(dict):
         return super().get(key, default)
 
     def __init__(__self__, *,
-                 charging_mode: str,
                  share_type: str,
-                 size: int):
+                 charging_mode: Optional[str] = None,
+                 id: Optional[str] = None,
+                 size: Optional[int] = None):
         """
-        :param str charging_mode: Specifies whether the bandwidth is billed by traffic or by bandwidth
-               size. The value can be **traffic** or **bandwidth**. Changing this creates a new resource.
-        :param str share_type: Specifies the bandwidth sharing type. The system only supports
-               **PER** (indicates exclusive bandwidth). Changing this will create a new resource.
+        :param str share_type: Specifies the bandwidth sharing type.
+               The value can be **PER** (exclusive bandwidth) or **WHOLE** (shared bandwidth).
+               Changing this will create a new resource.
+        :param str charging_mode: Specifies the bandwidth billing type.
+               Changing this creates a new resource. The valid values are as follows:
+               + **bandwidth**: Billing by bandwidth.
+               + **traffic**: Billing by traffic.
+        :param str id: Specifies the ID of the shared bandwidth.
+               Changing this will create a new resource.
         :param int size: Specifies the bandwidth (Mbit/s). The value range for bandwidth billed by bandwidth
-               is 1 to 2000 and that for bandwidth billed by traffic is 1 to 300.
+               is `1` to `2,000` and that for bandwidth billed by traffic is `1` to `300`.
                Changing this creates a new resource.
         """
-        pulumi.set(__self__, "charging_mode", charging_mode)
         pulumi.set(__self__, "share_type", share_type)
-        pulumi.set(__self__, "size", size)
-
-    @property
-    @pulumi.getter(name="chargingMode")
-    def charging_mode(self) -> str:
-        """
-        Specifies whether the bandwidth is billed by traffic or by bandwidth
-        size. The value can be **traffic** or **bandwidth**. Changing this creates a new resource.
-        """
-        return pulumi.get(self, "charging_mode")
+        if charging_mode is not None:
+            pulumi.set(__self__, "charging_mode", charging_mode)
+        if id is not None:
+            pulumi.set(__self__, "id", id)
+        if size is not None:
+            pulumi.set(__self__, "size", size)
 
     @property
     @pulumi.getter(name="shareType")
     def share_type(self) -> str:
         """
-        Specifies the bandwidth sharing type. The system only supports
-        **PER** (indicates exclusive bandwidth). Changing this will create a new resource.
+        Specifies the bandwidth sharing type.
+        The value can be **PER** (exclusive bandwidth) or **WHOLE** (shared bandwidth).
+        Changing this will create a new resource.
         """
         return pulumi.get(self, "share_type")
 
     @property
+    @pulumi.getter(name="chargingMode")
+    def charging_mode(self) -> Optional[str]:
+        """
+        Specifies the bandwidth billing type.
+        Changing this creates a new resource. The valid values are as follows:
+        + **bandwidth**: Billing by bandwidth.
+        + **traffic**: Billing by traffic.
+        """
+        return pulumi.get(self, "charging_mode")
+
+    @property
     @pulumi.getter
-    def size(self) -> int:
+    def id(self) -> Optional[str]:
+        """
+        Specifies the ID of the shared bandwidth.
+        Changing this will create a new resource.
+        """
+        return pulumi.get(self, "id")
+
+    @property
+    @pulumi.getter
+    def size(self) -> Optional[int]:
         """
         Specifies the bandwidth (Mbit/s). The value range for bandwidth billed by bandwidth
-        is 1 to 2000 and that for bandwidth billed by traffic is 1 to 300.
+        is `1` to `2,000` and that for bandwidth billed by traffic is `1` to `300`.
         Changing this creates a new resource.
         """
         return pulumi.get(self, "size")
@@ -705,6 +870,8 @@ class GroupLbaasListener(dict):
             suggest = "pool_id"
         elif key == "protocolPort":
             suggest = "protocol_port"
+        elif key == "protocolVersion":
+            suggest = "protocol_version"
 
         if suggest:
             pulumi.log.warn(f"Key '{key}' not found in GroupLbaasListener. Access the value via the '{suggest}' property getter instead.")
@@ -720,17 +887,22 @@ class GroupLbaasListener(dict):
     def __init__(__self__, *,
                  pool_id: str,
                  protocol_port: int,
+                 protocol_version: Optional[str] = None,
                  weight: Optional[int] = None):
         """
         :param str pool_id: Specifies the backend ECS group ID.
         :param int protocol_port: Specifies the backend protocol, which is the port on which a backend ECS listens for
-               traffic. The number of the port ranges from 1 to 65535.
+               traffic. The number of the port ranges from `1` to `65,535`.
+        :param str protocol_version: Specifies the version of instance IP addresses to be associated with the
+               load balancer. The value can be **ipv4** or **ipv6**. Defaults to **ipv4**.
         :param int weight: Specifies the weight, which determines the portion of requests a backend ECS processes
-               compared to other backend ECSs added to the same listener. The value of this parameter ranges from 0 to 100. The
-               default value is 1.
+               compared to other backend ECSs added to the same listener. The value of this parameter ranges from `0` to `100`.
+               Defaults to `1`.
         """
         pulumi.set(__self__, "pool_id", pool_id)
         pulumi.set(__self__, "protocol_port", protocol_port)
+        if protocol_version is not None:
+            pulumi.set(__self__, "protocol_version", protocol_version)
         if weight is not None:
             pulumi.set(__self__, "weight", weight)
 
@@ -747,17 +919,26 @@ class GroupLbaasListener(dict):
     def protocol_port(self) -> int:
         """
         Specifies the backend protocol, which is the port on which a backend ECS listens for
-        traffic. The number of the port ranges from 1 to 65535.
+        traffic. The number of the port ranges from `1` to `65,535`.
         """
         return pulumi.get(self, "protocol_port")
+
+    @property
+    @pulumi.getter(name="protocolVersion")
+    def protocol_version(self) -> Optional[str]:
+        """
+        Specifies the version of instance IP addresses to be associated with the
+        load balancer. The value can be **ipv4** or **ipv6**. Defaults to **ipv4**.
+        """
+        return pulumi.get(self, "protocol_version")
 
     @property
     @pulumi.getter
     def weight(self) -> Optional[int]:
         """
         Specifies the weight, which determines the portion of requests a backend ECS processes
-        compared to other backend ECSs added to the same listener. The value of this parameter ranges from 0 to 100. The
-        default value is 1.
+        compared to other backend ECSs added to the same listener. The value of this parameter ranges from `0` to `100`.
+        Defaults to `1`.
         """
         return pulumi.get(self, "weight")
 
@@ -793,9 +974,9 @@ class GroupNetwork(dict):
         """
         :param str id: Specifies the ID of the security group.
         :param str ipv6_bandwidth_id: Specifies the ID of the shared bandwidth of an IPv6 address.
-        :param bool ipv6_enable: Specifies whether to support IPv6 addresses. The default value is `false`.
-        :param bool source_dest_check: Specifies whether processesing only traffic that is destined specifically
-               for it. Defaults to true.
+        :param bool ipv6_enable: Specifies whether to support IPv6 addresses. Defaults to **false**.
+        :param bool source_dest_check: Specifies whether process only traffic that is destined specifically
+               for it. Defaults to **true**.
         """
         pulumi.set(__self__, "id", id)
         if ipv6_bandwidth_id is not None:
@@ -825,7 +1006,7 @@ class GroupNetwork(dict):
     @pulumi.getter(name="ipv6Enable")
     def ipv6_enable(self) -> Optional[bool]:
         """
-        Specifies whether to support IPv6 addresses. The default value is `false`.
+        Specifies whether to support IPv6 addresses. Defaults to **false**.
         """
         return pulumi.get(self, "ipv6_enable")
 
@@ -833,8 +1014,8 @@ class GroupNetwork(dict):
     @pulumi.getter(name="sourceDestCheck")
     def source_dest_check(self) -> Optional[bool]:
         """
-        Specifies whether processesing only traffic that is destined specifically
-        for it. Defaults to true.
+        Specifies whether process only traffic that is destined specifically
+        for it. Defaults to **true**.
         """
         return pulumi.get(self, "source_dest_check")
 
@@ -864,6 +1045,8 @@ class PolicyScalingPolicyAction(dict):
         suggest = None
         if key == "instanceNumber":
             suggest = "instance_number"
+        elif key == "instancePercentage":
+            suggest = "instance_percentage"
 
         if suggest:
             pulumi.log.warn(f"Key '{key}' not found in PolicyScalingPolicyAction. Access the value via the '{suggest}' property getter instead.")
@@ -878,14 +1061,18 @@ class PolicyScalingPolicyAction(dict):
 
     def __init__(__self__, *,
                  instance_number: Optional[int] = None,
+                 instance_percentage: Optional[int] = None,
                  operation: Optional[str] = None):
         """
-        :param int instance_number: Specifies the number of instances to be operated. The default number is 1.
+        :param int instance_number: Specifies the number of instances to be operated.
+        :param int instance_percentage: Specifies the percentage of instances to be operated.
         :param str operation: Specifies the operation to be performed. The options include `ADD` (default), `REMOVE`,
                and `SET`.
         """
         if instance_number is not None:
             pulumi.set(__self__, "instance_number", instance_number)
+        if instance_percentage is not None:
+            pulumi.set(__self__, "instance_percentage", instance_percentage)
         if operation is not None:
             pulumi.set(__self__, "operation", operation)
 
@@ -893,9 +1080,17 @@ class PolicyScalingPolicyAction(dict):
     @pulumi.getter(name="instanceNumber")
     def instance_number(self) -> Optional[int]:
         """
-        Specifies the number of instances to be operated. The default number is 1.
+        Specifies the number of instances to be operated.
         """
         return pulumi.get(self, "instance_number")
+
+    @property
+    @pulumi.getter(name="instancePercentage")
+    def instance_percentage(self) -> Optional[int]:
+        """
+        Specifies the percentage of instances to be operated.
+        """
+        return pulumi.get(self, "instance_percentage")
 
     @property
     @pulumi.getter

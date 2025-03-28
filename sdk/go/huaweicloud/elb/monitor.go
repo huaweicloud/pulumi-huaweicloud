@@ -106,7 +106,7 @@ import (
 //
 // ## Import
 //
-// ELB monitor can be imported using the monitor ID, e.g.
+// ELB monitor can be imported using the monitor ID, e.g. bash
 //
 // ```sh
 //
@@ -134,7 +134,7 @@ type Monitor struct {
 	// Specifies the id of the pool that this monitor will be assigned to. Changing
 	// this creates a new monitor.
 	PoolId pulumi.StringOutput `pulumi:"poolId"`
-	// Specifies the health check port. The port number ranges from 1 to 65535. If not specified,
+	// Specifies the health check port. The port number ranges from `1` to `65,535`. If not specified,
 	// the port of the backend server will be used as the health check port.
 	Port pulumi.IntPtrOutput `pulumi:"port"`
 	// The region in which to create the ELB monitor resource. If omitted, the
@@ -217,7 +217,7 @@ type monitorState struct {
 	// Specifies the id of the pool that this monitor will be assigned to. Changing
 	// this creates a new monitor.
 	PoolId *string `pulumi:"poolId"`
-	// Specifies the health check port. The port number ranges from 1 to 65535. If not specified,
+	// Specifies the health check port. The port number ranges from `1` to `65,535`. If not specified,
 	// the port of the backend server will be used as the health check port.
 	Port *int `pulumi:"port"`
 	// The region in which to create the ELB monitor resource. If omitted, the
@@ -256,7 +256,7 @@ type MonitorState struct {
 	// Specifies the id of the pool that this monitor will be assigned to. Changing
 	// this creates a new monitor.
 	PoolId pulumi.StringPtrInput
-	// Specifies the health check port. The port number ranges from 1 to 65535. If not specified,
+	// Specifies the health check port. The port number ranges from `1` to `65,535`. If not specified,
 	// the port of the backend server will be used as the health check port.
 	Port pulumi.IntPtrInput
 	// The region in which to create the ELB monitor resource. If omitted, the
@@ -299,7 +299,7 @@ type monitorArgs struct {
 	// Specifies the id of the pool that this monitor will be assigned to. Changing
 	// this creates a new monitor.
 	PoolId string `pulumi:"poolId"`
-	// Specifies the health check port. The port number ranges from 1 to 65535. If not specified,
+	// Specifies the health check port. The port number ranges from `1` to `65,535`. If not specified,
 	// the port of the backend server will be used as the health check port.
 	Port *int `pulumi:"port"`
 	// The region in which to create the ELB monitor resource. If omitted, the
@@ -339,7 +339,7 @@ type MonitorArgs struct {
 	// Specifies the id of the pool that this monitor will be assigned to. Changing
 	// this creates a new monitor.
 	PoolId pulumi.StringInput
-	// Specifies the health check port. The port number ranges from 1 to 65535. If not specified,
+	// Specifies the health check port. The port number ranges from `1` to `65,535`. If not specified,
 	// the port of the backend server will be used as the health check port.
 	Port pulumi.IntPtrInput
 	// The region in which to create the ELB monitor resource. If omitted, the
@@ -485,7 +485,7 @@ func (o MonitorOutput) PoolId() pulumi.StringOutput {
 	return o.ApplyT(func(v *Monitor) pulumi.StringOutput { return v.PoolId }).(pulumi.StringOutput)
 }
 
-// Specifies the health check port. The port number ranges from 1 to 65535. If not specified,
+// Specifies the health check port. The port number ranges from `1` to `65,535`. If not specified,
 // the port of the backend server will be used as the health check port.
 func (o MonitorOutput) Port() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v *Monitor) pulumi.IntPtrOutput { return v.Port }).(pulumi.IntPtrOutput)

@@ -101,7 +101,7 @@ import (
 //
 // ## Import
 //
-// ELB certificate can be imported using the certificate ID, e.g.
+// ELB certificate can be imported using the certificate ID, e.g. bash
 //
 // ```sh
 //
@@ -109,7 +109,7 @@ import (
 //
 // ```
 //
-//	Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`enterprise_project_id`. It is generally recommended running `terraform plan` after importing a certificate. You can then decide if changes should be applied to the certificate, or the resource definition should be updated to align with the certificate. Also you can ignore changes as below. resource "huaweicloud_elb_certificate" "certificate_1" {
+//	Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`enterprise_project_id`. It is generally recommended running `terraform plan` after importing a certificate. You can then decide if changes should be applied to the certificate, or the resource definition should be updated to align with the certificate. Also you can ignore changes as below. hcl resource "huaweicloud_elb_certificate" "certificate_1" {
 //
 //	...
 //
@@ -136,7 +136,7 @@ type Certificate struct {
 	Domain pulumi.StringPtrOutput `pulumi:"domain"`
 	// The enterprise project id of the certificate.
 	EnterpriseProjectId pulumi.StringOutput `pulumi:"enterpriseProjectId"`
-	// Indicates the expire time.
+	// Indicates the expiration time.
 	ExpireTime pulumi.StringOutput `pulumi:"expireTime"`
 	// Human-readable name for the Certificate. Does not have to be unique.
 	Name pulumi.StringOutput `pulumi:"name"`
@@ -199,7 +199,7 @@ type certificateState struct {
 	Domain *string `pulumi:"domain"`
 	// The enterprise project id of the certificate.
 	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
-	// Indicates the expire time.
+	// Indicates the expiration time.
 	ExpireTime *string `pulumi:"expireTime"`
 	// Human-readable name for the Certificate. Does not have to be unique.
 	Name *string `pulumi:"name"`
@@ -230,7 +230,7 @@ type CertificateState struct {
 	Domain pulumi.StringPtrInput
 	// The enterprise project id of the certificate.
 	EnterpriseProjectId pulumi.StringPtrInput
-	// Indicates the expire time.
+	// Indicates the expiration time.
 	ExpireTime pulumi.StringPtrInput
 	// Human-readable name for the Certificate. Does not have to be unique.
 	Name pulumi.StringPtrInput
@@ -417,7 +417,7 @@ func (o CertificateOutput) EnterpriseProjectId() pulumi.StringOutput {
 	return o.ApplyT(func(v *Certificate) pulumi.StringOutput { return v.EnterpriseProjectId }).(pulumi.StringOutput)
 }
 
-// Indicates the expire time.
+// Indicates the expiration time.
 func (o CertificateOutput) ExpireTime() pulumi.StringOutput {
 	return o.ApplyT(func(v *Certificate) pulumi.StringOutput { return v.ExpireTime }).(pulumi.StringOutput)
 }

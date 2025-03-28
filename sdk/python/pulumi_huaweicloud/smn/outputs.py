@@ -10,8 +10,156 @@ from typing import Any, Mapping, Optional, Sequence, Union, overload
 from .. import _utilities
 
 __all__ = [
+    'SubscriptionExtension',
+    'SubscriptionFilterPolicy',
     'GetTopicsTopicResult',
 ]
+
+@pulumi.output_type
+class SubscriptionExtension(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "clientId":
+            suggest = "client_id"
+        elif key == "clientSecret":
+            suggest = "client_secret"
+        elif key == "signSecret":
+            suggest = "sign_secret"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in SubscriptionExtension. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        SubscriptionExtension.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        SubscriptionExtension.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 client_id: Optional[str] = None,
+                 client_secret: Optional[str] = None,
+                 keyword: Optional[str] = None,
+                 sign_secret: Optional[str] = None):
+        """
+        :param str client_id: Specifies the client ID. This field is the tenant ID field in
+               the WeLink subscription and is obtained by the tenant from WeLink. This field is mandatory when `protocol`
+               is set to **welink**. Changing this parameter will create a new resource.
+        :param str client_secret: Specifies the client secret. This field is the client secret
+               field obtained by the tenant from WeLink. This field is mandatory when `protocol` is set to **welink**.
+               Changing this parameter will create a new resource.
+        :param str keyword: Specifies the keyword. When `protocol` is set to **feishu**,
+               either `keyword` or `sign_secret` must be specified. When you use `keywords` to configure a security policy
+               for the Lark or DingTalk chatbot on SMN, the keywords must have one of the keywords configured on the Lark
+               or DingTalk client. Changing this parameter will create a new resource.
+        :param str sign_secret: Specifies the key including signature. When `protocol` is set
+               to **feishu** or **dingding**, this field or `keyword` must be specified. The key configurations must be
+               the same as those on the Lark or DingTalk client. For example, if only key is configured on the Lark client,
+               enter the key field obtained from the Lark client. If only keyword is configured on the Lark client, skip this field.
+               Changing this parameter will create a new resource.
+        """
+        if client_id is not None:
+            pulumi.set(__self__, "client_id", client_id)
+        if client_secret is not None:
+            pulumi.set(__self__, "client_secret", client_secret)
+        if keyword is not None:
+            pulumi.set(__self__, "keyword", keyword)
+        if sign_secret is not None:
+            pulumi.set(__self__, "sign_secret", sign_secret)
+
+    @property
+    @pulumi.getter(name="clientId")
+    def client_id(self) -> Optional[str]:
+        """
+        Specifies the client ID. This field is the tenant ID field in
+        the WeLink subscription and is obtained by the tenant from WeLink. This field is mandatory when `protocol`
+        is set to **welink**. Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "client_id")
+
+    @property
+    @pulumi.getter(name="clientSecret")
+    def client_secret(self) -> Optional[str]:
+        """
+        Specifies the client secret. This field is the client secret
+        field obtained by the tenant from WeLink. This field is mandatory when `protocol` is set to **welink**.
+        Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "client_secret")
+
+    @property
+    @pulumi.getter
+    def keyword(self) -> Optional[str]:
+        """
+        Specifies the keyword. When `protocol` is set to **feishu**,
+        either `keyword` or `sign_secret` must be specified. When you use `keywords` to configure a security policy
+        for the Lark or DingTalk chatbot on SMN, the keywords must have one of the keywords configured on the Lark
+        or DingTalk client. Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "keyword")
+
+    @property
+    @pulumi.getter(name="signSecret")
+    def sign_secret(self) -> Optional[str]:
+        """
+        Specifies the key including signature. When `protocol` is set
+        to **feishu** or **dingding**, this field or `keyword` must be specified. The key configurations must be
+        the same as those on the Lark or DingTalk client. For example, if only key is configured on the Lark client,
+        enter the key field obtained from the Lark client. If only keyword is configured on the Lark client, skip this field.
+        Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "sign_secret")
+
+
+@pulumi.output_type
+class SubscriptionFilterPolicy(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "stringEquals":
+            suggest = "string_equals"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in SubscriptionFilterPolicy. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        SubscriptionFilterPolicy.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        SubscriptionFilterPolicy.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 name: Optional[str] = None,
+                 string_equals: Optional[Sequence[str]] = None):
+        """
+        :param str name: The filter policy name.
+        :param Sequence[str] string_equals: The string array for exact match.
+        """
+        if name is not None:
+            pulumi.set(__self__, "name", name)
+        if string_equals is not None:
+            pulumi.set(__self__, "string_equals", string_equals)
+
+    @property
+    @pulumi.getter
+    def name(self) -> Optional[str]:
+        """
+        The filter policy name.
+        """
+        return pulumi.get(self, "name")
+
+    @property
+    @pulumi.getter(name="stringEquals")
+    def string_equals(self) -> Optional[Sequence[str]]:
+        """
+        The string array for exact match.
+        """
+        return pulumi.get(self, "string_equals")
+
 
 @pulumi.output_type
 class GetTopicsTopicResult(dict):

@@ -45,7 +45,7 @@ class NotebookArgs:
         :param pulumi.Input['NotebookVolumeArgs'] volume: Specifies the volume information. Structure is documented below.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] allowed_access_ips: Specifies public IP addresses that are allowed for remote SSH access.
                If the parameter is not specified, all IP addresses will be allowed for remote SSH access.
-        :param pulumi.Input[str] description: Specifies the description of notebook. It contains a maximum of 512 characters and
+        :param pulumi.Input[str] description: Specifies the description of notebook. It contains a maximum of `512` characters and
                cannot contain special characters `&<>"'/`.
         :param pulumi.Input[str] key_pair: Specifies the key pair name for remote SSH access.
                Changing this parameter will create a new resource.
@@ -141,7 +141,7 @@ class NotebookArgs:
     @pulumi.getter
     def description(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the description of notebook. It contains a maximum of 512 characters and
+        Specifies the description of notebook. It contains a maximum of `512` characters and
         cannot contain special characters `&<>"'/`.
         """
         return pulumi.get(self, "description")
@@ -246,7 +246,7 @@ class _NotebookState:
                If the parameter is not specified, all IP addresses will be allowed for remote SSH access.
         :param pulumi.Input[bool] auto_stop_enabled: Whether enabled the notebook instance to automatically stop.
         :param pulumi.Input[str] created_at: The notebook creation time.
-        :param pulumi.Input[str] description: Specifies the description of notebook. It contains a maximum of 512 characters and
+        :param pulumi.Input[str] description: Specifies the description of notebook. It contains a maximum of `512` characters and
                cannot contain special characters `&<>"'/`.
         :param pulumi.Input[str] flavor_id: Specifies the flavor ID. The options are as follows:
                - **modelarts.vm.cpu.2u**: General-purpose Intel CPU specifications, suitable for data exploration and algorithm
@@ -368,7 +368,7 @@ class _NotebookState:
     @pulumi.getter
     def description(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the description of notebook. It contains a maximum of 512 characters and
+        Specifies the description of notebook. It contains a maximum of `512` characters and
         cannot contain special characters `&<>"'/`.
         """
         return pulumi.get(self, "description")
@@ -620,6 +620,7 @@ class Notebook(pulumi.CustomResource):
         Manages ModelArts notebook resource within HuaweiCloud.
 
         ## Example Usage
+        ### Create a notebook with the EVS storage type
 
         ```python
         import pulumi
@@ -628,20 +629,46 @@ class Notebook(pulumi.CustomResource):
         config = pulumi.Config()
         notebook_name = config.require_object("notebookName")
         key_pair_name = config.require_object("keyPairName")
-        ip = config.require_object("ip")
-        notebook = huaweicloud.model_arts.Notebook("notebook",
+        image_id = config.require_object("imageId")
+        allowed_ip_addresses = config.require_object("allowedIpAddresses")
+        key_pair_name_input = config.require_object("keyPairNameInput")
+        test = huaweicloud.model_arts.Notebook("test",
             flavor_id="modelarts.vm.cpu.2u",
-            image_id="e1a07296-22a8-4f05-8bc8-e936c8e54090",
-            allowed_access_ips=[ip],
+            image_id=image_id,
+            allowed_access_ips=allowed_ip_addresses,
             key_pair=key_pair_name,
             volume=huaweicloud.model_arts.NotebookVolumeArgs(
+                type="EVS",
+                size=5,
+            ))
+        ```
+        ### Create a notebook with the EFS storage type
+
+        ```python
+        import pulumi
+        import pulumi_huaweicloud as huaweicloud
+
+        config = pulumi.Config()
+        notebook_name = config.require_object("notebookName")
+        image_id = config.require_object("imageId")
+        resource_pool_id = config.require_object("resourcePoolId")
+        sfs_export_location = config.require_object("sfsExportLocation")
+        sfs_turbo_id = config.require_object("sfsTurboId")
+        test = huaweicloud.model_arts.Notebook("test",
+            flavor_id="modelarts.vm.cpu.2u",
+            image_id=image_id,
+            pool_id=resource_pool_id,
+            volume=huaweicloud.model_arts.NotebookVolumeArgs(
                 type="EFS",
+                ownership="DEDICATED",
+                uri=sfs_export_location,
+                id=sfs_turbo_id,
             ))
         ```
 
         ## Import
 
-        The notebook can be imported by `id`.
+        The notebook can be imported by `id`. bash
 
         ```sh
          $ pulumi import huaweicloud:ModelArts/notebook:Notebook test b11b407c-e604-4e8d-8bc4-92398320b847
@@ -651,7 +678,7 @@ class Notebook(pulumi.CustomResource):
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] allowed_access_ips: Specifies public IP addresses that are allowed for remote SSH access.
                If the parameter is not specified, all IP addresses will be allowed for remote SSH access.
-        :param pulumi.Input[str] description: Specifies the description of notebook. It contains a maximum of 512 characters and
+        :param pulumi.Input[str] description: Specifies the description of notebook. It contains a maximum of `512` characters and
                cannot contain special characters `&<>"'/`.
         :param pulumi.Input[str] flavor_id: Specifies the flavor ID. The options are as follows:
                - **modelarts.vm.cpu.2u**: General-purpose Intel CPU specifications, suitable for data exploration and algorithm
@@ -689,6 +716,7 @@ class Notebook(pulumi.CustomResource):
         Manages ModelArts notebook resource within HuaweiCloud.
 
         ## Example Usage
+        ### Create a notebook with the EVS storage type
 
         ```python
         import pulumi
@@ -697,20 +725,46 @@ class Notebook(pulumi.CustomResource):
         config = pulumi.Config()
         notebook_name = config.require_object("notebookName")
         key_pair_name = config.require_object("keyPairName")
-        ip = config.require_object("ip")
-        notebook = huaweicloud.model_arts.Notebook("notebook",
+        image_id = config.require_object("imageId")
+        allowed_ip_addresses = config.require_object("allowedIpAddresses")
+        key_pair_name_input = config.require_object("keyPairNameInput")
+        test = huaweicloud.model_arts.Notebook("test",
             flavor_id="modelarts.vm.cpu.2u",
-            image_id="e1a07296-22a8-4f05-8bc8-e936c8e54090",
-            allowed_access_ips=[ip],
+            image_id=image_id,
+            allowed_access_ips=allowed_ip_addresses,
             key_pair=key_pair_name,
             volume=huaweicloud.model_arts.NotebookVolumeArgs(
+                type="EVS",
+                size=5,
+            ))
+        ```
+        ### Create a notebook with the EFS storage type
+
+        ```python
+        import pulumi
+        import pulumi_huaweicloud as huaweicloud
+
+        config = pulumi.Config()
+        notebook_name = config.require_object("notebookName")
+        image_id = config.require_object("imageId")
+        resource_pool_id = config.require_object("resourcePoolId")
+        sfs_export_location = config.require_object("sfsExportLocation")
+        sfs_turbo_id = config.require_object("sfsTurboId")
+        test = huaweicloud.model_arts.Notebook("test",
+            flavor_id="modelarts.vm.cpu.2u",
+            image_id=image_id,
+            pool_id=resource_pool_id,
+            volume=huaweicloud.model_arts.NotebookVolumeArgs(
                 type="EFS",
+                ownership="DEDICATED",
+                uri=sfs_export_location,
+                id=sfs_turbo_id,
             ))
         ```
 
         ## Import
 
-        The notebook can be imported by `id`.
+        The notebook can be imported by `id`. bash
 
         ```sh
          $ pulumi import huaweicloud:ModelArts/notebook:Notebook test b11b407c-e604-4e8d-8bc4-92398320b847
@@ -819,7 +873,7 @@ class Notebook(pulumi.CustomResource):
                If the parameter is not specified, all IP addresses will be allowed for remote SSH access.
         :param pulumi.Input[bool] auto_stop_enabled: Whether enabled the notebook instance to automatically stop.
         :param pulumi.Input[str] created_at: The notebook creation time.
-        :param pulumi.Input[str] description: Specifies the description of notebook. It contains a maximum of 512 characters and
+        :param pulumi.Input[str] description: Specifies the description of notebook. It contains a maximum of `512` characters and
                cannot contain special characters `&<>"'/`.
         :param pulumi.Input[str] flavor_id: Specifies the flavor ID. The options are as follows:
                - **modelarts.vm.cpu.2u**: General-purpose Intel CPU specifications, suitable for data exploration and algorithm
@@ -913,7 +967,7 @@ class Notebook(pulumi.CustomResource):
     @pulumi.getter
     def description(self) -> pulumi.Output[Optional[str]]:
         """
-        Specifies the description of notebook. It contains a maximum of 512 characters and
+        Specifies the description of notebook. It contains a maximum of `512` characters and
         cannot contain special characters `&<>"'/`.
         """
         return pulumi.get(self, "description")

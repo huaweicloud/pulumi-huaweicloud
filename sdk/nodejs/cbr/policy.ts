@@ -6,31 +6,65 @@ import { input as inputs, output as outputs } from "../types";
 import * as utilities from "../utilities";
 
 /**
- * Manages a CBR Policy resource within Huaweicloud.
+ * Manages a backup policy for backing up vault objects within HuaweiCloud.
  *
  * ## Example Usage
+ * ### Create a backup policy (weekly backup)
+ *
+ * ```typescript
+ * import * as pulumi from "@pulumi/pulumi";
+ * import * as pulumi from "@huaweicloudos/pulumi";
+ *
+ * const config = new pulumi.Config();
+ * const policyName = config.requireObject("policyName");
+ * const test = new huaweicloud.cbr.Policy("test", {
+ *     type: "backup",
+ *     timePeriod: 20,
+ *     timeZone: "UTC+08:00",
+ *     longTermRetention: {
+ *         daily: 10,
+ *         weekly: 10,
+ *         monthly: 1,
+ *         fullBackupInterval: -1,
+ *     },
+ *     backupCycle: {
+ *         days: "SA,SU",
+ *         executionTimes: [
+ *             "08:00",
+ *             "20:00",
+ *         ],
+ *     },
+ * });
+ * ```
+ * ### Create a replication policy (periodic backup)
+ *
+ * ```typescript
+ * import * as pulumi from "@pulumi/pulumi";
+ * import * as pulumi from "@huaweicloudos/pulumi";
+ *
+ * const config = new pulumi.Config();
+ * const policyName = config.requireObject("policyName");
+ * const destinationRegion = config.requireObject("destinationRegion");
+ * const destinationProjectId = config.requireObject("destinationProjectId");
+ * const test = new huaweicloud.cbr.Policy("test", {
+ *     type: "replication",
+ *     destinationRegion: destinationRegion,
+ *     destinationProjectId: destinationProjectId,
+ *     backupQuantity: 20,
+ *     backupCycle: {
+ *         interval: 5,
+ *         executionTimes: ["21:00"],
+ *     },
+ * });
+ * ```
  *
  * ## Import
  *
- * Policies can be imported by their `id`. For example,
+ * Policies can be imported by their `id`, e.g. bash
  *
  * ```sh
- *  $ pulumi import huaweicloud:Cbr/policy:Policy test 4d2c2939-774f-42ef-ab15-e5b126b11ace
+ *  $ pulumi import huaweicloud:Cbr/policy:Policy test <id>
  * ```
- *
- *  Note that the imported state may not be identical to your resource definition, due to the attribute missing from the API response. The missing attribute is`enable_acceleration`. It is generally recommended running `terraform plan` after importing a policy. You can then decide if changes should be applied to the policy, or the resource definition should be updated to align with the policy. Also you can ignore changes as below. resource "huaweicloud_cbr_policy" "test" {
- *
- *  ...
- *
- *  lifecycle {
- *
- *  ignore_changes = [
- *
- *  enable_acceleration,
- *
- *  ]
- *
- *  } }
  */
 export class Policy extends pulumi.CustomResource {
     /**
@@ -81,9 +115,7 @@ export class Policy extends pulumi.CustomResource {
      */
     public readonly destinationRegion!: pulumi.Output<string | undefined>;
     /**
-     * Specifies whether to enable the acceleration function to shorten
-     * the replication time for cross-region.
-     * Changing this will create a new policy.
+     * Whether to enable the acceleration function to shorten the replication time for cross-region
      */
     public readonly enableAcceleration!: pulumi.Output<boolean | undefined>;
     /**
@@ -97,7 +129,7 @@ export class Policy extends pulumi.CustomResource {
     public readonly longTermRetention!: pulumi.Output<outputs.Cbr.PolicyLongTermRetention | undefined>;
     /**
      * Specifies the policy name.  
-     * This parameter can contain a maximum of 64
+     * This parameter can contain a maximum of `64`
      * characters, which may consist of chinese characters, letters, digits, underscores(_) and hyphens (-).
      */
     public readonly name!: pulumi.Output<string>;
@@ -199,9 +231,7 @@ export interface PolicyState {
      */
     destinationRegion?: pulumi.Input<string>;
     /**
-     * Specifies whether to enable the acceleration function to shorten
-     * the replication time for cross-region.
-     * Changing this will create a new policy.
+     * Whether to enable the acceleration function to shorten the replication time for cross-region
      */
     enableAcceleration?: pulumi.Input<boolean>;
     /**
@@ -215,7 +245,7 @@ export interface PolicyState {
     longTermRetention?: pulumi.Input<inputs.Cbr.PolicyLongTermRetention>;
     /**
      * Specifies the policy name.  
-     * This parameter can contain a maximum of 64
+     * This parameter can contain a maximum of `64`
      * characters, which may consist of chinese characters, letters, digits, underscores(_) and hyphens (-).
      */
     name?: pulumi.Input<string>;
@@ -267,9 +297,7 @@ export interface PolicyArgs {
      */
     destinationRegion?: pulumi.Input<string>;
     /**
-     * Specifies whether to enable the acceleration function to shorten
-     * the replication time for cross-region.
-     * Changing this will create a new policy.
+     * Whether to enable the acceleration function to shorten the replication time for cross-region
      */
     enableAcceleration?: pulumi.Input<boolean>;
     /**
@@ -283,7 +311,7 @@ export interface PolicyArgs {
     longTermRetention?: pulumi.Input<inputs.Cbr.PolicyLongTermRetention>;
     /**
      * Specifies the policy name.  
-     * This parameter can contain a maximum of 64
+     * This parameter can contain a maximum of `64`
      * characters, which may consist of chinese characters, letters, digits, underscores(_) and hyphens (-).
      */
     name?: pulumi.Input<string>;

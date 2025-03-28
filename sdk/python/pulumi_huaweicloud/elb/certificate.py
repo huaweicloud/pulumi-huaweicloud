@@ -168,6 +168,7 @@ class _CertificateState:
                  description: Optional[pulumi.Input[str]] = None,
                  domain: Optional[pulumi.Input[str]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
+                 expire_time: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  private_key: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
@@ -182,6 +183,7 @@ class _CertificateState:
                parameter is valid only when `type` is set to "server".
         :param pulumi.Input[str] enterprise_project_id: The enterprise project ID of the certificate. Changing this
                creates a new certificate.
+        :param pulumi.Input[str] expire_time: Indicates the expire time.
         :param pulumi.Input[str] name: Human-readable name for the Certificate. Does not have to be unique.
         :param pulumi.Input[str] private_key: The private encrypted key of the Certificate, PEM format. This parameter is valid
                and mandatory only when `type` is set to "server".
@@ -203,6 +205,8 @@ class _CertificateState:
             pulumi.set(__self__, "domain", domain)
         if enterprise_project_id is not None:
             pulumi.set(__self__, "enterprise_project_id", enterprise_project_id)
+        if expire_time is not None:
+            pulumi.set(__self__, "expire_time", expire_time)
         if name is not None:
             pulumi.set(__self__, "name", name)
         if private_key is not None:
@@ -275,6 +279,18 @@ class _CertificateState:
     @enterprise_project_id.setter
     def enterprise_project_id(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "enterprise_project_id", value)
+
+    @property
+    @pulumi.getter(name="expireTime")
+    def expire_time(self) -> Optional[pulumi.Input[str]]:
+        """
+        Indicates the expire time.
+        """
+        return pulumi.get(self, "expire_time")
+
+    @expire_time.setter
+    def expire_time(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "expire_time", value)
 
     @property
     @pulumi.getter
@@ -425,13 +441,13 @@ class Certificate(pulumi.CustomResource):
 
         ## Import
 
-        ELB certificate can be imported using the certificate ID, e.g.
+        ELB certificate can be imported using the certificate ID, e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:Elb/certificate:Certificate certificate_1 5c20fdad-7288-11eb-b817-0255ac10158b
         ```
 
-         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`enterprise_project_id`. It is generally recommended running `terraform plan` after importing a certificate. You can then decide if changes should be applied to the certificate, or the resource definition should be updated to align with the certificate. Also you can ignore changes as below. resource "huaweicloud_lb_certificate" "certificate_1" {
+         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`enterprise_project_id`. It is generally recommended running `terraform plan` after importing a certificate. You can then decide if changes should be applied to the certificate, or the resource definition should be updated to align with the certificate. Also you can ignore changes as below. hcl resource "huaweicloud_lb_certificate" "certificate_1" {
 
          ...
 
@@ -538,13 +554,13 @@ class Certificate(pulumi.CustomResource):
 
         ## Import
 
-        ELB certificate can be imported using the certificate ID, e.g.
+        ELB certificate can be imported using the certificate ID, e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:Elb/certificate:Certificate certificate_1 5c20fdad-7288-11eb-b817-0255ac10158b
         ```
 
-         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`enterprise_project_id`. It is generally recommended running `terraform plan` after importing a certificate. You can then decide if changes should be applied to the certificate, or the resource definition should be updated to align with the certificate. Also you can ignore changes as below. resource "huaweicloud_lb_certificate" "certificate_1" {
+         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`enterprise_project_id`. It is generally recommended running `terraform plan` after importing a certificate. You can then decide if changes should be applied to the certificate, or the resource definition should be updated to align with the certificate. Also you can ignore changes as below. hcl resource "huaweicloud_lb_certificate" "certificate_1" {
 
          ...
 
@@ -601,6 +617,7 @@ class Certificate(pulumi.CustomResource):
             __props__.__dict__["region"] = region
             __props__.__dict__["type"] = type
             __props__.__dict__["create_time"] = None
+            __props__.__dict__["expire_time"] = None
             __props__.__dict__["update_time"] = None
         super(Certificate, __self__).__init__(
             'huaweicloud:Elb/certificate:Certificate',
@@ -617,6 +634,7 @@ class Certificate(pulumi.CustomResource):
             description: Optional[pulumi.Input[str]] = None,
             domain: Optional[pulumi.Input[str]] = None,
             enterprise_project_id: Optional[pulumi.Input[str]] = None,
+            expire_time: Optional[pulumi.Input[str]] = None,
             name: Optional[pulumi.Input[str]] = None,
             private_key: Optional[pulumi.Input[str]] = None,
             region: Optional[pulumi.Input[str]] = None,
@@ -636,6 +654,7 @@ class Certificate(pulumi.CustomResource):
                parameter is valid only when `type` is set to "server".
         :param pulumi.Input[str] enterprise_project_id: The enterprise project ID of the certificate. Changing this
                creates a new certificate.
+        :param pulumi.Input[str] expire_time: Indicates the expire time.
         :param pulumi.Input[str] name: Human-readable name for the Certificate. Does not have to be unique.
         :param pulumi.Input[str] private_key: The private encrypted key of the Certificate, PEM format. This parameter is valid
                and mandatory only when `type` is set to "server".
@@ -656,6 +675,7 @@ class Certificate(pulumi.CustomResource):
         __props__.__dict__["description"] = description
         __props__.__dict__["domain"] = domain
         __props__.__dict__["enterprise_project_id"] = enterprise_project_id
+        __props__.__dict__["expire_time"] = expire_time
         __props__.__dict__["name"] = name
         __props__.__dict__["private_key"] = private_key
         __props__.__dict__["region"] = region
@@ -704,6 +724,14 @@ class Certificate(pulumi.CustomResource):
         creates a new certificate.
         """
         return pulumi.get(self, "enterprise_project_id")
+
+    @property
+    @pulumi.getter(name="expireTime")
+    def expire_time(self) -> pulumi.Output[str]:
+        """
+        Indicates the expire time.
+        """
+        return pulumi.get(self, "expire_time")
 
     @property
     @pulumi.getter

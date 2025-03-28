@@ -15,17 +15,22 @@ __all__ = ['ProjectArgs', 'Project']
 class ProjectArgs:
     def __init__(__self__, *,
                  description: Optional[pulumi.Input[str]] = None,
-                 name: Optional[pulumi.Input[str]] = None):
+                 name: Optional[pulumi.Input[str]] = None,
+                 status: Optional[pulumi.Input[str]] = None):
         """
         The set of arguments for constructing a Project resource.
         :param pulumi.Input[str] description: Specifies the description of the project.
         :param pulumi.Input[str] name: Specifies the name of the project. it must start with an existing *region* and be less
                than or equal to 64 characters. Example: cn-north-1_project1.
+        :param pulumi.Input[str] status: Specifies the status of the project.
+               Valid values are **normal** and **suspended**, default is **normal**.
         """
         if description is not None:
             pulumi.set(__self__, "description", description)
         if name is not None:
             pulumi.set(__self__, "name", name)
+        if status is not None:
+            pulumi.set(__self__, "status", status)
 
     @property
     @pulumi.getter
@@ -52,6 +57,19 @@ class ProjectArgs:
     def name(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "name", value)
 
+    @property
+    @pulumi.getter
+    def status(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the status of the project.
+        Valid values are **normal** and **suspended**, default is **normal**.
+        """
+        return pulumi.get(self, "status")
+
+    @status.setter
+    def status(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "status", value)
+
 
 @pulumi.input_type
 class _ProjectState:
@@ -59,14 +77,17 @@ class _ProjectState:
                  description: Optional[pulumi.Input[str]] = None,
                  enabled: Optional[pulumi.Input[bool]] = None,
                  name: Optional[pulumi.Input[str]] = None,
-                 parent_id: Optional[pulumi.Input[str]] = None):
+                 parent_id: Optional[pulumi.Input[str]] = None,
+                 status: Optional[pulumi.Input[str]] = None):
         """
         Input properties used for looking up and filtering Project resources.
         :param pulumi.Input[str] description: Specifies the description of the project.
-        :param pulumi.Input[bool] enabled: Enabling status of this project.
+        :param pulumi.Input[bool] enabled: Whether the IAM project is enabled.
         :param pulumi.Input[str] name: Specifies the name of the project. it must start with an existing *region* and be less
                than or equal to 64 characters. Example: cn-north-1_project1.
-        :param pulumi.Input[str] parent_id: The parent of this project.
+        :param pulumi.Input[str] parent_id: The parent of the IAM project.
+        :param pulumi.Input[str] status: Specifies the status of the project.
+               Valid values are **normal** and **suspended**, default is **normal**.
         """
         if description is not None:
             pulumi.set(__self__, "description", description)
@@ -76,6 +97,8 @@ class _ProjectState:
             pulumi.set(__self__, "name", name)
         if parent_id is not None:
             pulumi.set(__self__, "parent_id", parent_id)
+        if status is not None:
+            pulumi.set(__self__, "status", status)
 
     @property
     @pulumi.getter
@@ -93,7 +116,7 @@ class _ProjectState:
     @pulumi.getter
     def enabled(self) -> Optional[pulumi.Input[bool]]:
         """
-        Enabling status of this project.
+        Whether the IAM project is enabled.
         """
         return pulumi.get(self, "enabled")
 
@@ -118,13 +141,26 @@ class _ProjectState:
     @pulumi.getter(name="parentId")
     def parent_id(self) -> Optional[pulumi.Input[str]]:
         """
-        The parent of this project.
+        The parent of the IAM project.
         """
         return pulumi.get(self, "parent_id")
 
     @parent_id.setter
     def parent_id(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "parent_id", value)
+
+    @property
+    @pulumi.getter
+    def status(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the status of the project.
+        Valid values are **normal** and **suspended**, default is **normal**.
+        """
+        return pulumi.get(self, "status")
+
+    @status.setter
+    def status(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "status", value)
 
 
 class Project(pulumi.CustomResource):
@@ -134,11 +170,12 @@ class Project(pulumi.CustomResource):
                  opts: Optional[pulumi.ResourceOptions] = None,
                  description: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
+                 status: Optional[pulumi.Input[str]] = None,
                  __props__=None):
         """
-        Manages a Project resource within HuaweiCloud Identity And Access Management service.
+        Manages an IAM project resource within HuaweiCloud.
 
-        > You *must* have security admin privileges in your HuaweiCloud cloud to use this resource.
+        > **NOTE:** You *must* have admin privileges to use this resource.
 
         !>  Deleting projects is not supported. The project is only removed from the state, but it remains in the cloud.
 
@@ -153,7 +190,7 @@ class Project(pulumi.CustomResource):
 
         ## Import
 
-        Projects can be imported using the `id`, e.g.
+        IAM projects can be imported using the `id`, e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:Iam/project:Project project_1 89c60255-9bd6-460c-822a-e2b959ede9d2
@@ -164,6 +201,8 @@ class Project(pulumi.CustomResource):
         :param pulumi.Input[str] description: Specifies the description of the project.
         :param pulumi.Input[str] name: Specifies the name of the project. it must start with an existing *region* and be less
                than or equal to 64 characters. Example: cn-north-1_project1.
+        :param pulumi.Input[str] status: Specifies the status of the project.
+               Valid values are **normal** and **suspended**, default is **normal**.
         """
         ...
     @overload
@@ -172,9 +211,9 @@ class Project(pulumi.CustomResource):
                  args: Optional[ProjectArgs] = None,
                  opts: Optional[pulumi.ResourceOptions] = None):
         """
-        Manages a Project resource within HuaweiCloud Identity And Access Management service.
+        Manages an IAM project resource within HuaweiCloud.
 
-        > You *must* have security admin privileges in your HuaweiCloud cloud to use this resource.
+        > **NOTE:** You *must* have admin privileges to use this resource.
 
         !>  Deleting projects is not supported. The project is only removed from the state, but it remains in the cloud.
 
@@ -189,7 +228,7 @@ class Project(pulumi.CustomResource):
 
         ## Import
 
-        Projects can be imported using the `id`, e.g.
+        IAM projects can be imported using the `id`, e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:Iam/project:Project project_1 89c60255-9bd6-460c-822a-e2b959ede9d2
@@ -212,6 +251,7 @@ class Project(pulumi.CustomResource):
                  opts: Optional[pulumi.ResourceOptions] = None,
                  description: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
+                 status: Optional[pulumi.Input[str]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -223,6 +263,7 @@ class Project(pulumi.CustomResource):
 
             __props__.__dict__["description"] = description
             __props__.__dict__["name"] = name
+            __props__.__dict__["status"] = status
             __props__.__dict__["enabled"] = None
             __props__.__dict__["parent_id"] = None
         super(Project, __self__).__init__(
@@ -238,7 +279,8 @@ class Project(pulumi.CustomResource):
             description: Optional[pulumi.Input[str]] = None,
             enabled: Optional[pulumi.Input[bool]] = None,
             name: Optional[pulumi.Input[str]] = None,
-            parent_id: Optional[pulumi.Input[str]] = None) -> 'Project':
+            parent_id: Optional[pulumi.Input[str]] = None,
+            status: Optional[pulumi.Input[str]] = None) -> 'Project':
         """
         Get an existing Project resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.
@@ -247,10 +289,12 @@ class Project(pulumi.CustomResource):
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[str] description: Specifies the description of the project.
-        :param pulumi.Input[bool] enabled: Enabling status of this project.
+        :param pulumi.Input[bool] enabled: Whether the IAM project is enabled.
         :param pulumi.Input[str] name: Specifies the name of the project. it must start with an existing *region* and be less
                than or equal to 64 characters. Example: cn-north-1_project1.
-        :param pulumi.Input[str] parent_id: The parent of this project.
+        :param pulumi.Input[str] parent_id: The parent of the IAM project.
+        :param pulumi.Input[str] status: Specifies the status of the project.
+               Valid values are **normal** and **suspended**, default is **normal**.
         """
         opts = pulumi.ResourceOptions.merge(opts, pulumi.ResourceOptions(id=id))
 
@@ -260,6 +304,7 @@ class Project(pulumi.CustomResource):
         __props__.__dict__["enabled"] = enabled
         __props__.__dict__["name"] = name
         __props__.__dict__["parent_id"] = parent_id
+        __props__.__dict__["status"] = status
         return Project(resource_name, opts=opts, __props__=__props__)
 
     @property
@@ -274,7 +319,7 @@ class Project(pulumi.CustomResource):
     @pulumi.getter
     def enabled(self) -> pulumi.Output[bool]:
         """
-        Enabling status of this project.
+        Whether the IAM project is enabled.
         """
         return pulumi.get(self, "enabled")
 
@@ -291,7 +336,16 @@ class Project(pulumi.CustomResource):
     @pulumi.getter(name="parentId")
     def parent_id(self) -> pulumi.Output[str]:
         """
-        The parent of this project.
+        The parent of the IAM project.
         """
         return pulumi.get(self, "parent_id")
+
+    @property
+    @pulumi.getter
+    def status(self) -> pulumi.Output[str]:
+        """
+        Specifies the status of the project.
+        Valid values are **normal** and **suspended**, default is **normal**.
+        """
+        return pulumi.get(self, "status")
 

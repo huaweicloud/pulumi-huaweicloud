@@ -49,7 +49,7 @@ import (
 //
 // ## Import
 //
-// DLI SQL job can be imported by `id`. For example,
+// DLI SQL job can be imported by `id`. For example, bash
 //
 // ```sh
 //
@@ -57,7 +57,7 @@ import (
 //
 // ```
 //
-//	Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`conf`, `rows` and `schema`. It is generally recommended running `terraform plan` after importing a resource. You can then decide if changes should be applied to the resource, or the resource definition should be updated to align with the resource. Also you can ignore changes as below. resource "huaweicloud_dli_sql_job" "test" {
+//	Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`conf`, `rows` and `schema`. It is generally recommended running `terraform plan` after importing a resource. You can then decide if changes should be applied to the resource, or the resource definition should be updated to align with the resource. Also you can ignore changes as below. hcl resource "huaweicloud_dli_sql_job" "test" {
 //
 //	...
 //

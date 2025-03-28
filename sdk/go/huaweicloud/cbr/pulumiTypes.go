@@ -11,16 +11,16 @@ import (
 )
 
 type PolicyBackupCycle struct {
-	// Specifies the weekly backup day of backup schedule. It supports seven days a week (MO, TU,
-	// WE, TH, FR, SA, SU) and this parameter is separated by a comma (,) without spaces, between date and date during the
-	// configuration.
+	// Specifies the weekly backup day of backup schedule.\
+	// It supports seven days a week (MO, TU, WE, TH, FR, SA, SU) and this parameter is separated by a comma (,) without
+	// spaces, between date and date during the configuration.
 	Days *string `pulumi:"days"`
 	// Specifies the backup time. Automated backups will be triggered at the backup
 	// time. The current time is in the UTC format (HH:MM). The minutes in the list must be set to **00** and the hours
 	// cannot be repeated. In the replication policy, you are advised to set one time point for one day.
 	ExecutionTimes []string `pulumi:"executionTimes"`
-	// Specifies the interval (in days) of backup schedule. The value range is `1` to `30`. This
-	// parameter and `days` are alternative.
+	// Specifies the interval (in days) of backup schedule.\
+	// The valid value ranges from `1` to `30`.
 	Interval *int `pulumi:"interval"`
 }
 
@@ -36,16 +36,16 @@ type PolicyBackupCycleInput interface {
 }
 
 type PolicyBackupCycleArgs struct {
-	// Specifies the weekly backup day of backup schedule. It supports seven days a week (MO, TU,
-	// WE, TH, FR, SA, SU) and this parameter is separated by a comma (,) without spaces, between date and date during the
-	// configuration.
+	// Specifies the weekly backup day of backup schedule.\
+	// It supports seven days a week (MO, TU, WE, TH, FR, SA, SU) and this parameter is separated by a comma (,) without
+	// spaces, between date and date during the configuration.
 	Days pulumi.StringPtrInput `pulumi:"days"`
 	// Specifies the backup time. Automated backups will be triggered at the backup
 	// time. The current time is in the UTC format (HH:MM). The minutes in the list must be set to **00** and the hours
 	// cannot be repeated. In the replication policy, you are advised to set one time point for one day.
 	ExecutionTimes pulumi.StringArrayInput `pulumi:"executionTimes"`
-	// Specifies the interval (in days) of backup schedule. The value range is `1` to `30`. This
-	// parameter and `days` are alternative.
+	// Specifies the interval (in days) of backup schedule.\
+	// The valid value ranges from `1` to `30`.
 	Interval pulumi.IntPtrInput `pulumi:"interval"`
 }
 
@@ -126,9 +126,9 @@ func (o PolicyBackupCycleOutput) ToPolicyBackupCyclePtrOutputWithContext(ctx con
 	}).(PolicyBackupCyclePtrOutput)
 }
 
-// Specifies the weekly backup day of backup schedule. It supports seven days a week (MO, TU,
-// WE, TH, FR, SA, SU) and this parameter is separated by a comma (,) without spaces, between date and date during the
-// configuration.
+// Specifies the weekly backup day of backup schedule.\
+// It supports seven days a week (MO, TU, WE, TH, FR, SA, SU) and this parameter is separated by a comma (,) without
+// spaces, between date and date during the configuration.
 func (o PolicyBackupCycleOutput) Days() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v PolicyBackupCycle) *string { return v.Days }).(pulumi.StringPtrOutput)
 }
@@ -140,8 +140,8 @@ func (o PolicyBackupCycleOutput) ExecutionTimes() pulumi.StringArrayOutput {
 	return o.ApplyT(func(v PolicyBackupCycle) []string { return v.ExecutionTimes }).(pulumi.StringArrayOutput)
 }
 
-// Specifies the interval (in days) of backup schedule. The value range is `1` to `30`. This
-// parameter and `days` are alternative.
+// Specifies the interval (in days) of backup schedule.\
+// The valid value ranges from `1` to `30`.
 func (o PolicyBackupCycleOutput) Interval() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v PolicyBackupCycle) *int { return v.Interval }).(pulumi.IntPtrOutput)
 }
@@ -170,9 +170,9 @@ func (o PolicyBackupCyclePtrOutput) Elem() PolicyBackupCycleOutput {
 	}).(PolicyBackupCycleOutput)
 }
 
-// Specifies the weekly backup day of backup schedule. It supports seven days a week (MO, TU,
-// WE, TH, FR, SA, SU) and this parameter is separated by a comma (,) without spaces, between date and date during the
-// configuration.
+// Specifies the weekly backup day of backup schedule.\
+// It supports seven days a week (MO, TU, WE, TH, FR, SA, SU) and this parameter is separated by a comma (,) without
+// spaces, between date and date during the configuration.
 func (o PolicyBackupCyclePtrOutput) Days() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *PolicyBackupCycle) *string {
 		if v == nil {
@@ -194,8 +194,8 @@ func (o PolicyBackupCyclePtrOutput) ExecutionTimes() pulumi.StringArrayOutput {
 	}).(pulumi.StringArrayOutput)
 }
 
-// Specifies the interval (in days) of backup schedule. The value range is `1` to `30`. This
-// parameter and `days` are alternative.
+// Specifies the interval (in days) of backup schedule.\
+// The valid value ranges from `1` to `30`.
 func (o PolicyBackupCyclePtrOutput) Interval() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v *PolicyBackupCycle) *int {
 		if v == nil {
@@ -659,9 +659,13 @@ func (o VaultResourceArrayOutput) Index(i pulumi.IntInput) VaultResourceOutput {
 type GetVaultsVault struct {
 	// The allocated capacity of the vault, in GB.
 	Allocated float64 `pulumi:"allocated"`
+	// Whether automatic association is enabled. Defaults to **false**.
+	AutoBind bool `pulumi:"autoBind"`
 	// Specifies whether to enable automatic expansion of the backup protection
 	// type vault. Defaults to **false**.
 	AutoExpandEnabled bool `pulumi:"autoExpandEnabled"`
+	// The tags to filter resources for automatic association with **auto_bind**.
+	BindRules map[string]string `pulumi:"bindRules"`
 	// Specifies the consistent level (specification) of the vault.
 	// The valid values are as follows:
 	// + **[crashConsistent](https://support.huaweicloud.com/intl/en-us/usermanual-cbr/cbr_03_0109.html)**
@@ -683,7 +687,7 @@ type GetVaultsVault struct {
 	// The array of one or more resources to attach to the vault.
 	// The object structure is documented below.
 	Resources []GetVaultsVaultResource `pulumi:"resources"`
-	// Specifies the vault sapacity, in GB. The valid value range is `1` to `10,485,760`.
+	// Specifies the vault capacity, in GB. The valid value range is `1` to `10,485,760`.
 	Size int `pulumi:"size"`
 	// The specification code.
 	SpecCode string `pulumi:"specCode"`
@@ -693,7 +697,7 @@ type GetVaultsVault struct {
 	Storage string `pulumi:"storage"`
 	// The key/value pairs to associate with the vault.
 	Tags map[string]string `pulumi:"tags"`
-	// Specifies the object type of the vault. The vaild values are as follows:
+	// Specifies the object type of the vault. The valid values are as follows:
 	// + **server** (Cloud Servers)
 	// + **disk** (EVS Disks)
 	// + **turbo** (SFS Turbo file systems)
@@ -716,9 +720,13 @@ type GetVaultsVaultInput interface {
 type GetVaultsVaultArgs struct {
 	// The allocated capacity of the vault, in GB.
 	Allocated pulumi.Float64Input `pulumi:"allocated"`
+	// Whether automatic association is enabled. Defaults to **false**.
+	AutoBind pulumi.BoolInput `pulumi:"autoBind"`
 	// Specifies whether to enable automatic expansion of the backup protection
 	// type vault. Defaults to **false**.
 	AutoExpandEnabled pulumi.BoolInput `pulumi:"autoExpandEnabled"`
+	// The tags to filter resources for automatic association with **auto_bind**.
+	BindRules pulumi.StringMapInput `pulumi:"bindRules"`
 	// Specifies the consistent level (specification) of the vault.
 	// The valid values are as follows:
 	// + **[crashConsistent](https://support.huaweicloud.com/intl/en-us/usermanual-cbr/cbr_03_0109.html)**
@@ -740,7 +748,7 @@ type GetVaultsVaultArgs struct {
 	// The array of one or more resources to attach to the vault.
 	// The object structure is documented below.
 	Resources GetVaultsVaultResourceArrayInput `pulumi:"resources"`
-	// Specifies the vault sapacity, in GB. The valid value range is `1` to `10,485,760`.
+	// Specifies the vault capacity, in GB. The valid value range is `1` to `10,485,760`.
 	Size pulumi.IntInput `pulumi:"size"`
 	// The specification code.
 	SpecCode pulumi.StringInput `pulumi:"specCode"`
@@ -750,7 +758,7 @@ type GetVaultsVaultArgs struct {
 	Storage pulumi.StringInput `pulumi:"storage"`
 	// The key/value pairs to associate with the vault.
 	Tags pulumi.StringMapInput `pulumi:"tags"`
-	// Specifies the object type of the vault. The vaild values are as follows:
+	// Specifies the object type of the vault. The valid values are as follows:
 	// + **server** (Cloud Servers)
 	// + **disk** (EVS Disks)
 	// + **turbo** (SFS Turbo file systems)
@@ -815,10 +823,20 @@ func (o GetVaultsVaultOutput) Allocated() pulumi.Float64Output {
 	return o.ApplyT(func(v GetVaultsVault) float64 { return v.Allocated }).(pulumi.Float64Output)
 }
 
+// Whether automatic association is enabled. Defaults to **false**.
+func (o GetVaultsVaultOutput) AutoBind() pulumi.BoolOutput {
+	return o.ApplyT(func(v GetVaultsVault) bool { return v.AutoBind }).(pulumi.BoolOutput)
+}
+
 // Specifies whether to enable automatic expansion of the backup protection
 // type vault. Defaults to **false**.
 func (o GetVaultsVaultOutput) AutoExpandEnabled() pulumi.BoolOutput {
 	return o.ApplyT(func(v GetVaultsVault) bool { return v.AutoExpandEnabled }).(pulumi.BoolOutput)
+}
+
+// The tags to filter resources for automatic association with **auto_bind**.
+func (o GetVaultsVaultOutput) BindRules() pulumi.StringMapOutput {
+	return o.ApplyT(func(v GetVaultsVault) map[string]string { return v.BindRules }).(pulumi.StringMapOutput)
 }
 
 // Specifies the consistent level (specification) of the vault.
@@ -863,7 +881,7 @@ func (o GetVaultsVaultOutput) Resources() GetVaultsVaultResourceArrayOutput {
 	return o.ApplyT(func(v GetVaultsVault) []GetVaultsVaultResource { return v.Resources }).(GetVaultsVaultResourceArrayOutput)
 }
 
-// Specifies the vault sapacity, in GB. The valid value range is `1` to `10,485,760`.
+// Specifies the vault capacity, in GB. The valid value range is `1` to `10,485,760`.
 func (o GetVaultsVaultOutput) Size() pulumi.IntOutput {
 	return o.ApplyT(func(v GetVaultsVault) int { return v.Size }).(pulumi.IntOutput)
 }
@@ -888,7 +906,7 @@ func (o GetVaultsVaultOutput) Tags() pulumi.StringMapOutput {
 	return o.ApplyT(func(v GetVaultsVault) map[string]string { return v.Tags }).(pulumi.StringMapOutput)
 }
 
-// Specifies the object type of the vault. The vaild values are as follows:
+// Specifies the object type of the vault. The valid values are as follows:
 // + **server** (Cloud Servers)
 // + **disk** (EVS Disks)
 // + **turbo** (SFS Turbo file systems)

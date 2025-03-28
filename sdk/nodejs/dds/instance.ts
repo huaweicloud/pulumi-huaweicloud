@@ -13,99 +13,78 @@ import * as utilities from "../utilities";
  *
  * ```typescript
  * import * as pulumi from "@pulumi/pulumi";
- * import * as huaweicloud from "@pulumi/huaweicloud";
+ * import * as pulumi from "@huaweicloudos/pulumi";
  *
- * const instance = new huaweicloud.Dds.Instance("instance", {
- *     availabilityZone: "{{ availability_zone }}",
- *     backupStrategy: {
- *         keepDays: 8,
- *         startTime: "08:00-09:00",
- *     },
+ * const config = new pulumi.Config();
+ * const ddsPassword = config.requireObject("ddsPassword");
+ * const instance = new huaweicloud.dds.Instance("instance", {
  *     datastore: {
- *         storageEngine: "wiredTiger",
  *         type: "DDS-Community",
- *         version: "3.4",
+ *         version: "4.0",
+ *         storageEngine: "wiredTiger",
  *     },
+ *     availabilityZone: "{{ availability_zone }}",
+ *     vpcId: "{{ vpc_id }}",
+ *     subnetId: "{{ subnet_network_id }}}",
+ *     securityGroupId: "{{ security_group_id }}",
+ *     password: ddsPassword,
+ *     mode: "Sharding",
+ *     maintainBegin: "02:00",
+ *     maintainEnd: "03:00",
  *     flavors: [
  *         {
+ *             type: "mongos",
  *             num: 2,
  *             specCode: "dds.mongodb.c3.medium.4.mongos",
- *             type: "mongos",
  *         },
  *         {
+ *             type: "shard",
  *             num: 2,
+ *             storage: "ULTRAHIGH",
  *             size: 20,
  *             specCode: "dds.mongodb.c3.medium.4.shard",
- *             storage: "ULTRAHIGH",
- *             type: "shard",
  *         },
  *         {
+ *             type: "config",
  *             num: 1,
+ *             storage: "ULTRAHIGH",
  *             size: 20,
  *             specCode: "dds.mongodb.c3.large.2.config",
- *             storage: "ULTRAHIGH",
- *             type: "config",
  *         },
  *     ],
- *     mode: "Sharding",
- *     password: "Test@123",
- *     securityGroupId: "{{ security_group_id }}",
- *     subnetId: "{{ subnet_network_id }}}",
- *     vpcId: "{{ vpc_id }}",
+ *     backupStrategy: {
+ *         startTime: "08:00-09:00",
+ *         keepDays: 8,
+ *     },
  * });
  * ```
  * ### Creating A Replica Set Community Edition
  *
  * ```typescript
  * import * as pulumi from "@pulumi/pulumi";
- * import * as huaweicloud from "@pulumi/huaweicloud";
+ * import * as pulumi from "@huaweicloudos/pulumi";
  *
- * const instance = new huaweicloud.Dds.Instance("instance", {
- *     availabilityZone: "{{ availability_zone }}",
+ * const config = new pulumi.Config();
+ * const ddsPassword = config.requireObject("ddsPassword");
+ * const instance = new huaweicloud.dds.Instance("instance", {
  *     datastore: {
- *         storageEngine: "wiredTiger",
  *         type: "DDS-Community",
- *         version: "3.4",
+ *         version: "4.0",
+ *         storageEngine: "wiredTiger",
  *     },
+ *     availabilityZone: "{{ availability_zone }}",
+ *     vpcId: "{{ vpc_id }}",
+ *     subnetId: "{{ subnet_network_id }}}",
+ *     securityGroupId: "{{ security_group_id }}",
+ *     password: ddsPassword,
+ *     mode: "ReplicaSet",
  *     flavors: [{
- *         num: 1,
+ *         type: "replica",
+ *         num: 3,
+ *         storage: "ULTRAHIGH",
  *         size: 30,
  *         specCode: "dds.mongodb.c3.medium.4.repset",
- *         storage: "ULTRAHIGH",
- *         type: "replica",
  *     }],
- *     mode: "ReplicaSet",
- *     password: "Test@123",
- *     securityGroupId: "{{ security_group_id }}",
- *     subnetId: "{{ subnet_network_id }}}",
- *     vpcId: "{{ vpc_id }}",
- * });
- * ```
- * ### Creating A Single Community Edition
- *
- * ```typescript
- * import * as pulumi from "@pulumi/pulumi";
- * import * as huaweicloud from "@pulumi/huaweicloud";
- *
- * const instance = new huaweicloud.Dds.Instance("instance", {
- *     availabilityZone: "{{ availability_zone }}",
- *     datastore: {
- *         storageEngine: "wiredTiger",
- *         type: "DDS-Community",
- *         version: "3.4",
- *     },
- *     flavors: [{
- *         num: 1,
- *         size: 30,
- *         specCode: "dds.mongodb.s6.large.2.single",
- *         storage: "ULTRAHIGH",
- *         type: "single",
- *     }],
- *     mode: "Single",
- *     password: "Test@123",
- *     securityGroupId: "{{ security_group_id }}",
- *     subnetId: "{{ subnet_network_id }}}",
- *     vpcId: "{{ vpc_id }}",
  * });
  * ```
  *
@@ -117,7 +96,7 @@ import * as utilities from "../utilities";
  *  $ pulumi import huaweicloud:Dds/instance:Instance instance 9c6d6ff2cba3434293fd479571517e16in02
  * ```
  *
- *  Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`password`, `availability_zone`, `flavor`, configuration. It is generally recommended running `terraform plan` after importing an instance. You can then decide if changes should be applied to the instance, or the resource definition should be updated to align with the instance. Also you can ignore changes as below. resource "huaweicloud_dds_instance" "instance" {
+ *  Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`password`, `availability_zone`, `flavor`, configuration. It is generally recommended running `terraform plan` after importing an instance. You can then decide if changes should be applied to the instance, or the resource definition should be updated to align with the instance. Also you can ignore changes as below. hcl resource "huaweicloud_dds_instance" "instance" {
  *
  *  ...
  *
@@ -170,14 +149,28 @@ export class Instance extends pulumi.CustomResource {
      */
     public readonly autoRenew!: pulumi.Output<string | undefined>;
     /**
-     * Specifies the ID of the availability zone. Changing this creates a
-     * new instance.
+     * Specifies the availability zone names separated by commas.
      */
     public readonly availabilityZone!: pulumi.Output<string>;
     /**
      * Specifies the advanced backup policy. The structure is described below.
      */
     public readonly backupStrategy!: pulumi.Output<outputs.Dds.InstanceBackupStrategy>;
+    /**
+     * Specifies the start time of the balancing activity time window.
+     * The format is **HH:MM**. It's required with `balancerActiveEnd`.
+     */
+    public readonly balancerActiveBegin!: pulumi.Output<string | undefined>;
+    /**
+     * Specifies the end time of the balancing activity time window.
+     * The format is **HH:MM**. It's required with `balancerActiveBegin`.
+     */
+    public readonly balancerActiveEnd!: pulumi.Output<string | undefined>;
+    /**
+     * Specifies the status of the balancer.
+     * The value can be **start** or **stop**. Defaults to **start**.
+     */
+    public readonly balancerStatus!: pulumi.Output<string>;
     /**
      * Specifies the charging mode of the instance.
      * The valid values are as follows:
@@ -186,27 +179,42 @@ export class Instance extends pulumi.CustomResource {
      */
     public readonly chargingMode!: pulumi.Output<string>;
     /**
+     * Specifies the CIDR block where the client is located. Cross-CIDR access is
+     * required only when the CIDR blocks of the client and the replica set instance are different. For example, if the client
+     * CIDR block is 192.168.0.0/16 and the replica set instance's CIDR block is 172.16.0.0/24, add the CIDR block
+     * 192.168.0.0/16 so that the client can access the replica set instance.
+     * It's only for replica set instance.
+     */
+    public readonly clientNetworkRanges!: pulumi.Output<string[] | undefined>;
+    /**
      * Specifies the configuration information.
      * The structure is described below. Changing this creates a new instance.
      */
     public readonly configurations!: pulumi.Output<outputs.Dds.InstanceConfiguration[] | undefined>;
+    /**
+     * Indicates the create time.
+     */
+    public /*out*/ readonly createdAt!: pulumi.Output<string>;
     /**
      * Specifies database information. The structure is described below. Changing
      * this creates a new instance.
      */
     public readonly datastore!: pulumi.Output<outputs.Dds.InstanceDatastore>;
     /**
-     * Indicates the DB Administator name.
+     * Indicates the DB Administrator name.
      */
     public /*out*/ readonly dbUsername!: pulumi.Output<string>;
+    /**
+     * Specifies the description of the DDS instance.
+     */
+    public readonly description!: pulumi.Output<string | undefined>;
     /**
      * Specifies the disk encryption ID of the instance. Changing this
      * creates a new instance.
      */
     public readonly diskEncryptionId!: pulumi.Output<string | undefined>;
     /**
-     * Specifies the enterprise project id of the dds instance.
-     * Changing this creates a new instance.
+     * Specifies the enterprise project id of the DDS instance.
      */
     public readonly enterpriseProjectId!: pulumi.Output<string>;
     /**
@@ -215,8 +223,25 @@ export class Instance extends pulumi.CustomResource {
      */
     public readonly flavors!: pulumi.Output<outputs.Dds.InstanceFlavor[]>;
     /**
-     * Specifies the mode of the database instance. **Sharding**, **ReplicaSet**,
-     * **Single** are supported. Changing this creates a new instance.
+     * Indicates the instance groups information.
+     * The groups structure is documented below.
+     */
+    public /*out*/ readonly groups!: pulumi.Output<outputs.Dds.InstanceGroup[]>;
+    /**
+     * Specifies begin time of the time range within which you are allowed to start a
+     * task that affects the running of database instances. It must be a valid value in the format of **hh:mm** in UTC+0,
+     * such as **02:00**, meanwhile, this time in console displays in the format of **hh:mm** in UTC+08:00, e.g. **10:00**.
+     */
+    public readonly maintainBegin!: pulumi.Output<string>;
+    /**
+     * Specifies end time of the time range within which you are allowed to start a
+     * task that affects the running of database instances. It must be a valid value in the format of **hh:mm** in UTC+0,
+     * such as **04:00**, meanwhile, this time in console displays in the format of **hh:mm** in UTC+08:00, e.g. **12:00**.
+     */
+    public readonly maintainEnd!: pulumi.Output<string>;
+    /**
+     * Specifies the mode of the database instance. **Sharding**, **ReplicaSet**
+     * are supported. Changing this creates a new instance.
      */
     public readonly mode!: pulumi.Output<string>;
     /**
@@ -225,19 +250,22 @@ export class Instance extends pulumi.CustomResource {
      */
     public readonly name!: pulumi.Output<string>;
     /**
-     * Indicates the instance nodes information. Structure is documented below.
+     * Indicates the nodes info.
+     * The nodes structure is documented below.
      */
     public /*out*/ readonly nodes!: pulumi.Output<outputs.Dds.InstanceNode[]>;
     /**
      * Specifies the Administrator password of the database instance.
      */
-    public readonly password!: pulumi.Output<string>;
+    public readonly password!: pulumi.Output<string | undefined>;
     /**
-     * Specifies the charging period of the instance.
-     * If `periodUnit` is set to *month*, the value ranges from 1 to 9.
-     * If `periodUnit` is set to *year*, the value ranges from 1 to 3.
-     * This parameter is mandatory if `chargingMode` is set to *prePaid*.
-     * Changing this creates a new instance.
+     * Specifies the backup cycle. Data will be automatically backed up on the
+     * selected days every week.
+     * + If you set the `keepDays` to 0, this parameter is no need to set.
+     * + If you set the `keepDays` within 6 days, set the parameter value to **1,2,3,4,5,6,7**, data is automatically
+     * backed up on each day every week.
+     * + If you set the `keepDays` between 7 and 732 days, set the parameter value to at least one day of every week.
+     * For example: **1**, **3,5**.
      */
     public readonly period!: pulumi.Output<number | undefined>;
     /**
@@ -257,9 +285,24 @@ export class Instance extends pulumi.CustomResource {
      */
     public readonly region!: pulumi.Output<string>;
     /**
+     * Specifies the name of the replica set in the connection address.
+     * It must be `3` to `128` characters long and start with a letter. It is case-sensitive and can contain only letters,
+     * digits, and underscores (_). Default is **replica**.
+     */
+    public readonly replicaSetName!: pulumi.Output<string>;
+    /**
+     * Specifies whether to enable second level monitoring.
+     */
+    public readonly secondLevelMonitoringEnabled!: pulumi.Output<boolean>;
+    /**
      * Specifies the security group ID of the DDS instance.
      */
     public readonly securityGroupId!: pulumi.Output<string>;
+    /**
+     * Specifies whether to enable slow original log.
+     * The value can be **on** or **off**.
+     */
+    public readonly slowLogDesensitization!: pulumi.Output<string>;
     /**
      * Specifies whether to enable or disable SSL. Defaults to true.
      */
@@ -276,6 +319,14 @@ export class Instance extends pulumi.CustomResource {
      * The key/value pairs to associate with the DDS instance.
      */
     public readonly tags!: pulumi.Output<{[key: string]: string} | undefined>;
+    /**
+     * Indicates the time zone.
+     */
+    public /*out*/ readonly timeZone!: pulumi.Output<string>;
+    /**
+     * Indicates the update time.
+     */
+    public /*out*/ readonly updatedAt!: pulumi.Output<string>;
     /**
      * Specifies the VPC ID. Changing this creates a new instance.
      */
@@ -298,13 +349,22 @@ export class Instance extends pulumi.CustomResource {
             resourceInputs["autoRenew"] = state ? state.autoRenew : undefined;
             resourceInputs["availabilityZone"] = state ? state.availabilityZone : undefined;
             resourceInputs["backupStrategy"] = state ? state.backupStrategy : undefined;
+            resourceInputs["balancerActiveBegin"] = state ? state.balancerActiveBegin : undefined;
+            resourceInputs["balancerActiveEnd"] = state ? state.balancerActiveEnd : undefined;
+            resourceInputs["balancerStatus"] = state ? state.balancerStatus : undefined;
             resourceInputs["chargingMode"] = state ? state.chargingMode : undefined;
+            resourceInputs["clientNetworkRanges"] = state ? state.clientNetworkRanges : undefined;
             resourceInputs["configurations"] = state ? state.configurations : undefined;
+            resourceInputs["createdAt"] = state ? state.createdAt : undefined;
             resourceInputs["datastore"] = state ? state.datastore : undefined;
             resourceInputs["dbUsername"] = state ? state.dbUsername : undefined;
+            resourceInputs["description"] = state ? state.description : undefined;
             resourceInputs["diskEncryptionId"] = state ? state.diskEncryptionId : undefined;
             resourceInputs["enterpriseProjectId"] = state ? state.enterpriseProjectId : undefined;
             resourceInputs["flavors"] = state ? state.flavors : undefined;
+            resourceInputs["groups"] = state ? state.groups : undefined;
+            resourceInputs["maintainBegin"] = state ? state.maintainBegin : undefined;
+            resourceInputs["maintainEnd"] = state ? state.maintainEnd : undefined;
             resourceInputs["mode"] = state ? state.mode : undefined;
             resourceInputs["name"] = state ? state.name : undefined;
             resourceInputs["nodes"] = state ? state.nodes : undefined;
@@ -313,11 +373,16 @@ export class Instance extends pulumi.CustomResource {
             resourceInputs["periodUnit"] = state ? state.periodUnit : undefined;
             resourceInputs["port"] = state ? state.port : undefined;
             resourceInputs["region"] = state ? state.region : undefined;
+            resourceInputs["replicaSetName"] = state ? state.replicaSetName : undefined;
+            resourceInputs["secondLevelMonitoringEnabled"] = state ? state.secondLevelMonitoringEnabled : undefined;
             resourceInputs["securityGroupId"] = state ? state.securityGroupId : undefined;
+            resourceInputs["slowLogDesensitization"] = state ? state.slowLogDesensitization : undefined;
             resourceInputs["ssl"] = state ? state.ssl : undefined;
             resourceInputs["status"] = state ? state.status : undefined;
             resourceInputs["subnetId"] = state ? state.subnetId : undefined;
             resourceInputs["tags"] = state ? state.tags : undefined;
+            resourceInputs["timeZone"] = state ? state.timeZone : undefined;
+            resourceInputs["updatedAt"] = state ? state.updatedAt : undefined;
             resourceInputs["vpcId"] = state ? state.vpcId : undefined;
         } else {
             const args = argsOrState as InstanceArgs | undefined;
@@ -333,9 +398,6 @@ export class Instance extends pulumi.CustomResource {
             if ((!args || args.mode === undefined) && !opts.urn) {
                 throw new Error("Missing required property 'mode'");
             }
-            if ((!args || args.password === undefined) && !opts.urn) {
-                throw new Error("Missing required property 'password'");
-            }
             if ((!args || args.securityGroupId === undefined) && !opts.urn) {
                 throw new Error("Missing required property 'securityGroupId'");
             }
@@ -349,12 +411,19 @@ export class Instance extends pulumi.CustomResource {
             resourceInputs["autoRenew"] = args ? args.autoRenew : undefined;
             resourceInputs["availabilityZone"] = args ? args.availabilityZone : undefined;
             resourceInputs["backupStrategy"] = args ? args.backupStrategy : undefined;
+            resourceInputs["balancerActiveBegin"] = args ? args.balancerActiveBegin : undefined;
+            resourceInputs["balancerActiveEnd"] = args ? args.balancerActiveEnd : undefined;
+            resourceInputs["balancerStatus"] = args ? args.balancerStatus : undefined;
             resourceInputs["chargingMode"] = args ? args.chargingMode : undefined;
+            resourceInputs["clientNetworkRanges"] = args ? args.clientNetworkRanges : undefined;
             resourceInputs["configurations"] = args ? args.configurations : undefined;
             resourceInputs["datastore"] = args ? args.datastore : undefined;
+            resourceInputs["description"] = args ? args.description : undefined;
             resourceInputs["diskEncryptionId"] = args ? args.diskEncryptionId : undefined;
             resourceInputs["enterpriseProjectId"] = args ? args.enterpriseProjectId : undefined;
             resourceInputs["flavors"] = args ? args.flavors : undefined;
+            resourceInputs["maintainBegin"] = args ? args.maintainBegin : undefined;
+            resourceInputs["maintainEnd"] = args ? args.maintainEnd : undefined;
             resourceInputs["mode"] = args ? args.mode : undefined;
             resourceInputs["name"] = args ? args.name : undefined;
             resourceInputs["password"] = args ? args.password : undefined;
@@ -362,14 +431,21 @@ export class Instance extends pulumi.CustomResource {
             resourceInputs["periodUnit"] = args ? args.periodUnit : undefined;
             resourceInputs["port"] = args ? args.port : undefined;
             resourceInputs["region"] = args ? args.region : undefined;
+            resourceInputs["replicaSetName"] = args ? args.replicaSetName : undefined;
+            resourceInputs["secondLevelMonitoringEnabled"] = args ? args.secondLevelMonitoringEnabled : undefined;
             resourceInputs["securityGroupId"] = args ? args.securityGroupId : undefined;
+            resourceInputs["slowLogDesensitization"] = args ? args.slowLogDesensitization : undefined;
             resourceInputs["ssl"] = args ? args.ssl : undefined;
             resourceInputs["subnetId"] = args ? args.subnetId : undefined;
             resourceInputs["tags"] = args ? args.tags : undefined;
             resourceInputs["vpcId"] = args ? args.vpcId : undefined;
+            resourceInputs["createdAt"] = undefined /*out*/;
             resourceInputs["dbUsername"] = undefined /*out*/;
+            resourceInputs["groups"] = undefined /*out*/;
             resourceInputs["nodes"] = undefined /*out*/;
             resourceInputs["status"] = undefined /*out*/;
+            resourceInputs["timeZone"] = undefined /*out*/;
+            resourceInputs["updatedAt"] = undefined /*out*/;
         }
         opts = pulumi.mergeOptions(utilities.resourceOptsDefaults(), opts);
         super(Instance.__pulumiType, name, resourceInputs, opts);
@@ -391,14 +467,28 @@ export interface InstanceState {
      */
     autoRenew?: pulumi.Input<string>;
     /**
-     * Specifies the ID of the availability zone. Changing this creates a
-     * new instance.
+     * Specifies the availability zone names separated by commas.
      */
     availabilityZone?: pulumi.Input<string>;
     /**
      * Specifies the advanced backup policy. The structure is described below.
      */
     backupStrategy?: pulumi.Input<inputs.Dds.InstanceBackupStrategy>;
+    /**
+     * Specifies the start time of the balancing activity time window.
+     * The format is **HH:MM**. It's required with `balancerActiveEnd`.
+     */
+    balancerActiveBegin?: pulumi.Input<string>;
+    /**
+     * Specifies the end time of the balancing activity time window.
+     * The format is **HH:MM**. It's required with `balancerActiveBegin`.
+     */
+    balancerActiveEnd?: pulumi.Input<string>;
+    /**
+     * Specifies the status of the balancer.
+     * The value can be **start** or **stop**. Defaults to **start**.
+     */
+    balancerStatus?: pulumi.Input<string>;
     /**
      * Specifies the charging mode of the instance.
      * The valid values are as follows:
@@ -407,27 +497,42 @@ export interface InstanceState {
      */
     chargingMode?: pulumi.Input<string>;
     /**
+     * Specifies the CIDR block where the client is located. Cross-CIDR access is
+     * required only when the CIDR blocks of the client and the replica set instance are different. For example, if the client
+     * CIDR block is 192.168.0.0/16 and the replica set instance's CIDR block is 172.16.0.0/24, add the CIDR block
+     * 192.168.0.0/16 so that the client can access the replica set instance.
+     * It's only for replica set instance.
+     */
+    clientNetworkRanges?: pulumi.Input<pulumi.Input<string>[]>;
+    /**
      * Specifies the configuration information.
      * The structure is described below. Changing this creates a new instance.
      */
     configurations?: pulumi.Input<pulumi.Input<inputs.Dds.InstanceConfiguration>[]>;
+    /**
+     * Indicates the create time.
+     */
+    createdAt?: pulumi.Input<string>;
     /**
      * Specifies database information. The structure is described below. Changing
      * this creates a new instance.
      */
     datastore?: pulumi.Input<inputs.Dds.InstanceDatastore>;
     /**
-     * Indicates the DB Administator name.
+     * Indicates the DB Administrator name.
      */
     dbUsername?: pulumi.Input<string>;
+    /**
+     * Specifies the description of the DDS instance.
+     */
+    description?: pulumi.Input<string>;
     /**
      * Specifies the disk encryption ID of the instance. Changing this
      * creates a new instance.
      */
     diskEncryptionId?: pulumi.Input<string>;
     /**
-     * Specifies the enterprise project id of the dds instance.
-     * Changing this creates a new instance.
+     * Specifies the enterprise project id of the DDS instance.
      */
     enterpriseProjectId?: pulumi.Input<string>;
     /**
@@ -436,8 +541,25 @@ export interface InstanceState {
      */
     flavors?: pulumi.Input<pulumi.Input<inputs.Dds.InstanceFlavor>[]>;
     /**
-     * Specifies the mode of the database instance. **Sharding**, **ReplicaSet**,
-     * **Single** are supported. Changing this creates a new instance.
+     * Indicates the instance groups information.
+     * The groups structure is documented below.
+     */
+    groups?: pulumi.Input<pulumi.Input<inputs.Dds.InstanceGroup>[]>;
+    /**
+     * Specifies begin time of the time range within which you are allowed to start a
+     * task that affects the running of database instances. It must be a valid value in the format of **hh:mm** in UTC+0,
+     * such as **02:00**, meanwhile, this time in console displays in the format of **hh:mm** in UTC+08:00, e.g. **10:00**.
+     */
+    maintainBegin?: pulumi.Input<string>;
+    /**
+     * Specifies end time of the time range within which you are allowed to start a
+     * task that affects the running of database instances. It must be a valid value in the format of **hh:mm** in UTC+0,
+     * such as **04:00**, meanwhile, this time in console displays in the format of **hh:mm** in UTC+08:00, e.g. **12:00**.
+     */
+    maintainEnd?: pulumi.Input<string>;
+    /**
+     * Specifies the mode of the database instance. **Sharding**, **ReplicaSet**
+     * are supported. Changing this creates a new instance.
      */
     mode?: pulumi.Input<string>;
     /**
@@ -446,7 +568,8 @@ export interface InstanceState {
      */
     name?: pulumi.Input<string>;
     /**
-     * Indicates the instance nodes information. Structure is documented below.
+     * Indicates the nodes info.
+     * The nodes structure is documented below.
      */
     nodes?: pulumi.Input<pulumi.Input<inputs.Dds.InstanceNode>[]>;
     /**
@@ -454,11 +577,13 @@ export interface InstanceState {
      */
     password?: pulumi.Input<string>;
     /**
-     * Specifies the charging period of the instance.
-     * If `periodUnit` is set to *month*, the value ranges from 1 to 9.
-     * If `periodUnit` is set to *year*, the value ranges from 1 to 3.
-     * This parameter is mandatory if `chargingMode` is set to *prePaid*.
-     * Changing this creates a new instance.
+     * Specifies the backup cycle. Data will be automatically backed up on the
+     * selected days every week.
+     * + If you set the `keepDays` to 0, this parameter is no need to set.
+     * + If you set the `keepDays` within 6 days, set the parameter value to **1,2,3,4,5,6,7**, data is automatically
+     * backed up on each day every week.
+     * + If you set the `keepDays` between 7 and 732 days, set the parameter value to at least one day of every week.
+     * For example: **1**, **3,5**.
      */
     period?: pulumi.Input<number>;
     /**
@@ -478,9 +603,24 @@ export interface InstanceState {
      */
     region?: pulumi.Input<string>;
     /**
+     * Specifies the name of the replica set in the connection address.
+     * It must be `3` to `128` characters long and start with a letter. It is case-sensitive and can contain only letters,
+     * digits, and underscores (_). Default is **replica**.
+     */
+    replicaSetName?: pulumi.Input<string>;
+    /**
+     * Specifies whether to enable second level monitoring.
+     */
+    secondLevelMonitoringEnabled?: pulumi.Input<boolean>;
+    /**
      * Specifies the security group ID of the DDS instance.
      */
     securityGroupId?: pulumi.Input<string>;
+    /**
+     * Specifies whether to enable slow original log.
+     * The value can be **on** or **off**.
+     */
+    slowLogDesensitization?: pulumi.Input<string>;
     /**
      * Specifies whether to enable or disable SSL. Defaults to true.
      */
@@ -497,6 +637,14 @@ export interface InstanceState {
      * The key/value pairs to associate with the DDS instance.
      */
     tags?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
+    /**
+     * Indicates the time zone.
+     */
+    timeZone?: pulumi.Input<string>;
+    /**
+     * Indicates the update time.
+     */
+    updatedAt?: pulumi.Input<string>;
     /**
      * Specifies the VPC ID. Changing this creates a new instance.
      */
@@ -518,8 +666,7 @@ export interface InstanceArgs {
      */
     autoRenew?: pulumi.Input<string>;
     /**
-     * Specifies the ID of the availability zone. Changing this creates a
-     * new instance.
+     * Specifies the availability zone names separated by commas.
      */
     availabilityZone: pulumi.Input<string>;
     /**
@@ -527,12 +674,35 @@ export interface InstanceArgs {
      */
     backupStrategy?: pulumi.Input<inputs.Dds.InstanceBackupStrategy>;
     /**
+     * Specifies the start time of the balancing activity time window.
+     * The format is **HH:MM**. It's required with `balancerActiveEnd`.
+     */
+    balancerActiveBegin?: pulumi.Input<string>;
+    /**
+     * Specifies the end time of the balancing activity time window.
+     * The format is **HH:MM**. It's required with `balancerActiveBegin`.
+     */
+    balancerActiveEnd?: pulumi.Input<string>;
+    /**
+     * Specifies the status of the balancer.
+     * The value can be **start** or **stop**. Defaults to **start**.
+     */
+    balancerStatus?: pulumi.Input<string>;
+    /**
      * Specifies the charging mode of the instance.
      * The valid values are as follows:
      * + `prePaid`: indicates the yearly/monthly billing mode.
      * + `postPaid`: indicates the pay-per-use billing mode.
      */
     chargingMode?: pulumi.Input<string>;
+    /**
+     * Specifies the CIDR block where the client is located. Cross-CIDR access is
+     * required only when the CIDR blocks of the client and the replica set instance are different. For example, if the client
+     * CIDR block is 192.168.0.0/16 and the replica set instance's CIDR block is 172.16.0.0/24, add the CIDR block
+     * 192.168.0.0/16 so that the client can access the replica set instance.
+     * It's only for replica set instance.
+     */
+    clientNetworkRanges?: pulumi.Input<pulumi.Input<string>[]>;
     /**
      * Specifies the configuration information.
      * The structure is described below. Changing this creates a new instance.
@@ -544,13 +714,16 @@ export interface InstanceArgs {
      */
     datastore: pulumi.Input<inputs.Dds.InstanceDatastore>;
     /**
+     * Specifies the description of the DDS instance.
+     */
+    description?: pulumi.Input<string>;
+    /**
      * Specifies the disk encryption ID of the instance. Changing this
      * creates a new instance.
      */
     diskEncryptionId?: pulumi.Input<string>;
     /**
-     * Specifies the enterprise project id of the dds instance.
-     * Changing this creates a new instance.
+     * Specifies the enterprise project id of the DDS instance.
      */
     enterpriseProjectId?: pulumi.Input<string>;
     /**
@@ -559,8 +732,20 @@ export interface InstanceArgs {
      */
     flavors: pulumi.Input<pulumi.Input<inputs.Dds.InstanceFlavor>[]>;
     /**
-     * Specifies the mode of the database instance. **Sharding**, **ReplicaSet**,
-     * **Single** are supported. Changing this creates a new instance.
+     * Specifies begin time of the time range within which you are allowed to start a
+     * task that affects the running of database instances. It must be a valid value in the format of **hh:mm** in UTC+0,
+     * such as **02:00**, meanwhile, this time in console displays in the format of **hh:mm** in UTC+08:00, e.g. **10:00**.
+     */
+    maintainBegin?: pulumi.Input<string>;
+    /**
+     * Specifies end time of the time range within which you are allowed to start a
+     * task that affects the running of database instances. It must be a valid value in the format of **hh:mm** in UTC+0,
+     * such as **04:00**, meanwhile, this time in console displays in the format of **hh:mm** in UTC+08:00, e.g. **12:00**.
+     */
+    maintainEnd?: pulumi.Input<string>;
+    /**
+     * Specifies the mode of the database instance. **Sharding**, **ReplicaSet**
+     * are supported. Changing this creates a new instance.
      */
     mode: pulumi.Input<string>;
     /**
@@ -571,13 +756,15 @@ export interface InstanceArgs {
     /**
      * Specifies the Administrator password of the database instance.
      */
-    password: pulumi.Input<string>;
+    password?: pulumi.Input<string>;
     /**
-     * Specifies the charging period of the instance.
-     * If `periodUnit` is set to *month*, the value ranges from 1 to 9.
-     * If `periodUnit` is set to *year*, the value ranges from 1 to 3.
-     * This parameter is mandatory if `chargingMode` is set to *prePaid*.
-     * Changing this creates a new instance.
+     * Specifies the backup cycle. Data will be automatically backed up on the
+     * selected days every week.
+     * + If you set the `keepDays` to 0, this parameter is no need to set.
+     * + If you set the `keepDays` within 6 days, set the parameter value to **1,2,3,4,5,6,7**, data is automatically
+     * backed up on each day every week.
+     * + If you set the `keepDays` between 7 and 732 days, set the parameter value to at least one day of every week.
+     * For example: **1**, **3,5**.
      */
     period?: pulumi.Input<number>;
     /**
@@ -597,9 +784,24 @@ export interface InstanceArgs {
      */
     region?: pulumi.Input<string>;
     /**
+     * Specifies the name of the replica set in the connection address.
+     * It must be `3` to `128` characters long and start with a letter. It is case-sensitive and can contain only letters,
+     * digits, and underscores (_). Default is **replica**.
+     */
+    replicaSetName?: pulumi.Input<string>;
+    /**
+     * Specifies whether to enable second level monitoring.
+     */
+    secondLevelMonitoringEnabled?: pulumi.Input<boolean>;
+    /**
      * Specifies the security group ID of the DDS instance.
      */
     securityGroupId: pulumi.Input<string>;
+    /**
+     * Specifies whether to enable slow original log.
+     * The value can be **on** or **off**.
+     */
+    slowLogDesensitization?: pulumi.Input<string>;
     /**
      * Specifies whether to enable or disable SSL. Defaults to true.
      */

@@ -31,6 +31,7 @@ class MemberArgs:
         :param pulumi.Input[int] protocol_port: The port on which to listen for client traffic. Changing this creates a
                new member.
         :param pulumi.Input[str] subnet_id: The **IPv4 subnet ID** of the subnet in which to access the member.
+        :param pulumi.Input[bool] admin_state_up: schema: Deprecated
         :param pulumi.Input[str] name: Human-readable name for the member.
         :param pulumi.Input[str] region: The region in which to create the ELB member resource. If omitted, the the
                provider-level region will be used. Changing this creates a new member.
@@ -109,6 +110,9 @@ class MemberArgs:
     @property
     @pulumi.getter(name="adminStateUp")
     def admin_state_up(self) -> Optional[pulumi.Input[bool]]:
+        """
+        schema: Deprecated
+        """
         return pulumi.get(self, "admin_state_up")
 
     @admin_state_up.setter
@@ -169,7 +173,9 @@ class _MemberState:
     def __init__(__self__, *,
                  address: Optional[pulumi.Input[str]] = None,
                  admin_state_up: Optional[pulumi.Input[bool]] = None,
+                 backend_server_status: Optional[pulumi.Input[bool]] = None,
                  name: Optional[pulumi.Input[str]] = None,
+                 operating_status: Optional[pulumi.Input[str]] = None,
                  pool_id: Optional[pulumi.Input[str]] = None,
                  protocol_port: Optional[pulumi.Input[int]] = None,
                  region: Optional[pulumi.Input[str]] = None,
@@ -180,7 +186,10 @@ class _MemberState:
         Input properties used for looking up and filtering Member resources.
         :param pulumi.Input[str] address: The IP address of the member to receive traffic from the load balancer.
                Changing this creates a new member.
+        :param pulumi.Input[bool] admin_state_up: schema: Deprecated
+        :param pulumi.Input[bool] backend_server_status: Indicates the administrative status of the backend server.
         :param pulumi.Input[str] name: Human-readable name for the member.
+        :param pulumi.Input[str] operating_status: Indicates the health check result of the backend server.
         :param pulumi.Input[str] pool_id: The id of the pool that this member will be assigned to.
         :param pulumi.Input[int] protocol_port: The port on which to listen for client traffic. Changing this creates a
                new member.
@@ -195,8 +204,12 @@ class _MemberState:
             pulumi.set(__self__, "address", address)
         if admin_state_up is not None:
             pulumi.set(__self__, "admin_state_up", admin_state_up)
+        if backend_server_status is not None:
+            pulumi.set(__self__, "backend_server_status", backend_server_status)
         if name is not None:
             pulumi.set(__self__, "name", name)
+        if operating_status is not None:
+            pulumi.set(__self__, "operating_status", operating_status)
         if pool_id is not None:
             pulumi.set(__self__, "pool_id", pool_id)
         if protocol_port is not None:
@@ -229,11 +242,26 @@ class _MemberState:
     @property
     @pulumi.getter(name="adminStateUp")
     def admin_state_up(self) -> Optional[pulumi.Input[bool]]:
+        """
+        schema: Deprecated
+        """
         return pulumi.get(self, "admin_state_up")
 
     @admin_state_up.setter
     def admin_state_up(self, value: Optional[pulumi.Input[bool]]):
         pulumi.set(self, "admin_state_up", value)
+
+    @property
+    @pulumi.getter(name="backendServerStatus")
+    def backend_server_status(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Indicates the administrative status of the backend server.
+        """
+        return pulumi.get(self, "backend_server_status")
+
+    @backend_server_status.setter
+    def backend_server_status(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "backend_server_status", value)
 
     @property
     @pulumi.getter
@@ -246,6 +274,18 @@ class _MemberState:
     @name.setter
     def name(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "name", value)
+
+    @property
+    @pulumi.getter(name="operatingStatus")
+    def operating_status(self) -> Optional[pulumi.Input[str]]:
+        """
+        Indicates the health check result of the backend server.
+        """
+        return pulumi.get(self, "operating_status")
+
+    @operating_status.setter
+    def operating_status(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "operating_status", value)
 
     @property
     @pulumi.getter(name="poolId")
@@ -357,7 +397,7 @@ class Member(pulumi.CustomResource):
 
         ## Import
 
-        ELB member can be imported using the pool ID and member ID separated by a slash, e.g.
+        ELB member can be imported using the pool ID and member ID separated by a slash, e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:Elb/member:Member member_1 e0bd694a-abbe-450e-b329-0931fd1cc5eb/4086b0c9-b18c-4d1c-b6b8-4c56c3ad2a9e
@@ -367,6 +407,7 @@ class Member(pulumi.CustomResource):
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[str] address: The IP address of the member to receive traffic from the load balancer.
                Changing this creates a new member.
+        :param pulumi.Input[bool] admin_state_up: schema: Deprecated
         :param pulumi.Input[str] name: Human-readable name for the member.
         :param pulumi.Input[str] pool_id: The id of the pool that this member will be assigned to.
         :param pulumi.Input[int] protocol_port: The port on which to listen for client traffic. Changing this creates a
@@ -405,7 +446,7 @@ class Member(pulumi.CustomResource):
 
         ## Import
 
-        ELB member can be imported using the pool ID and member ID separated by a slash, e.g.
+        ELB member can be imported using the pool ID and member ID separated by a slash, e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:Elb/member:Member member_1 e0bd694a-abbe-450e-b329-0931fd1cc5eb/4086b0c9-b18c-4d1c-b6b8-4c56c3ad2a9e
@@ -464,6 +505,8 @@ class Member(pulumi.CustomResource):
                 pulumi.log.warn("""tenant_id is deprecated: tenant_id is deprecated""")
             __props__.__dict__["tenant_id"] = tenant_id
             __props__.__dict__["weight"] = weight
+            __props__.__dict__["backend_server_status"] = None
+            __props__.__dict__["operating_status"] = None
         super(Member, __self__).__init__(
             'huaweicloud:Elb/member:Member',
             resource_name,
@@ -476,7 +519,9 @@ class Member(pulumi.CustomResource):
             opts: Optional[pulumi.ResourceOptions] = None,
             address: Optional[pulumi.Input[str]] = None,
             admin_state_up: Optional[pulumi.Input[bool]] = None,
+            backend_server_status: Optional[pulumi.Input[bool]] = None,
             name: Optional[pulumi.Input[str]] = None,
+            operating_status: Optional[pulumi.Input[str]] = None,
             pool_id: Optional[pulumi.Input[str]] = None,
             protocol_port: Optional[pulumi.Input[int]] = None,
             region: Optional[pulumi.Input[str]] = None,
@@ -492,7 +537,10 @@ class Member(pulumi.CustomResource):
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[str] address: The IP address of the member to receive traffic from the load balancer.
                Changing this creates a new member.
+        :param pulumi.Input[bool] admin_state_up: schema: Deprecated
+        :param pulumi.Input[bool] backend_server_status: Indicates the administrative status of the backend server.
         :param pulumi.Input[str] name: Human-readable name for the member.
+        :param pulumi.Input[str] operating_status: Indicates the health check result of the backend server.
         :param pulumi.Input[str] pool_id: The id of the pool that this member will be assigned to.
         :param pulumi.Input[int] protocol_port: The port on which to listen for client traffic. Changing this creates a
                new member.
@@ -509,7 +557,9 @@ class Member(pulumi.CustomResource):
 
         __props__.__dict__["address"] = address
         __props__.__dict__["admin_state_up"] = admin_state_up
+        __props__.__dict__["backend_server_status"] = backend_server_status
         __props__.__dict__["name"] = name
+        __props__.__dict__["operating_status"] = operating_status
         __props__.__dict__["pool_id"] = pool_id
         __props__.__dict__["protocol_port"] = protocol_port
         __props__.__dict__["region"] = region
@@ -530,7 +580,18 @@ class Member(pulumi.CustomResource):
     @property
     @pulumi.getter(name="adminStateUp")
     def admin_state_up(self) -> pulumi.Output[Optional[bool]]:
+        """
+        schema: Deprecated
+        """
         return pulumi.get(self, "admin_state_up")
+
+    @property
+    @pulumi.getter(name="backendServerStatus")
+    def backend_server_status(self) -> pulumi.Output[bool]:
+        """
+        Indicates the administrative status of the backend server.
+        """
+        return pulumi.get(self, "backend_server_status")
 
     @property
     @pulumi.getter
@@ -539,6 +600,14 @@ class Member(pulumi.CustomResource):
         Human-readable name for the member.
         """
         return pulumi.get(self, "name")
+
+    @property
+    @pulumi.getter(name="operatingStatus")
+    def operating_status(self) -> pulumi.Output[str]:
+        """
+        Indicates the health check result of the backend server.
+        """
+        return pulumi.get(self, "operating_status")
 
     @property
     @pulumi.getter(name="poolId")

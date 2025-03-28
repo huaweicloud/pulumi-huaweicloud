@@ -8,28 +8,25 @@ import * as utilities from "../utilities";
  * Manage a log stream resource within HuaweiCloud.
  *
  * ## Example Usage
- * ### create a log stream
  *
  * ```typescript
  * import * as pulumi from "@pulumi/pulumi";
  * import * as pulumi from "@huaweicloudos/pulumi";
  *
- * const testGroup = new huaweicloud.lts.Group("testGroup", {
- *     groupName: "test_group",
- *     ttlInDays: 1,
- * });
- * const testStream = new huaweicloud.lts.Stream("testStream", {
- *     groupId: testGroup.id,
+ * const config = new pulumi.Config();
+ * const groupId = config.requireObject("groupId");
+ * const test = new huaweicloud.lts.Stream("test", {
+ *     groupId: groupId,
  *     streamName: "testacc_stream",
  * });
  * ```
  *
  * ## Import
  *
- * Log stream can be imported using the lts group ID and stream ID separated by a slash, e.g.
+ * The log stream can be imported using the group ID and stream ID separated by a slash, e.g. bash
  *
  * ```sh
- *  $ pulumi import huaweicloud:Lts/stream:Stream stream_1 393f2bfd-2244-11ea-adb7-286ed488c87f/72855918-20b1-11ea-80e0-286ed488c880
+ *  $ pulumi import huaweicloud:Lts/stream:Stream test <group_id>/<id>
  * ```
  */
 export class Stream extends pulumi.CustomResource {
@@ -61,6 +58,15 @@ export class Stream extends pulumi.CustomResource {
     }
 
     /**
+     * The creation time of the log stream.
+     */
+    public /*out*/ readonly createdAt!: pulumi.Output<string>;
+    /**
+     * Specifies the enterprise project ID.
+     * Changing this parameter will create a new resource.
+     */
+    public readonly enterpriseProjectId!: pulumi.Output<string>;
+    /**
      * Number of log stream filters.
      */
     public /*out*/ readonly filterCount!: pulumi.Output<number>;
@@ -70,7 +76,7 @@ export class Stream extends pulumi.CustomResource {
      */
     public readonly groupId!: pulumi.Output<string>;
     /**
-     * The region in which to create the log stream resource. If omitted, the
+     * Specifies the region in which to create the log stream resource. If omitted, the
      * provider-level region will be used. Changing this creates a new log stream resource.
      */
     public readonly region!: pulumi.Output<string>;
@@ -79,6 +85,15 @@ export class Stream extends pulumi.CustomResource {
      * resource.
      */
     public readonly streamName!: pulumi.Output<string>;
+    /**
+     * Specifies the key/value pairs of the log stream.
+     */
+    public readonly tags!: pulumi.Output<{[key: string]: string} | undefined>;
+    /**
+     * Specifies the log expiration time (days).
+     * The valid value is a non-zero integer from `-1` to `365`, defaults to `-1` which means inherit the log group settings.
+     */
+    public readonly ttlInDays!: pulumi.Output<number>;
 
     /**
      * Create a Stream resource with the given unique name, arguments, and options.
@@ -93,10 +108,14 @@ export class Stream extends pulumi.CustomResource {
         opts = opts || {};
         if (opts.id) {
             const state = argsOrState as StreamState | undefined;
+            resourceInputs["createdAt"] = state ? state.createdAt : undefined;
+            resourceInputs["enterpriseProjectId"] = state ? state.enterpriseProjectId : undefined;
             resourceInputs["filterCount"] = state ? state.filterCount : undefined;
             resourceInputs["groupId"] = state ? state.groupId : undefined;
             resourceInputs["region"] = state ? state.region : undefined;
             resourceInputs["streamName"] = state ? state.streamName : undefined;
+            resourceInputs["tags"] = state ? state.tags : undefined;
+            resourceInputs["ttlInDays"] = state ? state.ttlInDays : undefined;
         } else {
             const args = argsOrState as StreamArgs | undefined;
             if ((!args || args.groupId === undefined) && !opts.urn) {
@@ -105,9 +124,13 @@ export class Stream extends pulumi.CustomResource {
             if ((!args || args.streamName === undefined) && !opts.urn) {
                 throw new Error("Missing required property 'streamName'");
             }
+            resourceInputs["enterpriseProjectId"] = args ? args.enterpriseProjectId : undefined;
             resourceInputs["groupId"] = args ? args.groupId : undefined;
             resourceInputs["region"] = args ? args.region : undefined;
             resourceInputs["streamName"] = args ? args.streamName : undefined;
+            resourceInputs["tags"] = args ? args.tags : undefined;
+            resourceInputs["ttlInDays"] = args ? args.ttlInDays : undefined;
+            resourceInputs["createdAt"] = undefined /*out*/;
             resourceInputs["filterCount"] = undefined /*out*/;
         }
         opts = pulumi.mergeOptions(utilities.resourceOptsDefaults(), opts);
@@ -120,6 +143,15 @@ export class Stream extends pulumi.CustomResource {
  */
 export interface StreamState {
     /**
+     * The creation time of the log stream.
+     */
+    createdAt?: pulumi.Input<string>;
+    /**
+     * Specifies the enterprise project ID.
+     * Changing this parameter will create a new resource.
+     */
+    enterpriseProjectId?: pulumi.Input<string>;
+    /**
      * Number of log stream filters.
      */
     filterCount?: pulumi.Input<number>;
@@ -129,7 +161,7 @@ export interface StreamState {
      */
     groupId?: pulumi.Input<string>;
     /**
-     * The region in which to create the log stream resource. If omitted, the
+     * Specifies the region in which to create the log stream resource. If omitted, the
      * provider-level region will be used. Changing this creates a new log stream resource.
      */
     region?: pulumi.Input<string>;
@@ -138,6 +170,15 @@ export interface StreamState {
      * resource.
      */
     streamName?: pulumi.Input<string>;
+    /**
+     * Specifies the key/value pairs of the log stream.
+     */
+    tags?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
+    /**
+     * Specifies the log expiration time (days).
+     * The valid value is a non-zero integer from `-1` to `365`, defaults to `-1` which means inherit the log group settings.
+     */
+    ttlInDays?: pulumi.Input<number>;
 }
 
 /**
@@ -145,12 +186,17 @@ export interface StreamState {
  */
 export interface StreamArgs {
     /**
+     * Specifies the enterprise project ID.
+     * Changing this parameter will create a new resource.
+     */
+    enterpriseProjectId?: pulumi.Input<string>;
+    /**
      * Specifies the ID of a created log group. Changing this parameter will create
      * a new resource.
      */
     groupId: pulumi.Input<string>;
     /**
-     * The region in which to create the log stream resource. If omitted, the
+     * Specifies the region in which to create the log stream resource. If omitted, the
      * provider-level region will be used. Changing this creates a new log stream resource.
      */
     region?: pulumi.Input<string>;
@@ -159,4 +205,13 @@ export interface StreamArgs {
      * resource.
      */
     streamName: pulumi.Input<string>;
+    /**
+     * Specifies the key/value pairs of the log stream.
+     */
+    tags?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
+    /**
+     * Specifies the log expiration time (days).
+     * The valid value is a non-zero integer from `-1` to `365`, defaults to `-1` which means inherit the log group settings.
+     */
+    ttlInDays?: pulumi.Input<number>;
 }

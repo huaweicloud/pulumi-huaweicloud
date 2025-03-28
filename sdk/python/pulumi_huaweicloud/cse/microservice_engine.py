@@ -17,10 +17,10 @@ __all__ = ['MicroserviceEngineArgs', 'MicroserviceEngine']
 class MicroserviceEngineArgs:
     def __init__(__self__, *,
                  auth_type: pulumi.Input[str],
-                 availability_zones: pulumi.Input[Sequence[pulumi.Input[str]]],
                  flavor: pulumi.Input[str],
                  network_id: pulumi.Input[str],
                  admin_pass: Optional[pulumi.Input[str]] = None,
+                 availability_zones: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  description: Optional[pulumi.Input[str]] = None,
                  eip_id: Optional[pulumi.Input[str]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
@@ -39,8 +39,6 @@ class MicroserviceEngineArgs:
                + **NONE**: Disable security authentication.
                After security authentication is disabled, all users who use the engine can use the engine without using the account
                and password, and have the same operation permissions on all services.
-        :param pulumi.Input[Sequence[pulumi.Input[str]]] availability_zones: Specifies the list of availability zone.
-               Changing this will create a new engine.
         :param pulumi.Input[str] flavor: Specifies the flavor of the dedicated microservice engine.
                Changing this will create a new engine.
         :param pulumi.Input[str] network_id: Specifies the network ID of the subnet to which the dedicated microservice
@@ -53,6 +51,9 @@ class MicroserviceEngineArgs:
                (-~!@#%^*_=+?$&()|<>{}[]).
                + Cannot be the account name or account name spelled backwards.
                + The password can only start with a letter.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] availability_zones: Specifies the list of availability zones.  
+               Required if the `version` is **CSE2**.
+               Changing this will create a new engine.
         :param pulumi.Input[str] description: Specifies the description of the dedicated microservice engine.
                The description can contain a maximum of `255` characters.
                Changing this will create a new engine.
@@ -69,15 +70,18 @@ class MicroserviceEngineArgs:
                Changing this will create a new engine.
         :param pulumi.Input[str] region: Specifies the region in which to create the dedicated microservice engine.
                If omitted, the provider-level region will be used. Changing this will create a new engine.
-        :param pulumi.Input[str] version: Specifies the version of the dedicated microservice engine. The value can be:
-               **CSE2**. Defaults to: **CSE2**. Changing this will create a new engine.
+        :param pulumi.Input[str] version: Specifies the version of the dedicated microservice engine.  
+               The valid values are as follows:
+               + **CSE2**
+               + **Nacos2**
         """
         pulumi.set(__self__, "auth_type", auth_type)
-        pulumi.set(__self__, "availability_zones", availability_zones)
         pulumi.set(__self__, "flavor", flavor)
         pulumi.set(__self__, "network_id", network_id)
         if admin_pass is not None:
             pulumi.set(__self__, "admin_pass", admin_pass)
+        if availability_zones is not None:
+            pulumi.set(__self__, "availability_zones", availability_zones)
         if description is not None:
             pulumi.set(__self__, "description", description)
         if eip_id is not None:
@@ -112,19 +116,6 @@ class MicroserviceEngineArgs:
     @auth_type.setter
     def auth_type(self, value: pulumi.Input[str]):
         pulumi.set(self, "auth_type", value)
-
-    @property
-    @pulumi.getter(name="availabilityZones")
-    def availability_zones(self) -> pulumi.Input[Sequence[pulumi.Input[str]]]:
-        """
-        Specifies the list of availability zone.
-        Changing this will create a new engine.
-        """
-        return pulumi.get(self, "availability_zones")
-
-    @availability_zones.setter
-    def availability_zones(self, value: pulumi.Input[Sequence[pulumi.Input[str]]]):
-        pulumi.set(self, "availability_zones", value)
 
     @property
     @pulumi.getter
@@ -170,6 +161,20 @@ class MicroserviceEngineArgs:
     @admin_pass.setter
     def admin_pass(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "admin_pass", value)
+
+    @property
+    @pulumi.getter(name="availabilityZones")
+    def availability_zones(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]:
+        """
+        Specifies the list of availability zones.  
+        Required if the `version` is **CSE2**.
+        Changing this will create a new engine.
+        """
+        return pulumi.get(self, "availability_zones")
+
+    @availability_zones.setter
+    def availability_zones(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]):
+        pulumi.set(self, "availability_zones", value)
 
     @property
     @pulumi.getter
@@ -257,8 +262,10 @@ class MicroserviceEngineArgs:
     @pulumi.getter
     def version(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the version of the dedicated microservice engine. The value can be:
-        **CSE2**. Defaults to: **CSE2**. Changing this will create a new engine.
+        Specifies the version of the dedicated microservice engine.  
+        The valid values are as follows:
+        + **CSE2**
+        + **Nacos2**
         """
         return pulumi.get(self, "version")
 
@@ -305,7 +312,8 @@ class _MicroserviceEngineState:
                + **NONE**: Disable security authentication.
                After security authentication is disabled, all users who use the engine can use the engine without using the account
                and password, and have the same operation permissions on all services.
-        :param pulumi.Input[Sequence[pulumi.Input[str]]] availability_zones: Specifies the list of availability zone.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] availability_zones: Specifies the list of availability zones.  
+               Required if the `version` is **CSE2**.
                Changing this will create a new engine.
         :param pulumi.Input[Sequence[pulumi.Input['MicroserviceEngineConfigCenterAddressArgs']]] config_center_addresses: The address of config center.
                The object structure is documented below.
@@ -333,8 +341,10 @@ class _MicroserviceEngineState:
         :param pulumi.Input[int] service_limit: The maximum number of the microservice resources.
         :param pulumi.Input[Sequence[pulumi.Input['MicroserviceEngineServiceRegistryAddressArgs']]] service_registry_addresses: The connection address of service center.
                The object structure is documented below.
-        :param pulumi.Input[str] version: Specifies the version of the dedicated microservice engine. The value can be:
-               **CSE2**. Defaults to: **CSE2**. Changing this will create a new engine.
+        :param pulumi.Input[str] version: Specifies the version of the dedicated microservice engine.  
+               The valid values are as follows:
+               + **CSE2**
+               + **Nacos2**
         """
         if admin_pass is not None:
             pulumi.set(__self__, "admin_pass", admin_pass)
@@ -412,7 +422,8 @@ class _MicroserviceEngineState:
     @pulumi.getter(name="availabilityZones")
     def availability_zones(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]:
         """
-        Specifies the list of availability zone.
+        Specifies the list of availability zones.  
+        Required if the `version` is **CSE2**.
         Changing this will create a new engine.
         """
         return pulumi.get(self, "availability_zones")
@@ -583,8 +594,10 @@ class _MicroserviceEngineState:
     @pulumi.getter
     def version(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the version of the dedicated microservice engine. The value can be:
-        **CSE2**. Defaults to: **CSE2**. Changing this will create a new engine.
+        Specifies the version of the dedicated microservice engine.  
+        The valid values are as follows:
+        + **CSE2**
+        + **Nacos2**
         """
         return pulumi.get(self, "version")
 
@@ -615,6 +628,7 @@ class MicroserviceEngine(pulumi.CustomResource):
         Manages a dedicated microservice engine (2.0+) resource within HuaweiCloud.
 
         ## Example Usage
+        ### Create an engine for the default type CSE
 
         ```python
         import pulumi
@@ -623,12 +637,31 @@ class MicroserviceEngine(pulumi.CustomResource):
         config = pulumi.Config()
         engine_name = config.require_object("engineName")
         network_id = config.require_object("networkId")
-        az1 = config.require_object("az1")
+        floating_ip_id = config.require_object("floatingIpId")
+        availability_zones = config.require_object("availabilityZones")
+        manager_password = config.require_object("managerPassword")
         test = huaweicloud.cse.MicroserviceEngine("test",
             flavor="cse.s1.small2",
             network_id=network_id,
+            eip_id=floating_ip_id,
+            availability_zones=availability_zones,
+            auth_type="RBAC",
+            admin_pass=manager_password)
+        ```
+        ### Create an engine for the type Nacos
+
+        ```python
+        import pulumi
+        import pulumi_huaweicloud as huaweicloud
+
+        config = pulumi.Config()
+        engine_name = config.require_object("engineName")
+        network_id = config.require_object("networkId")
+        test = huaweicloud.cse.MicroserviceEngine("test",
+            flavor="cse.nacos2.c1.large.10",
+            network_id=network_id,
             auth_type="NONE",
-            availability_zones=[az1])
+            version="Nacos2")
         ```
 
         ## Import
@@ -639,7 +672,7 @@ class MicroserviceEngine(pulumi.CustomResource):
          $ pulumi import huaweicloud:Cse/microserviceEngine:MicroserviceEngine test eddc5d42-f9d5-4f8e-984b-d6f3e088561c
         ```
 
-         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes are `admin_pass` and `extend_params`. It is generally recommended running `terraform plan` after importing an instance. You can then decide if changes should be applied to the instance, or the resource definition should be updated to align with the instance. Also you can ignore changes as below. resource "huaweicloud_cse_microservice_engine" "test" {
+         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes are `admin_pass` and `extend_params`. It is generally recommended running `terraform plan` after importing an instance. You can then decide if changes should be applied to the instance, or the resource definition should be updated to align with the instance. Also you can ignore changes as below. hcl resource "huaweicloud_cse_microservice_engine" "test" {
 
          ...
 
@@ -678,7 +711,8 @@ class MicroserviceEngine(pulumi.CustomResource):
                + **NONE**: Disable security authentication.
                After security authentication is disabled, all users who use the engine can use the engine without using the account
                and password, and have the same operation permissions on all services.
-        :param pulumi.Input[Sequence[pulumi.Input[str]]] availability_zones: Specifies the list of availability zone.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] availability_zones: Specifies the list of availability zones.  
+               Required if the `version` is **CSE2**.
                Changing this will create a new engine.
         :param pulumi.Input[str] description: Specifies the description of the dedicated microservice engine.
                The description can contain a maximum of `255` characters.
@@ -700,8 +734,10 @@ class MicroserviceEngine(pulumi.CustomResource):
                engine belongs. Changing this will create a new engine.
         :param pulumi.Input[str] region: Specifies the region in which to create the dedicated microservice engine.
                If omitted, the provider-level region will be used. Changing this will create a new engine.
-        :param pulumi.Input[str] version: Specifies the version of the dedicated microservice engine. The value can be:
-               **CSE2**. Defaults to: **CSE2**. Changing this will create a new engine.
+        :param pulumi.Input[str] version: Specifies the version of the dedicated microservice engine.  
+               The valid values are as follows:
+               + **CSE2**
+               + **Nacos2**
         """
         ...
     @overload
@@ -713,6 +749,7 @@ class MicroserviceEngine(pulumi.CustomResource):
         Manages a dedicated microservice engine (2.0+) resource within HuaweiCloud.
 
         ## Example Usage
+        ### Create an engine for the default type CSE
 
         ```python
         import pulumi
@@ -721,12 +758,31 @@ class MicroserviceEngine(pulumi.CustomResource):
         config = pulumi.Config()
         engine_name = config.require_object("engineName")
         network_id = config.require_object("networkId")
-        az1 = config.require_object("az1")
+        floating_ip_id = config.require_object("floatingIpId")
+        availability_zones = config.require_object("availabilityZones")
+        manager_password = config.require_object("managerPassword")
         test = huaweicloud.cse.MicroserviceEngine("test",
             flavor="cse.s1.small2",
             network_id=network_id,
+            eip_id=floating_ip_id,
+            availability_zones=availability_zones,
+            auth_type="RBAC",
+            admin_pass=manager_password)
+        ```
+        ### Create an engine for the type Nacos
+
+        ```python
+        import pulumi
+        import pulumi_huaweicloud as huaweicloud
+
+        config = pulumi.Config()
+        engine_name = config.require_object("engineName")
+        network_id = config.require_object("networkId")
+        test = huaweicloud.cse.MicroserviceEngine("test",
+            flavor="cse.nacos2.c1.large.10",
+            network_id=network_id,
             auth_type="NONE",
-            availability_zones=[az1])
+            version="Nacos2")
         ```
 
         ## Import
@@ -737,7 +793,7 @@ class MicroserviceEngine(pulumi.CustomResource):
          $ pulumi import huaweicloud:Cse/microserviceEngine:MicroserviceEngine test eddc5d42-f9d5-4f8e-984b-d6f3e088561c
         ```
 
-         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes are `admin_pass` and `extend_params`. It is generally recommended running `terraform plan` after importing an instance. You can then decide if changes should be applied to the instance, or the resource definition should be updated to align with the instance. Also you can ignore changes as below. resource "huaweicloud_cse_microservice_engine" "test" {
+         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes are `admin_pass` and `extend_params`. It is generally recommended running `terraform plan` after importing an instance. You can then decide if changes should be applied to the instance, or the resource definition should be updated to align with the instance. Also you can ignore changes as below. hcl resource "huaweicloud_cse_microservice_engine" "test" {
 
          ...
 
@@ -797,8 +853,6 @@ class MicroserviceEngine(pulumi.CustomResource):
             if auth_type is None and not opts.urn:
                 raise TypeError("Missing required property 'auth_type'")
             __props__.__dict__["auth_type"] = auth_type
-            if availability_zones is None and not opts.urn:
-                raise TypeError("Missing required property 'availability_zones'")
             __props__.__dict__["availability_zones"] = availability_zones
             __props__.__dict__["description"] = description
             __props__.__dict__["eip_id"] = eip_id
@@ -867,7 +921,8 @@ class MicroserviceEngine(pulumi.CustomResource):
                + **NONE**: Disable security authentication.
                After security authentication is disabled, all users who use the engine can use the engine without using the account
                and password, and have the same operation permissions on all services.
-        :param pulumi.Input[Sequence[pulumi.Input[str]]] availability_zones: Specifies the list of availability zone.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] availability_zones: Specifies the list of availability zones.  
+               Required if the `version` is **CSE2**.
                Changing this will create a new engine.
         :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['MicroserviceEngineConfigCenterAddressArgs']]]] config_center_addresses: The address of config center.
                The object structure is documented below.
@@ -895,8 +950,10 @@ class MicroserviceEngine(pulumi.CustomResource):
         :param pulumi.Input[int] service_limit: The maximum number of the microservice resources.
         :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['MicroserviceEngineServiceRegistryAddressArgs']]]] service_registry_addresses: The connection address of service center.
                The object structure is documented below.
-        :param pulumi.Input[str] version: Specifies the version of the dedicated microservice engine. The value can be:
-               **CSE2**. Defaults to: **CSE2**. Changing this will create a new engine.
+        :param pulumi.Input[str] version: Specifies the version of the dedicated microservice engine.  
+               The valid values are as follows:
+               + **CSE2**
+               + **Nacos2**
         """
         opts = pulumi.ResourceOptions.merge(opts, pulumi.ResourceOptions(id=id))
 
@@ -955,7 +1012,8 @@ class MicroserviceEngine(pulumi.CustomResource):
     @pulumi.getter(name="availabilityZones")
     def availability_zones(self) -> pulumi.Output[Sequence[str]]:
         """
-        Specifies the list of availability zone.
+        Specifies the list of availability zones.  
+        Required if the `version` is **CSE2**.
         Changing this will create a new engine.
         """
         return pulumi.get(self, "availability_zones")
@@ -990,7 +1048,7 @@ class MicroserviceEngine(pulumi.CustomResource):
 
     @property
     @pulumi.getter(name="enterpriseProjectId")
-    def enterprise_project_id(self) -> pulumi.Output[Optional[str]]:
+    def enterprise_project_id(self) -> pulumi.Output[str]:
         """
         Specifies the enterprise project ID to which the dedicated
         microservice engine belongs.
@@ -1074,8 +1132,10 @@ class MicroserviceEngine(pulumi.CustomResource):
     @pulumi.getter
     def version(self) -> pulumi.Output[Optional[str]]:
         """
-        Specifies the version of the dedicated microservice engine. The value can be:
-        **CSE2**. Defaults to: **CSE2**. Changing this will create a new engine.
+        Specifies the version of the dedicated microservice engine.  
+        The valid values are as follows:
+        + **CSE2**
+        + **Nacos2**
         """
         return pulumi.get(self, "version")
 

@@ -32,8 +32,10 @@ class BucketArgs:
                  policy_format: Optional[pulumi.Input[str]] = None,
                  quota: Optional[pulumi.Input[int]] = None,
                  region: Optional[pulumi.Input[str]] = None,
+                 sse_algorithm: Optional[pulumi.Input[str]] = None,
                  storage_class: Optional[pulumi.Input[str]] = None,
                  tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
+                 user_domain_names: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  versioning: Optional[pulumi.Input[bool]] = None,
                  website: Optional[pulumi.Input['BucketWebsiteArgs']] = None):
         """
@@ -51,14 +53,15 @@ class BucketArgs:
         :param pulumi.Input[str] acl: Specifies the ACL policy for a bucket. The predefined common policies are as follows:
                "private", "public-read", "public-read-write" and "log-delivery-write". Defaults to `private`.
         :param pulumi.Input[Sequence[pulumi.Input['BucketCorsRuleArgs']]] cors_rules: A rule of Cross-Origin Resource Sharing (documented below).
-        :param pulumi.Input[bool] encryption: Whether enable default server-side encryption of the bucket in SSE-KMS mode.
+        :param pulumi.Input[bool] encryption: Whether to enable default server-side encryption of the bucket.
         :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project id of the OBS bucket.
                Defaults to `0`.
         :param pulumi.Input[bool] force_destroy: A boolean that indicates all objects should be deleted from the bucket, so that the
                bucket can be destroyed without error. Default to `false`.
-        :param pulumi.Input[str] kms_key_id: Specifies the ID of a KMS key. If omitted, the default master key will be used.
-        :param pulumi.Input[str] kms_key_project_id: Specifies the project ID to which the KMS key belongs. If omitted, the ID
-               of the provider-level project will be used.
+        :param pulumi.Input[str] kms_key_id: Specifies the ID of a KMS key. If omitted, the default master key will be used. This
+               field is used only when `sse_algorithm` value is **kms**.
+        :param pulumi.Input[str] kms_key_project_id: Specifies the project ID to which the KMS key belongs. This field is valid
+               only when `kms_key_id` is specified.
         :param pulumi.Input[Sequence[pulumi.Input['BucketLifecycleRuleArgs']]] lifecycle_rules: A configuration of object lifecycle management (documented below).
         :param pulumi.Input[Sequence[pulumi.Input['BucketLoggingArgs']]] loggings: A settings of bucket logging (documented below).
         :param pulumi.Input[bool] multi_az: Whether enable the multi-AZ mode for the bucket. When the multi-AZ mode is
@@ -71,13 +74,24 @@ class BucketArgs:
         :param pulumi.Input[str] policy_format: Specifies the policy format, the supported values are *obs* and *s3*. Defaults
                to *obs*.
         :param pulumi.Input[int] quota: Specifies bucket storage quota. Must be a positive integer in the unit of byte. The maximum
-               storage quota is 2<sup>63</sup> – 1 bytes. The default bucket storage quota is 0, indicating that the bucket storage
+               storage quota is 2<sup>63</sup> – 1 bytes. The default bucket storage quota is `0`, indicating that the bucket storage
                quota is not limited.
         :param pulumi.Input[str] region: Specifies the region where this bucket will be created. If not specified, used
                the region by the provider. Changing this will create a new bucket.
+        :param pulumi.Input[str] sse_algorithm: Specifies the mode of encryption algorithm. The valid values are:
+               + **kms**: Server-side encryption with keys hosted by KMS are used to encrypt your objects.
+               + **AES256**: Server-side encryption with keys managed by OBS are used to encrypt your objects.
         :param pulumi.Input[str] storage_class: Specifies the storage class of the bucket. OBS provides three storage classes:
                "STANDARD", "WARM" (Infrequent Access) and "COLD" (Archive). Defaults to `STANDARD`.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: A mapping of tags to assign to the bucket. Each tag is represented by one key-value pair.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] user_domain_names: Specifies the user domain names. The restriction requirements for this field
+               are as follows:
+               + Each value must meet the domain name rules.
+               + The maximum length of a domain name is 256 characters.
+               + A maximum of 100 custom domain names can be set for a bucket.
+               + A custom domain name can only be used by one bucket.
+               + Ensure the domain name has been licensed by the Ministry of Industry and Information Technology.
+               + The bound user domain names only support access over HTTP now.
         :param pulumi.Input[bool] versioning: Whether enable versioning. Once you version-enable a bucket, it can never return to an
                unversioned state. You can, however, suspend versioning on that bucket.
         :param pulumi.Input['BucketWebsiteArgs'] website: A website object (documented below).
@@ -113,10 +127,14 @@ class BucketArgs:
             pulumi.set(__self__, "quota", quota)
         if region is not None:
             pulumi.set(__self__, "region", region)
+        if sse_algorithm is not None:
+            pulumi.set(__self__, "sse_algorithm", sse_algorithm)
         if storage_class is not None:
             pulumi.set(__self__, "storage_class", storage_class)
         if tags is not None:
             pulumi.set(__self__, "tags", tags)
+        if user_domain_names is not None:
+            pulumi.set(__self__, "user_domain_names", user_domain_names)
         if versioning is not None:
             pulumi.set(__self__, "versioning", versioning)
         if website is not None:
@@ -172,7 +190,7 @@ class BucketArgs:
     @pulumi.getter
     def encryption(self) -> Optional[pulumi.Input[bool]]:
         """
-        Whether enable default server-side encryption of the bucket in SSE-KMS mode.
+        Whether to enable default server-side encryption of the bucket.
         """
         return pulumi.get(self, "encryption")
 
@@ -210,7 +228,8 @@ class BucketArgs:
     @pulumi.getter(name="kmsKeyId")
     def kms_key_id(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the ID of a KMS key. If omitted, the default master key will be used.
+        Specifies the ID of a KMS key. If omitted, the default master key will be used. This
+        field is used only when `sse_algorithm` value is **kms**.
         """
         return pulumi.get(self, "kms_key_id")
 
@@ -222,8 +241,8 @@ class BucketArgs:
     @pulumi.getter(name="kmsKeyProjectId")
     def kms_key_project_id(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the project ID to which the KMS key belongs. If omitted, the ID
-        of the provider-level project will be used.
+        Specifies the project ID to which the KMS key belongs. This field is valid
+        only when `kms_key_id` is specified.
         """
         return pulumi.get(self, "kms_key_project_id")
 
@@ -313,7 +332,7 @@ class BucketArgs:
     def quota(self) -> Optional[pulumi.Input[int]]:
         """
         Specifies bucket storage quota. Must be a positive integer in the unit of byte. The maximum
-        storage quota is 2<sup>63</sup> – 1 bytes. The default bucket storage quota is 0, indicating that the bucket storage
+        storage quota is 2<sup>63</sup> – 1 bytes. The default bucket storage quota is `0`, indicating that the bucket storage
         quota is not limited.
         """
         return pulumi.get(self, "quota")
@@ -334,6 +353,20 @@ class BucketArgs:
     @region.setter
     def region(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "region", value)
+
+    @property
+    @pulumi.getter(name="sseAlgorithm")
+    def sse_algorithm(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the mode of encryption algorithm. The valid values are:
+        + **kms**: Server-side encryption with keys hosted by KMS are used to encrypt your objects.
+        + **AES256**: Server-side encryption with keys managed by OBS are used to encrypt your objects.
+        """
+        return pulumi.get(self, "sse_algorithm")
+
+    @sse_algorithm.setter
+    def sse_algorithm(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "sse_algorithm", value)
 
     @property
     @pulumi.getter(name="storageClass")
@@ -359,6 +392,25 @@ class BucketArgs:
     @tags.setter
     def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]):
         pulumi.set(self, "tags", value)
+
+    @property
+    @pulumi.getter(name="userDomainNames")
+    def user_domain_names(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]:
+        """
+        Specifies the user domain names. The restriction requirements for this field
+        are as follows:
+        + Each value must meet the domain name rules.
+        + The maximum length of a domain name is 256 characters.
+        + A maximum of 100 custom domain names can be set for a bucket.
+        + A custom domain name can only be used by one bucket.
+        + Ensure the domain name has been licensed by the Ministry of Industry and Information Technology.
+        + The bound user domain names only support access over HTTP now.
+        """
+        return pulumi.get(self, "user_domain_names")
+
+    @user_domain_names.setter
+    def user_domain_names(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]):
+        pulumi.set(self, "user_domain_names", value)
 
     @property
     @pulumi.getter
@@ -407,9 +459,11 @@ class _BucketState:
                  policy_format: Optional[pulumi.Input[str]] = None,
                  quota: Optional[pulumi.Input[int]] = None,
                  region: Optional[pulumi.Input[str]] = None,
+                 sse_algorithm: Optional[pulumi.Input[str]] = None,
                  storage_class: Optional[pulumi.Input[str]] = None,
                  storage_infos: Optional[pulumi.Input[Sequence[pulumi.Input['BucketStorageInfoArgs']]]] = None,
                  tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
+                 user_domain_names: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  versioning: Optional[pulumi.Input[bool]] = None,
                  website: Optional[pulumi.Input['BucketWebsiteArgs']] = None):
         """
@@ -429,14 +483,15 @@ class _BucketState:
         :param pulumi.Input[str] bucket_domain_name: The bucket domain name. Will be of format `bucketname.obs.region.myhuaweicloud.com`.
         :param pulumi.Input[str] bucket_version: The OBS version of the bucket.
         :param pulumi.Input[Sequence[pulumi.Input['BucketCorsRuleArgs']]] cors_rules: A rule of Cross-Origin Resource Sharing (documented below).
-        :param pulumi.Input[bool] encryption: Whether enable default server-side encryption of the bucket in SSE-KMS mode.
+        :param pulumi.Input[bool] encryption: Whether to enable default server-side encryption of the bucket.
         :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project id of the OBS bucket.
                Defaults to `0`.
         :param pulumi.Input[bool] force_destroy: A boolean that indicates all objects should be deleted from the bucket, so that the
                bucket can be destroyed without error. Default to `false`.
-        :param pulumi.Input[str] kms_key_id: Specifies the ID of a KMS key. If omitted, the default master key will be used.
-        :param pulumi.Input[str] kms_key_project_id: Specifies the project ID to which the KMS key belongs. If omitted, the ID
-               of the provider-level project will be used.
+        :param pulumi.Input[str] kms_key_id: Specifies the ID of a KMS key. If omitted, the default master key will be used. This
+               field is used only when `sse_algorithm` value is **kms**.
+        :param pulumi.Input[str] kms_key_project_id: Specifies the project ID to which the KMS key belongs. This field is valid
+               only when `kms_key_id` is specified.
         :param pulumi.Input[Sequence[pulumi.Input['BucketLifecycleRuleArgs']]] lifecycle_rules: A configuration of object lifecycle management (documented below).
         :param pulumi.Input[Sequence[pulumi.Input['BucketLoggingArgs']]] loggings: A settings of bucket logging (documented below).
         :param pulumi.Input[bool] multi_az: Whether enable the multi-AZ mode for the bucket. When the multi-AZ mode is
@@ -449,15 +504,26 @@ class _BucketState:
         :param pulumi.Input[str] policy_format: Specifies the policy format, the supported values are *obs* and *s3*. Defaults
                to *obs*.
         :param pulumi.Input[int] quota: Specifies bucket storage quota. Must be a positive integer in the unit of byte. The maximum
-               storage quota is 2<sup>63</sup> – 1 bytes. The default bucket storage quota is 0, indicating that the bucket storage
+               storage quota is 2<sup>63</sup> – 1 bytes. The default bucket storage quota is `0`, indicating that the bucket storage
                quota is not limited.
         :param pulumi.Input[str] region: Specifies the region where this bucket will be created. If not specified, used
                the region by the provider. Changing this will create a new bucket.
+        :param pulumi.Input[str] sse_algorithm: Specifies the mode of encryption algorithm. The valid values are:
+               + **kms**: Server-side encryption with keys hosted by KMS are used to encrypt your objects.
+               + **AES256**: Server-side encryption with keys managed by OBS are used to encrypt your objects.
         :param pulumi.Input[str] storage_class: Specifies the storage class of the bucket. OBS provides three storage classes:
                "STANDARD", "WARM" (Infrequent Access) and "COLD" (Archive). Defaults to `STANDARD`.
         :param pulumi.Input[Sequence[pulumi.Input['BucketStorageInfoArgs']]] storage_infos: The OBS storage info of the bucket.
                The object structure is documented below.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: A mapping of tags to assign to the bucket. Each tag is represented by one key-value pair.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] user_domain_names: Specifies the user domain names. The restriction requirements for this field
+               are as follows:
+               + Each value must meet the domain name rules.
+               + The maximum length of a domain name is 256 characters.
+               + A maximum of 100 custom domain names can be set for a bucket.
+               + A custom domain name can only be used by one bucket.
+               + Ensure the domain name has been licensed by the Ministry of Industry and Information Technology.
+               + The bound user domain names only support access over HTTP now.
         :param pulumi.Input[bool] versioning: Whether enable versioning. Once you version-enable a bucket, it can never return to an
                unversioned state. You can, however, suspend versioning on that bucket.
         :param pulumi.Input['BucketWebsiteArgs'] website: A website object (documented below).
@@ -498,12 +564,16 @@ class _BucketState:
             pulumi.set(__self__, "quota", quota)
         if region is not None:
             pulumi.set(__self__, "region", region)
+        if sse_algorithm is not None:
+            pulumi.set(__self__, "sse_algorithm", sse_algorithm)
         if storage_class is not None:
             pulumi.set(__self__, "storage_class", storage_class)
         if storage_infos is not None:
             pulumi.set(__self__, "storage_infos", storage_infos)
         if tags is not None:
             pulumi.set(__self__, "tags", tags)
+        if user_domain_names is not None:
+            pulumi.set(__self__, "user_domain_names", user_domain_names)
         if versioning is not None:
             pulumi.set(__self__, "versioning", versioning)
         if website is not None:
@@ -583,7 +653,7 @@ class _BucketState:
     @pulumi.getter
     def encryption(self) -> Optional[pulumi.Input[bool]]:
         """
-        Whether enable default server-side encryption of the bucket in SSE-KMS mode.
+        Whether to enable default server-side encryption of the bucket.
         """
         return pulumi.get(self, "encryption")
 
@@ -621,7 +691,8 @@ class _BucketState:
     @pulumi.getter(name="kmsKeyId")
     def kms_key_id(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the ID of a KMS key. If omitted, the default master key will be used.
+        Specifies the ID of a KMS key. If omitted, the default master key will be used. This
+        field is used only when `sse_algorithm` value is **kms**.
         """
         return pulumi.get(self, "kms_key_id")
 
@@ -633,8 +704,8 @@ class _BucketState:
     @pulumi.getter(name="kmsKeyProjectId")
     def kms_key_project_id(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the project ID to which the KMS key belongs. If omitted, the ID
-        of the provider-level project will be used.
+        Specifies the project ID to which the KMS key belongs. This field is valid
+        only when `kms_key_id` is specified.
         """
         return pulumi.get(self, "kms_key_project_id")
 
@@ -724,7 +795,7 @@ class _BucketState:
     def quota(self) -> Optional[pulumi.Input[int]]:
         """
         Specifies bucket storage quota. Must be a positive integer in the unit of byte. The maximum
-        storage quota is 2<sup>63</sup> – 1 bytes. The default bucket storage quota is 0, indicating that the bucket storage
+        storage quota is 2<sup>63</sup> – 1 bytes. The default bucket storage quota is `0`, indicating that the bucket storage
         quota is not limited.
         """
         return pulumi.get(self, "quota")
@@ -745,6 +816,20 @@ class _BucketState:
     @region.setter
     def region(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "region", value)
+
+    @property
+    @pulumi.getter(name="sseAlgorithm")
+    def sse_algorithm(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the mode of encryption algorithm. The valid values are:
+        + **kms**: Server-side encryption with keys hosted by KMS are used to encrypt your objects.
+        + **AES256**: Server-side encryption with keys managed by OBS are used to encrypt your objects.
+        """
+        return pulumi.get(self, "sse_algorithm")
+
+    @sse_algorithm.setter
+    def sse_algorithm(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "sse_algorithm", value)
 
     @property
     @pulumi.getter(name="storageClass")
@@ -783,6 +868,25 @@ class _BucketState:
     @tags.setter
     def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]):
         pulumi.set(self, "tags", value)
+
+    @property
+    @pulumi.getter(name="userDomainNames")
+    def user_domain_names(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]:
+        """
+        Specifies the user domain names. The restriction requirements for this field
+        are as follows:
+        + Each value must meet the domain name rules.
+        + The maximum length of a domain name is 256 characters.
+        + A maximum of 100 custom domain names can be set for a bucket.
+        + A custom domain name can only be used by one bucket.
+        + Ensure the domain name has been licensed by the Ministry of Industry and Information Technology.
+        + The bound user domain names only support access over HTTP now.
+        """
+        return pulumi.get(self, "user_domain_names")
+
+    @user_domain_names.setter
+    def user_domain_names(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]):
+        pulumi.set(self, "user_domain_names", value)
 
     @property
     @pulumi.getter
@@ -831,8 +935,10 @@ class Bucket(pulumi.CustomResource):
                  policy_format: Optional[pulumi.Input[str]] = None,
                  quota: Optional[pulumi.Input[int]] = None,
                  region: Optional[pulumi.Input[str]] = None,
+                 sse_algorithm: Optional[pulumi.Input[str]] = None,
                  storage_class: Optional[pulumi.Input[str]] = None,
                  tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
+                 user_domain_names: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  versioning: Optional[pulumi.Input[bool]] = None,
                  website: Optional[pulumi.Input[pulumi.InputType['BucketWebsiteArgs']]] = None,
                  __props__=None):
@@ -871,6 +977,8 @@ class Bucket(pulumi.CustomResource):
         import pulumi
         import pulumi_huaweicloud as huaweicloud
 
+        config = pulumi.Config()
+        agency_name = config.require_object("agencyName")
         log_bucket = huaweicloud.obs.Bucket("logBucket",
             bucket="my-tf-log-bucket",
             acl="log-delivery-write")
@@ -880,6 +988,7 @@ class Bucket(pulumi.CustomResource):
             loggings=[huaweicloud.obs.BucketLoggingArgs(
                 target_bucket=log_bucket.id,
                 target_prefix="log/",
+                agency=agency_name,
             )])
         ```
         ### Static Website Hosting
@@ -937,6 +1046,9 @@ class Bucket(pulumi.CustomResource):
             bucket="my-bucket",
             lifecycle_rules=[
                 huaweicloud.obs.BucketLifecycleRuleArgs(
+                    abort_incomplete_multipart_uploads=[huaweicloud.obs.BucketLifecycleRuleAbortIncompleteMultipartUploadArgs(
+                        days=360,
+                    )],
                     enabled=True,
                     expirations=[huaweicloud.obs.BucketLifecycleRuleExpirationArgs(
                         days=365,
@@ -970,27 +1082,42 @@ class Bucket(pulumi.CustomResource):
                             storage_class="COLD",
                         ),
                     ],
-                    prefix="tmp/",
                 ),
             ],
             versioning=True)
         ```
+        ### using encryption
+
+        ```python
+        import pulumi
+        import pulumi_huaweicloud as huaweicloud
+
+        bucket = huaweicloud.obs.Bucket("bucket",
+            acl="private",
+            bucket="my-tf-encryption-bucket",
+            encryption=True,
+            storage_class="STANDARD",
+            tags={
+                "foo": "bar",
+                "key": "value",
+            })
+        ```
 
         ## Import
 
-        OBS bucket can be imported using the `bucket`, e.g.
+        OBS bucket can be imported using the `bucket`, e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:Obs/bucket:Bucket bucket <bucket-name>
         ```
 
-         OBS bucket with S3 foramt bucket policy can be imported using the `bucket` and "s3" by a slash, e.g.
+         OBS bucket with S3 format bucket policy can be imported using the `bucket` and "s3" by a slash, e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:Obs/bucket:Bucket bucket_with_s3_policy <bucket-name>/s3
         ```
 
-         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response. The missing attributes include `acl` and `force_destroy`. It is generally recommended running `terraform plan` after importing an OBS bucket. Also you can ignore changes as below. resource "huaweicloud_obs_bucket" "bucket" {
+         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response. The missing attributes include `acl` and `force_destroy`. It is generally recommended running `terraform plan` after importing an OBS bucket. Also you can ignore changes as below. hcl resource "huaweicloud_obs_bucket" "bucket" {
 
          ...
 
@@ -1019,14 +1146,15 @@ class Bucket(pulumi.CustomResource):
                + If the name contains any periods (.), a security certificate verification message may appear when you access the
                bucket or its objects by entering a domain name.
         :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['BucketCorsRuleArgs']]]] cors_rules: A rule of Cross-Origin Resource Sharing (documented below).
-        :param pulumi.Input[bool] encryption: Whether enable default server-side encryption of the bucket in SSE-KMS mode.
+        :param pulumi.Input[bool] encryption: Whether to enable default server-side encryption of the bucket.
         :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project id of the OBS bucket.
                Defaults to `0`.
         :param pulumi.Input[bool] force_destroy: A boolean that indicates all objects should be deleted from the bucket, so that the
                bucket can be destroyed without error. Default to `false`.
-        :param pulumi.Input[str] kms_key_id: Specifies the ID of a KMS key. If omitted, the default master key will be used.
-        :param pulumi.Input[str] kms_key_project_id: Specifies the project ID to which the KMS key belongs. If omitted, the ID
-               of the provider-level project will be used.
+        :param pulumi.Input[str] kms_key_id: Specifies the ID of a KMS key. If omitted, the default master key will be used. This
+               field is used only when `sse_algorithm` value is **kms**.
+        :param pulumi.Input[str] kms_key_project_id: Specifies the project ID to which the KMS key belongs. This field is valid
+               only when `kms_key_id` is specified.
         :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['BucketLifecycleRuleArgs']]]] lifecycle_rules: A configuration of object lifecycle management (documented below).
         :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['BucketLoggingArgs']]]] loggings: A settings of bucket logging (documented below).
         :param pulumi.Input[bool] multi_az: Whether enable the multi-AZ mode for the bucket. When the multi-AZ mode is
@@ -1039,13 +1167,24 @@ class Bucket(pulumi.CustomResource):
         :param pulumi.Input[str] policy_format: Specifies the policy format, the supported values are *obs* and *s3*. Defaults
                to *obs*.
         :param pulumi.Input[int] quota: Specifies bucket storage quota. Must be a positive integer in the unit of byte. The maximum
-               storage quota is 2<sup>63</sup> – 1 bytes. The default bucket storage quota is 0, indicating that the bucket storage
+               storage quota is 2<sup>63</sup> – 1 bytes. The default bucket storage quota is `0`, indicating that the bucket storage
                quota is not limited.
         :param pulumi.Input[str] region: Specifies the region where this bucket will be created. If not specified, used
                the region by the provider. Changing this will create a new bucket.
+        :param pulumi.Input[str] sse_algorithm: Specifies the mode of encryption algorithm. The valid values are:
+               + **kms**: Server-side encryption with keys hosted by KMS are used to encrypt your objects.
+               + **AES256**: Server-side encryption with keys managed by OBS are used to encrypt your objects.
         :param pulumi.Input[str] storage_class: Specifies the storage class of the bucket. OBS provides three storage classes:
                "STANDARD", "WARM" (Infrequent Access) and "COLD" (Archive). Defaults to `STANDARD`.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: A mapping of tags to assign to the bucket. Each tag is represented by one key-value pair.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] user_domain_names: Specifies the user domain names. The restriction requirements for this field
+               are as follows:
+               + Each value must meet the domain name rules.
+               + The maximum length of a domain name is 256 characters.
+               + A maximum of 100 custom domain names can be set for a bucket.
+               + A custom domain name can only be used by one bucket.
+               + Ensure the domain name has been licensed by the Ministry of Industry and Information Technology.
+               + The bound user domain names only support access over HTTP now.
         :param pulumi.Input[bool] versioning: Whether enable versioning. Once you version-enable a bucket, it can never return to an
                unversioned state. You can, however, suspend versioning on that bucket.
         :param pulumi.Input[pulumi.InputType['BucketWebsiteArgs']] website: A website object (documented below).
@@ -1091,6 +1230,8 @@ class Bucket(pulumi.CustomResource):
         import pulumi
         import pulumi_huaweicloud as huaweicloud
 
+        config = pulumi.Config()
+        agency_name = config.require_object("agencyName")
         log_bucket = huaweicloud.obs.Bucket("logBucket",
             bucket="my-tf-log-bucket",
             acl="log-delivery-write")
@@ -1100,6 +1241,7 @@ class Bucket(pulumi.CustomResource):
             loggings=[huaweicloud.obs.BucketLoggingArgs(
                 target_bucket=log_bucket.id,
                 target_prefix="log/",
+                agency=agency_name,
             )])
         ```
         ### Static Website Hosting
@@ -1157,6 +1299,9 @@ class Bucket(pulumi.CustomResource):
             bucket="my-bucket",
             lifecycle_rules=[
                 huaweicloud.obs.BucketLifecycleRuleArgs(
+                    abort_incomplete_multipart_uploads=[huaweicloud.obs.BucketLifecycleRuleAbortIncompleteMultipartUploadArgs(
+                        days=360,
+                    )],
                     enabled=True,
                     expirations=[huaweicloud.obs.BucketLifecycleRuleExpirationArgs(
                         days=365,
@@ -1190,27 +1335,42 @@ class Bucket(pulumi.CustomResource):
                             storage_class="COLD",
                         ),
                     ],
-                    prefix="tmp/",
                 ),
             ],
             versioning=True)
         ```
+        ### using encryption
+
+        ```python
+        import pulumi
+        import pulumi_huaweicloud as huaweicloud
+
+        bucket = huaweicloud.obs.Bucket("bucket",
+            acl="private",
+            bucket="my-tf-encryption-bucket",
+            encryption=True,
+            storage_class="STANDARD",
+            tags={
+                "foo": "bar",
+                "key": "value",
+            })
+        ```
 
         ## Import
 
-        OBS bucket can be imported using the `bucket`, e.g.
+        OBS bucket can be imported using the `bucket`, e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:Obs/bucket:Bucket bucket <bucket-name>
         ```
 
-         OBS bucket with S3 foramt bucket policy can be imported using the `bucket` and "s3" by a slash, e.g.
+         OBS bucket with S3 format bucket policy can be imported using the `bucket` and "s3" by a slash, e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:Obs/bucket:Bucket bucket_with_s3_policy <bucket-name>/s3
         ```
 
-         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response. The missing attributes include `acl` and `force_destroy`. It is generally recommended running `terraform plan` after importing an OBS bucket. Also you can ignore changes as below. resource "huaweicloud_obs_bucket" "bucket" {
+         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response. The missing attributes include `acl` and `force_destroy`. It is generally recommended running `terraform plan` after importing an OBS bucket. Also you can ignore changes as below. hcl resource "huaweicloud_obs_bucket" "bucket" {
 
          ...
 
@@ -1255,8 +1415,10 @@ class Bucket(pulumi.CustomResource):
                  policy_format: Optional[pulumi.Input[str]] = None,
                  quota: Optional[pulumi.Input[int]] = None,
                  region: Optional[pulumi.Input[str]] = None,
+                 sse_algorithm: Optional[pulumi.Input[str]] = None,
                  storage_class: Optional[pulumi.Input[str]] = None,
                  tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
+                 user_domain_names: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  versioning: Optional[pulumi.Input[bool]] = None,
                  website: Optional[pulumi.Input[pulumi.InputType['BucketWebsiteArgs']]] = None,
                  __props__=None):
@@ -1286,8 +1448,10 @@ class Bucket(pulumi.CustomResource):
             __props__.__dict__["policy_format"] = policy_format
             __props__.__dict__["quota"] = quota
             __props__.__dict__["region"] = region
+            __props__.__dict__["sse_algorithm"] = sse_algorithm
             __props__.__dict__["storage_class"] = storage_class
             __props__.__dict__["tags"] = tags
+            __props__.__dict__["user_domain_names"] = user_domain_names
             __props__.__dict__["versioning"] = versioning
             __props__.__dict__["website"] = website
             __props__.__dict__["bucket_domain_name"] = None
@@ -1321,9 +1485,11 @@ class Bucket(pulumi.CustomResource):
             policy_format: Optional[pulumi.Input[str]] = None,
             quota: Optional[pulumi.Input[int]] = None,
             region: Optional[pulumi.Input[str]] = None,
+            sse_algorithm: Optional[pulumi.Input[str]] = None,
             storage_class: Optional[pulumi.Input[str]] = None,
             storage_infos: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['BucketStorageInfoArgs']]]]] = None,
             tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
+            user_domain_names: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
             versioning: Optional[pulumi.Input[bool]] = None,
             website: Optional[pulumi.Input[pulumi.InputType['BucketWebsiteArgs']]] = None) -> 'Bucket':
         """
@@ -1348,14 +1514,15 @@ class Bucket(pulumi.CustomResource):
         :param pulumi.Input[str] bucket_domain_name: The bucket domain name. Will be of format `bucketname.obs.region.myhuaweicloud.com`.
         :param pulumi.Input[str] bucket_version: The OBS version of the bucket.
         :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['BucketCorsRuleArgs']]]] cors_rules: A rule of Cross-Origin Resource Sharing (documented below).
-        :param pulumi.Input[bool] encryption: Whether enable default server-side encryption of the bucket in SSE-KMS mode.
+        :param pulumi.Input[bool] encryption: Whether to enable default server-side encryption of the bucket.
         :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project id of the OBS bucket.
                Defaults to `0`.
         :param pulumi.Input[bool] force_destroy: A boolean that indicates all objects should be deleted from the bucket, so that the
                bucket can be destroyed without error. Default to `false`.
-        :param pulumi.Input[str] kms_key_id: Specifies the ID of a KMS key. If omitted, the default master key will be used.
-        :param pulumi.Input[str] kms_key_project_id: Specifies the project ID to which the KMS key belongs. If omitted, the ID
-               of the provider-level project will be used.
+        :param pulumi.Input[str] kms_key_id: Specifies the ID of a KMS key. If omitted, the default master key will be used. This
+               field is used only when `sse_algorithm` value is **kms**.
+        :param pulumi.Input[str] kms_key_project_id: Specifies the project ID to which the KMS key belongs. This field is valid
+               only when `kms_key_id` is specified.
         :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['BucketLifecycleRuleArgs']]]] lifecycle_rules: A configuration of object lifecycle management (documented below).
         :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['BucketLoggingArgs']]]] loggings: A settings of bucket logging (documented below).
         :param pulumi.Input[bool] multi_az: Whether enable the multi-AZ mode for the bucket. When the multi-AZ mode is
@@ -1368,15 +1535,26 @@ class Bucket(pulumi.CustomResource):
         :param pulumi.Input[str] policy_format: Specifies the policy format, the supported values are *obs* and *s3*. Defaults
                to *obs*.
         :param pulumi.Input[int] quota: Specifies bucket storage quota. Must be a positive integer in the unit of byte. The maximum
-               storage quota is 2<sup>63</sup> – 1 bytes. The default bucket storage quota is 0, indicating that the bucket storage
+               storage quota is 2<sup>63</sup> – 1 bytes. The default bucket storage quota is `0`, indicating that the bucket storage
                quota is not limited.
         :param pulumi.Input[str] region: Specifies the region where this bucket will be created. If not specified, used
                the region by the provider. Changing this will create a new bucket.
+        :param pulumi.Input[str] sse_algorithm: Specifies the mode of encryption algorithm. The valid values are:
+               + **kms**: Server-side encryption with keys hosted by KMS are used to encrypt your objects.
+               + **AES256**: Server-side encryption with keys managed by OBS are used to encrypt your objects.
         :param pulumi.Input[str] storage_class: Specifies the storage class of the bucket. OBS provides three storage classes:
                "STANDARD", "WARM" (Infrequent Access) and "COLD" (Archive). Defaults to `STANDARD`.
         :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['BucketStorageInfoArgs']]]] storage_infos: The OBS storage info of the bucket.
                The object structure is documented below.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: A mapping of tags to assign to the bucket. Each tag is represented by one key-value pair.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] user_domain_names: Specifies the user domain names. The restriction requirements for this field
+               are as follows:
+               + Each value must meet the domain name rules.
+               + The maximum length of a domain name is 256 characters.
+               + A maximum of 100 custom domain names can be set for a bucket.
+               + A custom domain name can only be used by one bucket.
+               + Ensure the domain name has been licensed by the Ministry of Industry and Information Technology.
+               + The bound user domain names only support access over HTTP now.
         :param pulumi.Input[bool] versioning: Whether enable versioning. Once you version-enable a bucket, it can never return to an
                unversioned state. You can, however, suspend versioning on that bucket.
         :param pulumi.Input[pulumi.InputType['BucketWebsiteArgs']] website: A website object (documented below).
@@ -1403,9 +1581,11 @@ class Bucket(pulumi.CustomResource):
         __props__.__dict__["policy_format"] = policy_format
         __props__.__dict__["quota"] = quota
         __props__.__dict__["region"] = region
+        __props__.__dict__["sse_algorithm"] = sse_algorithm
         __props__.__dict__["storage_class"] = storage_class
         __props__.__dict__["storage_infos"] = storage_infos
         __props__.__dict__["tags"] = tags
+        __props__.__dict__["user_domain_names"] = user_domain_names
         __props__.__dict__["versioning"] = versioning
         __props__.__dict__["website"] = website
         return Bucket(resource_name, opts=opts, __props__=__props__)
@@ -1464,7 +1644,7 @@ class Bucket(pulumi.CustomResource):
     @pulumi.getter
     def encryption(self) -> pulumi.Output[Optional[bool]]:
         """
-        Whether enable default server-side encryption of the bucket in SSE-KMS mode.
+        Whether to enable default server-side encryption of the bucket.
         """
         return pulumi.get(self, "encryption")
 
@@ -1490,7 +1670,8 @@ class Bucket(pulumi.CustomResource):
     @pulumi.getter(name="kmsKeyId")
     def kms_key_id(self) -> pulumi.Output[Optional[str]]:
         """
-        Specifies the ID of a KMS key. If omitted, the default master key will be used.
+        Specifies the ID of a KMS key. If omitted, the default master key will be used. This
+        field is used only when `sse_algorithm` value is **kms**.
         """
         return pulumi.get(self, "kms_key_id")
 
@@ -1498,8 +1679,8 @@ class Bucket(pulumi.CustomResource):
     @pulumi.getter(name="kmsKeyProjectId")
     def kms_key_project_id(self) -> pulumi.Output[str]:
         """
-        Specifies the project ID to which the KMS key belongs. If omitted, the ID
-        of the provider-level project will be used.
+        Specifies the project ID to which the KMS key belongs. This field is valid
+        only when `kms_key_id` is specified.
         """
         return pulumi.get(self, "kms_key_project_id")
 
@@ -1561,7 +1742,7 @@ class Bucket(pulumi.CustomResource):
     def quota(self) -> pulumi.Output[Optional[int]]:
         """
         Specifies bucket storage quota. Must be a positive integer in the unit of byte. The maximum
-        storage quota is 2<sup>63</sup> – 1 bytes. The default bucket storage quota is 0, indicating that the bucket storage
+        storage quota is 2<sup>63</sup> – 1 bytes. The default bucket storage quota is `0`, indicating that the bucket storage
         quota is not limited.
         """
         return pulumi.get(self, "quota")
@@ -1574,6 +1755,16 @@ class Bucket(pulumi.CustomResource):
         the region by the provider. Changing this will create a new bucket.
         """
         return pulumi.get(self, "region")
+
+    @property
+    @pulumi.getter(name="sseAlgorithm")
+    def sse_algorithm(self) -> pulumi.Output[str]:
+        """
+        Specifies the mode of encryption algorithm. The valid values are:
+        + **kms**: Server-side encryption with keys hosted by KMS are used to encrypt your objects.
+        + **AES256**: Server-side encryption with keys managed by OBS are used to encrypt your objects.
+        """
+        return pulumi.get(self, "sse_algorithm")
 
     @property
     @pulumi.getter(name="storageClass")
@@ -1600,6 +1791,21 @@ class Bucket(pulumi.CustomResource):
         A mapping of tags to assign to the bucket. Each tag is represented by one key-value pair.
         """
         return pulumi.get(self, "tags")
+
+    @property
+    @pulumi.getter(name="userDomainNames")
+    def user_domain_names(self) -> pulumi.Output[Sequence[str]]:
+        """
+        Specifies the user domain names. The restriction requirements for this field
+        are as follows:
+        + Each value must meet the domain name rules.
+        + The maximum length of a domain name is 256 characters.
+        + A maximum of 100 custom domain names can be set for a bucket.
+        + A custom domain name can only be used by one bucket.
+        + Ensure the domain name has been licensed by the Ministry of Industry and Information Technology.
+        + The bound user domain names only support access over HTTP now.
+        """
+        return pulumi.get(self, "user_domain_names")
 
     @property
     @pulumi.getter

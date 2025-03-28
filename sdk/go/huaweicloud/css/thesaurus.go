@@ -13,17 +13,49 @@ import (
 
 // Manages CSS thesaurus resource within HuaweiCloud
 //
-// > Only one thesaurus resource can be created for the specified cluster
+// > Only one thesaurus resource can be created for the specified cluster.
 //
 // ## Example Usage
+// ### Create a thesaurus
+//
+// ```go
+// package main
+//
+// import (
+//
+//	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud/Css"
+//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi/config"
+//
+// )
+//
+//	func main() {
+//		pulumi.Run(func(ctx *pulumi.Context) error {
+//			cfg := config.New(ctx, "")
+//			clusterId := cfg.RequireObject("clusterId")
+//			bucketName := cfg.RequireObject("bucketName")
+//			bucketObjKey := cfg.RequireObject("bucketObjKey")
+//			_, err := Css.NewThesaurus(ctx, "test", &Css.ThesaurusArgs{
+//				ClusterId:  pulumi.Any(clusterId),
+//				BucketName: pulumi.Any(bucketName),
+//				MainObject: pulumi.Any(bucketObjKey),
+//			})
+//			if err != nil {
+//				return err
+//			}
+//			return nil
+//		})
+//	}
+//
+// ```
 //
 // ## Import
 //
-// CSS thesaurus can be imported by `id`. For example,
+// CSS thesaurus can be imported by `id`, e.g. bash
 //
 // ```sh
 //
-//	$ pulumi import huaweicloud:Css/thesaurus:Thesaurus example e9ee3f48-f097-406a-aa74-cfece0af3e31
+//	$ pulumi import huaweicloud:Css/thesaurus:Thesaurus test <id>
 //
 // ```
 type Thesaurus struct {
@@ -36,16 +68,16 @@ type Thesaurus struct {
 	// Changing this parameter will create a new resource.
 	ClusterId pulumi.StringOutput `pulumi:"clusterId"`
 	// Specifies the path of the main thesaurus file object.
-	MainObject pulumi.StringPtrOutput `pulumi:"mainObject"`
+	MainObject pulumi.StringOutput `pulumi:"mainObject"`
 	// The region in which to create the thesaurus resource. If omitted, the
 	// provider-level region will be used. Changing this creates a new thesaurus resource.
 	Region pulumi.StringOutput `pulumi:"region"`
 	// Indicates the status of the thesaurus loading
 	Status pulumi.StringOutput `pulumi:"status"`
 	// Specifies the path of the stop word library file object.
-	StopObject pulumi.StringPtrOutput `pulumi:"stopObject"`
+	StopObject pulumi.StringOutput `pulumi:"stopObject"`
 	// Specifies the path of the synonyms thesaurus file object.
-	SynonymObject pulumi.StringPtrOutput `pulumi:"synonymObject"`
+	SynonymObject pulumi.StringOutput `pulumi:"synonymObject"`
 	// Specifies the time (UTC) when the thesaurus was modified. The format is ISO8601:YYYY-MM-DDThh:mm:ssZ
 	UpdateTime pulumi.StringOutput `pulumi:"updateTime"`
 }
@@ -270,8 +302,8 @@ func (o ThesaurusOutput) ClusterId() pulumi.StringOutput {
 }
 
 // Specifies the path of the main thesaurus file object.
-func (o ThesaurusOutput) MainObject() pulumi.StringPtrOutput {
-	return o.ApplyT(func(v *Thesaurus) pulumi.StringPtrOutput { return v.MainObject }).(pulumi.StringPtrOutput)
+func (o ThesaurusOutput) MainObject() pulumi.StringOutput {
+	return o.ApplyT(func(v *Thesaurus) pulumi.StringOutput { return v.MainObject }).(pulumi.StringOutput)
 }
 
 // The region in which to create the thesaurus resource. If omitted, the
@@ -286,13 +318,13 @@ func (o ThesaurusOutput) Status() pulumi.StringOutput {
 }
 
 // Specifies the path of the stop word library file object.
-func (o ThesaurusOutput) StopObject() pulumi.StringPtrOutput {
-	return o.ApplyT(func(v *Thesaurus) pulumi.StringPtrOutput { return v.StopObject }).(pulumi.StringPtrOutput)
+func (o ThesaurusOutput) StopObject() pulumi.StringOutput {
+	return o.ApplyT(func(v *Thesaurus) pulumi.StringOutput { return v.StopObject }).(pulumi.StringOutput)
 }
 
 // Specifies the path of the synonyms thesaurus file object.
-func (o ThesaurusOutput) SynonymObject() pulumi.StringPtrOutput {
-	return o.ApplyT(func(v *Thesaurus) pulumi.StringPtrOutput { return v.SynonymObject }).(pulumi.StringPtrOutput)
+func (o ThesaurusOutput) SynonymObject() pulumi.StringOutput {
+	return o.ApplyT(func(v *Thesaurus) pulumi.StringOutput { return v.SynonymObject }).(pulumi.StringOutput)
 }
 
 // Specifies the time (UTC) when the thesaurus was modified. The format is ISO8601:YYYY-MM-DDThh:mm:ssZ

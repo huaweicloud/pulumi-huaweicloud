@@ -57,7 +57,7 @@ type LookupSecgroupArgs struct {
 	// Specifies the region in which to obtain the security group. If omitted, the
 	// provider-level region will be used.
 	Region *string `pulumi:"region"`
-	// Specifiest he ID of the security group.
+	// Specifies the ID of the security group.
 	SecgroupId *string `pulumi:"secgroupId"`
 }
 
@@ -102,7 +102,7 @@ type LookupSecgroupOutputArgs struct {
 	// Specifies the region in which to obtain the security group. If omitted, the
 	// provider-level region will be used.
 	Region pulumi.StringPtrInput `pulumi:"region"`
-	// Specifiest he ID of the security group.
+	// Specifies the ID of the security group.
 	SecgroupId pulumi.StringPtrInput `pulumi:"secgroupId"`
 }
 

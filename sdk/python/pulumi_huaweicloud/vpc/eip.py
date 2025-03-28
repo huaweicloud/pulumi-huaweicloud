@@ -36,9 +36,8 @@ class EipArgs:
         :param pulumi.Input[str] auto_renew: Specifies whether auto renew is enabled.  
                Valid values are **true** and **false**. Defaults to **false**.
         :param pulumi.Input[str] charging_mode: Specifies the charging mode of the EIP.  
-               The valid values are **prePaid** and **postPaid**, defaults to **postPaid**. Changing this will create a new resource.
-        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID to which the EIP belongs.  
-               Changing this will create a new resource.
+               The valid values are **prePaid** and **postPaid**, defaults to **postPaid**.
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID to which the EIP belongs.
         :param pulumi.Input[str] name: Specifies the bandwidth name.  
                The name can contain `1` to `64` characters, including letters, digits, underscores (_), hyphens (-), and periods (.).
                This parameter is mandatory when `share_type` is set to **PER**.
@@ -47,7 +46,6 @@ class EipArgs:
                + If `period_unit` is set to **year**, the value ranges from `1` to `3`.
         :param pulumi.Input[str] period_unit: Specifies the charging period unit of the EIP.  
                Valid values are **month** and **year**. This parameter is mandatory if `charging_mode` is set to **prePaid**.
-               Changing this will create a new resource.
         :param pulumi.Input[str] region: Specifies the region in which to create the EIP resource.  
                If omitted, the provider-level region will be used. Changing this will create a new resource.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the EIP.
@@ -129,7 +127,7 @@ class EipArgs:
     def charging_mode(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the charging mode of the EIP.  
-        The valid values are **prePaid** and **postPaid**, defaults to **postPaid**. Changing this will create a new resource.
+        The valid values are **prePaid** and **postPaid**, defaults to **postPaid**.
         """
         return pulumi.get(self, "charging_mode")
 
@@ -141,8 +139,7 @@ class EipArgs:
     @pulumi.getter(name="enterpriseProjectId")
     def enterprise_project_id(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the enterprise project ID to which the EIP belongs.  
-        Changing this will create a new resource.
+        Specifies the enterprise project ID to which the EIP belongs.
         """
         return pulumi.get(self, "enterprise_project_id")
 
@@ -184,7 +181,6 @@ class EipArgs:
         """
         Specifies the charging period unit of the EIP.  
         Valid values are **month** and **year**. This parameter is mandatory if `charging_mode` is set to **prePaid**.
-        Changing this will create a new resource.
         """
         return pulumi.get(self, "period_unit")
 
@@ -222,11 +218,16 @@ class EipArgs:
 class _EipState:
     def __init__(__self__, *,
                  address: Optional[pulumi.Input[str]] = None,
+                 associate_id: Optional[pulumi.Input[str]] = None,
+                 associate_type: Optional[pulumi.Input[str]] = None,
                  auto_pay: Optional[pulumi.Input[str]] = None,
                  auto_renew: Optional[pulumi.Input[str]] = None,
                  bandwidth: Optional[pulumi.Input['EipBandwidthArgs']] = None,
                  charging_mode: Optional[pulumi.Input[str]] = None,
+                 created_at: Optional[pulumi.Input[str]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
+                 instance_id: Optional[pulumi.Input[str]] = None,
+                 instance_type: Optional[pulumi.Input[str]] = None,
                  ipv6_address: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  period: Optional[pulumi.Input[int]] = None,
@@ -236,18 +237,23 @@ class _EipState:
                  publicip: Optional[pulumi.Input['EipPublicipArgs']] = None,
                  region: Optional[pulumi.Input[str]] = None,
                  status: Optional[pulumi.Input[str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None):
+                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
+                 updated_at: Optional[pulumi.Input[str]] = None):
         """
         Input properties used for looking up and filtering Eip resources.
         :param pulumi.Input[str] address: The IPv4 address of the EIP.
+        :param pulumi.Input[str] associate_id: The associate id of EIP.
+        :param pulumi.Input[str] associate_type: The associate type of EIP. Values are **PORT**, **NATGW**, **ELB**, **ELBV1** and **VPN**.
         :param pulumi.Input[str] auto_renew: Specifies whether auto renew is enabled.  
                Valid values are **true** and **false**. Defaults to **false**.
         :param pulumi.Input['EipBandwidthArgs'] bandwidth: Specifies the bandwidth configuration.  
                The object structure is documented below.
         :param pulumi.Input[str] charging_mode: Specifies the charging mode of the EIP.  
-               The valid values are **prePaid** and **postPaid**, defaults to **postPaid**. Changing this will create a new resource.
-        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID to which the EIP belongs.  
-               Changing this will create a new resource.
+               The valid values are **prePaid** and **postPaid**, defaults to **postPaid**.
+        :param pulumi.Input[str] created_at: The create time of EIP.
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID to which the EIP belongs.
+        :param pulumi.Input[str] instance_id: The instance id to which the port belongs. Return when `associate_type` is **PORT**.
+        :param pulumi.Input[str] instance_type: The instance type to which the port belongs. Return when `associate_type` is **PORT**.
         :param pulumi.Input[str] ipv6_address: The IPv6 address of the EIP.
         :param pulumi.Input[str] name: Specifies the bandwidth name.  
                The name can contain `1` to `64` characters, including letters, digits, underscores (_), hyphens (-), and periods (.).
@@ -257,7 +263,6 @@ class _EipState:
                + If `period_unit` is set to **year**, the value ranges from `1` to `3`.
         :param pulumi.Input[str] period_unit: Specifies the charging period unit of the EIP.  
                Valid values are **month** and **year**. This parameter is mandatory if `charging_mode` is set to **prePaid**.
-               Changing this will create a new resource.
         :param pulumi.Input[str] port_id: The port ID which the EIP associated with.
         :param pulumi.Input[str] private_ip: The private IP address bound to the EIP.
         :param pulumi.Input['EipPublicipArgs'] publicip: Specifies the EIP configuration.  
@@ -266,9 +271,14 @@ class _EipState:
                If omitted, the provider-level region will be used. Changing this will create a new resource.
         :param pulumi.Input[str] status: The status of EIP.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the EIP.
+        :param pulumi.Input[str] updated_at: The update time of EIP.
         """
         if address is not None:
             pulumi.set(__self__, "address", address)
+        if associate_id is not None:
+            pulumi.set(__self__, "associate_id", associate_id)
+        if associate_type is not None:
+            pulumi.set(__self__, "associate_type", associate_type)
         if auto_pay is not None:
             warnings.warn("""Deprecated""", DeprecationWarning)
             pulumi.log.warn("""auto_pay is deprecated: Deprecated""")
@@ -280,8 +290,14 @@ class _EipState:
             pulumi.set(__self__, "bandwidth", bandwidth)
         if charging_mode is not None:
             pulumi.set(__self__, "charging_mode", charging_mode)
+        if created_at is not None:
+            pulumi.set(__self__, "created_at", created_at)
         if enterprise_project_id is not None:
             pulumi.set(__self__, "enterprise_project_id", enterprise_project_id)
+        if instance_id is not None:
+            pulumi.set(__self__, "instance_id", instance_id)
+        if instance_type is not None:
+            pulumi.set(__self__, "instance_type", instance_type)
         if ipv6_address is not None:
             pulumi.set(__self__, "ipv6_address", ipv6_address)
         if name is not None:
@@ -302,6 +318,8 @@ class _EipState:
             pulumi.set(__self__, "status", status)
         if tags is not None:
             pulumi.set(__self__, "tags", tags)
+        if updated_at is not None:
+            pulumi.set(__self__, "updated_at", updated_at)
 
     @property
     @pulumi.getter
@@ -314,6 +332,30 @@ class _EipState:
     @address.setter
     def address(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "address", value)
+
+    @property
+    @pulumi.getter(name="associateId")
+    def associate_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        The associate id of EIP.
+        """
+        return pulumi.get(self, "associate_id")
+
+    @associate_id.setter
+    def associate_id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "associate_id", value)
+
+    @property
+    @pulumi.getter(name="associateType")
+    def associate_type(self) -> Optional[pulumi.Input[str]]:
+        """
+        The associate type of EIP. Values are **PORT**, **NATGW**, **ELB**, **ELBV1** and **VPN**.
+        """
+        return pulumi.get(self, "associate_type")
+
+    @associate_type.setter
+    def associate_type(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "associate_type", value)
 
     @property
     @pulumi.getter(name="autoPay")
@@ -355,7 +397,7 @@ class _EipState:
     def charging_mode(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the charging mode of the EIP.  
-        The valid values are **prePaid** and **postPaid**, defaults to **postPaid**. Changing this will create a new resource.
+        The valid values are **prePaid** and **postPaid**, defaults to **postPaid**.
         """
         return pulumi.get(self, "charging_mode")
 
@@ -364,17 +406,52 @@ class _EipState:
         pulumi.set(self, "charging_mode", value)
 
     @property
+    @pulumi.getter(name="createdAt")
+    def created_at(self) -> Optional[pulumi.Input[str]]:
+        """
+        The create time of EIP.
+        """
+        return pulumi.get(self, "created_at")
+
+    @created_at.setter
+    def created_at(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "created_at", value)
+
+    @property
     @pulumi.getter(name="enterpriseProjectId")
     def enterprise_project_id(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the enterprise project ID to which the EIP belongs.  
-        Changing this will create a new resource.
+        Specifies the enterprise project ID to which the EIP belongs.
         """
         return pulumi.get(self, "enterprise_project_id")
 
     @enterprise_project_id.setter
     def enterprise_project_id(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "enterprise_project_id", value)
+
+    @property
+    @pulumi.getter(name="instanceId")
+    def instance_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        The instance id to which the port belongs. Return when `associate_type` is **PORT**.
+        """
+        return pulumi.get(self, "instance_id")
+
+    @instance_id.setter
+    def instance_id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "instance_id", value)
+
+    @property
+    @pulumi.getter(name="instanceType")
+    def instance_type(self) -> Optional[pulumi.Input[str]]:
+        """
+        The instance type to which the port belongs. Return when `associate_type` is **PORT**.
+        """
+        return pulumi.get(self, "instance_type")
+
+    @instance_type.setter
+    def instance_type(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "instance_type", value)
 
     @property
     @pulumi.getter(name="ipv6Address")
@@ -422,7 +499,6 @@ class _EipState:
         """
         Specifies the charging period unit of the EIP.  
         Valid values are **month** and **year**. This parameter is mandatory if `charging_mode` is set to **prePaid**.
-        Changing this will create a new resource.
         """
         return pulumi.get(self, "period_unit")
 
@@ -504,6 +580,18 @@ class _EipState:
     def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]):
         pulumi.set(self, "tags", value)
 
+    @property
+    @pulumi.getter(name="updatedAt")
+    def updated_at(self) -> Optional[pulumi.Input[str]]:
+        """
+        The update time of EIP.
+        """
+        return pulumi.get(self, "updated_at")
+
+    @updated_at.setter
+    def updated_at(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "updated_at", value)
+
 
 class Eip(pulumi.CustomResource):
     @overload
@@ -562,7 +650,7 @@ class Eip(pulumi.CustomResource):
 
         ## Import
 
-        EIPs can be imported using the `id`, e.g.
+        EIPs can be imported using the `id`, e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:Vpc/eip:Eip test 2c7f39f3-702b-48d1-940c-b50384177ee1
@@ -575,9 +663,8 @@ class Eip(pulumi.CustomResource):
         :param pulumi.Input[pulumi.InputType['EipBandwidthArgs']] bandwidth: Specifies the bandwidth configuration.  
                The object structure is documented below.
         :param pulumi.Input[str] charging_mode: Specifies the charging mode of the EIP.  
-               The valid values are **prePaid** and **postPaid**, defaults to **postPaid**. Changing this will create a new resource.
-        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID to which the EIP belongs.  
-               Changing this will create a new resource.
+               The valid values are **prePaid** and **postPaid**, defaults to **postPaid**.
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID to which the EIP belongs.
         :param pulumi.Input[str] name: Specifies the bandwidth name.  
                The name can contain `1` to `64` characters, including letters, digits, underscores (_), hyphens (-), and periods (.).
                This parameter is mandatory when `share_type` is set to **PER**.
@@ -586,7 +673,6 @@ class Eip(pulumi.CustomResource):
                + If `period_unit` is set to **year**, the value ranges from `1` to `3`.
         :param pulumi.Input[str] period_unit: Specifies the charging period unit of the EIP.  
                Valid values are **month** and **year**. This parameter is mandatory if `charging_mode` is set to **prePaid**.
-               Changing this will create a new resource.
         :param pulumi.Input[pulumi.InputType['EipPublicipArgs']] publicip: Specifies the EIP configuration.  
                The object structure is documented below.
         :param pulumi.Input[str] region: Specifies the region in which to create the EIP resource.  
@@ -639,7 +725,7 @@ class Eip(pulumi.CustomResource):
 
         ## Import
 
-        EIPs can be imported using the `id`, e.g.
+        EIPs can be imported using the `id`, e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:Vpc/eip:Eip test 2c7f39f3-702b-48d1-940c-b50384177ee1
@@ -699,10 +785,16 @@ class Eip(pulumi.CustomResource):
             __props__.__dict__["region"] = region
             __props__.__dict__["tags"] = tags
             __props__.__dict__["address"] = None
+            __props__.__dict__["associate_id"] = None
+            __props__.__dict__["associate_type"] = None
+            __props__.__dict__["created_at"] = None
+            __props__.__dict__["instance_id"] = None
+            __props__.__dict__["instance_type"] = None
             __props__.__dict__["ipv6_address"] = None
             __props__.__dict__["port_id"] = None
             __props__.__dict__["private_ip"] = None
             __props__.__dict__["status"] = None
+            __props__.__dict__["updated_at"] = None
         super(Eip, __self__).__init__(
             'huaweicloud:Vpc/eip:Eip',
             resource_name,
@@ -714,11 +806,16 @@ class Eip(pulumi.CustomResource):
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
             address: Optional[pulumi.Input[str]] = None,
+            associate_id: Optional[pulumi.Input[str]] = None,
+            associate_type: Optional[pulumi.Input[str]] = None,
             auto_pay: Optional[pulumi.Input[str]] = None,
             auto_renew: Optional[pulumi.Input[str]] = None,
             bandwidth: Optional[pulumi.Input[pulumi.InputType['EipBandwidthArgs']]] = None,
             charging_mode: Optional[pulumi.Input[str]] = None,
+            created_at: Optional[pulumi.Input[str]] = None,
             enterprise_project_id: Optional[pulumi.Input[str]] = None,
+            instance_id: Optional[pulumi.Input[str]] = None,
+            instance_type: Optional[pulumi.Input[str]] = None,
             ipv6_address: Optional[pulumi.Input[str]] = None,
             name: Optional[pulumi.Input[str]] = None,
             period: Optional[pulumi.Input[int]] = None,
@@ -728,7 +825,8 @@ class Eip(pulumi.CustomResource):
             publicip: Optional[pulumi.Input[pulumi.InputType['EipPublicipArgs']]] = None,
             region: Optional[pulumi.Input[str]] = None,
             status: Optional[pulumi.Input[str]] = None,
-            tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None) -> 'Eip':
+            tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
+            updated_at: Optional[pulumi.Input[str]] = None) -> 'Eip':
         """
         Get an existing Eip resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.
@@ -737,14 +835,18 @@ class Eip(pulumi.CustomResource):
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[str] address: The IPv4 address of the EIP.
+        :param pulumi.Input[str] associate_id: The associate id of EIP.
+        :param pulumi.Input[str] associate_type: The associate type of EIP. Values are **PORT**, **NATGW**, **ELB**, **ELBV1** and **VPN**.
         :param pulumi.Input[str] auto_renew: Specifies whether auto renew is enabled.  
                Valid values are **true** and **false**. Defaults to **false**.
         :param pulumi.Input[pulumi.InputType['EipBandwidthArgs']] bandwidth: Specifies the bandwidth configuration.  
                The object structure is documented below.
         :param pulumi.Input[str] charging_mode: Specifies the charging mode of the EIP.  
-               The valid values are **prePaid** and **postPaid**, defaults to **postPaid**. Changing this will create a new resource.
-        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID to which the EIP belongs.  
-               Changing this will create a new resource.
+               The valid values are **prePaid** and **postPaid**, defaults to **postPaid**.
+        :param pulumi.Input[str] created_at: The create time of EIP.
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID to which the EIP belongs.
+        :param pulumi.Input[str] instance_id: The instance id to which the port belongs. Return when `associate_type` is **PORT**.
+        :param pulumi.Input[str] instance_type: The instance type to which the port belongs. Return when `associate_type` is **PORT**.
         :param pulumi.Input[str] ipv6_address: The IPv6 address of the EIP.
         :param pulumi.Input[str] name: Specifies the bandwidth name.  
                The name can contain `1` to `64` characters, including letters, digits, underscores (_), hyphens (-), and periods (.).
@@ -754,7 +856,6 @@ class Eip(pulumi.CustomResource):
                + If `period_unit` is set to **year**, the value ranges from `1` to `3`.
         :param pulumi.Input[str] period_unit: Specifies the charging period unit of the EIP.  
                Valid values are **month** and **year**. This parameter is mandatory if `charging_mode` is set to **prePaid**.
-               Changing this will create a new resource.
         :param pulumi.Input[str] port_id: The port ID which the EIP associated with.
         :param pulumi.Input[str] private_ip: The private IP address bound to the EIP.
         :param pulumi.Input[pulumi.InputType['EipPublicipArgs']] publicip: Specifies the EIP configuration.  
@@ -763,17 +864,23 @@ class Eip(pulumi.CustomResource):
                If omitted, the provider-level region will be used. Changing this will create a new resource.
         :param pulumi.Input[str] status: The status of EIP.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the EIP.
+        :param pulumi.Input[str] updated_at: The update time of EIP.
         """
         opts = pulumi.ResourceOptions.merge(opts, pulumi.ResourceOptions(id=id))
 
         __props__ = _EipState.__new__(_EipState)
 
         __props__.__dict__["address"] = address
+        __props__.__dict__["associate_id"] = associate_id
+        __props__.__dict__["associate_type"] = associate_type
         __props__.__dict__["auto_pay"] = auto_pay
         __props__.__dict__["auto_renew"] = auto_renew
         __props__.__dict__["bandwidth"] = bandwidth
         __props__.__dict__["charging_mode"] = charging_mode
+        __props__.__dict__["created_at"] = created_at
         __props__.__dict__["enterprise_project_id"] = enterprise_project_id
+        __props__.__dict__["instance_id"] = instance_id
+        __props__.__dict__["instance_type"] = instance_type
         __props__.__dict__["ipv6_address"] = ipv6_address
         __props__.__dict__["name"] = name
         __props__.__dict__["period"] = period
@@ -784,6 +891,7 @@ class Eip(pulumi.CustomResource):
         __props__.__dict__["region"] = region
         __props__.__dict__["status"] = status
         __props__.__dict__["tags"] = tags
+        __props__.__dict__["updated_at"] = updated_at
         return Eip(resource_name, opts=opts, __props__=__props__)
 
     @property
@@ -793,6 +901,22 @@ class Eip(pulumi.CustomResource):
         The IPv4 address of the EIP.
         """
         return pulumi.get(self, "address")
+
+    @property
+    @pulumi.getter(name="associateId")
+    def associate_id(self) -> pulumi.Output[str]:
+        """
+        The associate id of EIP.
+        """
+        return pulumi.get(self, "associate_id")
+
+    @property
+    @pulumi.getter(name="associateType")
+    def associate_type(self) -> pulumi.Output[str]:
+        """
+        The associate type of EIP. Values are **PORT**, **NATGW**, **ELB**, **ELBV1** and **VPN**.
+        """
+        return pulumi.get(self, "associate_type")
 
     @property
     @pulumi.getter(name="autoPay")
@@ -822,18 +946,41 @@ class Eip(pulumi.CustomResource):
     def charging_mode(self) -> pulumi.Output[str]:
         """
         Specifies the charging mode of the EIP.  
-        The valid values are **prePaid** and **postPaid**, defaults to **postPaid**. Changing this will create a new resource.
+        The valid values are **prePaid** and **postPaid**, defaults to **postPaid**.
         """
         return pulumi.get(self, "charging_mode")
+
+    @property
+    @pulumi.getter(name="createdAt")
+    def created_at(self) -> pulumi.Output[str]:
+        """
+        The create time of EIP.
+        """
+        return pulumi.get(self, "created_at")
 
     @property
     @pulumi.getter(name="enterpriseProjectId")
     def enterprise_project_id(self) -> pulumi.Output[str]:
         """
-        Specifies the enterprise project ID to which the EIP belongs.  
-        Changing this will create a new resource.
+        Specifies the enterprise project ID to which the EIP belongs.
         """
         return pulumi.get(self, "enterprise_project_id")
+
+    @property
+    @pulumi.getter(name="instanceId")
+    def instance_id(self) -> pulumi.Output[str]:
+        """
+        The instance id to which the port belongs. Return when `associate_type` is **PORT**.
+        """
+        return pulumi.get(self, "instance_id")
+
+    @property
+    @pulumi.getter(name="instanceType")
+    def instance_type(self) -> pulumi.Output[str]:
+        """
+        The instance type to which the port belongs. Return when `associate_type` is **PORT**.
+        """
+        return pulumi.get(self, "instance_type")
 
     @property
     @pulumi.getter(name="ipv6Address")
@@ -869,7 +1016,6 @@ class Eip(pulumi.CustomResource):
         """
         Specifies the charging period unit of the EIP.  
         Valid values are **month** and **year**. This parameter is mandatory if `charging_mode` is set to **prePaid**.
-        Changing this will create a new resource.
         """
         return pulumi.get(self, "period_unit")
 
@@ -922,4 +1068,12 @@ class Eip(pulumi.CustomResource):
         Specifies the key/value pairs to associate with the EIP.
         """
         return pulumi.get(self, "tags")
+
+    @property
+    @pulumi.getter(name="updatedAt")
+    def updated_at(self) -> pulumi.Output[str]:
+        """
+        The update time of EIP.
+        """
+        return pulumi.get(self, "updated_at")
 

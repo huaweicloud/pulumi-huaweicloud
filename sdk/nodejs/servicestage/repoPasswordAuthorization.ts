@@ -10,7 +10,7 @@ import * as utilities from "../utilities";
  *
  * ## Import
  *
- * Authorizations can be imported using their `id` or `name`, e.g.
+ * Authorizations can be imported using their `id` or `name`, e.g.bash
  *
  * ```sh
  *  $ pulumi import huaweicloud:ServiceStage/repoPasswordAuthorization:RepoPasswordAuthorization test terraform-test
@@ -45,9 +45,9 @@ export class RepoPasswordAuthorization extends pulumi.CustomResource {
     }
 
     /**
-     * Specified the authorization name. The name can contain of 4 to 63 characters,
-     * only letters, digits, underscores (_), hyphens (-) and dots (.) are allowed.
-     * Changing this parameter will create a new authorization.
+     * Specified the authorization name.  
+     * The name can contain of `4` to `63` characters, only letters, digits, underscores (_), hyphens (-) and dots (.) are
+     * allowed. Changing this parameter will create a new authorization.
      */
     public readonly name!: pulumi.Output<string>;
     /**
@@ -119,9 +119,9 @@ export class RepoPasswordAuthorization extends pulumi.CustomResource {
  */
 export interface RepoPasswordAuthorizationState {
     /**
-     * Specified the authorization name. The name can contain of 4 to 63 characters,
-     * only letters, digits, underscores (_), hyphens (-) and dots (.) are allowed.
-     * Changing this parameter will create a new authorization.
+     * Specified the authorization name.  
+     * The name can contain of `4` to `63` characters, only letters, digits, underscores (_), hyphens (-) and dots (.) are
+     * allowed. Changing this parameter will create a new authorization.
      */
     name?: pulumi.Input<string>;
     /**
@@ -154,9 +154,9 @@ export interface RepoPasswordAuthorizationState {
  */
 export interface RepoPasswordAuthorizationArgs {
     /**
-     * Specified the authorization name. The name can contain of 4 to 63 characters,
-     * only letters, digits, underscores (_), hyphens (-) and dots (.) are allowed.
-     * Changing this parameter will create a new authorization.
+     * Specified the authorization name.  
+     * The name can contain of `4` to `63` characters, only letters, digits, underscores (_), hyphens (-) and dots (.) are
+     * allowed. Changing this parameter will create a new authorization.
      */
     name?: pulumi.Input<string>;
     /**

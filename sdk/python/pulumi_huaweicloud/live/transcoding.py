@@ -21,22 +21,28 @@ class TranscodingArgs:
                  templates: pulumi.Input[Sequence[pulumi.Input['TranscodingTemplateArgs']]],
                  video_encoding: pulumi.Input[str],
                  low_bitrate_hd: Optional[pulumi.Input[bool]] = None,
-                 region: Optional[pulumi.Input[str]] = None):
+                 region: Optional[pulumi.Input[str]] = None,
+                 trans_type: Optional[pulumi.Input[str]] = None):
         """
         The set of arguments for constructing a Transcoding resource.
         :param pulumi.Input[str] app_name: Specifies the application name.
                Changing this parameter will create a new resource.
         :param pulumi.Input[str] domain_name: Specifies the ingest domain name.
                Changing this parameter will create a new resource.
-        :param pulumi.Input[Sequence[pulumi.Input['TranscodingTemplateArgs']]] templates: Specifies the video quality templates.
-               The object structure is documented below. A maximum of 4 templates can be added.
+        :param pulumi.Input[Sequence[pulumi.Input['TranscodingTemplateArgs']]] templates: Specifies the video quality templates. A maximum of `4` templates can be added.
+               The templates structure is documented below.
                For resolution and bitrate settings in the presets,
                please refer to the [document](https://support.huaweicloud.com/intl/en-us/usermanual-live/live01000802.html).
         :param pulumi.Input[str] video_encoding: Specifies the video codec. The valid values are **H264** and **H265**.
         :param pulumi.Input[bool] low_bitrate_hd: Specifies whether to enable low bitrate HD rates. If enabled
-               the output media will have a lower bitrate with the same image quality. Defaults to `false`.
-        :param pulumi.Input[str] region: Specifies the region in which to create this resource. If omitted,
-               the provider-level region will be used. Changing this parameter will create a new resource.
+               the output media will have a lower bitrate with the same image quality. Defaults to **false**.
+        :param pulumi.Input[str] region: Specifies the region in which to create this resource.
+               If omitted, the provider-level region will be used.
+               Changing this parameter will create a new resource.
+        :param pulumi.Input[str] trans_type: Specifies the transcoding stream trigger mode.
+               The valid values are as follows:
+               + **play**: Pull stream triggers transcoding.
+               + **publish**: Push stream triggers transcoding.
         """
         pulumi.set(__self__, "app_name", app_name)
         pulumi.set(__self__, "domain_name", domain_name)
@@ -46,6 +52,8 @@ class TranscodingArgs:
             pulumi.set(__self__, "low_bitrate_hd", low_bitrate_hd)
         if region is not None:
             pulumi.set(__self__, "region", region)
+        if trans_type is not None:
+            pulumi.set(__self__, "trans_type", trans_type)
 
     @property
     @pulumi.getter(name="appName")
@@ -77,8 +85,8 @@ class TranscodingArgs:
     @pulumi.getter
     def templates(self) -> pulumi.Input[Sequence[pulumi.Input['TranscodingTemplateArgs']]]:
         """
-        Specifies the video quality templates.
-        The object structure is documented below. A maximum of 4 templates can be added.
+        Specifies the video quality templates. A maximum of `4` templates can be added.
+        The templates structure is documented below.
         For resolution and bitrate settings in the presets,
         please refer to the [document](https://support.huaweicloud.com/intl/en-us/usermanual-live/live01000802.html).
         """
@@ -105,7 +113,7 @@ class TranscodingArgs:
     def low_bitrate_hd(self) -> Optional[pulumi.Input[bool]]:
         """
         Specifies whether to enable low bitrate HD rates. If enabled
-        the output media will have a lower bitrate with the same image quality. Defaults to `false`.
+        the output media will have a lower bitrate with the same image quality. Defaults to **false**.
         """
         return pulumi.get(self, "low_bitrate_hd")
 
@@ -117,14 +125,30 @@ class TranscodingArgs:
     @pulumi.getter
     def region(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the region in which to create this resource. If omitted,
-        the provider-level region will be used. Changing this parameter will create a new resource.
+        Specifies the region in which to create this resource.
+        If omitted, the provider-level region will be used.
+        Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "region")
 
     @region.setter
     def region(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "region", value)
+
+    @property
+    @pulumi.getter(name="transType")
+    def trans_type(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the transcoding stream trigger mode.
+        The valid values are as follows:
+        + **play**: Pull stream triggers transcoding.
+        + **publish**: Push stream triggers transcoding.
+        """
+        return pulumi.get(self, "trans_type")
+
+    @trans_type.setter
+    def trans_type(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "trans_type", value)
 
 
 @pulumi.input_type
@@ -135,6 +159,7 @@ class _TranscodingState:
                  low_bitrate_hd: Optional[pulumi.Input[bool]] = None,
                  region: Optional[pulumi.Input[str]] = None,
                  templates: Optional[pulumi.Input[Sequence[pulumi.Input['TranscodingTemplateArgs']]]] = None,
+                 trans_type: Optional[pulumi.Input[str]] = None,
                  video_encoding: Optional[pulumi.Input[str]] = None):
         """
         Input properties used for looking up and filtering Transcoding resources.
@@ -143,13 +168,18 @@ class _TranscodingState:
         :param pulumi.Input[str] domain_name: Specifies the ingest domain name.
                Changing this parameter will create a new resource.
         :param pulumi.Input[bool] low_bitrate_hd: Specifies whether to enable low bitrate HD rates. If enabled
-               the output media will have a lower bitrate with the same image quality. Defaults to `false`.
-        :param pulumi.Input[str] region: Specifies the region in which to create this resource. If omitted,
-               the provider-level region will be used. Changing this parameter will create a new resource.
-        :param pulumi.Input[Sequence[pulumi.Input['TranscodingTemplateArgs']]] templates: Specifies the video quality templates.
-               The object structure is documented below. A maximum of 4 templates can be added.
+               the output media will have a lower bitrate with the same image quality. Defaults to **false**.
+        :param pulumi.Input[str] region: Specifies the region in which to create this resource.
+               If omitted, the provider-level region will be used.
+               Changing this parameter will create a new resource.
+        :param pulumi.Input[Sequence[pulumi.Input['TranscodingTemplateArgs']]] templates: Specifies the video quality templates. A maximum of `4` templates can be added.
+               The templates structure is documented below.
                For resolution and bitrate settings in the presets,
                please refer to the [document](https://support.huaweicloud.com/intl/en-us/usermanual-live/live01000802.html).
+        :param pulumi.Input[str] trans_type: Specifies the transcoding stream trigger mode.
+               The valid values are as follows:
+               + **play**: Pull stream triggers transcoding.
+               + **publish**: Push stream triggers transcoding.
         :param pulumi.Input[str] video_encoding: Specifies the video codec. The valid values are **H264** and **H265**.
         """
         if app_name is not None:
@@ -162,6 +192,8 @@ class _TranscodingState:
             pulumi.set(__self__, "region", region)
         if templates is not None:
             pulumi.set(__self__, "templates", templates)
+        if trans_type is not None:
+            pulumi.set(__self__, "trans_type", trans_type)
         if video_encoding is not None:
             pulumi.set(__self__, "video_encoding", video_encoding)
 
@@ -196,7 +228,7 @@ class _TranscodingState:
     def low_bitrate_hd(self) -> Optional[pulumi.Input[bool]]:
         """
         Specifies whether to enable low bitrate HD rates. If enabled
-        the output media will have a lower bitrate with the same image quality. Defaults to `false`.
+        the output media will have a lower bitrate with the same image quality. Defaults to **false**.
         """
         return pulumi.get(self, "low_bitrate_hd")
 
@@ -208,8 +240,9 @@ class _TranscodingState:
     @pulumi.getter
     def region(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the region in which to create this resource. If omitted,
-        the provider-level region will be used. Changing this parameter will create a new resource.
+        Specifies the region in which to create this resource.
+        If omitted, the provider-level region will be used.
+        Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "region")
 
@@ -221,8 +254,8 @@ class _TranscodingState:
     @pulumi.getter
     def templates(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['TranscodingTemplateArgs']]]]:
         """
-        Specifies the video quality templates.
-        The object structure is documented below. A maximum of 4 templates can be added.
+        Specifies the video quality templates. A maximum of `4` templates can be added.
+        The templates structure is documented below.
         For resolution and bitrate settings in the presets,
         please refer to the [document](https://support.huaweicloud.com/intl/en-us/usermanual-live/live01000802.html).
         """
@@ -231,6 +264,21 @@ class _TranscodingState:
     @templates.setter
     def templates(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['TranscodingTemplateArgs']]]]):
         pulumi.set(self, "templates", value)
+
+    @property
+    @pulumi.getter(name="transType")
+    def trans_type(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the transcoding stream trigger mode.
+        The valid values are as follows:
+        + **play**: Pull stream triggers transcoding.
+        + **publish**: Push stream triggers transcoding.
+        """
+        return pulumi.get(self, "trans_type")
+
+    @trans_type.setter
+    def trans_type(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "trans_type", value)
 
     @property
     @pulumi.getter(name="videoEncoding")
@@ -255,10 +303,11 @@ class Transcoding(pulumi.CustomResource):
                  low_bitrate_hd: Optional[pulumi.Input[bool]] = None,
                  region: Optional[pulumi.Input[str]] = None,
                  templates: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['TranscodingTemplateArgs']]]]] = None,
+                 trans_type: Optional[pulumi.Input[str]] = None,
                  video_encoding: Optional[pulumi.Input[str]] = None,
                  __props__=None):
         """
-        Manages a Live transcoding within HuaweiCloud.
+        Manages a Live transcoding resource within HuaweiCloud.
 
         ## Example Usage
         ### Create a transcoding
@@ -269,13 +318,15 @@ class Transcoding(pulumi.CustomResource):
 
         config = pulumi.Config()
         ingest_domain_name = config.require_object("ingestDomainName")
-        ingest_domain = huaweicloud.live.Domain("ingestDomain", type="push")
+        app_name = config.require_object("appName")
+        video_encoding = config.require_object("videoEncoding")
+        template_name = config.require_object("templateName")
         test = huaweicloud.live.Transcoding("test",
-            domain_name=ingest_domain.name,
-            app_name="live",
-            video_encoding="H264",
+            domain_name=ingest_domain_name,
+            app_name=app_name,
+            video_encoding=video_encoding,
             templates=[huaweicloud.live.TranscodingTemplateArgs(
-                name="L",
+                name=template_name,
                 width=300,
                 height=400,
                 bitrate=300,
@@ -284,11 +335,25 @@ class Transcoding(pulumi.CustomResource):
 
         ## Import
 
-        Transcodings can be imported using the `domain_name` and `app_name`, separated by a slash. e.g.
+        The resource can be imported using the `domain_name` and `app_name`, separated by a slash, e.g. bash
 
         ```sh
-         $ pulumi import huaweicloud:Live/transcoding:Transcoding test play.example.demo.com/live
+         $ pulumi import huaweicloud:Live/transcoding:Transcoding test <domian_name>/<app_name>
         ```
+
+         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`trans_type`. It is generally recommended running `terraform plan` after importing the resource. You can then decide if changes should be applied to the resource, or the resource definition should be updated to align with the resource. Also, you can ignore changes as below. hcl resource "huaweicloud_live_transcoding" "test" {
+
+         ...
+
+         lifecycle {
+
+         ignore_changes = [
+
+         trans_type,
+
+         ]
+
+         } }
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -297,13 +362,18 @@ class Transcoding(pulumi.CustomResource):
         :param pulumi.Input[str] domain_name: Specifies the ingest domain name.
                Changing this parameter will create a new resource.
         :param pulumi.Input[bool] low_bitrate_hd: Specifies whether to enable low bitrate HD rates. If enabled
-               the output media will have a lower bitrate with the same image quality. Defaults to `false`.
-        :param pulumi.Input[str] region: Specifies the region in which to create this resource. If omitted,
-               the provider-level region will be used. Changing this parameter will create a new resource.
-        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['TranscodingTemplateArgs']]]] templates: Specifies the video quality templates.
-               The object structure is documented below. A maximum of 4 templates can be added.
+               the output media will have a lower bitrate with the same image quality. Defaults to **false**.
+        :param pulumi.Input[str] region: Specifies the region in which to create this resource.
+               If omitted, the provider-level region will be used.
+               Changing this parameter will create a new resource.
+        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['TranscodingTemplateArgs']]]] templates: Specifies the video quality templates. A maximum of `4` templates can be added.
+               The templates structure is documented below.
                For resolution and bitrate settings in the presets,
                please refer to the [document](https://support.huaweicloud.com/intl/en-us/usermanual-live/live01000802.html).
+        :param pulumi.Input[str] trans_type: Specifies the transcoding stream trigger mode.
+               The valid values are as follows:
+               + **play**: Pull stream triggers transcoding.
+               + **publish**: Push stream triggers transcoding.
         :param pulumi.Input[str] video_encoding: Specifies the video codec. The valid values are **H264** and **H265**.
         """
         ...
@@ -313,7 +383,7 @@ class Transcoding(pulumi.CustomResource):
                  args: TranscodingArgs,
                  opts: Optional[pulumi.ResourceOptions] = None):
         """
-        Manages a Live transcoding within HuaweiCloud.
+        Manages a Live transcoding resource within HuaweiCloud.
 
         ## Example Usage
         ### Create a transcoding
@@ -324,13 +394,15 @@ class Transcoding(pulumi.CustomResource):
 
         config = pulumi.Config()
         ingest_domain_name = config.require_object("ingestDomainName")
-        ingest_domain = huaweicloud.live.Domain("ingestDomain", type="push")
+        app_name = config.require_object("appName")
+        video_encoding = config.require_object("videoEncoding")
+        template_name = config.require_object("templateName")
         test = huaweicloud.live.Transcoding("test",
-            domain_name=ingest_domain.name,
-            app_name="live",
-            video_encoding="H264",
+            domain_name=ingest_domain_name,
+            app_name=app_name,
+            video_encoding=video_encoding,
             templates=[huaweicloud.live.TranscodingTemplateArgs(
-                name="L",
+                name=template_name,
                 width=300,
                 height=400,
                 bitrate=300,
@@ -339,11 +411,25 @@ class Transcoding(pulumi.CustomResource):
 
         ## Import
 
-        Transcodings can be imported using the `domain_name` and `app_name`, separated by a slash. e.g.
+        The resource can be imported using the `domain_name` and `app_name`, separated by a slash, e.g. bash
 
         ```sh
-         $ pulumi import huaweicloud:Live/transcoding:Transcoding test play.example.demo.com/live
+         $ pulumi import huaweicloud:Live/transcoding:Transcoding test <domian_name>/<app_name>
         ```
+
+         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`trans_type`. It is generally recommended running `terraform plan` after importing the resource. You can then decide if changes should be applied to the resource, or the resource definition should be updated to align with the resource. Also, you can ignore changes as below. hcl resource "huaweicloud_live_transcoding" "test" {
+
+         ...
+
+         lifecycle {
+
+         ignore_changes = [
+
+         trans_type,
+
+         ]
+
+         } }
 
         :param str resource_name: The name of the resource.
         :param TranscodingArgs args: The arguments to use to populate this resource's properties.
@@ -365,6 +451,7 @@ class Transcoding(pulumi.CustomResource):
                  low_bitrate_hd: Optional[pulumi.Input[bool]] = None,
                  region: Optional[pulumi.Input[str]] = None,
                  templates: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['TranscodingTemplateArgs']]]]] = None,
+                 trans_type: Optional[pulumi.Input[str]] = None,
                  video_encoding: Optional[pulumi.Input[str]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
@@ -386,6 +473,7 @@ class Transcoding(pulumi.CustomResource):
             if templates is None and not opts.urn:
                 raise TypeError("Missing required property 'templates'")
             __props__.__dict__["templates"] = templates
+            __props__.__dict__["trans_type"] = trans_type
             if video_encoding is None and not opts.urn:
                 raise TypeError("Missing required property 'video_encoding'")
             __props__.__dict__["video_encoding"] = video_encoding
@@ -404,6 +492,7 @@ class Transcoding(pulumi.CustomResource):
             low_bitrate_hd: Optional[pulumi.Input[bool]] = None,
             region: Optional[pulumi.Input[str]] = None,
             templates: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['TranscodingTemplateArgs']]]]] = None,
+            trans_type: Optional[pulumi.Input[str]] = None,
             video_encoding: Optional[pulumi.Input[str]] = None) -> 'Transcoding':
         """
         Get an existing Transcoding resource's state with the given name, id, and optional extra
@@ -417,13 +506,18 @@ class Transcoding(pulumi.CustomResource):
         :param pulumi.Input[str] domain_name: Specifies the ingest domain name.
                Changing this parameter will create a new resource.
         :param pulumi.Input[bool] low_bitrate_hd: Specifies whether to enable low bitrate HD rates. If enabled
-               the output media will have a lower bitrate with the same image quality. Defaults to `false`.
-        :param pulumi.Input[str] region: Specifies the region in which to create this resource. If omitted,
-               the provider-level region will be used. Changing this parameter will create a new resource.
-        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['TranscodingTemplateArgs']]]] templates: Specifies the video quality templates.
-               The object structure is documented below. A maximum of 4 templates can be added.
+               the output media will have a lower bitrate with the same image quality. Defaults to **false**.
+        :param pulumi.Input[str] region: Specifies the region in which to create this resource.
+               If omitted, the provider-level region will be used.
+               Changing this parameter will create a new resource.
+        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['TranscodingTemplateArgs']]]] templates: Specifies the video quality templates. A maximum of `4` templates can be added.
+               The templates structure is documented below.
                For resolution and bitrate settings in the presets,
                please refer to the [document](https://support.huaweicloud.com/intl/en-us/usermanual-live/live01000802.html).
+        :param pulumi.Input[str] trans_type: Specifies the transcoding stream trigger mode.
+               The valid values are as follows:
+               + **play**: Pull stream triggers transcoding.
+               + **publish**: Push stream triggers transcoding.
         :param pulumi.Input[str] video_encoding: Specifies the video codec. The valid values are **H264** and **H265**.
         """
         opts = pulumi.ResourceOptions.merge(opts, pulumi.ResourceOptions(id=id))
@@ -435,6 +529,7 @@ class Transcoding(pulumi.CustomResource):
         __props__.__dict__["low_bitrate_hd"] = low_bitrate_hd
         __props__.__dict__["region"] = region
         __props__.__dict__["templates"] = templates
+        __props__.__dict__["trans_type"] = trans_type
         __props__.__dict__["video_encoding"] = video_encoding
         return Transcoding(resource_name, opts=opts, __props__=__props__)
 
@@ -461,7 +556,7 @@ class Transcoding(pulumi.CustomResource):
     def low_bitrate_hd(self) -> pulumi.Output[bool]:
         """
         Specifies whether to enable low bitrate HD rates. If enabled
-        the output media will have a lower bitrate with the same image quality. Defaults to `false`.
+        the output media will have a lower bitrate with the same image quality. Defaults to **false**.
         """
         return pulumi.get(self, "low_bitrate_hd")
 
@@ -469,8 +564,9 @@ class Transcoding(pulumi.CustomResource):
     @pulumi.getter
     def region(self) -> pulumi.Output[str]:
         """
-        Specifies the region in which to create this resource. If omitted,
-        the provider-level region will be used. Changing this parameter will create a new resource.
+        Specifies the region in which to create this resource.
+        If omitted, the provider-level region will be used.
+        Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "region")
 
@@ -478,12 +574,23 @@ class Transcoding(pulumi.CustomResource):
     @pulumi.getter
     def templates(self) -> pulumi.Output[Sequence['outputs.TranscodingTemplate']]:
         """
-        Specifies the video quality templates.
-        The object structure is documented below. A maximum of 4 templates can be added.
+        Specifies the video quality templates. A maximum of `4` templates can be added.
+        The templates structure is documented below.
         For resolution and bitrate settings in the presets,
         please refer to the [document](https://support.huaweicloud.com/intl/en-us/usermanual-live/live01000802.html).
         """
         return pulumi.get(self, "templates")
+
+    @property
+    @pulumi.getter(name="transType")
+    def trans_type(self) -> pulumi.Output[Optional[str]]:
+        """
+        Specifies the transcoding stream trigger mode.
+        The valid values are as follows:
+        + **play**: Pull stream triggers transcoding.
+        + **publish**: Push stream triggers transcoding.
+        """
+        return pulumi.get(self, "trans_type")
 
     @property
     @pulumi.getter(name="videoEncoding")

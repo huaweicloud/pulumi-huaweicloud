@@ -11,31 +11,35 @@ import * as utilities from "../utilities";
  *
  * ```typescript
  * import * as pulumi from "@pulumi/pulumi";
- * import * as huaweicloud from "@pulumi/huaweicloud";
+ * import * as pulumi from "@huaweicloudos/pulumi";
  *
- * const key1 = new huaweicloud.Dew.Key("key_1", {
- *     isEnabled: true,
- *     keyAlias: "key_1",
- *     keyDescription: "first test key",
+ * const config = new pulumi.Config();
+ * const keyAlias = config.requireObject("keyAlias");
+ * const test = new huaweicloud.dew.Key("test", {
+ *     keyAlias: keyAlias,
  *     pendingDays: "7",
  * });
  * ```
  *
  * ## Import
  *
- * KMS Keys can be imported using the `id`, e.g.
+ * The KMS Key resource can be imported using the `id`, e.g. bash
  *
  * ```sh
- *  $ pulumi import huaweicloud:Dew/key:Key key_1 7056d636-ac60-4663-8a6c-82d3c32c1c64
+ *  $ pulumi import huaweicloud:Dew/key:Key test <id>
  * ```
  *
- *  Note that the imported state may not be identical to your resource definition, due to `pending_days` is missing from the API response. It is generally recommended running `terraform plan` after importing a KMS Key. You can then decide if changes should be applied to the KMS Key, or the resource definition should be updated to align with the KMS Key. Also you can ignore changes as below. resource "huaweicloud_kms_key" "key_1" {
+ *  Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`pending_days` and `is_enabled`. It is generally recommended running `terraform plan` after importing the resource. You can then decide if changes should be applied to the resource, or the resource definition should be updated to align with the resource. Also you can ignore changes as below. hcl resource "huaweicloud_kms_key" "test" {
  *
  *  ...
  *
  *  lifecycle {
  *
- *  ignore_changes = [ pending_days ]
+ *  ignore_changes = [
+ *
+ *  pending_days, is_enabled
+ *
+ *  ]
  *
  *  } }
  */
@@ -68,68 +72,114 @@ export class Key extends pulumi.CustomResource {
     }
 
     /**
-     * Creation time (time stamp) of a key.
+     * The creation time of the KMS key.
+     * The value is a time stamp, e.g. **1723272402000**.
      */
     public /*out*/ readonly creationDate!: pulumi.Output<string>;
     /**
-     * Identification of a Master Key. The value 1 indicates a Default Master Key, and the value 0
-     * indicates a key.
+     * The default master Key identifier.
+     * The value can be **1** (indicated the KMS key is default master key) or
+     * **0** (indicated the KMS key is not default master key).
      */
     public /*out*/ readonly defaultKeyFlag!: pulumi.Output<string>;
     /**
-     * ID of a user domain for the key.
+     * The ID of the user account.
      */
     public /*out*/ readonly domainId!: pulumi.Output<string>;
     /**
-     * The enterprise project id of the kms key. Changing this creates
-     * a new key.
+     * Specifies the enterprise project ID to which the KMS key belongs.
+     * If omitted, the default enterprise project will be used.
+     * If the enterprise project function is not enabled, ignore this parameter.
      */
     public readonly enterpriseProjectId!: pulumi.Output<string>;
     /**
-     * Expiration time.
+     * The expiration time of the KMS key material.
+     * The value is a time stamp, e.g. **1723272402000**.
      */
     public /*out*/ readonly expirationTime!: pulumi.Output<string>;
     /**
-     * Specifies whether the key is enabled. Defaults to true. Changing this updates the
-     * state of existing key.
+     * Specifies whether the KMS key is enabled.
+     * The default value is **true**.
+     * This parameter is not supported when creating an external import key for the first time.
      */
     public readonly isEnabled!: pulumi.Output<boolean | undefined>;
     /**
-     * The algorithm of the key. Valid values are AES_256, SM4, RSA_2048, RSA_3072,
-     * RSA_4096, EC_P256, EC_P384, SM2. Changing this creates a new key.
+     * Specifies the generation algorithm of the KMS key.
+     * Changing this parameter will create a new resource.
+     * The default value is **AES_256**. The valid values are as follows:
+     * + **AES_256**
+     * + **SM4**
+     * + **RSA_2048**
+     * + **RSA_3072**
+     * + **RSA_4096**
+     * + **EC_P256**
+     * + **EC_P384**
+     * + **SM2**
      */
     public readonly keyAlgorithm!: pulumi.Output<string>;
     /**
-     * The alias in which to create the key. It is required when we create a new key.
-     * Changing this updates the alias of key.
+     * Specifies the alias name of the KMS key.
+     * Only letters, digits, underscores(_), hyphens(-), colons(:) and slash(/) are allowed.
+     * The valid length is limited from `1` to `255` characters.
+     * The name must be different from the alias of the default master key.
      */
     public readonly keyAlias!: pulumi.Output<string>;
     /**
-     * The description of the key as viewed in Huawei console. Changing this updates
-     * the description of key.
+     * Specifies the description of the KMS key.
      */
     public readonly keyDescription!: pulumi.Output<string | undefined>;
     /**
-     * The globally unique identifier for the key.
+     * The ID of the KMS key.
      */
     public /*out*/ readonly keyId!: pulumi.Output<string>;
     /**
-     * Duration in days after which the key is deleted after destruction of the resource,
-     * must be between 7 and 1096 days. It doesn't have default value. It only be used when delete a key.
+     * The current status of the KMS key.
+     * The valid values are as follows:
+     * + **1**: To be activated.
+     * + **2**: Enabled.
+     * + **3**: Disabled.
+     * + **4**: Pending deletion.
+     * + **5**: Pending import.
+     */
+    public /*out*/ readonly keyState!: pulumi.Output<string>;
+    /**
+     * Specifies the KMS key usage.
+     * Changing this parameter will create a new resource.
+     * The value can be **ENCRYPT_DECRYPT** (symmetric key default value) or **SIGN_VERIFY** (asymmetric key default value).
+     */
+    public readonly keyUsage!: pulumi.Output<string>;
+    /**
+     * Specifies the keystore ID to which the KMS key belongs.
+     * Changing this parameter will create a new resource.
+     * The KMS default keystore is used by default.
+     */
+    public readonly keystoreId!: pulumi.Output<string>;
+    /**
+     * Specifies the source of the KMS key.
+     * Changing this parameter will create a new resource.
+     * The default value is **kms**. The valid values are as follows:
+     * + **kms**: The key is generated by KMS.
+     * + **external**: The key is external imported.
+     */
+    public readonly origin!: pulumi.Output<string>;
+    /**
+     * Specifies the number of days after which the KMS key is scheduled to be deleted.
+     * The valid value range from `7` to `1,096`.
      */
     public readonly pendingDays!: pulumi.Output<string | undefined>;
     /**
-     * The region in which to create the KMS key resource. If omitted, the
-     * provider-level region will be used. Changing this creates a new KMS key resource.
+     * Specifies the region in which to create the resource.
+     * If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
      */
     public readonly region!: pulumi.Output<string>;
     /**
-     * Specifies whether the key rotation is enabled. Defaults to false.
+     * Specifies whether the KMS key rotation is enabled.
+     * The default value is **false**.
      */
     public readonly rotationEnabled!: pulumi.Output<boolean | undefined>;
     /**
-     * Specifies the key rotation interval. The valid value is range from 30 to 365,
-     * defaults to 365.
+     * Specifies the KMS key rotation period.
+     * The valid value range from `30` to `365`. The default value is `365`.
      */
     public readonly rotationInterval!: pulumi.Output<number>;
     /**
@@ -137,11 +187,12 @@ export class Key extends pulumi.CustomResource {
      */
     public /*out*/ readonly rotationNumber!: pulumi.Output<number>;
     /**
-     * Scheduled deletion time (time stamp) of a key.
+     * The scheduled deletion time of the KMS key.
+     * The value is a time stamp, e.g. **1723272402000**.
      */
     public /*out*/ readonly scheduledDeletionDate!: pulumi.Output<string>;
     /**
-     * Specifies the key/value pairs to associate with the kms key.
+     * Specifies the key/value pairs to associate with the KMS key.
      */
     public readonly tags!: pulumi.Output<{[key: string]: string} | undefined>;
 
@@ -168,6 +219,10 @@ export class Key extends pulumi.CustomResource {
             resourceInputs["keyAlias"] = state ? state.keyAlias : undefined;
             resourceInputs["keyDescription"] = state ? state.keyDescription : undefined;
             resourceInputs["keyId"] = state ? state.keyId : undefined;
+            resourceInputs["keyState"] = state ? state.keyState : undefined;
+            resourceInputs["keyUsage"] = state ? state.keyUsage : undefined;
+            resourceInputs["keystoreId"] = state ? state.keystoreId : undefined;
+            resourceInputs["origin"] = state ? state.origin : undefined;
             resourceInputs["pendingDays"] = state ? state.pendingDays : undefined;
             resourceInputs["region"] = state ? state.region : undefined;
             resourceInputs["rotationEnabled"] = state ? state.rotationEnabled : undefined;
@@ -185,6 +240,9 @@ export class Key extends pulumi.CustomResource {
             resourceInputs["keyAlgorithm"] = args ? args.keyAlgorithm : undefined;
             resourceInputs["keyAlias"] = args ? args.keyAlias : undefined;
             resourceInputs["keyDescription"] = args ? args.keyDescription : undefined;
+            resourceInputs["keyUsage"] = args ? args.keyUsage : undefined;
+            resourceInputs["keystoreId"] = args ? args.keystoreId : undefined;
+            resourceInputs["origin"] = args ? args.origin : undefined;
             resourceInputs["pendingDays"] = args ? args.pendingDays : undefined;
             resourceInputs["region"] = args ? args.region : undefined;
             resourceInputs["rotationEnabled"] = args ? args.rotationEnabled : undefined;
@@ -195,6 +253,7 @@ export class Key extends pulumi.CustomResource {
             resourceInputs["domainId"] = undefined /*out*/;
             resourceInputs["expirationTime"] = undefined /*out*/;
             resourceInputs["keyId"] = undefined /*out*/;
+            resourceInputs["keyState"] = undefined /*out*/;
             resourceInputs["rotationNumber"] = undefined /*out*/;
             resourceInputs["scheduledDeletionDate"] = undefined /*out*/;
         }
@@ -208,68 +267,114 @@ export class Key extends pulumi.CustomResource {
  */
 export interface KeyState {
     /**
-     * Creation time (time stamp) of a key.
+     * The creation time of the KMS key.
+     * The value is a time stamp, e.g. **1723272402000**.
      */
     creationDate?: pulumi.Input<string>;
     /**
-     * Identification of a Master Key. The value 1 indicates a Default Master Key, and the value 0
-     * indicates a key.
+     * The default master Key identifier.
+     * The value can be **1** (indicated the KMS key is default master key) or
+     * **0** (indicated the KMS key is not default master key).
      */
     defaultKeyFlag?: pulumi.Input<string>;
     /**
-     * ID of a user domain for the key.
+     * The ID of the user account.
      */
     domainId?: pulumi.Input<string>;
     /**
-     * The enterprise project id of the kms key. Changing this creates
-     * a new key.
+     * Specifies the enterprise project ID to which the KMS key belongs.
+     * If omitted, the default enterprise project will be used.
+     * If the enterprise project function is not enabled, ignore this parameter.
      */
     enterpriseProjectId?: pulumi.Input<string>;
     /**
-     * Expiration time.
+     * The expiration time of the KMS key material.
+     * The value is a time stamp, e.g. **1723272402000**.
      */
     expirationTime?: pulumi.Input<string>;
     /**
-     * Specifies whether the key is enabled. Defaults to true. Changing this updates the
-     * state of existing key.
+     * Specifies whether the KMS key is enabled.
+     * The default value is **true**.
+     * This parameter is not supported when creating an external import key for the first time.
      */
     isEnabled?: pulumi.Input<boolean>;
     /**
-     * The algorithm of the key. Valid values are AES_256, SM4, RSA_2048, RSA_3072,
-     * RSA_4096, EC_P256, EC_P384, SM2. Changing this creates a new key.
+     * Specifies the generation algorithm of the KMS key.
+     * Changing this parameter will create a new resource.
+     * The default value is **AES_256**. The valid values are as follows:
+     * + **AES_256**
+     * + **SM4**
+     * + **RSA_2048**
+     * + **RSA_3072**
+     * + **RSA_4096**
+     * + **EC_P256**
+     * + **EC_P384**
+     * + **SM2**
      */
     keyAlgorithm?: pulumi.Input<string>;
     /**
-     * The alias in which to create the key. It is required when we create a new key.
-     * Changing this updates the alias of key.
+     * Specifies the alias name of the KMS key.
+     * Only letters, digits, underscores(_), hyphens(-), colons(:) and slash(/) are allowed.
+     * The valid length is limited from `1` to `255` characters.
+     * The name must be different from the alias of the default master key.
      */
     keyAlias?: pulumi.Input<string>;
     /**
-     * The description of the key as viewed in Huawei console. Changing this updates
-     * the description of key.
+     * Specifies the description of the KMS key.
      */
     keyDescription?: pulumi.Input<string>;
     /**
-     * The globally unique identifier for the key.
+     * The ID of the KMS key.
      */
     keyId?: pulumi.Input<string>;
     /**
-     * Duration in days after which the key is deleted after destruction of the resource,
-     * must be between 7 and 1096 days. It doesn't have default value. It only be used when delete a key.
+     * The current status of the KMS key.
+     * The valid values are as follows:
+     * + **1**: To be activated.
+     * + **2**: Enabled.
+     * + **3**: Disabled.
+     * + **4**: Pending deletion.
+     * + **5**: Pending import.
+     */
+    keyState?: pulumi.Input<string>;
+    /**
+     * Specifies the KMS key usage.
+     * Changing this parameter will create a new resource.
+     * The value can be **ENCRYPT_DECRYPT** (symmetric key default value) or **SIGN_VERIFY** (asymmetric key default value).
+     */
+    keyUsage?: pulumi.Input<string>;
+    /**
+     * Specifies the keystore ID to which the KMS key belongs.
+     * Changing this parameter will create a new resource.
+     * The KMS default keystore is used by default.
+     */
+    keystoreId?: pulumi.Input<string>;
+    /**
+     * Specifies the source of the KMS key.
+     * Changing this parameter will create a new resource.
+     * The default value is **kms**. The valid values are as follows:
+     * + **kms**: The key is generated by KMS.
+     * + **external**: The key is external imported.
+     */
+    origin?: pulumi.Input<string>;
+    /**
+     * Specifies the number of days after which the KMS key is scheduled to be deleted.
+     * The valid value range from `7` to `1,096`.
      */
     pendingDays?: pulumi.Input<string>;
     /**
-     * The region in which to create the KMS key resource. If omitted, the
-     * provider-level region will be used. Changing this creates a new KMS key resource.
+     * Specifies the region in which to create the resource.
+     * If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
      */
     region?: pulumi.Input<string>;
     /**
-     * Specifies whether the key rotation is enabled. Defaults to false.
+     * Specifies whether the KMS key rotation is enabled.
+     * The default value is **false**.
      */
     rotationEnabled?: pulumi.Input<boolean>;
     /**
-     * Specifies the key rotation interval. The valid value is range from 30 to 365,
-     * defaults to 365.
+     * Specifies the KMS key rotation period.
+     * The valid value range from `30` to `365`. The default value is `365`.
      */
     rotationInterval?: pulumi.Input<number>;
     /**
@@ -277,11 +382,12 @@ export interface KeyState {
      */
     rotationNumber?: pulumi.Input<number>;
     /**
-     * Scheduled deletion time (time stamp) of a key.
+     * The scheduled deletion time of the KMS key.
+     * The value is a time stamp, e.g. **1723272402000**.
      */
     scheduledDeletionDate?: pulumi.Input<string>;
     /**
-     * Specifies the key/value pairs to associate with the kms key.
+     * Specifies the key/value pairs to associate with the KMS key.
      */
     tags?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
 }
@@ -291,51 +397,84 @@ export interface KeyState {
  */
 export interface KeyArgs {
     /**
-     * The enterprise project id of the kms key. Changing this creates
-     * a new key.
+     * Specifies the enterprise project ID to which the KMS key belongs.
+     * If omitted, the default enterprise project will be used.
+     * If the enterprise project function is not enabled, ignore this parameter.
      */
     enterpriseProjectId?: pulumi.Input<string>;
     /**
-     * Specifies whether the key is enabled. Defaults to true. Changing this updates the
-     * state of existing key.
+     * Specifies whether the KMS key is enabled.
+     * The default value is **true**.
+     * This parameter is not supported when creating an external import key for the first time.
      */
     isEnabled?: pulumi.Input<boolean>;
     /**
-     * The algorithm of the key. Valid values are AES_256, SM4, RSA_2048, RSA_3072,
-     * RSA_4096, EC_P256, EC_P384, SM2. Changing this creates a new key.
+     * Specifies the generation algorithm of the KMS key.
+     * Changing this parameter will create a new resource.
+     * The default value is **AES_256**. The valid values are as follows:
+     * + **AES_256**
+     * + **SM4**
+     * + **RSA_2048**
+     * + **RSA_3072**
+     * + **RSA_4096**
+     * + **EC_P256**
+     * + **EC_P384**
+     * + **SM2**
      */
     keyAlgorithm?: pulumi.Input<string>;
     /**
-     * The alias in which to create the key. It is required when we create a new key.
-     * Changing this updates the alias of key.
+     * Specifies the alias name of the KMS key.
+     * Only letters, digits, underscores(_), hyphens(-), colons(:) and slash(/) are allowed.
+     * The valid length is limited from `1` to `255` characters.
+     * The name must be different from the alias of the default master key.
      */
     keyAlias: pulumi.Input<string>;
     /**
-     * The description of the key as viewed in Huawei console. Changing this updates
-     * the description of key.
+     * Specifies the description of the KMS key.
      */
     keyDescription?: pulumi.Input<string>;
     /**
-     * Duration in days after which the key is deleted after destruction of the resource,
-     * must be between 7 and 1096 days. It doesn't have default value. It only be used when delete a key.
+     * Specifies the KMS key usage.
+     * Changing this parameter will create a new resource.
+     * The value can be **ENCRYPT_DECRYPT** (symmetric key default value) or **SIGN_VERIFY** (asymmetric key default value).
+     */
+    keyUsage?: pulumi.Input<string>;
+    /**
+     * Specifies the keystore ID to which the KMS key belongs.
+     * Changing this parameter will create a new resource.
+     * The KMS default keystore is used by default.
+     */
+    keystoreId?: pulumi.Input<string>;
+    /**
+     * Specifies the source of the KMS key.
+     * Changing this parameter will create a new resource.
+     * The default value is **kms**. The valid values are as follows:
+     * + **kms**: The key is generated by KMS.
+     * + **external**: The key is external imported.
+     */
+    origin?: pulumi.Input<string>;
+    /**
+     * Specifies the number of days after which the KMS key is scheduled to be deleted.
+     * The valid value range from `7` to `1,096`.
      */
     pendingDays?: pulumi.Input<string>;
     /**
-     * The region in which to create the KMS key resource. If omitted, the
-     * provider-level region will be used. Changing this creates a new KMS key resource.
+     * Specifies the region in which to create the resource.
+     * If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
      */
     region?: pulumi.Input<string>;
     /**
-     * Specifies whether the key rotation is enabled. Defaults to false.
+     * Specifies whether the KMS key rotation is enabled.
+     * The default value is **false**.
      */
     rotationEnabled?: pulumi.Input<boolean>;
     /**
-     * Specifies the key rotation interval. The valid value is range from 30 to 365,
-     * defaults to 365.
+     * Specifies the KMS key rotation period.
+     * The valid value range from `30` to `365`. The default value is `365`.
      */
     rotationInterval?: pulumi.Input<number>;
     /**
-     * Specifies the key/value pairs to associate with the kms key.
+     * Specifies the key/value pairs to associate with the KMS key.
      */
     tags?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
 }

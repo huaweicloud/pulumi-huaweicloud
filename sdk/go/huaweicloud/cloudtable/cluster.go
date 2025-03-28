@@ -15,7 +15,7 @@ import (
 //
 // ## Import
 //
-// Clusters can be imported by their `id`. e.g.
+// Clusters can be imported by their `id`. e.g.bash
 //
 // ```sh
 //
@@ -23,7 +23,7 @@ import (
 //
 // ```
 //
-//	Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`availability_zone`, `network_id`. It is generally recommended running `terraform plan` after importing a cluster. You can then decide if changes should be applied to the cluster, or the resource definition should be updated to align with the cluster. Also you can ignore changes as below. resource "huaweicloud_cloudtable_cluster" "test" {
+//	Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`availability_zone`, `network_id`. It is generally recommended running `terraform plan` after importing a cluster. You can then decide if changes should be applied to the cluster, or the resource definition should be updated to align with the cluster. Also you can ignore changes as below. hcl resource "huaweicloud_cloudtable_cluster" "test" {
 //
 //	...
 //
@@ -52,8 +52,9 @@ type Cluster struct {
 	// Specifies whether IAM authorization is enabled.
 	// Changing this parameter will create a new resource.
 	IamAuthEnabled pulumi.BoolOutput `pulumi:"iamAuthEnabled"`
-	// Specifies the cluster name. The name consists of 4 to 64 characters, including
-	// lowercase letters, numbers and hyphens (-). Changing this parameter will create a new resource.
+	// Specifies the cluster name.\
+	// The name consists of `4` to `64` characters, including lowercase letters, numbers and hyphens (-).
+	// Changing this parameter will create a new resource.
 	Name pulumi.StringOutput `pulumi:"name"`
 	// Specifies the ID of the network to which the cluster belongs.
 	// Changing this parameter will create a new resource.
@@ -69,7 +70,8 @@ type Cluster struct {
 	// If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
 	Region pulumi.StringOutput `pulumi:"region"`
 	// Specifies the compute nodes number of the cluster.
-	// The valid values must be greater than `2`. Defaults to `2`. Changing this parameter will create a new resource.
+	// The valid values must be at least `2`. Defaults to `2`.
+	// Changing this parameter will create a new resource.
 	RsNum pulumi.IntPtrOutput `pulumi:"rsNum"`
 	// Specifies the security group ID of the cluster.
 	// Changing this parameter will create a new resource.
@@ -151,8 +153,9 @@ type clusterState struct {
 	// Specifies whether IAM authorization is enabled.
 	// Changing this parameter will create a new resource.
 	IamAuthEnabled *bool `pulumi:"iamAuthEnabled"`
-	// Specifies the cluster name. The name consists of 4 to 64 characters, including
-	// lowercase letters, numbers and hyphens (-). Changing this parameter will create a new resource.
+	// Specifies the cluster name.\
+	// The name consists of `4` to `64` characters, including lowercase letters, numbers and hyphens (-).
+	// Changing this parameter will create a new resource.
 	Name *string `pulumi:"name"`
 	// Specifies the ID of the network to which the cluster belongs.
 	// Changing this parameter will create a new resource.
@@ -168,7 +171,8 @@ type clusterState struct {
 	// If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
 	Region *string `pulumi:"region"`
 	// Specifies the compute nodes number of the cluster.
-	// The valid values must be greater than `2`. Defaults to `2`. Changing this parameter will create a new resource.
+	// The valid values must be at least `2`. Defaults to `2`.
+	// Changing this parameter will create a new resource.
 	RsNum *int `pulumi:"rsNum"`
 	// Specifies the security group ID of the cluster.
 	// Changing this parameter will create a new resource.
@@ -203,8 +207,9 @@ type ClusterState struct {
 	// Specifies whether IAM authorization is enabled.
 	// Changing this parameter will create a new resource.
 	IamAuthEnabled pulumi.BoolPtrInput
-	// Specifies the cluster name. The name consists of 4 to 64 characters, including
-	// lowercase letters, numbers and hyphens (-). Changing this parameter will create a new resource.
+	// Specifies the cluster name.\
+	// The name consists of `4` to `64` characters, including lowercase letters, numbers and hyphens (-).
+	// Changing this parameter will create a new resource.
 	Name pulumi.StringPtrInput
 	// Specifies the ID of the network to which the cluster belongs.
 	// Changing this parameter will create a new resource.
@@ -220,7 +225,8 @@ type ClusterState struct {
 	// If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
 	Region pulumi.StringPtrInput
 	// Specifies the compute nodes number of the cluster.
-	// The valid values must be greater than `2`. Defaults to `2`. Changing this parameter will create a new resource.
+	// The valid values must be at least `2`. Defaults to `2`.
+	// Changing this parameter will create a new resource.
 	RsNum pulumi.IntPtrInput
 	// Specifies the security group ID of the cluster.
 	// Changing this parameter will create a new resource.
@@ -255,8 +261,9 @@ type clusterArgs struct {
 	// Specifies whether IAM authorization is enabled.
 	// Changing this parameter will create a new resource.
 	IamAuthEnabled *bool `pulumi:"iamAuthEnabled"`
-	// Specifies the cluster name. The name consists of 4 to 64 characters, including
-	// lowercase letters, numbers and hyphens (-). Changing this parameter will create a new resource.
+	// Specifies the cluster name.\
+	// The name consists of `4` to `64` characters, including lowercase letters, numbers and hyphens (-).
+	// Changing this parameter will create a new resource.
 	Name *string `pulumi:"name"`
 	// Specifies the ID of the network to which the cluster belongs.
 	// Changing this parameter will create a new resource.
@@ -268,7 +275,8 @@ type clusterArgs struct {
 	// If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
 	Region *string `pulumi:"region"`
 	// Specifies the compute nodes number of the cluster.
-	// The valid values must be greater than `2`. Defaults to `2`. Changing this parameter will create a new resource.
+	// The valid values must be at least `2`. Defaults to `2`.
+	// Changing this parameter will create a new resource.
 	RsNum *int `pulumi:"rsNum"`
 	// Specifies the security group ID of the cluster.
 	// Changing this parameter will create a new resource.
@@ -292,8 +300,9 @@ type ClusterArgs struct {
 	// Specifies whether IAM authorization is enabled.
 	// Changing this parameter will create a new resource.
 	IamAuthEnabled pulumi.BoolPtrInput
-	// Specifies the cluster name. The name consists of 4 to 64 characters, including
-	// lowercase letters, numbers and hyphens (-). Changing this parameter will create a new resource.
+	// Specifies the cluster name.\
+	// The name consists of `4` to `64` characters, including lowercase letters, numbers and hyphens (-).
+	// Changing this parameter will create a new resource.
 	Name pulumi.StringPtrInput
 	// Specifies the ID of the network to which the cluster belongs.
 	// Changing this parameter will create a new resource.
@@ -305,7 +314,8 @@ type ClusterArgs struct {
 	// If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
 	Region pulumi.StringPtrInput
 	// Specifies the compute nodes number of the cluster.
-	// The valid values must be greater than `2`. Defaults to `2`. Changing this parameter will create a new resource.
+	// The valid values must be at least `2`. Defaults to `2`.
+	// Changing this parameter will create a new resource.
 	RsNum pulumi.IntPtrInput
 	// Specifies the security group ID of the cluster.
 	// Changing this parameter will create a new resource.
@@ -433,8 +443,9 @@ func (o ClusterOutput) IamAuthEnabled() pulumi.BoolOutput {
 	return o.ApplyT(func(v *Cluster) pulumi.BoolOutput { return v.IamAuthEnabled }).(pulumi.BoolOutput)
 }
 
-// Specifies the cluster name. The name consists of 4 to 64 characters, including
-// lowercase letters, numbers and hyphens (-). Changing this parameter will create a new resource.
+// Specifies the cluster name.\
+// The name consists of `4` to `64` characters, including lowercase letters, numbers and hyphens (-).
+// Changing this parameter will create a new resource.
 func (o ClusterOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v *Cluster) pulumi.StringOutput { return v.Name }).(pulumi.StringOutput)
 }
@@ -468,7 +479,8 @@ func (o ClusterOutput) Region() pulumi.StringOutput {
 }
 
 // Specifies the compute nodes number of the cluster.
-// The valid values must be greater than `2`. Defaults to `2`. Changing this parameter will create a new resource.
+// The valid values must be at least `2`. Defaults to `2`.
+// Changing this parameter will create a new resource.
 func (o ClusterOutput) RsNum() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v *Cluster) pulumi.IntPtrOutput { return v.RsNum }).(pulumi.IntPtrOutput)
 }

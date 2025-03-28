@@ -31,7 +31,7 @@ class ProductArgs:
         The set of arguments for constructing a Product resource.
         :param pulumi.Input[str] data_type: Specifies the type of data.
                The valid values are **json** and **binary**.
-        :param pulumi.Input[str] device_type: Specifies the device type. The device type contains a maximum of 32 characters.
+        :param pulumi.Input[str] device_type: Specifies the device type. The device type contains a maximum of `32` characters.
                Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special characters
                are allowed: `?'#().,&%@!`. Example: StreetLight, GasMeter, or WaterMeter.
         :param pulumi.Input[str] protocol: Specifies the protocol.
@@ -39,18 +39,19 @@ class ProductArgs:
         :param pulumi.Input[Sequence[pulumi.Input['ProductServiceArgs']]] services: Specifies the list of services.
                The services structure is documented below.
         :param pulumi.Input[str] description: Specifies the description of the parameter. The description contains a maximum of
-               128 characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special
+               `128` characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special
                characters are allowed: `?'#().,&%@!`.
         :param pulumi.Input[str] industry: Specifies the industry which the device belongs to. The industry contains a maximum of
-               64 characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and
+               `64` characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and
                the following special characters are allowed: `?'#().,&%@!`.
-        :param pulumi.Input[str] manufacturer_name: Specifies the manufacturer name. The name contains a maximum of 32 characters.
+        :param pulumi.Input[str] manufacturer_name: Specifies the manufacturer name.
+               The name contains a maximum of `32` characters.
                Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special
                characters are allowed: `?'#().,&%@!`.
-        :param pulumi.Input[str] name: Specifies the name of the parameter. The name contains a maximum of 64 characters.
+        :param pulumi.Input[str] name: Specifies the name of the parameter. The name contains a maximum of `64` characters.
                Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special characters are
                allowed: `?'#().,&%@!`.
-        :param pulumi.Input[str] product_id: Specifies the product ID. The product ID contains a maximum of 32
+        :param pulumi.Input[str] product_id: Specifies the product ID. The product ID contains a maximum of `32`
                characters. Only letters, digits, hyphens (-) and underscores (_) are allowed. If omitted, the platform will
                automatically allocate a product ID. Changing this parameter will create a new resource.
         :param pulumi.Input[str] region: Specifies the region in which to create the IoTDA product resource.
@@ -94,7 +95,7 @@ class ProductArgs:
     @pulumi.getter(name="deviceType")
     def device_type(self) -> pulumi.Input[str]:
         """
-        Specifies the device type. The device type contains a maximum of 32 characters.
+        Specifies the device type. The device type contains a maximum of `32` characters.
         Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special characters
         are allowed: `?'#().,&%@!`. Example: StreetLight, GasMeter, or WaterMeter.
         """
@@ -135,7 +136,7 @@ class ProductArgs:
     def description(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the description of the parameter. The description contains a maximum of
-        128 characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special
+        `128` characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special
         characters are allowed: `?'#().,&%@!`.
         """
         return pulumi.get(self, "description")
@@ -149,7 +150,7 @@ class ProductArgs:
     def industry(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the industry which the device belongs to. The industry contains a maximum of
-        64 characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and
+        `64` characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and
         the following special characters are allowed: `?'#().,&%@!`.
         """
         return pulumi.get(self, "industry")
@@ -162,7 +163,8 @@ class ProductArgs:
     @pulumi.getter(name="manufacturerName")
     def manufacturer_name(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the manufacturer name. The name contains a maximum of 32 characters.
+        Specifies the manufacturer name.
+        The name contains a maximum of `32` characters.
         Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special
         characters are allowed: `?'#().,&%@!`.
         """
@@ -176,7 +178,7 @@ class ProductArgs:
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the name of the parameter. The name contains a maximum of 64 characters.
+        Specifies the name of the parameter. The name contains a maximum of `64` characters.
         Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special characters are
         allowed: `?'#().,&%@!`.
         """
@@ -190,7 +192,7 @@ class ProductArgs:
     @pulumi.getter(name="productId")
     def product_id(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the product ID. The product ID contains a maximum of 32
+        Specifies the product ID. The product ID contains a maximum of `32`
         characters. Only letters, digits, hyphens (-) and underscores (_) are allowed. If omitted, the platform will
         automatically allocate a product ID. Changing this parameter will create a new resource.
         """
@@ -246,21 +248,22 @@ class _ProductState:
         :param pulumi.Input[str] data_type: Specifies the type of data.
                The valid values are **json** and **binary**.
         :param pulumi.Input[str] description: Specifies the description of the parameter. The description contains a maximum of
-               128 characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special
+               `128` characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special
                characters are allowed: `?'#().,&%@!`.
-        :param pulumi.Input[str] device_type: Specifies the device type. The device type contains a maximum of 32 characters.
+        :param pulumi.Input[str] device_type: Specifies the device type. The device type contains a maximum of `32` characters.
                Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special characters
                are allowed: `?'#().,&%@!`. Example: StreetLight, GasMeter, or WaterMeter.
         :param pulumi.Input[str] industry: Specifies the industry which the device belongs to. The industry contains a maximum of
-               64 characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and
+               `64` characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and
                the following special characters are allowed: `?'#().,&%@!`.
-        :param pulumi.Input[str] manufacturer_name: Specifies the manufacturer name. The name contains a maximum of 32 characters.
+        :param pulumi.Input[str] manufacturer_name: Specifies the manufacturer name.
+               The name contains a maximum of `32` characters.
                Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special
                characters are allowed: `?'#().,&%@!`.
-        :param pulumi.Input[str] name: Specifies the name of the parameter. The name contains a maximum of 64 characters.
+        :param pulumi.Input[str] name: Specifies the name of the parameter. The name contains a maximum of `64` characters.
                Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special characters are
                allowed: `?'#().,&%@!`.
-        :param pulumi.Input[str] product_id: Specifies the product ID. The product ID contains a maximum of 32
+        :param pulumi.Input[str] product_id: Specifies the product ID. The product ID contains a maximum of `32`
                characters. Only letters, digits, hyphens (-) and underscores (_) are allowed. If omitted, the platform will
                automatically allocate a product ID. Changing this parameter will create a new resource.
         :param pulumi.Input[str] protocol: Specifies the protocol.
@@ -313,7 +316,7 @@ class _ProductState:
     def description(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the description of the parameter. The description contains a maximum of
-        128 characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special
+        `128` characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special
         characters are allowed: `?'#().,&%@!`.
         """
         return pulumi.get(self, "description")
@@ -326,7 +329,7 @@ class _ProductState:
     @pulumi.getter(name="deviceType")
     def device_type(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the device type. The device type contains a maximum of 32 characters.
+        Specifies the device type. The device type contains a maximum of `32` characters.
         Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special characters
         are allowed: `?'#().,&%@!`. Example: StreetLight, GasMeter, or WaterMeter.
         """
@@ -341,7 +344,7 @@ class _ProductState:
     def industry(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the industry which the device belongs to. The industry contains a maximum of
-        64 characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and
+        `64` characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and
         the following special characters are allowed: `?'#().,&%@!`.
         """
         return pulumi.get(self, "industry")
@@ -354,7 +357,8 @@ class _ProductState:
     @pulumi.getter(name="manufacturerName")
     def manufacturer_name(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the manufacturer name. The name contains a maximum of 32 characters.
+        Specifies the manufacturer name.
+        The name contains a maximum of `32` characters.
         Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special
         characters are allowed: `?'#().,&%@!`.
         """
@@ -368,7 +372,7 @@ class _ProductState:
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the name of the parameter. The name contains a maximum of 64 characters.
+        Specifies the name of the parameter. The name contains a maximum of `64` characters.
         Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special characters are
         allowed: `?'#().,&%@!`.
         """
@@ -382,7 +386,7 @@ class _ProductState:
     @pulumi.getter(name="productId")
     def product_id(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the product ID. The product ID contains a maximum of 32
+        Specifies the product ID. The product ID contains a maximum of `32`
         characters. Only letters, digits, hyphens (-) and underscores (_) are allowed. If omitted, the platform will
         automatically allocate a product ID. Changing this parameter will create a new resource.
         """
@@ -463,7 +467,14 @@ class Product(pulumi.CustomResource):
                  space_id: Optional[pulumi.Input[str]] = None,
                  __props__=None):
         """
-        Manages an IoTDA product within HuaweiCloud.
+        Manages a product resource within HuaweiCloud.
+
+        > When accessing an IoTDA **standard** or **enterprise** edition instance, you need to specify the IoTDA service
+        endpoint in `provider` block.
+        You can login to the IoTDA console, choose the instance **Overview** and click **Access Details**
+        to view the HTTPS application access address. An example of the access address might be
+        **9bc34xxxxx.st1.iotda-app.ap-southeast-1.myhuaweicloud.com**, then you need to configure the
+        `provider` block as follows:
 
         ## Example Usage
 
@@ -539,10 +550,10 @@ class Product(pulumi.CustomResource):
 
         ## Import
 
-        Products can be imported using the `id`, e.g.
+        The product resource can be imported using the `id`, e.g. bash
 
         ```sh
-         $ pulumi import huaweicloud:IoTDA/product:Product test 10022532f4f94f26b01daa1e424853e1
+         $ pulumi import huaweicloud:IoTDA/product:Product test <id>
         ```
 
         :param str resource_name: The name of the resource.
@@ -550,21 +561,22 @@ class Product(pulumi.CustomResource):
         :param pulumi.Input[str] data_type: Specifies the type of data.
                The valid values are **json** and **binary**.
         :param pulumi.Input[str] description: Specifies the description of the parameter. The description contains a maximum of
-               128 characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special
+               `128` characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special
                characters are allowed: `?'#().,&%@!`.
-        :param pulumi.Input[str] device_type: Specifies the device type. The device type contains a maximum of 32 characters.
+        :param pulumi.Input[str] device_type: Specifies the device type. The device type contains a maximum of `32` characters.
                Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special characters
                are allowed: `?'#().,&%@!`. Example: StreetLight, GasMeter, or WaterMeter.
         :param pulumi.Input[str] industry: Specifies the industry which the device belongs to. The industry contains a maximum of
-               64 characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and
+               `64` characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and
                the following special characters are allowed: `?'#().,&%@!`.
-        :param pulumi.Input[str] manufacturer_name: Specifies the manufacturer name. The name contains a maximum of 32 characters.
+        :param pulumi.Input[str] manufacturer_name: Specifies the manufacturer name.
+               The name contains a maximum of `32` characters.
                Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special
                characters are allowed: `?'#().,&%@!`.
-        :param pulumi.Input[str] name: Specifies the name of the parameter. The name contains a maximum of 64 characters.
+        :param pulumi.Input[str] name: Specifies the name of the parameter. The name contains a maximum of `64` characters.
                Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special characters are
                allowed: `?'#().,&%@!`.
-        :param pulumi.Input[str] product_id: Specifies the product ID. The product ID contains a maximum of 32
+        :param pulumi.Input[str] product_id: Specifies the product ID. The product ID contains a maximum of `32`
                characters. Only letters, digits, hyphens (-) and underscores (_) are allowed. If omitted, the platform will
                automatically allocate a product ID. Changing this parameter will create a new resource.
         :param pulumi.Input[str] protocol: Specifies the protocol.
@@ -583,7 +595,14 @@ class Product(pulumi.CustomResource):
                  args: ProductArgs,
                  opts: Optional[pulumi.ResourceOptions] = None):
         """
-        Manages an IoTDA product within HuaweiCloud.
+        Manages a product resource within HuaweiCloud.
+
+        > When accessing an IoTDA **standard** or **enterprise** edition instance, you need to specify the IoTDA service
+        endpoint in `provider` block.
+        You can login to the IoTDA console, choose the instance **Overview** and click **Access Details**
+        to view the HTTPS application access address. An example of the access address might be
+        **9bc34xxxxx.st1.iotda-app.ap-southeast-1.myhuaweicloud.com**, then you need to configure the
+        `provider` block as follows:
 
         ## Example Usage
 
@@ -659,10 +678,10 @@ class Product(pulumi.CustomResource):
 
         ## Import
 
-        Products can be imported using the `id`, e.g.
+        The product resource can be imported using the `id`, e.g. bash
 
         ```sh
-         $ pulumi import huaweicloud:IoTDA/product:Product test 10022532f4f94f26b01daa1e424853e1
+         $ pulumi import huaweicloud:IoTDA/product:Product test <id>
         ```
 
         :param str resource_name: The name of the resource.
@@ -750,21 +769,22 @@ class Product(pulumi.CustomResource):
         :param pulumi.Input[str] data_type: Specifies the type of data.
                The valid values are **json** and **binary**.
         :param pulumi.Input[str] description: Specifies the description of the parameter. The description contains a maximum of
-               128 characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special
+               `128` characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special
                characters are allowed: `?'#().,&%@!`.
-        :param pulumi.Input[str] device_type: Specifies the device type. The device type contains a maximum of 32 characters.
+        :param pulumi.Input[str] device_type: Specifies the device type. The device type contains a maximum of `32` characters.
                Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special characters
                are allowed: `?'#().,&%@!`. Example: StreetLight, GasMeter, or WaterMeter.
         :param pulumi.Input[str] industry: Specifies the industry which the device belongs to. The industry contains a maximum of
-               64 characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and
+               `64` characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and
                the following special characters are allowed: `?'#().,&%@!`.
-        :param pulumi.Input[str] manufacturer_name: Specifies the manufacturer name. The name contains a maximum of 32 characters.
+        :param pulumi.Input[str] manufacturer_name: Specifies the manufacturer name.
+               The name contains a maximum of `32` characters.
                Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special
                characters are allowed: `?'#().,&%@!`.
-        :param pulumi.Input[str] name: Specifies the name of the parameter. The name contains a maximum of 64 characters.
+        :param pulumi.Input[str] name: Specifies the name of the parameter. The name contains a maximum of `64` characters.
                Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special characters are
                allowed: `?'#().,&%@!`.
-        :param pulumi.Input[str] product_id: Specifies the product ID. The product ID contains a maximum of 32
+        :param pulumi.Input[str] product_id: Specifies the product ID. The product ID contains a maximum of `32`
                characters. Only letters, digits, hyphens (-) and underscores (_) are allowed. If omitted, the platform will
                automatically allocate a product ID. Changing this parameter will create a new resource.
         :param pulumi.Input[str] protocol: Specifies the protocol.
@@ -807,7 +827,7 @@ class Product(pulumi.CustomResource):
     def description(self) -> pulumi.Output[Optional[str]]:
         """
         Specifies the description of the parameter. The description contains a maximum of
-        128 characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special
+        `128` characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special
         characters are allowed: `?'#().,&%@!`.
         """
         return pulumi.get(self, "description")
@@ -816,7 +836,7 @@ class Product(pulumi.CustomResource):
     @pulumi.getter(name="deviceType")
     def device_type(self) -> pulumi.Output[str]:
         """
-        Specifies the device type. The device type contains a maximum of 32 characters.
+        Specifies the device type. The device type contains a maximum of `32` characters.
         Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special characters
         are allowed: `?'#().,&%@!`. Example: StreetLight, GasMeter, or WaterMeter.
         """
@@ -827,7 +847,7 @@ class Product(pulumi.CustomResource):
     def industry(self) -> pulumi.Output[str]:
         """
         Specifies the industry which the device belongs to. The industry contains a maximum of
-        64 characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and
+        `64` characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and
         the following special characters are allowed: `?'#().,&%@!`.
         """
         return pulumi.get(self, "industry")
@@ -836,7 +856,8 @@ class Product(pulumi.CustomResource):
     @pulumi.getter(name="manufacturerName")
     def manufacturer_name(self) -> pulumi.Output[str]:
         """
-        Specifies the manufacturer name. The name contains a maximum of 32 characters.
+        Specifies the manufacturer name.
+        The name contains a maximum of `32` characters.
         Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special
         characters are allowed: `?'#().,&%@!`.
         """
@@ -846,7 +867,7 @@ class Product(pulumi.CustomResource):
     @pulumi.getter
     def name(self) -> pulumi.Output[str]:
         """
-        Specifies the name of the parameter. The name contains a maximum of 64 characters.
+        Specifies the name of the parameter. The name contains a maximum of `64` characters.
         Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special characters are
         allowed: `?'#().,&%@!`.
         """
@@ -856,7 +877,7 @@ class Product(pulumi.CustomResource):
     @pulumi.getter(name="productId")
     def product_id(self) -> pulumi.Output[str]:
         """
-        Specifies the product ID. The product ID contains a maximum of 32
+        Specifies the product ID. The product ID contains a maximum of `32`
         characters. Only letters, digits, hyphens (-) and underscores (_) are allowed. If omitted, the platform will
         automatically allocate a product ID. Changing this parameter will create a new resource.
         """

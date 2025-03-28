@@ -59,7 +59,7 @@ class GetGroupResult:
     @pulumi.getter
     def id(self) -> str:
         """
-        Indicates the ID of the User.
+        Indicates the ID of the IAM user.
         """
         return pulumi.get(self, "id")
 
@@ -100,7 +100,7 @@ def get_group(description: Optional[str] = None,
     """
     Use this data source to get details of the specified IAM user group.
 
-    > You *must* have IAM read privileges to use this data source.
+    > **NOTE:** You *must* have IAM read privileges to use this data source.
 
     ## Example Usage
 
@@ -139,7 +139,7 @@ def get_group_output(description: Optional[pulumi.Input[Optional[str]]] = None,
     """
     Use this data source to get details of the specified IAM user group.
 
-    > You *must* have IAM read privileges to use this data source.
+    > **NOTE:** You *must* have IAM read privileges to use this data source.
 
     ## Example Usage
 

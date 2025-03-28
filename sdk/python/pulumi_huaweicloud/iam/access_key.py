@@ -300,9 +300,11 @@ class AccessKey(pulumi.CustomResource):
         import pulumi
         import pulumi_huaweicloud as huaweicloud
 
+        config = pulumi.Config()
+        user1_password = config.require_object("user1Password")
         user1 = huaweicloud.iam.User("user1",
             description="A user",
-            password="password123!")
+            password=user1_password)
         key1 = huaweicloud.iam.AccessKey("key1", user_id=user1.id)
         ```
 
@@ -335,9 +337,11 @@ class AccessKey(pulumi.CustomResource):
         import pulumi
         import pulumi_huaweicloud as huaweicloud
 
+        config = pulumi.Config()
+        user1_password = config.require_object("user1Password")
         user1 = huaweicloud.iam.User("user1",
             description="A user",
-            password="password123!")
+            password=user1_password)
         key1 = huaweicloud.iam.AccessKey("key1", user_id=user1.id)
         ```
 

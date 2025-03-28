@@ -103,15 +103,17 @@ def get_policies(enterprise_project_id: Optional[str] = None,
     config = pulumi.Config()
     policy_name = config.require_object("policyName")
     enterprise_project_id = config.require_object("enterpriseProjectId")
-    policies = huaweicloud.Waf.get_policies(name=policy_name,
+    test = huaweicloud.Waf.get_policies(name=policy_name,
         enterprise_project_id=enterprise_project_id)
     ```
 
 
     :param str enterprise_project_id: Specifies the enterprise project ID of WAF policies.
-    :param str name: Policy name used for matching. The value is case sensitive and supports fuzzy matching.
-    :param str region: The region in which to obtain the WAF policies. If omitted, the provider-level region
-           will be used.
+           For enterprise users, if omitted, default enterprise project will be used.
+    :param str name: Specifies the policy name used for matching. The value is case-sensitive and supports
+           fuzzy matching.
+    :param str region: Specifies the region in which to obtain the WAF policies. If omitted,
+           the provider-level region will be used.
     """
     __args__ = dict()
     __args__['enterpriseProjectId'] = enterprise_project_id
@@ -145,14 +147,16 @@ def get_policies_output(enterprise_project_id: Optional[pulumi.Input[Optional[st
     config = pulumi.Config()
     policy_name = config.require_object("policyName")
     enterprise_project_id = config.require_object("enterpriseProjectId")
-    policies = huaweicloud.Waf.get_policies(name=policy_name,
+    test = huaweicloud.Waf.get_policies(name=policy_name,
         enterprise_project_id=enterprise_project_id)
     ```
 
 
     :param str enterprise_project_id: Specifies the enterprise project ID of WAF policies.
-    :param str name: Policy name used for matching. The value is case sensitive and supports fuzzy matching.
-    :param str region: The region in which to obtain the WAF policies. If omitted, the provider-level region
-           will be used.
+           For enterprise users, if omitted, default enterprise project will be used.
+    :param str name: Specifies the policy name used for matching. The value is case-sensitive and supports
+           fuzzy matching.
+    :param str region: Specifies the region in which to obtain the WAF policies. If omitted,
+           the provider-level region will be used.
     """
     ...

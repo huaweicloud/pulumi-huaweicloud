@@ -46,7 +46,7 @@ import * as utilities from "../utilities";
  *
  * ## Import
  *
- * The permission can be imported by `id`, it is composed of `object` and `user_name`, separated by a slash. e.g.
+ * The permission can be imported by `id`, it is composed of `object` and `user_name`, separated by a slash. e.g.bash
  *
  * ```sh
  *  $ pulumi import huaweicloud:Dli/permission:Permission test databases.database_name/user_name

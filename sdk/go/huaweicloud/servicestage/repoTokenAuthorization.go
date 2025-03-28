@@ -14,9 +14,40 @@ import (
 // This resource is used for the ServiceStage service to establish the authorization relationship through personal access
 // token with various types of the Open-Source repository.
 //
+// ## Example Usage
+//
+// ```go
+// package main
+//
+// import (
+//
+//	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud/ServiceStage"
+//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi/config"
+//
+// )
+//
+//	func main() {
+//		pulumi.Run(func(ctx *pulumi.Context) error {
+//			cfg := config.New(ctx, "")
+//			authorizationName := cfg.RequireObject("authorizationName")
+//			personalAccessToken := cfg.RequireObject("personalAccessToken")
+//			_, err := ServiceStage.NewRepoTokenAuthorization(ctx, "test", &ServiceStage.RepoTokenAuthorizationArgs{
+//				Type:  pulumi.String("github"),
+//				Token: pulumi.Any(personalAccessToken),
+//			})
+//			if err != nil {
+//				return err
+//			}
+//			return nil
+//		})
+//	}
+//
+// ```
+//
 // ## Import
 //
-// Authorizations can be imported using their `id` or `name`, e.g.
+// # Authorizations can be imported using their `id` or `name`, e.g.bash
 //
 // ```sh
 //
@@ -26,12 +57,13 @@ import (
 type RepoTokenAuthorization struct {
 	pulumi.CustomResourceState
 
-	// Specified the host name of the repository.
+	// Specified the host name of the repository, e.g. **https://api.github.com**.
 	// Changing this parameter will create a new authorization.
-	Host pulumi.StringOutput `pulumi:"host"`
-	// Specified the authorization name. The name can contain of 4 to 63 characters,
-	// only letters, digits, underscores (_), hyphens (-) and dots (.) are allowed.
-	// Changing this parameter will create a new authorization.
+	// <!-- markdownlint-enable MD034 -->
+	Host pulumi.StringPtrOutput `pulumi:"host"`
+	// Specified the authorization name.\
+	// The name can contain of `4` to `63` characters, only letters, digits, underscores (_), hyphens (-) and dots (.) are
+	// allowed. Changing this parameter will create a new authorization.
 	Name pulumi.StringOutput `pulumi:"name"`
 	// Specified the region in which to create the repository authorization.
 	// If omitted, the provider-level region will be used. Changing this parameter will create a new authorization.
@@ -53,9 +85,6 @@ func NewRepoTokenAuthorization(ctx *pulumi.Context,
 		return nil, errors.New("missing one or more required arguments")
 	}
 
-	if args.Host == nil {
-		return nil, errors.New("invalid value for required argument 'Host'")
-	}
 	if args.Token == nil {
 		return nil, errors.New("invalid value for required argument 'Token'")
 	}
@@ -85,12 +114,13 @@ func GetRepoTokenAuthorization(ctx *pulumi.Context,
 
 // Input properties used for looking up and filtering RepoTokenAuthorization resources.
 type repoTokenAuthorizationState struct {
-	// Specified the host name of the repository.
+	// Specified the host name of the repository, e.g. **https://api.github.com**.
 	// Changing this parameter will create a new authorization.
+	// <!-- markdownlint-enable MD034 -->
 	Host *string `pulumi:"host"`
-	// Specified the authorization name. The name can contain of 4 to 63 characters,
-	// only letters, digits, underscores (_), hyphens (-) and dots (.) are allowed.
-	// Changing this parameter will create a new authorization.
+	// Specified the authorization name.\
+	// The name can contain of `4` to `63` characters, only letters, digits, underscores (_), hyphens (-) and dots (.) are
+	// allowed. Changing this parameter will create a new authorization.
 	Name *string `pulumi:"name"`
 	// Specified the region in which to create the repository authorization.
 	// If omitted, the provider-level region will be used. Changing this parameter will create a new authorization.
@@ -106,12 +136,13 @@ type repoTokenAuthorizationState struct {
 }
 
 type RepoTokenAuthorizationState struct {
-	// Specified the host name of the repository.
+	// Specified the host name of the repository, e.g. **https://api.github.com**.
 	// Changing this parameter will create a new authorization.
+	// <!-- markdownlint-enable MD034 -->
 	Host pulumi.StringPtrInput
-	// Specified the authorization name. The name can contain of 4 to 63 characters,
-	// only letters, digits, underscores (_), hyphens (-) and dots (.) are allowed.
-	// Changing this parameter will create a new authorization.
+	// Specified the authorization name.\
+	// The name can contain of `4` to `63` characters, only letters, digits, underscores (_), hyphens (-) and dots (.) are
+	// allowed. Changing this parameter will create a new authorization.
 	Name pulumi.StringPtrInput
 	// Specified the region in which to create the repository authorization.
 	// If omitted, the provider-level region will be used. Changing this parameter will create a new authorization.
@@ -131,12 +162,13 @@ func (RepoTokenAuthorizationState) ElementType() reflect.Type {
 }
 
 type repoTokenAuthorizationArgs struct {
-	// Specified the host name of the repository.
+	// Specified the host name of the repository, e.g. **https://api.github.com**.
 	// Changing this parameter will create a new authorization.
-	Host string `pulumi:"host"`
-	// Specified the authorization name. The name can contain of 4 to 63 characters,
-	// only letters, digits, underscores (_), hyphens (-) and dots (.) are allowed.
-	// Changing this parameter will create a new authorization.
+	// <!-- markdownlint-enable MD034 -->
+	Host *string `pulumi:"host"`
+	// Specified the authorization name.\
+	// The name can contain of `4` to `63` characters, only letters, digits, underscores (_), hyphens (-) and dots (.) are
+	// allowed. Changing this parameter will create a new authorization.
 	Name *string `pulumi:"name"`
 	// Specified the region in which to create the repository authorization.
 	// If omitted, the provider-level region will be used. Changing this parameter will create a new authorization.
@@ -153,12 +185,13 @@ type repoTokenAuthorizationArgs struct {
 
 // The set of arguments for constructing a RepoTokenAuthorization resource.
 type RepoTokenAuthorizationArgs struct {
-	// Specified the host name of the repository.
+	// Specified the host name of the repository, e.g. **https://api.github.com**.
 	// Changing this parameter will create a new authorization.
-	Host pulumi.StringInput
-	// Specified the authorization name. The name can contain of 4 to 63 characters,
-	// only letters, digits, underscores (_), hyphens (-) and dots (.) are allowed.
-	// Changing this parameter will create a new authorization.
+	// <!-- markdownlint-enable MD034 -->
+	Host pulumi.StringPtrInput
+	// Specified the authorization name.\
+	// The name can contain of `4` to `63` characters, only letters, digits, underscores (_), hyphens (-) and dots (.) are
+	// allowed. Changing this parameter will create a new authorization.
 	Name pulumi.StringPtrInput
 	// Specified the region in which to create the repository authorization.
 	// If omitted, the provider-level region will be used. Changing this parameter will create a new authorization.
@@ -260,15 +293,16 @@ func (o RepoTokenAuthorizationOutput) ToRepoTokenAuthorizationOutputWithContext(
 	return o
 }
 
-// Specified the host name of the repository.
+// Specified the host name of the repository, e.g. **https://api.github.com**.
 // Changing this parameter will create a new authorization.
-func (o RepoTokenAuthorizationOutput) Host() pulumi.StringOutput {
-	return o.ApplyT(func(v *RepoTokenAuthorization) pulumi.StringOutput { return v.Host }).(pulumi.StringOutput)
+// <!-- markdownlint-enable MD034 -->
+func (o RepoTokenAuthorizationOutput) Host() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *RepoTokenAuthorization) pulumi.StringPtrOutput { return v.Host }).(pulumi.StringPtrOutput)
 }
 
-// Specified the authorization name. The name can contain of 4 to 63 characters,
-// only letters, digits, underscores (_), hyphens (-) and dots (.) are allowed.
-// Changing this parameter will create a new authorization.
+// Specified the authorization name.\
+// The name can contain of `4` to `63` characters, only letters, digits, underscores (_), hyphens (-) and dots (.) are
+// allowed. Changing this parameter will create a new authorization.
 func (o RepoTokenAuthorizationOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v *RepoTokenAuthorization) pulumi.StringOutput { return v.Name }).(pulumi.StringOutput)
 }

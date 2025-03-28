@@ -7,7 +7,6 @@ import (
 	"context"
 	"reflect"
 
-	"github.com/pkg/errors"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
@@ -70,6 +69,45 @@ import (
 //	}
 //
 // ```
+// ### Address Group with ipExtraSet
+//
+// ```go
+// package main
+//
+// import (
+//
+//	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud/Vpc"
+//	"github.com/pulumi/pulumi-huaweicloud/sdk/go/huaweicloud/Vpc"
+//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+//
+// )
+//
+//	func main() {
+//		pulumi.Run(func(ctx *pulumi.Context) error {
+//			_, err := Vpc.NewAddressGroup(ctx, "ipv6", &Vpc.AddressGroupArgs{
+//				IpExtraSets: vpc.AddressGroupIpExtraSetArray{
+//					&vpc.AddressGroupIpExtraSetArgs{
+//						Ip:      pulumi.String("192.168.3.2"),
+//						Remarks: pulumi.String("terraform test 1"),
+//					},
+//					&vpc.AddressGroupIpExtraSetArgs{
+//						Ip:      pulumi.String("192.168.5.0/24"),
+//						Remarks: pulumi.String("terraform test 2"),
+//					},
+//					&vpc.AddressGroupIpExtraSetArgs{
+//						Ip: pulumi.String("192.168.3.20-192.168.3.100"),
+//					},
+//				},
+//				IpVersion: pulumi.Int(4),
+//			})
+//			if err != nil {
+//				return err
+//			}
+//			return nil
+//		})
+//	}
+//
+// ```
 //
 // ## Import
 //
@@ -98,10 +136,10 @@ type AddressGroup struct {
 	pulumi.CustomResourceState
 
 	// Specifies an array of one or more IP addresses. The address can be a single IP
-	// address, IP address range or IP address CIDR. The maximum length is 20.
+	// address, IP address range or IP address CIDR. Only one of `addresses` and `ipExtraSet` can be specified.
 	Addresses pulumi.StringArrayOutput `pulumi:"addresses"`
 	// Specifies the supplementary information about the IP address group.
-	// The value is a string of no more than 255 characters and cannot contain angle brackets (< or >).
+	// The value is a string of no more than `255` characters and cannot contain angle brackets (< or >).
 	Description pulumi.StringPtrOutput `pulumi:"description"`
 	// Specifies the enterprise project ID.
 	// Changing this creates a new address group.
@@ -110,14 +148,19 @@ type AddressGroup struct {
 	// a security group rule, the address group and the associated security group rule will be deleted together.
 	// The default value is **false**.
 	ForceDestroy pulumi.BoolPtrOutput `pulumi:"forceDestroy"`
+	// Specifies the IP addresses and their remarks in an IP address group.
+	// The ipExtraSet structure is documented below.
+	// Only one of `addresses` and `ipExtraSet` can be specified.
+	IpExtraSets AddressGroupIpExtraSetArrayOutput `pulumi:"ipExtraSets"`
 	// Specifies the IP version, either `4` (default) or `6`.
 	// Changing this creates a new address group.
 	IpVersion pulumi.IntPtrOutput `pulumi:"ipVersion"`
 	// Specifies the maximum number of addresses that an address group can contain.
-	// Value range: **1**-**20**, the default value is **20**.
+	// The valid value is range from `1` to `20`, the default value is `20`.
 	MaxCapacity pulumi.IntOutput `pulumi:"maxCapacity"`
-	// Specifies the IP address group name. The value is a string of 1 to 64 characters that can contain
-	// letters, digits, underscores (_), hyphens (-) and periods (.).
+	// Specifies the IP address group name.\
+	// The value is a string of `1` to `64` characters that can contain letters, digits, underscores (_), hyphens (-) and
+	// periods (.).
 	Name pulumi.StringOutput `pulumi:"name"`
 	// Specifies the region in which to create the IP address group. If omitted, the
 	// provider-level region will be used. Changing this creates a new address group.
@@ -128,12 +171,9 @@ type AddressGroup struct {
 func NewAddressGroup(ctx *pulumi.Context,
 	name string, args *AddressGroupArgs, opts ...pulumi.ResourceOption) (*AddressGroup, error) {
 	if args == nil {
-		return nil, errors.New("missing one or more required arguments")
+		args = &AddressGroupArgs{}
 	}
 
-	if args.Addresses == nil {
-		return nil, errors.New("invalid value for required argument 'Addresses'")
-	}
 	opts = pkgResourceDefaultOpts(opts)
 	var resource AddressGroup
 	err := ctx.RegisterResource("huaweicloud:Vpc/addressGroup:AddressGroup", name, args, &resource, opts...)
@@ -158,10 +198,10 @@ func GetAddressGroup(ctx *pulumi.Context,
 // Input properties used for looking up and filtering AddressGroup resources.
 type addressGroupState struct {
 	// Specifies an array of one or more IP addresses. The address can be a single IP
-	// address, IP address range or IP address CIDR. The maximum length is 20.
+	// address, IP address range or IP address CIDR. Only one of `addresses` and `ipExtraSet` can be specified.
 	Addresses []string `pulumi:"addresses"`
 	// Specifies the supplementary information about the IP address group.
-	// The value is a string of no more than 255 characters and cannot contain angle brackets (< or >).
+	// The value is a string of no more than `255` characters and cannot contain angle brackets (< or >).
 	Description *string `pulumi:"description"`
 	// Specifies the enterprise project ID.
 	// Changing this creates a new address group.
@@ -170,14 +210,19 @@ type addressGroupState struct {
 	// a security group rule, the address group and the associated security group rule will be deleted together.
 	// The default value is **false**.
 	ForceDestroy *bool `pulumi:"forceDestroy"`
+	// Specifies the IP addresses and their remarks in an IP address group.
+	// The ipExtraSet structure is documented below.
+	// Only one of `addresses` and `ipExtraSet` can be specified.
+	IpExtraSets []AddressGroupIpExtraSet `pulumi:"ipExtraSets"`
 	// Specifies the IP version, either `4` (default) or `6`.
 	// Changing this creates a new address group.
 	IpVersion *int `pulumi:"ipVersion"`
 	// Specifies the maximum number of addresses that an address group can contain.
-	// Value range: **1**-**20**, the default value is **20**.
+	// The valid value is range from `1` to `20`, the default value is `20`.
 	MaxCapacity *int `pulumi:"maxCapacity"`
-	// Specifies the IP address group name. The value is a string of 1 to 64 characters that can contain
-	// letters, digits, underscores (_), hyphens (-) and periods (.).
+	// Specifies the IP address group name.\
+	// The value is a string of `1` to `64` characters that can contain letters, digits, underscores (_), hyphens (-) and
+	// periods (.).
 	Name *string `pulumi:"name"`
 	// Specifies the region in which to create the IP address group. If omitted, the
 	// provider-level region will be used. Changing this creates a new address group.
@@ -186,10 +231,10 @@ type addressGroupState struct {
 
 type AddressGroupState struct {
 	// Specifies an array of one or more IP addresses. The address can be a single IP
-	// address, IP address range or IP address CIDR. The maximum length is 20.
+	// address, IP address range or IP address CIDR. Only one of `addresses` and `ipExtraSet` can be specified.
 	Addresses pulumi.StringArrayInput
 	// Specifies the supplementary information about the IP address group.
-	// The value is a string of no more than 255 characters and cannot contain angle brackets (< or >).
+	// The value is a string of no more than `255` characters and cannot contain angle brackets (< or >).
 	Description pulumi.StringPtrInput
 	// Specifies the enterprise project ID.
 	// Changing this creates a new address group.
@@ -198,14 +243,19 @@ type AddressGroupState struct {
 	// a security group rule, the address group and the associated security group rule will be deleted together.
 	// The default value is **false**.
 	ForceDestroy pulumi.BoolPtrInput
+	// Specifies the IP addresses and their remarks in an IP address group.
+	// The ipExtraSet structure is documented below.
+	// Only one of `addresses` and `ipExtraSet` can be specified.
+	IpExtraSets AddressGroupIpExtraSetArrayInput
 	// Specifies the IP version, either `4` (default) or `6`.
 	// Changing this creates a new address group.
 	IpVersion pulumi.IntPtrInput
 	// Specifies the maximum number of addresses that an address group can contain.
-	// Value range: **1**-**20**, the default value is **20**.
+	// The valid value is range from `1` to `20`, the default value is `20`.
 	MaxCapacity pulumi.IntPtrInput
-	// Specifies the IP address group name. The value is a string of 1 to 64 characters that can contain
-	// letters, digits, underscores (_), hyphens (-) and periods (.).
+	// Specifies the IP address group name.\
+	// The value is a string of `1` to `64` characters that can contain letters, digits, underscores (_), hyphens (-) and
+	// periods (.).
 	Name pulumi.StringPtrInput
 	// Specifies the region in which to create the IP address group. If omitted, the
 	// provider-level region will be used. Changing this creates a new address group.
@@ -218,10 +268,10 @@ func (AddressGroupState) ElementType() reflect.Type {
 
 type addressGroupArgs struct {
 	// Specifies an array of one or more IP addresses. The address can be a single IP
-	// address, IP address range or IP address CIDR. The maximum length is 20.
+	// address, IP address range or IP address CIDR. Only one of `addresses` and `ipExtraSet` can be specified.
 	Addresses []string `pulumi:"addresses"`
 	// Specifies the supplementary information about the IP address group.
-	// The value is a string of no more than 255 characters and cannot contain angle brackets (< or >).
+	// The value is a string of no more than `255` characters and cannot contain angle brackets (< or >).
 	Description *string `pulumi:"description"`
 	// Specifies the enterprise project ID.
 	// Changing this creates a new address group.
@@ -230,14 +280,19 @@ type addressGroupArgs struct {
 	// a security group rule, the address group and the associated security group rule will be deleted together.
 	// The default value is **false**.
 	ForceDestroy *bool `pulumi:"forceDestroy"`
+	// Specifies the IP addresses and their remarks in an IP address group.
+	// The ipExtraSet structure is documented below.
+	// Only one of `addresses` and `ipExtraSet` can be specified.
+	IpExtraSets []AddressGroupIpExtraSet `pulumi:"ipExtraSets"`
 	// Specifies the IP version, either `4` (default) or `6`.
 	// Changing this creates a new address group.
 	IpVersion *int `pulumi:"ipVersion"`
 	// Specifies the maximum number of addresses that an address group can contain.
-	// Value range: **1**-**20**, the default value is **20**.
+	// The valid value is range from `1` to `20`, the default value is `20`.
 	MaxCapacity *int `pulumi:"maxCapacity"`
-	// Specifies the IP address group name. The value is a string of 1 to 64 characters that can contain
-	// letters, digits, underscores (_), hyphens (-) and periods (.).
+	// Specifies the IP address group name.\
+	// The value is a string of `1` to `64` characters that can contain letters, digits, underscores (_), hyphens (-) and
+	// periods (.).
 	Name *string `pulumi:"name"`
 	// Specifies the region in which to create the IP address group. If omitted, the
 	// provider-level region will be used. Changing this creates a new address group.
@@ -247,10 +302,10 @@ type addressGroupArgs struct {
 // The set of arguments for constructing a AddressGroup resource.
 type AddressGroupArgs struct {
 	// Specifies an array of one or more IP addresses. The address can be a single IP
-	// address, IP address range or IP address CIDR. The maximum length is 20.
+	// address, IP address range or IP address CIDR. Only one of `addresses` and `ipExtraSet` can be specified.
 	Addresses pulumi.StringArrayInput
 	// Specifies the supplementary information about the IP address group.
-	// The value is a string of no more than 255 characters and cannot contain angle brackets (< or >).
+	// The value is a string of no more than `255` characters and cannot contain angle brackets (< or >).
 	Description pulumi.StringPtrInput
 	// Specifies the enterprise project ID.
 	// Changing this creates a new address group.
@@ -259,14 +314,19 @@ type AddressGroupArgs struct {
 	// a security group rule, the address group and the associated security group rule will be deleted together.
 	// The default value is **false**.
 	ForceDestroy pulumi.BoolPtrInput
+	// Specifies the IP addresses and their remarks in an IP address group.
+	// The ipExtraSet structure is documented below.
+	// Only one of `addresses` and `ipExtraSet` can be specified.
+	IpExtraSets AddressGroupIpExtraSetArrayInput
 	// Specifies the IP version, either `4` (default) or `6`.
 	// Changing this creates a new address group.
 	IpVersion pulumi.IntPtrInput
 	// Specifies the maximum number of addresses that an address group can contain.
-	// Value range: **1**-**20**, the default value is **20**.
+	// The valid value is range from `1` to `20`, the default value is `20`.
 	MaxCapacity pulumi.IntPtrInput
-	// Specifies the IP address group name. The value is a string of 1 to 64 characters that can contain
-	// letters, digits, underscores (_), hyphens (-) and periods (.).
+	// Specifies the IP address group name.\
+	// The value is a string of `1` to `64` characters that can contain letters, digits, underscores (_), hyphens (-) and
+	// periods (.).
 	Name pulumi.StringPtrInput
 	// Specifies the region in which to create the IP address group. If omitted, the
 	// provider-level region will be used. Changing this creates a new address group.
@@ -361,13 +421,13 @@ func (o AddressGroupOutput) ToAddressGroupOutputWithContext(ctx context.Context)
 }
 
 // Specifies an array of one or more IP addresses. The address can be a single IP
-// address, IP address range or IP address CIDR. The maximum length is 20.
+// address, IP address range or IP address CIDR. Only one of `addresses` and `ipExtraSet` can be specified.
 func (o AddressGroupOutput) Addresses() pulumi.StringArrayOutput {
 	return o.ApplyT(func(v *AddressGroup) pulumi.StringArrayOutput { return v.Addresses }).(pulumi.StringArrayOutput)
 }
 
 // Specifies the supplementary information about the IP address group.
-// The value is a string of no more than 255 characters and cannot contain angle brackets (< or >).
+// The value is a string of no more than `255` characters and cannot contain angle brackets (< or >).
 func (o AddressGroupOutput) Description() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *AddressGroup) pulumi.StringPtrOutput { return v.Description }).(pulumi.StringPtrOutput)
 }
@@ -385,6 +445,13 @@ func (o AddressGroupOutput) ForceDestroy() pulumi.BoolPtrOutput {
 	return o.ApplyT(func(v *AddressGroup) pulumi.BoolPtrOutput { return v.ForceDestroy }).(pulumi.BoolPtrOutput)
 }
 
+// Specifies the IP addresses and their remarks in an IP address group.
+// The ipExtraSet structure is documented below.
+// Only one of `addresses` and `ipExtraSet` can be specified.
+func (o AddressGroupOutput) IpExtraSets() AddressGroupIpExtraSetArrayOutput {
+	return o.ApplyT(func(v *AddressGroup) AddressGroupIpExtraSetArrayOutput { return v.IpExtraSets }).(AddressGroupIpExtraSetArrayOutput)
+}
+
 // Specifies the IP version, either `4` (default) or `6`.
 // Changing this creates a new address group.
 func (o AddressGroupOutput) IpVersion() pulumi.IntPtrOutput {
@@ -392,13 +459,14 @@ func (o AddressGroupOutput) IpVersion() pulumi.IntPtrOutput {
 }
 
 // Specifies the maximum number of addresses that an address group can contain.
-// Value range: **1**-**20**, the default value is **20**.
+// The valid value is range from `1` to `20`, the default value is `20`.
 func (o AddressGroupOutput) MaxCapacity() pulumi.IntOutput {
 	return o.ApplyT(func(v *AddressGroup) pulumi.IntOutput { return v.MaxCapacity }).(pulumi.IntOutput)
 }
 
-// Specifies the IP address group name. The value is a string of 1 to 64 characters that can contain
-// letters, digits, underscores (_), hyphens (-) and periods (.).
+// Specifies the IP address group name.\
+// The value is a string of `1` to `64` characters that can contain letters, digits, underscores (_), hyphens (-) and
+// periods (.).
 func (o AddressGroupOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v *AddressGroup) pulumi.StringOutput { return v.Name }).(pulumi.StringOutput)
 }

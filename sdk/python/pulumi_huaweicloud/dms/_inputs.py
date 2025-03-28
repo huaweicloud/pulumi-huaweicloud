@@ -11,7 +11,10 @@ from .. import _utilities
 
 __all__ = [
     'KafkaInstanceCrossVpcAccessArgs',
+    'KafkaInstanceParameterArgs',
+    'KafkaInstancePortProtocolArgs',
     'KafkaPermissionsPolicyArgs',
+    'KafkaTopicConfigArgs',
 ]
 
 @pulumi.input_type
@@ -101,6 +104,338 @@ class KafkaInstanceCrossVpcAccessArgs:
 
 
 @pulumi.input_type
+class KafkaInstanceParameterArgs:
+    def __init__(__self__, *,
+                 name: pulumi.Input[str],
+                 value: pulumi.Input[str]):
+        """
+        :param pulumi.Input[str] name: Specifies the parameter name. Static parameter needs to restart the instance to take effect.
+        :param pulumi.Input[str] value: Specifies the parameter value.
+        """
+        pulumi.set(__self__, "name", name)
+        pulumi.set(__self__, "value", value)
+
+    @property
+    @pulumi.getter
+    def name(self) -> pulumi.Input[str]:
+        """
+        Specifies the parameter name. Static parameter needs to restart the instance to take effect.
+        """
+        return pulumi.get(self, "name")
+
+    @name.setter
+    def name(self, value: pulumi.Input[str]):
+        pulumi.set(self, "name", value)
+
+    @property
+    @pulumi.getter
+    def value(self) -> pulumi.Input[str]:
+        """
+        Specifies the parameter value.
+        """
+        return pulumi.get(self, "value")
+
+    @value.setter
+    def value(self, value: pulumi.Input[str]):
+        pulumi.set(self, "value", value)
+
+
+@pulumi.input_type
+class KafkaInstancePortProtocolArgs:
+    def __init__(__self__, *,
+                 private_plain_address: Optional[pulumi.Input[str]] = None,
+                 private_plain_domain_name: Optional[pulumi.Input[str]] = None,
+                 private_plain_enable: Optional[pulumi.Input[bool]] = None,
+                 private_sasl_plaintext_address: Optional[pulumi.Input[str]] = None,
+                 private_sasl_plaintext_domain_name: Optional[pulumi.Input[str]] = None,
+                 private_sasl_plaintext_enable: Optional[pulumi.Input[bool]] = None,
+                 private_sasl_ssl_address: Optional[pulumi.Input[str]] = None,
+                 private_sasl_ssl_domain_name: Optional[pulumi.Input[str]] = None,
+                 private_sasl_ssl_enable: Optional[pulumi.Input[bool]] = None,
+                 public_plain_address: Optional[pulumi.Input[str]] = None,
+                 public_plain_domain_name: Optional[pulumi.Input[str]] = None,
+                 public_plain_enable: Optional[pulumi.Input[bool]] = None,
+                 public_sasl_plaintext_address: Optional[pulumi.Input[str]] = None,
+                 public_sasl_plaintext_domain_name: Optional[pulumi.Input[str]] = None,
+                 public_sasl_plaintext_enable: Optional[pulumi.Input[bool]] = None,
+                 public_sasl_ssl_address: Optional[pulumi.Input[str]] = None,
+                 public_sasl_ssl_domain_name: Optional[pulumi.Input[str]] = None,
+                 public_sasl_ssl_enable: Optional[pulumi.Input[bool]] = None):
+        """
+        :param pulumi.Input[str] private_plain_address: The private plain address.
+        :param pulumi.Input[str] private_plain_domain_name: The private plain domain name.
+        :param pulumi.Input[bool] private_plain_enable: Whether the private plain enabled.
+        :param pulumi.Input[str] private_sasl_plaintext_address: The private sasl plaintext address.
+        :param pulumi.Input[str] private_sasl_plaintext_domain_name: The private sasl plaintext domain name.
+        :param pulumi.Input[bool] private_sasl_plaintext_enable: Whether the private sasl plaintext enabled.
+        :param pulumi.Input[str] private_sasl_ssl_address: The private sasl ssl address.
+        :param pulumi.Input[str] private_sasl_ssl_domain_name: The private sasl ssl domain name.
+        :param pulumi.Input[bool] private_sasl_ssl_enable: Whether the private sasl ssl enabled.
+        :param pulumi.Input[str] public_plain_address: The public plain address.
+        :param pulumi.Input[str] public_plain_domain_name: The public plain domain name.
+        :param pulumi.Input[bool] public_plain_enable: Whether the public plain enabled.
+        :param pulumi.Input[str] public_sasl_plaintext_address: The public sasl plaintext address.
+        :param pulumi.Input[str] public_sasl_plaintext_domain_name: The public sasl plaintext domain name.
+        :param pulumi.Input[bool] public_sasl_plaintext_enable: Whether the public sasl plaintext enabled.
+        :param pulumi.Input[str] public_sasl_ssl_address: The public sasl ssl address.
+        :param pulumi.Input[str] public_sasl_ssl_domain_name: The public sasl ssl domain name.
+        :param pulumi.Input[bool] public_sasl_ssl_enable: Whether the public sasl ssl enabled.
+        """
+        if private_plain_address is not None:
+            pulumi.set(__self__, "private_plain_address", private_plain_address)
+        if private_plain_domain_name is not None:
+            pulumi.set(__self__, "private_plain_domain_name", private_plain_domain_name)
+        if private_plain_enable is not None:
+            pulumi.set(__self__, "private_plain_enable", private_plain_enable)
+        if private_sasl_plaintext_address is not None:
+            pulumi.set(__self__, "private_sasl_plaintext_address", private_sasl_plaintext_address)
+        if private_sasl_plaintext_domain_name is not None:
+            pulumi.set(__self__, "private_sasl_plaintext_domain_name", private_sasl_plaintext_domain_name)
+        if private_sasl_plaintext_enable is not None:
+            pulumi.set(__self__, "private_sasl_plaintext_enable", private_sasl_plaintext_enable)
+        if private_sasl_ssl_address is not None:
+            pulumi.set(__self__, "private_sasl_ssl_address", private_sasl_ssl_address)
+        if private_sasl_ssl_domain_name is not None:
+            pulumi.set(__self__, "private_sasl_ssl_domain_name", private_sasl_ssl_domain_name)
+        if private_sasl_ssl_enable is not None:
+            pulumi.set(__self__, "private_sasl_ssl_enable", private_sasl_ssl_enable)
+        if public_plain_address is not None:
+            pulumi.set(__self__, "public_plain_address", public_plain_address)
+        if public_plain_domain_name is not None:
+            pulumi.set(__self__, "public_plain_domain_name", public_plain_domain_name)
+        if public_plain_enable is not None:
+            pulumi.set(__self__, "public_plain_enable", public_plain_enable)
+        if public_sasl_plaintext_address is not None:
+            pulumi.set(__self__, "public_sasl_plaintext_address", public_sasl_plaintext_address)
+        if public_sasl_plaintext_domain_name is not None:
+            pulumi.set(__self__, "public_sasl_plaintext_domain_name", public_sasl_plaintext_domain_name)
+        if public_sasl_plaintext_enable is not None:
+            pulumi.set(__self__, "public_sasl_plaintext_enable", public_sasl_plaintext_enable)
+        if public_sasl_ssl_address is not None:
+            pulumi.set(__self__, "public_sasl_ssl_address", public_sasl_ssl_address)
+        if public_sasl_ssl_domain_name is not None:
+            pulumi.set(__self__, "public_sasl_ssl_domain_name", public_sasl_ssl_domain_name)
+        if public_sasl_ssl_enable is not None:
+            pulumi.set(__self__, "public_sasl_ssl_enable", public_sasl_ssl_enable)
+
+    @property
+    @pulumi.getter(name="privatePlainAddress")
+    def private_plain_address(self) -> Optional[pulumi.Input[str]]:
+        """
+        The private plain address.
+        """
+        return pulumi.get(self, "private_plain_address")
+
+    @private_plain_address.setter
+    def private_plain_address(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "private_plain_address", value)
+
+    @property
+    @pulumi.getter(name="privatePlainDomainName")
+    def private_plain_domain_name(self) -> Optional[pulumi.Input[str]]:
+        """
+        The private plain domain name.
+        """
+        return pulumi.get(self, "private_plain_domain_name")
+
+    @private_plain_domain_name.setter
+    def private_plain_domain_name(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "private_plain_domain_name", value)
+
+    @property
+    @pulumi.getter(name="privatePlainEnable")
+    def private_plain_enable(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Whether the private plain enabled.
+        """
+        return pulumi.get(self, "private_plain_enable")
+
+    @private_plain_enable.setter
+    def private_plain_enable(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "private_plain_enable", value)
+
+    @property
+    @pulumi.getter(name="privateSaslPlaintextAddress")
+    def private_sasl_plaintext_address(self) -> Optional[pulumi.Input[str]]:
+        """
+        The private sasl plaintext address.
+        """
+        return pulumi.get(self, "private_sasl_plaintext_address")
+
+    @private_sasl_plaintext_address.setter
+    def private_sasl_plaintext_address(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "private_sasl_plaintext_address", value)
+
+    @property
+    @pulumi.getter(name="privateSaslPlaintextDomainName")
+    def private_sasl_plaintext_domain_name(self) -> Optional[pulumi.Input[str]]:
+        """
+        The private sasl plaintext domain name.
+        """
+        return pulumi.get(self, "private_sasl_plaintext_domain_name")
+
+    @private_sasl_plaintext_domain_name.setter
+    def private_sasl_plaintext_domain_name(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "private_sasl_plaintext_domain_name", value)
+
+    @property
+    @pulumi.getter(name="privateSaslPlaintextEnable")
+    def private_sasl_plaintext_enable(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Whether the private sasl plaintext enabled.
+        """
+        return pulumi.get(self, "private_sasl_plaintext_enable")
+
+    @private_sasl_plaintext_enable.setter
+    def private_sasl_plaintext_enable(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "private_sasl_plaintext_enable", value)
+
+    @property
+    @pulumi.getter(name="privateSaslSslAddress")
+    def private_sasl_ssl_address(self) -> Optional[pulumi.Input[str]]:
+        """
+        The private sasl ssl address.
+        """
+        return pulumi.get(self, "private_sasl_ssl_address")
+
+    @private_sasl_ssl_address.setter
+    def private_sasl_ssl_address(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "private_sasl_ssl_address", value)
+
+    @property
+    @pulumi.getter(name="privateSaslSslDomainName")
+    def private_sasl_ssl_domain_name(self) -> Optional[pulumi.Input[str]]:
+        """
+        The private sasl ssl domain name.
+        """
+        return pulumi.get(self, "private_sasl_ssl_domain_name")
+
+    @private_sasl_ssl_domain_name.setter
+    def private_sasl_ssl_domain_name(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "private_sasl_ssl_domain_name", value)
+
+    @property
+    @pulumi.getter(name="privateSaslSslEnable")
+    def private_sasl_ssl_enable(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Whether the private sasl ssl enabled.
+        """
+        return pulumi.get(self, "private_sasl_ssl_enable")
+
+    @private_sasl_ssl_enable.setter
+    def private_sasl_ssl_enable(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "private_sasl_ssl_enable", value)
+
+    @property
+    @pulumi.getter(name="publicPlainAddress")
+    def public_plain_address(self) -> Optional[pulumi.Input[str]]:
+        """
+        The public plain address.
+        """
+        return pulumi.get(self, "public_plain_address")
+
+    @public_plain_address.setter
+    def public_plain_address(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "public_plain_address", value)
+
+    @property
+    @pulumi.getter(name="publicPlainDomainName")
+    def public_plain_domain_name(self) -> Optional[pulumi.Input[str]]:
+        """
+        The public plain domain name.
+        """
+        return pulumi.get(self, "public_plain_domain_name")
+
+    @public_plain_domain_name.setter
+    def public_plain_domain_name(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "public_plain_domain_name", value)
+
+    @property
+    @pulumi.getter(name="publicPlainEnable")
+    def public_plain_enable(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Whether the public plain enabled.
+        """
+        return pulumi.get(self, "public_plain_enable")
+
+    @public_plain_enable.setter
+    def public_plain_enable(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "public_plain_enable", value)
+
+    @property
+    @pulumi.getter(name="publicSaslPlaintextAddress")
+    def public_sasl_plaintext_address(self) -> Optional[pulumi.Input[str]]:
+        """
+        The public sasl plaintext address.
+        """
+        return pulumi.get(self, "public_sasl_plaintext_address")
+
+    @public_sasl_plaintext_address.setter
+    def public_sasl_plaintext_address(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "public_sasl_plaintext_address", value)
+
+    @property
+    @pulumi.getter(name="publicSaslPlaintextDomainName")
+    def public_sasl_plaintext_domain_name(self) -> Optional[pulumi.Input[str]]:
+        """
+        The public sasl plaintext domain name.
+        """
+        return pulumi.get(self, "public_sasl_plaintext_domain_name")
+
+    @public_sasl_plaintext_domain_name.setter
+    def public_sasl_plaintext_domain_name(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "public_sasl_plaintext_domain_name", value)
+
+    @property
+    @pulumi.getter(name="publicSaslPlaintextEnable")
+    def public_sasl_plaintext_enable(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Whether the public sasl plaintext enabled.
+        """
+        return pulumi.get(self, "public_sasl_plaintext_enable")
+
+    @public_sasl_plaintext_enable.setter
+    def public_sasl_plaintext_enable(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "public_sasl_plaintext_enable", value)
+
+    @property
+    @pulumi.getter(name="publicSaslSslAddress")
+    def public_sasl_ssl_address(self) -> Optional[pulumi.Input[str]]:
+        """
+        The public sasl ssl address.
+        """
+        return pulumi.get(self, "public_sasl_ssl_address")
+
+    @public_sasl_ssl_address.setter
+    def public_sasl_ssl_address(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "public_sasl_ssl_address", value)
+
+    @property
+    @pulumi.getter(name="publicSaslSslDomainName")
+    def public_sasl_ssl_domain_name(self) -> Optional[pulumi.Input[str]]:
+        """
+        The public sasl ssl domain name.
+        """
+        return pulumi.get(self, "public_sasl_ssl_domain_name")
+
+    @public_sasl_ssl_domain_name.setter
+    def public_sasl_ssl_domain_name(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "public_sasl_ssl_domain_name", value)
+
+    @property
+    @pulumi.getter(name="publicSaslSslEnable")
+    def public_sasl_ssl_enable(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Whether the public sasl ssl enabled.
+        """
+        return pulumi.get(self, "public_sasl_ssl_enable")
+
+    @public_sasl_ssl_enable.setter
+    def public_sasl_ssl_enable(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "public_sasl_ssl_enable", value)
+
+
+@pulumi.input_type
 class KafkaPermissionsPolicyArgs:
     def __init__(__self__, *,
                  access_policy: pulumi.Input[str],
@@ -141,5 +476,42 @@ class KafkaPermissionsPolicyArgs:
     @user_name.setter
     def user_name(self, value: pulumi.Input[str]):
         pulumi.set(self, "user_name", value)
+
+
+@pulumi.input_type
+class KafkaTopicConfigArgs:
+    def __init__(__self__, *,
+                 name: pulumi.Input[str],
+                 value: pulumi.Input[str]):
+        """
+        :param pulumi.Input[str] name: Specifies the configuration name.
+        :param pulumi.Input[str] value: Specifies the configuration value.
+        """
+        pulumi.set(__self__, "name", name)
+        pulumi.set(__self__, "value", value)
+
+    @property
+    @pulumi.getter
+    def name(self) -> pulumi.Input[str]:
+        """
+        Specifies the configuration name.
+        """
+        return pulumi.get(self, "name")
+
+    @name.setter
+    def name(self, value: pulumi.Input[str]):
+        pulumi.set(self, "name", value)
+
+    @property
+    @pulumi.getter
+    def value(self) -> pulumi.Input[str]:
+        """
+        Specifies the configuration value.
+        """
+        return pulumi.get(self, "value")
+
+    @value.setter
+    def value(self, value: pulumi.Input[str]):
+        pulumi.set(self, "value", value)
 
 

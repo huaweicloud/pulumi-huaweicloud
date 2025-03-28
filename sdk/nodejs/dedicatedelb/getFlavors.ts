@@ -13,16 +13,13 @@ import * as utilities from "../utilities";
  * ```typescript
  * import * as pulumi from "@pulumi/pulumi";
  * import * as huaweicloud from "@pulumi/huaweicloud";
- * import * as pulumi from "@huaweicloudos/pulumi";
  *
- * const flavors = huaweicloud.DedicatedElb.getFlavors({
- *     type: "L7",
- *     maxConnections: 200000,
- *     cps: 2000,
+ * const flavors = pulumi.output(huaweicloud.DedicatedElb.getFlavors({
  *     bandwidth: 50,
- * });
- * const lb = new huaweicloud.dedicatedelb.Loadbalancer("lb", {l7FlavorId: flavors.then(flavors => flavors.ids?[0])});
- * // Other properties...
+ *     cps: 2000,
+ *     maxConnections: 200000,
+ *     type: "L7",
+ * }));
  * ```
  */
 export function getFlavors(args?: GetFlavorsArgs, opts?: pulumi.InvokeOptions): Promise<GetFlavorsResult> {
@@ -36,6 +33,7 @@ export function getFlavors(args?: GetFlavorsArgs, opts?: pulumi.InvokeOptions): 
         "bandwidth": args.bandwidth,
         "cps": args.cps,
         "maxConnections": args.maxConnections,
+        "name": args.name,
         "qps": args.qps,
         "region": args.region,
         "type": args.type,
@@ -59,6 +57,10 @@ export interface GetFlavorsArgs {
      */
     maxConnections?: number;
     /**
+     * Specifies the flavor name.
+     */
+    name?: string;
+    /**
      * Specifies the qps in the L7 flavor.
      */
     qps?: number;
@@ -68,7 +70,13 @@ export interface GetFlavorsArgs {
      */
     region?: string;
     /**
-     * Specifies the flavor type. Valid values are L4 and L7.
+     * Specifies the flavor type. Values options:
+     * + **L4**: indicates Layer-4 flavor.
+     * + **L7**: indicates Layer-7 flavor.
+     * + **L4_elastic**: indicates minimum Layer-4 flavor for elastic scaling.
+     * + **L7_elastic**: indicates minimum Layer-7 flavor for elastic scaling.
+     * + **L4_elastic_max**: indicates maximum Layer-4 flavor for elastic scaling.
+     * + **L7_elastic_max**: indicates maximum Layer-7 flavor for elastic scaling
      */
     type?: string;
 }
@@ -102,6 +110,10 @@ export interface GetFlavorsResult {
      */
     readonly maxConnections?: number;
     /**
+     * Name of the flavor.
+     */
+    readonly name?: string;
+    /**
      * Qps of the L7 flavor.
      */
     readonly qps?: number;
@@ -133,6 +145,10 @@ export interface GetFlavorsOutputArgs {
      */
     maxConnections?: pulumi.Input<number>;
     /**
+     * Specifies the flavor name.
+     */
+    name?: pulumi.Input<string>;
+    /**
      * Specifies the qps in the L7 flavor.
      */
     qps?: pulumi.Input<number>;
@@ -142,7 +158,13 @@ export interface GetFlavorsOutputArgs {
      */
     region?: pulumi.Input<string>;
     /**
-     * Specifies the flavor type. Valid values are L4 and L7.
+     * Specifies the flavor type. Values options:
+     * + **L4**: indicates Layer-4 flavor.
+     * + **L7**: indicates Layer-7 flavor.
+     * + **L4_elastic**: indicates minimum Layer-4 flavor for elastic scaling.
+     * + **L7_elastic**: indicates minimum Layer-7 flavor for elastic scaling.
+     * + **L4_elastic_max**: indicates maximum Layer-4 flavor for elastic scaling.
+     * + **L7_elastic_max**: indicates maximum Layer-7 flavor for elastic scaling
      */
     type?: pulumi.Input<string>;
 }

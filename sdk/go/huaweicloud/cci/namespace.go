@@ -45,7 +45,7 @@ import (
 //
 // ## Import
 //
-// CCI Namespaces can be imported using their `name`, e.g.,
+// # CCI Namespaces can be imported using their `name`, e.g., bash
 //
 // ```sh
 //
@@ -68,9 +68,9 @@ type Namespace struct {
 	// Specifies a unique ID in UUID format of enterprise project.
 	// Changing this will create a new CCI namespace resource.
 	EnterpriseProjectId pulumi.StringOutput `pulumi:"enterpriseProjectId"`
-	// Specifies the unique name of the CCI namespace.
-	// This parameter can contain a maximum of 63 characters, which may consist of lowercase letters, digits and hyphens,
-	// and must start and end with lowercase letters and digits.
+	// Specifies the unique name of the CCI namespace.\
+	// This parameter can contain a maximum of `63` characters, which may consist of lowercase letters, digits and
+	// hyphens (-), and must start and end with lowercase letters and digits.
 	// Changing this will create a new CCI namespace resource.
 	Name pulumi.StringOutput `pulumi:"name"`
 	// Specifies whether Role-based access control is enabled.
@@ -90,7 +90,8 @@ type Namespace struct {
 	// The valid values are **general-computing** and **gpu-accelerated**.
 	// Changing this will create a new CCI namespace resource.
 	Type pulumi.StringOutput `pulumi:"type"`
-	// Specifies the size of IP pool to warm-up.
+	// Specifies the size of IP pool to warm-up.\
+	// The valid value is range from `1` to `500`.
 	// Changing this will create a new CCI namespace resource.
 	WarmupPoolSize pulumi.IntOutput `pulumi:"warmupPoolSize"`
 }
@@ -141,9 +142,9 @@ type namespaceState struct {
 	// Specifies a unique ID in UUID format of enterprise project.
 	// Changing this will create a new CCI namespace resource.
 	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
-	// Specifies the unique name of the CCI namespace.
-	// This parameter can contain a maximum of 63 characters, which may consist of lowercase letters, digits and hyphens,
-	// and must start and end with lowercase letters and digits.
+	// Specifies the unique name of the CCI namespace.\
+	// This parameter can contain a maximum of `63` characters, which may consist of lowercase letters, digits and
+	// hyphens (-), and must start and end with lowercase letters and digits.
 	// Changing this will create a new CCI namespace resource.
 	Name *string `pulumi:"name"`
 	// Specifies whether Role-based access control is enabled.
@@ -163,7 +164,8 @@ type namespaceState struct {
 	// The valid values are **general-computing** and **gpu-accelerated**.
 	// Changing this will create a new CCI namespace resource.
 	Type *string `pulumi:"type"`
-	// Specifies the size of IP pool to warm-up.
+	// Specifies the size of IP pool to warm-up.\
+	// The valid value is range from `1` to `500`.
 	// Changing this will create a new CCI namespace resource.
 	WarmupPoolSize *int `pulumi:"warmupPoolSize"`
 }
@@ -182,9 +184,9 @@ type NamespaceState struct {
 	// Specifies a unique ID in UUID format of enterprise project.
 	// Changing this will create a new CCI namespace resource.
 	EnterpriseProjectId pulumi.StringPtrInput
-	// Specifies the unique name of the CCI namespace.
-	// This parameter can contain a maximum of 63 characters, which may consist of lowercase letters, digits and hyphens,
-	// and must start and end with lowercase letters and digits.
+	// Specifies the unique name of the CCI namespace.\
+	// This parameter can contain a maximum of `63` characters, which may consist of lowercase letters, digits and
+	// hyphens (-), and must start and end with lowercase letters and digits.
 	// Changing this will create a new CCI namespace resource.
 	Name pulumi.StringPtrInput
 	// Specifies whether Role-based access control is enabled.
@@ -204,7 +206,8 @@ type NamespaceState struct {
 	// The valid values are **general-computing** and **gpu-accelerated**.
 	// Changing this will create a new CCI namespace resource.
 	Type pulumi.StringPtrInput
-	// Specifies the size of IP pool to warm-up.
+	// Specifies the size of IP pool to warm-up.\
+	// The valid value is range from `1` to `500`.
 	// Changing this will create a new CCI namespace resource.
 	WarmupPoolSize pulumi.IntPtrInput
 }
@@ -225,9 +228,9 @@ type namespaceArgs struct {
 	// Specifies a unique ID in UUID format of enterprise project.
 	// Changing this will create a new CCI namespace resource.
 	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
-	// Specifies the unique name of the CCI namespace.
-	// This parameter can contain a maximum of 63 characters, which may consist of lowercase letters, digits and hyphens,
-	// and must start and end with lowercase letters and digits.
+	// Specifies the unique name of the CCI namespace.\
+	// This parameter can contain a maximum of `63` characters, which may consist of lowercase letters, digits and
+	// hyphens (-), and must start and end with lowercase letters and digits.
 	// Changing this will create a new CCI namespace resource.
 	Name *string `pulumi:"name"`
 	// Specifies whether Role-based access control is enabled.
@@ -245,7 +248,8 @@ type namespaceArgs struct {
 	// The valid values are **general-computing** and **gpu-accelerated**.
 	// Changing this will create a new CCI namespace resource.
 	Type string `pulumi:"type"`
-	// Specifies the size of IP pool to warm-up.
+	// Specifies the size of IP pool to warm-up.\
+	// The valid value is range from `1` to `500`.
 	// Changing this will create a new CCI namespace resource.
 	WarmupPoolSize *int `pulumi:"warmupPoolSize"`
 }
@@ -263,9 +267,9 @@ type NamespaceArgs struct {
 	// Specifies a unique ID in UUID format of enterprise project.
 	// Changing this will create a new CCI namespace resource.
 	EnterpriseProjectId pulumi.StringPtrInput
-	// Specifies the unique name of the CCI namespace.
-	// This parameter can contain a maximum of 63 characters, which may consist of lowercase letters, digits and hyphens,
-	// and must start and end with lowercase letters and digits.
+	// Specifies the unique name of the CCI namespace.\
+	// This parameter can contain a maximum of `63` characters, which may consist of lowercase letters, digits and
+	// hyphens (-), and must start and end with lowercase letters and digits.
 	// Changing this will create a new CCI namespace resource.
 	Name pulumi.StringPtrInput
 	// Specifies whether Role-based access control is enabled.
@@ -283,7 +287,8 @@ type NamespaceArgs struct {
 	// The valid values are **general-computing** and **gpu-accelerated**.
 	// Changing this will create a new CCI namespace resource.
 	Type pulumi.StringInput
-	// Specifies the size of IP pool to warm-up.
+	// Specifies the size of IP pool to warm-up.\
+	// The valid value is range from `1` to `500`.
 	// Changing this will create a new CCI namespace resource.
 	WarmupPoolSize pulumi.IntPtrInput
 }
@@ -400,9 +405,9 @@ func (o NamespaceOutput) EnterpriseProjectId() pulumi.StringOutput {
 	return o.ApplyT(func(v *Namespace) pulumi.StringOutput { return v.EnterpriseProjectId }).(pulumi.StringOutput)
 }
 
-// Specifies the unique name of the CCI namespace.
-// This parameter can contain a maximum of 63 characters, which may consist of lowercase letters, digits and hyphens,
-// and must start and end with lowercase letters and digits.
+// Specifies the unique name of the CCI namespace.\
+// This parameter can contain a maximum of `63` characters, which may consist of lowercase letters, digits and
+// hyphens (-), and must start and end with lowercase letters and digits.
 // Changing this will create a new CCI namespace resource.
 func (o NamespaceOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v *Namespace) pulumi.StringOutput { return v.Name }).(pulumi.StringOutput)
@@ -440,7 +445,8 @@ func (o NamespaceOutput) Type() pulumi.StringOutput {
 	return o.ApplyT(func(v *Namespace) pulumi.StringOutput { return v.Type }).(pulumi.StringOutput)
 }
 
-// Specifies the size of IP pool to warm-up.
+// Specifies the size of IP pool to warm-up.\
+// The valid value is range from `1` to `500`.
 // Changing this will create a new CCI namespace resource.
 func (o NamespaceOutput) WarmupPoolSize() pulumi.IntOutput {
 	return o.ApplyT(func(v *Namespace) pulumi.IntOutput { return v.WarmupPoolSize }).(pulumi.IntOutput)

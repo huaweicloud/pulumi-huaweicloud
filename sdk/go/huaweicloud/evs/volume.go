@@ -22,20 +22,23 @@ import (
 //
 //	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud/Evs"
 //	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi/config"
 //
 // )
 //
 //	func main() {
 //		pulumi.Run(func(ctx *pulumi.Context) error {
+//			cfg := config.New(ctx, "")
+//			availabilityZone := cfg.RequireObject("availabilityZone")
 //			_, err := Evs.NewVolume(ctx, "volume", &Evs.VolumeArgs{
-//				AvailabilityZone: pulumi.String("cn-north-4a"),
 //				Description:      pulumi.String("my volume"),
+//				VolumeType:       pulumi.String("SAS"),
 //				Size:             pulumi.Int(20),
+//				AvailabilityZone: pulumi.Any(availabilityZone),
 //				Tags: pulumi.StringMap{
 //					"foo": pulumi.String("bar"),
 //					"key": pulumi.String("value"),
 //				},
-//				VolumeType: pulumi.String("SAS"),
 //			})
 //			if err != nil {
 //				return err
@@ -54,17 +57,80 @@ import (
 //
 //	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud/Evs"
 //	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi/config"
 //
 // )
 //
 //	func main() {
 //		pulumi.Run(func(ctx *pulumi.Context) error {
+//			cfg := config.New(ctx, "")
+//			availabilityZone := cfg.RequireObject("availabilityZone")
 //			_, err := Evs.NewVolume(ctx, "volume", &Evs.VolumeArgs{
 //				Description:      pulumi.String("my volume"),
 //				VolumeType:       pulumi.String("SAS"),
 //				Size:             pulumi.Int(20),
 //				KmsId:            pulumi.Any(_var.Kms_id),
-//				AvailabilityZone: pulumi.String("cn-north-4a"),
+//				AvailabilityZone: pulumi.Any(availabilityZone),
+//				Tags: pulumi.StringMap{
+//					"foo": pulumi.String("bar"),
+//					"key": pulumi.String("value"),
+//				},
+//			})
+//			if err != nil {
+//				return err
+//			}
+//			return nil
+//		})
+//	}
+//
+// ```
+// ### With Server_id
+//
+// ```go
+// package main
+//
+// import (
+//
+//	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud/Ecs"
+//	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud/Evs"
+//	"github.com/pulumi/pulumi-huaweicloud/sdk/go/huaweicloud/Ecs"
+//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi/config"
+//
+// )
+//
+//	func main() {
+//		pulumi.Run(func(ctx *pulumi.Context) error {
+//			cfg := config.New(ctx, "")
+//			imageId := cfg.RequireObject("imageId")
+//			flavorId := cfg.RequireObject("flavorId")
+//			keyPair := cfg.RequireObject("keyPair")
+//			securityGroupId := cfg.RequireObject("securityGroupId")
+//			availabilityZone := cfg.RequireObject("availabilityZone")
+//			subnetId := cfg.RequireObject("subnetId")
+//			myinstance, err := Ecs.NewInstance(ctx, "myinstance", &Ecs.InstanceArgs{
+//				ImageId:  pulumi.Any(imageId),
+//				FlavorId: pulumi.Any(flavorId),
+//				KeyPair:  pulumi.Any(keyPair),
+//				SecurityGroupIds: pulumi.StringArray{
+//					pulumi.Any(securityGroupId),
+//				},
+//				AvailabilityZone: pulumi.Any(availabilityZone),
+//				Networks: ecs.InstanceNetworkArray{
+//					&ecs.InstanceNetworkArgs{
+//						Uuid: pulumi.Any(subnetId),
+//					},
+//				},
+//			})
+//			if err != nil {
+//				return err
+//			}
+//			_, err = Evs.NewVolume(ctx, "volume", &Evs.VolumeArgs{
+//				Description:      pulumi.String("my volume"),
+//				VolumeType:       pulumi.String("SAS"),
+//				Size:             pulumi.Int(20),
+//				AvailabilityZone: pulumi.Any(availabilityZone),
+//				ServerId:         myinstance.ID(),
 //				Tags: pulumi.StringMap{
 //					"foo": pulumi.String("bar"),
 //					"key": pulumi.String("value"),
@@ -81,15 +147,15 @@ import (
 //
 // ## Import
 //
-// Volumes can be imported using the `id`, e.g.
+// Volumes can be imported using the `id`, e.g. bash
 //
 // ```sh
 //
-//	$ pulumi import huaweicloud:Evs/volume:Volume volume_1 14a80bc7-c12c-4fe0-a38a-cb77eeac9bd6
+//	$ pulumi import huaweicloud:Evs/volume:Volume test <id>
 //
 // ```
 //
-//	Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include**cascade**, **period_unit**, **period** and **auto_renew**. It is generally recommended running terraform plan after importing an disk. You can then decide if changes should be applied to the disk, or the resource definition should be updated to align with the disk. Also you can ignore changes as below. resource "huaweicloud_evs_volume" "volume_1" {
+//	Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`cascade`, `period_unit`, `period`, `server_id`, `auto_renew`, and `charging_mode`. It is generally recommended running terraform plan after importing a disk. You can then decide if changes should be applied to the disk, or the resource definition should be updated to align with the disk. Also, you can ignore changes as below. hcl resource "huaweicloud_evs_volume" "test" {
 //
 //	...
 //
@@ -97,88 +163,95 @@ import (
 //
 //	ignore_changes = [
 //
-//	cascade,
+//	cascade, period_unit, period, server_id, auto_renew, charging_mode,
 //
-//	]
+// ]
 //
 //	} }
 type Volume struct {
 	pulumi.CustomResourceState
 
-	// If a disk is attached to an instance, this attribute will display the Attachment ID, Instance ID, and
-	// the Device as the Instance sees it. The object structure is documented below.
+	// If a disk is attached to an instance, this attribute will display the attachment ID, instance ID, and
+	// the device as the instance sees it. The attachment structure is documented below.
 	Attachments VolumeAttachmentArrayOutput `pulumi:"attachments"`
 	// Deprecated: Deprecated
 	AutoPay pulumi.StringPtrOutput `pulumi:"autoPay"`
-	// Specifies whether auto renew is enabled.
-	// Valid values are **true** and **false**.
+	// Specifies whether auto-renew is enabled.
+	// Valid values are **true** and **false**. Defaults to **false**.
 	AutoRenew pulumi.StringPtrOutput `pulumi:"autoRenew"`
-	// Specifies the availability zone for the disk. Changing this creates
-	// a new disk.
+	// Specifies the availability zone for the disk.
 	AvailabilityZone pulumi.StringOutput `pulumi:"availabilityZone"`
-	// Specifies the backup ID from which to create the disk. Changing this
-	// creates a new disk.
+	// Specifies the backup ID from which to create the disk.
 	BackupId pulumi.StringPtrOutput `pulumi:"backupId"`
-	// Specifies the delete mode of snapshot. The default value is false. All snapshot
-	// associated with the disk will also be deleted when the parameter is set to true.
+	// Specifies the delete mode of snapshot. The default value is **false**. All snapshot
+	// associated with the disk will also be deleted when the parameter is set to **true**.
 	Cascade pulumi.BoolPtrOutput `pulumi:"cascade"`
 	// Specifies the charging mode of the disk.
 	// The valid values are as follows:
 	// + **prePaid**: the yearly/monthly billing mode.
 	// + **postPaid**: the pay-per-use billing mode.
-	//   Changing this creates a new disk.
 	ChargingMode pulumi.StringOutput `pulumi:"chargingMode"`
 	// Specifies the ID of the DSS storage pool accommodating the disk.
 	DedicatedStorageId pulumi.StringPtrOutput `pulumi:"dedicatedStorageId"`
 	// The name of the DSS storage pool accommodating the disk.
 	DedicatedStorageName pulumi.StringOutput `pulumi:"dedicatedStorageName"`
-	// Specifies the disk description. The value can contain a maximum of 255 bytes.
+	// Specifies the disk description. You can enter up to `85` characters.
 	Description pulumi.StringPtrOutput `pulumi:"description"`
-	// Specifies the device type of disk to create. Valid options are VBD and
-	// SCSI. Defaults to VBD. Changing this creates a new disk.
+	// Specifies the device type of disk to create. Valid options are **VBD** and
+	// **SCSI**. Defaults to **VBD**.
 	DeviceType pulumi.StringPtrOutput `pulumi:"deviceType"`
-	// Specifies the enterprise project id of the disk. Changing this
-	// creates a new disk.
+	// Specifies the enterprise project ID of the disk.
+	// For enterprise users, if omitted, default enterprise project will be used.
 	EnterpriseProjectId pulumi.StringOutput `pulumi:"enterpriseProjectId"`
-	// Specifies the image ID from which to create the disk. Changing this creates
-	// a new disk.
+	// Specifies the image ID from which to create the disk.
 	ImageId pulumi.StringPtrOutput `pulumi:"imageId"`
-	// Specifies the Encryption KMS ID to create the disk. Changing this creates a
-	// new disk.
+	// Specifies the IOPS(Input/Output Operations Per Second) for the volume.
+	// The field is valid and required when `volumeType` is set to **GPSSD2** or **ESSD2**.
+	// This field can be changed only when the disk status is Available or In-use.
+	Iops pulumi.IntOutput `pulumi:"iops"`
+	// Specifies the Encryption KMS ID to create the disk.
 	KmsId pulumi.StringPtrOutput `pulumi:"kmsId"`
-	// Specifies whether the disk is shareable. The default value is false.
-	// Changing this creates a new disk.
+	// Specifies whether the disk is shareable. Defaults to **false**.
 	Multiattach pulumi.BoolPtrOutput `pulumi:"multiattach"`
-	// Specifies the disk name. The value can contain a maximum of 255 bytes.
+	// Specifies the disk name. You can enter up to `64` characters.
 	Name pulumi.StringOutput `pulumi:"name"`
 	// Specifies the charging period of the disk.
-	// If `periodUnit` is set to **month**, the value ranges from 1 to 9.
-	// If `periodUnit` is set to **year**, the valid value is 1.
-	// This parameter is mandatory if `chargingMode` is set to **prePaid**.
-	// Changing this creates a new disk.
+	// + If `periodUnit` is set to **month**, the value ranges from `1` to `9`.
+	// + If `periodUnit` is set to **year**, the valid value is `1`.
 	Period pulumi.IntPtrOutput `pulumi:"period"`
 	// Specifies the charging period unit of the disk.
 	// Valid values are **month** and **year**. This parameter is mandatory if `chargingMode` is set to **prePaid**.
-	// Changing this creates a new disk.
 	PeriodUnit pulumi.StringPtrOutput `pulumi:"periodUnit"`
 	// Specifies the region in which to create the disk. If omitted, the
-	// provider-level region will be used. Changing this creates a new disk.
+	// provider-level region will be used. Changing this parameter will create a new resource.
 	Region pulumi.StringOutput `pulumi:"region"`
-	// Specifies the disk size, in GB. The valid value is range from:
-	// + System disk: 1 GB to 1024 GB
-	// + Data disk: 10 GB to 32768 GB
+	// Specifies the server ID to which the cloud volume is to be mounted.
+	// After specifying the value of this field, the cloud volume will be automatically attached on the cloud server.
+	// The chargingMode of the created cloud volume will be consistent with that of the cloud server.
+	// Currently, only ECS cloud-servers are supported, and BMS bare metal cloud-servers are not supported yet.
+	ServerId pulumi.StringPtrOutput `pulumi:"serverId"`
+	// Specifies the disk size, in GB.
+	// For system disk, the valid value ranges from `1` GB to `1,024` GB.
+	// For data disk, the valid value ranges from `10` GB to `32,768` GB.
 	Size pulumi.IntOutput `pulumi:"size"`
-	// Specifies the snapshot ID from which to create the disk. Changing this
-	// creates a new disk.
+	// Specifies the snapshot ID from which to create the disk.
 	SnapshotId pulumi.StringPtrOutput `pulumi:"snapshotId"`
+	// The disk status.
+	// Please refer to [EVS Disk Status](https://support.huaweicloud.com/intl/en-us/api-evs/evs_04_0040.html).
+	Status pulumi.StringOutput `pulumi:"status"`
 	// Specifies the key/value pairs to associate with the disk.
 	Tags pulumi.StringMapOutput `pulumi:"tags"`
-	// Specifies the disk type. Currently, the value can be SAS, SSD, GPSSD or
-	// ESSD.
-	// + SAS: specifies the high I/O disk type.
-	// + SSD: specifies the ultra-high I/O disk type.
-	// + GPSSD: specifies the general purpose SSD disk type.
-	// + ESSD: Extreme SSD type.
+	// Specifies the throughput for the volume. The Unit is MiB/s.
+	// The field is valid and required when `volumeType` is set to **GPSSD2**.
+	// This field can be changed only when the disk status is Available or In-use.
+	Throughput pulumi.IntOutput `pulumi:"throughput"`
+	// Specifies the disk type. Valid values are as follows:
+	// + **SAS**: High I/O type.
+	// + **SSD**: Ultra-high I/O type.
+	// + **GPSSD**: General purpose SSD type.
+	// + **ESSD**: Extreme SSD type.
+	// + **GPSSD2**: General purpose SSD V2 type.
+	// + **ESSD2**: Extreme SSD V2 type.
 	VolumeType pulumi.StringOutput `pulumi:"volumeType"`
 	// The unique identifier used for mounting the EVS disk.
 	Wwn pulumi.StringOutput `pulumi:"wwn"`
@@ -220,160 +293,174 @@ func GetVolume(ctx *pulumi.Context,
 
 // Input properties used for looking up and filtering Volume resources.
 type volumeState struct {
-	// If a disk is attached to an instance, this attribute will display the Attachment ID, Instance ID, and
-	// the Device as the Instance sees it. The object structure is documented below.
+	// If a disk is attached to an instance, this attribute will display the attachment ID, instance ID, and
+	// the device as the instance sees it. The attachment structure is documented below.
 	Attachments []VolumeAttachment `pulumi:"attachments"`
 	// Deprecated: Deprecated
 	AutoPay *string `pulumi:"autoPay"`
-	// Specifies whether auto renew is enabled.
-	// Valid values are **true** and **false**.
+	// Specifies whether auto-renew is enabled.
+	// Valid values are **true** and **false**. Defaults to **false**.
 	AutoRenew *string `pulumi:"autoRenew"`
-	// Specifies the availability zone for the disk. Changing this creates
-	// a new disk.
+	// Specifies the availability zone for the disk.
 	AvailabilityZone *string `pulumi:"availabilityZone"`
-	// Specifies the backup ID from which to create the disk. Changing this
-	// creates a new disk.
+	// Specifies the backup ID from which to create the disk.
 	BackupId *string `pulumi:"backupId"`
-	// Specifies the delete mode of snapshot. The default value is false. All snapshot
-	// associated with the disk will also be deleted when the parameter is set to true.
+	// Specifies the delete mode of snapshot. The default value is **false**. All snapshot
+	// associated with the disk will also be deleted when the parameter is set to **true**.
 	Cascade *bool `pulumi:"cascade"`
 	// Specifies the charging mode of the disk.
 	// The valid values are as follows:
 	// + **prePaid**: the yearly/monthly billing mode.
 	// + **postPaid**: the pay-per-use billing mode.
-	//   Changing this creates a new disk.
 	ChargingMode *string `pulumi:"chargingMode"`
 	// Specifies the ID of the DSS storage pool accommodating the disk.
 	DedicatedStorageId *string `pulumi:"dedicatedStorageId"`
 	// The name of the DSS storage pool accommodating the disk.
 	DedicatedStorageName *string `pulumi:"dedicatedStorageName"`
-	// Specifies the disk description. The value can contain a maximum of 255 bytes.
+	// Specifies the disk description. You can enter up to `85` characters.
 	Description *string `pulumi:"description"`
-	// Specifies the device type of disk to create. Valid options are VBD and
-	// SCSI. Defaults to VBD. Changing this creates a new disk.
+	// Specifies the device type of disk to create. Valid options are **VBD** and
+	// **SCSI**. Defaults to **VBD**.
 	DeviceType *string `pulumi:"deviceType"`
-	// Specifies the enterprise project id of the disk. Changing this
-	// creates a new disk.
+	// Specifies the enterprise project ID of the disk.
+	// For enterprise users, if omitted, default enterprise project will be used.
 	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
-	// Specifies the image ID from which to create the disk. Changing this creates
-	// a new disk.
+	// Specifies the image ID from which to create the disk.
 	ImageId *string `pulumi:"imageId"`
-	// Specifies the Encryption KMS ID to create the disk. Changing this creates a
-	// new disk.
+	// Specifies the IOPS(Input/Output Operations Per Second) for the volume.
+	// The field is valid and required when `volumeType` is set to **GPSSD2** or **ESSD2**.
+	// This field can be changed only when the disk status is Available or In-use.
+	Iops *int `pulumi:"iops"`
+	// Specifies the Encryption KMS ID to create the disk.
 	KmsId *string `pulumi:"kmsId"`
-	// Specifies whether the disk is shareable. The default value is false.
-	// Changing this creates a new disk.
+	// Specifies whether the disk is shareable. Defaults to **false**.
 	Multiattach *bool `pulumi:"multiattach"`
-	// Specifies the disk name. The value can contain a maximum of 255 bytes.
+	// Specifies the disk name. You can enter up to `64` characters.
 	Name *string `pulumi:"name"`
 	// Specifies the charging period of the disk.
-	// If `periodUnit` is set to **month**, the value ranges from 1 to 9.
-	// If `periodUnit` is set to **year**, the valid value is 1.
-	// This parameter is mandatory if `chargingMode` is set to **prePaid**.
-	// Changing this creates a new disk.
+	// + If `periodUnit` is set to **month**, the value ranges from `1` to `9`.
+	// + If `periodUnit` is set to **year**, the valid value is `1`.
 	Period *int `pulumi:"period"`
 	// Specifies the charging period unit of the disk.
 	// Valid values are **month** and **year**. This parameter is mandatory if `chargingMode` is set to **prePaid**.
-	// Changing this creates a new disk.
 	PeriodUnit *string `pulumi:"periodUnit"`
 	// Specifies the region in which to create the disk. If omitted, the
-	// provider-level region will be used. Changing this creates a new disk.
+	// provider-level region will be used. Changing this parameter will create a new resource.
 	Region *string `pulumi:"region"`
-	// Specifies the disk size, in GB. The valid value is range from:
-	// + System disk: 1 GB to 1024 GB
-	// + Data disk: 10 GB to 32768 GB
+	// Specifies the server ID to which the cloud volume is to be mounted.
+	// After specifying the value of this field, the cloud volume will be automatically attached on the cloud server.
+	// The chargingMode of the created cloud volume will be consistent with that of the cloud server.
+	// Currently, only ECS cloud-servers are supported, and BMS bare metal cloud-servers are not supported yet.
+	ServerId *string `pulumi:"serverId"`
+	// Specifies the disk size, in GB.
+	// For system disk, the valid value ranges from `1` GB to `1,024` GB.
+	// For data disk, the valid value ranges from `10` GB to `32,768` GB.
 	Size *int `pulumi:"size"`
-	// Specifies the snapshot ID from which to create the disk. Changing this
-	// creates a new disk.
+	// Specifies the snapshot ID from which to create the disk.
 	SnapshotId *string `pulumi:"snapshotId"`
+	// The disk status.
+	// Please refer to [EVS Disk Status](https://support.huaweicloud.com/intl/en-us/api-evs/evs_04_0040.html).
+	Status *string `pulumi:"status"`
 	// Specifies the key/value pairs to associate with the disk.
 	Tags map[string]string `pulumi:"tags"`
-	// Specifies the disk type. Currently, the value can be SAS, SSD, GPSSD or
-	// ESSD.
-	// + SAS: specifies the high I/O disk type.
-	// + SSD: specifies the ultra-high I/O disk type.
-	// + GPSSD: specifies the general purpose SSD disk type.
-	// + ESSD: Extreme SSD type.
+	// Specifies the throughput for the volume. The Unit is MiB/s.
+	// The field is valid and required when `volumeType` is set to **GPSSD2**.
+	// This field can be changed only when the disk status is Available or In-use.
+	Throughput *int `pulumi:"throughput"`
+	// Specifies the disk type. Valid values are as follows:
+	// + **SAS**: High I/O type.
+	// + **SSD**: Ultra-high I/O type.
+	// + **GPSSD**: General purpose SSD type.
+	// + **ESSD**: Extreme SSD type.
+	// + **GPSSD2**: General purpose SSD V2 type.
+	// + **ESSD2**: Extreme SSD V2 type.
 	VolumeType *string `pulumi:"volumeType"`
 	// The unique identifier used for mounting the EVS disk.
 	Wwn *string `pulumi:"wwn"`
 }
 
 type VolumeState struct {
-	// If a disk is attached to an instance, this attribute will display the Attachment ID, Instance ID, and
-	// the Device as the Instance sees it. The object structure is documented below.
+	// If a disk is attached to an instance, this attribute will display the attachment ID, instance ID, and
+	// the device as the instance sees it. The attachment structure is documented below.
 	Attachments VolumeAttachmentArrayInput
 	// Deprecated: Deprecated
 	AutoPay pulumi.StringPtrInput
-	// Specifies whether auto renew is enabled.
-	// Valid values are **true** and **false**.
+	// Specifies whether auto-renew is enabled.
+	// Valid values are **true** and **false**. Defaults to **false**.
 	AutoRenew pulumi.StringPtrInput
-	// Specifies the availability zone for the disk. Changing this creates
-	// a new disk.
+	// Specifies the availability zone for the disk.
 	AvailabilityZone pulumi.StringPtrInput
-	// Specifies the backup ID from which to create the disk. Changing this
-	// creates a new disk.
+	// Specifies the backup ID from which to create the disk.
 	BackupId pulumi.StringPtrInput
-	// Specifies the delete mode of snapshot. The default value is false. All snapshot
-	// associated with the disk will also be deleted when the parameter is set to true.
+	// Specifies the delete mode of snapshot. The default value is **false**. All snapshot
+	// associated with the disk will also be deleted when the parameter is set to **true**.
 	Cascade pulumi.BoolPtrInput
 	// Specifies the charging mode of the disk.
 	// The valid values are as follows:
 	// + **prePaid**: the yearly/monthly billing mode.
 	// + **postPaid**: the pay-per-use billing mode.
-	//   Changing this creates a new disk.
 	ChargingMode pulumi.StringPtrInput
 	// Specifies the ID of the DSS storage pool accommodating the disk.
 	DedicatedStorageId pulumi.StringPtrInput
 	// The name of the DSS storage pool accommodating the disk.
 	DedicatedStorageName pulumi.StringPtrInput
-	// Specifies the disk description. The value can contain a maximum of 255 bytes.
+	// Specifies the disk description. You can enter up to `85` characters.
 	Description pulumi.StringPtrInput
-	// Specifies the device type of disk to create. Valid options are VBD and
-	// SCSI. Defaults to VBD. Changing this creates a new disk.
+	// Specifies the device type of disk to create. Valid options are **VBD** and
+	// **SCSI**. Defaults to **VBD**.
 	DeviceType pulumi.StringPtrInput
-	// Specifies the enterprise project id of the disk. Changing this
-	// creates a new disk.
+	// Specifies the enterprise project ID of the disk.
+	// For enterprise users, if omitted, default enterprise project will be used.
 	EnterpriseProjectId pulumi.StringPtrInput
-	// Specifies the image ID from which to create the disk. Changing this creates
-	// a new disk.
+	// Specifies the image ID from which to create the disk.
 	ImageId pulumi.StringPtrInput
-	// Specifies the Encryption KMS ID to create the disk. Changing this creates a
-	// new disk.
+	// Specifies the IOPS(Input/Output Operations Per Second) for the volume.
+	// The field is valid and required when `volumeType` is set to **GPSSD2** or **ESSD2**.
+	// This field can be changed only when the disk status is Available or In-use.
+	Iops pulumi.IntPtrInput
+	// Specifies the Encryption KMS ID to create the disk.
 	KmsId pulumi.StringPtrInput
-	// Specifies whether the disk is shareable. The default value is false.
-	// Changing this creates a new disk.
+	// Specifies whether the disk is shareable. Defaults to **false**.
 	Multiattach pulumi.BoolPtrInput
-	// Specifies the disk name. The value can contain a maximum of 255 bytes.
+	// Specifies the disk name. You can enter up to `64` characters.
 	Name pulumi.StringPtrInput
 	// Specifies the charging period of the disk.
-	// If `periodUnit` is set to **month**, the value ranges from 1 to 9.
-	// If `periodUnit` is set to **year**, the valid value is 1.
-	// This parameter is mandatory if `chargingMode` is set to **prePaid**.
-	// Changing this creates a new disk.
+	// + If `periodUnit` is set to **month**, the value ranges from `1` to `9`.
+	// + If `periodUnit` is set to **year**, the valid value is `1`.
 	Period pulumi.IntPtrInput
 	// Specifies the charging period unit of the disk.
 	// Valid values are **month** and **year**. This parameter is mandatory if `chargingMode` is set to **prePaid**.
-	// Changing this creates a new disk.
 	PeriodUnit pulumi.StringPtrInput
 	// Specifies the region in which to create the disk. If omitted, the
-	// provider-level region will be used. Changing this creates a new disk.
+	// provider-level region will be used. Changing this parameter will create a new resource.
 	Region pulumi.StringPtrInput
-	// Specifies the disk size, in GB. The valid value is range from:
-	// + System disk: 1 GB to 1024 GB
-	// + Data disk: 10 GB to 32768 GB
+	// Specifies the server ID to which the cloud volume is to be mounted.
+	// After specifying the value of this field, the cloud volume will be automatically attached on the cloud server.
+	// The chargingMode of the created cloud volume will be consistent with that of the cloud server.
+	// Currently, only ECS cloud-servers are supported, and BMS bare metal cloud-servers are not supported yet.
+	ServerId pulumi.StringPtrInput
+	// Specifies the disk size, in GB.
+	// For system disk, the valid value ranges from `1` GB to `1,024` GB.
+	// For data disk, the valid value ranges from `10` GB to `32,768` GB.
 	Size pulumi.IntPtrInput
-	// Specifies the snapshot ID from which to create the disk. Changing this
-	// creates a new disk.
+	// Specifies the snapshot ID from which to create the disk.
 	SnapshotId pulumi.StringPtrInput
+	// The disk status.
+	// Please refer to [EVS Disk Status](https://support.huaweicloud.com/intl/en-us/api-evs/evs_04_0040.html).
+	Status pulumi.StringPtrInput
 	// Specifies the key/value pairs to associate with the disk.
 	Tags pulumi.StringMapInput
-	// Specifies the disk type. Currently, the value can be SAS, SSD, GPSSD or
-	// ESSD.
-	// + SAS: specifies the high I/O disk type.
-	// + SSD: specifies the ultra-high I/O disk type.
-	// + GPSSD: specifies the general purpose SSD disk type.
-	// + ESSD: Extreme SSD type.
+	// Specifies the throughput for the volume. The Unit is MiB/s.
+	// The field is valid and required when `volumeType` is set to **GPSSD2**.
+	// This field can be changed only when the disk status is Available or In-use.
+	Throughput pulumi.IntPtrInput
+	// Specifies the disk type. Valid values are as follows:
+	// + **SAS**: High I/O type.
+	// + **SSD**: Ultra-high I/O type.
+	// + **GPSSD**: General purpose SSD type.
+	// + **ESSD**: Extreme SSD type.
+	// + **GPSSD2**: General purpose SSD V2 type.
+	// + **ESSD2**: Extreme SSD V2 type.
 	VolumeType pulumi.StringPtrInput
 	// The unique identifier used for mounting the EVS disk.
 	Wwn pulumi.StringPtrInput
@@ -386,73 +473,77 @@ func (VolumeState) ElementType() reflect.Type {
 type volumeArgs struct {
 	// Deprecated: Deprecated
 	AutoPay *string `pulumi:"autoPay"`
-	// Specifies whether auto renew is enabled.
-	// Valid values are **true** and **false**.
+	// Specifies whether auto-renew is enabled.
+	// Valid values are **true** and **false**. Defaults to **false**.
 	AutoRenew *string `pulumi:"autoRenew"`
-	// Specifies the availability zone for the disk. Changing this creates
-	// a new disk.
+	// Specifies the availability zone for the disk.
 	AvailabilityZone string `pulumi:"availabilityZone"`
-	// Specifies the backup ID from which to create the disk. Changing this
-	// creates a new disk.
+	// Specifies the backup ID from which to create the disk.
 	BackupId *string `pulumi:"backupId"`
-	// Specifies the delete mode of snapshot. The default value is false. All snapshot
-	// associated with the disk will also be deleted when the parameter is set to true.
+	// Specifies the delete mode of snapshot. The default value is **false**. All snapshot
+	// associated with the disk will also be deleted when the parameter is set to **true**.
 	Cascade *bool `pulumi:"cascade"`
 	// Specifies the charging mode of the disk.
 	// The valid values are as follows:
 	// + **prePaid**: the yearly/monthly billing mode.
 	// + **postPaid**: the pay-per-use billing mode.
-	//   Changing this creates a new disk.
 	ChargingMode *string `pulumi:"chargingMode"`
 	// Specifies the ID of the DSS storage pool accommodating the disk.
 	DedicatedStorageId *string `pulumi:"dedicatedStorageId"`
-	// Specifies the disk description. The value can contain a maximum of 255 bytes.
+	// Specifies the disk description. You can enter up to `85` characters.
 	Description *string `pulumi:"description"`
-	// Specifies the device type of disk to create. Valid options are VBD and
-	// SCSI. Defaults to VBD. Changing this creates a new disk.
+	// Specifies the device type of disk to create. Valid options are **VBD** and
+	// **SCSI**. Defaults to **VBD**.
 	DeviceType *string `pulumi:"deviceType"`
-	// Specifies the enterprise project id of the disk. Changing this
-	// creates a new disk.
+	// Specifies the enterprise project ID of the disk.
+	// For enterprise users, if omitted, default enterprise project will be used.
 	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
-	// Specifies the image ID from which to create the disk. Changing this creates
-	// a new disk.
+	// Specifies the image ID from which to create the disk.
 	ImageId *string `pulumi:"imageId"`
-	// Specifies the Encryption KMS ID to create the disk. Changing this creates a
-	// new disk.
+	// Specifies the IOPS(Input/Output Operations Per Second) for the volume.
+	// The field is valid and required when `volumeType` is set to **GPSSD2** or **ESSD2**.
+	// This field can be changed only when the disk status is Available or In-use.
+	Iops *int `pulumi:"iops"`
+	// Specifies the Encryption KMS ID to create the disk.
 	KmsId *string `pulumi:"kmsId"`
-	// Specifies whether the disk is shareable. The default value is false.
-	// Changing this creates a new disk.
+	// Specifies whether the disk is shareable. Defaults to **false**.
 	Multiattach *bool `pulumi:"multiattach"`
-	// Specifies the disk name. The value can contain a maximum of 255 bytes.
+	// Specifies the disk name. You can enter up to `64` characters.
 	Name *string `pulumi:"name"`
 	// Specifies the charging period of the disk.
-	// If `periodUnit` is set to **month**, the value ranges from 1 to 9.
-	// If `periodUnit` is set to **year**, the valid value is 1.
-	// This parameter is mandatory if `chargingMode` is set to **prePaid**.
-	// Changing this creates a new disk.
+	// + If `periodUnit` is set to **month**, the value ranges from `1` to `9`.
+	// + If `periodUnit` is set to **year**, the valid value is `1`.
 	Period *int `pulumi:"period"`
 	// Specifies the charging period unit of the disk.
 	// Valid values are **month** and **year**. This parameter is mandatory if `chargingMode` is set to **prePaid**.
-	// Changing this creates a new disk.
 	PeriodUnit *string `pulumi:"periodUnit"`
 	// Specifies the region in which to create the disk. If omitted, the
-	// provider-level region will be used. Changing this creates a new disk.
+	// provider-level region will be used. Changing this parameter will create a new resource.
 	Region *string `pulumi:"region"`
-	// Specifies the disk size, in GB. The valid value is range from:
-	// + System disk: 1 GB to 1024 GB
-	// + Data disk: 10 GB to 32768 GB
+	// Specifies the server ID to which the cloud volume is to be mounted.
+	// After specifying the value of this field, the cloud volume will be automatically attached on the cloud server.
+	// The chargingMode of the created cloud volume will be consistent with that of the cloud server.
+	// Currently, only ECS cloud-servers are supported, and BMS bare metal cloud-servers are not supported yet.
+	ServerId *string `pulumi:"serverId"`
+	// Specifies the disk size, in GB.
+	// For system disk, the valid value ranges from `1` GB to `1,024` GB.
+	// For data disk, the valid value ranges from `10` GB to `32,768` GB.
 	Size *int `pulumi:"size"`
-	// Specifies the snapshot ID from which to create the disk. Changing this
-	// creates a new disk.
+	// Specifies the snapshot ID from which to create the disk.
 	SnapshotId *string `pulumi:"snapshotId"`
 	// Specifies the key/value pairs to associate with the disk.
 	Tags map[string]string `pulumi:"tags"`
-	// Specifies the disk type. Currently, the value can be SAS, SSD, GPSSD or
-	// ESSD.
-	// + SAS: specifies the high I/O disk type.
-	// + SSD: specifies the ultra-high I/O disk type.
-	// + GPSSD: specifies the general purpose SSD disk type.
-	// + ESSD: Extreme SSD type.
+	// Specifies the throughput for the volume. The Unit is MiB/s.
+	// The field is valid and required when `volumeType` is set to **GPSSD2**.
+	// This field can be changed only when the disk status is Available or In-use.
+	Throughput *int `pulumi:"throughput"`
+	// Specifies the disk type. Valid values are as follows:
+	// + **SAS**: High I/O type.
+	// + **SSD**: Ultra-high I/O type.
+	// + **GPSSD**: General purpose SSD type.
+	// + **ESSD**: Extreme SSD type.
+	// + **GPSSD2**: General purpose SSD V2 type.
+	// + **ESSD2**: Extreme SSD V2 type.
 	VolumeType string `pulumi:"volumeType"`
 }
 
@@ -460,73 +551,77 @@ type volumeArgs struct {
 type VolumeArgs struct {
 	// Deprecated: Deprecated
 	AutoPay pulumi.StringPtrInput
-	// Specifies whether auto renew is enabled.
-	// Valid values are **true** and **false**.
+	// Specifies whether auto-renew is enabled.
+	// Valid values are **true** and **false**. Defaults to **false**.
 	AutoRenew pulumi.StringPtrInput
-	// Specifies the availability zone for the disk. Changing this creates
-	// a new disk.
+	// Specifies the availability zone for the disk.
 	AvailabilityZone pulumi.StringInput
-	// Specifies the backup ID from which to create the disk. Changing this
-	// creates a new disk.
+	// Specifies the backup ID from which to create the disk.
 	BackupId pulumi.StringPtrInput
-	// Specifies the delete mode of snapshot. The default value is false. All snapshot
-	// associated with the disk will also be deleted when the parameter is set to true.
+	// Specifies the delete mode of snapshot. The default value is **false**. All snapshot
+	// associated with the disk will also be deleted when the parameter is set to **true**.
 	Cascade pulumi.BoolPtrInput
 	// Specifies the charging mode of the disk.
 	// The valid values are as follows:
 	// + **prePaid**: the yearly/monthly billing mode.
 	// + **postPaid**: the pay-per-use billing mode.
-	//   Changing this creates a new disk.
 	ChargingMode pulumi.StringPtrInput
 	// Specifies the ID of the DSS storage pool accommodating the disk.
 	DedicatedStorageId pulumi.StringPtrInput
-	// Specifies the disk description. The value can contain a maximum of 255 bytes.
+	// Specifies the disk description. You can enter up to `85` characters.
 	Description pulumi.StringPtrInput
-	// Specifies the device type of disk to create. Valid options are VBD and
-	// SCSI. Defaults to VBD. Changing this creates a new disk.
+	// Specifies the device type of disk to create. Valid options are **VBD** and
+	// **SCSI**. Defaults to **VBD**.
 	DeviceType pulumi.StringPtrInput
-	// Specifies the enterprise project id of the disk. Changing this
-	// creates a new disk.
+	// Specifies the enterprise project ID of the disk.
+	// For enterprise users, if omitted, default enterprise project will be used.
 	EnterpriseProjectId pulumi.StringPtrInput
-	// Specifies the image ID from which to create the disk. Changing this creates
-	// a new disk.
+	// Specifies the image ID from which to create the disk.
 	ImageId pulumi.StringPtrInput
-	// Specifies the Encryption KMS ID to create the disk. Changing this creates a
-	// new disk.
+	// Specifies the IOPS(Input/Output Operations Per Second) for the volume.
+	// The field is valid and required when `volumeType` is set to **GPSSD2** or **ESSD2**.
+	// This field can be changed only when the disk status is Available or In-use.
+	Iops pulumi.IntPtrInput
+	// Specifies the Encryption KMS ID to create the disk.
 	KmsId pulumi.StringPtrInput
-	// Specifies whether the disk is shareable. The default value is false.
-	// Changing this creates a new disk.
+	// Specifies whether the disk is shareable. Defaults to **false**.
 	Multiattach pulumi.BoolPtrInput
-	// Specifies the disk name. The value can contain a maximum of 255 bytes.
+	// Specifies the disk name. You can enter up to `64` characters.
 	Name pulumi.StringPtrInput
 	// Specifies the charging period of the disk.
-	// If `periodUnit` is set to **month**, the value ranges from 1 to 9.
-	// If `periodUnit` is set to **year**, the valid value is 1.
-	// This parameter is mandatory if `chargingMode` is set to **prePaid**.
-	// Changing this creates a new disk.
+	// + If `periodUnit` is set to **month**, the value ranges from `1` to `9`.
+	// + If `periodUnit` is set to **year**, the valid value is `1`.
 	Period pulumi.IntPtrInput
 	// Specifies the charging period unit of the disk.
 	// Valid values are **month** and **year**. This parameter is mandatory if `chargingMode` is set to **prePaid**.
-	// Changing this creates a new disk.
 	PeriodUnit pulumi.StringPtrInput
 	// Specifies the region in which to create the disk. If omitted, the
-	// provider-level region will be used. Changing this creates a new disk.
+	// provider-level region will be used. Changing this parameter will create a new resource.
 	Region pulumi.StringPtrInput
-	// Specifies the disk size, in GB. The valid value is range from:
-	// + System disk: 1 GB to 1024 GB
-	// + Data disk: 10 GB to 32768 GB
+	// Specifies the server ID to which the cloud volume is to be mounted.
+	// After specifying the value of this field, the cloud volume will be automatically attached on the cloud server.
+	// The chargingMode of the created cloud volume will be consistent with that of the cloud server.
+	// Currently, only ECS cloud-servers are supported, and BMS bare metal cloud-servers are not supported yet.
+	ServerId pulumi.StringPtrInput
+	// Specifies the disk size, in GB.
+	// For system disk, the valid value ranges from `1` GB to `1,024` GB.
+	// For data disk, the valid value ranges from `10` GB to `32,768` GB.
 	Size pulumi.IntPtrInput
-	// Specifies the snapshot ID from which to create the disk. Changing this
-	// creates a new disk.
+	// Specifies the snapshot ID from which to create the disk.
 	SnapshotId pulumi.StringPtrInput
 	// Specifies the key/value pairs to associate with the disk.
 	Tags pulumi.StringMapInput
-	// Specifies the disk type. Currently, the value can be SAS, SSD, GPSSD or
-	// ESSD.
-	// + SAS: specifies the high I/O disk type.
-	// + SSD: specifies the ultra-high I/O disk type.
-	// + GPSSD: specifies the general purpose SSD disk type.
-	// + ESSD: Extreme SSD type.
+	// Specifies the throughput for the volume. The Unit is MiB/s.
+	// The field is valid and required when `volumeType` is set to **GPSSD2**.
+	// This field can be changed only when the disk status is Available or In-use.
+	Throughput pulumi.IntPtrInput
+	// Specifies the disk type. Valid values are as follows:
+	// + **SAS**: High I/O type.
+	// + **SSD**: Ultra-high I/O type.
+	// + **GPSSD**: General purpose SSD type.
+	// + **ESSD**: Extreme SSD type.
+	// + **GPSSD2**: General purpose SSD V2 type.
+	// + **ESSD2**: Extreme SSD V2 type.
 	VolumeType pulumi.StringInput
 }
 
@@ -617,8 +712,8 @@ func (o VolumeOutput) ToVolumeOutputWithContext(ctx context.Context) VolumeOutpu
 	return o
 }
 
-// If a disk is attached to an instance, this attribute will display the Attachment ID, Instance ID, and
-// the Device as the Instance sees it. The object structure is documented below.
+// If a disk is attached to an instance, this attribute will display the attachment ID, instance ID, and
+// the device as the instance sees it. The attachment structure is documented below.
 func (o VolumeOutput) Attachments() VolumeAttachmentArrayOutput {
 	return o.ApplyT(func(v *Volume) VolumeAttachmentArrayOutput { return v.Attachments }).(VolumeAttachmentArrayOutput)
 }
@@ -628,35 +723,32 @@ func (o VolumeOutput) AutoPay() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Volume) pulumi.StringPtrOutput { return v.AutoPay }).(pulumi.StringPtrOutput)
 }
 
-// Specifies whether auto renew is enabled.
-// Valid values are **true** and **false**.
+// Specifies whether auto-renew is enabled.
+// Valid values are **true** and **false**. Defaults to **false**.
 func (o VolumeOutput) AutoRenew() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Volume) pulumi.StringPtrOutput { return v.AutoRenew }).(pulumi.StringPtrOutput)
 }
 
-// Specifies the availability zone for the disk. Changing this creates
-// a new disk.
+// Specifies the availability zone for the disk.
 func (o VolumeOutput) AvailabilityZone() pulumi.StringOutput {
 	return o.ApplyT(func(v *Volume) pulumi.StringOutput { return v.AvailabilityZone }).(pulumi.StringOutput)
 }
 
-// Specifies the backup ID from which to create the disk. Changing this
-// creates a new disk.
+// Specifies the backup ID from which to create the disk.
 func (o VolumeOutput) BackupId() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Volume) pulumi.StringPtrOutput { return v.BackupId }).(pulumi.StringPtrOutput)
 }
 
-// Specifies the delete mode of snapshot. The default value is false. All snapshot
-// associated with the disk will also be deleted when the parameter is set to true.
+// Specifies the delete mode of snapshot. The default value is **false**. All snapshot
+// associated with the disk will also be deleted when the parameter is set to **true**.
 func (o VolumeOutput) Cascade() pulumi.BoolPtrOutput {
 	return o.ApplyT(func(v *Volume) pulumi.BoolPtrOutput { return v.Cascade }).(pulumi.BoolPtrOutput)
 }
 
 // Specifies the charging mode of the disk.
 // The valid values are as follows:
-//   - **prePaid**: the yearly/monthly billing mode.
-//   - **postPaid**: the pay-per-use billing mode.
-//     Changing this creates a new disk.
+// + **prePaid**: the yearly/monthly billing mode.
+// + **postPaid**: the pay-per-use billing mode.
 func (o VolumeOutput) ChargingMode() pulumi.StringOutput {
 	return o.ApplyT(func(v *Volume) pulumi.StringOutput { return v.ChargingMode }).(pulumi.StringOutput)
 }
@@ -671,79 +763,93 @@ func (o VolumeOutput) DedicatedStorageName() pulumi.StringOutput {
 	return o.ApplyT(func(v *Volume) pulumi.StringOutput { return v.DedicatedStorageName }).(pulumi.StringOutput)
 }
 
-// Specifies the disk description. The value can contain a maximum of 255 bytes.
+// Specifies the disk description. You can enter up to `85` characters.
 func (o VolumeOutput) Description() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Volume) pulumi.StringPtrOutput { return v.Description }).(pulumi.StringPtrOutput)
 }
 
-// Specifies the device type of disk to create. Valid options are VBD and
-// SCSI. Defaults to VBD. Changing this creates a new disk.
+// Specifies the device type of disk to create. Valid options are **VBD** and
+// **SCSI**. Defaults to **VBD**.
 func (o VolumeOutput) DeviceType() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Volume) pulumi.StringPtrOutput { return v.DeviceType }).(pulumi.StringPtrOutput)
 }
 
-// Specifies the enterprise project id of the disk. Changing this
-// creates a new disk.
+// Specifies the enterprise project ID of the disk.
+// For enterprise users, if omitted, default enterprise project will be used.
 func (o VolumeOutput) EnterpriseProjectId() pulumi.StringOutput {
 	return o.ApplyT(func(v *Volume) pulumi.StringOutput { return v.EnterpriseProjectId }).(pulumi.StringOutput)
 }
 
-// Specifies the image ID from which to create the disk. Changing this creates
-// a new disk.
+// Specifies the image ID from which to create the disk.
 func (o VolumeOutput) ImageId() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Volume) pulumi.StringPtrOutput { return v.ImageId }).(pulumi.StringPtrOutput)
 }
 
-// Specifies the Encryption KMS ID to create the disk. Changing this creates a
-// new disk.
+// Specifies the IOPS(Input/Output Operations Per Second) for the volume.
+// The field is valid and required when `volumeType` is set to **GPSSD2** or **ESSD2**.
+// This field can be changed only when the disk status is Available or In-use.
+func (o VolumeOutput) Iops() pulumi.IntOutput {
+	return o.ApplyT(func(v *Volume) pulumi.IntOutput { return v.Iops }).(pulumi.IntOutput)
+}
+
+// Specifies the Encryption KMS ID to create the disk.
 func (o VolumeOutput) KmsId() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Volume) pulumi.StringPtrOutput { return v.KmsId }).(pulumi.StringPtrOutput)
 }
 
-// Specifies whether the disk is shareable. The default value is false.
-// Changing this creates a new disk.
+// Specifies whether the disk is shareable. Defaults to **false**.
 func (o VolumeOutput) Multiattach() pulumi.BoolPtrOutput {
 	return o.ApplyT(func(v *Volume) pulumi.BoolPtrOutput { return v.Multiattach }).(pulumi.BoolPtrOutput)
 }
 
-// Specifies the disk name. The value can contain a maximum of 255 bytes.
+// Specifies the disk name. You can enter up to `64` characters.
 func (o VolumeOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v *Volume) pulumi.StringOutput { return v.Name }).(pulumi.StringOutput)
 }
 
 // Specifies the charging period of the disk.
-// If `periodUnit` is set to **month**, the value ranges from 1 to 9.
-// If `periodUnit` is set to **year**, the valid value is 1.
-// This parameter is mandatory if `chargingMode` is set to **prePaid**.
-// Changing this creates a new disk.
+// + If `periodUnit` is set to **month**, the value ranges from `1` to `9`.
+// + If `periodUnit` is set to **year**, the valid value is `1`.
 func (o VolumeOutput) Period() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v *Volume) pulumi.IntPtrOutput { return v.Period }).(pulumi.IntPtrOutput)
 }
 
 // Specifies the charging period unit of the disk.
 // Valid values are **month** and **year**. This parameter is mandatory if `chargingMode` is set to **prePaid**.
-// Changing this creates a new disk.
 func (o VolumeOutput) PeriodUnit() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Volume) pulumi.StringPtrOutput { return v.PeriodUnit }).(pulumi.StringPtrOutput)
 }
 
 // Specifies the region in which to create the disk. If omitted, the
-// provider-level region will be used. Changing this creates a new disk.
+// provider-level region will be used. Changing this parameter will create a new resource.
 func (o VolumeOutput) Region() pulumi.StringOutput {
 	return o.ApplyT(func(v *Volume) pulumi.StringOutput { return v.Region }).(pulumi.StringOutput)
 }
 
-// Specifies the disk size, in GB. The valid value is range from:
-// + System disk: 1 GB to 1024 GB
-// + Data disk: 10 GB to 32768 GB
+// Specifies the server ID to which the cloud volume is to be mounted.
+// After specifying the value of this field, the cloud volume will be automatically attached on the cloud server.
+// The chargingMode of the created cloud volume will be consistent with that of the cloud server.
+// Currently, only ECS cloud-servers are supported, and BMS bare metal cloud-servers are not supported yet.
+func (o VolumeOutput) ServerId() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *Volume) pulumi.StringPtrOutput { return v.ServerId }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the disk size, in GB.
+// For system disk, the valid value ranges from `1` GB to `1,024` GB.
+// For data disk, the valid value ranges from `10` GB to `32,768` GB.
 func (o VolumeOutput) Size() pulumi.IntOutput {
 	return o.ApplyT(func(v *Volume) pulumi.IntOutput { return v.Size }).(pulumi.IntOutput)
 }
 
-// Specifies the snapshot ID from which to create the disk. Changing this
-// creates a new disk.
+// Specifies the snapshot ID from which to create the disk.
 func (o VolumeOutput) SnapshotId() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Volume) pulumi.StringPtrOutput { return v.SnapshotId }).(pulumi.StringPtrOutput)
+}
+
+// The disk status.
+// Please refer to [EVS Disk Status](https://support.huaweicloud.com/intl/en-us/api-evs/evs_04_0040.html).
+func (o VolumeOutput) Status() pulumi.StringOutput {
+	return o.ApplyT(func(v *Volume) pulumi.StringOutput { return v.Status }).(pulumi.StringOutput)
 }
 
 // Specifies the key/value pairs to associate with the disk.
@@ -751,12 +857,20 @@ func (o VolumeOutput) Tags() pulumi.StringMapOutput {
 	return o.ApplyT(func(v *Volume) pulumi.StringMapOutput { return v.Tags }).(pulumi.StringMapOutput)
 }
 
-// Specifies the disk type. Currently, the value can be SAS, SSD, GPSSD or
-// ESSD.
-// + SAS: specifies the high I/O disk type.
-// + SSD: specifies the ultra-high I/O disk type.
-// + GPSSD: specifies the general purpose SSD disk type.
-// + ESSD: Extreme SSD type.
+// Specifies the throughput for the volume. The Unit is MiB/s.
+// The field is valid and required when `volumeType` is set to **GPSSD2**.
+// This field can be changed only when the disk status is Available or In-use.
+func (o VolumeOutput) Throughput() pulumi.IntOutput {
+	return o.ApplyT(func(v *Volume) pulumi.IntOutput { return v.Throughput }).(pulumi.IntOutput)
+}
+
+// Specifies the disk type. Valid values are as follows:
+// + **SAS**: High I/O type.
+// + **SSD**: Ultra-high I/O type.
+// + **GPSSD**: General purpose SSD type.
+// + **ESSD**: Extreme SSD type.
+// + **GPSSD2**: General purpose SSD V2 type.
+// + **ESSD2**: Extreme SSD V2 type.
 func (o VolumeOutput) VolumeType() pulumi.StringOutput {
 	return o.ApplyT(func(v *Volume) pulumi.StringOutput { return v.VolumeType }).(pulumi.StringOutput)
 }

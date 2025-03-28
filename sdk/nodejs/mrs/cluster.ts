@@ -129,62 +129,56 @@ import * as utilities from "../utilities";
  * const subnetId = config.requireObject("subnetId");
  * const testcluster = new huaweicloud.mrs.Cluster("testcluster", {
  *     availabilityZone: testAvailabilityZones.then(testAvailabilityZones => testAvailabilityZones.names?[0]),
- *     version: "MRS 1.9.2",
+ *     version: "MRS 3.1.5",
  *     type: "MIXED",
  *     componentLists: [
  *         "Hadoop",
- *         "Spark",
- *         "Hive",
+ *         "ZooKeeper",
+ *         "Ranger",
  *         "Tez",
- *         "Storm",
+ *         "Spark2x",
+ *         "Hive",
+ *         "Kafka",
+ *         "Flume",
  *     ],
  *     managerAdminPass: password,
  *     nodeAdminPass: password,
  *     vpcId: vpcId,
  *     subnetId: subnetId,
  *     masterNodes: {
- *         flavor: "c6.2xlarge.4.linux.bigdata",
+ *         flavor: "ac7.4xlarge.4.linux.bigdata",
  *         nodeNumber: 2,
  *         rootVolumeType: "SAS",
- *         rootVolumeSize: 300,
+ *         rootVolumeSize: 100,
  *         dataVolumeType: "SAS",
- *         dataVolumeSize: 480,
+ *         dataVolumeSize: 200,
  *         dataVolumeCount: 1,
  *     },
  *     analysisCoreNodes: {
- *         flavor: "c6.2xlarge.4.linux.bigdata",
+ *         flavor: "ac7.4xlarge.4.linux.bigdata",
  *         nodeNumber: 2,
  *         rootVolumeType: "SAS",
- *         rootVolumeSize: 300,
+ *         rootVolumeSize: 100,
  *         dataVolumeType: "SAS",
- *         dataVolumeSize: 480,
+ *         dataVolumeSize: 200,
  *         dataVolumeCount: 1,
  *     },
  *     streamingCoreNodes: {
- *         flavor: "c6.2xlarge.4.linux.bigdata",
+ *         flavor: "ac7.4xlarge.4.linux.bigdata",
  *         nodeNumber: 2,
  *         rootVolumeType: "SAS",
- *         rootVolumeSize: 300,
+ *         rootVolumeSize: 100,
  *         dataVolumeType: "SAS",
- *         dataVolumeSize: 480,
+ *         dataVolumeSize: 200,
  *         dataVolumeCount: 1,
  *     },
  *     analysisTaskNodes: {
- *         flavor: "c6.2xlarge.4.linux.bigdata",
- *         nodeNumber: 1,
+ *         flavor: "ac7.4xlarge.4.linux.bigdata",
+ *         nodeNumber: 2,
  *         rootVolumeType: "SAS",
- *         rootVolumeSize: 300,
+ *         rootVolumeSize: 100,
  *         dataVolumeType: "SAS",
- *         dataVolumeSize: 480,
- *         dataVolumeCount: 1,
- *     },
- *     streamingTaskNodes: {
- *         flavor: "c6.2xlarge.4.linux.bigdata",
- *         nodeNumber: 1,
- *         rootVolumeType: "SAS",
- *         rootVolumeSize: 300,
- *         dataVolumeType: "SAS",
- *         dataVolumeSize: 480,
+ *         dataVolumeSize: 200,
  *         dataVolumeCount: 1,
  *     },
  *     tags: {
@@ -332,6 +326,53 @@ import * as utilities from "../utilities";
  *     },
  * });
  * ```
+ * ### Create a prePaid stream cluster
+ *
+ * ```typescript
+ * import * as pulumi from "@pulumi/pulumi";
+ * import * as huaweicloud from "@pulumi/huaweicloud";
+ * import * as pulumi from "@huaweicloudos/pulumi";
+ *
+ * const testAvailabilityZones = huaweicloud.getAvailabilityZones({});
+ * const config = new pulumi.Config();
+ * const clusterName = config.requireObject("clusterName");
+ * const password = config.requireObject("password");
+ * const vpcId = config.requireObject("vpcId");
+ * const subnetId = config.requireObject("subnetId");
+ * const period = config.requireObject("period");
+ * const periodUnit = config.requireObject("periodUnit");
+ * const testcluster = new huaweicloud.mrs.Cluster("testcluster", {
+ *     availabilityZone: testAvailabilityZones.then(testAvailabilityZones => testAvailabilityZones.names?[0]),
+ *     type: "STREAMING",
+ *     version: "MRS 1.9.2",
+ *     managerAdminPass: password,
+ *     nodeAdminPass: password,
+ *     vpcId: vpcId,
+ *     subnetId: subnetId,
+ *     componentLists: ["Storm"],
+ *     chargingMode: "prePaid",
+ *     period: period,
+ *     periodUnit: periodUnit,
+ *     masterNodes: {
+ *         flavor: "c6.2xlarge.4.linux.bigdata",
+ *         nodeNumber: 2,
+ *         rootVolumeType: "SAS",
+ *         rootVolumeSize: 300,
+ *         dataVolumeType: "SAS",
+ *         dataVolumeSize: 480,
+ *         dataVolumeCount: 1,
+ *     },
+ *     streamingCoreNodes: {
+ *         flavor: "c6.2xlarge.4.linux.bigdata",
+ *         nodeNumber: 2,
+ *         rootVolumeType: "SAS",
+ *         rootVolumeSize: 300,
+ *         dataVolumeType: "SAS",
+ *         dataVolumeSize: 480,
+ *         dataVolumeCount: 1,
+ *     },
+ * });
+ * ```
  *
  * ## Import
  *
@@ -341,7 +382,7 @@ import * as utilities from "../utilities";
  *  $ pulumi import huaweicloud:Mrs/cluster:cluster test b11b407c-e604-4e8d-8bc4-92398320b847
  * ```
  *
- *  Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`manager_admin_pass`, `node_admin_pass`,`template_id`, `assigned_roles` and `component_configs`. It is generally recommended running `terraform plan` after importing a cluster. You can then decide if changes should be applied to the cluster, or the resource definition should be updated to align with the cluster. Also you can ignore changes as below. hcl resource "huaweicloud_mapreduce_cluster" "test" {
+ *  Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`manager_admin_pass`, `node_admin_pass`,`template_id`, `assigned_roles`, `external_datasources`, `component_configs`, `smn_notify`, `charging_mode`, `period` and `period_unit`. It is generally recommended running `terraform plan` after importing a cluster. You can then decide if changes should be applied to the cluster, or the resource definition should be updated to align with the cluster. Also you can ignore changes as below. hcl resource "huaweicloud_mapreduce_cluster" "test" {
  *
  *  ...
  *
@@ -349,7 +390,9 @@ import * as utilities from "../utilities";
  *
  *  ignore_changes = [
  *
- *  manager_admin_pass, node_admin_pass,
+ *  manager_admin_pass, node_admin_pass, template_id, assigned_roles, external_datasources, component_configs, smn_notify,
+ *
+ *  charging_mode, period, period_unit,
  *
  *  ]
  *
@@ -404,6 +447,19 @@ export class Cluster extends pulumi.CustomResource {
      */
     public readonly availabilityZone!: pulumi.Output<string>;
     /**
+     * Specifies the bootstrap action scripts.
+     * Bootstrap action scripts will be executed on specified cluster nodes before or after big data components are
+     * started. You can execute bootstrap actions to install third-party software, modify the cluster running environment,
+     * and customize cluster configuration. [Learn more](https://support.huaweicloud.com/intl/en-us/usermanual-mrs/mrs_01_0414.html)
+     */
+    public readonly bootstrapScripts!: pulumi.Output<outputs.Mrs.ClusterBootstrapScript[] | undefined>;
+    /**
+     * Specifies the charging mode of the cluster.  
+     * Valid values are **prePaid** and **postPaid**, defaults to **postPaid**.
+     * Changing this parameter will create a new MapReduce cluster resource.
+     */
+    public readonly chargingMode!: pulumi.Output<string>;
+    /**
      * The charging start time which is the start time of billing, in RFC-3339 format.
      */
     public /*out*/ readonly chargingStartTime!: pulumi.Output<string>;
@@ -437,9 +493,14 @@ export class Cluster extends pulumi.CustomResource {
     public readonly eipId!: pulumi.Output<string>;
     /**
      * Specifies a unique ID in UUID format of enterprise project.
-     * Changing this will create a new MapReduce cluster resource.
      */
     public readonly enterpriseProjectId!: pulumi.Output<string>;
+    /**
+     * Specifies the external datasource configurations of the cluster.
+     * The object structure is documented below.
+     * Changing this will create a new MapReduce cluster resource.
+     */
+    public readonly externalDatasources!: pulumi.Output<outputs.Mrs.ClusterExternalDatasource[] | undefined>;
     /**
      * Specifies whether logs are collected when cluster installation fails.
      * Defaults to true. If `logCollection` set true, the OBS buckets will be created and only used to collect logs that
@@ -464,7 +525,7 @@ export class Cluster extends pulumi.CustomResource {
      */
     public readonly masterNodes!: pulumi.Output<outputs.Mrs.ClusterMasterNodes>;
     /**
-     * Specifies the component name of the cluster which has installed.
+     * Specifies the name of a bootstrap action script.
      * Changing this will create a new MapReduce cluster resource.
      */
     public readonly name!: pulumi.Output<string>;
@@ -481,6 +542,20 @@ export class Cluster extends pulumi.CustomResource {
      * nodes(/ECSs). Changing this will create a new MapReduce cluster resource.
      */
     public readonly nodeKeyPair!: pulumi.Output<string | undefined>;
+    /**
+     * Specifies the charging period of the cluster.  
+     * If `periodUnit` is set to **month**, the value ranges from 1 to 9.
+     * If `periodUnit` is set to **year**, the value ranges from 1 to 3.
+     * This parameter is mandatory if `chargingMode` is set to **prePaid**.
+     * Changing this parameter will create a new MapReduce cluster resource.
+     */
+    public readonly period!: pulumi.Output<number | undefined>;
+    /**
+     * Specifies the charging period unit of the cluster.  
+     * Valid values are **month** and **year**. This parameter is mandatory if `chargingMode` is set to **prePaid**.
+     * Changing this parameter will create a new MapReduce cluster resource.
+     */
+    public readonly periodUnit!: pulumi.Output<string | undefined>;
     /**
      * The preferred private IP address of the master node.
      */
@@ -508,6 +583,12 @@ export class Cluster extends pulumi.CustomResource {
      * MapReduce cluster. If using the specified security group, the group need to open the specified port (9022) rules.
      */
     public readonly securityGroupIds!: pulumi.Output<string[]>;
+    /**
+     * Specifies the alarm configuration of the cluster. The smnNotify
+     * structure is documented below.
+     * Changing this will create a new MapReduce cluster resource.
+     */
+    public readonly smnNotify!: pulumi.Output<outputs.Mrs.ClusterSmnNotify | undefined>;
     /**
      * The cluster state, which include: running, frozen, abnormal and failed.
      */
@@ -554,7 +635,7 @@ export class Cluster extends pulumi.CustomResource {
      */
     public /*out*/ readonly totalNodeNumber!: pulumi.Output<number>;
     /**
-     * Specifies the type of the MapReduce cluster. The valid values are **ANALYSIS***,
+     * Specifies the type of the MapReduce cluster. The valid values are **ANALYSIS**,
      * **STREAMING** and **MIXED**, defaults to **ANALYSIS**. Changing this will create a new MapReduce cluster resource.
      */
     public readonly type!: pulumi.Output<string | undefined>;
@@ -589,6 +670,8 @@ export class Cluster extends pulumi.CustomResource {
             resourceInputs["analysisCoreNodes"] = state ? state.analysisCoreNodes : undefined;
             resourceInputs["analysisTaskNodes"] = state ? state.analysisTaskNodes : undefined;
             resourceInputs["availabilityZone"] = state ? state.availabilityZone : undefined;
+            resourceInputs["bootstrapScripts"] = state ? state.bootstrapScripts : undefined;
+            resourceInputs["chargingMode"] = state ? state.chargingMode : undefined;
             resourceInputs["chargingStartTime"] = state ? state.chargingStartTime : undefined;
             resourceInputs["componentConfigs"] = state ? state.componentConfigs : undefined;
             resourceInputs["componentLists"] = state ? state.componentLists : undefined;
@@ -596,6 +679,7 @@ export class Cluster extends pulumi.CustomResource {
             resourceInputs["customNodes"] = state ? state.customNodes : undefined;
             resourceInputs["eipId"] = state ? state.eipId : undefined;
             resourceInputs["enterpriseProjectId"] = state ? state.enterpriseProjectId : undefined;
+            resourceInputs["externalDatasources"] = state ? state.externalDatasources : undefined;
             resourceInputs["logCollection"] = state ? state.logCollection : undefined;
             resourceInputs["managerAdminPass"] = state ? state.managerAdminPass : undefined;
             resourceInputs["masterNodeIp"] = state ? state.masterNodeIp : undefined;
@@ -603,11 +687,14 @@ export class Cluster extends pulumi.CustomResource {
             resourceInputs["name"] = state ? state.name : undefined;
             resourceInputs["nodeAdminPass"] = state ? state.nodeAdminPass : undefined;
             resourceInputs["nodeKeyPair"] = state ? state.nodeKeyPair : undefined;
+            resourceInputs["period"] = state ? state.period : undefined;
+            resourceInputs["periodUnit"] = state ? state.periodUnit : undefined;
             resourceInputs["privateIp"] = state ? state.privateIp : undefined;
             resourceInputs["publicIp"] = state ? state.publicIp : undefined;
             resourceInputs["region"] = state ? state.region : undefined;
             resourceInputs["safeMode"] = state ? state.safeMode : undefined;
             resourceInputs["securityGroupIds"] = state ? state.securityGroupIds : undefined;
+            resourceInputs["smnNotify"] = state ? state.smnNotify : undefined;
             resourceInputs["status"] = state ? state.status : undefined;
             resourceInputs["streamingCoreNodes"] = state ? state.streamingCoreNodes : undefined;
             resourceInputs["streamingTaskNodes"] = state ? state.streamingTaskNodes : undefined;
@@ -645,21 +732,27 @@ export class Cluster extends pulumi.CustomResource {
             resourceInputs["analysisCoreNodes"] = args ? args.analysisCoreNodes : undefined;
             resourceInputs["analysisTaskNodes"] = args ? args.analysisTaskNodes : undefined;
             resourceInputs["availabilityZone"] = args ? args.availabilityZone : undefined;
+            resourceInputs["bootstrapScripts"] = args ? args.bootstrapScripts : undefined;
+            resourceInputs["chargingMode"] = args ? args.chargingMode : undefined;
             resourceInputs["componentConfigs"] = args ? args.componentConfigs : undefined;
             resourceInputs["componentLists"] = args ? args.componentLists : undefined;
             resourceInputs["customNodes"] = args ? args.customNodes : undefined;
             resourceInputs["eipId"] = args ? args.eipId : undefined;
             resourceInputs["enterpriseProjectId"] = args ? args.enterpriseProjectId : undefined;
+            resourceInputs["externalDatasources"] = args ? args.externalDatasources : undefined;
             resourceInputs["logCollection"] = args ? args.logCollection : undefined;
             resourceInputs["managerAdminPass"] = args ? args.managerAdminPass : undefined;
             resourceInputs["masterNodes"] = args ? args.masterNodes : undefined;
             resourceInputs["name"] = args ? args.name : undefined;
             resourceInputs["nodeAdminPass"] = args ? args.nodeAdminPass : undefined;
             resourceInputs["nodeKeyPair"] = args ? args.nodeKeyPair : undefined;
+            resourceInputs["period"] = args ? args.period : undefined;
+            resourceInputs["periodUnit"] = args ? args.periodUnit : undefined;
             resourceInputs["publicIp"] = args ? args.publicIp : undefined;
             resourceInputs["region"] = args ? args.region : undefined;
             resourceInputs["safeMode"] = args ? args.safeMode : undefined;
             resourceInputs["securityGroupIds"] = args ? args.securityGroupIds : undefined;
+            resourceInputs["smnNotify"] = args ? args.smnNotify : undefined;
             resourceInputs["streamingCoreNodes"] = args ? args.streamingCoreNodes : undefined;
             resourceInputs["streamingTaskNodes"] = args ? args.streamingTaskNodes : undefined;
             resourceInputs["subnetId"] = args ? args.subnetId : undefined;
@@ -706,6 +799,19 @@ export interface ClusterState {
      */
     availabilityZone?: pulumi.Input<string>;
     /**
+     * Specifies the bootstrap action scripts.
+     * Bootstrap action scripts will be executed on specified cluster nodes before or after big data components are
+     * started. You can execute bootstrap actions to install third-party software, modify the cluster running environment,
+     * and customize cluster configuration. [Learn more](https://support.huaweicloud.com/intl/en-us/usermanual-mrs/mrs_01_0414.html)
+     */
+    bootstrapScripts?: pulumi.Input<pulumi.Input<inputs.Mrs.ClusterBootstrapScript>[]>;
+    /**
+     * Specifies the charging mode of the cluster.  
+     * Valid values are **prePaid** and **postPaid**, defaults to **postPaid**.
+     * Changing this parameter will create a new MapReduce cluster resource.
+     */
+    chargingMode?: pulumi.Input<string>;
+    /**
      * The charging start time which is the start time of billing, in RFC-3339 format.
      */
     chargingStartTime?: pulumi.Input<string>;
@@ -739,9 +845,14 @@ export interface ClusterState {
     eipId?: pulumi.Input<string>;
     /**
      * Specifies a unique ID in UUID format of enterprise project.
-     * Changing this will create a new MapReduce cluster resource.
      */
     enterpriseProjectId?: pulumi.Input<string>;
+    /**
+     * Specifies the external datasource configurations of the cluster.
+     * The object structure is documented below.
+     * Changing this will create a new MapReduce cluster resource.
+     */
+    externalDatasources?: pulumi.Input<pulumi.Input<inputs.Mrs.ClusterExternalDatasource>[]>;
     /**
      * Specifies whether logs are collected when cluster installation fails.
      * Defaults to true. If `logCollection` set true, the OBS buckets will be created and only used to collect logs that
@@ -766,7 +877,7 @@ export interface ClusterState {
      */
     masterNodes?: pulumi.Input<inputs.Mrs.ClusterMasterNodes>;
     /**
-     * Specifies the component name of the cluster which has installed.
+     * Specifies the name of a bootstrap action script.
      * Changing this will create a new MapReduce cluster resource.
      */
     name?: pulumi.Input<string>;
@@ -783,6 +894,20 @@ export interface ClusterState {
      * nodes(/ECSs). Changing this will create a new MapReduce cluster resource.
      */
     nodeKeyPair?: pulumi.Input<string>;
+    /**
+     * Specifies the charging period of the cluster.  
+     * If `periodUnit` is set to **month**, the value ranges from 1 to 9.
+     * If `periodUnit` is set to **year**, the value ranges from 1 to 3.
+     * This parameter is mandatory if `chargingMode` is set to **prePaid**.
+     * Changing this parameter will create a new MapReduce cluster resource.
+     */
+    period?: pulumi.Input<number>;
+    /**
+     * Specifies the charging period unit of the cluster.  
+     * Valid values are **month** and **year**. This parameter is mandatory if `chargingMode` is set to **prePaid**.
+     * Changing this parameter will create a new MapReduce cluster resource.
+     */
+    periodUnit?: pulumi.Input<string>;
     /**
      * The preferred private IP address of the master node.
      */
@@ -810,6 +935,12 @@ export interface ClusterState {
      * MapReduce cluster. If using the specified security group, the group need to open the specified port (9022) rules.
      */
     securityGroupIds?: pulumi.Input<pulumi.Input<string>[]>;
+    /**
+     * Specifies the alarm configuration of the cluster. The smnNotify
+     * structure is documented below.
+     * Changing this will create a new MapReduce cluster resource.
+     */
+    smnNotify?: pulumi.Input<inputs.Mrs.ClusterSmnNotify>;
     /**
      * The cluster state, which include: running, frozen, abnormal and failed.
      */
@@ -856,7 +987,7 @@ export interface ClusterState {
      */
     totalNodeNumber?: pulumi.Input<number>;
     /**
-     * Specifies the type of the MapReduce cluster. The valid values are **ANALYSIS***,
+     * Specifies the type of the MapReduce cluster. The valid values are **ANALYSIS**,
      * **STREAMING** and **MIXED**, defaults to **ANALYSIS**. Changing this will create a new MapReduce cluster resource.
      */
     type?: pulumi.Input<string>;
@@ -901,6 +1032,19 @@ export interface ClusterArgs {
      */
     availabilityZone: pulumi.Input<string>;
     /**
+     * Specifies the bootstrap action scripts.
+     * Bootstrap action scripts will be executed on specified cluster nodes before or after big data components are
+     * started. You can execute bootstrap actions to install third-party software, modify the cluster running environment,
+     * and customize cluster configuration. [Learn more](https://support.huaweicloud.com/intl/en-us/usermanual-mrs/mrs_01_0414.html)
+     */
+    bootstrapScripts?: pulumi.Input<pulumi.Input<inputs.Mrs.ClusterBootstrapScript>[]>;
+    /**
+     * Specifies the charging mode of the cluster.  
+     * Valid values are **prePaid** and **postPaid**, defaults to **postPaid**.
+     * Changing this parameter will create a new MapReduce cluster resource.
+     */
+    chargingMode?: pulumi.Input<string>;
+    /**
      * Specifies the component configurations of the cluster.
      * The object structure is documented below.
      * Changing this will create a new MapReduce cluster resource.
@@ -926,9 +1070,14 @@ export interface ClusterArgs {
     eipId?: pulumi.Input<string>;
     /**
      * Specifies a unique ID in UUID format of enterprise project.
-     * Changing this will create a new MapReduce cluster resource.
      */
     enterpriseProjectId?: pulumi.Input<string>;
+    /**
+     * Specifies the external datasource configurations of the cluster.
+     * The object structure is documented below.
+     * Changing this will create a new MapReduce cluster resource.
+     */
+    externalDatasources?: pulumi.Input<pulumi.Input<inputs.Mrs.ClusterExternalDatasource>[]>;
     /**
      * Specifies whether logs are collected when cluster installation fails.
      * Defaults to true. If `logCollection` set true, the OBS buckets will be created and only used to collect logs that
@@ -949,7 +1098,7 @@ export interface ClusterArgs {
      */
     masterNodes: pulumi.Input<inputs.Mrs.ClusterMasterNodes>;
     /**
-     * Specifies the component name of the cluster which has installed.
+     * Specifies the name of a bootstrap action script.
      * Changing this will create a new MapReduce cluster resource.
      */
     name?: pulumi.Input<string>;
@@ -966,6 +1115,20 @@ export interface ClusterArgs {
      * nodes(/ECSs). Changing this will create a new MapReduce cluster resource.
      */
     nodeKeyPair?: pulumi.Input<string>;
+    /**
+     * Specifies the charging period of the cluster.  
+     * If `periodUnit` is set to **month**, the value ranges from 1 to 9.
+     * If `periodUnit` is set to **year**, the value ranges from 1 to 3.
+     * This parameter is mandatory if `chargingMode` is set to **prePaid**.
+     * Changing this parameter will create a new MapReduce cluster resource.
+     */
+    period?: pulumi.Input<number>;
+    /**
+     * Specifies the charging period unit of the cluster.  
+     * Valid values are **month** and **year**. This parameter is mandatory if `chargingMode` is set to **prePaid**.
+     * Changing this parameter will create a new MapReduce cluster resource.
+     */
+    periodUnit?: pulumi.Input<string>;
     /**
      * Specifies the EIP address which bound to the MapReduce cluster.
      * The EIP must have been created and must be in the same region as the cluster.
@@ -989,6 +1152,12 @@ export interface ClusterArgs {
      * MapReduce cluster. If using the specified security group, the group need to open the specified port (9022) rules.
      */
     securityGroupIds?: pulumi.Input<pulumi.Input<string>[]>;
+    /**
+     * Specifies the alarm configuration of the cluster. The smnNotify
+     * structure is documented below.
+     * Changing this will create a new MapReduce cluster resource.
+     */
+    smnNotify?: pulumi.Input<inputs.Mrs.ClusterSmnNotify>;
     /**
      * Specifies the informations about streaming core nodes in the
      * MapReduce cluster.
@@ -1027,7 +1196,7 @@ export interface ClusterArgs {
      */
     templateId?: pulumi.Input<string>;
     /**
-     * Specifies the type of the MapReduce cluster. The valid values are **ANALYSIS***,
+     * Specifies the type of the MapReduce cluster. The valid values are **ANALYSIS**,
      * **STREAMING** and **MIXED**, defaults to **ANALYSIS**. Changing this will create a new MapReduce cluster resource.
      */
     type?: pulumi.Input<string>;

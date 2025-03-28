@@ -41,7 +41,7 @@ import (
 //
 // ## Import
 //
-// The cloud connection can be imported using the `id`, e.g.
+// The cloud connection can be imported using the `id`, e.g. bash
 //
 // ```sh
 //
@@ -54,7 +54,7 @@ type Connection struct {
 	// The number of bandwidth packages associated with the cloud connection instance.
 	BandwidthPackageNumber pulumi.IntOutput `pulumi:"bandwidthPackageNumber"`
 	// The Description about the cloud connection.\
-	// The description can contain a maximum of 255 characters.
+	// The description contain a maximum of `255` characters, and the angle brackets (< and >) are not allowed.
 	Description pulumi.StringOutput `pulumi:"description"`
 	// The Domain ID.
 	DomainId pulumi.StringOutput `pulumi:"domainId"`
@@ -64,8 +64,8 @@ type Connection struct {
 	// The number of inter-domain bandwidths associated with the cloud connection instance.
 	InterRegionBandwidthNumber pulumi.IntOutput `pulumi:"interRegionBandwidthNumber"`
 	// The cloud connection name.\
-	// The name can contain 1 to 64 characters, only letters, Chinese characters, digits, hyphens (-),
-	// underscores (_) and dots (.).
+	// The name can contain `1` to `64` characters, only English letters, Chinese characters, digits, hyphens (-),
+	// underscores (_) and dots (.) are allowed.
 	Name pulumi.StringOutput `pulumi:"name"`
 	// The number of network instances associated with the cloud connection instance.
 	NetworkInstanceNumber pulumi.IntOutput `pulumi:"networkInstanceNumber"`
@@ -76,6 +76,8 @@ type Connection struct {
 	// The options are as follows:
 	// + **ACTIVE**: Device deleted.
 	Status pulumi.StringOutput `pulumi:"status"`
+	// Specifies the key/value pairs to associate with the cloud connection.
+	Tags pulumi.StringMapOutput `pulumi:"tags"`
 	// The Scenario.\
 	// The options are as follows:
 	// + **vpc**: VPCs or virtual gateways can use this cloud connection.
@@ -115,7 +117,7 @@ type connectionState struct {
 	// The number of bandwidth packages associated with the cloud connection instance.
 	BandwidthPackageNumber *int `pulumi:"bandwidthPackageNumber"`
 	// The Description about the cloud connection.\
-	// The description can contain a maximum of 255 characters.
+	// The description contain a maximum of `255` characters, and the angle brackets (< and >) are not allowed.
 	Description *string `pulumi:"description"`
 	// The Domain ID.
 	DomainId *string `pulumi:"domainId"`
@@ -125,8 +127,8 @@ type connectionState struct {
 	// The number of inter-domain bandwidths associated with the cloud connection instance.
 	InterRegionBandwidthNumber *int `pulumi:"interRegionBandwidthNumber"`
 	// The cloud connection name.\
-	// The name can contain 1 to 64 characters, only letters, Chinese characters, digits, hyphens (-),
-	// underscores (_) and dots (.).
+	// The name can contain `1` to `64` characters, only English letters, Chinese characters, digits, hyphens (-),
+	// underscores (_) and dots (.) are allowed.
 	Name *string `pulumi:"name"`
 	// The number of network instances associated with the cloud connection instance.
 	NetworkInstanceNumber *int `pulumi:"networkInstanceNumber"`
@@ -137,6 +139,8 @@ type connectionState struct {
 	// The options are as follows:
 	// + **ACTIVE**: Device deleted.
 	Status *string `pulumi:"status"`
+	// Specifies the key/value pairs to associate with the cloud connection.
+	Tags map[string]string `pulumi:"tags"`
 	// The Scenario.\
 	// The options are as follows:
 	// + **vpc**: VPCs or virtual gateways can use this cloud connection.
@@ -147,7 +151,7 @@ type ConnectionState struct {
 	// The number of bandwidth packages associated with the cloud connection instance.
 	BandwidthPackageNumber pulumi.IntPtrInput
 	// The Description about the cloud connection.\
-	// The description can contain a maximum of 255 characters.
+	// The description contain a maximum of `255` characters, and the angle brackets (< and >) are not allowed.
 	Description pulumi.StringPtrInput
 	// The Domain ID.
 	DomainId pulumi.StringPtrInput
@@ -157,8 +161,8 @@ type ConnectionState struct {
 	// The number of inter-domain bandwidths associated with the cloud connection instance.
 	InterRegionBandwidthNumber pulumi.IntPtrInput
 	// The cloud connection name.\
-	// The name can contain 1 to 64 characters, only letters, Chinese characters, digits, hyphens (-),
-	// underscores (_) and dots (.).
+	// The name can contain `1` to `64` characters, only English letters, Chinese characters, digits, hyphens (-),
+	// underscores (_) and dots (.) are allowed.
 	Name pulumi.StringPtrInput
 	// The number of network instances associated with the cloud connection instance.
 	NetworkInstanceNumber pulumi.IntPtrInput
@@ -169,6 +173,8 @@ type ConnectionState struct {
 	// The options are as follows:
 	// + **ACTIVE**: Device deleted.
 	Status pulumi.StringPtrInput
+	// Specifies the key/value pairs to associate with the cloud connection.
+	Tags pulumi.StringMapInput
 	// The Scenario.\
 	// The options are as follows:
 	// + **vpc**: VPCs or virtual gateways can use this cloud connection.
@@ -181,35 +187,39 @@ func (ConnectionState) ElementType() reflect.Type {
 
 type connectionArgs struct {
 	// The Description about the cloud connection.\
-	// The description can contain a maximum of 255 characters.
+	// The description contain a maximum of `255` characters, and the angle brackets (< and >) are not allowed.
 	Description *string `pulumi:"description"`
 	// The enterprise project id of the cloud connection.\
 	// Value 0 indicates the default enterprise project.
 	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
 	// The cloud connection name.\
-	// The name can contain 1 to 64 characters, only letters, Chinese characters, digits, hyphens (-),
-	// underscores (_) and dots (.).
+	// The name can contain `1` to `64` characters, only English letters, Chinese characters, digits, hyphens (-),
+	// underscores (_) and dots (.) are allowed.
 	Name *string `pulumi:"name"`
 	// Specifies the region in which to create the resource.
 	// If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
 	Region *string `pulumi:"region"`
+	// Specifies the key/value pairs to associate with the cloud connection.
+	Tags map[string]string `pulumi:"tags"`
 }
 
 // The set of arguments for constructing a Connection resource.
 type ConnectionArgs struct {
 	// The Description about the cloud connection.\
-	// The description can contain a maximum of 255 characters.
+	// The description contain a maximum of `255` characters, and the angle brackets (< and >) are not allowed.
 	Description pulumi.StringPtrInput
 	// The enterprise project id of the cloud connection.\
 	// Value 0 indicates the default enterprise project.
 	EnterpriseProjectId pulumi.StringPtrInput
 	// The cloud connection name.\
-	// The name can contain 1 to 64 characters, only letters, Chinese characters, digits, hyphens (-),
-	// underscores (_) and dots (.).
+	// The name can contain `1` to `64` characters, only English letters, Chinese characters, digits, hyphens (-),
+	// underscores (_) and dots (.) are allowed.
 	Name pulumi.StringPtrInput
 	// Specifies the region in which to create the resource.
 	// If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
 	Region pulumi.StringPtrInput
+	// Specifies the key/value pairs to associate with the cloud connection.
+	Tags pulumi.StringMapInput
 }
 
 func (ConnectionArgs) ElementType() reflect.Type {
@@ -305,7 +315,7 @@ func (o ConnectionOutput) BandwidthPackageNumber() pulumi.IntOutput {
 }
 
 // The Description about the cloud connection.\
-// The description can contain a maximum of 255 characters.
+// The description contain a maximum of `255` characters, and the angle brackets (< and >) are not allowed.
 func (o ConnectionOutput) Description() pulumi.StringOutput {
 	return o.ApplyT(func(v *Connection) pulumi.StringOutput { return v.Description }).(pulumi.StringOutput)
 }
@@ -327,8 +337,8 @@ func (o ConnectionOutput) InterRegionBandwidthNumber() pulumi.IntOutput {
 }
 
 // The cloud connection name.\
-// The name can contain 1 to 64 characters, only letters, Chinese characters, digits, hyphens (-),
-// underscores (_) and dots (.).
+// The name can contain `1` to `64` characters, only English letters, Chinese characters, digits, hyphens (-),
+// underscores (_) and dots (.) are allowed.
 func (o ConnectionOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v *Connection) pulumi.StringOutput { return v.Name }).(pulumi.StringOutput)
 }
@@ -349,6 +359,11 @@ func (o ConnectionOutput) Region() pulumi.StringOutput {
 // + **ACTIVE**: Device deleted.
 func (o ConnectionOutput) Status() pulumi.StringOutput {
 	return o.ApplyT(func(v *Connection) pulumi.StringOutput { return v.Status }).(pulumi.StringOutput)
+}
+
+// Specifies the key/value pairs to associate with the cloud connection.
+func (o ConnectionOutput) Tags() pulumi.StringMapOutput {
+	return o.ApplyT(func(v *Connection) pulumi.StringMapOutput { return v.Tags }).(pulumi.StringMapOutput)
 }
 
 // The Scenario.\

@@ -57,7 +57,7 @@ import (
 //
 // ## Import
 //
-// The datasets can be imported by `id`.
+// The datasets can be imported by `id`. bash
 //
 // ```sh
 //
@@ -65,7 +65,7 @@ import (
 //
 // ```
 //
-//	Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`data_source.0.path`, `data_source.0.queue_name`, `data_source.0.database_name`, `data_source.0.table_name`, `data_source.0.cluster_id`, `data_source.0.user_name` and `data_source.0.password`. It is generally recommended running `terraform plan` after importing a dataset. You can then decide if changes should be applied to the dataset, or the resource definition should be updated to align with the dataset. Also you can ignore changes as below. resource "huaweicloud_modelarts_dataset" "test" {
+//	Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`data_source.0.path`, `data_source.0.queue_name`, `data_source.0.database_name`, `data_source.0.table_name`, `data_source.0.cluster_id`, `data_source.0.user_name` and `data_source.0.password`. It is generally recommended running `terraform plan` after importing a dataset. You can then decide if changes should be applied to the dataset, or the resource definition should be updated to align with the dataset. Also you can ignore changes as below. hcl resource "huaweicloud_modelarts_dataset" "test" {
 //
 //	...
 //
@@ -92,7 +92,7 @@ type Dataset struct {
 	// as pictures/files/audio, etc.) in this directory and subdirectories to the dataset. Structure is documented below.
 	// Changing this parameter will create a new resource.
 	DataSource DatasetDataSourceOutput `pulumi:"dataSource"`
-	// Specifies the description of dataset. It contains a maximum of 256 characters and
+	// Specifies the description of dataset. It contains a maximum of `256` characters and
 	// cannot contain special characters `!<>=&"'`.
 	Description pulumi.StringPtrOutput `pulumi:"description"`
 	// Specifies whether to import labeled files.
@@ -180,7 +180,7 @@ type datasetState struct {
 	// as pictures/files/audio, etc.) in this directory and subdirectories to the dataset. Structure is documented below.
 	// Changing this parameter will create a new resource.
 	DataSource *DatasetDataSource `pulumi:"dataSource"`
-	// Specifies the description of dataset. It contains a maximum of 256 characters and
+	// Specifies the description of dataset. It contains a maximum of `256` characters and
 	// cannot contain special characters `!<>=&"'`.
 	Description *string `pulumi:"description"`
 	// Specifies whether to import labeled files.
@@ -230,7 +230,7 @@ type DatasetState struct {
 	// as pictures/files/audio, etc.) in this directory and subdirectories to the dataset. Structure is documented below.
 	// Changing this parameter will create a new resource.
 	DataSource DatasetDataSourcePtrInput
-	// Specifies the description of dataset. It contains a maximum of 256 characters and
+	// Specifies the description of dataset. It contains a maximum of `256` characters and
 	// cannot contain special characters `!<>=&"'`.
 	Description pulumi.StringPtrInput
 	// Specifies whether to import labeled files.
@@ -279,7 +279,7 @@ type datasetArgs struct {
 	// as pictures/files/audio, etc.) in this directory and subdirectories to the dataset. Structure is documented below.
 	// Changing this parameter will create a new resource.
 	DataSource DatasetDataSource `pulumi:"dataSource"`
-	// Specifies the description of dataset. It contains a maximum of 256 characters and
+	// Specifies the description of dataset. It contains a maximum of `256` characters and
 	// cannot contain special characters `!<>=&"'`.
 	Description *string `pulumi:"description"`
 	// Specifies whether to import labeled files.
@@ -314,7 +314,7 @@ type DatasetArgs struct {
 	// as pictures/files/audio, etc.) in this directory and subdirectories to the dataset. Structure is documented below.
 	// Changing this parameter will create a new resource.
 	DataSource DatasetDataSourceInput
-	// Specifies the description of dataset. It contains a maximum of 256 characters and
+	// Specifies the description of dataset. It contains a maximum of `256` characters and
 	// cannot contain special characters `!<>=&"'`.
 	Description pulumi.StringPtrInput
 	// Specifies whether to import labeled files.
@@ -448,7 +448,7 @@ func (o DatasetOutput) DataSource() DatasetDataSourceOutput {
 	return o.ApplyT(func(v *Dataset) DatasetDataSourceOutput { return v.DataSource }).(DatasetDataSourceOutput)
 }
 
-// Specifies the description of dataset. It contains a maximum of 256 characters and
+// Specifies the description of dataset. It contains a maximum of `256` characters and
 // cannot contain special characters `!<>=&"'`.
 func (o DatasetOutput) Description() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Dataset) pulumi.StringPtrOutput { return v.Description }).(pulumi.StringPtrOutput)

@@ -71,7 +71,7 @@ import (
 //
 // ## Import
 //
-// Dis stream can be imported by `stream_name`. For example,
+// Dis stream can be imported by `stream_name`. For example, bash
 //
 // ```sh
 //
@@ -95,11 +95,11 @@ type Stream struct {
 	// Field separator for CSV file. Changing this parameter will create a new
 	// resource.
 	CsvDelimiter pulumi.StringOutput `pulumi:"csvDelimiter"`
-	// User's JOSN, CSV format data schema, described with Avro schema. Changing
+	// User's JSON, CSV format data schema, described with Avro schema. Changing
 	// this parameter will create a new resource.
 	DataSchema pulumi.StringOutput `pulumi:"dataSchema"`
-	// Data type of the data putting into the stream. The value is one of `BLOB`,
-	// `JSON` and `CSV`. Changing this parameter will create a new resource.
+	// Data type of the data putting into the stream. The value is one of **BLOB**,
+	// **JSON** and **CSV**. Changing this parameter will create a new resource.
 	DataType pulumi.StringOutput `pulumi:"dataType"`
 	// Specifies the enterprise project id of the dis stream, Value 0
 	// indicates the default enterprise project. Changing this parameter will create a new resource.
@@ -116,7 +116,7 @@ type Stream struct {
 	// provider-level region will be used. Changing this creates a new DIS Stream resource.
 	Region pulumi.StringOutput `pulumi:"region"`
 	// The number of hours for which data from the stream will be retained in DIS.
-	// Value range: `24` to `72`. Unit: `hour`. Default:`24`. Changing this parameter will create a new resource.
+	// Value range: `24` to `72`. Unit: **hour**. Default:`24`. Changing this parameter will create a new resource.
 	RetentionPeriod pulumi.IntPtrOutput `pulumi:"retentionPeriod"`
 	// The status of the partition.
 	Status pulumi.StringOutput `pulumi:"status"`
@@ -184,11 +184,11 @@ type streamState struct {
 	// Field separator for CSV file. Changing this parameter will create a new
 	// resource.
 	CsvDelimiter *string `pulumi:"csvDelimiter"`
-	// User's JOSN, CSV format data schema, described with Avro schema. Changing
+	// User's JSON, CSV format data schema, described with Avro schema. Changing
 	// this parameter will create a new resource.
 	DataSchema *string `pulumi:"dataSchema"`
-	// Data type of the data putting into the stream. The value is one of `BLOB`,
-	// `JSON` and `CSV`. Changing this parameter will create a new resource.
+	// Data type of the data putting into the stream. The value is one of **BLOB**,
+	// **JSON** and **CSV**. Changing this parameter will create a new resource.
 	DataType *string `pulumi:"dataType"`
 	// Specifies the enterprise project id of the dis stream, Value 0
 	// indicates the default enterprise project. Changing this parameter will create a new resource.
@@ -205,7 +205,7 @@ type streamState struct {
 	// provider-level region will be used. Changing this creates a new DIS Stream resource.
 	Region *string `pulumi:"region"`
 	// The number of hours for which data from the stream will be retained in DIS.
-	// Value range: `24` to `72`. Unit: `hour`. Default:`24`. Changing this parameter will create a new resource.
+	// Value range: `24` to `72`. Unit: **hour**. Default:`24`. Changing this parameter will create a new resource.
 	RetentionPeriod *int `pulumi:"retentionPeriod"`
 	// The status of the partition.
 	Status *string `pulumi:"status"`
@@ -238,11 +238,11 @@ type StreamState struct {
 	// Field separator for CSV file. Changing this parameter will create a new
 	// resource.
 	CsvDelimiter pulumi.StringPtrInput
-	// User's JOSN, CSV format data schema, described with Avro schema. Changing
+	// User's JSON, CSV format data schema, described with Avro schema. Changing
 	// this parameter will create a new resource.
 	DataSchema pulumi.StringPtrInput
-	// Data type of the data putting into the stream. The value is one of `BLOB`,
-	// `JSON` and `CSV`. Changing this parameter will create a new resource.
+	// Data type of the data putting into the stream. The value is one of **BLOB**,
+	// **JSON** and **CSV**. Changing this parameter will create a new resource.
 	DataType pulumi.StringPtrInput
 	// Specifies the enterprise project id of the dis stream, Value 0
 	// indicates the default enterprise project. Changing this parameter will create a new resource.
@@ -259,7 +259,7 @@ type StreamState struct {
 	// provider-level region will be used. Changing this creates a new DIS Stream resource.
 	Region pulumi.StringPtrInput
 	// The number of hours for which data from the stream will be retained in DIS.
-	// Value range: `24` to `72`. Unit: `hour`. Default:`24`. Changing this parameter will create a new resource.
+	// Value range: `24` to `72`. Unit: **hour**. Default:`24`. Changing this parameter will create a new resource.
 	RetentionPeriod pulumi.IntPtrInput
 	// The status of the partition.
 	Status pulumi.StringPtrInput
@@ -294,11 +294,11 @@ type streamArgs struct {
 	// Field separator for CSV file. Changing this parameter will create a new
 	// resource.
 	CsvDelimiter *string `pulumi:"csvDelimiter"`
-	// User's JOSN, CSV format data schema, described with Avro schema. Changing
+	// User's JSON, CSV format data schema, described with Avro schema. Changing
 	// this parameter will create a new resource.
 	DataSchema *string `pulumi:"dataSchema"`
-	// Data type of the data putting into the stream. The value is one of `BLOB`,
-	// `JSON` and `CSV`. Changing this parameter will create a new resource.
+	// Data type of the data putting into the stream. The value is one of **BLOB**,
+	// **JSON** and **CSV**. Changing this parameter will create a new resource.
 	DataType *string `pulumi:"dataType"`
 	// Specifies the enterprise project id of the dis stream, Value 0
 	// indicates the default enterprise project. Changing this parameter will create a new resource.
@@ -311,7 +311,7 @@ type streamArgs struct {
 	// provider-level region will be used. Changing this creates a new DIS Stream resource.
 	Region *string `pulumi:"region"`
 	// The number of hours for which data from the stream will be retained in DIS.
-	// Value range: `24` to `72`. Unit: `hour`. Default:`24`. Changing this parameter will create a new resource.
+	// Value range: `24` to `72`. Unit: **hour**. Default:`24`. Changing this parameter will create a new resource.
 	RetentionPeriod *int `pulumi:"retentionPeriod"`
 	// Name of the DIS stream to be created.
 	// Changing this parameter will create a new resource.
@@ -337,11 +337,11 @@ type StreamArgs struct {
 	// Field separator for CSV file. Changing this parameter will create a new
 	// resource.
 	CsvDelimiter pulumi.StringPtrInput
-	// User's JOSN, CSV format data schema, described with Avro schema. Changing
+	// User's JSON, CSV format data schema, described with Avro schema. Changing
 	// this parameter will create a new resource.
 	DataSchema pulumi.StringPtrInput
-	// Data type of the data putting into the stream. The value is one of `BLOB`,
-	// `JSON` and `CSV`. Changing this parameter will create a new resource.
+	// Data type of the data putting into the stream. The value is one of **BLOB**,
+	// **JSON** and **CSV**. Changing this parameter will create a new resource.
 	DataType pulumi.StringPtrInput
 	// Specifies the enterprise project id of the dis stream, Value 0
 	// indicates the default enterprise project. Changing this parameter will create a new resource.
@@ -354,7 +354,7 @@ type StreamArgs struct {
 	// provider-level region will be used. Changing this creates a new DIS Stream resource.
 	Region pulumi.StringPtrInput
 	// The number of hours for which data from the stream will be retained in DIS.
-	// Value range: `24` to `72`. Unit: `hour`. Default:`24`. Changing this parameter will create a new resource.
+	// Value range: `24` to `72`. Unit: **hour**. Default:`24`. Changing this parameter will create a new resource.
 	RetentionPeriod pulumi.IntPtrInput
 	// Name of the DIS stream to be created.
 	// Changing this parameter will create a new resource.
@@ -482,14 +482,14 @@ func (o StreamOutput) CsvDelimiter() pulumi.StringOutput {
 	return o.ApplyT(func(v *Stream) pulumi.StringOutput { return v.CsvDelimiter }).(pulumi.StringOutput)
 }
 
-// User's JOSN, CSV format data schema, described with Avro schema. Changing
+// User's JSON, CSV format data schema, described with Avro schema. Changing
 // this parameter will create a new resource.
 func (o StreamOutput) DataSchema() pulumi.StringOutput {
 	return o.ApplyT(func(v *Stream) pulumi.StringOutput { return v.DataSchema }).(pulumi.StringOutput)
 }
 
-// Data type of the data putting into the stream. The value is one of `BLOB`,
-// `JSON` and `CSV`. Changing this parameter will create a new resource.
+// Data type of the data putting into the stream. The value is one of **BLOB**,
+// **JSON** and **CSV**. Changing this parameter will create a new resource.
 func (o StreamOutput) DataType() pulumi.StringOutput {
 	return o.ApplyT(func(v *Stream) pulumi.StringOutput { return v.DataType }).(pulumi.StringOutput)
 }
@@ -524,7 +524,7 @@ func (o StreamOutput) Region() pulumi.StringOutput {
 }
 
 // The number of hours for which data from the stream will be retained in DIS.
-// Value range: `24` to `72`. Unit: `hour`. Default:`24`. Changing this parameter will create a new resource.
+// Value range: `24` to `72`. Unit: **hour**. Default:`24`. Changing this parameter will create a new resource.
 func (o StreamOutput) RetentionPeriod() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v *Stream) pulumi.IntPtrOutput { return v.RetentionPeriod }).(pulumi.IntPtrOutput)
 }

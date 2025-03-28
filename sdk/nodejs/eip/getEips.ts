@@ -39,6 +39,7 @@ export function getEips(args?: GetEipsArgs, opts?: pulumi.InvokeOptions): Promis
         "ids": args.ids,
         "ipVersion": args.ipVersion,
         "portIds": args.portIds,
+        "privateIps": args.privateIps,
         "publicIps": args.publicIps,
         "region": args.region,
         "tags": args.tags,
@@ -67,6 +68,10 @@ export interface GetEipsArgs {
      * Specifies an array of one or more port ids which bound to the desired EIP.
      */
     portIds?: string[];
+    /**
+     * Specifies an array of one or more private ip addresses of the desired EIP.
+     */
+    privateIps?: string[];
     /**
      * Specifies an array of one or more public ip addresses of the desired EIP.
      */
@@ -104,6 +109,7 @@ export interface GetEipsResult {
      */
     readonly ipVersion?: number;
     readonly portIds?: string[];
+    readonly privateIps?: string[];
     readonly publicIps?: string[];
     readonly region: string;
     /**
@@ -138,6 +144,10 @@ export interface GetEipsOutputArgs {
      * Specifies an array of one or more port ids which bound to the desired EIP.
      */
     portIds?: pulumi.Input<pulumi.Input<string>[]>;
+    /**
+     * Specifies an array of one or more private ip addresses of the desired EIP.
+     */
+    privateIps?: pulumi.Input<pulumi.Input<string>[]>;
     /**
      * Specifies an array of one or more public ip addresses of the desired EIP.
      */

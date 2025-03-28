@@ -43,6 +43,43 @@ import (
 //	}
 //
 // ```
+// ### Complete Notification and Enable Filtering
+//
+// ```go
+// package main
+//
+// import (
+//
+//	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud/Cts"
+//	"github.com/pulumi/pulumi-huaweicloud/sdk/go/huaweicloud/Cts"
+//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi/config"
+//
+// )
+//
+//	func main() {
+//		pulumi.Run(func(ctx *pulumi.Context) error {
+//			cfg := config.New(ctx, "")
+//			topicUrn := cfg.RequireObject("topicUrn")
+//			_, err := Cts.NewNotification(ctx, "notify", &Cts.NotificationArgs{
+//				OperationType: pulumi.String("complete"),
+//				SmnTopic:      pulumi.Any(topicUrn),
+//				Filter: &cts.NotificationFilterArgs{
+//					Condition: pulumi.String("AND"),
+//					Rules: pulumi.StringArray{
+//						pulumi.String("code = 200"),
+//						pulumi.String("resource_name = test"),
+//					},
+//				},
+//			})
+//			if err != nil {
+//				return err
+//			}
+//			return nil
+//		})
+//	}
+//
+// ```
 // ### Customized Notification
 //
 // ```go
@@ -86,7 +123,7 @@ import (
 //
 // ## Import
 //
-// CTS notifications can be imported using `name`, e.g.
+// # CTS notifications can be imported using `name`, e.g.bash
 //
 // ```sh
 //
@@ -96,10 +133,17 @@ import (
 type Notification struct {
 	pulumi.CustomResourceState
 
+	// Specifies the cloud service agency name. The value can only be **cts_admin_trust**.
+	AgencyName pulumi.StringPtrOutput `pulumi:"agencyName"`
+	// The creation time of the notification.
+	CreatedAt pulumi.StringOutput `pulumi:"createdAt"`
 	// Specifies whether notification is enabled, defaults to true.
 	Enabled pulumi.BoolPtrOutput `pulumi:"enabled"`
-	// Specifies the notification name. The value contains a maximum of 64 characters,
-	// and only letters, digits, underscores(_), and Chinese characters are allowed.
+	// Specifies the filtering rules for notification.
+	// The filter structure is documented below.
+	Filter NotificationFilterPtrOutput `pulumi:"filter"`
+	// Specifies the notification name. The value contains a maximum of `64` characters,
+	// and only English letters, digits, underscores(_), and Chinese characters are allowed.
 	Name pulumi.StringOutput `pulumi:"name"`
 	// The notification ID in UUID format.
 	NotificationId pulumi.StringOutput `pulumi:"notificationId"`
@@ -108,11 +152,11 @@ type Notification struct {
 	OperationType pulumi.StringOutput `pulumi:"operationType"`
 	// Specifies an array of users. Notifications will be sent when specified users
 	// perform specified operations. All users are selected by default.
-	// The object structure is documented below.
+	// The operationUsers structure is documented below.
 	OperationUsers NotificationOperationUserArrayOutput `pulumi:"operationUsers"`
 	// Specifies an array of operations that will trigger notifications.
 	// For details, see [Supported Services and Operations](https://support.huaweicloud.com/intl/en-us/usermanual-cts/cts_03_0022.html).
-	// The object structure is documented below.
+	// The operations structure is documented below.
 	Operations NotificationOperationArrayOutput `pulumi:"operations"`
 	// Specifies the region in which to manage the CTS notification resource.
 	// If omitted, the provider-level region will be used. Changing this creates a new resource.
@@ -156,10 +200,17 @@ func GetNotification(ctx *pulumi.Context,
 
 // Input properties used for looking up and filtering Notification resources.
 type notificationState struct {
+	// Specifies the cloud service agency name. The value can only be **cts_admin_trust**.
+	AgencyName *string `pulumi:"agencyName"`
+	// The creation time of the notification.
+	CreatedAt *string `pulumi:"createdAt"`
 	// Specifies whether notification is enabled, defaults to true.
 	Enabled *bool `pulumi:"enabled"`
-	// Specifies the notification name. The value contains a maximum of 64 characters,
-	// and only letters, digits, underscores(_), and Chinese characters are allowed.
+	// Specifies the filtering rules for notification.
+	// The filter structure is documented below.
+	Filter *NotificationFilter `pulumi:"filter"`
+	// Specifies the notification name. The value contains a maximum of `64` characters,
+	// and only English letters, digits, underscores(_), and Chinese characters are allowed.
 	Name *string `pulumi:"name"`
 	// The notification ID in UUID format.
 	NotificationId *string `pulumi:"notificationId"`
@@ -168,11 +219,11 @@ type notificationState struct {
 	OperationType *string `pulumi:"operationType"`
 	// Specifies an array of users. Notifications will be sent when specified users
 	// perform specified operations. All users are selected by default.
-	// The object structure is documented below.
+	// The operationUsers structure is documented below.
 	OperationUsers []NotificationOperationUser `pulumi:"operationUsers"`
 	// Specifies an array of operations that will trigger notifications.
 	// For details, see [Supported Services and Operations](https://support.huaweicloud.com/intl/en-us/usermanual-cts/cts_03_0022.html).
-	// The object structure is documented below.
+	// The operations structure is documented below.
 	Operations []NotificationOperation `pulumi:"operations"`
 	// Specifies the region in which to manage the CTS notification resource.
 	// If omitted, the provider-level region will be used. Changing this creates a new resource.
@@ -184,10 +235,17 @@ type notificationState struct {
 }
 
 type NotificationState struct {
+	// Specifies the cloud service agency name. The value can only be **cts_admin_trust**.
+	AgencyName pulumi.StringPtrInput
+	// The creation time of the notification.
+	CreatedAt pulumi.StringPtrInput
 	// Specifies whether notification is enabled, defaults to true.
 	Enabled pulumi.BoolPtrInput
-	// Specifies the notification name. The value contains a maximum of 64 characters,
-	// and only letters, digits, underscores(_), and Chinese characters are allowed.
+	// Specifies the filtering rules for notification.
+	// The filter structure is documented below.
+	Filter NotificationFilterPtrInput
+	// Specifies the notification name. The value contains a maximum of `64` characters,
+	// and only English letters, digits, underscores(_), and Chinese characters are allowed.
 	Name pulumi.StringPtrInput
 	// The notification ID in UUID format.
 	NotificationId pulumi.StringPtrInput
@@ -196,11 +254,11 @@ type NotificationState struct {
 	OperationType pulumi.StringPtrInput
 	// Specifies an array of users. Notifications will be sent when specified users
 	// perform specified operations. All users are selected by default.
-	// The object structure is documented below.
+	// The operationUsers structure is documented below.
 	OperationUsers NotificationOperationUserArrayInput
 	// Specifies an array of operations that will trigger notifications.
 	// For details, see [Supported Services and Operations](https://support.huaweicloud.com/intl/en-us/usermanual-cts/cts_03_0022.html).
-	// The object structure is documented below.
+	// The operations structure is documented below.
 	Operations NotificationOperationArrayInput
 	// Specifies the region in which to manage the CTS notification resource.
 	// If omitted, the provider-level region will be used. Changing this creates a new resource.
@@ -216,21 +274,26 @@ func (NotificationState) ElementType() reflect.Type {
 }
 
 type notificationArgs struct {
+	// Specifies the cloud service agency name. The value can only be **cts_admin_trust**.
+	AgencyName *string `pulumi:"agencyName"`
 	// Specifies whether notification is enabled, defaults to true.
 	Enabled *bool `pulumi:"enabled"`
-	// Specifies the notification name. The value contains a maximum of 64 characters,
-	// and only letters, digits, underscores(_), and Chinese characters are allowed.
+	// Specifies the filtering rules for notification.
+	// The filter structure is documented below.
+	Filter *NotificationFilter `pulumi:"filter"`
+	// Specifies the notification name. The value contains a maximum of `64` characters,
+	// and only English letters, digits, underscores(_), and Chinese characters are allowed.
 	Name *string `pulumi:"name"`
 	// Specifies the operation type, possible options include **complete** and
 	// **customized**.
 	OperationType string `pulumi:"operationType"`
 	// Specifies an array of users. Notifications will be sent when specified users
 	// perform specified operations. All users are selected by default.
-	// The object structure is documented below.
+	// The operationUsers structure is documented below.
 	OperationUsers []NotificationOperationUser `pulumi:"operationUsers"`
 	// Specifies an array of operations that will trigger notifications.
 	// For details, see [Supported Services and Operations](https://support.huaweicloud.com/intl/en-us/usermanual-cts/cts_03_0022.html).
-	// The object structure is documented below.
+	// The operations structure is documented below.
 	Operations []NotificationOperation `pulumi:"operations"`
 	// Specifies the region in which to manage the CTS notification resource.
 	// If omitted, the provider-level region will be used. Changing this creates a new resource.
@@ -241,21 +304,26 @@ type notificationArgs struct {
 
 // The set of arguments for constructing a Notification resource.
 type NotificationArgs struct {
+	// Specifies the cloud service agency name. The value can only be **cts_admin_trust**.
+	AgencyName pulumi.StringPtrInput
 	// Specifies whether notification is enabled, defaults to true.
 	Enabled pulumi.BoolPtrInput
-	// Specifies the notification name. The value contains a maximum of 64 characters,
-	// and only letters, digits, underscores(_), and Chinese characters are allowed.
+	// Specifies the filtering rules for notification.
+	// The filter structure is documented below.
+	Filter NotificationFilterPtrInput
+	// Specifies the notification name. The value contains a maximum of `64` characters,
+	// and only English letters, digits, underscores(_), and Chinese characters are allowed.
 	Name pulumi.StringPtrInput
 	// Specifies the operation type, possible options include **complete** and
 	// **customized**.
 	OperationType pulumi.StringInput
 	// Specifies an array of users. Notifications will be sent when specified users
 	// perform specified operations. All users are selected by default.
-	// The object structure is documented below.
+	// The operationUsers structure is documented below.
 	OperationUsers NotificationOperationUserArrayInput
 	// Specifies an array of operations that will trigger notifications.
 	// For details, see [Supported Services and Operations](https://support.huaweicloud.com/intl/en-us/usermanual-cts/cts_03_0022.html).
-	// The object structure is documented below.
+	// The operations structure is documented below.
 	Operations NotificationOperationArrayInput
 	// Specifies the region in which to manage the CTS notification resource.
 	// If omitted, the provider-level region will be used. Changing this creates a new resource.
@@ -351,13 +419,29 @@ func (o NotificationOutput) ToNotificationOutputWithContext(ctx context.Context)
 	return o
 }
 
+// Specifies the cloud service agency name. The value can only be **cts_admin_trust**.
+func (o NotificationOutput) AgencyName() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *Notification) pulumi.StringPtrOutput { return v.AgencyName }).(pulumi.StringPtrOutput)
+}
+
+// The creation time of the notification.
+func (o NotificationOutput) CreatedAt() pulumi.StringOutput {
+	return o.ApplyT(func(v *Notification) pulumi.StringOutput { return v.CreatedAt }).(pulumi.StringOutput)
+}
+
 // Specifies whether notification is enabled, defaults to true.
 func (o NotificationOutput) Enabled() pulumi.BoolPtrOutput {
 	return o.ApplyT(func(v *Notification) pulumi.BoolPtrOutput { return v.Enabled }).(pulumi.BoolPtrOutput)
 }
 
-// Specifies the notification name. The value contains a maximum of 64 characters,
-// and only letters, digits, underscores(_), and Chinese characters are allowed.
+// Specifies the filtering rules for notification.
+// The filter structure is documented below.
+func (o NotificationOutput) Filter() NotificationFilterPtrOutput {
+	return o.ApplyT(func(v *Notification) NotificationFilterPtrOutput { return v.Filter }).(NotificationFilterPtrOutput)
+}
+
+// Specifies the notification name. The value contains a maximum of `64` characters,
+// and only English letters, digits, underscores(_), and Chinese characters are allowed.
 func (o NotificationOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v *Notification) pulumi.StringOutput { return v.Name }).(pulumi.StringOutput)
 }
@@ -375,14 +459,14 @@ func (o NotificationOutput) OperationType() pulumi.StringOutput {
 
 // Specifies an array of users. Notifications will be sent when specified users
 // perform specified operations. All users are selected by default.
-// The object structure is documented below.
+// The operationUsers structure is documented below.
 func (o NotificationOutput) OperationUsers() NotificationOperationUserArrayOutput {
 	return o.ApplyT(func(v *Notification) NotificationOperationUserArrayOutput { return v.OperationUsers }).(NotificationOperationUserArrayOutput)
 }
 
 // Specifies an array of operations that will trigger notifications.
 // For details, see [Supported Services and Operations](https://support.huaweicloud.com/intl/en-us/usermanual-cts/cts_03_0022.html).
-// The object structure is documented below.
+// The operations structure is documented below.
 func (o NotificationOutput) Operations() NotificationOperationArrayOutput {
 	return o.ApplyT(func(v *Notification) NotificationOperationArrayOutput { return v.Operations }).(NotificationOperationArrayOutput)
 }

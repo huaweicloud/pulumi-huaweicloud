@@ -8,7 +8,7 @@ import * as utilities from "../utilities";
  * Manages a WAF Data Masking Rule resource within HuaweiCloud.
  *
  * > **NOTE:** All WAF resources depend on WAF instances, and the WAF instances need to be purchased before they can be
- * used. The data masking rule resource can be used in Cloud Mode, Dedicated Mode and ELB Mode.
+ * used. The data masking rule resource can be used in Cloud Mode and Dedicated Mode.
  *
  * ## Example Usage
  *
@@ -19,12 +19,13 @@ import * as utilities from "../utilities";
  * const config = new pulumi.Config();
  * const enterpriseProjectId = config.requireObject("enterpriseProjectId");
  * const policyId = config.requireObject("policyId");
- * const rule1 = new huaweicloud.waf.RuleDataMasking("rule1", {
+ * const test = new huaweicloud.waf.RuleDataMasking("test", {
  *     policyId: policyId,
  *     enterpriseProjectId: enterpriseProjectId,
  *     path: "/login",
  *     field: "params",
  *     subfield: "password",
+ *     description: "test description",
  * });
  * ```
  *
@@ -71,16 +72,21 @@ export class RuleDataMasking extends pulumi.CustomResource {
     }
 
     /**
+     * Specifies the description of WAF data masking rule.
+     */
+    public readonly description!: pulumi.Output<string>;
+    /**
      * Specifies the enterprise project ID of WAF data masking rule.
+     * For enterprise users, if omitted, default enterprise project will be used.
      * Changing this parameter will create a new resource.
      */
     public readonly enterpriseProjectId!: pulumi.Output<string | undefined>;
     /**
-     * The position where the masked field stored. Valid values are:
-     * + `params`: The field in the parameter.
-     * + `header`: The field in the header.
-     * + `form`: The field in the form.
-     * + `cookie`: The field in the cookie.
+     * Specifies the position where the masked field stored. Valid values are:
+     * + **params**: The field in the parameter.
+     * + **header**: The field in the header.
+     * + **form**: The field in the form.
+     * + **cookie**: The field in the cookie.
      */
     public readonly field!: pulumi.Output<string>;
     /**
@@ -92,12 +98,19 @@ export class RuleDataMasking extends pulumi.CustomResource {
      */
     public readonly policyId!: pulumi.Output<string>;
     /**
-     * The region in which to create the WAF Data Masking rule resource. If omitted,
-     * the provider-level region will be used. Changing this setting will create a new rule.
+     * Specifies the region in which to create the WAF Data Masking rule resource.
+     * If omitted, the provider-level region will be used. Changing this setting will create a new rule.
      */
     public readonly region!: pulumi.Output<string>;
     /**
-     * Specifies the name of the masked field, e.g.: password.
+     * Specifies the status of WAF web tamper protection rule.
+     * Valid values are as follows:
+     * + `0`: Disabled.
+     * + `1`: Enabled.
+     */
+    public readonly status!: pulumi.Output<number | undefined>;
+    /**
+     * Specifies the name of the masked field, e.g.: **password**.
      */
     public readonly subfield!: pulumi.Output<string>;
 
@@ -114,11 +127,13 @@ export class RuleDataMasking extends pulumi.CustomResource {
         opts = opts || {};
         if (opts.id) {
             const state = argsOrState as RuleDataMaskingState | undefined;
+            resourceInputs["description"] = state ? state.description : undefined;
             resourceInputs["enterpriseProjectId"] = state ? state.enterpriseProjectId : undefined;
             resourceInputs["field"] = state ? state.field : undefined;
             resourceInputs["path"] = state ? state.path : undefined;
             resourceInputs["policyId"] = state ? state.policyId : undefined;
             resourceInputs["region"] = state ? state.region : undefined;
+            resourceInputs["status"] = state ? state.status : undefined;
             resourceInputs["subfield"] = state ? state.subfield : undefined;
         } else {
             const args = argsOrState as RuleDataMaskingArgs | undefined;
@@ -134,11 +149,13 @@ export class RuleDataMasking extends pulumi.CustomResource {
             if ((!args || args.subfield === undefined) && !opts.urn) {
                 throw new Error("Missing required property 'subfield'");
             }
+            resourceInputs["description"] = args ? args.description : undefined;
             resourceInputs["enterpriseProjectId"] = args ? args.enterpriseProjectId : undefined;
             resourceInputs["field"] = args ? args.field : undefined;
             resourceInputs["path"] = args ? args.path : undefined;
             resourceInputs["policyId"] = args ? args.policyId : undefined;
             resourceInputs["region"] = args ? args.region : undefined;
+            resourceInputs["status"] = args ? args.status : undefined;
             resourceInputs["subfield"] = args ? args.subfield : undefined;
         }
         opts = pulumi.mergeOptions(utilities.resourceOptsDefaults(), opts);
@@ -151,16 +168,21 @@ export class RuleDataMasking extends pulumi.CustomResource {
  */
 export interface RuleDataMaskingState {
     /**
+     * Specifies the description of WAF data masking rule.
+     */
+    description?: pulumi.Input<string>;
+    /**
      * Specifies the enterprise project ID of WAF data masking rule.
+     * For enterprise users, if omitted, default enterprise project will be used.
      * Changing this parameter will create a new resource.
      */
     enterpriseProjectId?: pulumi.Input<string>;
     /**
-     * The position where the masked field stored. Valid values are:
-     * + `params`: The field in the parameter.
-     * + `header`: The field in the header.
-     * + `form`: The field in the form.
-     * + `cookie`: The field in the cookie.
+     * Specifies the position where the masked field stored. Valid values are:
+     * + **params**: The field in the parameter.
+     * + **header**: The field in the header.
+     * + **form**: The field in the form.
+     * + **cookie**: The field in the cookie.
      */
     field?: pulumi.Input<string>;
     /**
@@ -172,12 +194,19 @@ export interface RuleDataMaskingState {
      */
     policyId?: pulumi.Input<string>;
     /**
-     * The region in which to create the WAF Data Masking rule resource. If omitted,
-     * the provider-level region will be used. Changing this setting will create a new rule.
+     * Specifies the region in which to create the WAF Data Masking rule resource.
+     * If omitted, the provider-level region will be used. Changing this setting will create a new rule.
      */
     region?: pulumi.Input<string>;
     /**
-     * Specifies the name of the masked field, e.g.: password.
+     * Specifies the status of WAF web tamper protection rule.
+     * Valid values are as follows:
+     * + `0`: Disabled.
+     * + `1`: Enabled.
+     */
+    status?: pulumi.Input<number>;
+    /**
+     * Specifies the name of the masked field, e.g.: **password**.
      */
     subfield?: pulumi.Input<string>;
 }
@@ -187,16 +216,21 @@ export interface RuleDataMaskingState {
  */
 export interface RuleDataMaskingArgs {
     /**
+     * Specifies the description of WAF data masking rule.
+     */
+    description?: pulumi.Input<string>;
+    /**
      * Specifies the enterprise project ID of WAF data masking rule.
+     * For enterprise users, if omitted, default enterprise project will be used.
      * Changing this parameter will create a new resource.
      */
     enterpriseProjectId?: pulumi.Input<string>;
     /**
-     * The position where the masked field stored. Valid values are:
-     * + `params`: The field in the parameter.
-     * + `header`: The field in the header.
-     * + `form`: The field in the form.
-     * + `cookie`: The field in the cookie.
+     * Specifies the position where the masked field stored. Valid values are:
+     * + **params**: The field in the parameter.
+     * + **header**: The field in the header.
+     * + **form**: The field in the form.
+     * + **cookie**: The field in the cookie.
      */
     field: pulumi.Input<string>;
     /**
@@ -208,12 +242,19 @@ export interface RuleDataMaskingArgs {
      */
     policyId: pulumi.Input<string>;
     /**
-     * The region in which to create the WAF Data Masking rule resource. If omitted,
-     * the provider-level region will be used. Changing this setting will create a new rule.
+     * Specifies the region in which to create the WAF Data Masking rule resource.
+     * If omitted, the provider-level region will be used. Changing this setting will create a new rule.
      */
     region?: pulumi.Input<string>;
     /**
-     * Specifies the name of the masked field, e.g.: password.
+     * Specifies the status of WAF web tamper protection rule.
+     * Valid values are as follows:
+     * + `0`: Disabled.
+     * + `1`: Enabled.
+     */
+    status?: pulumi.Input<number>;
+    /**
+     * Specifies the name of the masked field, e.g.: **password**.
      */
     subfield: pulumi.Input<string>;
 }

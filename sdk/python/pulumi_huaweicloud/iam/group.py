@@ -19,7 +19,7 @@ class GroupArgs:
         """
         The set of arguments for constructing a Group resource.
         :param pulumi.Input[str] description: Specifies the description of the group.
-        :param pulumi.Input[str] name: Specifies the name of the group.The length is less than or equal to 64 bytes.
+        :param pulumi.Input[str] name: Specifies the name of the group. The length is less than or equal to 64 bytes.
         """
         if description is not None:
             pulumi.set(__self__, "description", description)
@@ -42,7 +42,7 @@ class GroupArgs:
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the name of the group.The length is less than or equal to 64 bytes.
+        Specifies the name of the group. The length is less than or equal to 64 bytes.
         """
         return pulumi.get(self, "name")
 
@@ -59,7 +59,7 @@ class _GroupState:
         """
         Input properties used for looking up and filtering Group resources.
         :param pulumi.Input[str] description: Specifies the description of the group.
-        :param pulumi.Input[str] name: Specifies the name of the group.The length is less than or equal to 64 bytes.
+        :param pulumi.Input[str] name: Specifies the name of the group. The length is less than or equal to 64 bytes.
         """
         if description is not None:
             pulumi.set(__self__, "description", description)
@@ -82,7 +82,7 @@ class _GroupState:
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the name of the group.The length is less than or equal to 64 bytes.
+        Specifies the name of the group. The length is less than or equal to 64 bytes.
         """
         return pulumi.get(self, "name")
 
@@ -100,9 +100,9 @@ class Group(pulumi.CustomResource):
                  name: Optional[pulumi.Input[str]] = None,
                  __props__=None):
         """
-        Manages a User Group resource within HuaweiCloud IAM service.
+        Manages an IAM user group resource within HuaweiCloud.
 
-        Note: You *must* have admin privileges in your HuaweiCloud cloud to use this resource.
+        > **NOTE:** You *must* have admin privileges to use this resource.
 
         ## Example Usage
 
@@ -115,7 +115,7 @@ class Group(pulumi.CustomResource):
 
         ## Import
 
-        Groups can be imported using the `id`, e.g.
+        Groups can be imported using the `id`, e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:Iam/group:Group group_1 89c60255-9bd6-460c-822a-e2b959ede9d2
@@ -124,7 +124,7 @@ class Group(pulumi.CustomResource):
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[str] description: Specifies the description of the group.
-        :param pulumi.Input[str] name: Specifies the name of the group.The length is less than or equal to 64 bytes.
+        :param pulumi.Input[str] name: Specifies the name of the group. The length is less than or equal to 64 bytes.
         """
         ...
     @overload
@@ -133,9 +133,9 @@ class Group(pulumi.CustomResource):
                  args: Optional[GroupArgs] = None,
                  opts: Optional[pulumi.ResourceOptions] = None):
         """
-        Manages a User Group resource within HuaweiCloud IAM service.
+        Manages an IAM user group resource within HuaweiCloud.
 
-        Note: You *must* have admin privileges in your HuaweiCloud cloud to use this resource.
+        > **NOTE:** You *must* have admin privileges to use this resource.
 
         ## Example Usage
 
@@ -148,7 +148,7 @@ class Group(pulumi.CustomResource):
 
         ## Import
 
-        Groups can be imported using the `id`, e.g.
+        Groups can be imported using the `id`, e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:Iam/group:Group group_1 89c60255-9bd6-460c-822a-e2b959ede9d2
@@ -202,7 +202,7 @@ class Group(pulumi.CustomResource):
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[str] description: Specifies the description of the group.
-        :param pulumi.Input[str] name: Specifies the name of the group.The length is less than or equal to 64 bytes.
+        :param pulumi.Input[str] name: Specifies the name of the group. The length is less than or equal to 64 bytes.
         """
         opts = pulumi.ResourceOptions.merge(opts, pulumi.ResourceOptions(id=id))
 
@@ -224,7 +224,7 @@ class Group(pulumi.CustomResource):
     @pulumi.getter
     def name(self) -> pulumi.Output[str]:
         """
-        Specifies the name of the group.The length is less than or equal to 64 bytes.
+        Specifies the name of the group. The length is less than or equal to 64 bytes.
         """
         return pulumi.get(self, "name")
 

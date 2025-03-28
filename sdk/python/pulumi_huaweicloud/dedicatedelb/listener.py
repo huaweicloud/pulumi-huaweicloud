@@ -8,6 +8,8 @@ import pulumi
 import pulumi.runtime
 from typing import Any, Mapping, Optional, Sequence, Union, overload
 from .. import _utilities
+from . import outputs
+from ._inputs import *
 
 __all__ = ['ListenerArgs', 'Listener']
 
@@ -16,67 +18,146 @@ class ListenerArgs:
     def __init__(__self__, *,
                  loadbalancer_id: pulumi.Input[str],
                  protocol: pulumi.Input[str],
-                 protocol_port: pulumi.Input[int],
                  access_policy: Optional[pulumi.Input[str]] = None,
                  advanced_forwarding_enabled: Optional[pulumi.Input[bool]] = None,
                  ca_certificate: Optional[pulumi.Input[str]] = None,
                  default_pool_id: Optional[pulumi.Input[str]] = None,
                  description: Optional[pulumi.Input[str]] = None,
+                 enable_member_retry: Optional[pulumi.Input[bool]] = None,
+                 force_delete: Optional[pulumi.Input[bool]] = None,
                  forward_eip: Optional[pulumi.Input[bool]] = None,
+                 forward_elb: Optional[pulumi.Input[bool]] = None,
+                 forward_host: Optional[pulumi.Input[bool]] = None,
+                 forward_port: Optional[pulumi.Input[bool]] = None,
+                 forward_proto: Optional[pulumi.Input[bool]] = None,
+                 forward_request_port: Optional[pulumi.Input[bool]] = None,
+                 forward_tls_certificate: Optional[pulumi.Input[bool]] = None,
+                 forward_tls_cipher: Optional[pulumi.Input[bool]] = None,
+                 forward_tls_protocol: Optional[pulumi.Input[bool]] = None,
+                 gzip_enable: Optional[pulumi.Input[bool]] = None,
                  http2_enable: Optional[pulumi.Input[bool]] = None,
                  idle_timeout: Optional[pulumi.Input[int]] = None,
                  ip_group: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
+                 port_ranges: Optional[pulumi.Input[Sequence[pulumi.Input['ListenerPortRangeArgs']]]] = None,
+                 protection_reason: Optional[pulumi.Input[str]] = None,
+                 protection_status: Optional[pulumi.Input[str]] = None,
+                 protocol_port: Optional[pulumi.Input[int]] = None,
+                 proxy_protocol_enable: Optional[pulumi.Input[bool]] = None,
+                 quic_listener_id: Optional[pulumi.Input[str]] = None,
+                 real_ip: Optional[pulumi.Input[bool]] = None,
                  region: Optional[pulumi.Input[str]] = None,
                  request_timeout: Optional[pulumi.Input[int]] = None,
                  response_timeout: Optional[pulumi.Input[int]] = None,
+                 security_policy_id: Optional[pulumi.Input[str]] = None,
                  server_certificate: Optional[pulumi.Input[str]] = None,
                  sni_certificates: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
+                 sni_match_algo: Optional[pulumi.Input[str]] = None,
+                 ssl_early_data_enable: Optional[pulumi.Input[bool]] = None,
                  tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  tls_ciphers_policy: Optional[pulumi.Input[str]] = None):
         """
         The set of arguments for constructing a Listener resource.
         :param pulumi.Input[str] loadbalancer_id: The load balancer on which to provision this listener. Changing this
                creates a new listener.
-        :param pulumi.Input[str] protocol: The protocol can either be TCP, UDP, HTTP or HTTPS. Changing this creates a
-               new listener.
-        :param pulumi.Input[int] protocol_port: The port on which to listen for client traffic. Changing this creates a
-               new listener.
-        :param pulumi.Input[str] access_policy: Specifies the access policy for the listener. Valid options are *white* and
-               *black*.
+        :param pulumi.Input[str] protocol: The protocol can either be **TCP**, **UDP**, **HTTP**, **HTTPS**, **QUIC**,
+               **IP** or **TLS**. **IP** is only available for listeners that will be added to gateway load balancers. Changing this
+               creates a new listener.
+        :param pulumi.Input[str] access_policy: Specifies the access policy for the listener. Valid options are **white** and
+               **black**.
         :param pulumi.Input[bool] advanced_forwarding_enabled: Specifies whether to enable advanced forwarding.
                If advanced forwarding is enabled, more flexible forwarding policies and rules are supported.
         :param pulumi.Input[str] ca_certificate: Specifies the ID of the CA certificate used by the listener. This parameter is
-               valid when protocol is set to *HTTPS*.
+               valid when protocol is set to **HTTPS**.
         :param pulumi.Input[str] default_pool_id: The ID of the default pool with which the listener is associated. Changing this
                creates a new listener.
         :param pulumi.Input[str] description: Human-readable description for the listener.
+        :param pulumi.Input[bool] enable_member_retry: Specifies whether to enable health check retries for backend servers.
+               The default value is true. It is available only when protocol is set to **HTTP**, **HTTPS**, or **QUIC**.
+        :param pulumi.Input[bool] force_delete: Specifies whether to forcibly delete the listener, remove the listener, l7 policies,
+               unbind associated pools. Defaults to **false**.
         :param pulumi.Input[bool] forward_eip: Specifies whether transfer the load balancer EIP in the X-Forward-EIP header to
-               backend servers. The default value is false. This parameter is valid only when the protocol is set to *HTTP* or
-               *HTTPS*.
+               backend servers. The default value is false. This parameter is valid only when the protocol is set to **HTTP** or
+               **HTTPS**.
+        :param pulumi.Input[bool] forward_elb: Specifies whether to transfer the load balancer ID to backend servers through the HTTP
+               header of the packet. The default value is false. This parameter is valid only when the protocol is set to **HTTP** or
+               **HTTPS**.
+        :param pulumi.Input[bool] forward_host: Specifies whether to rewrite the X-Forwarded-Host header. If X-Forwarded-Host is
+               set to true, X-Forwarded-Host in the request header from the clients can be set to Host in the request header sent
+               from the load balancer to backend servers. The default value is true. This parameter is valid only when the protocol
+               is set to **HTTP** or **HTTPS**.
+        :param pulumi.Input[bool] forward_port: Specifies whether transfer the listening port of the load balancer in the
+               X-Forwarded-Port header to backend servers. The default value is false. This parameter is valid only when the
+               protocol is set to **HTTP** or **HTTPS**.
+        :param pulumi.Input[bool] forward_proto: Specifies whether to transfer the listener protocol of the load balancer to backend
+               servers through the HTTP header of the packet. The default value is false. This parameter is valid only when the
+               protocol is set to **HTTP** or **HTTPS**.
+        :param pulumi.Input[bool] forward_request_port: Specifies whether transfer the source port of the client in the
+               X-Forwarded-For-Port header to backend servers. The default value is false. This parameter is valid only when the
+               protocol is set to **HTTP** or **HTTPS**.
+        :param pulumi.Input[bool] forward_tls_certificate: Specifies whether to transfer the certificate ID of the load balancer to
+               backend servers through the HTTP header of the packet. The default value is false. This parameter is valid only when
+               the protocol is set to **HTTPS**.
+        :param pulumi.Input[bool] forward_tls_cipher: Specifies whether to transfer the algorithm suite of the load balancer to
+               backend servers through the HTTP header of the packet. The default value is false. This parameter is valid only when
+               the protocol is set to **HTTPS**.
+        :param pulumi.Input[bool] forward_tls_protocol: Specifies whether to transfer the algorithm protocol of the load balancer to
+               backend servers through the HTTP header of the packet. The default value is false. This parameter is valid only when
+               the protocol is set to **HTTPS**.
+        :param pulumi.Input[bool] gzip_enable: Specifies whether to enable gzip compression for a load balancer. The default value
+               is **false**. This parameter can be configured only for **HTTP**, **HTTPS**, and **QUIC** listeners.
         :param pulumi.Input[bool] http2_enable: Specifies whether to use HTTP/2. The default value is false. This parameter is valid
-               only when the protocol is set to *HTTPS*.
+               only when the protocol is set to **HTTPS**.
         :param pulumi.Input[int] idle_timeout: Specifies the idle timeout for the listener. Value range: 0 to 4000.
         :param pulumi.Input[str] ip_group: Specifies the ip group id for the listener.
         :param pulumi.Input[str] name: Human-readable name for the listener.
+        :param pulumi.Input[Sequence[pulumi.Input['ListenerPortRangeArgs']]] port_ranges: Specifies the port monitoring range (closed range), specify up to 10 port
+               groups, each group range must not overlap. This field can only be passed in when `protocol_port` is `0` or empty.
+               Only **TCP**, **UDP**, and **TLS** listener support this field. Changing this creates a new listener.
+               The port_ranges structure is documented below.
+        :param pulumi.Input[str] protection_reason: The reason for update protection. Only valid when `protection_status` is
+               **consoleProtection**.
+        :param pulumi.Input[str] protection_status: The protection status for update. Value options:
+               + **nonProtection**: No protection.
+               + **consoleProtection**: Console modification protection.
+        :param pulumi.Input[int] protocol_port: Specifies the port used by the listener.
+               + The **QUIC** listener port cannot be `4789` or the same as the **UDP** listener port.
+               + If `protocol` is set to **IP**, the value can only be `0` or empty.
+               + If it is set to `0` and `protocol` is not set to **IP**, `port_ranges` is required.
+        :param pulumi.Input[bool] proxy_protocol_enable: Specifies whether to enable the proxy protocol option to pass the source IP
+               addresses of the clients to backend servers. The default value is false. This parameter is available only for **TLS**
+               listeners and does not take effect for other types of listeners.
+        :param pulumi.Input[str] quic_listener_id: Specifies the ID of the QUIC listener. If it is set, HTTPS listener will be
+               upgraded to QUIC listener. This parameter is valid only when protocol is set to **HTTPS**.
+        :param pulumi.Input[bool] real_ip: Specifies whether to transfer the source IP address of the client to backend servers
+               through the HTTP header of the packet. The default value is false. This parameter is valid only when the protocol is
+               set to **HTTP** or **HTTPS**.
         :param pulumi.Input[str] region: The region in which to create the listener resource. If omitted, the
                provider-level region will be used. Changing this creates a new listener.
         :param pulumi.Input[int] request_timeout: Specifies the request timeout for the listener. Value range: 1 to 300. This
-               parameter is valid when protocol is set to *HTTP* or *HTTPS*.
+               parameter is valid when protocol is set to **HTTP** or **HTTPS**.
         :param pulumi.Input[int] response_timeout: Specifies the response timeout for the listener. Value range: 1 to 300. This
-               parameter is valid when protocol is set to *HTTP* or *HTTPS*.
+               parameter is valid when protocol is set to **HTTP** or **HTTPS**.
+        :param pulumi.Input[str] security_policy_id: Specifies the ID of the custom security policy. This parameter is available
+               only for **HTTPS** listeners added to a dedicated load balancer. If both `security_policy_id` and `tls_ciphers_policy`
+               are specified, only `security_policy_id` will take effect. This parameter is valid when protocol is set to **HTTPS**.
         :param pulumi.Input[str] server_certificate: Specifies the ID of the server certificate used by the listener. This
-               parameter is mandatory when protocol is set to *HTTPS*.
+               parameter is mandatory when protocol is set to **HTTPS**.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] sni_certificates: Lists the IDs of SNI certificates (server certificates with a domain name) used
-               by the listener. This parameter is valid when protocol is set to *HTTPS*.
+               by the listener. This parameter is valid when protocol is set to **HTTPS**.
+        :param pulumi.Input[str] sni_match_algo: Specifies how wildcard domain name matches with the SNI certificates used by the
+               listener. **longest_suffix** indicates longest suffix match. **wildcard** indicates wildcard match.
+               The default value is **wildcard**.
+        :param pulumi.Input[bool] ssl_early_data_enable: Specifies whether to enable 0-RTT capability, it is available only when
+               protocol is set to **HTTPS** and relys on the **TLSv1.3** security policy protocol. The default value is false.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: The key/value pairs to associate with the listener.
         :param pulumi.Input[str] tls_ciphers_policy: Specifies the TLS cipher policy for the listener. Valid options are:
-               tls-1-0-inherit, tls-1-0, tls-1-1, tls-1-2, tls-1-2-strict, tls-1-2-fs, tls-1-0-with-1-3, and tls-1-2-fs-with-1-3.
-               This parameter is valid when protocol is set to *HTTPS*.
+               **tls-1-0-inherit**, **tls-1-0**, **tls-1-1**, **tls-1-2**, **tls-1-2-strict**, **tls-1-2-fs**, **tls-1-0-with-1-3**,
+               **tls-1-2-fs-with-1-3**, **hybrid-policy-1-0** and **tls-1-2-strict-no-cbc**. Defaults to **tls-1-0**.
+               This parameter is valid when protocol is set to **HTTPS**.
         """
         pulumi.set(__self__, "loadbalancer_id", loadbalancer_id)
         pulumi.set(__self__, "protocol", protocol)
-        pulumi.set(__self__, "protocol_port", protocol_port)
         if access_policy is not None:
             pulumi.set(__self__, "access_policy", access_policy)
         if advanced_forwarding_enabled is not None:
@@ -87,8 +168,30 @@ class ListenerArgs:
             pulumi.set(__self__, "default_pool_id", default_pool_id)
         if description is not None:
             pulumi.set(__self__, "description", description)
+        if enable_member_retry is not None:
+            pulumi.set(__self__, "enable_member_retry", enable_member_retry)
+        if force_delete is not None:
+            pulumi.set(__self__, "force_delete", force_delete)
         if forward_eip is not None:
             pulumi.set(__self__, "forward_eip", forward_eip)
+        if forward_elb is not None:
+            pulumi.set(__self__, "forward_elb", forward_elb)
+        if forward_host is not None:
+            pulumi.set(__self__, "forward_host", forward_host)
+        if forward_port is not None:
+            pulumi.set(__self__, "forward_port", forward_port)
+        if forward_proto is not None:
+            pulumi.set(__self__, "forward_proto", forward_proto)
+        if forward_request_port is not None:
+            pulumi.set(__self__, "forward_request_port", forward_request_port)
+        if forward_tls_certificate is not None:
+            pulumi.set(__self__, "forward_tls_certificate", forward_tls_certificate)
+        if forward_tls_cipher is not None:
+            pulumi.set(__self__, "forward_tls_cipher", forward_tls_cipher)
+        if forward_tls_protocol is not None:
+            pulumi.set(__self__, "forward_tls_protocol", forward_tls_protocol)
+        if gzip_enable is not None:
+            pulumi.set(__self__, "gzip_enable", gzip_enable)
         if http2_enable is not None:
             pulumi.set(__self__, "http2_enable", http2_enable)
         if idle_timeout is not None:
@@ -97,16 +200,36 @@ class ListenerArgs:
             pulumi.set(__self__, "ip_group", ip_group)
         if name is not None:
             pulumi.set(__self__, "name", name)
+        if port_ranges is not None:
+            pulumi.set(__self__, "port_ranges", port_ranges)
+        if protection_reason is not None:
+            pulumi.set(__self__, "protection_reason", protection_reason)
+        if protection_status is not None:
+            pulumi.set(__self__, "protection_status", protection_status)
+        if protocol_port is not None:
+            pulumi.set(__self__, "protocol_port", protocol_port)
+        if proxy_protocol_enable is not None:
+            pulumi.set(__self__, "proxy_protocol_enable", proxy_protocol_enable)
+        if quic_listener_id is not None:
+            pulumi.set(__self__, "quic_listener_id", quic_listener_id)
+        if real_ip is not None:
+            pulumi.set(__self__, "real_ip", real_ip)
         if region is not None:
             pulumi.set(__self__, "region", region)
         if request_timeout is not None:
             pulumi.set(__self__, "request_timeout", request_timeout)
         if response_timeout is not None:
             pulumi.set(__self__, "response_timeout", response_timeout)
+        if security_policy_id is not None:
+            pulumi.set(__self__, "security_policy_id", security_policy_id)
         if server_certificate is not None:
             pulumi.set(__self__, "server_certificate", server_certificate)
         if sni_certificates is not None:
             pulumi.set(__self__, "sni_certificates", sni_certificates)
+        if sni_match_algo is not None:
+            pulumi.set(__self__, "sni_match_algo", sni_match_algo)
+        if ssl_early_data_enable is not None:
+            pulumi.set(__self__, "ssl_early_data_enable", ssl_early_data_enable)
         if tags is not None:
             pulumi.set(__self__, "tags", tags)
         if tls_ciphers_policy is not None:
@@ -129,8 +252,9 @@ class ListenerArgs:
     @pulumi.getter
     def protocol(self) -> pulumi.Input[str]:
         """
-        The protocol can either be TCP, UDP, HTTP or HTTPS. Changing this creates a
-        new listener.
+        The protocol can either be **TCP**, **UDP**, **HTTP**, **HTTPS**, **QUIC**,
+        **IP** or **TLS**. **IP** is only available for listeners that will be added to gateway load balancers. Changing this
+        creates a new listener.
         """
         return pulumi.get(self, "protocol")
 
@@ -139,24 +263,11 @@ class ListenerArgs:
         pulumi.set(self, "protocol", value)
 
     @property
-    @pulumi.getter(name="protocolPort")
-    def protocol_port(self) -> pulumi.Input[int]:
-        """
-        The port on which to listen for client traffic. Changing this creates a
-        new listener.
-        """
-        return pulumi.get(self, "protocol_port")
-
-    @protocol_port.setter
-    def protocol_port(self, value: pulumi.Input[int]):
-        pulumi.set(self, "protocol_port", value)
-
-    @property
     @pulumi.getter(name="accessPolicy")
     def access_policy(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the access policy for the listener. Valid options are *white* and
-        *black*.
+        Specifies the access policy for the listener. Valid options are **white** and
+        **black**.
         """
         return pulumi.get(self, "access_policy")
 
@@ -182,7 +293,7 @@ class ListenerArgs:
     def ca_certificate(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the ID of the CA certificate used by the listener. This parameter is
-        valid when protocol is set to *HTTPS*.
+        valid when protocol is set to **HTTPS**.
         """
         return pulumi.get(self, "ca_certificate")
 
@@ -216,12 +327,38 @@ class ListenerArgs:
         pulumi.set(self, "description", value)
 
     @property
+    @pulumi.getter(name="enableMemberRetry")
+    def enable_member_retry(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies whether to enable health check retries for backend servers.
+        The default value is true. It is available only when protocol is set to **HTTP**, **HTTPS**, or **QUIC**.
+        """
+        return pulumi.get(self, "enable_member_retry")
+
+    @enable_member_retry.setter
+    def enable_member_retry(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "enable_member_retry", value)
+
+    @property
+    @pulumi.getter(name="forceDelete")
+    def force_delete(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies whether to forcibly delete the listener, remove the listener, l7 policies,
+        unbind associated pools. Defaults to **false**.
+        """
+        return pulumi.get(self, "force_delete")
+
+    @force_delete.setter
+    def force_delete(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "force_delete", value)
+
+    @property
     @pulumi.getter(name="forwardEip")
     def forward_eip(self) -> Optional[pulumi.Input[bool]]:
         """
         Specifies whether transfer the load balancer EIP in the X-Forward-EIP header to
-        backend servers. The default value is false. This parameter is valid only when the protocol is set to *HTTP* or
-        *HTTPS*.
+        backend servers. The default value is false. This parameter is valid only when the protocol is set to **HTTP** or
+        **HTTPS**.
         """
         return pulumi.get(self, "forward_eip")
 
@@ -230,11 +367,137 @@ class ListenerArgs:
         pulumi.set(self, "forward_eip", value)
 
     @property
+    @pulumi.getter(name="forwardElb")
+    def forward_elb(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies whether to transfer the load balancer ID to backend servers through the HTTP
+        header of the packet. The default value is false. This parameter is valid only when the protocol is set to **HTTP** or
+        **HTTPS**.
+        """
+        return pulumi.get(self, "forward_elb")
+
+    @forward_elb.setter
+    def forward_elb(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "forward_elb", value)
+
+    @property
+    @pulumi.getter(name="forwardHost")
+    def forward_host(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies whether to rewrite the X-Forwarded-Host header. If X-Forwarded-Host is
+        set to true, X-Forwarded-Host in the request header from the clients can be set to Host in the request header sent
+        from the load balancer to backend servers. The default value is true. This parameter is valid only when the protocol
+        is set to **HTTP** or **HTTPS**.
+        """
+        return pulumi.get(self, "forward_host")
+
+    @forward_host.setter
+    def forward_host(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "forward_host", value)
+
+    @property
+    @pulumi.getter(name="forwardPort")
+    def forward_port(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies whether transfer the listening port of the load balancer in the
+        X-Forwarded-Port header to backend servers. The default value is false. This parameter is valid only when the
+        protocol is set to **HTTP** or **HTTPS**.
+        """
+        return pulumi.get(self, "forward_port")
+
+    @forward_port.setter
+    def forward_port(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "forward_port", value)
+
+    @property
+    @pulumi.getter(name="forwardProto")
+    def forward_proto(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies whether to transfer the listener protocol of the load balancer to backend
+        servers through the HTTP header of the packet. The default value is false. This parameter is valid only when the
+        protocol is set to **HTTP** or **HTTPS**.
+        """
+        return pulumi.get(self, "forward_proto")
+
+    @forward_proto.setter
+    def forward_proto(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "forward_proto", value)
+
+    @property
+    @pulumi.getter(name="forwardRequestPort")
+    def forward_request_port(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies whether transfer the source port of the client in the
+        X-Forwarded-For-Port header to backend servers. The default value is false. This parameter is valid only when the
+        protocol is set to **HTTP** or **HTTPS**.
+        """
+        return pulumi.get(self, "forward_request_port")
+
+    @forward_request_port.setter
+    def forward_request_port(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "forward_request_port", value)
+
+    @property
+    @pulumi.getter(name="forwardTlsCertificate")
+    def forward_tls_certificate(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies whether to transfer the certificate ID of the load balancer to
+        backend servers through the HTTP header of the packet. The default value is false. This parameter is valid only when
+        the protocol is set to **HTTPS**.
+        """
+        return pulumi.get(self, "forward_tls_certificate")
+
+    @forward_tls_certificate.setter
+    def forward_tls_certificate(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "forward_tls_certificate", value)
+
+    @property
+    @pulumi.getter(name="forwardTlsCipher")
+    def forward_tls_cipher(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies whether to transfer the algorithm suite of the load balancer to
+        backend servers through the HTTP header of the packet. The default value is false. This parameter is valid only when
+        the protocol is set to **HTTPS**.
+        """
+        return pulumi.get(self, "forward_tls_cipher")
+
+    @forward_tls_cipher.setter
+    def forward_tls_cipher(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "forward_tls_cipher", value)
+
+    @property
+    @pulumi.getter(name="forwardTlsProtocol")
+    def forward_tls_protocol(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies whether to transfer the algorithm protocol of the load balancer to
+        backend servers through the HTTP header of the packet. The default value is false. This parameter is valid only when
+        the protocol is set to **HTTPS**.
+        """
+        return pulumi.get(self, "forward_tls_protocol")
+
+    @forward_tls_protocol.setter
+    def forward_tls_protocol(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "forward_tls_protocol", value)
+
+    @property
+    @pulumi.getter(name="gzipEnable")
+    def gzip_enable(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies whether to enable gzip compression for a load balancer. The default value
+        is **false**. This parameter can be configured only for **HTTP**, **HTTPS**, and **QUIC** listeners.
+        """
+        return pulumi.get(self, "gzip_enable")
+
+    @gzip_enable.setter
+    def gzip_enable(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "gzip_enable", value)
+
+    @property
     @pulumi.getter(name="http2Enable")
     def http2_enable(self) -> Optional[pulumi.Input[bool]]:
         """
         Specifies whether to use HTTP/2. The default value is false. This parameter is valid
-        only when the protocol is set to *HTTPS*.
+        only when the protocol is set to **HTTPS**.
         """
         return pulumi.get(self, "http2_enable")
 
@@ -279,6 +542,104 @@ class ListenerArgs:
         pulumi.set(self, "name", value)
 
     @property
+    @pulumi.getter(name="portRanges")
+    def port_ranges(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['ListenerPortRangeArgs']]]]:
+        """
+        Specifies the port monitoring range (closed range), specify up to 10 port
+        groups, each group range must not overlap. This field can only be passed in when `protocol_port` is `0` or empty.
+        Only **TCP**, **UDP**, and **TLS** listener support this field. Changing this creates a new listener.
+        The port_ranges structure is documented below.
+        """
+        return pulumi.get(self, "port_ranges")
+
+    @port_ranges.setter
+    def port_ranges(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['ListenerPortRangeArgs']]]]):
+        pulumi.set(self, "port_ranges", value)
+
+    @property
+    @pulumi.getter(name="protectionReason")
+    def protection_reason(self) -> Optional[pulumi.Input[str]]:
+        """
+        The reason for update protection. Only valid when `protection_status` is
+        **consoleProtection**.
+        """
+        return pulumi.get(self, "protection_reason")
+
+    @protection_reason.setter
+    def protection_reason(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "protection_reason", value)
+
+    @property
+    @pulumi.getter(name="protectionStatus")
+    def protection_status(self) -> Optional[pulumi.Input[str]]:
+        """
+        The protection status for update. Value options:
+        + **nonProtection**: No protection.
+        + **consoleProtection**: Console modification protection.
+        """
+        return pulumi.get(self, "protection_status")
+
+    @protection_status.setter
+    def protection_status(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "protection_status", value)
+
+    @property
+    @pulumi.getter(name="protocolPort")
+    def protocol_port(self) -> Optional[pulumi.Input[int]]:
+        """
+        Specifies the port used by the listener.
+        + The **QUIC** listener port cannot be `4789` or the same as the **UDP** listener port.
+        + If `protocol` is set to **IP**, the value can only be `0` or empty.
+        + If it is set to `0` and `protocol` is not set to **IP**, `port_ranges` is required.
+        """
+        return pulumi.get(self, "protocol_port")
+
+    @protocol_port.setter
+    def protocol_port(self, value: Optional[pulumi.Input[int]]):
+        pulumi.set(self, "protocol_port", value)
+
+    @property
+    @pulumi.getter(name="proxyProtocolEnable")
+    def proxy_protocol_enable(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies whether to enable the proxy protocol option to pass the source IP
+        addresses of the clients to backend servers. The default value is false. This parameter is available only for **TLS**
+        listeners and does not take effect for other types of listeners.
+        """
+        return pulumi.get(self, "proxy_protocol_enable")
+
+    @proxy_protocol_enable.setter
+    def proxy_protocol_enable(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "proxy_protocol_enable", value)
+
+    @property
+    @pulumi.getter(name="quicListenerId")
+    def quic_listener_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the ID of the QUIC listener. If it is set, HTTPS listener will be
+        upgraded to QUIC listener. This parameter is valid only when protocol is set to **HTTPS**.
+        """
+        return pulumi.get(self, "quic_listener_id")
+
+    @quic_listener_id.setter
+    def quic_listener_id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "quic_listener_id", value)
+
+    @property
+    @pulumi.getter(name="realIp")
+    def real_ip(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies whether to transfer the source IP address of the client to backend servers
+        through the HTTP header of the packet. The default value is false. This parameter is valid only when the protocol is
+        set to **HTTP** or **HTTPS**.
+        """
+        return pulumi.get(self, "real_ip")
+
+    @real_ip.setter
+    def real_ip(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "real_ip", value)
+
+    @property
     @pulumi.getter
     def region(self) -> Optional[pulumi.Input[str]]:
         """
@@ -296,7 +657,7 @@ class ListenerArgs:
     def request_timeout(self) -> Optional[pulumi.Input[int]]:
         """
         Specifies the request timeout for the listener. Value range: 1 to 300. This
-        parameter is valid when protocol is set to *HTTP* or *HTTPS*.
+        parameter is valid when protocol is set to **HTTP** or **HTTPS**.
         """
         return pulumi.get(self, "request_timeout")
 
@@ -309,7 +670,7 @@ class ListenerArgs:
     def response_timeout(self) -> Optional[pulumi.Input[int]]:
         """
         Specifies the response timeout for the listener. Value range: 1 to 300. This
-        parameter is valid when protocol is set to *HTTP* or *HTTPS*.
+        parameter is valid when protocol is set to **HTTP** or **HTTPS**.
         """
         return pulumi.get(self, "response_timeout")
 
@@ -318,11 +679,25 @@ class ListenerArgs:
         pulumi.set(self, "response_timeout", value)
 
     @property
+    @pulumi.getter(name="securityPolicyId")
+    def security_policy_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the ID of the custom security policy. This parameter is available
+        only for **HTTPS** listeners added to a dedicated load balancer. If both `security_policy_id` and `tls_ciphers_policy`
+        are specified, only `security_policy_id` will take effect. This parameter is valid when protocol is set to **HTTPS**.
+        """
+        return pulumi.get(self, "security_policy_id")
+
+    @security_policy_id.setter
+    def security_policy_id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "security_policy_id", value)
+
+    @property
     @pulumi.getter(name="serverCertificate")
     def server_certificate(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the ID of the server certificate used by the listener. This
-        parameter is mandatory when protocol is set to *HTTPS*.
+        parameter is mandatory when protocol is set to **HTTPS**.
         """
         return pulumi.get(self, "server_certificate")
 
@@ -335,13 +710,40 @@ class ListenerArgs:
     def sni_certificates(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]:
         """
         Lists the IDs of SNI certificates (server certificates with a domain name) used
-        by the listener. This parameter is valid when protocol is set to *HTTPS*.
+        by the listener. This parameter is valid when protocol is set to **HTTPS**.
         """
         return pulumi.get(self, "sni_certificates")
 
     @sni_certificates.setter
     def sni_certificates(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]):
         pulumi.set(self, "sni_certificates", value)
+
+    @property
+    @pulumi.getter(name="sniMatchAlgo")
+    def sni_match_algo(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies how wildcard domain name matches with the SNI certificates used by the
+        listener. **longest_suffix** indicates longest suffix match. **wildcard** indicates wildcard match.
+        The default value is **wildcard**.
+        """
+        return pulumi.get(self, "sni_match_algo")
+
+    @sni_match_algo.setter
+    def sni_match_algo(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "sni_match_algo", value)
+
+    @property
+    @pulumi.getter(name="sslEarlyDataEnable")
+    def ssl_early_data_enable(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies whether to enable 0-RTT capability, it is available only when
+        protocol is set to **HTTPS** and relys on the **TLSv1.3** security policy protocol. The default value is false.
+        """
+        return pulumi.get(self, "ssl_early_data_enable")
+
+    @ssl_early_data_enable.setter
+    def ssl_early_data_enable(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "ssl_early_data_enable", value)
 
     @property
     @pulumi.getter
@@ -360,8 +762,9 @@ class ListenerArgs:
     def tls_ciphers_policy(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the TLS cipher policy for the listener. Valid options are:
-        tls-1-0-inherit, tls-1-0, tls-1-1, tls-1-2, tls-1-2-strict, tls-1-2-fs, tls-1-0-with-1-3, and tls-1-2-fs-with-1-3.
-        This parameter is valid when protocol is set to *HTTPS*.
+        **tls-1-0-inherit**, **tls-1-0**, **tls-1-1**, **tls-1-2**, **tls-1-2-strict**, **tls-1-2-fs**, **tls-1-0-with-1-3**,
+        **tls-1-2-fs-with-1-3**, **hybrid-policy-1-0** and **tls-1-2-strict-no-cbc**. Defaults to **tls-1-0**.
+        This parameter is valid when protocol is set to **HTTPS**.
         """
         return pulumi.get(self, "tls_ciphers_policy")
 
@@ -376,62 +779,146 @@ class _ListenerState:
                  access_policy: Optional[pulumi.Input[str]] = None,
                  advanced_forwarding_enabled: Optional[pulumi.Input[bool]] = None,
                  ca_certificate: Optional[pulumi.Input[str]] = None,
+                 created_at: Optional[pulumi.Input[str]] = None,
                  default_pool_id: Optional[pulumi.Input[str]] = None,
                  description: Optional[pulumi.Input[str]] = None,
+                 enable_member_retry: Optional[pulumi.Input[bool]] = None,
+                 force_delete: Optional[pulumi.Input[bool]] = None,
                  forward_eip: Optional[pulumi.Input[bool]] = None,
+                 forward_elb: Optional[pulumi.Input[bool]] = None,
+                 forward_host: Optional[pulumi.Input[bool]] = None,
+                 forward_port: Optional[pulumi.Input[bool]] = None,
+                 forward_proto: Optional[pulumi.Input[bool]] = None,
+                 forward_request_port: Optional[pulumi.Input[bool]] = None,
+                 forward_tls_certificate: Optional[pulumi.Input[bool]] = None,
+                 forward_tls_cipher: Optional[pulumi.Input[bool]] = None,
+                 forward_tls_protocol: Optional[pulumi.Input[bool]] = None,
+                 gzip_enable: Optional[pulumi.Input[bool]] = None,
                  http2_enable: Optional[pulumi.Input[bool]] = None,
                  idle_timeout: Optional[pulumi.Input[int]] = None,
                  ip_group: Optional[pulumi.Input[str]] = None,
                  loadbalancer_id: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
+                 port_ranges: Optional[pulumi.Input[Sequence[pulumi.Input['ListenerPortRangeArgs']]]] = None,
+                 protection_reason: Optional[pulumi.Input[str]] = None,
+                 protection_status: Optional[pulumi.Input[str]] = None,
                  protocol: Optional[pulumi.Input[str]] = None,
                  protocol_port: Optional[pulumi.Input[int]] = None,
+                 proxy_protocol_enable: Optional[pulumi.Input[bool]] = None,
+                 quic_listener_id: Optional[pulumi.Input[str]] = None,
+                 real_ip: Optional[pulumi.Input[bool]] = None,
                  region: Optional[pulumi.Input[str]] = None,
                  request_timeout: Optional[pulumi.Input[int]] = None,
                  response_timeout: Optional[pulumi.Input[int]] = None,
+                 security_policy_id: Optional[pulumi.Input[str]] = None,
                  server_certificate: Optional[pulumi.Input[str]] = None,
                  sni_certificates: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
+                 sni_match_algo: Optional[pulumi.Input[str]] = None,
+                 ssl_early_data_enable: Optional[pulumi.Input[bool]] = None,
                  tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
-                 tls_ciphers_policy: Optional[pulumi.Input[str]] = None):
+                 tls_ciphers_policy: Optional[pulumi.Input[str]] = None,
+                 updated_at: Optional[pulumi.Input[str]] = None):
         """
         Input properties used for looking up and filtering Listener resources.
-        :param pulumi.Input[str] access_policy: Specifies the access policy for the listener. Valid options are *white* and
-               *black*.
+        :param pulumi.Input[str] access_policy: Specifies the access policy for the listener. Valid options are **white** and
+               **black**.
         :param pulumi.Input[bool] advanced_forwarding_enabled: Specifies whether to enable advanced forwarding.
                If advanced forwarding is enabled, more flexible forwarding policies and rules are supported.
         :param pulumi.Input[str] ca_certificate: Specifies the ID of the CA certificate used by the listener. This parameter is
-               valid when protocol is set to *HTTPS*.
+               valid when protocol is set to **HTTPS**.
+        :param pulumi.Input[str] created_at: The create time of the listener.
         :param pulumi.Input[str] default_pool_id: The ID of the default pool with which the listener is associated. Changing this
                creates a new listener.
         :param pulumi.Input[str] description: Human-readable description for the listener.
+        :param pulumi.Input[bool] enable_member_retry: Specifies whether to enable health check retries for backend servers.
+               The default value is true. It is available only when protocol is set to **HTTP**, **HTTPS**, or **QUIC**.
+        :param pulumi.Input[bool] force_delete: Specifies whether to forcibly delete the listener, remove the listener, l7 policies,
+               unbind associated pools. Defaults to **false**.
         :param pulumi.Input[bool] forward_eip: Specifies whether transfer the load balancer EIP in the X-Forward-EIP header to
-               backend servers. The default value is false. This parameter is valid only when the protocol is set to *HTTP* or
-               *HTTPS*.
+               backend servers. The default value is false. This parameter is valid only when the protocol is set to **HTTP** or
+               **HTTPS**.
+        :param pulumi.Input[bool] forward_elb: Specifies whether to transfer the load balancer ID to backend servers through the HTTP
+               header of the packet. The default value is false. This parameter is valid only when the protocol is set to **HTTP** or
+               **HTTPS**.
+        :param pulumi.Input[bool] forward_host: Specifies whether to rewrite the X-Forwarded-Host header. If X-Forwarded-Host is
+               set to true, X-Forwarded-Host in the request header from the clients can be set to Host in the request header sent
+               from the load balancer to backend servers. The default value is true. This parameter is valid only when the protocol
+               is set to **HTTP** or **HTTPS**.
+        :param pulumi.Input[bool] forward_port: Specifies whether transfer the listening port of the load balancer in the
+               X-Forwarded-Port header to backend servers. The default value is false. This parameter is valid only when the
+               protocol is set to **HTTP** or **HTTPS**.
+        :param pulumi.Input[bool] forward_proto: Specifies whether to transfer the listener protocol of the load balancer to backend
+               servers through the HTTP header of the packet. The default value is false. This parameter is valid only when the
+               protocol is set to **HTTP** or **HTTPS**.
+        :param pulumi.Input[bool] forward_request_port: Specifies whether transfer the source port of the client in the
+               X-Forwarded-For-Port header to backend servers. The default value is false. This parameter is valid only when the
+               protocol is set to **HTTP** or **HTTPS**.
+        :param pulumi.Input[bool] forward_tls_certificate: Specifies whether to transfer the certificate ID of the load balancer to
+               backend servers through the HTTP header of the packet. The default value is false. This parameter is valid only when
+               the protocol is set to **HTTPS**.
+        :param pulumi.Input[bool] forward_tls_cipher: Specifies whether to transfer the algorithm suite of the load balancer to
+               backend servers through the HTTP header of the packet. The default value is false. This parameter is valid only when
+               the protocol is set to **HTTPS**.
+        :param pulumi.Input[bool] forward_tls_protocol: Specifies whether to transfer the algorithm protocol of the load balancer to
+               backend servers through the HTTP header of the packet. The default value is false. This parameter is valid only when
+               the protocol is set to **HTTPS**.
+        :param pulumi.Input[bool] gzip_enable: Specifies whether to enable gzip compression for a load balancer. The default value
+               is **false**. This parameter can be configured only for **HTTP**, **HTTPS**, and **QUIC** listeners.
         :param pulumi.Input[bool] http2_enable: Specifies whether to use HTTP/2. The default value is false. This parameter is valid
-               only when the protocol is set to *HTTPS*.
+               only when the protocol is set to **HTTPS**.
         :param pulumi.Input[int] idle_timeout: Specifies the idle timeout for the listener. Value range: 0 to 4000.
         :param pulumi.Input[str] ip_group: Specifies the ip group id for the listener.
         :param pulumi.Input[str] loadbalancer_id: The load balancer on which to provision this listener. Changing this
                creates a new listener.
         :param pulumi.Input[str] name: Human-readable name for the listener.
-        :param pulumi.Input[str] protocol: The protocol can either be TCP, UDP, HTTP or HTTPS. Changing this creates a
-               new listener.
-        :param pulumi.Input[int] protocol_port: The port on which to listen for client traffic. Changing this creates a
-               new listener.
+        :param pulumi.Input[Sequence[pulumi.Input['ListenerPortRangeArgs']]] port_ranges: Specifies the port monitoring range (closed range), specify up to 10 port
+               groups, each group range must not overlap. This field can only be passed in when `protocol_port` is `0` or empty.
+               Only **TCP**, **UDP**, and **TLS** listener support this field. Changing this creates a new listener.
+               The port_ranges structure is documented below.
+        :param pulumi.Input[str] protection_reason: The reason for update protection. Only valid when `protection_status` is
+               **consoleProtection**.
+        :param pulumi.Input[str] protection_status: The protection status for update. Value options:
+               + **nonProtection**: No protection.
+               + **consoleProtection**: Console modification protection.
+        :param pulumi.Input[str] protocol: The protocol can either be **TCP**, **UDP**, **HTTP**, **HTTPS**, **QUIC**,
+               **IP** or **TLS**. **IP** is only available for listeners that will be added to gateway load balancers. Changing this
+               creates a new listener.
+        :param pulumi.Input[int] protocol_port: Specifies the port used by the listener.
+               + The **QUIC** listener port cannot be `4789` or the same as the **UDP** listener port.
+               + If `protocol` is set to **IP**, the value can only be `0` or empty.
+               + If it is set to `0` and `protocol` is not set to **IP**, `port_ranges` is required.
+        :param pulumi.Input[bool] proxy_protocol_enable: Specifies whether to enable the proxy protocol option to pass the source IP
+               addresses of the clients to backend servers. The default value is false. This parameter is available only for **TLS**
+               listeners and does not take effect for other types of listeners.
+        :param pulumi.Input[str] quic_listener_id: Specifies the ID of the QUIC listener. If it is set, HTTPS listener will be
+               upgraded to QUIC listener. This parameter is valid only when protocol is set to **HTTPS**.
+        :param pulumi.Input[bool] real_ip: Specifies whether to transfer the source IP address of the client to backend servers
+               through the HTTP header of the packet. The default value is false. This parameter is valid only when the protocol is
+               set to **HTTP** or **HTTPS**.
         :param pulumi.Input[str] region: The region in which to create the listener resource. If omitted, the
                provider-level region will be used. Changing this creates a new listener.
         :param pulumi.Input[int] request_timeout: Specifies the request timeout for the listener. Value range: 1 to 300. This
-               parameter is valid when protocol is set to *HTTP* or *HTTPS*.
+               parameter is valid when protocol is set to **HTTP** or **HTTPS**.
         :param pulumi.Input[int] response_timeout: Specifies the response timeout for the listener. Value range: 1 to 300. This
-               parameter is valid when protocol is set to *HTTP* or *HTTPS*.
+               parameter is valid when protocol is set to **HTTP** or **HTTPS**.
+        :param pulumi.Input[str] security_policy_id: Specifies the ID of the custom security policy. This parameter is available
+               only for **HTTPS** listeners added to a dedicated load balancer. If both `security_policy_id` and `tls_ciphers_policy`
+               are specified, only `security_policy_id` will take effect. This parameter is valid when protocol is set to **HTTPS**.
         :param pulumi.Input[str] server_certificate: Specifies the ID of the server certificate used by the listener. This
-               parameter is mandatory when protocol is set to *HTTPS*.
+               parameter is mandatory when protocol is set to **HTTPS**.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] sni_certificates: Lists the IDs of SNI certificates (server certificates with a domain name) used
-               by the listener. This parameter is valid when protocol is set to *HTTPS*.
+               by the listener. This parameter is valid when protocol is set to **HTTPS**.
+        :param pulumi.Input[str] sni_match_algo: Specifies how wildcard domain name matches with the SNI certificates used by the
+               listener. **longest_suffix** indicates longest suffix match. **wildcard** indicates wildcard match.
+               The default value is **wildcard**.
+        :param pulumi.Input[bool] ssl_early_data_enable: Specifies whether to enable 0-RTT capability, it is available only when
+               protocol is set to **HTTPS** and relys on the **TLSv1.3** security policy protocol. The default value is false.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: The key/value pairs to associate with the listener.
         :param pulumi.Input[str] tls_ciphers_policy: Specifies the TLS cipher policy for the listener. Valid options are:
-               tls-1-0-inherit, tls-1-0, tls-1-1, tls-1-2, tls-1-2-strict, tls-1-2-fs, tls-1-0-with-1-3, and tls-1-2-fs-with-1-3.
-               This parameter is valid when protocol is set to *HTTPS*.
+               **tls-1-0-inherit**, **tls-1-0**, **tls-1-1**, **tls-1-2**, **tls-1-2-strict**, **tls-1-2-fs**, **tls-1-0-with-1-3**,
+               **tls-1-2-fs-with-1-3**, **hybrid-policy-1-0** and **tls-1-2-strict-no-cbc**. Defaults to **tls-1-0**.
+               This parameter is valid when protocol is set to **HTTPS**.
+        :param pulumi.Input[str] updated_at: The update time of the listener.
         """
         if access_policy is not None:
             pulumi.set(__self__, "access_policy", access_policy)
@@ -439,12 +926,36 @@ class _ListenerState:
             pulumi.set(__self__, "advanced_forwarding_enabled", advanced_forwarding_enabled)
         if ca_certificate is not None:
             pulumi.set(__self__, "ca_certificate", ca_certificate)
+        if created_at is not None:
+            pulumi.set(__self__, "created_at", created_at)
         if default_pool_id is not None:
             pulumi.set(__self__, "default_pool_id", default_pool_id)
         if description is not None:
             pulumi.set(__self__, "description", description)
+        if enable_member_retry is not None:
+            pulumi.set(__self__, "enable_member_retry", enable_member_retry)
+        if force_delete is not None:
+            pulumi.set(__self__, "force_delete", force_delete)
         if forward_eip is not None:
             pulumi.set(__self__, "forward_eip", forward_eip)
+        if forward_elb is not None:
+            pulumi.set(__self__, "forward_elb", forward_elb)
+        if forward_host is not None:
+            pulumi.set(__self__, "forward_host", forward_host)
+        if forward_port is not None:
+            pulumi.set(__self__, "forward_port", forward_port)
+        if forward_proto is not None:
+            pulumi.set(__self__, "forward_proto", forward_proto)
+        if forward_request_port is not None:
+            pulumi.set(__self__, "forward_request_port", forward_request_port)
+        if forward_tls_certificate is not None:
+            pulumi.set(__self__, "forward_tls_certificate", forward_tls_certificate)
+        if forward_tls_cipher is not None:
+            pulumi.set(__self__, "forward_tls_cipher", forward_tls_cipher)
+        if forward_tls_protocol is not None:
+            pulumi.set(__self__, "forward_tls_protocol", forward_tls_protocol)
+        if gzip_enable is not None:
+            pulumi.set(__self__, "gzip_enable", gzip_enable)
         if http2_enable is not None:
             pulumi.set(__self__, "http2_enable", http2_enable)
         if idle_timeout is not None:
@@ -455,31 +966,51 @@ class _ListenerState:
             pulumi.set(__self__, "loadbalancer_id", loadbalancer_id)
         if name is not None:
             pulumi.set(__self__, "name", name)
+        if port_ranges is not None:
+            pulumi.set(__self__, "port_ranges", port_ranges)
+        if protection_reason is not None:
+            pulumi.set(__self__, "protection_reason", protection_reason)
+        if protection_status is not None:
+            pulumi.set(__self__, "protection_status", protection_status)
         if protocol is not None:
             pulumi.set(__self__, "protocol", protocol)
         if protocol_port is not None:
             pulumi.set(__self__, "protocol_port", protocol_port)
+        if proxy_protocol_enable is not None:
+            pulumi.set(__self__, "proxy_protocol_enable", proxy_protocol_enable)
+        if quic_listener_id is not None:
+            pulumi.set(__self__, "quic_listener_id", quic_listener_id)
+        if real_ip is not None:
+            pulumi.set(__self__, "real_ip", real_ip)
         if region is not None:
             pulumi.set(__self__, "region", region)
         if request_timeout is not None:
             pulumi.set(__self__, "request_timeout", request_timeout)
         if response_timeout is not None:
             pulumi.set(__self__, "response_timeout", response_timeout)
+        if security_policy_id is not None:
+            pulumi.set(__self__, "security_policy_id", security_policy_id)
         if server_certificate is not None:
             pulumi.set(__self__, "server_certificate", server_certificate)
         if sni_certificates is not None:
             pulumi.set(__self__, "sni_certificates", sni_certificates)
+        if sni_match_algo is not None:
+            pulumi.set(__self__, "sni_match_algo", sni_match_algo)
+        if ssl_early_data_enable is not None:
+            pulumi.set(__self__, "ssl_early_data_enable", ssl_early_data_enable)
         if tags is not None:
             pulumi.set(__self__, "tags", tags)
         if tls_ciphers_policy is not None:
             pulumi.set(__self__, "tls_ciphers_policy", tls_ciphers_policy)
+        if updated_at is not None:
+            pulumi.set(__self__, "updated_at", updated_at)
 
     @property
     @pulumi.getter(name="accessPolicy")
     def access_policy(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the access policy for the listener. Valid options are *white* and
-        *black*.
+        Specifies the access policy for the listener. Valid options are **white** and
+        **black**.
         """
         return pulumi.get(self, "access_policy")
 
@@ -505,13 +1036,25 @@ class _ListenerState:
     def ca_certificate(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the ID of the CA certificate used by the listener. This parameter is
-        valid when protocol is set to *HTTPS*.
+        valid when protocol is set to **HTTPS**.
         """
         return pulumi.get(self, "ca_certificate")
 
     @ca_certificate.setter
     def ca_certificate(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "ca_certificate", value)
+
+    @property
+    @pulumi.getter(name="createdAt")
+    def created_at(self) -> Optional[pulumi.Input[str]]:
+        """
+        The create time of the listener.
+        """
+        return pulumi.get(self, "created_at")
+
+    @created_at.setter
+    def created_at(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "created_at", value)
 
     @property
     @pulumi.getter(name="defaultPoolId")
@@ -539,12 +1082,38 @@ class _ListenerState:
         pulumi.set(self, "description", value)
 
     @property
+    @pulumi.getter(name="enableMemberRetry")
+    def enable_member_retry(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies whether to enable health check retries for backend servers.
+        The default value is true. It is available only when protocol is set to **HTTP**, **HTTPS**, or **QUIC**.
+        """
+        return pulumi.get(self, "enable_member_retry")
+
+    @enable_member_retry.setter
+    def enable_member_retry(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "enable_member_retry", value)
+
+    @property
+    @pulumi.getter(name="forceDelete")
+    def force_delete(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies whether to forcibly delete the listener, remove the listener, l7 policies,
+        unbind associated pools. Defaults to **false**.
+        """
+        return pulumi.get(self, "force_delete")
+
+    @force_delete.setter
+    def force_delete(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "force_delete", value)
+
+    @property
     @pulumi.getter(name="forwardEip")
     def forward_eip(self) -> Optional[pulumi.Input[bool]]:
         """
         Specifies whether transfer the load balancer EIP in the X-Forward-EIP header to
-        backend servers. The default value is false. This parameter is valid only when the protocol is set to *HTTP* or
-        *HTTPS*.
+        backend servers. The default value is false. This parameter is valid only when the protocol is set to **HTTP** or
+        **HTTPS**.
         """
         return pulumi.get(self, "forward_eip")
 
@@ -553,11 +1122,137 @@ class _ListenerState:
         pulumi.set(self, "forward_eip", value)
 
     @property
+    @pulumi.getter(name="forwardElb")
+    def forward_elb(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies whether to transfer the load balancer ID to backend servers through the HTTP
+        header of the packet. The default value is false. This parameter is valid only when the protocol is set to **HTTP** or
+        **HTTPS**.
+        """
+        return pulumi.get(self, "forward_elb")
+
+    @forward_elb.setter
+    def forward_elb(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "forward_elb", value)
+
+    @property
+    @pulumi.getter(name="forwardHost")
+    def forward_host(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies whether to rewrite the X-Forwarded-Host header. If X-Forwarded-Host is
+        set to true, X-Forwarded-Host in the request header from the clients can be set to Host in the request header sent
+        from the load balancer to backend servers. The default value is true. This parameter is valid only when the protocol
+        is set to **HTTP** or **HTTPS**.
+        """
+        return pulumi.get(self, "forward_host")
+
+    @forward_host.setter
+    def forward_host(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "forward_host", value)
+
+    @property
+    @pulumi.getter(name="forwardPort")
+    def forward_port(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies whether transfer the listening port of the load balancer in the
+        X-Forwarded-Port header to backend servers. The default value is false. This parameter is valid only when the
+        protocol is set to **HTTP** or **HTTPS**.
+        """
+        return pulumi.get(self, "forward_port")
+
+    @forward_port.setter
+    def forward_port(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "forward_port", value)
+
+    @property
+    @pulumi.getter(name="forwardProto")
+    def forward_proto(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies whether to transfer the listener protocol of the load balancer to backend
+        servers through the HTTP header of the packet. The default value is false. This parameter is valid only when the
+        protocol is set to **HTTP** or **HTTPS**.
+        """
+        return pulumi.get(self, "forward_proto")
+
+    @forward_proto.setter
+    def forward_proto(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "forward_proto", value)
+
+    @property
+    @pulumi.getter(name="forwardRequestPort")
+    def forward_request_port(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies whether transfer the source port of the client in the
+        X-Forwarded-For-Port header to backend servers. The default value is false. This parameter is valid only when the
+        protocol is set to **HTTP** or **HTTPS**.
+        """
+        return pulumi.get(self, "forward_request_port")
+
+    @forward_request_port.setter
+    def forward_request_port(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "forward_request_port", value)
+
+    @property
+    @pulumi.getter(name="forwardTlsCertificate")
+    def forward_tls_certificate(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies whether to transfer the certificate ID of the load balancer to
+        backend servers through the HTTP header of the packet. The default value is false. This parameter is valid only when
+        the protocol is set to **HTTPS**.
+        """
+        return pulumi.get(self, "forward_tls_certificate")
+
+    @forward_tls_certificate.setter
+    def forward_tls_certificate(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "forward_tls_certificate", value)
+
+    @property
+    @pulumi.getter(name="forwardTlsCipher")
+    def forward_tls_cipher(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies whether to transfer the algorithm suite of the load balancer to
+        backend servers through the HTTP header of the packet. The default value is false. This parameter is valid only when
+        the protocol is set to **HTTPS**.
+        """
+        return pulumi.get(self, "forward_tls_cipher")
+
+    @forward_tls_cipher.setter
+    def forward_tls_cipher(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "forward_tls_cipher", value)
+
+    @property
+    @pulumi.getter(name="forwardTlsProtocol")
+    def forward_tls_protocol(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies whether to transfer the algorithm protocol of the load balancer to
+        backend servers through the HTTP header of the packet. The default value is false. This parameter is valid only when
+        the protocol is set to **HTTPS**.
+        """
+        return pulumi.get(self, "forward_tls_protocol")
+
+    @forward_tls_protocol.setter
+    def forward_tls_protocol(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "forward_tls_protocol", value)
+
+    @property
+    @pulumi.getter(name="gzipEnable")
+    def gzip_enable(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies whether to enable gzip compression for a load balancer. The default value
+        is **false**. This parameter can be configured only for **HTTP**, **HTTPS**, and **QUIC** listeners.
+        """
+        return pulumi.get(self, "gzip_enable")
+
+    @gzip_enable.setter
+    def gzip_enable(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "gzip_enable", value)
+
+    @property
     @pulumi.getter(name="http2Enable")
     def http2_enable(self) -> Optional[pulumi.Input[bool]]:
         """
         Specifies whether to use HTTP/2. The default value is false. This parameter is valid
-        only when the protocol is set to *HTTPS*.
+        only when the protocol is set to **HTTPS**.
         """
         return pulumi.get(self, "http2_enable")
 
@@ -615,11 +1310,54 @@ class _ListenerState:
         pulumi.set(self, "name", value)
 
     @property
+    @pulumi.getter(name="portRanges")
+    def port_ranges(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['ListenerPortRangeArgs']]]]:
+        """
+        Specifies the port monitoring range (closed range), specify up to 10 port
+        groups, each group range must not overlap. This field can only be passed in when `protocol_port` is `0` or empty.
+        Only **TCP**, **UDP**, and **TLS** listener support this field. Changing this creates a new listener.
+        The port_ranges structure is documented below.
+        """
+        return pulumi.get(self, "port_ranges")
+
+    @port_ranges.setter
+    def port_ranges(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['ListenerPortRangeArgs']]]]):
+        pulumi.set(self, "port_ranges", value)
+
+    @property
+    @pulumi.getter(name="protectionReason")
+    def protection_reason(self) -> Optional[pulumi.Input[str]]:
+        """
+        The reason for update protection. Only valid when `protection_status` is
+        **consoleProtection**.
+        """
+        return pulumi.get(self, "protection_reason")
+
+    @protection_reason.setter
+    def protection_reason(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "protection_reason", value)
+
+    @property
+    @pulumi.getter(name="protectionStatus")
+    def protection_status(self) -> Optional[pulumi.Input[str]]:
+        """
+        The protection status for update. Value options:
+        + **nonProtection**: No protection.
+        + **consoleProtection**: Console modification protection.
+        """
+        return pulumi.get(self, "protection_status")
+
+    @protection_status.setter
+    def protection_status(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "protection_status", value)
+
+    @property
     @pulumi.getter
     def protocol(self) -> Optional[pulumi.Input[str]]:
         """
-        The protocol can either be TCP, UDP, HTTP or HTTPS. Changing this creates a
-        new listener.
+        The protocol can either be **TCP**, **UDP**, **HTTP**, **HTTPS**, **QUIC**,
+        **IP** or **TLS**. **IP** is only available for listeners that will be added to gateway load balancers. Changing this
+        creates a new listener.
         """
         return pulumi.get(self, "protocol")
 
@@ -631,14 +1369,57 @@ class _ListenerState:
     @pulumi.getter(name="protocolPort")
     def protocol_port(self) -> Optional[pulumi.Input[int]]:
         """
-        The port on which to listen for client traffic. Changing this creates a
-        new listener.
+        Specifies the port used by the listener.
+        + The **QUIC** listener port cannot be `4789` or the same as the **UDP** listener port.
+        + If `protocol` is set to **IP**, the value can only be `0` or empty.
+        + If it is set to `0` and `protocol` is not set to **IP**, `port_ranges` is required.
         """
         return pulumi.get(self, "protocol_port")
 
     @protocol_port.setter
     def protocol_port(self, value: Optional[pulumi.Input[int]]):
         pulumi.set(self, "protocol_port", value)
+
+    @property
+    @pulumi.getter(name="proxyProtocolEnable")
+    def proxy_protocol_enable(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies whether to enable the proxy protocol option to pass the source IP
+        addresses of the clients to backend servers. The default value is false. This parameter is available only for **TLS**
+        listeners and does not take effect for other types of listeners.
+        """
+        return pulumi.get(self, "proxy_protocol_enable")
+
+    @proxy_protocol_enable.setter
+    def proxy_protocol_enable(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "proxy_protocol_enable", value)
+
+    @property
+    @pulumi.getter(name="quicListenerId")
+    def quic_listener_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the ID of the QUIC listener. If it is set, HTTPS listener will be
+        upgraded to QUIC listener. This parameter is valid only when protocol is set to **HTTPS**.
+        """
+        return pulumi.get(self, "quic_listener_id")
+
+    @quic_listener_id.setter
+    def quic_listener_id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "quic_listener_id", value)
+
+    @property
+    @pulumi.getter(name="realIp")
+    def real_ip(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies whether to transfer the source IP address of the client to backend servers
+        through the HTTP header of the packet. The default value is false. This parameter is valid only when the protocol is
+        set to **HTTP** or **HTTPS**.
+        """
+        return pulumi.get(self, "real_ip")
+
+    @real_ip.setter
+    def real_ip(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "real_ip", value)
 
     @property
     @pulumi.getter
@@ -658,7 +1439,7 @@ class _ListenerState:
     def request_timeout(self) -> Optional[pulumi.Input[int]]:
         """
         Specifies the request timeout for the listener. Value range: 1 to 300. This
-        parameter is valid when protocol is set to *HTTP* or *HTTPS*.
+        parameter is valid when protocol is set to **HTTP** or **HTTPS**.
         """
         return pulumi.get(self, "request_timeout")
 
@@ -671,7 +1452,7 @@ class _ListenerState:
     def response_timeout(self) -> Optional[pulumi.Input[int]]:
         """
         Specifies the response timeout for the listener. Value range: 1 to 300. This
-        parameter is valid when protocol is set to *HTTP* or *HTTPS*.
+        parameter is valid when protocol is set to **HTTP** or **HTTPS**.
         """
         return pulumi.get(self, "response_timeout")
 
@@ -680,11 +1461,25 @@ class _ListenerState:
         pulumi.set(self, "response_timeout", value)
 
     @property
+    @pulumi.getter(name="securityPolicyId")
+    def security_policy_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the ID of the custom security policy. This parameter is available
+        only for **HTTPS** listeners added to a dedicated load balancer. If both `security_policy_id` and `tls_ciphers_policy`
+        are specified, only `security_policy_id` will take effect. This parameter is valid when protocol is set to **HTTPS**.
+        """
+        return pulumi.get(self, "security_policy_id")
+
+    @security_policy_id.setter
+    def security_policy_id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "security_policy_id", value)
+
+    @property
     @pulumi.getter(name="serverCertificate")
     def server_certificate(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the ID of the server certificate used by the listener. This
-        parameter is mandatory when protocol is set to *HTTPS*.
+        parameter is mandatory when protocol is set to **HTTPS**.
         """
         return pulumi.get(self, "server_certificate")
 
@@ -697,13 +1492,40 @@ class _ListenerState:
     def sni_certificates(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]:
         """
         Lists the IDs of SNI certificates (server certificates with a domain name) used
-        by the listener. This parameter is valid when protocol is set to *HTTPS*.
+        by the listener. This parameter is valid when protocol is set to **HTTPS**.
         """
         return pulumi.get(self, "sni_certificates")
 
     @sni_certificates.setter
     def sni_certificates(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]):
         pulumi.set(self, "sni_certificates", value)
+
+    @property
+    @pulumi.getter(name="sniMatchAlgo")
+    def sni_match_algo(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies how wildcard domain name matches with the SNI certificates used by the
+        listener. **longest_suffix** indicates longest suffix match. **wildcard** indicates wildcard match.
+        The default value is **wildcard**.
+        """
+        return pulumi.get(self, "sni_match_algo")
+
+    @sni_match_algo.setter
+    def sni_match_algo(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "sni_match_algo", value)
+
+    @property
+    @pulumi.getter(name="sslEarlyDataEnable")
+    def ssl_early_data_enable(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies whether to enable 0-RTT capability, it is available only when
+        protocol is set to **HTTPS** and relys on the **TLSv1.3** security policy protocol. The default value is false.
+        """
+        return pulumi.get(self, "ssl_early_data_enable")
+
+    @ssl_early_data_enable.setter
+    def ssl_early_data_enable(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "ssl_early_data_enable", value)
 
     @property
     @pulumi.getter
@@ -722,14 +1544,27 @@ class _ListenerState:
     def tls_ciphers_policy(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the TLS cipher policy for the listener. Valid options are:
-        tls-1-0-inherit, tls-1-0, tls-1-1, tls-1-2, tls-1-2-strict, tls-1-2-fs, tls-1-0-with-1-3, and tls-1-2-fs-with-1-3.
-        This parameter is valid when protocol is set to *HTTPS*.
+        **tls-1-0-inherit**, **tls-1-0**, **tls-1-1**, **tls-1-2**, **tls-1-2-strict**, **tls-1-2-fs**, **tls-1-0-with-1-3**,
+        **tls-1-2-fs-with-1-3**, **hybrid-policy-1-0** and **tls-1-2-strict-no-cbc**. Defaults to **tls-1-0**.
+        This parameter is valid when protocol is set to **HTTPS**.
         """
         return pulumi.get(self, "tls_ciphers_policy")
 
     @tls_ciphers_policy.setter
     def tls_ciphers_policy(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "tls_ciphers_policy", value)
+
+    @property
+    @pulumi.getter(name="updatedAt")
+    def updated_at(self) -> Optional[pulumi.Input[str]]:
+        """
+        The update time of the listener.
+        """
+        return pulumi.get(self, "updated_at")
+
+    @updated_at.setter
+    def updated_at(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "updated_at", value)
 
 
 class Listener(pulumi.CustomResource):
@@ -742,72 +1577,187 @@ class Listener(pulumi.CustomResource):
                  ca_certificate: Optional[pulumi.Input[str]] = None,
                  default_pool_id: Optional[pulumi.Input[str]] = None,
                  description: Optional[pulumi.Input[str]] = None,
+                 enable_member_retry: Optional[pulumi.Input[bool]] = None,
+                 force_delete: Optional[pulumi.Input[bool]] = None,
                  forward_eip: Optional[pulumi.Input[bool]] = None,
+                 forward_elb: Optional[pulumi.Input[bool]] = None,
+                 forward_host: Optional[pulumi.Input[bool]] = None,
+                 forward_port: Optional[pulumi.Input[bool]] = None,
+                 forward_proto: Optional[pulumi.Input[bool]] = None,
+                 forward_request_port: Optional[pulumi.Input[bool]] = None,
+                 forward_tls_certificate: Optional[pulumi.Input[bool]] = None,
+                 forward_tls_cipher: Optional[pulumi.Input[bool]] = None,
+                 forward_tls_protocol: Optional[pulumi.Input[bool]] = None,
+                 gzip_enable: Optional[pulumi.Input[bool]] = None,
                  http2_enable: Optional[pulumi.Input[bool]] = None,
                  idle_timeout: Optional[pulumi.Input[int]] = None,
                  ip_group: Optional[pulumi.Input[str]] = None,
                  loadbalancer_id: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
+                 port_ranges: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ListenerPortRangeArgs']]]]] = None,
+                 protection_reason: Optional[pulumi.Input[str]] = None,
+                 protection_status: Optional[pulumi.Input[str]] = None,
                  protocol: Optional[pulumi.Input[str]] = None,
                  protocol_port: Optional[pulumi.Input[int]] = None,
+                 proxy_protocol_enable: Optional[pulumi.Input[bool]] = None,
+                 quic_listener_id: Optional[pulumi.Input[str]] = None,
+                 real_ip: Optional[pulumi.Input[bool]] = None,
                  region: Optional[pulumi.Input[str]] = None,
                  request_timeout: Optional[pulumi.Input[int]] = None,
                  response_timeout: Optional[pulumi.Input[int]] = None,
+                 security_policy_id: Optional[pulumi.Input[str]] = None,
                  server_certificate: Optional[pulumi.Input[str]] = None,
                  sni_certificates: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
+                 sni_match_algo: Optional[pulumi.Input[str]] = None,
+                 ssl_early_data_enable: Optional[pulumi.Input[bool]] = None,
                  tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  tls_ciphers_policy: Optional[pulumi.Input[str]] = None,
                  __props__=None):
         """
         Manages an ELB listener resource within HuaweiCloud.
 
+        ## Example Usage
+
+        ```python
+        import pulumi
+        import pulumi_huaweicloud as huaweicloud
+
+        config = pulumi.Config()
+        loadbalancer_id = config.require_object("loadbalancerId")
+        basic = huaweicloud.dedicated_elb.Listener("basic",
+            description="basic description",
+            protocol="HTTP",
+            protocol_port=8080,
+            loadbalancer_id=loadbalancer_id,
+            idle_timeout=60,
+            request_timeout=60,
+            response_timeout=60,
+            tags={
+                "key": "value",
+            })
+        ```
+
         ## Import
 
-        ELB listener can be imported using the listener ID, e.g.
+        ELB listener can be imported using the listener ID, e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:DedicatedElb/listener:Listener listener_1 5c20fdad-7288-11eb-b817-0255ac10158b
         ```
 
+         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`force_delete`. It is generally recommended running `terraform plan` after importing a listener. You can then decide if changes should be applied to the listener, or the resource definition should be updated to align with the listener. Also you can ignore changes as below. hcl resource "huaweicloud_elb_listener" "listener_1" {
+
+         ...
+
+         lifecycle {
+
+         ignore_changes = [
+
+         force_delete,
+
+         ]
+
+         } }
+
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[str] access_policy: Specifies the access policy for the listener. Valid options are *white* and
-               *black*.
+        :param pulumi.Input[str] access_policy: Specifies the access policy for the listener. Valid options are **white** and
+               **black**.
         :param pulumi.Input[bool] advanced_forwarding_enabled: Specifies whether to enable advanced forwarding.
                If advanced forwarding is enabled, more flexible forwarding policies and rules are supported.
         :param pulumi.Input[str] ca_certificate: Specifies the ID of the CA certificate used by the listener. This parameter is
-               valid when protocol is set to *HTTPS*.
+               valid when protocol is set to **HTTPS**.
         :param pulumi.Input[str] default_pool_id: The ID of the default pool with which the listener is associated. Changing this
                creates a new listener.
         :param pulumi.Input[str] description: Human-readable description for the listener.
+        :param pulumi.Input[bool] enable_member_retry: Specifies whether to enable health check retries for backend servers.
+               The default value is true. It is available only when protocol is set to **HTTP**, **HTTPS**, or **QUIC**.
+        :param pulumi.Input[bool] force_delete: Specifies whether to forcibly delete the listener, remove the listener, l7 policies,
+               unbind associated pools. Defaults to **false**.
         :param pulumi.Input[bool] forward_eip: Specifies whether transfer the load balancer EIP in the X-Forward-EIP header to
-               backend servers. The default value is false. This parameter is valid only when the protocol is set to *HTTP* or
-               *HTTPS*.
+               backend servers. The default value is false. This parameter is valid only when the protocol is set to **HTTP** or
+               **HTTPS**.
+        :param pulumi.Input[bool] forward_elb: Specifies whether to transfer the load balancer ID to backend servers through the HTTP
+               header of the packet. The default value is false. This parameter is valid only when the protocol is set to **HTTP** or
+               **HTTPS**.
+        :param pulumi.Input[bool] forward_host: Specifies whether to rewrite the X-Forwarded-Host header. If X-Forwarded-Host is
+               set to true, X-Forwarded-Host in the request header from the clients can be set to Host in the request header sent
+               from the load balancer to backend servers. The default value is true. This parameter is valid only when the protocol
+               is set to **HTTP** or **HTTPS**.
+        :param pulumi.Input[bool] forward_port: Specifies whether transfer the listening port of the load balancer in the
+               X-Forwarded-Port header to backend servers. The default value is false. This parameter is valid only when the
+               protocol is set to **HTTP** or **HTTPS**.
+        :param pulumi.Input[bool] forward_proto: Specifies whether to transfer the listener protocol of the load balancer to backend
+               servers through the HTTP header of the packet. The default value is false. This parameter is valid only when the
+               protocol is set to **HTTP** or **HTTPS**.
+        :param pulumi.Input[bool] forward_request_port: Specifies whether transfer the source port of the client in the
+               X-Forwarded-For-Port header to backend servers. The default value is false. This parameter is valid only when the
+               protocol is set to **HTTP** or **HTTPS**.
+        :param pulumi.Input[bool] forward_tls_certificate: Specifies whether to transfer the certificate ID of the load balancer to
+               backend servers through the HTTP header of the packet. The default value is false. This parameter is valid only when
+               the protocol is set to **HTTPS**.
+        :param pulumi.Input[bool] forward_tls_cipher: Specifies whether to transfer the algorithm suite of the load balancer to
+               backend servers through the HTTP header of the packet. The default value is false. This parameter is valid only when
+               the protocol is set to **HTTPS**.
+        :param pulumi.Input[bool] forward_tls_protocol: Specifies whether to transfer the algorithm protocol of the load balancer to
+               backend servers through the HTTP header of the packet. The default value is false. This parameter is valid only when
+               the protocol is set to **HTTPS**.
+        :param pulumi.Input[bool] gzip_enable: Specifies whether to enable gzip compression for a load balancer. The default value
+               is **false**. This parameter can be configured only for **HTTP**, **HTTPS**, and **QUIC** listeners.
         :param pulumi.Input[bool] http2_enable: Specifies whether to use HTTP/2. The default value is false. This parameter is valid
-               only when the protocol is set to *HTTPS*.
+               only when the protocol is set to **HTTPS**.
         :param pulumi.Input[int] idle_timeout: Specifies the idle timeout for the listener. Value range: 0 to 4000.
         :param pulumi.Input[str] ip_group: Specifies the ip group id for the listener.
         :param pulumi.Input[str] loadbalancer_id: The load balancer on which to provision this listener. Changing this
                creates a new listener.
         :param pulumi.Input[str] name: Human-readable name for the listener.
-        :param pulumi.Input[str] protocol: The protocol can either be TCP, UDP, HTTP or HTTPS. Changing this creates a
-               new listener.
-        :param pulumi.Input[int] protocol_port: The port on which to listen for client traffic. Changing this creates a
-               new listener.
+        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ListenerPortRangeArgs']]]] port_ranges: Specifies the port monitoring range (closed range), specify up to 10 port
+               groups, each group range must not overlap. This field can only be passed in when `protocol_port` is `0` or empty.
+               Only **TCP**, **UDP**, and **TLS** listener support this field. Changing this creates a new listener.
+               The port_ranges structure is documented below.
+        :param pulumi.Input[str] protection_reason: The reason for update protection. Only valid when `protection_status` is
+               **consoleProtection**.
+        :param pulumi.Input[str] protection_status: The protection status for update. Value options:
+               + **nonProtection**: No protection.
+               + **consoleProtection**: Console modification protection.
+        :param pulumi.Input[str] protocol: The protocol can either be **TCP**, **UDP**, **HTTP**, **HTTPS**, **QUIC**,
+               **IP** or **TLS**. **IP** is only available for listeners that will be added to gateway load balancers. Changing this
+               creates a new listener.
+        :param pulumi.Input[int] protocol_port: Specifies the port used by the listener.
+               + The **QUIC** listener port cannot be `4789` or the same as the **UDP** listener port.
+               + If `protocol` is set to **IP**, the value can only be `0` or empty.
+               + If it is set to `0` and `protocol` is not set to **IP**, `port_ranges` is required.
+        :param pulumi.Input[bool] proxy_protocol_enable: Specifies whether to enable the proxy protocol option to pass the source IP
+               addresses of the clients to backend servers. The default value is false. This parameter is available only for **TLS**
+               listeners and does not take effect for other types of listeners.
+        :param pulumi.Input[str] quic_listener_id: Specifies the ID of the QUIC listener. If it is set, HTTPS listener will be
+               upgraded to QUIC listener. This parameter is valid only when protocol is set to **HTTPS**.
+        :param pulumi.Input[bool] real_ip: Specifies whether to transfer the source IP address of the client to backend servers
+               through the HTTP header of the packet. The default value is false. This parameter is valid only when the protocol is
+               set to **HTTP** or **HTTPS**.
         :param pulumi.Input[str] region: The region in which to create the listener resource. If omitted, the
                provider-level region will be used. Changing this creates a new listener.
         :param pulumi.Input[int] request_timeout: Specifies the request timeout for the listener. Value range: 1 to 300. This
-               parameter is valid when protocol is set to *HTTP* or *HTTPS*.
+               parameter is valid when protocol is set to **HTTP** or **HTTPS**.
         :param pulumi.Input[int] response_timeout: Specifies the response timeout for the listener. Value range: 1 to 300. This
-               parameter is valid when protocol is set to *HTTP* or *HTTPS*.
+               parameter is valid when protocol is set to **HTTP** or **HTTPS**.
+        :param pulumi.Input[str] security_policy_id: Specifies the ID of the custom security policy. This parameter is available
+               only for **HTTPS** listeners added to a dedicated load balancer. If both `security_policy_id` and `tls_ciphers_policy`
+               are specified, only `security_policy_id` will take effect. This parameter is valid when protocol is set to **HTTPS**.
         :param pulumi.Input[str] server_certificate: Specifies the ID of the server certificate used by the listener. This
-               parameter is mandatory when protocol is set to *HTTPS*.
+               parameter is mandatory when protocol is set to **HTTPS**.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] sni_certificates: Lists the IDs of SNI certificates (server certificates with a domain name) used
-               by the listener. This parameter is valid when protocol is set to *HTTPS*.
+               by the listener. This parameter is valid when protocol is set to **HTTPS**.
+        :param pulumi.Input[str] sni_match_algo: Specifies how wildcard domain name matches with the SNI certificates used by the
+               listener. **longest_suffix** indicates longest suffix match. **wildcard** indicates wildcard match.
+               The default value is **wildcard**.
+        :param pulumi.Input[bool] ssl_early_data_enable: Specifies whether to enable 0-RTT capability, it is available only when
+               protocol is set to **HTTPS** and relys on the **TLSv1.3** security policy protocol. The default value is false.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: The key/value pairs to associate with the listener.
         :param pulumi.Input[str] tls_ciphers_policy: Specifies the TLS cipher policy for the listener. Valid options are:
-               tls-1-0-inherit, tls-1-0, tls-1-1, tls-1-2, tls-1-2-strict, tls-1-2-fs, tls-1-0-with-1-3, and tls-1-2-fs-with-1-3.
-               This parameter is valid when protocol is set to *HTTPS*.
+               **tls-1-0-inherit**, **tls-1-0**, **tls-1-1**, **tls-1-2**, **tls-1-2-strict**, **tls-1-2-fs**, **tls-1-0-with-1-3**,
+               **tls-1-2-fs-with-1-3**, **hybrid-policy-1-0** and **tls-1-2-strict-no-cbc**. Defaults to **tls-1-0**.
+               This parameter is valid when protocol is set to **HTTPS**.
         """
         ...
     @overload
@@ -818,13 +1768,48 @@ class Listener(pulumi.CustomResource):
         """
         Manages an ELB listener resource within HuaweiCloud.
 
+        ## Example Usage
+
+        ```python
+        import pulumi
+        import pulumi_huaweicloud as huaweicloud
+
+        config = pulumi.Config()
+        loadbalancer_id = config.require_object("loadbalancerId")
+        basic = huaweicloud.dedicated_elb.Listener("basic",
+            description="basic description",
+            protocol="HTTP",
+            protocol_port=8080,
+            loadbalancer_id=loadbalancer_id,
+            idle_timeout=60,
+            request_timeout=60,
+            response_timeout=60,
+            tags={
+                "key": "value",
+            })
+        ```
+
         ## Import
 
-        ELB listener can be imported using the listener ID, e.g.
+        ELB listener can be imported using the listener ID, e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:DedicatedElb/listener:Listener listener_1 5c20fdad-7288-11eb-b817-0255ac10158b
         ```
+
+         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`force_delete`. It is generally recommended running `terraform plan` after importing a listener. You can then decide if changes should be applied to the listener, or the resource definition should be updated to align with the listener. Also you can ignore changes as below. hcl resource "huaweicloud_elb_listener" "listener_1" {
+
+         ...
+
+         lifecycle {
+
+         ignore_changes = [
+
+         force_delete,
+
+         ]
+
+         } }
 
         :param str resource_name: The name of the resource.
         :param ListenerArgs args: The arguments to use to populate this resource's properties.
@@ -846,19 +1831,39 @@ class Listener(pulumi.CustomResource):
                  ca_certificate: Optional[pulumi.Input[str]] = None,
                  default_pool_id: Optional[pulumi.Input[str]] = None,
                  description: Optional[pulumi.Input[str]] = None,
+                 enable_member_retry: Optional[pulumi.Input[bool]] = None,
+                 force_delete: Optional[pulumi.Input[bool]] = None,
                  forward_eip: Optional[pulumi.Input[bool]] = None,
+                 forward_elb: Optional[pulumi.Input[bool]] = None,
+                 forward_host: Optional[pulumi.Input[bool]] = None,
+                 forward_port: Optional[pulumi.Input[bool]] = None,
+                 forward_proto: Optional[pulumi.Input[bool]] = None,
+                 forward_request_port: Optional[pulumi.Input[bool]] = None,
+                 forward_tls_certificate: Optional[pulumi.Input[bool]] = None,
+                 forward_tls_cipher: Optional[pulumi.Input[bool]] = None,
+                 forward_tls_protocol: Optional[pulumi.Input[bool]] = None,
+                 gzip_enable: Optional[pulumi.Input[bool]] = None,
                  http2_enable: Optional[pulumi.Input[bool]] = None,
                  idle_timeout: Optional[pulumi.Input[int]] = None,
                  ip_group: Optional[pulumi.Input[str]] = None,
                  loadbalancer_id: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
+                 port_ranges: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ListenerPortRangeArgs']]]]] = None,
+                 protection_reason: Optional[pulumi.Input[str]] = None,
+                 protection_status: Optional[pulumi.Input[str]] = None,
                  protocol: Optional[pulumi.Input[str]] = None,
                  protocol_port: Optional[pulumi.Input[int]] = None,
+                 proxy_protocol_enable: Optional[pulumi.Input[bool]] = None,
+                 quic_listener_id: Optional[pulumi.Input[str]] = None,
+                 real_ip: Optional[pulumi.Input[bool]] = None,
                  region: Optional[pulumi.Input[str]] = None,
                  request_timeout: Optional[pulumi.Input[int]] = None,
                  response_timeout: Optional[pulumi.Input[int]] = None,
+                 security_policy_id: Optional[pulumi.Input[str]] = None,
                  server_certificate: Optional[pulumi.Input[str]] = None,
                  sni_certificates: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
+                 sni_match_algo: Optional[pulumi.Input[str]] = None,
+                 ssl_early_data_enable: Optional[pulumi.Input[bool]] = None,
                  tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  tls_ciphers_policy: Optional[pulumi.Input[str]] = None,
                  __props__=None):
@@ -875,7 +1880,18 @@ class Listener(pulumi.CustomResource):
             __props__.__dict__["ca_certificate"] = ca_certificate
             __props__.__dict__["default_pool_id"] = default_pool_id
             __props__.__dict__["description"] = description
+            __props__.__dict__["enable_member_retry"] = enable_member_retry
+            __props__.__dict__["force_delete"] = force_delete
             __props__.__dict__["forward_eip"] = forward_eip
+            __props__.__dict__["forward_elb"] = forward_elb
+            __props__.__dict__["forward_host"] = forward_host
+            __props__.__dict__["forward_port"] = forward_port
+            __props__.__dict__["forward_proto"] = forward_proto
+            __props__.__dict__["forward_request_port"] = forward_request_port
+            __props__.__dict__["forward_tls_certificate"] = forward_tls_certificate
+            __props__.__dict__["forward_tls_cipher"] = forward_tls_cipher
+            __props__.__dict__["forward_tls_protocol"] = forward_tls_protocol
+            __props__.__dict__["gzip_enable"] = gzip_enable
             __props__.__dict__["http2_enable"] = http2_enable
             __props__.__dict__["idle_timeout"] = idle_timeout
             __props__.__dict__["ip_group"] = ip_group
@@ -883,19 +1899,28 @@ class Listener(pulumi.CustomResource):
                 raise TypeError("Missing required property 'loadbalancer_id'")
             __props__.__dict__["loadbalancer_id"] = loadbalancer_id
             __props__.__dict__["name"] = name
+            __props__.__dict__["port_ranges"] = port_ranges
+            __props__.__dict__["protection_reason"] = protection_reason
+            __props__.__dict__["protection_status"] = protection_status
             if protocol is None and not opts.urn:
                 raise TypeError("Missing required property 'protocol'")
             __props__.__dict__["protocol"] = protocol
-            if protocol_port is None and not opts.urn:
-                raise TypeError("Missing required property 'protocol_port'")
             __props__.__dict__["protocol_port"] = protocol_port
+            __props__.__dict__["proxy_protocol_enable"] = proxy_protocol_enable
+            __props__.__dict__["quic_listener_id"] = quic_listener_id
+            __props__.__dict__["real_ip"] = real_ip
             __props__.__dict__["region"] = region
             __props__.__dict__["request_timeout"] = request_timeout
             __props__.__dict__["response_timeout"] = response_timeout
+            __props__.__dict__["security_policy_id"] = security_policy_id
             __props__.__dict__["server_certificate"] = server_certificate
             __props__.__dict__["sni_certificates"] = sni_certificates
+            __props__.__dict__["sni_match_algo"] = sni_match_algo
+            __props__.__dict__["ssl_early_data_enable"] = ssl_early_data_enable
             __props__.__dict__["tags"] = tags
             __props__.__dict__["tls_ciphers_policy"] = tls_ciphers_policy
+            __props__.__dict__["created_at"] = None
+            __props__.__dict__["updated_at"] = None
         super(Listener, __self__).__init__(
             'huaweicloud:DedicatedElb/listener:Listener',
             resource_name,
@@ -909,23 +1934,45 @@ class Listener(pulumi.CustomResource):
             access_policy: Optional[pulumi.Input[str]] = None,
             advanced_forwarding_enabled: Optional[pulumi.Input[bool]] = None,
             ca_certificate: Optional[pulumi.Input[str]] = None,
+            created_at: Optional[pulumi.Input[str]] = None,
             default_pool_id: Optional[pulumi.Input[str]] = None,
             description: Optional[pulumi.Input[str]] = None,
+            enable_member_retry: Optional[pulumi.Input[bool]] = None,
+            force_delete: Optional[pulumi.Input[bool]] = None,
             forward_eip: Optional[pulumi.Input[bool]] = None,
+            forward_elb: Optional[pulumi.Input[bool]] = None,
+            forward_host: Optional[pulumi.Input[bool]] = None,
+            forward_port: Optional[pulumi.Input[bool]] = None,
+            forward_proto: Optional[pulumi.Input[bool]] = None,
+            forward_request_port: Optional[pulumi.Input[bool]] = None,
+            forward_tls_certificate: Optional[pulumi.Input[bool]] = None,
+            forward_tls_cipher: Optional[pulumi.Input[bool]] = None,
+            forward_tls_protocol: Optional[pulumi.Input[bool]] = None,
+            gzip_enable: Optional[pulumi.Input[bool]] = None,
             http2_enable: Optional[pulumi.Input[bool]] = None,
             idle_timeout: Optional[pulumi.Input[int]] = None,
             ip_group: Optional[pulumi.Input[str]] = None,
             loadbalancer_id: Optional[pulumi.Input[str]] = None,
             name: Optional[pulumi.Input[str]] = None,
+            port_ranges: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ListenerPortRangeArgs']]]]] = None,
+            protection_reason: Optional[pulumi.Input[str]] = None,
+            protection_status: Optional[pulumi.Input[str]] = None,
             protocol: Optional[pulumi.Input[str]] = None,
             protocol_port: Optional[pulumi.Input[int]] = None,
+            proxy_protocol_enable: Optional[pulumi.Input[bool]] = None,
+            quic_listener_id: Optional[pulumi.Input[str]] = None,
+            real_ip: Optional[pulumi.Input[bool]] = None,
             region: Optional[pulumi.Input[str]] = None,
             request_timeout: Optional[pulumi.Input[int]] = None,
             response_timeout: Optional[pulumi.Input[int]] = None,
+            security_policy_id: Optional[pulumi.Input[str]] = None,
             server_certificate: Optional[pulumi.Input[str]] = None,
             sni_certificates: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
+            sni_match_algo: Optional[pulumi.Input[str]] = None,
+            ssl_early_data_enable: Optional[pulumi.Input[bool]] = None,
             tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
-            tls_ciphers_policy: Optional[pulumi.Input[str]] = None) -> 'Listener':
+            tls_ciphers_policy: Optional[pulumi.Input[str]] = None,
+            updated_at: Optional[pulumi.Input[str]] = None) -> 'Listener':
         """
         Get an existing Listener resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.
@@ -933,43 +1980,105 @@ class Listener(pulumi.CustomResource):
         :param str resource_name: The unique name of the resulting resource.
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[str] access_policy: Specifies the access policy for the listener. Valid options are *white* and
-               *black*.
+        :param pulumi.Input[str] access_policy: Specifies the access policy for the listener. Valid options are **white** and
+               **black**.
         :param pulumi.Input[bool] advanced_forwarding_enabled: Specifies whether to enable advanced forwarding.
                If advanced forwarding is enabled, more flexible forwarding policies and rules are supported.
         :param pulumi.Input[str] ca_certificate: Specifies the ID of the CA certificate used by the listener. This parameter is
-               valid when protocol is set to *HTTPS*.
+               valid when protocol is set to **HTTPS**.
+        :param pulumi.Input[str] created_at: The create time of the listener.
         :param pulumi.Input[str] default_pool_id: The ID of the default pool with which the listener is associated. Changing this
                creates a new listener.
         :param pulumi.Input[str] description: Human-readable description for the listener.
+        :param pulumi.Input[bool] enable_member_retry: Specifies whether to enable health check retries for backend servers.
+               The default value is true. It is available only when protocol is set to **HTTP**, **HTTPS**, or **QUIC**.
+        :param pulumi.Input[bool] force_delete: Specifies whether to forcibly delete the listener, remove the listener, l7 policies,
+               unbind associated pools. Defaults to **false**.
         :param pulumi.Input[bool] forward_eip: Specifies whether transfer the load balancer EIP in the X-Forward-EIP header to
-               backend servers. The default value is false. This parameter is valid only when the protocol is set to *HTTP* or
-               *HTTPS*.
+               backend servers. The default value is false. This parameter is valid only when the protocol is set to **HTTP** or
+               **HTTPS**.
+        :param pulumi.Input[bool] forward_elb: Specifies whether to transfer the load balancer ID to backend servers through the HTTP
+               header of the packet. The default value is false. This parameter is valid only when the protocol is set to **HTTP** or
+               **HTTPS**.
+        :param pulumi.Input[bool] forward_host: Specifies whether to rewrite the X-Forwarded-Host header. If X-Forwarded-Host is
+               set to true, X-Forwarded-Host in the request header from the clients can be set to Host in the request header sent
+               from the load balancer to backend servers. The default value is true. This parameter is valid only when the protocol
+               is set to **HTTP** or **HTTPS**.
+        :param pulumi.Input[bool] forward_port: Specifies whether transfer the listening port of the load balancer in the
+               X-Forwarded-Port header to backend servers. The default value is false. This parameter is valid only when the
+               protocol is set to **HTTP** or **HTTPS**.
+        :param pulumi.Input[bool] forward_proto: Specifies whether to transfer the listener protocol of the load balancer to backend
+               servers through the HTTP header of the packet. The default value is false. This parameter is valid only when the
+               protocol is set to **HTTP** or **HTTPS**.
+        :param pulumi.Input[bool] forward_request_port: Specifies whether transfer the source port of the client in the
+               X-Forwarded-For-Port header to backend servers. The default value is false. This parameter is valid only when the
+               protocol is set to **HTTP** or **HTTPS**.
+        :param pulumi.Input[bool] forward_tls_certificate: Specifies whether to transfer the certificate ID of the load balancer to
+               backend servers through the HTTP header of the packet. The default value is false. This parameter is valid only when
+               the protocol is set to **HTTPS**.
+        :param pulumi.Input[bool] forward_tls_cipher: Specifies whether to transfer the algorithm suite of the load balancer to
+               backend servers through the HTTP header of the packet. The default value is false. This parameter is valid only when
+               the protocol is set to **HTTPS**.
+        :param pulumi.Input[bool] forward_tls_protocol: Specifies whether to transfer the algorithm protocol of the load balancer to
+               backend servers through the HTTP header of the packet. The default value is false. This parameter is valid only when
+               the protocol is set to **HTTPS**.
+        :param pulumi.Input[bool] gzip_enable: Specifies whether to enable gzip compression for a load balancer. The default value
+               is **false**. This parameter can be configured only for **HTTP**, **HTTPS**, and **QUIC** listeners.
         :param pulumi.Input[bool] http2_enable: Specifies whether to use HTTP/2. The default value is false. This parameter is valid
-               only when the protocol is set to *HTTPS*.
+               only when the protocol is set to **HTTPS**.
         :param pulumi.Input[int] idle_timeout: Specifies the idle timeout for the listener. Value range: 0 to 4000.
         :param pulumi.Input[str] ip_group: Specifies the ip group id for the listener.
         :param pulumi.Input[str] loadbalancer_id: The load balancer on which to provision this listener. Changing this
                creates a new listener.
         :param pulumi.Input[str] name: Human-readable name for the listener.
-        :param pulumi.Input[str] protocol: The protocol can either be TCP, UDP, HTTP or HTTPS. Changing this creates a
-               new listener.
-        :param pulumi.Input[int] protocol_port: The port on which to listen for client traffic. Changing this creates a
-               new listener.
+        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ListenerPortRangeArgs']]]] port_ranges: Specifies the port monitoring range (closed range), specify up to 10 port
+               groups, each group range must not overlap. This field can only be passed in when `protocol_port` is `0` or empty.
+               Only **TCP**, **UDP**, and **TLS** listener support this field. Changing this creates a new listener.
+               The port_ranges structure is documented below.
+        :param pulumi.Input[str] protection_reason: The reason for update protection. Only valid when `protection_status` is
+               **consoleProtection**.
+        :param pulumi.Input[str] protection_status: The protection status for update. Value options:
+               + **nonProtection**: No protection.
+               + **consoleProtection**: Console modification protection.
+        :param pulumi.Input[str] protocol: The protocol can either be **TCP**, **UDP**, **HTTP**, **HTTPS**, **QUIC**,
+               **IP** or **TLS**. **IP** is only available for listeners that will be added to gateway load balancers. Changing this
+               creates a new listener.
+        :param pulumi.Input[int] protocol_port: Specifies the port used by the listener.
+               + The **QUIC** listener port cannot be `4789` or the same as the **UDP** listener port.
+               + If `protocol` is set to **IP**, the value can only be `0` or empty.
+               + If it is set to `0` and `protocol` is not set to **IP**, `port_ranges` is required.
+        :param pulumi.Input[bool] proxy_protocol_enable: Specifies whether to enable the proxy protocol option to pass the source IP
+               addresses of the clients to backend servers. The default value is false. This parameter is available only for **TLS**
+               listeners and does not take effect for other types of listeners.
+        :param pulumi.Input[str] quic_listener_id: Specifies the ID of the QUIC listener. If it is set, HTTPS listener will be
+               upgraded to QUIC listener. This parameter is valid only when protocol is set to **HTTPS**.
+        :param pulumi.Input[bool] real_ip: Specifies whether to transfer the source IP address of the client to backend servers
+               through the HTTP header of the packet. The default value is false. This parameter is valid only when the protocol is
+               set to **HTTP** or **HTTPS**.
         :param pulumi.Input[str] region: The region in which to create the listener resource. If omitted, the
                provider-level region will be used. Changing this creates a new listener.
         :param pulumi.Input[int] request_timeout: Specifies the request timeout for the listener. Value range: 1 to 300. This
-               parameter is valid when protocol is set to *HTTP* or *HTTPS*.
+               parameter is valid when protocol is set to **HTTP** or **HTTPS**.
         :param pulumi.Input[int] response_timeout: Specifies the response timeout for the listener. Value range: 1 to 300. This
-               parameter is valid when protocol is set to *HTTP* or *HTTPS*.
+               parameter is valid when protocol is set to **HTTP** or **HTTPS**.
+        :param pulumi.Input[str] security_policy_id: Specifies the ID of the custom security policy. This parameter is available
+               only for **HTTPS** listeners added to a dedicated load balancer. If both `security_policy_id` and `tls_ciphers_policy`
+               are specified, only `security_policy_id` will take effect. This parameter is valid when protocol is set to **HTTPS**.
         :param pulumi.Input[str] server_certificate: Specifies the ID of the server certificate used by the listener. This
-               parameter is mandatory when protocol is set to *HTTPS*.
+               parameter is mandatory when protocol is set to **HTTPS**.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] sni_certificates: Lists the IDs of SNI certificates (server certificates with a domain name) used
-               by the listener. This parameter is valid when protocol is set to *HTTPS*.
+               by the listener. This parameter is valid when protocol is set to **HTTPS**.
+        :param pulumi.Input[str] sni_match_algo: Specifies how wildcard domain name matches with the SNI certificates used by the
+               listener. **longest_suffix** indicates longest suffix match. **wildcard** indicates wildcard match.
+               The default value is **wildcard**.
+        :param pulumi.Input[bool] ssl_early_data_enable: Specifies whether to enable 0-RTT capability, it is available only when
+               protocol is set to **HTTPS** and relys on the **TLSv1.3** security policy protocol. The default value is false.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: The key/value pairs to associate with the listener.
         :param pulumi.Input[str] tls_ciphers_policy: Specifies the TLS cipher policy for the listener. Valid options are:
-               tls-1-0-inherit, tls-1-0, tls-1-1, tls-1-2, tls-1-2-strict, tls-1-2-fs, tls-1-0-with-1-3, and tls-1-2-fs-with-1-3.
-               This parameter is valid when protocol is set to *HTTPS*.
+               **tls-1-0-inherit**, **tls-1-0**, **tls-1-1**, **tls-1-2**, **tls-1-2-strict**, **tls-1-2-fs**, **tls-1-0-with-1-3**,
+               **tls-1-2-fs-with-1-3**, **hybrid-policy-1-0** and **tls-1-2-strict-no-cbc**. Defaults to **tls-1-0**.
+               This parameter is valid when protocol is set to **HTTPS**.
+        :param pulumi.Input[str] updated_at: The update time of the listener.
         """
         opts = pulumi.ResourceOptions.merge(opts, pulumi.ResourceOptions(id=id))
 
@@ -978,31 +2087,53 @@ class Listener(pulumi.CustomResource):
         __props__.__dict__["access_policy"] = access_policy
         __props__.__dict__["advanced_forwarding_enabled"] = advanced_forwarding_enabled
         __props__.__dict__["ca_certificate"] = ca_certificate
+        __props__.__dict__["created_at"] = created_at
         __props__.__dict__["default_pool_id"] = default_pool_id
         __props__.__dict__["description"] = description
+        __props__.__dict__["enable_member_retry"] = enable_member_retry
+        __props__.__dict__["force_delete"] = force_delete
         __props__.__dict__["forward_eip"] = forward_eip
+        __props__.__dict__["forward_elb"] = forward_elb
+        __props__.__dict__["forward_host"] = forward_host
+        __props__.__dict__["forward_port"] = forward_port
+        __props__.__dict__["forward_proto"] = forward_proto
+        __props__.__dict__["forward_request_port"] = forward_request_port
+        __props__.__dict__["forward_tls_certificate"] = forward_tls_certificate
+        __props__.__dict__["forward_tls_cipher"] = forward_tls_cipher
+        __props__.__dict__["forward_tls_protocol"] = forward_tls_protocol
+        __props__.__dict__["gzip_enable"] = gzip_enable
         __props__.__dict__["http2_enable"] = http2_enable
         __props__.__dict__["idle_timeout"] = idle_timeout
         __props__.__dict__["ip_group"] = ip_group
         __props__.__dict__["loadbalancer_id"] = loadbalancer_id
         __props__.__dict__["name"] = name
+        __props__.__dict__["port_ranges"] = port_ranges
+        __props__.__dict__["protection_reason"] = protection_reason
+        __props__.__dict__["protection_status"] = protection_status
         __props__.__dict__["protocol"] = protocol
         __props__.__dict__["protocol_port"] = protocol_port
+        __props__.__dict__["proxy_protocol_enable"] = proxy_protocol_enable
+        __props__.__dict__["quic_listener_id"] = quic_listener_id
+        __props__.__dict__["real_ip"] = real_ip
         __props__.__dict__["region"] = region
         __props__.__dict__["request_timeout"] = request_timeout
         __props__.__dict__["response_timeout"] = response_timeout
+        __props__.__dict__["security_policy_id"] = security_policy_id
         __props__.__dict__["server_certificate"] = server_certificate
         __props__.__dict__["sni_certificates"] = sni_certificates
+        __props__.__dict__["sni_match_algo"] = sni_match_algo
+        __props__.__dict__["ssl_early_data_enable"] = ssl_early_data_enable
         __props__.__dict__["tags"] = tags
         __props__.__dict__["tls_ciphers_policy"] = tls_ciphers_policy
+        __props__.__dict__["updated_at"] = updated_at
         return Listener(resource_name, opts=opts, __props__=__props__)
 
     @property
     @pulumi.getter(name="accessPolicy")
     def access_policy(self) -> pulumi.Output[Optional[str]]:
         """
-        Specifies the access policy for the listener. Valid options are *white* and
-        *black*.
+        Specifies the access policy for the listener. Valid options are **white** and
+        **black**.
         """
         return pulumi.get(self, "access_policy")
 
@@ -1020,9 +2151,17 @@ class Listener(pulumi.CustomResource):
     def ca_certificate(self) -> pulumi.Output[Optional[str]]:
         """
         Specifies the ID of the CA certificate used by the listener. This parameter is
-        valid when protocol is set to *HTTPS*.
+        valid when protocol is set to **HTTPS**.
         """
         return pulumi.get(self, "ca_certificate")
+
+    @property
+    @pulumi.getter(name="createdAt")
+    def created_at(self) -> pulumi.Output[str]:
+        """
+        The create time of the listener.
+        """
+        return pulumi.get(self, "created_at")
 
     @property
     @pulumi.getter(name="defaultPoolId")
@@ -1042,21 +2181,129 @@ class Listener(pulumi.CustomResource):
         return pulumi.get(self, "description")
 
     @property
+    @pulumi.getter(name="enableMemberRetry")
+    def enable_member_retry(self) -> pulumi.Output[bool]:
+        """
+        Specifies whether to enable health check retries for backend servers.
+        The default value is true. It is available only when protocol is set to **HTTP**, **HTTPS**, or **QUIC**.
+        """
+        return pulumi.get(self, "enable_member_retry")
+
+    @property
+    @pulumi.getter(name="forceDelete")
+    def force_delete(self) -> pulumi.Output[Optional[bool]]:
+        """
+        Specifies whether to forcibly delete the listener, remove the listener, l7 policies,
+        unbind associated pools. Defaults to **false**.
+        """
+        return pulumi.get(self, "force_delete")
+
+    @property
     @pulumi.getter(name="forwardEip")
-    def forward_eip(self) -> pulumi.Output[Optional[bool]]:
+    def forward_eip(self) -> pulumi.Output[bool]:
         """
         Specifies whether transfer the load balancer EIP in the X-Forward-EIP header to
-        backend servers. The default value is false. This parameter is valid only when the protocol is set to *HTTP* or
-        *HTTPS*.
+        backend servers. The default value is false. This parameter is valid only when the protocol is set to **HTTP** or
+        **HTTPS**.
         """
         return pulumi.get(self, "forward_eip")
 
     @property
+    @pulumi.getter(name="forwardElb")
+    def forward_elb(self) -> pulumi.Output[bool]:
+        """
+        Specifies whether to transfer the load balancer ID to backend servers through the HTTP
+        header of the packet. The default value is false. This parameter is valid only when the protocol is set to **HTTP** or
+        **HTTPS**.
+        """
+        return pulumi.get(self, "forward_elb")
+
+    @property
+    @pulumi.getter(name="forwardHost")
+    def forward_host(self) -> pulumi.Output[Optional[bool]]:
+        """
+        Specifies whether to rewrite the X-Forwarded-Host header. If X-Forwarded-Host is
+        set to true, X-Forwarded-Host in the request header from the clients can be set to Host in the request header sent
+        from the load balancer to backend servers. The default value is true. This parameter is valid only when the protocol
+        is set to **HTTP** or **HTTPS**.
+        """
+        return pulumi.get(self, "forward_host")
+
+    @property
+    @pulumi.getter(name="forwardPort")
+    def forward_port(self) -> pulumi.Output[bool]:
+        """
+        Specifies whether transfer the listening port of the load balancer in the
+        X-Forwarded-Port header to backend servers. The default value is false. This parameter is valid only when the
+        protocol is set to **HTTP** or **HTTPS**.
+        """
+        return pulumi.get(self, "forward_port")
+
+    @property
+    @pulumi.getter(name="forwardProto")
+    def forward_proto(self) -> pulumi.Output[bool]:
+        """
+        Specifies whether to transfer the listener protocol of the load balancer to backend
+        servers through the HTTP header of the packet. The default value is false. This parameter is valid only when the
+        protocol is set to **HTTP** or **HTTPS**.
+        """
+        return pulumi.get(self, "forward_proto")
+
+    @property
+    @pulumi.getter(name="forwardRequestPort")
+    def forward_request_port(self) -> pulumi.Output[bool]:
+        """
+        Specifies whether transfer the source port of the client in the
+        X-Forwarded-For-Port header to backend servers. The default value is false. This parameter is valid only when the
+        protocol is set to **HTTP** or **HTTPS**.
+        """
+        return pulumi.get(self, "forward_request_port")
+
+    @property
+    @pulumi.getter(name="forwardTlsCertificate")
+    def forward_tls_certificate(self) -> pulumi.Output[bool]:
+        """
+        Specifies whether to transfer the certificate ID of the load balancer to
+        backend servers through the HTTP header of the packet. The default value is false. This parameter is valid only when
+        the protocol is set to **HTTPS**.
+        """
+        return pulumi.get(self, "forward_tls_certificate")
+
+    @property
+    @pulumi.getter(name="forwardTlsCipher")
+    def forward_tls_cipher(self) -> pulumi.Output[bool]:
+        """
+        Specifies whether to transfer the algorithm suite of the load balancer to
+        backend servers through the HTTP header of the packet. The default value is false. This parameter is valid only when
+        the protocol is set to **HTTPS**.
+        """
+        return pulumi.get(self, "forward_tls_cipher")
+
+    @property
+    @pulumi.getter(name="forwardTlsProtocol")
+    def forward_tls_protocol(self) -> pulumi.Output[bool]:
+        """
+        Specifies whether to transfer the algorithm protocol of the load balancer to
+        backend servers through the HTTP header of the packet. The default value is false. This parameter is valid only when
+        the protocol is set to **HTTPS**.
+        """
+        return pulumi.get(self, "forward_tls_protocol")
+
+    @property
+    @pulumi.getter(name="gzipEnable")
+    def gzip_enable(self) -> pulumi.Output[bool]:
+        """
+        Specifies whether to enable gzip compression for a load balancer. The default value
+        is **false**. This parameter can be configured only for **HTTP**, **HTTPS**, and **QUIC** listeners.
+        """
+        return pulumi.get(self, "gzip_enable")
+
+    @property
     @pulumi.getter(name="http2Enable")
-    def http2_enable(self) -> pulumi.Output[Optional[bool]]:
+    def http2_enable(self) -> pulumi.Output[bool]:
         """
         Specifies whether to use HTTP/2. The default value is false. This parameter is valid
-        only when the protocol is set to *HTTPS*.
+        only when the protocol is set to **HTTPS**.
         """
         return pulumi.get(self, "http2_enable")
 
@@ -1094,11 +2341,42 @@ class Listener(pulumi.CustomResource):
         return pulumi.get(self, "name")
 
     @property
+    @pulumi.getter(name="portRanges")
+    def port_ranges(self) -> pulumi.Output[Optional[Sequence['outputs.ListenerPortRange']]]:
+        """
+        Specifies the port monitoring range (closed range), specify up to 10 port
+        groups, each group range must not overlap. This field can only be passed in when `protocol_port` is `0` or empty.
+        Only **TCP**, **UDP**, and **TLS** listener support this field. Changing this creates a new listener.
+        The port_ranges structure is documented below.
+        """
+        return pulumi.get(self, "port_ranges")
+
+    @property
+    @pulumi.getter(name="protectionReason")
+    def protection_reason(self) -> pulumi.Output[Optional[str]]:
+        """
+        The reason for update protection. Only valid when `protection_status` is
+        **consoleProtection**.
+        """
+        return pulumi.get(self, "protection_reason")
+
+    @property
+    @pulumi.getter(name="protectionStatus")
+    def protection_status(self) -> pulumi.Output[str]:
+        """
+        The protection status for update. Value options:
+        + **nonProtection**: No protection.
+        + **consoleProtection**: Console modification protection.
+        """
+        return pulumi.get(self, "protection_status")
+
+    @property
     @pulumi.getter
     def protocol(self) -> pulumi.Output[str]:
         """
-        The protocol can either be TCP, UDP, HTTP or HTTPS. Changing this creates a
-        new listener.
+        The protocol can either be **TCP**, **UDP**, **HTTP**, **HTTPS**, **QUIC**,
+        **IP** or **TLS**. **IP** is only available for listeners that will be added to gateway load balancers. Changing this
+        creates a new listener.
         """
         return pulumi.get(self, "protocol")
 
@@ -1106,10 +2384,41 @@ class Listener(pulumi.CustomResource):
     @pulumi.getter(name="protocolPort")
     def protocol_port(self) -> pulumi.Output[int]:
         """
-        The port on which to listen for client traffic. Changing this creates a
-        new listener.
+        Specifies the port used by the listener.
+        + The **QUIC** listener port cannot be `4789` or the same as the **UDP** listener port.
+        + If `protocol` is set to **IP**, the value can only be `0` or empty.
+        + If it is set to `0` and `protocol` is not set to **IP**, `port_ranges` is required.
         """
         return pulumi.get(self, "protocol_port")
+
+    @property
+    @pulumi.getter(name="proxyProtocolEnable")
+    def proxy_protocol_enable(self) -> pulumi.Output[bool]:
+        """
+        Specifies whether to enable the proxy protocol option to pass the source IP
+        addresses of the clients to backend servers. The default value is false. This parameter is available only for **TLS**
+        listeners and does not take effect for other types of listeners.
+        """
+        return pulumi.get(self, "proxy_protocol_enable")
+
+    @property
+    @pulumi.getter(name="quicListenerId")
+    def quic_listener_id(self) -> pulumi.Output[Optional[str]]:
+        """
+        Specifies the ID of the QUIC listener. If it is set, HTTPS listener will be
+        upgraded to QUIC listener. This parameter is valid only when protocol is set to **HTTPS**.
+        """
+        return pulumi.get(self, "quic_listener_id")
+
+    @property
+    @pulumi.getter(name="realIp")
+    def real_ip(self) -> pulumi.Output[bool]:
+        """
+        Specifies whether to transfer the source IP address of the client to backend servers
+        through the HTTP header of the packet. The default value is false. This parameter is valid only when the protocol is
+        set to **HTTP** or **HTTPS**.
+        """
+        return pulumi.get(self, "real_ip")
 
     @property
     @pulumi.getter
@@ -1125,7 +2434,7 @@ class Listener(pulumi.CustomResource):
     def request_timeout(self) -> pulumi.Output[int]:
         """
         Specifies the request timeout for the listener. Value range: 1 to 300. This
-        parameter is valid when protocol is set to *HTTP* or *HTTPS*.
+        parameter is valid when protocol is set to **HTTP** or **HTTPS**.
         """
         return pulumi.get(self, "request_timeout")
 
@@ -1134,16 +2443,26 @@ class Listener(pulumi.CustomResource):
     def response_timeout(self) -> pulumi.Output[int]:
         """
         Specifies the response timeout for the listener. Value range: 1 to 300. This
-        parameter is valid when protocol is set to *HTTP* or *HTTPS*.
+        parameter is valid when protocol is set to **HTTP** or **HTTPS**.
         """
         return pulumi.get(self, "response_timeout")
+
+    @property
+    @pulumi.getter(name="securityPolicyId")
+    def security_policy_id(self) -> pulumi.Output[Optional[str]]:
+        """
+        Specifies the ID of the custom security policy. This parameter is available
+        only for **HTTPS** listeners added to a dedicated load balancer. If both `security_policy_id` and `tls_ciphers_policy`
+        are specified, only `security_policy_id` will take effect. This parameter is valid when protocol is set to **HTTPS**.
+        """
+        return pulumi.get(self, "security_policy_id")
 
     @property
     @pulumi.getter(name="serverCertificate")
     def server_certificate(self) -> pulumi.Output[Optional[str]]:
         """
         Specifies the ID of the server certificate used by the listener. This
-        parameter is mandatory when protocol is set to *HTTPS*.
+        parameter is mandatory when protocol is set to **HTTPS**.
         """
         return pulumi.get(self, "server_certificate")
 
@@ -1152,9 +2471,28 @@ class Listener(pulumi.CustomResource):
     def sni_certificates(self) -> pulumi.Output[Optional[Sequence[str]]]:
         """
         Lists the IDs of SNI certificates (server certificates with a domain name) used
-        by the listener. This parameter is valid when protocol is set to *HTTPS*.
+        by the listener. This parameter is valid when protocol is set to **HTTPS**.
         """
         return pulumi.get(self, "sni_certificates")
+
+    @property
+    @pulumi.getter(name="sniMatchAlgo")
+    def sni_match_algo(self) -> pulumi.Output[str]:
+        """
+        Specifies how wildcard domain name matches with the SNI certificates used by the
+        listener. **longest_suffix** indicates longest suffix match. **wildcard** indicates wildcard match.
+        The default value is **wildcard**.
+        """
+        return pulumi.get(self, "sni_match_algo")
+
+    @property
+    @pulumi.getter(name="sslEarlyDataEnable")
+    def ssl_early_data_enable(self) -> pulumi.Output[Optional[bool]]:
+        """
+        Specifies whether to enable 0-RTT capability, it is available only when
+        protocol is set to **HTTPS** and relys on the **TLSv1.3** security policy protocol. The default value is false.
+        """
+        return pulumi.get(self, "ssl_early_data_enable")
 
     @property
     @pulumi.getter
@@ -1169,8 +2507,17 @@ class Listener(pulumi.CustomResource):
     def tls_ciphers_policy(self) -> pulumi.Output[str]:
         """
         Specifies the TLS cipher policy for the listener. Valid options are:
-        tls-1-0-inherit, tls-1-0, tls-1-1, tls-1-2, tls-1-2-strict, tls-1-2-fs, tls-1-0-with-1-3, and tls-1-2-fs-with-1-3.
-        This parameter is valid when protocol is set to *HTTPS*.
+        **tls-1-0-inherit**, **tls-1-0**, **tls-1-1**, **tls-1-2**, **tls-1-2-strict**, **tls-1-2-fs**, **tls-1-0-with-1-3**,
+        **tls-1-2-fs-with-1-3**, **hybrid-policy-1-0** and **tls-1-2-strict-no-cbc**. Defaults to **tls-1-0**.
+        This parameter is valid when protocol is set to **HTTPS**.
         """
         return pulumi.get(self, "tls_ciphers_policy")
+
+    @property
+    @pulumi.getter(name="updatedAt")
+    def updated_at(self) -> pulumi.Output[str]:
+        """
+        The update time of the listener.
+        """
+        return pulumi.get(self, "updated_at")
 

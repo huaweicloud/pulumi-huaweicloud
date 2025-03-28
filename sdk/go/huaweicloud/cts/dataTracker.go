@@ -48,43 +48,79 @@ import (
 //
 // ## Import
 //
-// CTS data tracker can be imported using `name`, e.g.
+// # CTS data tracker can be imported using `name`, e.g.bash
 //
 // ```sh
 //
 //	$ pulumi import huaweicloud:Cts/dataTracker:DataTracker tracker your_tracker_name
 //
 // ```
+//
+//	Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attribute is `tags`. It is generally recommended running `terraform plan` after importing the resource. You can then decide if changes should be applied to the instance, or the resource definition should be updated to align with the resource. Also you can ignore changes as below. hcl resource "huaweicloud_cts_data_tracker" "test" {
+//
+//	...
+//
+//	lifecycle {
+//
+//	ignore_changes = [tags]
+//
+//	} }
 type DataTracker struct {
 	pulumi.CustomResourceState
 
+	// The cloud service delegation name.
+	AgencyName pulumi.StringOutput `pulumi:"agencyName"`
 	// Specifies the OBS bucket to which traces will be transferred.
 	BucketName pulumi.StringPtrOutput `pulumi:"bucketName"`
+	// Specifies the compression type of trace files. The value can be **gzip**
+	// or **json**. The default value is **gzip**.
+	CompressType pulumi.StringPtrOutput `pulumi:"compressType"`
+	// The creation time of the tracker.
+	CreateTime pulumi.IntOutput `pulumi:"createTime"`
 	// Specifies the OBS bucket tracked by the data tracker.
 	// Changing this creates a new resource.
 	DataBucket pulumi.StringOutput `pulumi:"dataBucket"`
 	// Specifies an array of operation types tracked by the data tracker,
 	// the value of operation can be **WRITE** or **READ**.
 	DataOperations pulumi.StringArrayOutput `pulumi:"dataOperations"`
+	// It indicates the cause of the abnormal status.
+	Detail pulumi.StringOutput `pulumi:"detail"`
+	// The Account ID.
+	DomainId pulumi.StringOutput `pulumi:"domainId"`
 	// Specifies whether tracker is enabled.
 	Enabled pulumi.BoolPtrOutput `pulumi:"enabled"`
 	// Specifies the file name prefix to mark trace files that need to be stored
-	// in an OBS bucket. The value contains 0 to 64 characters. Only letters, numbers, hyphens (-), underscores (_),
+	// in an OBS bucket. The value contains `0` to `64` characters. Only letters, numbers, hyphens (-), underscores (_),
 	// and periods (.) are allowed.
 	FilePrefix pulumi.StringPtrOutput `pulumi:"filePrefix"`
+	// The LTS log group ID.
+	GroupId pulumi.StringOutput `pulumi:"groupId"`
+	// Whether CTS has been granted permissions to perform operations on the OBS bucket.
+	IsAuthorizedBucket pulumi.BoolOutput `pulumi:"isAuthorizedBucket"`
+	// Specifies whether to divide the path of the trace file by cloud service.
+	// The default value is **true**.
+	IsSortByService pulumi.BoolPtrOutput `pulumi:"isSortByService"`
+	// The name of the log group that CTS creates in LTS.
+	LogGroupName pulumi.StringOutput `pulumi:"logGroupName"`
+	// The name of the log topic that CTS creates in LTS.
+	LogTopicName pulumi.StringOutput `pulumi:"logTopicName"`
 	// Specifies whether trace analysis is enabled.
 	LtsEnabled pulumi.BoolPtrOutput `pulumi:"ltsEnabled"`
 	// Specifies the data tracker name. The name cannot be system or ststem-trace.
 	// Changing this creates a new resource.
 	Name pulumi.StringOutput `pulumi:"name"`
 	// Specifies the retention period that traces are stored in `bucketName`,
-	// the value can be **0**(permanent), **30**, **60**, **90**, **180** or **1095**.
+	// the value can be `0`(permanent), `30`, `60`, `90`, `180` or `1,095`.
 	ObsRetentionPeriod pulumi.IntPtrOutput `pulumi:"obsRetentionPeriod"`
 	// Specifies the region in which to manage the CTS data tracker resource.
 	// If omitted, the provider-level region will be used. Changing this creates a new resource.
 	Region pulumi.StringOutput `pulumi:"region"`
 	// The tracker status, the value can be **enabled**, **disabled** or **error**.
 	Status pulumi.StringOutput `pulumi:"status"`
+	// The LTS log stream ID.
+	StreamId pulumi.StringOutput `pulumi:"streamId"`
+	// Specifies the key/value pairs to associate with the CTS data tracker.
+	Tags pulumi.StringMapOutput `pulumi:"tags"`
 	// Whether traces will be transferred.
 	TransferEnabled pulumi.BoolOutput `pulumi:"transferEnabled"`
 	// The tracker type, only **data** is available.
@@ -126,33 +162,59 @@ func GetDataTracker(ctx *pulumi.Context,
 
 // Input properties used for looking up and filtering DataTracker resources.
 type dataTrackerState struct {
+	// The cloud service delegation name.
+	AgencyName *string `pulumi:"agencyName"`
 	// Specifies the OBS bucket to which traces will be transferred.
 	BucketName *string `pulumi:"bucketName"`
+	// Specifies the compression type of trace files. The value can be **gzip**
+	// or **json**. The default value is **gzip**.
+	CompressType *string `pulumi:"compressType"`
+	// The creation time of the tracker.
+	CreateTime *int `pulumi:"createTime"`
 	// Specifies the OBS bucket tracked by the data tracker.
 	// Changing this creates a new resource.
 	DataBucket *string `pulumi:"dataBucket"`
 	// Specifies an array of operation types tracked by the data tracker,
 	// the value of operation can be **WRITE** or **READ**.
 	DataOperations []string `pulumi:"dataOperations"`
+	// It indicates the cause of the abnormal status.
+	Detail *string `pulumi:"detail"`
+	// The Account ID.
+	DomainId *string `pulumi:"domainId"`
 	// Specifies whether tracker is enabled.
 	Enabled *bool `pulumi:"enabled"`
 	// Specifies the file name prefix to mark trace files that need to be stored
-	// in an OBS bucket. The value contains 0 to 64 characters. Only letters, numbers, hyphens (-), underscores (_),
+	// in an OBS bucket. The value contains `0` to `64` characters. Only letters, numbers, hyphens (-), underscores (_),
 	// and periods (.) are allowed.
 	FilePrefix *string `pulumi:"filePrefix"`
+	// The LTS log group ID.
+	GroupId *string `pulumi:"groupId"`
+	// Whether CTS has been granted permissions to perform operations on the OBS bucket.
+	IsAuthorizedBucket *bool `pulumi:"isAuthorizedBucket"`
+	// Specifies whether to divide the path of the trace file by cloud service.
+	// The default value is **true**.
+	IsSortByService *bool `pulumi:"isSortByService"`
+	// The name of the log group that CTS creates in LTS.
+	LogGroupName *string `pulumi:"logGroupName"`
+	// The name of the log topic that CTS creates in LTS.
+	LogTopicName *string `pulumi:"logTopicName"`
 	// Specifies whether trace analysis is enabled.
 	LtsEnabled *bool `pulumi:"ltsEnabled"`
 	// Specifies the data tracker name. The name cannot be system or ststem-trace.
 	// Changing this creates a new resource.
 	Name *string `pulumi:"name"`
 	// Specifies the retention period that traces are stored in `bucketName`,
-	// the value can be **0**(permanent), **30**, **60**, **90**, **180** or **1095**.
+	// the value can be `0`(permanent), `30`, `60`, `90`, `180` or `1,095`.
 	ObsRetentionPeriod *int `pulumi:"obsRetentionPeriod"`
 	// Specifies the region in which to manage the CTS data tracker resource.
 	// If omitted, the provider-level region will be used. Changing this creates a new resource.
 	Region *string `pulumi:"region"`
 	// The tracker status, the value can be **enabled**, **disabled** or **error**.
 	Status *string `pulumi:"status"`
+	// The LTS log stream ID.
+	StreamId *string `pulumi:"streamId"`
+	// Specifies the key/value pairs to associate with the CTS data tracker.
+	Tags map[string]string `pulumi:"tags"`
 	// Whether traces will be transferred.
 	TransferEnabled *bool `pulumi:"transferEnabled"`
 	// The tracker type, only **data** is available.
@@ -162,33 +224,59 @@ type dataTrackerState struct {
 }
 
 type DataTrackerState struct {
+	// The cloud service delegation name.
+	AgencyName pulumi.StringPtrInput
 	// Specifies the OBS bucket to which traces will be transferred.
 	BucketName pulumi.StringPtrInput
+	// Specifies the compression type of trace files. The value can be **gzip**
+	// or **json**. The default value is **gzip**.
+	CompressType pulumi.StringPtrInput
+	// The creation time of the tracker.
+	CreateTime pulumi.IntPtrInput
 	// Specifies the OBS bucket tracked by the data tracker.
 	// Changing this creates a new resource.
 	DataBucket pulumi.StringPtrInput
 	// Specifies an array of operation types tracked by the data tracker,
 	// the value of operation can be **WRITE** or **READ**.
 	DataOperations pulumi.StringArrayInput
+	// It indicates the cause of the abnormal status.
+	Detail pulumi.StringPtrInput
+	// The Account ID.
+	DomainId pulumi.StringPtrInput
 	// Specifies whether tracker is enabled.
 	Enabled pulumi.BoolPtrInput
 	// Specifies the file name prefix to mark trace files that need to be stored
-	// in an OBS bucket. The value contains 0 to 64 characters. Only letters, numbers, hyphens (-), underscores (_),
+	// in an OBS bucket. The value contains `0` to `64` characters. Only letters, numbers, hyphens (-), underscores (_),
 	// and periods (.) are allowed.
 	FilePrefix pulumi.StringPtrInput
+	// The LTS log group ID.
+	GroupId pulumi.StringPtrInput
+	// Whether CTS has been granted permissions to perform operations on the OBS bucket.
+	IsAuthorizedBucket pulumi.BoolPtrInput
+	// Specifies whether to divide the path of the trace file by cloud service.
+	// The default value is **true**.
+	IsSortByService pulumi.BoolPtrInput
+	// The name of the log group that CTS creates in LTS.
+	LogGroupName pulumi.StringPtrInput
+	// The name of the log topic that CTS creates in LTS.
+	LogTopicName pulumi.StringPtrInput
 	// Specifies whether trace analysis is enabled.
 	LtsEnabled pulumi.BoolPtrInput
 	// Specifies the data tracker name. The name cannot be system or ststem-trace.
 	// Changing this creates a new resource.
 	Name pulumi.StringPtrInput
 	// Specifies the retention period that traces are stored in `bucketName`,
-	// the value can be **0**(permanent), **30**, **60**, **90**, **180** or **1095**.
+	// the value can be `0`(permanent), `30`, `60`, `90`, `180` or `1,095`.
 	ObsRetentionPeriod pulumi.IntPtrInput
 	// Specifies the region in which to manage the CTS data tracker resource.
 	// If omitted, the provider-level region will be used. Changing this creates a new resource.
 	Region pulumi.StringPtrInput
 	// The tracker status, the value can be **enabled**, **disabled** or **error**.
 	Status pulumi.StringPtrInput
+	// The LTS log stream ID.
+	StreamId pulumi.StringPtrInput
+	// Specifies the key/value pairs to associate with the CTS data tracker.
+	Tags pulumi.StringMapInput
 	// Whether traces will be transferred.
 	TransferEnabled pulumi.BoolPtrInput
 	// The tracker type, only **data** is available.
@@ -204,6 +292,9 @@ func (DataTrackerState) ElementType() reflect.Type {
 type dataTrackerArgs struct {
 	// Specifies the OBS bucket to which traces will be transferred.
 	BucketName *string `pulumi:"bucketName"`
+	// Specifies the compression type of trace files. The value can be **gzip**
+	// or **json**. The default value is **gzip**.
+	CompressType *string `pulumi:"compressType"`
 	// Specifies the OBS bucket tracked by the data tracker.
 	// Changing this creates a new resource.
 	DataBucket string `pulumi:"dataBucket"`
@@ -213,20 +304,25 @@ type dataTrackerArgs struct {
 	// Specifies whether tracker is enabled.
 	Enabled *bool `pulumi:"enabled"`
 	// Specifies the file name prefix to mark trace files that need to be stored
-	// in an OBS bucket. The value contains 0 to 64 characters. Only letters, numbers, hyphens (-), underscores (_),
+	// in an OBS bucket. The value contains `0` to `64` characters. Only letters, numbers, hyphens (-), underscores (_),
 	// and periods (.) are allowed.
 	FilePrefix *string `pulumi:"filePrefix"`
+	// Specifies whether to divide the path of the trace file by cloud service.
+	// The default value is **true**.
+	IsSortByService *bool `pulumi:"isSortByService"`
 	// Specifies whether trace analysis is enabled.
 	LtsEnabled *bool `pulumi:"ltsEnabled"`
 	// Specifies the data tracker name. The name cannot be system or ststem-trace.
 	// Changing this creates a new resource.
 	Name *string `pulumi:"name"`
 	// Specifies the retention period that traces are stored in `bucketName`,
-	// the value can be **0**(permanent), **30**, **60**, **90**, **180** or **1095**.
+	// the value can be `0`(permanent), `30`, `60`, `90`, `180` or `1,095`.
 	ObsRetentionPeriod *int `pulumi:"obsRetentionPeriod"`
 	// Specifies the region in which to manage the CTS data tracker resource.
 	// If omitted, the provider-level region will be used. Changing this creates a new resource.
 	Region *string `pulumi:"region"`
+	// Specifies the key/value pairs to associate with the CTS data tracker.
+	Tags map[string]string `pulumi:"tags"`
 	// Specifies whether trace file verification is enabled during trace transfer.
 	ValidateFile *bool `pulumi:"validateFile"`
 }
@@ -235,6 +331,9 @@ type dataTrackerArgs struct {
 type DataTrackerArgs struct {
 	// Specifies the OBS bucket to which traces will be transferred.
 	BucketName pulumi.StringPtrInput
+	// Specifies the compression type of trace files. The value can be **gzip**
+	// or **json**. The default value is **gzip**.
+	CompressType pulumi.StringPtrInput
 	// Specifies the OBS bucket tracked by the data tracker.
 	// Changing this creates a new resource.
 	DataBucket pulumi.StringInput
@@ -244,20 +343,25 @@ type DataTrackerArgs struct {
 	// Specifies whether tracker is enabled.
 	Enabled pulumi.BoolPtrInput
 	// Specifies the file name prefix to mark trace files that need to be stored
-	// in an OBS bucket. The value contains 0 to 64 characters. Only letters, numbers, hyphens (-), underscores (_),
+	// in an OBS bucket. The value contains `0` to `64` characters. Only letters, numbers, hyphens (-), underscores (_),
 	// and periods (.) are allowed.
 	FilePrefix pulumi.StringPtrInput
+	// Specifies whether to divide the path of the trace file by cloud service.
+	// The default value is **true**.
+	IsSortByService pulumi.BoolPtrInput
 	// Specifies whether trace analysis is enabled.
 	LtsEnabled pulumi.BoolPtrInput
 	// Specifies the data tracker name. The name cannot be system or ststem-trace.
 	// Changing this creates a new resource.
 	Name pulumi.StringPtrInput
 	// Specifies the retention period that traces are stored in `bucketName`,
-	// the value can be **0**(permanent), **30**, **60**, **90**, **180** or **1095**.
+	// the value can be `0`(permanent), `30`, `60`, `90`, `180` or `1,095`.
 	ObsRetentionPeriod pulumi.IntPtrInput
 	// Specifies the region in which to manage the CTS data tracker resource.
 	// If omitted, the provider-level region will be used. Changing this creates a new resource.
 	Region pulumi.StringPtrInput
+	// Specifies the key/value pairs to associate with the CTS data tracker.
+	Tags pulumi.StringMapInput
 	// Specifies whether trace file verification is enabled during trace transfer.
 	ValidateFile pulumi.BoolPtrInput
 }
@@ -349,9 +453,25 @@ func (o DataTrackerOutput) ToDataTrackerOutputWithContext(ctx context.Context) D
 	return o
 }
 
+// The cloud service delegation name.
+func (o DataTrackerOutput) AgencyName() pulumi.StringOutput {
+	return o.ApplyT(func(v *DataTracker) pulumi.StringOutput { return v.AgencyName }).(pulumi.StringOutput)
+}
+
 // Specifies the OBS bucket to which traces will be transferred.
 func (o DataTrackerOutput) BucketName() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *DataTracker) pulumi.StringPtrOutput { return v.BucketName }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the compression type of trace files. The value can be **gzip**
+// or **json**. The default value is **gzip**.
+func (o DataTrackerOutput) CompressType() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *DataTracker) pulumi.StringPtrOutput { return v.CompressType }).(pulumi.StringPtrOutput)
+}
+
+// The creation time of the tracker.
+func (o DataTrackerOutput) CreateTime() pulumi.IntOutput {
+	return o.ApplyT(func(v *DataTracker) pulumi.IntOutput { return v.CreateTime }).(pulumi.IntOutput)
 }
 
 // Specifies the OBS bucket tracked by the data tracker.
@@ -366,16 +486,52 @@ func (o DataTrackerOutput) DataOperations() pulumi.StringArrayOutput {
 	return o.ApplyT(func(v *DataTracker) pulumi.StringArrayOutput { return v.DataOperations }).(pulumi.StringArrayOutput)
 }
 
+// It indicates the cause of the abnormal status.
+func (o DataTrackerOutput) Detail() pulumi.StringOutput {
+	return o.ApplyT(func(v *DataTracker) pulumi.StringOutput { return v.Detail }).(pulumi.StringOutput)
+}
+
+// The Account ID.
+func (o DataTrackerOutput) DomainId() pulumi.StringOutput {
+	return o.ApplyT(func(v *DataTracker) pulumi.StringOutput { return v.DomainId }).(pulumi.StringOutput)
+}
+
 // Specifies whether tracker is enabled.
 func (o DataTrackerOutput) Enabled() pulumi.BoolPtrOutput {
 	return o.ApplyT(func(v *DataTracker) pulumi.BoolPtrOutput { return v.Enabled }).(pulumi.BoolPtrOutput)
 }
 
 // Specifies the file name prefix to mark trace files that need to be stored
-// in an OBS bucket. The value contains 0 to 64 characters. Only letters, numbers, hyphens (-), underscores (_),
+// in an OBS bucket. The value contains `0` to `64` characters. Only letters, numbers, hyphens (-), underscores (_),
 // and periods (.) are allowed.
 func (o DataTrackerOutput) FilePrefix() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *DataTracker) pulumi.StringPtrOutput { return v.FilePrefix }).(pulumi.StringPtrOutput)
+}
+
+// The LTS log group ID.
+func (o DataTrackerOutput) GroupId() pulumi.StringOutput {
+	return o.ApplyT(func(v *DataTracker) pulumi.StringOutput { return v.GroupId }).(pulumi.StringOutput)
+}
+
+// Whether CTS has been granted permissions to perform operations on the OBS bucket.
+func (o DataTrackerOutput) IsAuthorizedBucket() pulumi.BoolOutput {
+	return o.ApplyT(func(v *DataTracker) pulumi.BoolOutput { return v.IsAuthorizedBucket }).(pulumi.BoolOutput)
+}
+
+// Specifies whether to divide the path of the trace file by cloud service.
+// The default value is **true**.
+func (o DataTrackerOutput) IsSortByService() pulumi.BoolPtrOutput {
+	return o.ApplyT(func(v *DataTracker) pulumi.BoolPtrOutput { return v.IsSortByService }).(pulumi.BoolPtrOutput)
+}
+
+// The name of the log group that CTS creates in LTS.
+func (o DataTrackerOutput) LogGroupName() pulumi.StringOutput {
+	return o.ApplyT(func(v *DataTracker) pulumi.StringOutput { return v.LogGroupName }).(pulumi.StringOutput)
+}
+
+// The name of the log topic that CTS creates in LTS.
+func (o DataTrackerOutput) LogTopicName() pulumi.StringOutput {
+	return o.ApplyT(func(v *DataTracker) pulumi.StringOutput { return v.LogTopicName }).(pulumi.StringOutput)
 }
 
 // Specifies whether trace analysis is enabled.
@@ -390,7 +546,7 @@ func (o DataTrackerOutput) Name() pulumi.StringOutput {
 }
 
 // Specifies the retention period that traces are stored in `bucketName`,
-// the value can be **0**(permanent), **30**, **60**, **90**, **180** or **1095**.
+// the value can be `0`(permanent), `30`, `60`, `90`, `180` or `1,095`.
 func (o DataTrackerOutput) ObsRetentionPeriod() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v *DataTracker) pulumi.IntPtrOutput { return v.ObsRetentionPeriod }).(pulumi.IntPtrOutput)
 }
@@ -404,6 +560,16 @@ func (o DataTrackerOutput) Region() pulumi.StringOutput {
 // The tracker status, the value can be **enabled**, **disabled** or **error**.
 func (o DataTrackerOutput) Status() pulumi.StringOutput {
 	return o.ApplyT(func(v *DataTracker) pulumi.StringOutput { return v.Status }).(pulumi.StringOutput)
+}
+
+// The LTS log stream ID.
+func (o DataTrackerOutput) StreamId() pulumi.StringOutput {
+	return o.ApplyT(func(v *DataTracker) pulumi.StringOutput { return v.StreamId }).(pulumi.StringOutput)
+}
+
+// Specifies the key/value pairs to associate with the CTS data tracker.
+func (o DataTrackerOutput) Tags() pulumi.StringMapOutput {
+	return o.ApplyT(func(v *DataTracker) pulumi.StringMapOutput { return v.Tags }).(pulumi.StringMapOutput)
 }
 
 // Whether traces will be transferred.

@@ -30,7 +30,7 @@ import * as utilities from "../utilities";
  *
  * ## Import
  *
- * Applications can be imported using their `id`, e.g.
+ * Applications can be imported using their `id`, e.g. bash
  *
  * ```sh
  *  $ pulumi import huaweicloud:ServiceStage/application:Application test eeea08e7-c838-4794-926c-abc12f3e10e8
@@ -74,7 +74,7 @@ export class Application extends pulumi.CustomResource {
      */
     public readonly description!: pulumi.Output<string | undefined>;
     /**
-     * Specifies the enterprise projcet ID to which the application
+     * Specifies the enterprise project ID to which the application
      * belongs. Changing this will create a new resource.
      */
     public readonly enterpriseProjectId!: pulumi.Output<string>;
@@ -141,7 +141,7 @@ export interface ApplicationState {
      */
     description?: pulumi.Input<string>;
     /**
-     * Specifies the enterprise projcet ID to which the application
+     * Specifies the enterprise project ID to which the application
      * belongs. Changing this will create a new resource.
      */
     enterpriseProjectId?: pulumi.Input<string>;
@@ -172,7 +172,7 @@ export interface ApplicationArgs {
      */
     description?: pulumi.Input<string>;
     /**
-     * Specifies the enterprise projcet ID to which the application
+     * Specifies the enterprise project ID to which the application
      * belongs. Changing this will create a new resource.
      */
     enterpriseProjectId?: pulumi.Input<string>;

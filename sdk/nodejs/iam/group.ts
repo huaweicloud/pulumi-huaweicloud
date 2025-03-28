@@ -5,9 +5,9 @@ import * as pulumi from "@pulumi/pulumi";
 import * as utilities from "../utilities";
 
 /**
- * Manages a User Group resource within HuaweiCloud IAM service.
+ * Manages an IAM user group resource within HuaweiCloud.
  *
- * Note: You *must* have admin privileges in your HuaweiCloud cloud to use this resource.
+ * > **NOTE:** You *must* have admin privileges to use this resource.
  *
  * ## Example Usage
  *
@@ -22,7 +22,7 @@ import * as utilities from "../utilities";
  *
  * ## Import
  *
- * Groups can be imported using the `id`, e.g.
+ * Groups can be imported using the `id`, e.g. bash
  *
  * ```sh
  *  $ pulumi import huaweicloud:Iam/group:Group group_1 89c60255-9bd6-460c-822a-e2b959ede9d2
@@ -61,7 +61,7 @@ export class Group extends pulumi.CustomResource {
      */
     public readonly description!: pulumi.Output<string | undefined>;
     /**
-     * Specifies the name of the group.The length is less than or equal to 64 bytes.
+     * Specifies the name of the group. The length is less than or equal to 64 bytes.
      */
     public readonly name!: pulumi.Output<string>;
 
@@ -99,7 +99,7 @@ export interface GroupState {
      */
     description?: pulumi.Input<string>;
     /**
-     * Specifies the name of the group.The length is less than or equal to 64 bytes.
+     * Specifies the name of the group. The length is less than or equal to 64 bytes.
      */
     name?: pulumi.Input<string>;
 }
@@ -113,7 +113,7 @@ export interface GroupArgs {
      */
     description?: pulumi.Input<string>;
     /**
-     * Specifies the name of the group.The length is less than or equal to 64 bytes.
+     * Specifies the name of the group. The length is less than or equal to 64 bytes.
      */
     name?: pulumi.Input<string>;
 }

@@ -55,27 +55,38 @@ import (
 type KafkaTopic struct {
 	pulumi.CustomResourceState
 
-	// Specifies the aging time in hours. The value ranges from 1 to 168 and defaults to 72.
+	// Specifies the aging time in hours.
+	// The value ranges from `1` to `720` and defaults to `72`.
 	AgingTime pulumi.IntOutput `pulumi:"agingTime"`
+	// Specifies the other topic configurations.
+	Configs KafkaTopicConfigArrayOutput `pulumi:"configs"`
+	// Indicates the topic create time.
+	CreatedAt pulumi.StringOutput `pulumi:"createdAt"`
+	// Specifies the description of topic.
+	Description pulumi.StringPtrOutput `pulumi:"description"`
 	// Specifies the ID of the DMS kafka instance to which the topic belongs.
 	// Changing this creates a new resource.
 	InstanceId pulumi.StringOutput `pulumi:"instanceId"`
-	// Specifies the name of the topic. The name starts with a letter, consists of 4 to
-	// 64 characters, and supports only letters, digits, hyphens (-) and underscores (_). Changing this creates a new
-	// resource.
+	// Specifies the configuration name.
 	Name pulumi.StringOutput `pulumi:"name"`
-	// Specifies the partition number. The value ranges from 1 to 100.
+	// Specifies the integers list of brokers for new partitions.
+	NewPartitionBrokers pulumi.IntArrayOutput `pulumi:"newPartitionBrokers"`
+	// Specifies the partition number. The value ranges from `1` to `200`.
 	Partitions pulumi.IntOutput `pulumi:"partitions"`
+	// Indicates whether this policy is the default policy.
+	PoliciesOnly pulumi.BoolOutput `pulumi:"policiesOnly"`
 	// The region in which to create the DMS kafka topic resource. If omitted, the
 	// provider-level region will be used. Changing this creates a new resource.
 	Region pulumi.StringOutput `pulumi:"region"`
-	// Specifies the replica number. The value ranges from 1 to 3 and defaults to 3.
-	// Changing this creates a new resource.
+	// Specifies the replica number.
+	// The value ranges from `1` to `3` and defaults to `3`. Changing this creates a new resource.
 	Replicas pulumi.IntOutput `pulumi:"replicas"`
 	// Whether or not to enable synchronous flushing.
 	SyncFlushing pulumi.BoolOutput `pulumi:"syncFlushing"`
 	// Whether or not to enable synchronous replication.
 	SyncReplication pulumi.BoolOutput `pulumi:"syncReplication"`
+	// Indicates the topic type.
+	Type pulumi.StringOutput `pulumi:"type"`
 }
 
 // NewKafkaTopic registers a new resource with the given unique name, arguments, and options.
@@ -114,51 +125,73 @@ func GetKafkaTopic(ctx *pulumi.Context,
 
 // Input properties used for looking up and filtering KafkaTopic resources.
 type kafkaTopicState struct {
-	// Specifies the aging time in hours. The value ranges from 1 to 168 and defaults to 72.
+	// Specifies the aging time in hours.
+	// The value ranges from `1` to `720` and defaults to `72`.
 	AgingTime *int `pulumi:"agingTime"`
+	// Specifies the other topic configurations.
+	Configs []KafkaTopicConfig `pulumi:"configs"`
+	// Indicates the topic create time.
+	CreatedAt *string `pulumi:"createdAt"`
+	// Specifies the description of topic.
+	Description *string `pulumi:"description"`
 	// Specifies the ID of the DMS kafka instance to which the topic belongs.
 	// Changing this creates a new resource.
 	InstanceId *string `pulumi:"instanceId"`
-	// Specifies the name of the topic. The name starts with a letter, consists of 4 to
-	// 64 characters, and supports only letters, digits, hyphens (-) and underscores (_). Changing this creates a new
-	// resource.
+	// Specifies the configuration name.
 	Name *string `pulumi:"name"`
-	// Specifies the partition number. The value ranges from 1 to 100.
+	// Specifies the integers list of brokers for new partitions.
+	NewPartitionBrokers []int `pulumi:"newPartitionBrokers"`
+	// Specifies the partition number. The value ranges from `1` to `200`.
 	Partitions *int `pulumi:"partitions"`
+	// Indicates whether this policy is the default policy.
+	PoliciesOnly *bool `pulumi:"policiesOnly"`
 	// The region in which to create the DMS kafka topic resource. If omitted, the
 	// provider-level region will be used. Changing this creates a new resource.
 	Region *string `pulumi:"region"`
-	// Specifies the replica number. The value ranges from 1 to 3 and defaults to 3.
-	// Changing this creates a new resource.
+	// Specifies the replica number.
+	// The value ranges from `1` to `3` and defaults to `3`. Changing this creates a new resource.
 	Replicas *int `pulumi:"replicas"`
 	// Whether or not to enable synchronous flushing.
 	SyncFlushing *bool `pulumi:"syncFlushing"`
 	// Whether or not to enable synchronous replication.
 	SyncReplication *bool `pulumi:"syncReplication"`
+	// Indicates the topic type.
+	Type *string `pulumi:"type"`
 }
 
 type KafkaTopicState struct {
-	// Specifies the aging time in hours. The value ranges from 1 to 168 and defaults to 72.
+	// Specifies the aging time in hours.
+	// The value ranges from `1` to `720` and defaults to `72`.
 	AgingTime pulumi.IntPtrInput
+	// Specifies the other topic configurations.
+	Configs KafkaTopicConfigArrayInput
+	// Indicates the topic create time.
+	CreatedAt pulumi.StringPtrInput
+	// Specifies the description of topic.
+	Description pulumi.StringPtrInput
 	// Specifies the ID of the DMS kafka instance to which the topic belongs.
 	// Changing this creates a new resource.
 	InstanceId pulumi.StringPtrInput
-	// Specifies the name of the topic. The name starts with a letter, consists of 4 to
-	// 64 characters, and supports only letters, digits, hyphens (-) and underscores (_). Changing this creates a new
-	// resource.
+	// Specifies the configuration name.
 	Name pulumi.StringPtrInput
-	// Specifies the partition number. The value ranges from 1 to 100.
+	// Specifies the integers list of brokers for new partitions.
+	NewPartitionBrokers pulumi.IntArrayInput
+	// Specifies the partition number. The value ranges from `1` to `200`.
 	Partitions pulumi.IntPtrInput
+	// Indicates whether this policy is the default policy.
+	PoliciesOnly pulumi.BoolPtrInput
 	// The region in which to create the DMS kafka topic resource. If omitted, the
 	// provider-level region will be used. Changing this creates a new resource.
 	Region pulumi.StringPtrInput
-	// Specifies the replica number. The value ranges from 1 to 3 and defaults to 3.
-	// Changing this creates a new resource.
+	// Specifies the replica number.
+	// The value ranges from `1` to `3` and defaults to `3`. Changing this creates a new resource.
 	Replicas pulumi.IntPtrInput
 	// Whether or not to enable synchronous flushing.
 	SyncFlushing pulumi.BoolPtrInput
 	// Whether or not to enable synchronous replication.
 	SyncReplication pulumi.BoolPtrInput
+	// Indicates the topic type.
+	Type pulumi.StringPtrInput
 }
 
 func (KafkaTopicState) ElementType() reflect.Type {
@@ -166,22 +199,27 @@ func (KafkaTopicState) ElementType() reflect.Type {
 }
 
 type kafkaTopicArgs struct {
-	// Specifies the aging time in hours. The value ranges from 1 to 168 and defaults to 72.
+	// Specifies the aging time in hours.
+	// The value ranges from `1` to `720` and defaults to `72`.
 	AgingTime *int `pulumi:"agingTime"`
+	// Specifies the other topic configurations.
+	Configs []KafkaTopicConfig `pulumi:"configs"`
+	// Specifies the description of topic.
+	Description *string `pulumi:"description"`
 	// Specifies the ID of the DMS kafka instance to which the topic belongs.
 	// Changing this creates a new resource.
 	InstanceId string `pulumi:"instanceId"`
-	// Specifies the name of the topic. The name starts with a letter, consists of 4 to
-	// 64 characters, and supports only letters, digits, hyphens (-) and underscores (_). Changing this creates a new
-	// resource.
+	// Specifies the configuration name.
 	Name *string `pulumi:"name"`
-	// Specifies the partition number. The value ranges from 1 to 100.
+	// Specifies the integers list of brokers for new partitions.
+	NewPartitionBrokers []int `pulumi:"newPartitionBrokers"`
+	// Specifies the partition number. The value ranges from `1` to `200`.
 	Partitions int `pulumi:"partitions"`
 	// The region in which to create the DMS kafka topic resource. If omitted, the
 	// provider-level region will be used. Changing this creates a new resource.
 	Region *string `pulumi:"region"`
-	// Specifies the replica number. The value ranges from 1 to 3 and defaults to 3.
-	// Changing this creates a new resource.
+	// Specifies the replica number.
+	// The value ranges from `1` to `3` and defaults to `3`. Changing this creates a new resource.
 	Replicas *int `pulumi:"replicas"`
 	// Whether or not to enable synchronous flushing.
 	SyncFlushing *bool `pulumi:"syncFlushing"`
@@ -191,22 +229,27 @@ type kafkaTopicArgs struct {
 
 // The set of arguments for constructing a KafkaTopic resource.
 type KafkaTopicArgs struct {
-	// Specifies the aging time in hours. The value ranges from 1 to 168 and defaults to 72.
+	// Specifies the aging time in hours.
+	// The value ranges from `1` to `720` and defaults to `72`.
 	AgingTime pulumi.IntPtrInput
+	// Specifies the other topic configurations.
+	Configs KafkaTopicConfigArrayInput
+	// Specifies the description of topic.
+	Description pulumi.StringPtrInput
 	// Specifies the ID of the DMS kafka instance to which the topic belongs.
 	// Changing this creates a new resource.
 	InstanceId pulumi.StringInput
-	// Specifies the name of the topic. The name starts with a letter, consists of 4 to
-	// 64 characters, and supports only letters, digits, hyphens (-) and underscores (_). Changing this creates a new
-	// resource.
+	// Specifies the configuration name.
 	Name pulumi.StringPtrInput
-	// Specifies the partition number. The value ranges from 1 to 100.
+	// Specifies the integers list of brokers for new partitions.
+	NewPartitionBrokers pulumi.IntArrayInput
+	// Specifies the partition number. The value ranges from `1` to `200`.
 	Partitions pulumi.IntInput
 	// The region in which to create the DMS kafka topic resource. If omitted, the
 	// provider-level region will be used. Changing this creates a new resource.
 	Region pulumi.StringPtrInput
-	// Specifies the replica number. The value ranges from 1 to 3 and defaults to 3.
-	// Changing this creates a new resource.
+	// Specifies the replica number.
+	// The value ranges from `1` to `3` and defaults to `3`. Changing this creates a new resource.
 	Replicas pulumi.IntPtrInput
 	// Whether or not to enable synchronous flushing.
 	SyncFlushing pulumi.BoolPtrInput
@@ -301,9 +344,25 @@ func (o KafkaTopicOutput) ToKafkaTopicOutputWithContext(ctx context.Context) Kaf
 	return o
 }
 
-// Specifies the aging time in hours. The value ranges from 1 to 168 and defaults to 72.
+// Specifies the aging time in hours.
+// The value ranges from `1` to `720` and defaults to `72`.
 func (o KafkaTopicOutput) AgingTime() pulumi.IntOutput {
 	return o.ApplyT(func(v *KafkaTopic) pulumi.IntOutput { return v.AgingTime }).(pulumi.IntOutput)
+}
+
+// Specifies the other topic configurations.
+func (o KafkaTopicOutput) Configs() KafkaTopicConfigArrayOutput {
+	return o.ApplyT(func(v *KafkaTopic) KafkaTopicConfigArrayOutput { return v.Configs }).(KafkaTopicConfigArrayOutput)
+}
+
+// Indicates the topic create time.
+func (o KafkaTopicOutput) CreatedAt() pulumi.StringOutput {
+	return o.ApplyT(func(v *KafkaTopic) pulumi.StringOutput { return v.CreatedAt }).(pulumi.StringOutput)
+}
+
+// Specifies the description of topic.
+func (o KafkaTopicOutput) Description() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *KafkaTopic) pulumi.StringPtrOutput { return v.Description }).(pulumi.StringPtrOutput)
 }
 
 // Specifies the ID of the DMS kafka instance to which the topic belongs.
@@ -312,16 +371,24 @@ func (o KafkaTopicOutput) InstanceId() pulumi.StringOutput {
 	return o.ApplyT(func(v *KafkaTopic) pulumi.StringOutput { return v.InstanceId }).(pulumi.StringOutput)
 }
 
-// Specifies the name of the topic. The name starts with a letter, consists of 4 to
-// 64 characters, and supports only letters, digits, hyphens (-) and underscores (_). Changing this creates a new
-// resource.
+// Specifies the configuration name.
 func (o KafkaTopicOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v *KafkaTopic) pulumi.StringOutput { return v.Name }).(pulumi.StringOutput)
 }
 
-// Specifies the partition number. The value ranges from 1 to 100.
+// Specifies the integers list of brokers for new partitions.
+func (o KafkaTopicOutput) NewPartitionBrokers() pulumi.IntArrayOutput {
+	return o.ApplyT(func(v *KafkaTopic) pulumi.IntArrayOutput { return v.NewPartitionBrokers }).(pulumi.IntArrayOutput)
+}
+
+// Specifies the partition number. The value ranges from `1` to `200`.
 func (o KafkaTopicOutput) Partitions() pulumi.IntOutput {
 	return o.ApplyT(func(v *KafkaTopic) pulumi.IntOutput { return v.Partitions }).(pulumi.IntOutput)
+}
+
+// Indicates whether this policy is the default policy.
+func (o KafkaTopicOutput) PoliciesOnly() pulumi.BoolOutput {
+	return o.ApplyT(func(v *KafkaTopic) pulumi.BoolOutput { return v.PoliciesOnly }).(pulumi.BoolOutput)
 }
 
 // The region in which to create the DMS kafka topic resource. If omitted, the
@@ -330,8 +397,8 @@ func (o KafkaTopicOutput) Region() pulumi.StringOutput {
 	return o.ApplyT(func(v *KafkaTopic) pulumi.StringOutput { return v.Region }).(pulumi.StringOutput)
 }
 
-// Specifies the replica number. The value ranges from 1 to 3 and defaults to 3.
-// Changing this creates a new resource.
+// Specifies the replica number.
+// The value ranges from `1` to `3` and defaults to `3`. Changing this creates a new resource.
 func (o KafkaTopicOutput) Replicas() pulumi.IntOutput {
 	return o.ApplyT(func(v *KafkaTopic) pulumi.IntOutput { return v.Replicas }).(pulumi.IntOutput)
 }
@@ -344,6 +411,11 @@ func (o KafkaTopicOutput) SyncFlushing() pulumi.BoolOutput {
 // Whether or not to enable synchronous replication.
 func (o KafkaTopicOutput) SyncReplication() pulumi.BoolOutput {
 	return o.ApplyT(func(v *KafkaTopic) pulumi.BoolOutput { return v.SyncReplication }).(pulumi.BoolOutput)
+}
+
+// Indicates the topic type.
+func (o KafkaTopicOutput) Type() pulumi.StringOutput {
+	return o.ApplyT(func(v *KafkaTopic) pulumi.StringOutput { return v.Type }).(pulumi.StringOutput)
 }
 
 type KafkaTopicArrayOutput struct{ *pulumi.OutputState }

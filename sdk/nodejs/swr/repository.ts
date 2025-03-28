@@ -24,7 +24,7 @@ import * as utilities from "../utilities";
  *
  * ## Import
  *
- * Repository can be imported using the organization name and repository name separated by a slash, e.g.
+ * Repository can be imported using the organization name and repository name separated by a slash, e.g.bash
  *
  * ```sh
  *  $ pulumi import huaweicloud:Swr/repository:Repository test org-name/repo-name
@@ -76,7 +76,10 @@ export class Repository extends pulumi.CustomResource {
      */
     public readonly isPublic!: pulumi.Output<boolean | undefined>;
     /**
-     * Specifies the name of the repository. Changing this creates a new resource.
+     * Specifies the name of the repository.  
+     * The valid length is limited from `1` to `128`, only lowercase letters, digits, periods (.), hyphens (-) and
+     * underscores (_) are allowed. Periods, underscores, and hyphens cannot be placed next to each other.
+     * A maximum of two consecutive underscores are allowed. Changing this creates a new resource.
      */
     public readonly name!: pulumi.Output<string>;
     /**
@@ -84,8 +87,8 @@ export class Repository extends pulumi.CustomResource {
      */
     public /*out*/ readonly numImages!: pulumi.Output<number>;
     /**
-     * Specifies the name of the organization (namespace) the repository belongs.
-     * Changing this creates a new resource.
+     * Specifies the name of the organization (namespace) the repository
+     * belongs. Changing this creates a new resource.
      */
     public readonly organization!: pulumi.Output<string>;
     /**
@@ -174,7 +177,10 @@ export interface RepositoryState {
      */
     isPublic?: pulumi.Input<boolean>;
     /**
-     * Specifies the name of the repository. Changing this creates a new resource.
+     * Specifies the name of the repository.  
+     * The valid length is limited from `1` to `128`, only lowercase letters, digits, periods (.), hyphens (-) and
+     * underscores (_) are allowed. Periods, underscores, and hyphens cannot be placed next to each other.
+     * A maximum of two consecutive underscores are allowed. Changing this creates a new resource.
      */
     name?: pulumi.Input<string>;
     /**
@@ -182,8 +188,8 @@ export interface RepositoryState {
      */
     numImages?: pulumi.Input<number>;
     /**
-     * Specifies the name of the organization (namespace) the repository belongs.
-     * Changing this creates a new resource.
+     * Specifies the name of the organization (namespace) the repository
+     * belongs. Changing this creates a new resource.
      */
     organization?: pulumi.Input<string>;
     /**
@@ -223,12 +229,15 @@ export interface RepositoryArgs {
      */
     isPublic?: pulumi.Input<boolean>;
     /**
-     * Specifies the name of the repository. Changing this creates a new resource.
+     * Specifies the name of the repository.  
+     * The valid length is limited from `1` to `128`, only lowercase letters, digits, periods (.), hyphens (-) and
+     * underscores (_) are allowed. Periods, underscores, and hyphens cannot be placed next to each other.
+     * A maximum of two consecutive underscores are allowed. Changing this creates a new resource.
      */
     name?: pulumi.Input<string>;
     /**
-     * Specifies the name of the organization (namespace) the repository belongs.
-     * Changing this creates a new resource.
+     * Specifies the name of the organization (namespace) the repository
+     * belongs. Changing this creates a new resource.
      */
     organization: pulumi.Input<string>;
     /**

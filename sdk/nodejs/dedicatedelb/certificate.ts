@@ -72,13 +72,13 @@ import * as utilities from "../utilities";
  *
  * ## Import
  *
- * ELB certificate can be imported using the certificate ID, e.g.
+ * ELB certificate can be imported using the certificate ID, e.g. bash
  *
  * ```sh
  *  $ pulumi import huaweicloud:DedicatedElb/certificate:Certificate certificate_1 5c20fdad-7288-11eb-b817-0255ac10158b
  * ```
  *
- *  Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`enterprise_project_id`. It is generally recommended running `terraform plan` after importing a certificate. You can then decide if changes should be applied to the certificate, or the resource definition should be updated to align with the certificate. Also you can ignore changes as below. resource "huaweicloud_elb_certificate" "certificate_1" {
+ *  Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`enterprise_project_id`. It is generally recommended running `terraform plan` after importing a certificate. You can then decide if changes should be applied to the certificate, or the resource definition should be updated to align with the certificate. Also you can ignore changes as below. hcl resource "huaweicloud_elb_certificate" "certificate_1" {
  *
  *  ...
  *
@@ -142,7 +142,7 @@ export class Certificate extends pulumi.CustomResource {
      */
     public readonly enterpriseProjectId!: pulumi.Output<string>;
     /**
-     * Indicates the expire time.
+     * Indicates the expiration time.
      */
     public /*out*/ readonly expireTime!: pulumi.Output<string>;
     /**
@@ -243,7 +243,7 @@ export interface CertificateState {
      */
     enterpriseProjectId?: pulumi.Input<string>;
     /**
-     * Indicates the expire time.
+     * Indicates the expiration time.
      */
     expireTime?: pulumi.Input<string>;
     /**

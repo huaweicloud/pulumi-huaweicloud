@@ -7,61 +7,53 @@ import * as utilities from "../utilities";
 /**
  * Manages a dedicated microservice resource within HuaweiCloud.
  *
- * > When deleting a microservice, all instances under it will also be deleted together.
+ * > 1. Before creating a configuration, make sure the engine has enabled the rules shown in the appendix
+ * >       table.
+ * >       <br/> 2. When deleting a microservice, all instances under it will also be deleted together.
  *
  * ## Example Usage
- * ### Create a microservice in an engine with RBAC authentication disabled
+ * ## Appendix
  *
- * ```typescript
- * import * as pulumi from "@pulumi/pulumi";
- * import * as pulumi from "@huaweicloudos/pulumi";
+ * <a name="microserviceDefaultEngineAccessRules"></a>
+ * Security group rules required to access the engine:
+ * (Remote is not the minimum range and can be adjusted according to business needs)
  *
- * const config = new pulumi.Config();
- * const engineConnAddr = config.requireObject("engineConnAddr");
- * const serviceName = config.requireObject("serviceName");
- * const appName = config.requireObject("appName");
- * const test = new huaweicloud.cse.Microservice("test", {
- *     connectAddress: engineConnAddr,
- *     version: "1.0.0",
- *     environment: "development",
- *     appName: appName,
- * });
- * ```
- * ### Create a microservice in an engine with RBAC authentication enabled
- *
- * ```typescript
- * import * as pulumi from "@pulumi/pulumi";
- * import * as pulumi from "@huaweicloudos/pulumi";
- *
- * const config = new pulumi.Config();
- * const engineConnAddr = config.requireObject("engineConnAddr");
- * const serviceName = config.requireObject("serviceName");
- * const appName = config.requireObject("appName");
- * const test = new huaweicloud.cse.Microservice("test", {
- *     connectAddress: engineConnAddr,
- *     version: "1.0.0",
- *     environment: "development",
- *     appName: appName,
- *     adminUser: "root",
- *     adminPass: "Huawei!123",
- * });
- * ```
+ * | Direction | Priority | Action | Protocol | Ports         | Ethertype | Remote                |
+ * | --------- | -------- | ------ | -------- | ------------- | --------- | --------------------- |
+ * | Ingress   | 1        | Allow  | ICMP     | All           | Ipv6      | ::/0                  |
+ * | Ingress   | 1        | Allow  | TCP      | 30100-30130   | Ipv6      | ::/0                  |
+ * | Ingress   | 1        | Allow  | All      | All           | Ipv6      | cse-engine-default-sg |
+ * | Ingress   | 1        | Allow  | ICMP     | All           | Ipv4      | 0.0.0.0/0             |
+ * | Ingress   | 1        | Allow  | TCP      | 30100-30130   | Ipv4      | 0.0.0.0/0             |
+ * | Ingress   | 1        | Allow  | All      | All           | Ipv4      | cse-engine-default-sg |
+ * | Egress    | 100      | Allow  | All      | All           | Ipv6      | ::/0                  |
+ * | Egress    | 100      | Allow  | All      | All           | Ipv4      | 0.0.0.0/0             |
  *
  * ## Import
  *
- * Microservices can be imported using related `connect_address` and their `id`, separated by a slash (/), e.g.
+ * Microservices can be imported using related `auth_address`, `connect_address` and their `id`, separated by the slashes (/), e.g. bash
  *
  * ```sh
- *  $ pulumi import huaweicloud:Cse/microservice:Microservice test https://124.70.26.32:30100/f14960ba495e03f59f85aacaaafbdef3fbff3f0d
+ *  $ pulumi import huaweicloud:Cse/microservice:Microservice test <auth_address>/<connect_address>/<id>
  * ```
  *
- *  If you enabled the **RBAC** authorization, you also need to provide the account name and password, e.g.
+ *  If you enabled the **RBAC** authorization, you also need to provide the account name (`admin_user`) and password (`admin_pass`) of the microservice engine. All fields separated by the slashes (/), e.g. bash
  *
  * ```sh
- *  $ pulumi import huaweicloud:Cse/microservice:Microservice test 'https://124.70.26.32:30100/f14960ba495e03f59f85aacaaafbdef3fbff3f0d/root/Test!123'
+ *  $ pulumi import huaweicloud:Cse/microservice:Microservice test <auth_address>/<connect_address>/<id>/<admin_user>/<admin_pass>
  * ```
  *
- *  The single quotes can help you solve the problem of special characters reporting errors on bash.
+ *  The single quotes (') or backslashes (\\) can help you solve the problem of special characters reporting errors on bash. bash
+ *
+ * ```sh
+ *  $ pulumi import huaweicloud:Cse/microservice:Microservice test https://124.70.26.32:30100/https://124.70.26.32:30100/f14960ba495e03f59f85aacaaafbdef3fbff3f0d/root/Test\!123
+ * ```
+ *
+ *  bash
+ *
+ * ```sh
+ *  $ pulumi import huaweicloud:Cse/microservice:Microservice test 'https://124.70.26.32:30100/https://124.70.26.32:30100/f14960ba495e03f59f85aacaaafbdef3fbff3f0d/root/Test!123'
+ * ```
  */
 export class Microservice extends pulumi.CustomResource {
     /**
@@ -92,8 +84,7 @@ export class Microservice extends pulumi.CustomResource {
     }
 
     /**
-     * Specifies the account password.
-     * Required if the `authType` of engine is **RBAC**. Changing this will create a new microservice.
+     * Specifies the account password for **RBAC** login.
      * The password format must meet the following conditions:
      * + Must be `8` to `32` characters long.
      * + A password must contain at least one digit, one uppercase letter, one lowercase letter, and one special character
@@ -103,8 +94,8 @@ export class Microservice extends pulumi.CustomResource {
      */
     public readonly adminPass!: pulumi.Output<string | undefined>;
     /**
-     * Specifies the account name. The initial account name is **root**.
-     * Required if the `authType` of engine is **RBAC**. Changing this will create a new microservice.
+     * Specifies the account name for **RBAC** login.
+     * Changing this will create a new resource.
      */
     public readonly adminUser!: pulumi.Output<string | undefined>;
     /**
@@ -113,8 +104,16 @@ export class Microservice extends pulumi.CustomResource {
      */
     public readonly appName!: pulumi.Output<string>;
     /**
-     * Specifies the connection address of service registry center for the
-     * specified dedicated CSE engine. Changing this will create a new microservice.
+     * Specifies the address that used to request the access token.  
+     * Usually is the connection address of service center.
+     * Changing this will create a new resource.
+     */
+    public readonly authAddress!: pulumi.Output<string>;
+    /**
+     * Specifies the address that used to access engine and manages
+     * microservice.
+     * Usually is the connection address of service center.
+     * Changing this will create a new resource.
      */
     public readonly connectAddress!: pulumi.Output<string>;
     /**
@@ -167,6 +166,7 @@ export class Microservice extends pulumi.CustomResource {
             resourceInputs["adminPass"] = state ? state.adminPass : undefined;
             resourceInputs["adminUser"] = state ? state.adminUser : undefined;
             resourceInputs["appName"] = state ? state.appName : undefined;
+            resourceInputs["authAddress"] = state ? state.authAddress : undefined;
             resourceInputs["connectAddress"] = state ? state.connectAddress : undefined;
             resourceInputs["description"] = state ? state.description : undefined;
             resourceInputs["environment"] = state ? state.environment : undefined;
@@ -188,6 +188,7 @@ export class Microservice extends pulumi.CustomResource {
             resourceInputs["adminPass"] = args ? args.adminPass : undefined;
             resourceInputs["adminUser"] = args ? args.adminUser : undefined;
             resourceInputs["appName"] = args ? args.appName : undefined;
+            resourceInputs["authAddress"] = args ? args.authAddress : undefined;
             resourceInputs["connectAddress"] = args ? args.connectAddress : undefined;
             resourceInputs["description"] = args ? args.description : undefined;
             resourceInputs["environment"] = args ? args.environment : undefined;
@@ -206,8 +207,7 @@ export class Microservice extends pulumi.CustomResource {
  */
 export interface MicroserviceState {
     /**
-     * Specifies the account password.
-     * Required if the `authType` of engine is **RBAC**. Changing this will create a new microservice.
+     * Specifies the account password for **RBAC** login.
      * The password format must meet the following conditions:
      * + Must be `8` to `32` characters long.
      * + A password must contain at least one digit, one uppercase letter, one lowercase letter, and one special character
@@ -217,8 +217,8 @@ export interface MicroserviceState {
      */
     adminPass?: pulumi.Input<string>;
     /**
-     * Specifies the account name. The initial account name is **root**.
-     * Required if the `authType` of engine is **RBAC**. Changing this will create a new microservice.
+     * Specifies the account name for **RBAC** login.
+     * Changing this will create a new resource.
      */
     adminUser?: pulumi.Input<string>;
     /**
@@ -227,8 +227,16 @@ export interface MicroserviceState {
      */
     appName?: pulumi.Input<string>;
     /**
-     * Specifies the connection address of service registry center for the
-     * specified dedicated CSE engine. Changing this will create a new microservice.
+     * Specifies the address that used to request the access token.  
+     * Usually is the connection address of service center.
+     * Changing this will create a new resource.
+     */
+    authAddress?: pulumi.Input<string>;
+    /**
+     * Specifies the address that used to access engine and manages
+     * microservice.
+     * Usually is the connection address of service center.
+     * Changing this will create a new resource.
      */
     connectAddress?: pulumi.Input<string>;
     /**
@@ -271,8 +279,7 @@ export interface MicroserviceState {
  */
 export interface MicroserviceArgs {
     /**
-     * Specifies the account password.
-     * Required if the `authType` of engine is **RBAC**. Changing this will create a new microservice.
+     * Specifies the account password for **RBAC** login.
      * The password format must meet the following conditions:
      * + Must be `8` to `32` characters long.
      * + A password must contain at least one digit, one uppercase letter, one lowercase letter, and one special character
@@ -282,8 +289,8 @@ export interface MicroserviceArgs {
      */
     adminPass?: pulumi.Input<string>;
     /**
-     * Specifies the account name. The initial account name is **root**.
-     * Required if the `authType` of engine is **RBAC**. Changing this will create a new microservice.
+     * Specifies the account name for **RBAC** login.
+     * Changing this will create a new resource.
      */
     adminUser?: pulumi.Input<string>;
     /**
@@ -292,8 +299,16 @@ export interface MicroserviceArgs {
      */
     appName: pulumi.Input<string>;
     /**
-     * Specifies the connection address of service registry center for the
-     * specified dedicated CSE engine. Changing this will create a new microservice.
+     * Specifies the address that used to request the access token.  
+     * Usually is the connection address of service center.
+     * Changing this will create a new resource.
+     */
+    authAddress?: pulumi.Input<string>;
+    /**
+     * Specifies the address that used to access engine and manages
+     * microservice.
+     * Usually is the connection address of service center.
+     * Changing this will create a new resource.
      */
     connectAddress: pulumi.Input<string>;
     /**

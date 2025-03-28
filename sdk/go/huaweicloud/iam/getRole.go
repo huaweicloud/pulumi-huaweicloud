@@ -49,10 +49,10 @@ func LookupRole(ctx *pulumi.Context, args *LookupRoleArgs, opts ...pulumi.Invoke
 // A collection of arguments for invoking getRole.
 type LookupRoleArgs struct {
 	// Specifies the display name of the role displayed on the console.
-	// Required if `name` is empty.
+	// It is recommended to use this parameter instead of `name` and required if `name` is not specified.
 	DisplayName *string `pulumi:"displayName"`
 	// Specifies the name of the role for internal use.
-	// Required if `displayName` is empty.
+	// It's required if `displayName` is not specified.
 	Name *string `pulumi:"name"`
 }
 
@@ -88,10 +88,10 @@ func LookupRoleOutput(ctx *pulumi.Context, args LookupRoleOutputArgs, opts ...pu
 // A collection of arguments for invoking getRole.
 type LookupRoleOutputArgs struct {
 	// Specifies the display name of the role displayed on the console.
-	// Required if `name` is empty.
+	// It is recommended to use this parameter instead of `name` and required if `name` is not specified.
 	DisplayName pulumi.StringPtrInput `pulumi:"displayName"`
 	// Specifies the name of the role for internal use.
-	// Required if `displayName` is empty.
+	// It's required if `displayName` is not specified.
 	Name pulumi.StringPtrInput `pulumi:"name"`
 }
 

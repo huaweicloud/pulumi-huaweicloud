@@ -11,6 +11,8 @@ import (
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
+// !> **WARNING:** It has been deprecated.
+//
 // Provides an access rule resource of Scalable File Resource (SFS).
 //
 // ## Example Usage
@@ -54,7 +56,7 @@ import (
 //
 // ## Import
 //
-// SFS access rule can be imported by specifying the SFS ID and access rule ID separated by a slash, e.g.
+// # SFS access rule can be imported by specifying the SFS ID and access rule ID separated by a slash, e.g.bash
 //
 // ```sh
 //

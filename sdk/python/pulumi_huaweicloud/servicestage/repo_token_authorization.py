@@ -14,47 +14,36 @@ __all__ = ['RepoTokenAuthorizationArgs', 'RepoTokenAuthorization']
 @pulumi.input_type
 class RepoTokenAuthorizationArgs:
     def __init__(__self__, *,
-                 host: pulumi.Input[str],
                  token: pulumi.Input[str],
                  type: pulumi.Input[str],
+                 host: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None):
         """
         The set of arguments for constructing a RepoTokenAuthorization resource.
-        :param pulumi.Input[str] host: Specified the host name of the repository.
-               Changing this parameter will create a new authorization.
         :param pulumi.Input[str] token: Specified the personal access token of the repository.
                Changing this parameter will create a new authorization.
         :param pulumi.Input[str] type: Specified the repository type. The valid values are as follows:
                + **github**
                + **gitlab**
                + **gitee**
-        :param pulumi.Input[str] name: Specified the authorization name. The name can contain of 4 to 63 characters,
-               only letters, digits, underscores (_), hyphens (-) and dots (.) are allowed.
+        :param pulumi.Input[str] host: Specified the host name of the repository, e.g. **https://api.github.com**.
                Changing this parameter will create a new authorization.
+               <!-- markdownlint-enable MD034 -->
+        :param pulumi.Input[str] name: Specified the authorization name.  
+               The name can contain of `4` to `63` characters, only letters, digits, underscores (_), hyphens (-) and dots (.) are
+               allowed. Changing this parameter will create a new authorization.
         :param pulumi.Input[str] region: Specified the region in which to create the repository authorization.
                If omitted, the provider-level region will be used. Changing this parameter will create a new authorization.
         """
-        pulumi.set(__self__, "host", host)
         pulumi.set(__self__, "token", token)
         pulumi.set(__self__, "type", type)
+        if host is not None:
+            pulumi.set(__self__, "host", host)
         if name is not None:
             pulumi.set(__self__, "name", name)
         if region is not None:
             pulumi.set(__self__, "region", region)
-
-    @property
-    @pulumi.getter
-    def host(self) -> pulumi.Input[str]:
-        """
-        Specified the host name of the repository.
-        Changing this parameter will create a new authorization.
-        """
-        return pulumi.get(self, "host")
-
-    @host.setter
-    def host(self, value: pulumi.Input[str]):
-        pulumi.set(self, "host", value)
 
     @property
     @pulumi.getter
@@ -86,11 +75,25 @@ class RepoTokenAuthorizationArgs:
 
     @property
     @pulumi.getter
+    def host(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specified the host name of the repository, e.g. **https://api.github.com**.
+        Changing this parameter will create a new authorization.
+        <!-- markdownlint-enable MD034 -->
+        """
+        return pulumi.get(self, "host")
+
+    @host.setter
+    def host(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "host", value)
+
+    @property
+    @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        Specified the authorization name. The name can contain of 4 to 63 characters,
-        only letters, digits, underscores (_), hyphens (-) and dots (.) are allowed.
-        Changing this parameter will create a new authorization.
+        Specified the authorization name.  
+        The name can contain of `4` to `63` characters, only letters, digits, underscores (_), hyphens (-) and dots (.) are
+        allowed. Changing this parameter will create a new authorization.
         """
         return pulumi.get(self, "name")
 
@@ -122,11 +125,12 @@ class _RepoTokenAuthorizationState:
                  type: Optional[pulumi.Input[str]] = None):
         """
         Input properties used for looking up and filtering RepoTokenAuthorization resources.
-        :param pulumi.Input[str] host: Specified the host name of the repository.
+        :param pulumi.Input[str] host: Specified the host name of the repository, e.g. **https://api.github.com**.
                Changing this parameter will create a new authorization.
-        :param pulumi.Input[str] name: Specified the authorization name. The name can contain of 4 to 63 characters,
-               only letters, digits, underscores (_), hyphens (-) and dots (.) are allowed.
-               Changing this parameter will create a new authorization.
+               <!-- markdownlint-enable MD034 -->
+        :param pulumi.Input[str] name: Specified the authorization name.  
+               The name can contain of `4` to `63` characters, only letters, digits, underscores (_), hyphens (-) and dots (.) are
+               allowed. Changing this parameter will create a new authorization.
         :param pulumi.Input[str] region: Specified the region in which to create the repository authorization.
                If omitted, the provider-level region will be used. Changing this parameter will create a new authorization.
         :param pulumi.Input[str] token: Specified the personal access token of the repository.
@@ -151,8 +155,9 @@ class _RepoTokenAuthorizationState:
     @pulumi.getter
     def host(self) -> Optional[pulumi.Input[str]]:
         """
-        Specified the host name of the repository.
+        Specified the host name of the repository, e.g. **https://api.github.com**.
         Changing this parameter will create a new authorization.
+        <!-- markdownlint-enable MD034 -->
         """
         return pulumi.get(self, "host")
 
@@ -164,9 +169,9 @@ class _RepoTokenAuthorizationState:
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        Specified the authorization name. The name can contain of 4 to 63 characters,
-        only letters, digits, underscores (_), hyphens (-) and dots (.) are allowed.
-        Changing this parameter will create a new authorization.
+        Specified the authorization name.  
+        The name can contain of `4` to `63` characters, only letters, digits, underscores (_), hyphens (-) and dots (.) are
+        allowed. Changing this parameter will create a new authorization.
         """
         return pulumi.get(self, "name")
 
@@ -231,9 +236,23 @@ class RepoTokenAuthorization(pulumi.CustomResource):
         This resource is used for the ServiceStage service to establish the authorization relationship through personal access
         token with various types of the Open-Source repository.
 
+        ## Example Usage
+
+        ```python
+        import pulumi
+        import pulumi_huaweicloud as huaweicloud
+
+        config = pulumi.Config()
+        authorization_name = config.require_object("authorizationName")
+        personal_access_token = config.require_object("personalAccessToken")
+        test = huaweicloud.service_stage.RepoTokenAuthorization("test",
+            type="github",
+            token=personal_access_token)
+        ```
+
         ## Import
 
-        Authorizations can be imported using their `id` or `name`, e.g.
+        Authorizations can be imported using their `id` or `name`, e.g.bash
 
         ```sh
          $ pulumi import huaweicloud:ServiceStage/repoTokenAuthorization:RepoTokenAuthorization test terraform-test
@@ -241,11 +260,12 @@ class RepoTokenAuthorization(pulumi.CustomResource):
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[str] host: Specified the host name of the repository.
+        :param pulumi.Input[str] host: Specified the host name of the repository, e.g. **https://api.github.com**.
                Changing this parameter will create a new authorization.
-        :param pulumi.Input[str] name: Specified the authorization name. The name can contain of 4 to 63 characters,
-               only letters, digits, underscores (_), hyphens (-) and dots (.) are allowed.
-               Changing this parameter will create a new authorization.
+               <!-- markdownlint-enable MD034 -->
+        :param pulumi.Input[str] name: Specified the authorization name.  
+               The name can contain of `4` to `63` characters, only letters, digits, underscores (_), hyphens (-) and dots (.) are
+               allowed. Changing this parameter will create a new authorization.
         :param pulumi.Input[str] region: Specified the region in which to create the repository authorization.
                If omitted, the provider-level region will be used. Changing this parameter will create a new authorization.
         :param pulumi.Input[str] token: Specified the personal access token of the repository.
@@ -265,9 +285,23 @@ class RepoTokenAuthorization(pulumi.CustomResource):
         This resource is used for the ServiceStage service to establish the authorization relationship through personal access
         token with various types of the Open-Source repository.
 
+        ## Example Usage
+
+        ```python
+        import pulumi
+        import pulumi_huaweicloud as huaweicloud
+
+        config = pulumi.Config()
+        authorization_name = config.require_object("authorizationName")
+        personal_access_token = config.require_object("personalAccessToken")
+        test = huaweicloud.service_stage.RepoTokenAuthorization("test",
+            type="github",
+            token=personal_access_token)
+        ```
+
         ## Import
 
-        Authorizations can be imported using their `id` or `name`, e.g.
+        Authorizations can be imported using their `id` or `name`, e.g.bash
 
         ```sh
          $ pulumi import huaweicloud:ServiceStage/repoTokenAuthorization:RepoTokenAuthorization test terraform-test
@@ -302,8 +336,6 @@ class RepoTokenAuthorization(pulumi.CustomResource):
                 raise TypeError('__props__ is only valid when passed in combination with a valid opts.id to get an existing resource')
             __props__ = RepoTokenAuthorizationArgs.__new__(RepoTokenAuthorizationArgs)
 
-            if host is None and not opts.urn:
-                raise TypeError("Missing required property 'host'")
             __props__.__dict__["host"] = host
             __props__.__dict__["name"] = name
             __props__.__dict__["region"] = region
@@ -335,11 +367,12 @@ class RepoTokenAuthorization(pulumi.CustomResource):
         :param str resource_name: The unique name of the resulting resource.
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[str] host: Specified the host name of the repository.
+        :param pulumi.Input[str] host: Specified the host name of the repository, e.g. **https://api.github.com**.
                Changing this parameter will create a new authorization.
-        :param pulumi.Input[str] name: Specified the authorization name. The name can contain of 4 to 63 characters,
-               only letters, digits, underscores (_), hyphens (-) and dots (.) are allowed.
-               Changing this parameter will create a new authorization.
+               <!-- markdownlint-enable MD034 -->
+        :param pulumi.Input[str] name: Specified the authorization name.  
+               The name can contain of `4` to `63` characters, only letters, digits, underscores (_), hyphens (-) and dots (.) are
+               allowed. Changing this parameter will create a new authorization.
         :param pulumi.Input[str] region: Specified the region in which to create the repository authorization.
                If omitted, the provider-level region will be used. Changing this parameter will create a new authorization.
         :param pulumi.Input[str] token: Specified the personal access token of the repository.
@@ -362,10 +395,11 @@ class RepoTokenAuthorization(pulumi.CustomResource):
 
     @property
     @pulumi.getter
-    def host(self) -> pulumi.Output[str]:
+    def host(self) -> pulumi.Output[Optional[str]]:
         """
-        Specified the host name of the repository.
+        Specified the host name of the repository, e.g. **https://api.github.com**.
         Changing this parameter will create a new authorization.
+        <!-- markdownlint-enable MD034 -->
         """
         return pulumi.get(self, "host")
 
@@ -373,9 +407,9 @@ class RepoTokenAuthorization(pulumi.CustomResource):
     @pulumi.getter
     def name(self) -> pulumi.Output[str]:
         """
-        Specified the authorization name. The name can contain of 4 to 63 characters,
-        only letters, digits, underscores (_), hyphens (-) and dots (.) are allowed.
-        Changing this parameter will create a new authorization.
+        Specified the authorization name.  
+        The name can contain of `4` to `63` characters, only letters, digits, underscores (_), hyphens (-) and dots (.) are
+        allowed. Changing this parameter will create a new authorization.
         """
         return pulumi.get(self, "name")
 

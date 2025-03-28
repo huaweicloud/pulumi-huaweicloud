@@ -24,11 +24,13 @@ class RedisInstanceArgs:
                  vpc_id: pulumi.Input[str],
                  auto_pay: Optional[pulumi.Input[str]] = None,
                  auto_renew: Optional[pulumi.Input[str]] = None,
+                 availability_zone_detail: Optional[pulumi.Input['RedisInstanceAvailabilityZoneDetailArgs']] = None,
                  backup_strategy: Optional[pulumi.Input['RedisInstanceBackupStrategyArgs']] = None,
                  charging_mode: Optional[pulumi.Input[str]] = None,
                  datastore: Optional[pulumi.Input['RedisInstanceDatastoreArgs']] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  force_import: Optional[pulumi.Input[bool]] = None,
+                 mode: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  node_num: Optional[pulumi.Input[int]] = None,
                  period: Optional[pulumi.Input[int]] = None,
@@ -46,7 +48,7 @@ class RedisInstanceArgs:
                Changing this parameter will create a new resource.
         :param pulumi.Input[str] flavor: Specifies the instance specifications. For details,
                see [DB Instance Specifications](https://support.huaweicloud.com/intl/en-us/redisug-nosql/nosql_05_0059.html).
-        :param pulumi.Input[str] password: Specifies the database password. The value must be 8 to 32 characters in length,
+        :param pulumi.Input[str] password: Specifies the database password. The value must be `8` to `32` characters in length,
                including uppercase and lowercase letters, digits, and special characters, such as ~!@#%^*-_=+? You are advised to
                enter a strong password to improve security, preventing security risks such as brute force cracking.
         :param pulumi.Input[str] subnet_id: Specifies the network ID of a subnet. Changing this parameter will create a
@@ -56,31 +58,37 @@ class RedisInstanceArgs:
                see [DB Instance Specifications](https://support.huaweicloud.com/intl/en-us/redisug-nosql/nosql_05_0059.html)
         :param pulumi.Input[str] vpc_id: Specifies the VPC ID. Changing this parameter will create a new resource.
         :param pulumi.Input[str] auto_renew: Specifies whether auto renew is enabled. Valid values are "true" and "false".
+        :param pulumi.Input['RedisInstanceAvailabilityZoneDetailArgs'] availability_zone_detail: Specifies Multi-AZ details of the active/standby instance.
+               The system ignores this parameter if single-AZ deployment is selected. Currently, only GeminiDB Redis instances are
+               supported.
         :param pulumi.Input['RedisInstanceBackupStrategyArgs'] backup_strategy: Specifies the advanced backup policy. Structure is documented below. Do nothing
                in update method if change this parameter.
         :param pulumi.Input[str] charging_mode: Specifies the charging mode of the GaussDB for Redis instance. Valid values are
-               *prePaid* and *postPaid*, defaults to *postPaid*. Do nothing in update method if change this parameter.
+               **prePaid** and **postPaid**, defaults to **postPaid**. Do nothing in update method if change this parameter.
         :param pulumi.Input['RedisInstanceDatastoreArgs'] datastore: Specifies the database information. Structure is documented below. Changing
                this parameter will create a new resource.
-        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project id, Only valid for users who
-               have enabled the enterprise multi-project service. Changing this parameter will create a new resource.
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID, Only valid for users who
+               have enabled the enterprise multi-project service.
         :param pulumi.Input[bool] force_import: If specified, try to import the instance instead of creating if the name already
                existed.
+        :param pulumi.Input[str] mode: Specifies the instance type. Value options: **Cluster**, **Replication**.
+               Defaults to **Cluster**.
         :param pulumi.Input[str] name: Specifies the instance name, which can be the same as an existing instance name. The value
-               must be 4 to 64 characters in length and start with a letter. It is case-sensitive and can contain only letters,
+               must be `4` to `64` characters in length and start with a letter. It is case-sensitive and can contain only letters,
                digits, hyphens (-), and underscores (_). Chinese characters must be in UTF-8 or Unicode format.
-        :param pulumi.Input[int] node_num: Specifies the number of nodes, ranges from 2 to 12. Defaults to 3.
-        :param pulumi.Input[int] period: Specifies the charging period of the GaussDB for Redis instance. If `period_unit` is set
-               to *month*, the value ranges from 1 to 9. If `period_unit` is set to *year*, the value ranges from 1 to 3. This
-               parameter is mandatory if `charging_mode` is set to *prePaid*. Do nothing in update method if change this parameter.
+        :param pulumi.Input[int] node_num: Specifies the number of nodes, ranges from `2` to `12`. Defaults to `3`.
+        :param pulumi.Input[int] period: Specifies the charging period of the GaussDB for Redis instance.  
+               If `period_unit` is set to **month** , the value ranges from `1` to `9`.
+               If `period_unit` is set to **year**, the value ranges from `1` to `3`.
+               This parameter is mandatory if `charging_mode` is set to **prePaid**.
+               Changing this will do nothing.
         :param pulumi.Input[str] period_unit: Specifies the charging period unit of the GaussDB for Redis instance. Valid values
-               are *month* and *year*. This parameter is mandatory if `charging_mode` is set to *prePaid*. Do nothing in update
+               are **month** and **year**. This parameter is mandatory if `charging_mode` is set to **prePaid**. Do nothing in update
                method if change this parameter.
         :param pulumi.Input[int] port: Specifies the port number for accessing the instance. You can specify a port number
-               based on your requirements. The port number ranges from **1024** to **65535**, excluding **2180**, **2887**, **3887**,
-               **6377**, **6378**, **6380**, **8018**, **8079**, **8091**, **8479**, **8484**, **8999**, **12017**, **12333**, and
-               **50069**. Defaults to **6379**.
-               If you want to use this instance for dual-active DR, set the port to **8635**.
+               based on your requirements. The port number ranges from `1,024` to `65,535`, excluding `2,180`, `2,887`, `3,887`,
+               `6,377`, `6,378`, `6,380`, `8,018`, `8,079`, `8,091`, `8,479`, `8,484`, `8,999`, `12,017`, `12,333`, and `50,069`.
+               Defaults to `6,379`. If you want to use this instance for dual-active DR, set the port to `8,635`.
         :param pulumi.Input[str] region: The region in which to create the Redis instance resource.
                See [Region and Endpoints](https://developer.huaweicloud.com/intl/en-us/endpoint?GaussDB%20NoSQL) for more detail. If
                omitted, the provider-level region will be used. Changing this creates a new Redis instance resource.
@@ -99,6 +107,8 @@ class RedisInstanceArgs:
             pulumi.set(__self__, "auto_pay", auto_pay)
         if auto_renew is not None:
             pulumi.set(__self__, "auto_renew", auto_renew)
+        if availability_zone_detail is not None:
+            pulumi.set(__self__, "availability_zone_detail", availability_zone_detail)
         if backup_strategy is not None:
             pulumi.set(__self__, "backup_strategy", backup_strategy)
         if charging_mode is not None:
@@ -109,6 +119,8 @@ class RedisInstanceArgs:
             pulumi.set(__self__, "enterprise_project_id", enterprise_project_id)
         if force_import is not None:
             pulumi.set(__self__, "force_import", force_import)
+        if mode is not None:
+            pulumi.set(__self__, "mode", mode)
         if name is not None:
             pulumi.set(__self__, "name", name)
         if node_num is not None:
@@ -160,7 +172,7 @@ class RedisInstanceArgs:
     @pulumi.getter
     def password(self) -> pulumi.Input[str]:
         """
-        Specifies the database password. The value must be 8 to 32 characters in length,
+        Specifies the database password. The value must be `8` to `32` characters in length,
         including uppercase and lowercase letters, digits, and special characters, such as ~!@#%^*-_=+? You are advised to
         enter a strong password to improve security, preventing security risks such as brute force cracking.
         """
@@ -231,6 +243,20 @@ class RedisInstanceArgs:
         pulumi.set(self, "auto_renew", value)
 
     @property
+    @pulumi.getter(name="availabilityZoneDetail")
+    def availability_zone_detail(self) -> Optional[pulumi.Input['RedisInstanceAvailabilityZoneDetailArgs']]:
+        """
+        Specifies Multi-AZ details of the active/standby instance.
+        The system ignores this parameter if single-AZ deployment is selected. Currently, only GeminiDB Redis instances are
+        supported.
+        """
+        return pulumi.get(self, "availability_zone_detail")
+
+    @availability_zone_detail.setter
+    def availability_zone_detail(self, value: Optional[pulumi.Input['RedisInstanceAvailabilityZoneDetailArgs']]):
+        pulumi.set(self, "availability_zone_detail", value)
+
+    @property
     @pulumi.getter(name="backupStrategy")
     def backup_strategy(self) -> Optional[pulumi.Input['RedisInstanceBackupStrategyArgs']]:
         """
@@ -248,7 +274,7 @@ class RedisInstanceArgs:
     def charging_mode(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the charging mode of the GaussDB for Redis instance. Valid values are
-        *prePaid* and *postPaid*, defaults to *postPaid*. Do nothing in update method if change this parameter.
+        **prePaid** and **postPaid**, defaults to **postPaid**. Do nothing in update method if change this parameter.
         """
         return pulumi.get(self, "charging_mode")
 
@@ -273,8 +299,8 @@ class RedisInstanceArgs:
     @pulumi.getter(name="enterpriseProjectId")
     def enterprise_project_id(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the enterprise project id, Only valid for users who
-        have enabled the enterprise multi-project service. Changing this parameter will create a new resource.
+        Specifies the enterprise project ID, Only valid for users who
+        have enabled the enterprise multi-project service.
         """
         return pulumi.get(self, "enterprise_project_id")
 
@@ -297,10 +323,23 @@ class RedisInstanceArgs:
 
     @property
     @pulumi.getter
+    def mode(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the instance type. Value options: **Cluster**, **Replication**.
+        Defaults to **Cluster**.
+        """
+        return pulumi.get(self, "mode")
+
+    @mode.setter
+    def mode(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "mode", value)
+
+    @property
+    @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the instance name, which can be the same as an existing instance name. The value
-        must be 4 to 64 characters in length and start with a letter. It is case-sensitive and can contain only letters,
+        must be `4` to `64` characters in length and start with a letter. It is case-sensitive and can contain only letters,
         digits, hyphens (-), and underscores (_). Chinese characters must be in UTF-8 or Unicode format.
         """
         return pulumi.get(self, "name")
@@ -313,7 +352,7 @@ class RedisInstanceArgs:
     @pulumi.getter(name="nodeNum")
     def node_num(self) -> Optional[pulumi.Input[int]]:
         """
-        Specifies the number of nodes, ranges from 2 to 12. Defaults to 3.
+        Specifies the number of nodes, ranges from `2` to `12`. Defaults to `3`.
         """
         return pulumi.get(self, "node_num")
 
@@ -325,9 +364,11 @@ class RedisInstanceArgs:
     @pulumi.getter
     def period(self) -> Optional[pulumi.Input[int]]:
         """
-        Specifies the charging period of the GaussDB for Redis instance. If `period_unit` is set
-        to *month*, the value ranges from 1 to 9. If `period_unit` is set to *year*, the value ranges from 1 to 3. This
-        parameter is mandatory if `charging_mode` is set to *prePaid*. Do nothing in update method if change this parameter.
+        Specifies the charging period of the GaussDB for Redis instance.  
+        If `period_unit` is set to **month** , the value ranges from `1` to `9`.
+        If `period_unit` is set to **year**, the value ranges from `1` to `3`.
+        This parameter is mandatory if `charging_mode` is set to **prePaid**.
+        Changing this will do nothing.
         """
         return pulumi.get(self, "period")
 
@@ -340,7 +381,7 @@ class RedisInstanceArgs:
     def period_unit(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the charging period unit of the GaussDB for Redis instance. Valid values
-        are *month* and *year*. This parameter is mandatory if `charging_mode` is set to *prePaid*. Do nothing in update
+        are **month** and **year**. This parameter is mandatory if `charging_mode` is set to **prePaid**. Do nothing in update
         method if change this parameter.
         """
         return pulumi.get(self, "period_unit")
@@ -354,10 +395,9 @@ class RedisInstanceArgs:
     def port(self) -> Optional[pulumi.Input[int]]:
         """
         Specifies the port number for accessing the instance. You can specify a port number
-        based on your requirements. The port number ranges from **1024** to **65535**, excluding **2180**, **2887**, **3887**,
-        **6377**, **6378**, **6380**, **8018**, **8079**, **8091**, **8479**, **8484**, **8999**, **12017**, **12333**, and
-        **50069**. Defaults to **6379**.
-        If you want to use this instance for dual-active DR, set the port to **8635**.
+        based on your requirements. The port number ranges from `1,024` to `65,535`, excluding `2,180`, `2,887`, `3,887`,
+        `6,377`, `6,378`, `6,380`, `8,018`, `8,079`, `8,091`, `8,479`, `8,484`, `8,999`, `12,017`, `12,333`, and `50,069`.
+        Defaults to `6,379`. If you want to use this instance for dual-active DR, set the port to `8,635`.
         """
         return pulumi.get(self, "port")
 
@@ -423,6 +463,7 @@ class _RedisInstanceState:
                  auto_pay: Optional[pulumi.Input[str]] = None,
                  auto_renew: Optional[pulumi.Input[str]] = None,
                  availability_zone: Optional[pulumi.Input[str]] = None,
+                 availability_zone_detail: Optional[pulumi.Input['RedisInstanceAvailabilityZoneDetailArgs']] = None,
                  backup_strategy: Optional[pulumi.Input['RedisInstanceBackupStrategyArgs']] = None,
                  charging_mode: Optional[pulumi.Input[str]] = None,
                  datastore: Optional[pulumi.Input['RedisInstanceDatastoreArgs']] = None,
@@ -456,41 +497,46 @@ class _RedisInstanceState:
                See [Region and Endpoints](https://developer.huaweicloud.com/intl/en-us/endpoint?GaussDB%20NoSQL) for more detail.
                For a three-AZ deployment instance, use commas (,) to separate the AZs, for example, `cn-north-4a,cn-north-4b,cn-north-4c`.
                Changing this parameter will create a new resource.
+        :param pulumi.Input['RedisInstanceAvailabilityZoneDetailArgs'] availability_zone_detail: Specifies Multi-AZ details of the active/standby instance.
+               The system ignores this parameter if single-AZ deployment is selected. Currently, only GeminiDB Redis instances are
+               supported.
         :param pulumi.Input['RedisInstanceBackupStrategyArgs'] backup_strategy: Specifies the advanced backup policy. Structure is documented below. Do nothing
                in update method if change this parameter.
         :param pulumi.Input[str] charging_mode: Specifies the charging mode of the GaussDB for Redis instance. Valid values are
-               *prePaid* and *postPaid*, defaults to *postPaid*. Do nothing in update method if change this parameter.
+               **prePaid** and **postPaid**, defaults to **postPaid**. Do nothing in update method if change this parameter.
         :param pulumi.Input['RedisInstanceDatastoreArgs'] datastore: Specifies the database information. Structure is documented below. Changing
                this parameter will create a new resource.
         :param pulumi.Input[str] db_user_name: Indicates the default username.
-        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project id, Only valid for users who
-               have enabled the enterprise multi-project service. Changing this parameter will create a new resource.
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID, Only valid for users who
+               have enabled the enterprise multi-project service.
         :param pulumi.Input[str] flavor: Specifies the instance specifications. For details,
                see [DB Instance Specifications](https://support.huaweicloud.com/intl/en-us/redisug-nosql/nosql_05_0059.html).
         :param pulumi.Input[bool] force_import: If specified, try to import the instance instead of creating if the name already
                existed.
         :param pulumi.Input[str] lb_ip_address: Indicates the LB IP address of the db.
         :param pulumi.Input[str] lb_port: Indicates the LB port of the db.
-        :param pulumi.Input[str] mode: Indicates the instance type.
+        :param pulumi.Input[str] mode: Specifies the instance type. Value options: **Cluster**, **Replication**.
+               Defaults to **Cluster**.
         :param pulumi.Input[str] name: Specifies the instance name, which can be the same as an existing instance name. The value
-               must be 4 to 64 characters in length and start with a letter. It is case-sensitive and can contain only letters,
+               must be `4` to `64` characters in length and start with a letter. It is case-sensitive and can contain only letters,
                digits, hyphens (-), and underscores (_). Chinese characters must be in UTF-8 or Unicode format.
-        :param pulumi.Input[int] node_num: Specifies the number of nodes, ranges from 2 to 12. Defaults to 3.
+        :param pulumi.Input[int] node_num: Specifies the number of nodes, ranges from `2` to `12`. Defaults to `3`.
         :param pulumi.Input[Sequence[pulumi.Input['RedisInstanceNodeArgs']]] nodes: Indicates the instance nodes information. Structure is documented below.
-        :param pulumi.Input[str] password: Specifies the database password. The value must be 8 to 32 characters in length,
+        :param pulumi.Input[str] password: Specifies the database password. The value must be `8` to `32` characters in length,
                including uppercase and lowercase letters, digits, and special characters, such as ~!@#%^*-_=+? You are advised to
                enter a strong password to improve security, preventing security risks such as brute force cracking.
-        :param pulumi.Input[int] period: Specifies the charging period of the GaussDB for Redis instance. If `period_unit` is set
-               to *month*, the value ranges from 1 to 9. If `period_unit` is set to *year*, the value ranges from 1 to 3. This
-               parameter is mandatory if `charging_mode` is set to *prePaid*. Do nothing in update method if change this parameter.
+        :param pulumi.Input[int] period: Specifies the charging period of the GaussDB for Redis instance.  
+               If `period_unit` is set to **month** , the value ranges from `1` to `9`.
+               If `period_unit` is set to **year**, the value ranges from `1` to `3`.
+               This parameter is mandatory if `charging_mode` is set to **prePaid**.
+               Changing this will do nothing.
         :param pulumi.Input[str] period_unit: Specifies the charging period unit of the GaussDB for Redis instance. Valid values
-               are *month* and *year*. This parameter is mandatory if `charging_mode` is set to *prePaid*. Do nothing in update
+               are **month** and **year**. This parameter is mandatory if `charging_mode` is set to **prePaid**. Do nothing in update
                method if change this parameter.
         :param pulumi.Input[int] port: Specifies the port number for accessing the instance. You can specify a port number
-               based on your requirements. The port number ranges from **1024** to **65535**, excluding **2180**, **2887**, **3887**,
-               **6377**, **6378**, **6380**, **8018**, **8079**, **8091**, **8479**, **8484**, **8999**, **12017**, **12333**, and
-               **50069**. Defaults to **6379**.
-               If you want to use this instance for dual-active DR, set the port to **8635**.
+               based on your requirements. The port number ranges from `1,024` to `65,535`, excluding `2,180`, `2,887`, `3,887`,
+               `6,377`, `6,378`, `6,380`, `8,018`, `8,079`, `8,091`, `8,479`, `8,484`, `8,999`, `12,017`, `12,333`, and `50,069`.
+               Defaults to `6,379`. If you want to use this instance for dual-active DR, set the port to `8,635`.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] private_ips: Indicates the IP address list of the db.
         :param pulumi.Input[str] region: The region in which to create the Redis instance resource.
                See [Region and Endpoints](https://developer.huaweicloud.com/intl/en-us/endpoint?GaussDB%20NoSQL) for more detail. If
@@ -513,6 +559,8 @@ class _RedisInstanceState:
             pulumi.set(__self__, "auto_renew", auto_renew)
         if availability_zone is not None:
             pulumi.set(__self__, "availability_zone", availability_zone)
+        if availability_zone_detail is not None:
+            pulumi.set(__self__, "availability_zone_detail", availability_zone_detail)
         if backup_strategy is not None:
             pulumi.set(__self__, "backup_strategy", backup_strategy)
         if charging_mode is not None:
@@ -603,6 +651,20 @@ class _RedisInstanceState:
         pulumi.set(self, "availability_zone", value)
 
     @property
+    @pulumi.getter(name="availabilityZoneDetail")
+    def availability_zone_detail(self) -> Optional[pulumi.Input['RedisInstanceAvailabilityZoneDetailArgs']]:
+        """
+        Specifies Multi-AZ details of the active/standby instance.
+        The system ignores this parameter if single-AZ deployment is selected. Currently, only GeminiDB Redis instances are
+        supported.
+        """
+        return pulumi.get(self, "availability_zone_detail")
+
+    @availability_zone_detail.setter
+    def availability_zone_detail(self, value: Optional[pulumi.Input['RedisInstanceAvailabilityZoneDetailArgs']]):
+        pulumi.set(self, "availability_zone_detail", value)
+
+    @property
     @pulumi.getter(name="backupStrategy")
     def backup_strategy(self) -> Optional[pulumi.Input['RedisInstanceBackupStrategyArgs']]:
         """
@@ -620,7 +682,7 @@ class _RedisInstanceState:
     def charging_mode(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the charging mode of the GaussDB for Redis instance. Valid values are
-        *prePaid* and *postPaid*, defaults to *postPaid*. Do nothing in update method if change this parameter.
+        **prePaid** and **postPaid**, defaults to **postPaid**. Do nothing in update method if change this parameter.
         """
         return pulumi.get(self, "charging_mode")
 
@@ -657,8 +719,8 @@ class _RedisInstanceState:
     @pulumi.getter(name="enterpriseProjectId")
     def enterprise_project_id(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the enterprise project id, Only valid for users who
-        have enabled the enterprise multi-project service. Changing this parameter will create a new resource.
+        Specifies the enterprise project ID, Only valid for users who
+        have enabled the enterprise multi-project service.
         """
         return pulumi.get(self, "enterprise_project_id")
 
@@ -720,7 +782,8 @@ class _RedisInstanceState:
     @pulumi.getter
     def mode(self) -> Optional[pulumi.Input[str]]:
         """
-        Indicates the instance type.
+        Specifies the instance type. Value options: **Cluster**, **Replication**.
+        Defaults to **Cluster**.
         """
         return pulumi.get(self, "mode")
 
@@ -733,7 +796,7 @@ class _RedisInstanceState:
     def name(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the instance name, which can be the same as an existing instance name. The value
-        must be 4 to 64 characters in length and start with a letter. It is case-sensitive and can contain only letters,
+        must be `4` to `64` characters in length and start with a letter. It is case-sensitive and can contain only letters,
         digits, hyphens (-), and underscores (_). Chinese characters must be in UTF-8 or Unicode format.
         """
         return pulumi.get(self, "name")
@@ -746,7 +809,7 @@ class _RedisInstanceState:
     @pulumi.getter(name="nodeNum")
     def node_num(self) -> Optional[pulumi.Input[int]]:
         """
-        Specifies the number of nodes, ranges from 2 to 12. Defaults to 3.
+        Specifies the number of nodes, ranges from `2` to `12`. Defaults to `3`.
         """
         return pulumi.get(self, "node_num")
 
@@ -770,7 +833,7 @@ class _RedisInstanceState:
     @pulumi.getter
     def password(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the database password. The value must be 8 to 32 characters in length,
+        Specifies the database password. The value must be `8` to `32` characters in length,
         including uppercase and lowercase letters, digits, and special characters, such as ~!@#%^*-_=+? You are advised to
         enter a strong password to improve security, preventing security risks such as brute force cracking.
         """
@@ -784,9 +847,11 @@ class _RedisInstanceState:
     @pulumi.getter
     def period(self) -> Optional[pulumi.Input[int]]:
         """
-        Specifies the charging period of the GaussDB for Redis instance. If `period_unit` is set
-        to *month*, the value ranges from 1 to 9. If `period_unit` is set to *year*, the value ranges from 1 to 3. This
-        parameter is mandatory if `charging_mode` is set to *prePaid*. Do nothing in update method if change this parameter.
+        Specifies the charging period of the GaussDB for Redis instance.  
+        If `period_unit` is set to **month** , the value ranges from `1` to `9`.
+        If `period_unit` is set to **year**, the value ranges from `1` to `3`.
+        This parameter is mandatory if `charging_mode` is set to **prePaid**.
+        Changing this will do nothing.
         """
         return pulumi.get(self, "period")
 
@@ -799,7 +864,7 @@ class _RedisInstanceState:
     def period_unit(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the charging period unit of the GaussDB for Redis instance. Valid values
-        are *month* and *year*. This parameter is mandatory if `charging_mode` is set to *prePaid*. Do nothing in update
+        are **month** and **year**. This parameter is mandatory if `charging_mode` is set to **prePaid**. Do nothing in update
         method if change this parameter.
         """
         return pulumi.get(self, "period_unit")
@@ -813,10 +878,9 @@ class _RedisInstanceState:
     def port(self) -> Optional[pulumi.Input[int]]:
         """
         Specifies the port number for accessing the instance. You can specify a port number
-        based on your requirements. The port number ranges from **1024** to **65535**, excluding **2180**, **2887**, **3887**,
-        **6377**, **6378**, **6380**, **8018**, **8079**, **8091**, **8479**, **8484**, **8999**, **12017**, **12333**, and
-        **50069**. Defaults to **6379**.
-        If you want to use this instance for dual-active DR, set the port to **8635**.
+        based on your requirements. The port number ranges from `1,024` to `65,535`, excluding `2,180`, `2,887`, `3,887`,
+        `6,377`, `6,378`, `6,380`, `8,018`, `8,079`, `8,091`, `8,479`, `8,484`, `8,999`, `12,017`, `12,333`, and `50,069`.
+        Defaults to `6,379`. If you want to use this instance for dual-active DR, set the port to `8,635`.
         """
         return pulumi.get(self, "port")
 
@@ -947,12 +1011,14 @@ class RedisInstance(pulumi.CustomResource):
                  auto_pay: Optional[pulumi.Input[str]] = None,
                  auto_renew: Optional[pulumi.Input[str]] = None,
                  availability_zone: Optional[pulumi.Input[str]] = None,
+                 availability_zone_detail: Optional[pulumi.Input[pulumi.InputType['RedisInstanceAvailabilityZoneDetailArgs']]] = None,
                  backup_strategy: Optional[pulumi.Input[pulumi.InputType['RedisInstanceBackupStrategyArgs']]] = None,
                  charging_mode: Optional[pulumi.Input[str]] = None,
                  datastore: Optional[pulumi.Input[pulumi.InputType['RedisInstanceDatastoreArgs']]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  flavor: Optional[pulumi.Input[str]] = None,
                  force_import: Optional[pulumi.Input[bool]] = None,
+                 mode: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  node_num: Optional[pulumi.Input[int]] = None,
                  password: Optional[pulumi.Input[str]] = None,
@@ -968,10 +1034,10 @@ class RedisInstance(pulumi.CustomResource):
                  vpc_id: Optional[pulumi.Input[str]] = None,
                  __props__=None):
         """
-        GaussDB for Redis instance management within HuaweiCoud.
+        GeminiDB Redis instance management within HuaweiCould.
 
         ## Example Usage
-        ### create a gaussdb for redis instance with tags
+        ### create a geminidb redis instance with tags
 
         ```python
         import pulumi
@@ -980,7 +1046,7 @@ class RedisInstance(pulumi.CustomResource):
         test = huaweicloud.gauss_d_bfor_no_sql.RedisInstance("test",
             password=var["password"],
             flavor="geminidb.redis.xlarge.4",
-            volume_size=100,
+            volume_size=16,
             vpc_id=var["vpc_id"],
             subnet_id=var["subnet_id"],
             security_group_id=var["secgroup_id"],
@@ -990,7 +1056,7 @@ class RedisInstance(pulumi.CustomResource):
                 "key": "value",
             })
         ```
-        ### create a gaussdb redis instance with backup strategy
+        ### create a geminidb redis instance with backup strategy
 
         ```python
         import pulumi
@@ -999,7 +1065,7 @@ class RedisInstance(pulumi.CustomResource):
         test = huaweicloud.gauss_d_bfor_no_sql.RedisInstance("test",
             password=var["password"],
             flavor="geminidb.redis.xlarge.4",
-            volume_size=100,
+            volume_size=16,
             vpc_id=var["vpc_id"],
             subnet_id=var["subnet_id"],
             security_group_id=var["secgroup_id"],
@@ -1012,7 +1078,7 @@ class RedisInstance(pulumi.CustomResource):
 
         ## Import
 
-        GaussDB Redis instance can be imported using the `id`, e.g.
+        GaussDB Redis instance can be imported using the `id`, e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:GaussDBforNoSQL/redisInstance:RedisInstance instance_1 d54b21f037ed447aad4bfd20927711c6in12
@@ -1025,36 +1091,42 @@ class RedisInstance(pulumi.CustomResource):
                See [Region and Endpoints](https://developer.huaweicloud.com/intl/en-us/endpoint?GaussDB%20NoSQL) for more detail.
                For a three-AZ deployment instance, use commas (,) to separate the AZs, for example, `cn-north-4a,cn-north-4b,cn-north-4c`.
                Changing this parameter will create a new resource.
+        :param pulumi.Input[pulumi.InputType['RedisInstanceAvailabilityZoneDetailArgs']] availability_zone_detail: Specifies Multi-AZ details of the active/standby instance.
+               The system ignores this parameter if single-AZ deployment is selected. Currently, only GeminiDB Redis instances are
+               supported.
         :param pulumi.Input[pulumi.InputType['RedisInstanceBackupStrategyArgs']] backup_strategy: Specifies the advanced backup policy. Structure is documented below. Do nothing
                in update method if change this parameter.
         :param pulumi.Input[str] charging_mode: Specifies the charging mode of the GaussDB for Redis instance. Valid values are
-               *prePaid* and *postPaid*, defaults to *postPaid*. Do nothing in update method if change this parameter.
+               **prePaid** and **postPaid**, defaults to **postPaid**. Do nothing in update method if change this parameter.
         :param pulumi.Input[pulumi.InputType['RedisInstanceDatastoreArgs']] datastore: Specifies the database information. Structure is documented below. Changing
                this parameter will create a new resource.
-        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project id, Only valid for users who
-               have enabled the enterprise multi-project service. Changing this parameter will create a new resource.
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID, Only valid for users who
+               have enabled the enterprise multi-project service.
         :param pulumi.Input[str] flavor: Specifies the instance specifications. For details,
                see [DB Instance Specifications](https://support.huaweicloud.com/intl/en-us/redisug-nosql/nosql_05_0059.html).
         :param pulumi.Input[bool] force_import: If specified, try to import the instance instead of creating if the name already
                existed.
+        :param pulumi.Input[str] mode: Specifies the instance type. Value options: **Cluster**, **Replication**.
+               Defaults to **Cluster**.
         :param pulumi.Input[str] name: Specifies the instance name, which can be the same as an existing instance name. The value
-               must be 4 to 64 characters in length and start with a letter. It is case-sensitive and can contain only letters,
+               must be `4` to `64` characters in length and start with a letter. It is case-sensitive and can contain only letters,
                digits, hyphens (-), and underscores (_). Chinese characters must be in UTF-8 or Unicode format.
-        :param pulumi.Input[int] node_num: Specifies the number of nodes, ranges from 2 to 12. Defaults to 3.
-        :param pulumi.Input[str] password: Specifies the database password. The value must be 8 to 32 characters in length,
+        :param pulumi.Input[int] node_num: Specifies the number of nodes, ranges from `2` to `12`. Defaults to `3`.
+        :param pulumi.Input[str] password: Specifies the database password. The value must be `8` to `32` characters in length,
                including uppercase and lowercase letters, digits, and special characters, such as ~!@#%^*-_=+? You are advised to
                enter a strong password to improve security, preventing security risks such as brute force cracking.
-        :param pulumi.Input[int] period: Specifies the charging period of the GaussDB for Redis instance. If `period_unit` is set
-               to *month*, the value ranges from 1 to 9. If `period_unit` is set to *year*, the value ranges from 1 to 3. This
-               parameter is mandatory if `charging_mode` is set to *prePaid*. Do nothing in update method if change this parameter.
+        :param pulumi.Input[int] period: Specifies the charging period of the GaussDB for Redis instance.  
+               If `period_unit` is set to **month** , the value ranges from `1` to `9`.
+               If `period_unit` is set to **year**, the value ranges from `1` to `3`.
+               This parameter is mandatory if `charging_mode` is set to **prePaid**.
+               Changing this will do nothing.
         :param pulumi.Input[str] period_unit: Specifies the charging period unit of the GaussDB for Redis instance. Valid values
-               are *month* and *year*. This parameter is mandatory if `charging_mode` is set to *prePaid*. Do nothing in update
+               are **month** and **year**. This parameter is mandatory if `charging_mode` is set to **prePaid**. Do nothing in update
                method if change this parameter.
         :param pulumi.Input[int] port: Specifies the port number for accessing the instance. You can specify a port number
-               based on your requirements. The port number ranges from **1024** to **65535**, excluding **2180**, **2887**, **3887**,
-               **6377**, **6378**, **6380**, **8018**, **8079**, **8091**, **8479**, **8484**, **8999**, **12017**, **12333**, and
-               **50069**. Defaults to **6379**.
-               If you want to use this instance for dual-active DR, set the port to **8635**.
+               based on your requirements. The port number ranges from `1,024` to `65,535`, excluding `2,180`, `2,887`, `3,887`,
+               `6,377`, `6,378`, `6,380`, `8,018`, `8,079`, `8,091`, `8,479`, `8,484`, `8,999`, `12,017`, `12,333`, and `50,069`.
+               Defaults to `6,379`. If you want to use this instance for dual-active DR, set the port to `8,635`.
         :param pulumi.Input[str] region: The region in which to create the Redis instance resource.
                See [Region and Endpoints](https://developer.huaweicloud.com/intl/en-us/endpoint?GaussDB%20NoSQL) for more detail. If
                omitted, the provider-level region will be used. Changing this creates a new Redis instance resource.
@@ -1076,10 +1148,10 @@ class RedisInstance(pulumi.CustomResource):
                  args: RedisInstanceArgs,
                  opts: Optional[pulumi.ResourceOptions] = None):
         """
-        GaussDB for Redis instance management within HuaweiCoud.
+        GeminiDB Redis instance management within HuaweiCould.
 
         ## Example Usage
-        ### create a gaussdb for redis instance with tags
+        ### create a geminidb redis instance with tags
 
         ```python
         import pulumi
@@ -1088,7 +1160,7 @@ class RedisInstance(pulumi.CustomResource):
         test = huaweicloud.gauss_d_bfor_no_sql.RedisInstance("test",
             password=var["password"],
             flavor="geminidb.redis.xlarge.4",
-            volume_size=100,
+            volume_size=16,
             vpc_id=var["vpc_id"],
             subnet_id=var["subnet_id"],
             security_group_id=var["secgroup_id"],
@@ -1098,7 +1170,7 @@ class RedisInstance(pulumi.CustomResource):
                 "key": "value",
             })
         ```
-        ### create a gaussdb redis instance with backup strategy
+        ### create a geminidb redis instance with backup strategy
 
         ```python
         import pulumi
@@ -1107,7 +1179,7 @@ class RedisInstance(pulumi.CustomResource):
         test = huaweicloud.gauss_d_bfor_no_sql.RedisInstance("test",
             password=var["password"],
             flavor="geminidb.redis.xlarge.4",
-            volume_size=100,
+            volume_size=16,
             vpc_id=var["vpc_id"],
             subnet_id=var["subnet_id"],
             security_group_id=var["secgroup_id"],
@@ -1120,7 +1192,7 @@ class RedisInstance(pulumi.CustomResource):
 
         ## Import
 
-        GaussDB Redis instance can be imported using the `id`, e.g.
+        GaussDB Redis instance can be imported using the `id`, e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:GaussDBforNoSQL/redisInstance:RedisInstance instance_1 d54b21f037ed447aad4bfd20927711c6in12
@@ -1144,12 +1216,14 @@ class RedisInstance(pulumi.CustomResource):
                  auto_pay: Optional[pulumi.Input[str]] = None,
                  auto_renew: Optional[pulumi.Input[str]] = None,
                  availability_zone: Optional[pulumi.Input[str]] = None,
+                 availability_zone_detail: Optional[pulumi.Input[pulumi.InputType['RedisInstanceAvailabilityZoneDetailArgs']]] = None,
                  backup_strategy: Optional[pulumi.Input[pulumi.InputType['RedisInstanceBackupStrategyArgs']]] = None,
                  charging_mode: Optional[pulumi.Input[str]] = None,
                  datastore: Optional[pulumi.Input[pulumi.InputType['RedisInstanceDatastoreArgs']]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  flavor: Optional[pulumi.Input[str]] = None,
                  force_import: Optional[pulumi.Input[bool]] = None,
+                 mode: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  node_num: Optional[pulumi.Input[int]] = None,
                  password: Optional[pulumi.Input[str]] = None,
@@ -1177,6 +1251,7 @@ class RedisInstance(pulumi.CustomResource):
             if availability_zone is None and not opts.urn:
                 raise TypeError("Missing required property 'availability_zone'")
             __props__.__dict__["availability_zone"] = availability_zone
+            __props__.__dict__["availability_zone_detail"] = availability_zone_detail
             __props__.__dict__["backup_strategy"] = backup_strategy
             __props__.__dict__["charging_mode"] = charging_mode
             __props__.__dict__["datastore"] = datastore
@@ -1185,6 +1260,7 @@ class RedisInstance(pulumi.CustomResource):
                 raise TypeError("Missing required property 'flavor'")
             __props__.__dict__["flavor"] = flavor
             __props__.__dict__["force_import"] = force_import
+            __props__.__dict__["mode"] = mode
             __props__.__dict__["name"] = name
             __props__.__dict__["node_num"] = node_num
             if password is None and not opts.urn:
@@ -1209,7 +1285,6 @@ class RedisInstance(pulumi.CustomResource):
             __props__.__dict__["db_user_name"] = None
             __props__.__dict__["lb_ip_address"] = None
             __props__.__dict__["lb_port"] = None
-            __props__.__dict__["mode"] = None
             __props__.__dict__["nodes"] = None
             __props__.__dict__["private_ips"] = None
             __props__.__dict__["status"] = None
@@ -1226,6 +1301,7 @@ class RedisInstance(pulumi.CustomResource):
             auto_pay: Optional[pulumi.Input[str]] = None,
             auto_renew: Optional[pulumi.Input[str]] = None,
             availability_zone: Optional[pulumi.Input[str]] = None,
+            availability_zone_detail: Optional[pulumi.Input[pulumi.InputType['RedisInstanceAvailabilityZoneDetailArgs']]] = None,
             backup_strategy: Optional[pulumi.Input[pulumi.InputType['RedisInstanceBackupStrategyArgs']]] = None,
             charging_mode: Optional[pulumi.Input[str]] = None,
             datastore: Optional[pulumi.Input[pulumi.InputType['RedisInstanceDatastoreArgs']]] = None,
@@ -1264,41 +1340,46 @@ class RedisInstance(pulumi.CustomResource):
                See [Region and Endpoints](https://developer.huaweicloud.com/intl/en-us/endpoint?GaussDB%20NoSQL) for more detail.
                For a three-AZ deployment instance, use commas (,) to separate the AZs, for example, `cn-north-4a,cn-north-4b,cn-north-4c`.
                Changing this parameter will create a new resource.
+        :param pulumi.Input[pulumi.InputType['RedisInstanceAvailabilityZoneDetailArgs']] availability_zone_detail: Specifies Multi-AZ details of the active/standby instance.
+               The system ignores this parameter if single-AZ deployment is selected. Currently, only GeminiDB Redis instances are
+               supported.
         :param pulumi.Input[pulumi.InputType['RedisInstanceBackupStrategyArgs']] backup_strategy: Specifies the advanced backup policy. Structure is documented below. Do nothing
                in update method if change this parameter.
         :param pulumi.Input[str] charging_mode: Specifies the charging mode of the GaussDB for Redis instance. Valid values are
-               *prePaid* and *postPaid*, defaults to *postPaid*. Do nothing in update method if change this parameter.
+               **prePaid** and **postPaid**, defaults to **postPaid**. Do nothing in update method if change this parameter.
         :param pulumi.Input[pulumi.InputType['RedisInstanceDatastoreArgs']] datastore: Specifies the database information. Structure is documented below. Changing
                this parameter will create a new resource.
         :param pulumi.Input[str] db_user_name: Indicates the default username.
-        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project id, Only valid for users who
-               have enabled the enterprise multi-project service. Changing this parameter will create a new resource.
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID, Only valid for users who
+               have enabled the enterprise multi-project service.
         :param pulumi.Input[str] flavor: Specifies the instance specifications. For details,
                see [DB Instance Specifications](https://support.huaweicloud.com/intl/en-us/redisug-nosql/nosql_05_0059.html).
         :param pulumi.Input[bool] force_import: If specified, try to import the instance instead of creating if the name already
                existed.
         :param pulumi.Input[str] lb_ip_address: Indicates the LB IP address of the db.
         :param pulumi.Input[str] lb_port: Indicates the LB port of the db.
-        :param pulumi.Input[str] mode: Indicates the instance type.
+        :param pulumi.Input[str] mode: Specifies the instance type. Value options: **Cluster**, **Replication**.
+               Defaults to **Cluster**.
         :param pulumi.Input[str] name: Specifies the instance name, which can be the same as an existing instance name. The value
-               must be 4 to 64 characters in length and start with a letter. It is case-sensitive and can contain only letters,
+               must be `4` to `64` characters in length and start with a letter. It is case-sensitive and can contain only letters,
                digits, hyphens (-), and underscores (_). Chinese characters must be in UTF-8 or Unicode format.
-        :param pulumi.Input[int] node_num: Specifies the number of nodes, ranges from 2 to 12. Defaults to 3.
+        :param pulumi.Input[int] node_num: Specifies the number of nodes, ranges from `2` to `12`. Defaults to `3`.
         :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['RedisInstanceNodeArgs']]]] nodes: Indicates the instance nodes information. Structure is documented below.
-        :param pulumi.Input[str] password: Specifies the database password. The value must be 8 to 32 characters in length,
+        :param pulumi.Input[str] password: Specifies the database password. The value must be `8` to `32` characters in length,
                including uppercase and lowercase letters, digits, and special characters, such as ~!@#%^*-_=+? You are advised to
                enter a strong password to improve security, preventing security risks such as brute force cracking.
-        :param pulumi.Input[int] period: Specifies the charging period of the GaussDB for Redis instance. If `period_unit` is set
-               to *month*, the value ranges from 1 to 9. If `period_unit` is set to *year*, the value ranges from 1 to 3. This
-               parameter is mandatory if `charging_mode` is set to *prePaid*. Do nothing in update method if change this parameter.
+        :param pulumi.Input[int] period: Specifies the charging period of the GaussDB for Redis instance.  
+               If `period_unit` is set to **month** , the value ranges from `1` to `9`.
+               If `period_unit` is set to **year**, the value ranges from `1` to `3`.
+               This parameter is mandatory if `charging_mode` is set to **prePaid**.
+               Changing this will do nothing.
         :param pulumi.Input[str] period_unit: Specifies the charging period unit of the GaussDB for Redis instance. Valid values
-               are *month* and *year*. This parameter is mandatory if `charging_mode` is set to *prePaid*. Do nothing in update
+               are **month** and **year**. This parameter is mandatory if `charging_mode` is set to **prePaid**. Do nothing in update
                method if change this parameter.
         :param pulumi.Input[int] port: Specifies the port number for accessing the instance. You can specify a port number
-               based on your requirements. The port number ranges from **1024** to **65535**, excluding **2180**, **2887**, **3887**,
-               **6377**, **6378**, **6380**, **8018**, **8079**, **8091**, **8479**, **8484**, **8999**, **12017**, **12333**, and
-               **50069**. Defaults to **6379**.
-               If you want to use this instance for dual-active DR, set the port to **8635**.
+               based on your requirements. The port number ranges from `1,024` to `65,535`, excluding `2,180`, `2,887`, `3,887`,
+               `6,377`, `6,378`, `6,380`, `8,018`, `8,079`, `8,091`, `8,479`, `8,484`, `8,999`, `12,017`, `12,333`, and `50,069`.
+               Defaults to `6,379`. If you want to use this instance for dual-active DR, set the port to `8,635`.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] private_ips: Indicates the IP address list of the db.
         :param pulumi.Input[str] region: The region in which to create the Redis instance resource.
                See [Region and Endpoints](https://developer.huaweicloud.com/intl/en-us/endpoint?GaussDB%20NoSQL) for more detail. If
@@ -1322,6 +1403,7 @@ class RedisInstance(pulumi.CustomResource):
         __props__.__dict__["auto_pay"] = auto_pay
         __props__.__dict__["auto_renew"] = auto_renew
         __props__.__dict__["availability_zone"] = availability_zone
+        __props__.__dict__["availability_zone_detail"] = availability_zone_detail
         __props__.__dict__["backup_strategy"] = backup_strategy
         __props__.__dict__["charging_mode"] = charging_mode
         __props__.__dict__["datastore"] = datastore
@@ -1375,6 +1457,16 @@ class RedisInstance(pulumi.CustomResource):
         return pulumi.get(self, "availability_zone")
 
     @property
+    @pulumi.getter(name="availabilityZoneDetail")
+    def availability_zone_detail(self) -> pulumi.Output[Optional['outputs.RedisInstanceAvailabilityZoneDetail']]:
+        """
+        Specifies Multi-AZ details of the active/standby instance.
+        The system ignores this parameter if single-AZ deployment is selected. Currently, only GeminiDB Redis instances are
+        supported.
+        """
+        return pulumi.get(self, "availability_zone_detail")
+
+    @property
     @pulumi.getter(name="backupStrategy")
     def backup_strategy(self) -> pulumi.Output['outputs.RedisInstanceBackupStrategy']:
         """
@@ -1388,7 +1480,7 @@ class RedisInstance(pulumi.CustomResource):
     def charging_mode(self) -> pulumi.Output[Optional[str]]:
         """
         Specifies the charging mode of the GaussDB for Redis instance. Valid values are
-        *prePaid* and *postPaid*, defaults to *postPaid*. Do nothing in update method if change this parameter.
+        **prePaid** and **postPaid**, defaults to **postPaid**. Do nothing in update method if change this parameter.
         """
         return pulumi.get(self, "charging_mode")
 
@@ -1413,8 +1505,8 @@ class RedisInstance(pulumi.CustomResource):
     @pulumi.getter(name="enterpriseProjectId")
     def enterprise_project_id(self) -> pulumi.Output[Optional[str]]:
         """
-        Specifies the enterprise project id, Only valid for users who
-        have enabled the enterprise multi-project service. Changing this parameter will create a new resource.
+        Specifies the enterprise project ID, Only valid for users who
+        have enabled the enterprise multi-project service.
         """
         return pulumi.get(self, "enterprise_project_id")
 
@@ -1454,9 +1546,10 @@ class RedisInstance(pulumi.CustomResource):
 
     @property
     @pulumi.getter
-    def mode(self) -> pulumi.Output[str]:
+    def mode(self) -> pulumi.Output[Optional[str]]:
         """
-        Indicates the instance type.
+        Specifies the instance type. Value options: **Cluster**, **Replication**.
+        Defaults to **Cluster**.
         """
         return pulumi.get(self, "mode")
 
@@ -1465,7 +1558,7 @@ class RedisInstance(pulumi.CustomResource):
     def name(self) -> pulumi.Output[str]:
         """
         Specifies the instance name, which can be the same as an existing instance name. The value
-        must be 4 to 64 characters in length and start with a letter. It is case-sensitive and can contain only letters,
+        must be `4` to `64` characters in length and start with a letter. It is case-sensitive and can contain only letters,
         digits, hyphens (-), and underscores (_). Chinese characters must be in UTF-8 or Unicode format.
         """
         return pulumi.get(self, "name")
@@ -1474,7 +1567,7 @@ class RedisInstance(pulumi.CustomResource):
     @pulumi.getter(name="nodeNum")
     def node_num(self) -> pulumi.Output[Optional[int]]:
         """
-        Specifies the number of nodes, ranges from 2 to 12. Defaults to 3.
+        Specifies the number of nodes, ranges from `2` to `12`. Defaults to `3`.
         """
         return pulumi.get(self, "node_num")
 
@@ -1490,7 +1583,7 @@ class RedisInstance(pulumi.CustomResource):
     @pulumi.getter
     def password(self) -> pulumi.Output[str]:
         """
-        Specifies the database password. The value must be 8 to 32 characters in length,
+        Specifies the database password. The value must be `8` to `32` characters in length,
         including uppercase and lowercase letters, digits, and special characters, such as ~!@#%^*-_=+? You are advised to
         enter a strong password to improve security, preventing security risks such as brute force cracking.
         """
@@ -1500,9 +1593,11 @@ class RedisInstance(pulumi.CustomResource):
     @pulumi.getter
     def period(self) -> pulumi.Output[Optional[int]]:
         """
-        Specifies the charging period of the GaussDB for Redis instance. If `period_unit` is set
-        to *month*, the value ranges from 1 to 9. If `period_unit` is set to *year*, the value ranges from 1 to 3. This
-        parameter is mandatory if `charging_mode` is set to *prePaid*. Do nothing in update method if change this parameter.
+        Specifies the charging period of the GaussDB for Redis instance.  
+        If `period_unit` is set to **month** , the value ranges from `1` to `9`.
+        If `period_unit` is set to **year**, the value ranges from `1` to `3`.
+        This parameter is mandatory if `charging_mode` is set to **prePaid**.
+        Changing this will do nothing.
         """
         return pulumi.get(self, "period")
 
@@ -1511,7 +1606,7 @@ class RedisInstance(pulumi.CustomResource):
     def period_unit(self) -> pulumi.Output[Optional[str]]:
         """
         Specifies the charging period unit of the GaussDB for Redis instance. Valid values
-        are *month* and *year*. This parameter is mandatory if `charging_mode` is set to *prePaid*. Do nothing in update
+        are **month** and **year**. This parameter is mandatory if `charging_mode` is set to **prePaid**. Do nothing in update
         method if change this parameter.
         """
         return pulumi.get(self, "period_unit")
@@ -1521,10 +1616,9 @@ class RedisInstance(pulumi.CustomResource):
     def port(self) -> pulumi.Output[int]:
         """
         Specifies the port number for accessing the instance. You can specify a port number
-        based on your requirements. The port number ranges from **1024** to **65535**, excluding **2180**, **2887**, **3887**,
-        **6377**, **6378**, **6380**, **8018**, **8079**, **8091**, **8479**, **8484**, **8999**, **12017**, **12333**, and
-        **50069**. Defaults to **6379**.
-        If you want to use this instance for dual-active DR, set the port to **8635**.
+        based on your requirements. The port number ranges from `1,024` to `65,535`, excluding `2,180`, `2,887`, `3,887`,
+        `6,377`, `6,378`, `6,380`, `8,018`, `8,079`, `8,091`, `8,479`, `8,484`, `8,999`, `12,017`, `12,333`, and `50,069`.
+        Defaults to `6,379`. If you want to use this instance for dual-active DR, set the port to `8,635`.
         """
         return pulumi.get(self, "port")
 

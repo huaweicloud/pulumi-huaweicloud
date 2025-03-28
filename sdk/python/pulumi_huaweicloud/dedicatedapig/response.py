@@ -34,7 +34,7 @@ class ResponseArgs:
         :param pulumi.Input[str] region: Specifies the region where the API custom response is located.  
                If omitted, the provider-level region will be used. Changing this will create a new resource.
         :param pulumi.Input[Sequence[pulumi.Input['ResponseRuleArgs']]] rules: Specifies the API custom response rules definition.  
-               The object structure is documented below.
+               The rule structure is documented below.
         """
         pulumi.set(__self__, "group_id", group_id)
         pulumi.set(__self__, "instance_id", instance_id)
@@ -104,7 +104,7 @@ class ResponseArgs:
     def rules(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['ResponseRuleArgs']]]]:
         """
         Specifies the API custom response rules definition.  
-        The object structure is documented below.
+        The rule structure is documented below.
         """
         return pulumi.get(self, "rules")
 
@@ -137,7 +137,7 @@ class _ResponseState:
         :param pulumi.Input[str] region: Specifies the region where the API custom response is located.  
                If omitted, the provider-level region will be used. Changing this will create a new resource.
         :param pulumi.Input[Sequence[pulumi.Input['ResponseRuleArgs']]] rules: Specifies the API custom response rules definition.  
-               The object structure is documented below.
+               The rule structure is documented below.
         :param pulumi.Input[str] updated_at: The latest update time of the API custom response.
         """
         if created_at is not None:
@@ -226,7 +226,7 @@ class _ResponseState:
     def rules(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['ResponseRuleArgs']]]]:
         """
         Specifies the API custom response rules definition.  
-        The object structure is documented below.
+        The rule structure is documented below.
         """
         return pulumi.get(self, "rules")
 
@@ -261,26 +261,6 @@ class Response(pulumi.CustomResource):
         """
         Manages an APIG (API) custom response resource within HuaweiCloud.
 
-        ## Example Usage
-
-        ```python
-        import pulumi
-        import pulumi_huaweicloud as huaweicloud
-
-        config = pulumi.Config()
-        instance_id = config.require_object("instanceId")
-        group_id = config.require_object("groupId")
-        response_name = config.require_object("responseName")
-        test = huaweicloud.dedicated_apig.Response("test",
-            instance_id=instance_id,
-            group_id=group_id,
-            rules=[huaweicloud.dedicated_apig.ResponseRuleArgs(
-                error_type="AUTHORIZER_FAILURE",
-                body="{\\"code\\":\\"$context.authorizer.frontend.code\\",\\"message\\":\\"$context.authorizer.frontend.message\\"}",
-                status_code=401,
-            )])
-        ```
-
         ## Import
 
         API Responses can be imported using their `name` and IDs of the APIG dedicated instances and API groups to which the API response belongs, separated by slashes, e.g.
@@ -302,7 +282,7 @@ class Response(pulumi.CustomResource):
         :param pulumi.Input[str] region: Specifies the region where the API custom response is located.  
                If omitted, the provider-level region will be used. Changing this will create a new resource.
         :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ResponseRuleArgs']]]] rules: Specifies the API custom response rules definition.  
-               The object structure is documented below.
+               The rule structure is documented below.
         """
         ...
     @overload
@@ -312,26 +292,6 @@ class Response(pulumi.CustomResource):
                  opts: Optional[pulumi.ResourceOptions] = None):
         """
         Manages an APIG (API) custom response resource within HuaweiCloud.
-
-        ## Example Usage
-
-        ```python
-        import pulumi
-        import pulumi_huaweicloud as huaweicloud
-
-        config = pulumi.Config()
-        instance_id = config.require_object("instanceId")
-        group_id = config.require_object("groupId")
-        response_name = config.require_object("responseName")
-        test = huaweicloud.dedicated_apig.Response("test",
-            instance_id=instance_id,
-            group_id=group_id,
-            rules=[huaweicloud.dedicated_apig.ResponseRuleArgs(
-                error_type="AUTHORIZER_FAILURE",
-                body="{\\"code\\":\\"$context.authorizer.frontend.code\\",\\"message\\":\\"$context.authorizer.frontend.message\\"}",
-                status_code=401,
-            )])
-        ```
 
         ## Import
 
@@ -417,7 +377,7 @@ class Response(pulumi.CustomResource):
         :param pulumi.Input[str] region: Specifies the region where the API custom response is located.  
                If omitted, the provider-level region will be used. Changing this will create a new resource.
         :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ResponseRuleArgs']]]] rules: Specifies the API custom response rules definition.  
-               The object structure is documented below.
+               The rule structure is documented below.
         :param pulumi.Input[str] updated_at: The latest update time of the API custom response.
         """
         opts = pulumi.ResourceOptions.merge(opts, pulumi.ResourceOptions(id=id))
@@ -484,7 +444,7 @@ class Response(pulumi.CustomResource):
     def rules(self) -> pulumi.Output[Sequence['outputs.ResponseRule']]:
         """
         Specifies the API custom response rules definition.  
-        The object structure is documented below.
+        The rule structure is documented below.
         """
         return pulumi.get(self, "rules")
 

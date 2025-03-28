@@ -24,48 +24,53 @@ import (
 //	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud/Dds"
 //	"github.com/pulumi/pulumi-huaweicloud/sdk/go/huaweicloud/Dds"
 //	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi/config"
 //
 // )
 //
 //	func main() {
 //		pulumi.Run(func(ctx *pulumi.Context) error {
+//			cfg := config.New(ctx, "")
+//			ddsPassword := cfg.RequireObject("ddsPassword")
 //			_, err := Dds.NewInstance(ctx, "instance", &Dds.InstanceArgs{
-//				AvailabilityZone: pulumi.String("{{ availability_zone }}"),
-//				BackupStrategy: &dds.InstanceBackupStrategyArgs{
-//					KeepDays:  pulumi.Int(8),
-//					StartTime: pulumi.String("08:00-09:00"),
-//				},
 //				Datastore: &dds.InstanceDatastoreArgs{
-//					StorageEngine: pulumi.String("wiredTiger"),
 //					Type:          pulumi.String("DDS-Community"),
-//					Version:       pulumi.String("3.4"),
+//					Version:       pulumi.String("4.0"),
+//					StorageEngine: pulumi.String("wiredTiger"),
 //				},
+//				AvailabilityZone: pulumi.String("{{ availability_zone }}"),
+//				VpcId:            pulumi.String("{{ vpc_id }}"),
+//				SubnetId:         pulumi.String("{{ subnet_network_id }}}"),
+//				SecurityGroupId:  pulumi.String("{{ security_group_id }}"),
+//				Password:         pulumi.Any(ddsPassword),
+//				Mode:             pulumi.String("Sharding"),
+//				MaintainBegin:    pulumi.String("02:00"),
+//				MaintainEnd:      pulumi.String("03:00"),
 //				Flavors: dds.InstanceFlavorArray{
 //					&dds.InstanceFlavorArgs{
+//						Type:     pulumi.String("mongos"),
 //						Num:      pulumi.Int(2),
 //						SpecCode: pulumi.String("dds.mongodb.c3.medium.4.mongos"),
-//						Type:     pulumi.String("mongos"),
 //					},
 //					&dds.InstanceFlavorArgs{
+//						Type:     pulumi.String("shard"),
 //						Num:      pulumi.Int(2),
+//						Storage:  pulumi.String("ULTRAHIGH"),
 //						Size:     pulumi.Int(20),
 //						SpecCode: pulumi.String("dds.mongodb.c3.medium.4.shard"),
-//						Storage:  pulumi.String("ULTRAHIGH"),
-//						Type:     pulumi.String("shard"),
 //					},
 //					&dds.InstanceFlavorArgs{
+//						Type:     pulumi.String("config"),
 //						Num:      pulumi.Int(1),
+//						Storage:  pulumi.String("ULTRAHIGH"),
 //						Size:     pulumi.Int(20),
 //						SpecCode: pulumi.String("dds.mongodb.c3.large.2.config"),
-//						Storage:  pulumi.String("ULTRAHIGH"),
-//						Type:     pulumi.String("config"),
 //					},
 //				},
-//				Mode:            pulumi.String("Sharding"),
-//				Password:        pulumi.String("Test@123"),
-//				SecurityGroupId: pulumi.String("{{ security_group_id }}"),
-//				SubnetId:        pulumi.String("{{ subnet_network_id }}}"),
-//				VpcId:           pulumi.String("{{ vpc_id }}"),
+//				BackupStrategy: &dds.InstanceBackupStrategyArgs{
+//					StartTime: pulumi.String("08:00-09:00"),
+//					KeepDays:  pulumi.Int(8),
+//				},
 //			})
 //			if err != nil {
 //				return err
@@ -85,77 +90,35 @@ import (
 //	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud/Dds"
 //	"github.com/pulumi/pulumi-huaweicloud/sdk/go/huaweicloud/Dds"
 //	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi/config"
 //
 // )
 //
 //	func main() {
 //		pulumi.Run(func(ctx *pulumi.Context) error {
+//			cfg := config.New(ctx, "")
+//			ddsPassword := cfg.RequireObject("ddsPassword")
 //			_, err := Dds.NewInstance(ctx, "instance", &Dds.InstanceArgs{
-//				AvailabilityZone: pulumi.String("{{ availability_zone }}"),
 //				Datastore: &dds.InstanceDatastoreArgs{
-//					StorageEngine: pulumi.String("wiredTiger"),
 //					Type:          pulumi.String("DDS-Community"),
-//					Version:       pulumi.String("3.4"),
+//					Version:       pulumi.String("4.0"),
+//					StorageEngine: pulumi.String("wiredTiger"),
 //				},
+//				AvailabilityZone: pulumi.String("{{ availability_zone }}"),
+//				VpcId:            pulumi.String("{{ vpc_id }}"),
+//				SubnetId:         pulumi.String("{{ subnet_network_id }}}"),
+//				SecurityGroupId:  pulumi.String("{{ security_group_id }}"),
+//				Password:         pulumi.Any(ddsPassword),
+//				Mode:             pulumi.String("ReplicaSet"),
 //				Flavors: dds.InstanceFlavorArray{
 //					&dds.InstanceFlavorArgs{
-//						Num:      pulumi.Int(1),
+//						Type:     pulumi.String("replica"),
+//						Num:      pulumi.Int(3),
+//						Storage:  pulumi.String("ULTRAHIGH"),
 //						Size:     pulumi.Int(30),
 //						SpecCode: pulumi.String("dds.mongodb.c3.medium.4.repset"),
-//						Storage:  pulumi.String("ULTRAHIGH"),
-//						Type:     pulumi.String("replica"),
 //					},
 //				},
-//				Mode:            pulumi.String("ReplicaSet"),
-//				Password:        pulumi.String("Test@123"),
-//				SecurityGroupId: pulumi.String("{{ security_group_id }}"),
-//				SubnetId:        pulumi.String("{{ subnet_network_id }}}"),
-//				VpcId:           pulumi.String("{{ vpc_id }}"),
-//			})
-//			if err != nil {
-//				return err
-//			}
-//			return nil
-//		})
-//	}
-//
-// ```
-// ### Creating A Single Community Edition
-//
-// ```go
-// package main
-//
-// import (
-//
-//	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud/Dds"
-//	"github.com/pulumi/pulumi-huaweicloud/sdk/go/huaweicloud/Dds"
-//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
-//
-// )
-//
-//	func main() {
-//		pulumi.Run(func(ctx *pulumi.Context) error {
-//			_, err := Dds.NewInstance(ctx, "instance", &Dds.InstanceArgs{
-//				AvailabilityZone: pulumi.String("{{ availability_zone }}"),
-//				Datastore: &dds.InstanceDatastoreArgs{
-//					StorageEngine: pulumi.String("wiredTiger"),
-//					Type:          pulumi.String("DDS-Community"),
-//					Version:       pulumi.String("3.4"),
-//				},
-//				Flavors: dds.InstanceFlavorArray{
-//					&dds.InstanceFlavorArgs{
-//						Num:      pulumi.Int(1),
-//						Size:     pulumi.Int(30),
-//						SpecCode: pulumi.String("dds.mongodb.s6.large.2.single"),
-//						Storage:  pulumi.String("ULTRAHIGH"),
-//						Type:     pulumi.String("single"),
-//					},
-//				},
-//				Mode:            pulumi.String("Single"),
-//				Password:        pulumi.String("Test@123"),
-//				SecurityGroupId: pulumi.String("{{ security_group_id }}"),
-//				SubnetId:        pulumi.String("{{ subnet_network_id }}}"),
-//				VpcId:           pulumi.String("{{ vpc_id }}"),
 //			})
 //			if err != nil {
 //				return err
@@ -176,7 +139,7 @@ import (
 //
 // ```
 //
-//	Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`password`, `availability_zone`, `flavor`, configuration. It is generally recommended running `terraform plan` after importing an instance. You can then decide if changes should be applied to the instance, or the resource definition should be updated to align with the instance. Also you can ignore changes as below. resource "huaweicloud_dds_instance" "instance" {
+//	Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`password`, `availability_zone`, `flavor`, configuration. It is generally recommended running `terraform plan` after importing an instance. You can then decide if changes should be applied to the instance, or the resource definition should be updated to align with the instance. Also you can ignore changes as below. hcl resource "huaweicloud_dds_instance" "instance" {
 //
 //	...
 //
@@ -198,48 +161,79 @@ type Instance struct {
 	// Valid values are `true` and `false`, defaults to `false`.
 	// Changing this creates a new instance.
 	AutoRenew pulumi.StringPtrOutput `pulumi:"autoRenew"`
-	// Specifies the ID of the availability zone. Changing this creates a
-	// new instance.
+	// Specifies the availability zone names separated by commas.
 	AvailabilityZone pulumi.StringOutput `pulumi:"availabilityZone"`
 	// Specifies the advanced backup policy. The structure is described below.
 	BackupStrategy InstanceBackupStrategyOutput `pulumi:"backupStrategy"`
+	// Specifies the start time of the balancing activity time window.
+	// The format is **HH:MM**. It's required with `balancerActiveEnd`.
+	BalancerActiveBegin pulumi.StringPtrOutput `pulumi:"balancerActiveBegin"`
+	// Specifies the end time of the balancing activity time window.
+	// The format is **HH:MM**. It's required with `balancerActiveBegin`.
+	BalancerActiveEnd pulumi.StringPtrOutput `pulumi:"balancerActiveEnd"`
+	// Specifies the status of the balancer.
+	// The value can be **start** or **stop**. Defaults to **start**.
+	BalancerStatus pulumi.StringOutput `pulumi:"balancerStatus"`
 	// Specifies the charging mode of the instance.
 	// The valid values are as follows:
 	// + `prePaid`: indicates the yearly/monthly billing mode.
 	// + `postPaid`: indicates the pay-per-use billing mode.
 	ChargingMode pulumi.StringOutput `pulumi:"chargingMode"`
+	// Specifies the CIDR block where the client is located. Cross-CIDR access is
+	// required only when the CIDR blocks of the client and the replica set instance are different. For example, if the client
+	// CIDR block is 192.168.0.0/16 and the replica set instance's CIDR block is 172.16.0.0/24, add the CIDR block
+	// 192.168.0.0/16 so that the client can access the replica set instance.
+	// It's only for replica set instance.
+	ClientNetworkRanges pulumi.StringArrayOutput `pulumi:"clientNetworkRanges"`
 	// Specifies the configuration information.
 	// The structure is described below. Changing this creates a new instance.
 	Configurations InstanceConfigurationArrayOutput `pulumi:"configurations"`
+	// Indicates the create time.
+	CreatedAt pulumi.StringOutput `pulumi:"createdAt"`
 	// Specifies database information. The structure is described below. Changing
 	// this creates a new instance.
 	Datastore InstanceDatastoreOutput `pulumi:"datastore"`
-	// Indicates the DB Administator name.
+	// Indicates the DB Administrator name.
 	DbUsername pulumi.StringOutput `pulumi:"dbUsername"`
+	// Specifies the description of the DDS instance.
+	Description pulumi.StringPtrOutput `pulumi:"description"`
 	// Specifies the disk encryption ID of the instance. Changing this
 	// creates a new instance.
 	DiskEncryptionId pulumi.StringPtrOutput `pulumi:"diskEncryptionId"`
-	// Specifies the enterprise project id of the dds instance.
-	// Changing this creates a new instance.
+	// Specifies the enterprise project id of the DDS instance.
 	EnterpriseProjectId pulumi.StringOutput `pulumi:"enterpriseProjectId"`
 	// Specifies the flavors information. The structure is described below. Changing
 	// this creates a new instance.
 	Flavors InstanceFlavorArrayOutput `pulumi:"flavors"`
-	// Specifies the mode of the database instance. **Sharding**, **ReplicaSet**,
-	// **Single** are supported. Changing this creates a new instance.
+	// Indicates the instance groups information.
+	// The groups structure is documented below.
+	Groups InstanceGroupArrayOutput `pulumi:"groups"`
+	// Specifies begin time of the time range within which you are allowed to start a
+	// task that affects the running of database instances. It must be a valid value in the format of **hh:mm** in UTC+0,
+	// such as **02:00**, meanwhile, this time in console displays in the format of **hh:mm** in UTC+08:00, e.g. **10:00**.
+	MaintainBegin pulumi.StringOutput `pulumi:"maintainBegin"`
+	// Specifies end time of the time range within which you are allowed to start a
+	// task that affects the running of database instances. It must be a valid value in the format of **hh:mm** in UTC+0,
+	// such as **04:00**, meanwhile, this time in console displays in the format of **hh:mm** in UTC+08:00, e.g. **12:00**.
+	MaintainEnd pulumi.StringOutput `pulumi:"maintainEnd"`
+	// Specifies the mode of the database instance. **Sharding**, **ReplicaSet**
+	// are supported. Changing this creates a new instance.
 	Mode pulumi.StringOutput `pulumi:"mode"`
 	// Specifies the DB instance name. The DB instance name of the same type is unique in the
 	// same tenant.
 	Name pulumi.StringOutput `pulumi:"name"`
-	// Indicates the instance nodes information. Structure is documented below.
+	// Indicates the nodes info.
+	// The nodes structure is documented below.
 	Nodes InstanceNodeArrayOutput `pulumi:"nodes"`
 	// Specifies the Administrator password of the database instance.
-	Password pulumi.StringOutput `pulumi:"password"`
-	// Specifies the charging period of the instance.
-	// If `periodUnit` is set to *month*, the value ranges from 1 to 9.
-	// If `periodUnit` is set to *year*, the value ranges from 1 to 3.
-	// This parameter is mandatory if `chargingMode` is set to *prePaid*.
-	// Changing this creates a new instance.
+	Password pulumi.StringPtrOutput `pulumi:"password"`
+	// Specifies the backup cycle. Data will be automatically backed up on the
+	// selected days every week.
+	// + If you set the `keepDays` to 0, this parameter is no need to set.
+	// + If you set the `keepDays` within 6 days, set the parameter value to **1,2,3,4,5,6,7**, data is automatically
+	//   backed up on each day every week.
+	// + If you set the `keepDays` between 7 and 732 days, set the parameter value to at least one day of every week.
+	//   For example: **1**, **3,5**.
 	Period pulumi.IntPtrOutput `pulumi:"period"`
 	// Specifies the charging period unit of the instance.
 	// Valid values are *month* and *year*. This parameter is mandatory if `chargingMode` is set to *prePaid*.
@@ -251,8 +245,17 @@ type Instance struct {
 	// Specifies the region of the DDS instance. Changing this creates a new
 	// instance.
 	Region pulumi.StringOutput `pulumi:"region"`
+	// Specifies the name of the replica set in the connection address.
+	// It must be `3` to `128` characters long and start with a letter. It is case-sensitive and can contain only letters,
+	// digits, and underscores (_). Default is **replica**.
+	ReplicaSetName pulumi.StringOutput `pulumi:"replicaSetName"`
+	// Specifies whether to enable second level monitoring.
+	SecondLevelMonitoringEnabled pulumi.BoolOutput `pulumi:"secondLevelMonitoringEnabled"`
 	// Specifies the security group ID of the DDS instance.
 	SecurityGroupId pulumi.StringOutput `pulumi:"securityGroupId"`
+	// Specifies whether to enable slow original log.
+	// The value can be **on** or **off**.
+	SlowLogDesensitization pulumi.StringOutput `pulumi:"slowLogDesensitization"`
 	// Specifies whether to enable or disable SSL. Defaults to true.
 	Ssl pulumi.BoolPtrOutput `pulumi:"ssl"`
 	// Indicates the node status.
@@ -261,6 +264,10 @@ type Instance struct {
 	SubnetId pulumi.StringOutput `pulumi:"subnetId"`
 	// The key/value pairs to associate with the DDS instance.
 	Tags pulumi.StringMapOutput `pulumi:"tags"`
+	// Indicates the time zone.
+	TimeZone pulumi.StringOutput `pulumi:"timeZone"`
+	// Indicates the update time.
+	UpdatedAt pulumi.StringOutput `pulumi:"updatedAt"`
 	// Specifies the VPC ID. Changing this creates a new instance.
 	VpcId pulumi.StringOutput `pulumi:"vpcId"`
 }
@@ -283,9 +290,6 @@ func NewInstance(ctx *pulumi.Context,
 	}
 	if args.Mode == nil {
 		return nil, errors.New("invalid value for required argument 'Mode'")
-	}
-	if args.Password == nil {
-		return nil, errors.New("invalid value for required argument 'Password'")
 	}
 	if args.SecurityGroupId == nil {
 		return nil, errors.New("invalid value for required argument 'SecurityGroupId'")
@@ -325,48 +329,79 @@ type instanceState struct {
 	// Valid values are `true` and `false`, defaults to `false`.
 	// Changing this creates a new instance.
 	AutoRenew *string `pulumi:"autoRenew"`
-	// Specifies the ID of the availability zone. Changing this creates a
-	// new instance.
+	// Specifies the availability zone names separated by commas.
 	AvailabilityZone *string `pulumi:"availabilityZone"`
 	// Specifies the advanced backup policy. The structure is described below.
 	BackupStrategy *InstanceBackupStrategy `pulumi:"backupStrategy"`
+	// Specifies the start time of the balancing activity time window.
+	// The format is **HH:MM**. It's required with `balancerActiveEnd`.
+	BalancerActiveBegin *string `pulumi:"balancerActiveBegin"`
+	// Specifies the end time of the balancing activity time window.
+	// The format is **HH:MM**. It's required with `balancerActiveBegin`.
+	BalancerActiveEnd *string `pulumi:"balancerActiveEnd"`
+	// Specifies the status of the balancer.
+	// The value can be **start** or **stop**. Defaults to **start**.
+	BalancerStatus *string `pulumi:"balancerStatus"`
 	// Specifies the charging mode of the instance.
 	// The valid values are as follows:
 	// + `prePaid`: indicates the yearly/monthly billing mode.
 	// + `postPaid`: indicates the pay-per-use billing mode.
 	ChargingMode *string `pulumi:"chargingMode"`
+	// Specifies the CIDR block where the client is located. Cross-CIDR access is
+	// required only when the CIDR blocks of the client and the replica set instance are different. For example, if the client
+	// CIDR block is 192.168.0.0/16 and the replica set instance's CIDR block is 172.16.0.0/24, add the CIDR block
+	// 192.168.0.0/16 so that the client can access the replica set instance.
+	// It's only for replica set instance.
+	ClientNetworkRanges []string `pulumi:"clientNetworkRanges"`
 	// Specifies the configuration information.
 	// The structure is described below. Changing this creates a new instance.
 	Configurations []InstanceConfiguration `pulumi:"configurations"`
+	// Indicates the create time.
+	CreatedAt *string `pulumi:"createdAt"`
 	// Specifies database information. The structure is described below. Changing
 	// this creates a new instance.
 	Datastore *InstanceDatastore `pulumi:"datastore"`
-	// Indicates the DB Administator name.
+	// Indicates the DB Administrator name.
 	DbUsername *string `pulumi:"dbUsername"`
+	// Specifies the description of the DDS instance.
+	Description *string `pulumi:"description"`
 	// Specifies the disk encryption ID of the instance. Changing this
 	// creates a new instance.
 	DiskEncryptionId *string `pulumi:"diskEncryptionId"`
-	// Specifies the enterprise project id of the dds instance.
-	// Changing this creates a new instance.
+	// Specifies the enterprise project id of the DDS instance.
 	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
 	// Specifies the flavors information. The structure is described below. Changing
 	// this creates a new instance.
 	Flavors []InstanceFlavor `pulumi:"flavors"`
-	// Specifies the mode of the database instance. **Sharding**, **ReplicaSet**,
-	// **Single** are supported. Changing this creates a new instance.
+	// Indicates the instance groups information.
+	// The groups structure is documented below.
+	Groups []InstanceGroup `pulumi:"groups"`
+	// Specifies begin time of the time range within which you are allowed to start a
+	// task that affects the running of database instances. It must be a valid value in the format of **hh:mm** in UTC+0,
+	// such as **02:00**, meanwhile, this time in console displays in the format of **hh:mm** in UTC+08:00, e.g. **10:00**.
+	MaintainBegin *string `pulumi:"maintainBegin"`
+	// Specifies end time of the time range within which you are allowed to start a
+	// task that affects the running of database instances. It must be a valid value in the format of **hh:mm** in UTC+0,
+	// such as **04:00**, meanwhile, this time in console displays in the format of **hh:mm** in UTC+08:00, e.g. **12:00**.
+	MaintainEnd *string `pulumi:"maintainEnd"`
+	// Specifies the mode of the database instance. **Sharding**, **ReplicaSet**
+	// are supported. Changing this creates a new instance.
 	Mode *string `pulumi:"mode"`
 	// Specifies the DB instance name. The DB instance name of the same type is unique in the
 	// same tenant.
 	Name *string `pulumi:"name"`
-	// Indicates the instance nodes information. Structure is documented below.
+	// Indicates the nodes info.
+	// The nodes structure is documented below.
 	Nodes []InstanceNode `pulumi:"nodes"`
 	// Specifies the Administrator password of the database instance.
 	Password *string `pulumi:"password"`
-	// Specifies the charging period of the instance.
-	// If `periodUnit` is set to *month*, the value ranges from 1 to 9.
-	// If `periodUnit` is set to *year*, the value ranges from 1 to 3.
-	// This parameter is mandatory if `chargingMode` is set to *prePaid*.
-	// Changing this creates a new instance.
+	// Specifies the backup cycle. Data will be automatically backed up on the
+	// selected days every week.
+	// + If you set the `keepDays` to 0, this parameter is no need to set.
+	// + If you set the `keepDays` within 6 days, set the parameter value to **1,2,3,4,5,6,7**, data is automatically
+	//   backed up on each day every week.
+	// + If you set the `keepDays` between 7 and 732 days, set the parameter value to at least one day of every week.
+	//   For example: **1**, **3,5**.
 	Period *int `pulumi:"period"`
 	// Specifies the charging period unit of the instance.
 	// Valid values are *month* and *year*. This parameter is mandatory if `chargingMode` is set to *prePaid*.
@@ -378,8 +413,17 @@ type instanceState struct {
 	// Specifies the region of the DDS instance. Changing this creates a new
 	// instance.
 	Region *string `pulumi:"region"`
+	// Specifies the name of the replica set in the connection address.
+	// It must be `3` to `128` characters long and start with a letter. It is case-sensitive and can contain only letters,
+	// digits, and underscores (_). Default is **replica**.
+	ReplicaSetName *string `pulumi:"replicaSetName"`
+	// Specifies whether to enable second level monitoring.
+	SecondLevelMonitoringEnabled *bool `pulumi:"secondLevelMonitoringEnabled"`
 	// Specifies the security group ID of the DDS instance.
 	SecurityGroupId *string `pulumi:"securityGroupId"`
+	// Specifies whether to enable slow original log.
+	// The value can be **on** or **off**.
+	SlowLogDesensitization *string `pulumi:"slowLogDesensitization"`
 	// Specifies whether to enable or disable SSL. Defaults to true.
 	Ssl *bool `pulumi:"ssl"`
 	// Indicates the node status.
@@ -388,6 +432,10 @@ type instanceState struct {
 	SubnetId *string `pulumi:"subnetId"`
 	// The key/value pairs to associate with the DDS instance.
 	Tags map[string]string `pulumi:"tags"`
+	// Indicates the time zone.
+	TimeZone *string `pulumi:"timeZone"`
+	// Indicates the update time.
+	UpdatedAt *string `pulumi:"updatedAt"`
 	// Specifies the VPC ID. Changing this creates a new instance.
 	VpcId *string `pulumi:"vpcId"`
 }
@@ -399,48 +447,79 @@ type InstanceState struct {
 	// Valid values are `true` and `false`, defaults to `false`.
 	// Changing this creates a new instance.
 	AutoRenew pulumi.StringPtrInput
-	// Specifies the ID of the availability zone. Changing this creates a
-	// new instance.
+	// Specifies the availability zone names separated by commas.
 	AvailabilityZone pulumi.StringPtrInput
 	// Specifies the advanced backup policy. The structure is described below.
 	BackupStrategy InstanceBackupStrategyPtrInput
+	// Specifies the start time of the balancing activity time window.
+	// The format is **HH:MM**. It's required with `balancerActiveEnd`.
+	BalancerActiveBegin pulumi.StringPtrInput
+	// Specifies the end time of the balancing activity time window.
+	// The format is **HH:MM**. It's required with `balancerActiveBegin`.
+	BalancerActiveEnd pulumi.StringPtrInput
+	// Specifies the status of the balancer.
+	// The value can be **start** or **stop**. Defaults to **start**.
+	BalancerStatus pulumi.StringPtrInput
 	// Specifies the charging mode of the instance.
 	// The valid values are as follows:
 	// + `prePaid`: indicates the yearly/monthly billing mode.
 	// + `postPaid`: indicates the pay-per-use billing mode.
 	ChargingMode pulumi.StringPtrInput
+	// Specifies the CIDR block where the client is located. Cross-CIDR access is
+	// required only when the CIDR blocks of the client and the replica set instance are different. For example, if the client
+	// CIDR block is 192.168.0.0/16 and the replica set instance's CIDR block is 172.16.0.0/24, add the CIDR block
+	// 192.168.0.0/16 so that the client can access the replica set instance.
+	// It's only for replica set instance.
+	ClientNetworkRanges pulumi.StringArrayInput
 	// Specifies the configuration information.
 	// The structure is described below. Changing this creates a new instance.
 	Configurations InstanceConfigurationArrayInput
+	// Indicates the create time.
+	CreatedAt pulumi.StringPtrInput
 	// Specifies database information. The structure is described below. Changing
 	// this creates a new instance.
 	Datastore InstanceDatastorePtrInput
-	// Indicates the DB Administator name.
+	// Indicates the DB Administrator name.
 	DbUsername pulumi.StringPtrInput
+	// Specifies the description of the DDS instance.
+	Description pulumi.StringPtrInput
 	// Specifies the disk encryption ID of the instance. Changing this
 	// creates a new instance.
 	DiskEncryptionId pulumi.StringPtrInput
-	// Specifies the enterprise project id of the dds instance.
-	// Changing this creates a new instance.
+	// Specifies the enterprise project id of the DDS instance.
 	EnterpriseProjectId pulumi.StringPtrInput
 	// Specifies the flavors information. The structure is described below. Changing
 	// this creates a new instance.
 	Flavors InstanceFlavorArrayInput
-	// Specifies the mode of the database instance. **Sharding**, **ReplicaSet**,
-	// **Single** are supported. Changing this creates a new instance.
+	// Indicates the instance groups information.
+	// The groups structure is documented below.
+	Groups InstanceGroupArrayInput
+	// Specifies begin time of the time range within which you are allowed to start a
+	// task that affects the running of database instances. It must be a valid value in the format of **hh:mm** in UTC+0,
+	// such as **02:00**, meanwhile, this time in console displays in the format of **hh:mm** in UTC+08:00, e.g. **10:00**.
+	MaintainBegin pulumi.StringPtrInput
+	// Specifies end time of the time range within which you are allowed to start a
+	// task that affects the running of database instances. It must be a valid value in the format of **hh:mm** in UTC+0,
+	// such as **04:00**, meanwhile, this time in console displays in the format of **hh:mm** in UTC+08:00, e.g. **12:00**.
+	MaintainEnd pulumi.StringPtrInput
+	// Specifies the mode of the database instance. **Sharding**, **ReplicaSet**
+	// are supported. Changing this creates a new instance.
 	Mode pulumi.StringPtrInput
 	// Specifies the DB instance name. The DB instance name of the same type is unique in the
 	// same tenant.
 	Name pulumi.StringPtrInput
-	// Indicates the instance nodes information. Structure is documented below.
+	// Indicates the nodes info.
+	// The nodes structure is documented below.
 	Nodes InstanceNodeArrayInput
 	// Specifies the Administrator password of the database instance.
 	Password pulumi.StringPtrInput
-	// Specifies the charging period of the instance.
-	// If `periodUnit` is set to *month*, the value ranges from 1 to 9.
-	// If `periodUnit` is set to *year*, the value ranges from 1 to 3.
-	// This parameter is mandatory if `chargingMode` is set to *prePaid*.
-	// Changing this creates a new instance.
+	// Specifies the backup cycle. Data will be automatically backed up on the
+	// selected days every week.
+	// + If you set the `keepDays` to 0, this parameter is no need to set.
+	// + If you set the `keepDays` within 6 days, set the parameter value to **1,2,3,4,5,6,7**, data is automatically
+	//   backed up on each day every week.
+	// + If you set the `keepDays` between 7 and 732 days, set the parameter value to at least one day of every week.
+	//   For example: **1**, **3,5**.
 	Period pulumi.IntPtrInput
 	// Specifies the charging period unit of the instance.
 	// Valid values are *month* and *year*. This parameter is mandatory if `chargingMode` is set to *prePaid*.
@@ -452,8 +531,17 @@ type InstanceState struct {
 	// Specifies the region of the DDS instance. Changing this creates a new
 	// instance.
 	Region pulumi.StringPtrInput
+	// Specifies the name of the replica set in the connection address.
+	// It must be `3` to `128` characters long and start with a letter. It is case-sensitive and can contain only letters,
+	// digits, and underscores (_). Default is **replica**.
+	ReplicaSetName pulumi.StringPtrInput
+	// Specifies whether to enable second level monitoring.
+	SecondLevelMonitoringEnabled pulumi.BoolPtrInput
 	// Specifies the security group ID of the DDS instance.
 	SecurityGroupId pulumi.StringPtrInput
+	// Specifies whether to enable slow original log.
+	// The value can be **on** or **off**.
+	SlowLogDesensitization pulumi.StringPtrInput
 	// Specifies whether to enable or disable SSL. Defaults to true.
 	Ssl pulumi.BoolPtrInput
 	// Indicates the node status.
@@ -462,6 +550,10 @@ type InstanceState struct {
 	SubnetId pulumi.StringPtrInput
 	// The key/value pairs to associate with the DDS instance.
 	Tags pulumi.StringMapInput
+	// Indicates the time zone.
+	TimeZone pulumi.StringPtrInput
+	// Indicates the update time.
+	UpdatedAt pulumi.StringPtrInput
 	// Specifies the VPC ID. Changing this creates a new instance.
 	VpcId pulumi.StringPtrInput
 }
@@ -477,44 +569,69 @@ type instanceArgs struct {
 	// Valid values are `true` and `false`, defaults to `false`.
 	// Changing this creates a new instance.
 	AutoRenew *string `pulumi:"autoRenew"`
-	// Specifies the ID of the availability zone. Changing this creates a
-	// new instance.
+	// Specifies the availability zone names separated by commas.
 	AvailabilityZone string `pulumi:"availabilityZone"`
 	// Specifies the advanced backup policy. The structure is described below.
 	BackupStrategy *InstanceBackupStrategy `pulumi:"backupStrategy"`
+	// Specifies the start time of the balancing activity time window.
+	// The format is **HH:MM**. It's required with `balancerActiveEnd`.
+	BalancerActiveBegin *string `pulumi:"balancerActiveBegin"`
+	// Specifies the end time of the balancing activity time window.
+	// The format is **HH:MM**. It's required with `balancerActiveBegin`.
+	BalancerActiveEnd *string `pulumi:"balancerActiveEnd"`
+	// Specifies the status of the balancer.
+	// The value can be **start** or **stop**. Defaults to **start**.
+	BalancerStatus *string `pulumi:"balancerStatus"`
 	// Specifies the charging mode of the instance.
 	// The valid values are as follows:
 	// + `prePaid`: indicates the yearly/monthly billing mode.
 	// + `postPaid`: indicates the pay-per-use billing mode.
 	ChargingMode *string `pulumi:"chargingMode"`
+	// Specifies the CIDR block where the client is located. Cross-CIDR access is
+	// required only when the CIDR blocks of the client and the replica set instance are different. For example, if the client
+	// CIDR block is 192.168.0.0/16 and the replica set instance's CIDR block is 172.16.0.0/24, add the CIDR block
+	// 192.168.0.0/16 so that the client can access the replica set instance.
+	// It's only for replica set instance.
+	ClientNetworkRanges []string `pulumi:"clientNetworkRanges"`
 	// Specifies the configuration information.
 	// The structure is described below. Changing this creates a new instance.
 	Configurations []InstanceConfiguration `pulumi:"configurations"`
 	// Specifies database information. The structure is described below. Changing
 	// this creates a new instance.
 	Datastore InstanceDatastore `pulumi:"datastore"`
+	// Specifies the description of the DDS instance.
+	Description *string `pulumi:"description"`
 	// Specifies the disk encryption ID of the instance. Changing this
 	// creates a new instance.
 	DiskEncryptionId *string `pulumi:"diskEncryptionId"`
-	// Specifies the enterprise project id of the dds instance.
-	// Changing this creates a new instance.
+	// Specifies the enterprise project id of the DDS instance.
 	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
 	// Specifies the flavors information. The structure is described below. Changing
 	// this creates a new instance.
 	Flavors []InstanceFlavor `pulumi:"flavors"`
-	// Specifies the mode of the database instance. **Sharding**, **ReplicaSet**,
-	// **Single** are supported. Changing this creates a new instance.
+	// Specifies begin time of the time range within which you are allowed to start a
+	// task that affects the running of database instances. It must be a valid value in the format of **hh:mm** in UTC+0,
+	// such as **02:00**, meanwhile, this time in console displays in the format of **hh:mm** in UTC+08:00, e.g. **10:00**.
+	MaintainBegin *string `pulumi:"maintainBegin"`
+	// Specifies end time of the time range within which you are allowed to start a
+	// task that affects the running of database instances. It must be a valid value in the format of **hh:mm** in UTC+0,
+	// such as **04:00**, meanwhile, this time in console displays in the format of **hh:mm** in UTC+08:00, e.g. **12:00**.
+	MaintainEnd *string `pulumi:"maintainEnd"`
+	// Specifies the mode of the database instance. **Sharding**, **ReplicaSet**
+	// are supported. Changing this creates a new instance.
 	Mode string `pulumi:"mode"`
 	// Specifies the DB instance name. The DB instance name of the same type is unique in the
 	// same tenant.
 	Name *string `pulumi:"name"`
 	// Specifies the Administrator password of the database instance.
-	Password string `pulumi:"password"`
-	// Specifies the charging period of the instance.
-	// If `periodUnit` is set to *month*, the value ranges from 1 to 9.
-	// If `periodUnit` is set to *year*, the value ranges from 1 to 3.
-	// This parameter is mandatory if `chargingMode` is set to *prePaid*.
-	// Changing this creates a new instance.
+	Password *string `pulumi:"password"`
+	// Specifies the backup cycle. Data will be automatically backed up on the
+	// selected days every week.
+	// + If you set the `keepDays` to 0, this parameter is no need to set.
+	// + If you set the `keepDays` within 6 days, set the parameter value to **1,2,3,4,5,6,7**, data is automatically
+	//   backed up on each day every week.
+	// + If you set the `keepDays` between 7 and 732 days, set the parameter value to at least one day of every week.
+	//   For example: **1**, **3,5**.
 	Period *int `pulumi:"period"`
 	// Specifies the charging period unit of the instance.
 	// Valid values are *month* and *year*. This parameter is mandatory if `chargingMode` is set to *prePaid*.
@@ -526,8 +643,17 @@ type instanceArgs struct {
 	// Specifies the region of the DDS instance. Changing this creates a new
 	// instance.
 	Region *string `pulumi:"region"`
+	// Specifies the name of the replica set in the connection address.
+	// It must be `3` to `128` characters long and start with a letter. It is case-sensitive and can contain only letters,
+	// digits, and underscores (_). Default is **replica**.
+	ReplicaSetName *string `pulumi:"replicaSetName"`
+	// Specifies whether to enable second level monitoring.
+	SecondLevelMonitoringEnabled *bool `pulumi:"secondLevelMonitoringEnabled"`
 	// Specifies the security group ID of the DDS instance.
 	SecurityGroupId string `pulumi:"securityGroupId"`
+	// Specifies whether to enable slow original log.
+	// The value can be **on** or **off**.
+	SlowLogDesensitization *string `pulumi:"slowLogDesensitization"`
 	// Specifies whether to enable or disable SSL. Defaults to true.
 	Ssl *bool `pulumi:"ssl"`
 	// Specifies the subnet Network ID. Changing this creates a new instance.
@@ -546,44 +672,69 @@ type InstanceArgs struct {
 	// Valid values are `true` and `false`, defaults to `false`.
 	// Changing this creates a new instance.
 	AutoRenew pulumi.StringPtrInput
-	// Specifies the ID of the availability zone. Changing this creates a
-	// new instance.
+	// Specifies the availability zone names separated by commas.
 	AvailabilityZone pulumi.StringInput
 	// Specifies the advanced backup policy. The structure is described below.
 	BackupStrategy InstanceBackupStrategyPtrInput
+	// Specifies the start time of the balancing activity time window.
+	// The format is **HH:MM**. It's required with `balancerActiveEnd`.
+	BalancerActiveBegin pulumi.StringPtrInput
+	// Specifies the end time of the balancing activity time window.
+	// The format is **HH:MM**. It's required with `balancerActiveBegin`.
+	BalancerActiveEnd pulumi.StringPtrInput
+	// Specifies the status of the balancer.
+	// The value can be **start** or **stop**. Defaults to **start**.
+	BalancerStatus pulumi.StringPtrInput
 	// Specifies the charging mode of the instance.
 	// The valid values are as follows:
 	// + `prePaid`: indicates the yearly/monthly billing mode.
 	// + `postPaid`: indicates the pay-per-use billing mode.
 	ChargingMode pulumi.StringPtrInput
+	// Specifies the CIDR block where the client is located. Cross-CIDR access is
+	// required only when the CIDR blocks of the client and the replica set instance are different. For example, if the client
+	// CIDR block is 192.168.0.0/16 and the replica set instance's CIDR block is 172.16.0.0/24, add the CIDR block
+	// 192.168.0.0/16 so that the client can access the replica set instance.
+	// It's only for replica set instance.
+	ClientNetworkRanges pulumi.StringArrayInput
 	// Specifies the configuration information.
 	// The structure is described below. Changing this creates a new instance.
 	Configurations InstanceConfigurationArrayInput
 	// Specifies database information. The structure is described below. Changing
 	// this creates a new instance.
 	Datastore InstanceDatastoreInput
+	// Specifies the description of the DDS instance.
+	Description pulumi.StringPtrInput
 	// Specifies the disk encryption ID of the instance. Changing this
 	// creates a new instance.
 	DiskEncryptionId pulumi.StringPtrInput
-	// Specifies the enterprise project id of the dds instance.
-	// Changing this creates a new instance.
+	// Specifies the enterprise project id of the DDS instance.
 	EnterpriseProjectId pulumi.StringPtrInput
 	// Specifies the flavors information. The structure is described below. Changing
 	// this creates a new instance.
 	Flavors InstanceFlavorArrayInput
-	// Specifies the mode of the database instance. **Sharding**, **ReplicaSet**,
-	// **Single** are supported. Changing this creates a new instance.
+	// Specifies begin time of the time range within which you are allowed to start a
+	// task that affects the running of database instances. It must be a valid value in the format of **hh:mm** in UTC+0,
+	// such as **02:00**, meanwhile, this time in console displays in the format of **hh:mm** in UTC+08:00, e.g. **10:00**.
+	MaintainBegin pulumi.StringPtrInput
+	// Specifies end time of the time range within which you are allowed to start a
+	// task that affects the running of database instances. It must be a valid value in the format of **hh:mm** in UTC+0,
+	// such as **04:00**, meanwhile, this time in console displays in the format of **hh:mm** in UTC+08:00, e.g. **12:00**.
+	MaintainEnd pulumi.StringPtrInput
+	// Specifies the mode of the database instance. **Sharding**, **ReplicaSet**
+	// are supported. Changing this creates a new instance.
 	Mode pulumi.StringInput
 	// Specifies the DB instance name. The DB instance name of the same type is unique in the
 	// same tenant.
 	Name pulumi.StringPtrInput
 	// Specifies the Administrator password of the database instance.
-	Password pulumi.StringInput
-	// Specifies the charging period of the instance.
-	// If `periodUnit` is set to *month*, the value ranges from 1 to 9.
-	// If `periodUnit` is set to *year*, the value ranges from 1 to 3.
-	// This parameter is mandatory if `chargingMode` is set to *prePaid*.
-	// Changing this creates a new instance.
+	Password pulumi.StringPtrInput
+	// Specifies the backup cycle. Data will be automatically backed up on the
+	// selected days every week.
+	// + If you set the `keepDays` to 0, this parameter is no need to set.
+	// + If you set the `keepDays` within 6 days, set the parameter value to **1,2,3,4,5,6,7**, data is automatically
+	//   backed up on each day every week.
+	// + If you set the `keepDays` between 7 and 732 days, set the parameter value to at least one day of every week.
+	//   For example: **1**, **3,5**.
 	Period pulumi.IntPtrInput
 	// Specifies the charging period unit of the instance.
 	// Valid values are *month* and *year*. This parameter is mandatory if `chargingMode` is set to *prePaid*.
@@ -595,8 +746,17 @@ type InstanceArgs struct {
 	// Specifies the region of the DDS instance. Changing this creates a new
 	// instance.
 	Region pulumi.StringPtrInput
+	// Specifies the name of the replica set in the connection address.
+	// It must be `3` to `128` characters long and start with a letter. It is case-sensitive and can contain only letters,
+	// digits, and underscores (_). Default is **replica**.
+	ReplicaSetName pulumi.StringPtrInput
+	// Specifies whether to enable second level monitoring.
+	SecondLevelMonitoringEnabled pulumi.BoolPtrInput
 	// Specifies the security group ID of the DDS instance.
 	SecurityGroupId pulumi.StringInput
+	// Specifies whether to enable slow original log.
+	// The value can be **on** or **off**.
+	SlowLogDesensitization pulumi.StringPtrInput
 	// Specifies whether to enable or disable SSL. Defaults to true.
 	Ssl pulumi.BoolPtrInput
 	// Specifies the subnet Network ID. Changing this creates a new instance.
@@ -706,8 +866,7 @@ func (o InstanceOutput) AutoRenew() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Instance) pulumi.StringPtrOutput { return v.AutoRenew }).(pulumi.StringPtrOutput)
 }
 
-// Specifies the ID of the availability zone. Changing this creates a
-// new instance.
+// Specifies the availability zone names separated by commas.
 func (o InstanceOutput) AvailabilityZone() pulumi.StringOutput {
 	return o.ApplyT(func(v *Instance) pulumi.StringOutput { return v.AvailabilityZone }).(pulumi.StringOutput)
 }
@@ -715,6 +874,24 @@ func (o InstanceOutput) AvailabilityZone() pulumi.StringOutput {
 // Specifies the advanced backup policy. The structure is described below.
 func (o InstanceOutput) BackupStrategy() InstanceBackupStrategyOutput {
 	return o.ApplyT(func(v *Instance) InstanceBackupStrategyOutput { return v.BackupStrategy }).(InstanceBackupStrategyOutput)
+}
+
+// Specifies the start time of the balancing activity time window.
+// The format is **HH:MM**. It's required with `balancerActiveEnd`.
+func (o InstanceOutput) BalancerActiveBegin() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *Instance) pulumi.StringPtrOutput { return v.BalancerActiveBegin }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the end time of the balancing activity time window.
+// The format is **HH:MM**. It's required with `balancerActiveBegin`.
+func (o InstanceOutput) BalancerActiveEnd() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *Instance) pulumi.StringPtrOutput { return v.BalancerActiveEnd }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the status of the balancer.
+// The value can be **start** or **stop**. Defaults to **start**.
+func (o InstanceOutput) BalancerStatus() pulumi.StringOutput {
+	return o.ApplyT(func(v *Instance) pulumi.StringOutput { return v.BalancerStatus }).(pulumi.StringOutput)
 }
 
 // Specifies the charging mode of the instance.
@@ -725,10 +902,24 @@ func (o InstanceOutput) ChargingMode() pulumi.StringOutput {
 	return o.ApplyT(func(v *Instance) pulumi.StringOutput { return v.ChargingMode }).(pulumi.StringOutput)
 }
 
+// Specifies the CIDR block where the client is located. Cross-CIDR access is
+// required only when the CIDR blocks of the client and the replica set instance are different. For example, if the client
+// CIDR block is 192.168.0.0/16 and the replica set instance's CIDR block is 172.16.0.0/24, add the CIDR block
+// 192.168.0.0/16 so that the client can access the replica set instance.
+// It's only for replica set instance.
+func (o InstanceOutput) ClientNetworkRanges() pulumi.StringArrayOutput {
+	return o.ApplyT(func(v *Instance) pulumi.StringArrayOutput { return v.ClientNetworkRanges }).(pulumi.StringArrayOutput)
+}
+
 // Specifies the configuration information.
 // The structure is described below. Changing this creates a new instance.
 func (o InstanceOutput) Configurations() InstanceConfigurationArrayOutput {
 	return o.ApplyT(func(v *Instance) InstanceConfigurationArrayOutput { return v.Configurations }).(InstanceConfigurationArrayOutput)
+}
+
+// Indicates the create time.
+func (o InstanceOutput) CreatedAt() pulumi.StringOutput {
+	return o.ApplyT(func(v *Instance) pulumi.StringOutput { return v.CreatedAt }).(pulumi.StringOutput)
 }
 
 // Specifies database information. The structure is described below. Changing
@@ -737,9 +928,14 @@ func (o InstanceOutput) Datastore() InstanceDatastoreOutput {
 	return o.ApplyT(func(v *Instance) InstanceDatastoreOutput { return v.Datastore }).(InstanceDatastoreOutput)
 }
 
-// Indicates the DB Administator name.
+// Indicates the DB Administrator name.
 func (o InstanceOutput) DbUsername() pulumi.StringOutput {
 	return o.ApplyT(func(v *Instance) pulumi.StringOutput { return v.DbUsername }).(pulumi.StringOutput)
+}
+
+// Specifies the description of the DDS instance.
+func (o InstanceOutput) Description() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *Instance) pulumi.StringPtrOutput { return v.Description }).(pulumi.StringPtrOutput)
 }
 
 // Specifies the disk encryption ID of the instance. Changing this
@@ -748,8 +944,7 @@ func (o InstanceOutput) DiskEncryptionId() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Instance) pulumi.StringPtrOutput { return v.DiskEncryptionId }).(pulumi.StringPtrOutput)
 }
 
-// Specifies the enterprise project id of the dds instance.
-// Changing this creates a new instance.
+// Specifies the enterprise project id of the DDS instance.
 func (o InstanceOutput) EnterpriseProjectId() pulumi.StringOutput {
 	return o.ApplyT(func(v *Instance) pulumi.StringOutput { return v.EnterpriseProjectId }).(pulumi.StringOutput)
 }
@@ -760,8 +955,28 @@ func (o InstanceOutput) Flavors() InstanceFlavorArrayOutput {
 	return o.ApplyT(func(v *Instance) InstanceFlavorArrayOutput { return v.Flavors }).(InstanceFlavorArrayOutput)
 }
 
-// Specifies the mode of the database instance. **Sharding**, **ReplicaSet**,
-// **Single** are supported. Changing this creates a new instance.
+// Indicates the instance groups information.
+// The groups structure is documented below.
+func (o InstanceOutput) Groups() InstanceGroupArrayOutput {
+	return o.ApplyT(func(v *Instance) InstanceGroupArrayOutput { return v.Groups }).(InstanceGroupArrayOutput)
+}
+
+// Specifies begin time of the time range within which you are allowed to start a
+// task that affects the running of database instances. It must be a valid value in the format of **hh:mm** in UTC+0,
+// such as **02:00**, meanwhile, this time in console displays in the format of **hh:mm** in UTC+08:00, e.g. **10:00**.
+func (o InstanceOutput) MaintainBegin() pulumi.StringOutput {
+	return o.ApplyT(func(v *Instance) pulumi.StringOutput { return v.MaintainBegin }).(pulumi.StringOutput)
+}
+
+// Specifies end time of the time range within which you are allowed to start a
+// task that affects the running of database instances. It must be a valid value in the format of **hh:mm** in UTC+0,
+// such as **04:00**, meanwhile, this time in console displays in the format of **hh:mm** in UTC+08:00, e.g. **12:00**.
+func (o InstanceOutput) MaintainEnd() pulumi.StringOutput {
+	return o.ApplyT(func(v *Instance) pulumi.StringOutput { return v.MaintainEnd }).(pulumi.StringOutput)
+}
+
+// Specifies the mode of the database instance. **Sharding**, **ReplicaSet**
+// are supported. Changing this creates a new instance.
 func (o InstanceOutput) Mode() pulumi.StringOutput {
 	return o.ApplyT(func(v *Instance) pulumi.StringOutput { return v.Mode }).(pulumi.StringOutput)
 }
@@ -772,21 +987,24 @@ func (o InstanceOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v *Instance) pulumi.StringOutput { return v.Name }).(pulumi.StringOutput)
 }
 
-// Indicates the instance nodes information. Structure is documented below.
+// Indicates the nodes info.
+// The nodes structure is documented below.
 func (o InstanceOutput) Nodes() InstanceNodeArrayOutput {
 	return o.ApplyT(func(v *Instance) InstanceNodeArrayOutput { return v.Nodes }).(InstanceNodeArrayOutput)
 }
 
 // Specifies the Administrator password of the database instance.
-func (o InstanceOutput) Password() pulumi.StringOutput {
-	return o.ApplyT(func(v *Instance) pulumi.StringOutput { return v.Password }).(pulumi.StringOutput)
+func (o InstanceOutput) Password() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *Instance) pulumi.StringPtrOutput { return v.Password }).(pulumi.StringPtrOutput)
 }
 
-// Specifies the charging period of the instance.
-// If `periodUnit` is set to *month*, the value ranges from 1 to 9.
-// If `periodUnit` is set to *year*, the value ranges from 1 to 3.
-// This parameter is mandatory if `chargingMode` is set to *prePaid*.
-// Changing this creates a new instance.
+// Specifies the backup cycle. Data will be automatically backed up on the
+// selected days every week.
+//   - If you set the `keepDays` to 0, this parameter is no need to set.
+//   - If you set the `keepDays` within 6 days, set the parameter value to **1,2,3,4,5,6,7**, data is automatically
+//     backed up on each day every week.
+//   - If you set the `keepDays` between 7 and 732 days, set the parameter value to at least one day of every week.
+//     For example: **1**, **3,5**.
 func (o InstanceOutput) Period() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v *Instance) pulumi.IntPtrOutput { return v.Period }).(pulumi.IntPtrOutput)
 }
@@ -810,9 +1028,27 @@ func (o InstanceOutput) Region() pulumi.StringOutput {
 	return o.ApplyT(func(v *Instance) pulumi.StringOutput { return v.Region }).(pulumi.StringOutput)
 }
 
+// Specifies the name of the replica set in the connection address.
+// It must be `3` to `128` characters long and start with a letter. It is case-sensitive and can contain only letters,
+// digits, and underscores (_). Default is **replica**.
+func (o InstanceOutput) ReplicaSetName() pulumi.StringOutput {
+	return o.ApplyT(func(v *Instance) pulumi.StringOutput { return v.ReplicaSetName }).(pulumi.StringOutput)
+}
+
+// Specifies whether to enable second level monitoring.
+func (o InstanceOutput) SecondLevelMonitoringEnabled() pulumi.BoolOutput {
+	return o.ApplyT(func(v *Instance) pulumi.BoolOutput { return v.SecondLevelMonitoringEnabled }).(pulumi.BoolOutput)
+}
+
 // Specifies the security group ID of the DDS instance.
 func (o InstanceOutput) SecurityGroupId() pulumi.StringOutput {
 	return o.ApplyT(func(v *Instance) pulumi.StringOutput { return v.SecurityGroupId }).(pulumi.StringOutput)
+}
+
+// Specifies whether to enable slow original log.
+// The value can be **on** or **off**.
+func (o InstanceOutput) SlowLogDesensitization() pulumi.StringOutput {
+	return o.ApplyT(func(v *Instance) pulumi.StringOutput { return v.SlowLogDesensitization }).(pulumi.StringOutput)
 }
 
 // Specifies whether to enable or disable SSL. Defaults to true.
@@ -833,6 +1069,16 @@ func (o InstanceOutput) SubnetId() pulumi.StringOutput {
 // The key/value pairs to associate with the DDS instance.
 func (o InstanceOutput) Tags() pulumi.StringMapOutput {
 	return o.ApplyT(func(v *Instance) pulumi.StringMapOutput { return v.Tags }).(pulumi.StringMapOutput)
+}
+
+// Indicates the time zone.
+func (o InstanceOutput) TimeZone() pulumi.StringOutput {
+	return o.ApplyT(func(v *Instance) pulumi.StringOutput { return v.TimeZone }).(pulumi.StringOutput)
+}
+
+// Indicates the update time.
+func (o InstanceOutput) UpdatedAt() pulumi.StringOutput {
+	return o.ApplyT(func(v *Instance) pulumi.StringOutput { return v.UpdatedAt }).(pulumi.StringOutput)
 }
 
 // Specifies the VPC ID. Changing this creates a new instance.

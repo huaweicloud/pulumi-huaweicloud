@@ -51,8 +51,8 @@ export class Tags extends pulumi.CustomResource {
     }
 
     /**
-     * Specifies an array of one or more predefined tags. The tags object
-     * structure is documented below. Changing this will create a new resource.
+     * Specifies an array of one or more predefined tags.
+     * The tags structure is documented below.
      */
     public readonly tags!: pulumi.Output<outputs.Tms.TagsTag[]>;
 
@@ -87,8 +87,8 @@ export class Tags extends pulumi.CustomResource {
  */
 export interface TagsState {
     /**
-     * Specifies an array of one or more predefined tags. The tags object
-     * structure is documented below. Changing this will create a new resource.
+     * Specifies an array of one or more predefined tags.
+     * The tags structure is documented below.
      */
     tags?: pulumi.Input<pulumi.Input<inputs.Tms.TagsTag>[]>;
 }
@@ -98,8 +98,8 @@ export interface TagsState {
  */
 export interface TagsArgs {
     /**
-     * Specifies an array of one or more predefined tags. The tags object
-     * structure is documented below. Changing this will create a new resource.
+     * Specifies an array of one or more predefined tags.
+     * The tags structure is documented below.
      */
     tags: pulumi.Input<pulumi.Input<inputs.Tms.TagsTag>[]>;
 }

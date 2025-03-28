@@ -284,23 +284,23 @@ import (
 //
 // ## Import
 //
-// Users can be imported using their `id` and authorization parameters, separated by slashes, e.g. Import a user and authenticated by account.
+// Users can be imported using their `id` and authorization parameters, separated by slashes, e.g. Import a user and authenticated by account. bash
 //
 // ```sh
 //
-//	$ pulumi import huaweicloud:Meeting/user:User test &ltid&gt/&ltaccount_name&gt/&ltaccount_password&gt
+//	$ pulumi import huaweicloud:Meeting/user:User test <id>/<account_name>/<account_password>
 //
 // ```
 //
-//	Import a user and authenticated by `APP ID`/`APP Key`.
+//	Import a user and authenticated by `APP ID`/`APP Key`. bash
 //
 // ```sh
 //
-//	$ pulumi import huaweicloud:Meeting/user:User test &ltid&gt/&ltapp_id&gt/&ltapp_key&gt/&ltcorp_id&gt/&ltuser_id&gt
+//	$ pulumi import huaweicloud:Meeting/user:User test <id>/<app_id>/<app_key>/<corp_id>/<user_id>
 //
 // ```
 //
-//	The slashes cannot be missing even corporation ID and user ID are empty. Note that some parameters do not support import due to missing API responses or privacy, such as `password`, `is_send_notify` and `is_admin`. You can ignore this change as below. resource "huaweicloud_meeting_user" "test" {
+//	The slashes cannot be missing even corporation ID and user ID are empty. Note that some parameters do not support import due to missing API responses or privacy, such as `password`, `is_send_notify` and `is_admin`. You can ignore this change as below. hcl resource "huaweicloud_meeting_user" "test" {
 //
 //	...
 //
@@ -316,7 +316,7 @@ import (
 type User struct {
 	pulumi.CustomResourceState
 
-	// Specifies the user account. The value can contain **1** to **64** characters.
+	// Specifies the user account. The value can contain `1` to `64` characters.
 	// If omitted, the service will automatically generate a value.
 	// Changing this parameter will create a new resource.
 	Account pulumi.StringOutput `pulumi:"account"`
@@ -344,11 +344,11 @@ type User struct {
 	DepartmentName pulumi.StringOutput `pulumi:"departmentName"`
 	// The department full name.
 	DepartmentNamePath pulumi.StringOutput `pulumi:"departmentNamePath"`
-	// Specifies the description. The value can contain **0** to **128** characters.
+	// Specifies the description. The value can contain `0` to `128` characters.
 	Description pulumi.StringPtrOutput `pulumi:"description"`
 	// Specifies the email address.
 	Email pulumi.StringOutput `pulumi:"email"`
-	// Specifies the english name. The value can contain **0** to **64** characters.
+	// Specifies the english name. The value can contain `0` to `64` characters.
 	EnglishName pulumi.StringOutput `pulumi:"englishName"`
 	// Specifies whether to hide the phone number.
 	HidePhone pulumi.BoolOutput `pulumi:"hidePhone"`
@@ -358,25 +358,21 @@ type User struct {
 	// Specifies whether to send email and SMS notifications for account opening.
 	// Defaults to **true**.
 	IsSendNotify pulumi.BoolPtrOutput `pulumi:"isSendNotify"`
-	// Specifies the user name. The value can contain **1** to **64** characters.
+	// Specifies the user name. The value can contain `1` to `64` characters.
 	Name pulumi.StringOutput `pulumi:"name"`
 	// Specifies the user password.
 	// The following conditions must be met:
-	// + **8** to **32** characters
-	// + It cannot be consistent with the positive and reverse order of the `account` parameter.
-	// + Contains at least two character types: lowercase letters, uppercase letters, numbers, special characters
-	//   (**`~!@#$%^&*()-_=+|[{}];:",'<.>/?**).
 	Password pulumi.StringOutput `pulumi:"password"`
 	// Specifies the phone number.
 	// The phone number must start with a country (region) code.
 	Phone pulumi.StringOutput `pulumi:"phone"`
-	// Specifies the signature. The value can contain **0** to **512** characters.
+	// Specifies the signature. The value can contain `0` to `512` characters.
 	Signature pulumi.StringOutput `pulumi:"signature"`
 	// The SIP number.
 	SipNumber pulumi.StringOutput `pulumi:"sipNumber"`
 	// Specifies the address book sorting level.
 	// The lower the serial number, the higher the priority.
-	// The valid value is range from **1** to **10000**. Defaults to **10000**.
+	// The valid value is range from `1` to `10,000`. Defaults to `10,000`.
 	SortLevel pulumi.IntOutput `pulumi:"sortLevel"`
 	// Specifies the status. The valid values are as follows:
 	// + **0**: Normal.
@@ -384,7 +380,7 @@ type User struct {
 	Status pulumi.IntOutput `pulumi:"status"`
 	// Specifies the third-party account name.
 	ThirdAccount pulumi.StringOutput `pulumi:"thirdAccount"`
-	// Specifies the title name. The value can contain **0** to **32** characters.
+	// Specifies the title name. The value can contain `0` to `32` characters.
 	Title pulumi.StringOutput `pulumi:"title"`
 	// The user type.
 	// + **2**: Enterprise member account.
@@ -428,7 +424,7 @@ func GetUser(ctx *pulumi.Context,
 
 // Input properties used for looking up and filtering User resources.
 type userState struct {
-	// Specifies the user account. The value can contain **1** to **64** characters.
+	// Specifies the user account. The value can contain `1` to `64` characters.
 	// If omitted, the service will automatically generate a value.
 	// Changing this parameter will create a new resource.
 	Account *string `pulumi:"account"`
@@ -456,11 +452,11 @@ type userState struct {
 	DepartmentName *string `pulumi:"departmentName"`
 	// The department full name.
 	DepartmentNamePath *string `pulumi:"departmentNamePath"`
-	// Specifies the description. The value can contain **0** to **128** characters.
+	// Specifies the description. The value can contain `0` to `128` characters.
 	Description *string `pulumi:"description"`
 	// Specifies the email address.
 	Email *string `pulumi:"email"`
-	// Specifies the english name. The value can contain **0** to **64** characters.
+	// Specifies the english name. The value can contain `0` to `64` characters.
 	EnglishName *string `pulumi:"englishName"`
 	// Specifies whether to hide the phone number.
 	HidePhone *bool `pulumi:"hidePhone"`
@@ -470,25 +466,21 @@ type userState struct {
 	// Specifies whether to send email and SMS notifications for account opening.
 	// Defaults to **true**.
 	IsSendNotify *bool `pulumi:"isSendNotify"`
-	// Specifies the user name. The value can contain **1** to **64** characters.
+	// Specifies the user name. The value can contain `1` to `64` characters.
 	Name *string `pulumi:"name"`
 	// Specifies the user password.
 	// The following conditions must be met:
-	// + **8** to **32** characters
-	// + It cannot be consistent with the positive and reverse order of the `account` parameter.
-	// + Contains at least two character types: lowercase letters, uppercase letters, numbers, special characters
-	//   (**`~!@#$%^&*()-_=+|[{}];:",'<.>/?**).
 	Password *string `pulumi:"password"`
 	// Specifies the phone number.
 	// The phone number must start with a country (region) code.
 	Phone *string `pulumi:"phone"`
-	// Specifies the signature. The value can contain **0** to **512** characters.
+	// Specifies the signature. The value can contain `0` to `512` characters.
 	Signature *string `pulumi:"signature"`
 	// The SIP number.
 	SipNumber *string `pulumi:"sipNumber"`
 	// Specifies the address book sorting level.
 	// The lower the serial number, the higher the priority.
-	// The valid value is range from **1** to **10000**. Defaults to **10000**.
+	// The valid value is range from `1` to `10,000`. Defaults to `10,000`.
 	SortLevel *int `pulumi:"sortLevel"`
 	// Specifies the status. The valid values are as follows:
 	// + **0**: Normal.
@@ -496,7 +488,7 @@ type userState struct {
 	Status *int `pulumi:"status"`
 	// Specifies the third-party account name.
 	ThirdAccount *string `pulumi:"thirdAccount"`
-	// Specifies the title name. The value can contain **0** to **32** characters.
+	// Specifies the title name. The value can contain `0` to `32` characters.
 	Title *string `pulumi:"title"`
 	// The user type.
 	// + **2**: Enterprise member account.
@@ -508,7 +500,7 @@ type userState struct {
 }
 
 type UserState struct {
-	// Specifies the user account. The value can contain **1** to **64** characters.
+	// Specifies the user account. The value can contain `1` to `64` characters.
 	// If omitted, the service will automatically generate a value.
 	// Changing this parameter will create a new resource.
 	Account pulumi.StringPtrInput
@@ -536,11 +528,11 @@ type UserState struct {
 	DepartmentName pulumi.StringPtrInput
 	// The department full name.
 	DepartmentNamePath pulumi.StringPtrInput
-	// Specifies the description. The value can contain **0** to **128** characters.
+	// Specifies the description. The value can contain `0` to `128` characters.
 	Description pulumi.StringPtrInput
 	// Specifies the email address.
 	Email pulumi.StringPtrInput
-	// Specifies the english name. The value can contain **0** to **64** characters.
+	// Specifies the english name. The value can contain `0` to `64` characters.
 	EnglishName pulumi.StringPtrInput
 	// Specifies whether to hide the phone number.
 	HidePhone pulumi.BoolPtrInput
@@ -550,25 +542,21 @@ type UserState struct {
 	// Specifies whether to send email and SMS notifications for account opening.
 	// Defaults to **true**.
 	IsSendNotify pulumi.BoolPtrInput
-	// Specifies the user name. The value can contain **1** to **64** characters.
+	// Specifies the user name. The value can contain `1` to `64` characters.
 	Name pulumi.StringPtrInput
 	// Specifies the user password.
 	// The following conditions must be met:
-	// + **8** to **32** characters
-	// + It cannot be consistent with the positive and reverse order of the `account` parameter.
-	// + Contains at least two character types: lowercase letters, uppercase letters, numbers, special characters
-	//   (**`~!@#$%^&*()-_=+|[{}];:",'<.>/?**).
 	Password pulumi.StringPtrInput
 	// Specifies the phone number.
 	// The phone number must start with a country (region) code.
 	Phone pulumi.StringPtrInput
-	// Specifies the signature. The value can contain **0** to **512** characters.
+	// Specifies the signature. The value can contain `0` to `512` characters.
 	Signature pulumi.StringPtrInput
 	// The SIP number.
 	SipNumber pulumi.StringPtrInput
 	// Specifies the address book sorting level.
 	// The lower the serial number, the higher the priority.
-	// The valid value is range from **1** to **10000**. Defaults to **10000**.
+	// The valid value is range from `1` to `10,000`. Defaults to `10,000`.
 	SortLevel pulumi.IntPtrInput
 	// Specifies the status. The valid values are as follows:
 	// + **0**: Normal.
@@ -576,7 +564,7 @@ type UserState struct {
 	Status pulumi.IntPtrInput
 	// Specifies the third-party account name.
 	ThirdAccount pulumi.StringPtrInput
-	// Specifies the title name. The value can contain **0** to **32** characters.
+	// Specifies the title name. The value can contain `0` to `32` characters.
 	Title pulumi.StringPtrInput
 	// The user type.
 	// + **2**: Enterprise member account.
@@ -592,7 +580,7 @@ func (UserState) ElementType() reflect.Type {
 }
 
 type userArgs struct {
-	// Specifies the user account. The value can contain **1** to **64** characters.
+	// Specifies the user account. The value can contain `1` to `64` characters.
 	// If omitted, the service will automatically generate a value.
 	// Changing this parameter will create a new resource.
 	Account *string `pulumi:"account"`
@@ -616,11 +604,11 @@ type userArgs struct {
 	Country *string `pulumi:"country"`
 	// Specifies the department code. Defaults to **1** (Root department).
 	DepartmentCode *string `pulumi:"departmentCode"`
-	// Specifies the description. The value can contain **0** to **128** characters.
+	// Specifies the description. The value can contain `0` to `128` characters.
 	Description *string `pulumi:"description"`
 	// Specifies the email address.
 	Email *string `pulumi:"email"`
-	// Specifies the english name. The value can contain **0** to **64** characters.
+	// Specifies the english name. The value can contain `0` to `64` characters.
 	EnglishName *string `pulumi:"englishName"`
 	// Specifies whether to hide the phone number.
 	HidePhone *bool `pulumi:"hidePhone"`
@@ -630,23 +618,19 @@ type userArgs struct {
 	// Specifies whether to send email and SMS notifications for account opening.
 	// Defaults to **true**.
 	IsSendNotify *bool `pulumi:"isSendNotify"`
-	// Specifies the user name. The value can contain **1** to **64** characters.
+	// Specifies the user name. The value can contain `1` to `64` characters.
 	Name *string `pulumi:"name"`
 	// Specifies the user password.
 	// The following conditions must be met:
-	// + **8** to **32** characters
-	// + It cannot be consistent with the positive and reverse order of the `account` parameter.
-	// + Contains at least two character types: lowercase letters, uppercase letters, numbers, special characters
-	//   (**`~!@#$%^&*()-_=+|[{}];:",'<.>/?**).
 	Password string `pulumi:"password"`
 	// Specifies the phone number.
 	// The phone number must start with a country (region) code.
 	Phone *string `pulumi:"phone"`
-	// Specifies the signature. The value can contain **0** to **512** characters.
+	// Specifies the signature. The value can contain `0` to `512` characters.
 	Signature *string `pulumi:"signature"`
 	// Specifies the address book sorting level.
 	// The lower the serial number, the higher the priority.
-	// The valid value is range from **1** to **10000**. Defaults to **10000**.
+	// The valid value is range from `1` to `10,000`. Defaults to `10,000`.
 	SortLevel *int `pulumi:"sortLevel"`
 	// Specifies the status. The valid values are as follows:
 	// + **0**: Normal.
@@ -654,7 +638,7 @@ type userArgs struct {
 	Status *int `pulumi:"status"`
 	// Specifies the third-party account name.
 	ThirdAccount *string `pulumi:"thirdAccount"`
-	// Specifies the title name. The value can contain **0** to **32** characters.
+	// Specifies the title name. The value can contain `0` to `32` characters.
 	Title *string `pulumi:"title"`
 	// Specifies the user ID of the administrator.
 	// Only available if `appId` is set. If omitted, the user ID of default administrator will be used.
@@ -664,7 +648,7 @@ type userArgs struct {
 
 // The set of arguments for constructing a User resource.
 type UserArgs struct {
-	// Specifies the user account. The value can contain **1** to **64** characters.
+	// Specifies the user account. The value can contain `1` to `64` characters.
 	// If omitted, the service will automatically generate a value.
 	// Changing this parameter will create a new resource.
 	Account pulumi.StringPtrInput
@@ -688,11 +672,11 @@ type UserArgs struct {
 	Country pulumi.StringPtrInput
 	// Specifies the department code. Defaults to **1** (Root department).
 	DepartmentCode pulumi.StringPtrInput
-	// Specifies the description. The value can contain **0** to **128** characters.
+	// Specifies the description. The value can contain `0` to `128` characters.
 	Description pulumi.StringPtrInput
 	// Specifies the email address.
 	Email pulumi.StringPtrInput
-	// Specifies the english name. The value can contain **0** to **64** characters.
+	// Specifies the english name. The value can contain `0` to `64` characters.
 	EnglishName pulumi.StringPtrInput
 	// Specifies whether to hide the phone number.
 	HidePhone pulumi.BoolPtrInput
@@ -702,23 +686,19 @@ type UserArgs struct {
 	// Specifies whether to send email and SMS notifications for account opening.
 	// Defaults to **true**.
 	IsSendNotify pulumi.BoolPtrInput
-	// Specifies the user name. The value can contain **1** to **64** characters.
+	// Specifies the user name. The value can contain `1` to `64` characters.
 	Name pulumi.StringPtrInput
 	// Specifies the user password.
 	// The following conditions must be met:
-	// + **8** to **32** characters
-	// + It cannot be consistent with the positive and reverse order of the `account` parameter.
-	// + Contains at least two character types: lowercase letters, uppercase letters, numbers, special characters
-	//   (**`~!@#$%^&*()-_=+|[{}];:",'<.>/?**).
 	Password pulumi.StringInput
 	// Specifies the phone number.
 	// The phone number must start with a country (region) code.
 	Phone pulumi.StringPtrInput
-	// Specifies the signature. The value can contain **0** to **512** characters.
+	// Specifies the signature. The value can contain `0` to `512` characters.
 	Signature pulumi.StringPtrInput
 	// Specifies the address book sorting level.
 	// The lower the serial number, the higher the priority.
-	// The valid value is range from **1** to **10000**. Defaults to **10000**.
+	// The valid value is range from `1` to `10,000`. Defaults to `10,000`.
 	SortLevel pulumi.IntPtrInput
 	// Specifies the status. The valid values are as follows:
 	// + **0**: Normal.
@@ -726,7 +706,7 @@ type UserArgs struct {
 	Status pulumi.IntPtrInput
 	// Specifies the third-party account name.
 	ThirdAccount pulumi.StringPtrInput
-	// Specifies the title name. The value can contain **0** to **32** characters.
+	// Specifies the title name. The value can contain `0` to `32` characters.
 	Title pulumi.StringPtrInput
 	// Specifies the user ID of the administrator.
 	// Only available if `appId` is set. If omitted, the user ID of default administrator will be used.
@@ -821,7 +801,7 @@ func (o UserOutput) ToUserOutputWithContext(ctx context.Context) UserOutput {
 	return o
 }
 
-// Specifies the user account. The value can contain **1** to **64** characters.
+// Specifies the user account. The value can contain `1` to `64` characters.
 // If omitted, the service will automatically generate a value.
 // Changing this parameter will create a new resource.
 func (o UserOutput) Account() pulumi.StringOutput {
@@ -879,7 +859,7 @@ func (o UserOutput) DepartmentNamePath() pulumi.StringOutput {
 	return o.ApplyT(func(v *User) pulumi.StringOutput { return v.DepartmentNamePath }).(pulumi.StringOutput)
 }
 
-// Specifies the description. The value can contain **0** to **128** characters.
+// Specifies the description. The value can contain `0` to `128` characters.
 func (o UserOutput) Description() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *User) pulumi.StringPtrOutput { return v.Description }).(pulumi.StringPtrOutput)
 }
@@ -889,7 +869,7 @@ func (o UserOutput) Email() pulumi.StringOutput {
 	return o.ApplyT(func(v *User) pulumi.StringOutput { return v.Email }).(pulumi.StringOutput)
 }
 
-// Specifies the english name. The value can contain **0** to **64** characters.
+// Specifies the english name. The value can contain `0` to `64` characters.
 func (o UserOutput) EnglishName() pulumi.StringOutput {
 	return o.ApplyT(func(v *User) pulumi.StringOutput { return v.EnglishName }).(pulumi.StringOutput)
 }
@@ -911,17 +891,13 @@ func (o UserOutput) IsSendNotify() pulumi.BoolPtrOutput {
 	return o.ApplyT(func(v *User) pulumi.BoolPtrOutput { return v.IsSendNotify }).(pulumi.BoolPtrOutput)
 }
 
-// Specifies the user name. The value can contain **1** to **64** characters.
+// Specifies the user name. The value can contain `1` to `64` characters.
 func (o UserOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v *User) pulumi.StringOutput { return v.Name }).(pulumi.StringOutput)
 }
 
 // Specifies the user password.
 // The following conditions must be met:
-//   - **8** to **32** characters
-//   - It cannot be consistent with the positive and reverse order of the `account` parameter.
-//   - Contains at least two character types: lowercase letters, uppercase letters, numbers, special characters
-//     (**`~!@#$%^&*()-_=+|[{}];:",'<.>/?**).
 func (o UserOutput) Password() pulumi.StringOutput {
 	return o.ApplyT(func(v *User) pulumi.StringOutput { return v.Password }).(pulumi.StringOutput)
 }
@@ -932,7 +908,7 @@ func (o UserOutput) Phone() pulumi.StringOutput {
 	return o.ApplyT(func(v *User) pulumi.StringOutput { return v.Phone }).(pulumi.StringOutput)
 }
 
-// Specifies the signature. The value can contain **0** to **512** characters.
+// Specifies the signature. The value can contain `0` to `512` characters.
 func (o UserOutput) Signature() pulumi.StringOutput {
 	return o.ApplyT(func(v *User) pulumi.StringOutput { return v.Signature }).(pulumi.StringOutput)
 }
@@ -944,7 +920,7 @@ func (o UserOutput) SipNumber() pulumi.StringOutput {
 
 // Specifies the address book sorting level.
 // The lower the serial number, the higher the priority.
-// The valid value is range from **1** to **10000**. Defaults to **10000**.
+// The valid value is range from `1` to `10,000`. Defaults to `10,000`.
 func (o UserOutput) SortLevel() pulumi.IntOutput {
 	return o.ApplyT(func(v *User) pulumi.IntOutput { return v.SortLevel }).(pulumi.IntOutput)
 }
@@ -961,7 +937,7 @@ func (o UserOutput) ThirdAccount() pulumi.StringOutput {
 	return o.ApplyT(func(v *User) pulumi.StringOutput { return v.ThirdAccount }).(pulumi.StringOutput)
 }
 
-// Specifies the title name. The value can contain **0** to **32** characters.
+// Specifies the title name. The value can contain `0` to `32` characters.
 func (o UserOutput) Title() pulumi.StringOutput {
 	return o.ApplyT(func(v *User) pulumi.StringOutput { return v.Title }).(pulumi.StringOutput)
 }

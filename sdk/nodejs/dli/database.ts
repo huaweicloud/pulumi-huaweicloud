@@ -21,11 +21,25 @@ import * as utilities from "../utilities";
  *
  * ## Import
  *
- * DLI SQL databases can be imported by their `name`, e.g.
+ * DLI SQL databases can be imported by their `name`, e.g. bash
  *
  * ```sh
  *  $ pulumi import huaweicloud:Dli/database:Database test terraform_test
  * ```
+ *
+ *  Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`tags`. It is generally recommended running `terraform plan` after importing a resource. You can then decide if changes should be applied to the resource, or the resource definition should be updated to align with the resource. Also you can ignore changes as below. hcl resource "huaweicloud_dataarts_factory_script" "test" {
+ *
+ *  ...
+ *
+ *  lifecycle {
+ *
+ *  ignore_changes = [
+ *
+ *  tags,
+ *
+ *  ]
+ *
+ *  } }
  */
 export class Database extends pulumi.CustomResource {
     /**
@@ -66,8 +80,9 @@ export class Database extends pulumi.CustomResource {
      */
     public readonly enterpriseProjectId!: pulumi.Output<string>;
     /**
-     * Specifies the database name. The name consists of 1 to 128 characters, starting
-     * with a letter or digit. Only letters, digits and underscores (_) are allowed and the name cannot be all digits.
+     * Specifies the database name.  
+     * The name consists of `1` to `128` characters, starting with a letter or digit.
+     * Only letters, digits and underscores (_) are allowed and the name cannot be all digits.
      * Changing this parameter will create a new database resource.
      */
     public readonly name!: pulumi.Output<string>;
@@ -81,6 +96,11 @@ export class Database extends pulumi.CustomResource {
      * If omitted, the provider-level region will be used. Changing this parameter will create a new database resource.
      */
     public readonly region!: pulumi.Output<string>;
+    /**
+     * Specifies the key/value pairs to associate with the database.  
+     * Changing this parameter will create a new resource.
+     */
+    public readonly tags!: pulumi.Output<{[key: string]: string} | undefined>;
 
     /**
      * Create a Database resource with the given unique name, arguments, and options.
@@ -100,6 +120,7 @@ export class Database extends pulumi.CustomResource {
             resourceInputs["name"] = state ? state.name : undefined;
             resourceInputs["owner"] = state ? state.owner : undefined;
             resourceInputs["region"] = state ? state.region : undefined;
+            resourceInputs["tags"] = state ? state.tags : undefined;
         } else {
             const args = argsOrState as DatabaseArgs | undefined;
             resourceInputs["description"] = args ? args.description : undefined;
@@ -107,6 +128,7 @@ export class Database extends pulumi.CustomResource {
             resourceInputs["name"] = args ? args.name : undefined;
             resourceInputs["owner"] = args ? args.owner : undefined;
             resourceInputs["region"] = args ? args.region : undefined;
+            resourceInputs["tags"] = args ? args.tags : undefined;
         }
         opts = pulumi.mergeOptions(utilities.resourceOptsDefaults(), opts);
         super(Database.__pulumiType, name, resourceInputs, opts);
@@ -128,8 +150,9 @@ export interface DatabaseState {
      */
     enterpriseProjectId?: pulumi.Input<string>;
     /**
-     * Specifies the database name. The name consists of 1 to 128 characters, starting
-     * with a letter or digit. Only letters, digits and underscores (_) are allowed and the name cannot be all digits.
+     * Specifies the database name.  
+     * The name consists of `1` to `128` characters, starting with a letter or digit.
+     * Only letters, digits and underscores (_) are allowed and the name cannot be all digits.
      * Changing this parameter will create a new database resource.
      */
     name?: pulumi.Input<string>;
@@ -143,6 +166,11 @@ export interface DatabaseState {
      * If omitted, the provider-level region will be used. Changing this parameter will create a new database resource.
      */
     region?: pulumi.Input<string>;
+    /**
+     * Specifies the key/value pairs to associate with the database.  
+     * Changing this parameter will create a new resource.
+     */
+    tags?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
 }
 
 /**
@@ -160,8 +188,9 @@ export interface DatabaseArgs {
      */
     enterpriseProjectId?: pulumi.Input<string>;
     /**
-     * Specifies the database name. The name consists of 1 to 128 characters, starting
-     * with a letter or digit. Only letters, digits and underscores (_) are allowed and the name cannot be all digits.
+     * Specifies the database name.  
+     * The name consists of `1` to `128` characters, starting with a letter or digit.
+     * Only letters, digits and underscores (_) are allowed and the name cannot be all digits.
      * Changing this parameter will create a new database resource.
      */
     name?: pulumi.Input<string>;
@@ -175,4 +204,9 @@ export interface DatabaseArgs {
      * If omitted, the provider-level region will be used. Changing this parameter will create a new database resource.
      */
     region?: pulumi.Input<string>;
+    /**
+     * Specifies the key/value pairs to associate with the database.  
+     * Changing this parameter will create a new resource.
+     */
+    tags?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
 }

@@ -11,8 +11,9 @@ import (
 )
 
 type ProviderAssumeRole struct {
-	AgencyName string `pulumi:"agencyName"`
-	DomainName string `pulumi:"domainName"`
+	AgencyName string  `pulumi:"agencyName"`
+	DomainId   *string `pulumi:"domainId"`
+	DomainName string  `pulumi:"domainName"`
 }
 
 // ProviderAssumeRoleInput is an input type that accepts ProviderAssumeRoleArgs and ProviderAssumeRoleOutput values.
@@ -27,8 +28,9 @@ type ProviderAssumeRoleInput interface {
 }
 
 type ProviderAssumeRoleArgs struct {
-	AgencyName pulumi.StringInput `pulumi:"agencyName"`
-	DomainName pulumi.StringInput `pulumi:"domainName"`
+	AgencyName pulumi.StringInput    `pulumi:"agencyName"`
+	DomainId   pulumi.StringPtrInput `pulumi:"domainId"`
+	DomainName pulumi.StringInput    `pulumi:"domainName"`
 }
 
 func (ProviderAssumeRoleArgs) ElementType() reflect.Type {
@@ -112,6 +114,10 @@ func (o ProviderAssumeRoleOutput) AgencyName() pulumi.StringOutput {
 	return o.ApplyT(func(v ProviderAssumeRole) string { return v.AgencyName }).(pulumi.StringOutput)
 }
 
+func (o ProviderAssumeRoleOutput) DomainId() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v ProviderAssumeRole) *string { return v.DomainId }).(pulumi.StringPtrOutput)
+}
+
 func (o ProviderAssumeRoleOutput) DomainName() pulumi.StringOutput {
 	return o.ApplyT(func(v ProviderAssumeRole) string { return v.DomainName }).(pulumi.StringOutput)
 }
@@ -146,6 +152,15 @@ func (o ProviderAssumeRolePtrOutput) AgencyName() pulumi.StringPtrOutput {
 			return nil
 		}
 		return &v.AgencyName
+	}).(pulumi.StringPtrOutput)
+}
+
+func (o ProviderAssumeRolePtrOutput) DomainId() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *ProviderAssumeRole) *string {
+		if v == nil {
+			return nil
+		}
+		return v.DomainId
 	}).(pulumi.StringPtrOutput)
 }
 

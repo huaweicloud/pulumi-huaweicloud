@@ -13,13 +13,13 @@ import (
 type GetKeypairsKeypair struct {
 	// Specifies the fingerprint of the keypair.
 	Fingerprint string `pulumi:"fingerprint"`
-	// Specifies whether the private key is managed by HuaweiCloud.
+	// Indicates whether the private key is managed by HuaweiCloud.
 	IsManaged bool `pulumi:"isManaged"`
 	// Specifies the name of the keypair.
 	Name string `pulumi:"name"`
 	// Specifies the imported OpenSSH-formatted public key.
 	PublicKey string `pulumi:"publicKey"`
-	// Indicates the scope of key pair. The value can be **account**or **user**.
+	// Indicates the scope of keypair. The value can be **account**or **user**.
 	Scope string `pulumi:"scope"`
 }
 
@@ -37,13 +37,13 @@ type GetKeypairsKeypairInput interface {
 type GetKeypairsKeypairArgs struct {
 	// Specifies the fingerprint of the keypair.
 	Fingerprint pulumi.StringInput `pulumi:"fingerprint"`
-	// Specifies whether the private key is managed by HuaweiCloud.
+	// Indicates whether the private key is managed by HuaweiCloud.
 	IsManaged pulumi.BoolInput `pulumi:"isManaged"`
 	// Specifies the name of the keypair.
 	Name pulumi.StringInput `pulumi:"name"`
 	// Specifies the imported OpenSSH-formatted public key.
 	PublicKey pulumi.StringInput `pulumi:"publicKey"`
-	// Indicates the scope of key pair. The value can be **account**or **user**.
+	// Indicates the scope of keypair. The value can be **account**or **user**.
 	Scope pulumi.StringInput `pulumi:"scope"`
 }
 
@@ -103,7 +103,7 @@ func (o GetKeypairsKeypairOutput) Fingerprint() pulumi.StringOutput {
 	return o.ApplyT(func(v GetKeypairsKeypair) string { return v.Fingerprint }).(pulumi.StringOutput)
 }
 
-// Specifies whether the private key is managed by HuaweiCloud.
+// Indicates whether the private key is managed by HuaweiCloud.
 func (o GetKeypairsKeypairOutput) IsManaged() pulumi.BoolOutput {
 	return o.ApplyT(func(v GetKeypairsKeypair) bool { return v.IsManaged }).(pulumi.BoolOutput)
 }
@@ -118,7 +118,7 @@ func (o GetKeypairsKeypairOutput) PublicKey() pulumi.StringOutput {
 	return o.ApplyT(func(v GetKeypairsKeypair) string { return v.PublicKey }).(pulumi.StringOutput)
 }
 
-// Indicates the scope of key pair. The value can be **account**or **user**.
+// Indicates the scope of keypair. The value can be **account**or **user**.
 func (o GetKeypairsKeypairOutput) Scope() pulumi.StringOutput {
 	return o.ApplyT(func(v GetKeypairsKeypair) string { return v.Scope }).(pulumi.StringOutput)
 }

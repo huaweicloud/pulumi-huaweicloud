@@ -59,7 +59,7 @@ import (
 //
 // ## Import
 //
-// DMS kafka permissions can be imported using the kafka instance ID and topic name separated by a slash, e.g.
+// # DMS kafka permissions can be imported using the kafka instance ID and topic name separated by a slash, e.g.bash
 //
 // ```sh
 //

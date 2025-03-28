@@ -14,6 +14,7 @@ __all__ = [
     'DataforwardingRuleTarget',
     'DataforwardingRuleTargetAmqpForwarding',
     'DataforwardingRuleTargetDisForwarding',
+    'DataforwardingRuleTargetFgsForwarding',
     'DataforwardingRuleTargetHttpForwarding',
     'DataforwardingRuleTargetKafkaForwarding',
     'DataforwardingRuleTargetKafkaForwardingAddress',
@@ -26,7 +27,9 @@ __all__ = [
     'DeviceLinkageRuleTrigger',
     'DeviceLinkageRuleTriggerDailyTimerCondition',
     'DeviceLinkageRuleTriggerDeviceDataCondition',
+    'DeviceLinkageRuleTriggerDeviceLinkageStatusCondition',
     'DeviceLinkageRuleTriggerSimpleTimerCondition',
+    'DeviceShadow',
     'ProductService',
     'ProductServiceCommand',
     'ProductServiceCommandPara',
@@ -43,6 +46,8 @@ class DataforwardingRuleTarget(dict):
             suggest = "amqp_forwarding"
         elif key == "disForwarding":
             suggest = "dis_forwarding"
+        elif key == "fgsForwarding":
+            suggest = "fgs_forwarding"
         elif key == "httpForwarding":
             suggest = "http_forwarding"
         elif key == "kafkaForwarding":
@@ -65,6 +70,7 @@ class DataforwardingRuleTarget(dict):
                  type: str,
                  amqp_forwarding: Optional['outputs.DataforwardingRuleTargetAmqpForwarding'] = None,
                  dis_forwarding: Optional['outputs.DataforwardingRuleTargetDisForwarding'] = None,
+                 fgs_forwarding: Optional['outputs.DataforwardingRuleTargetFgsForwarding'] = None,
                  http_forwarding: Optional['outputs.DataforwardingRuleTargetHttpForwarding'] = None,
                  id: Optional[str] = None,
                  kafka_forwarding: Optional['outputs.DataforwardingRuleTargetKafkaForwarding'] = None,
@@ -83,10 +89,16 @@ class DataforwardingRuleTarget(dict):
                + **DMS_KAFKA_FORWARDING**: Distributed Message Service (DMS) for Kafka features high throughput, concurrency, and
                scalability. It is suitable for real-time data transmission, stream data processing, system decoupling,
                and traffic balancing.
+               + **FUNCTIONGRAPH_FORWARDING**: By forwarding data to FunctionGraph service, you only need to write your business
+               function code and set the conditions for execution in FunctionGraph. There is no need to configure and manage
+               servers or other infrastructure. Functions will run in an elastic, maintenance-free, and highly reliable manner.
+               Currently, only standard and enterprise edition IoTDA instances are supported.
         :param 'DataforwardingRuleTargetAmqpForwardingArgs' amqp_forwarding: Specifies the detail of AMQP forwards. It is required when type
                is `AMQP_FORWARDING`. The amqp_forwarding structure is documented below.
         :param 'DataforwardingRuleTargetDisForwardingArgs' dis_forwarding: Specifies the detail of the DIS forwards. It is required when type
                is `DIS_FORWARDING`. The dis_forwarding structure is documented below.
+        :param 'DataforwardingRuleTargetFgsForwardingArgs' fgs_forwarding: Specifies the detail of the FunctionGraph forwards. It is required when
+               type is **FUNCTIONGRAPH_FORWARDING**. The fgs_forwarding structure is documented below.
         :param 'DataforwardingRuleTargetHttpForwardingArgs' http_forwarding: Specifies the detail of the HTTP forwards. It is required when type
                is `HTTP_FORWARDING`. The http_forwarding structure is documented below.
         :param str id: The resource ID in UUID format.
@@ -100,6 +112,8 @@ class DataforwardingRuleTarget(dict):
             pulumi.set(__self__, "amqp_forwarding", amqp_forwarding)
         if dis_forwarding is not None:
             pulumi.set(__self__, "dis_forwarding", dis_forwarding)
+        if fgs_forwarding is not None:
+            pulumi.set(__self__, "fgs_forwarding", fgs_forwarding)
         if http_forwarding is not None:
             pulumi.set(__self__, "http_forwarding", http_forwarding)
         if id is not None:
@@ -126,6 +140,10 @@ class DataforwardingRuleTarget(dict):
         + **DMS_KAFKA_FORWARDING**: Distributed Message Service (DMS) for Kafka features high throughput, concurrency, and
         scalability. It is suitable for real-time data transmission, stream data processing, system decoupling,
         and traffic balancing.
+        + **FUNCTIONGRAPH_FORWARDING**: By forwarding data to FunctionGraph service, you only need to write your business
+        function code and set the conditions for execution in FunctionGraph. There is no need to configure and manage
+        servers or other infrastructure. Functions will run in an elastic, maintenance-free, and highly reliable manner.
+        Currently, only standard and enterprise edition IoTDA instances are supported.
         """
         return pulumi.get(self, "type")
 
@@ -146,6 +164,15 @@ class DataforwardingRuleTarget(dict):
         is `DIS_FORWARDING`. The dis_forwarding structure is documented below.
         """
         return pulumi.get(self, "dis_forwarding")
+
+    @property
+    @pulumi.getter(name="fgsForwarding")
+    def fgs_forwarding(self) -> Optional['outputs.DataforwardingRuleTargetFgsForwarding']:
+        """
+        Specifies the detail of the FunctionGraph forwards. It is required when
+        type is **FUNCTIONGRAPH_FORWARDING**. The fgs_forwarding structure is documented below.
+        """
+        return pulumi.get(self, "fgs_forwarding")
 
     @property
     @pulumi.getter(name="httpForwarding")
@@ -278,6 +305,54 @@ class DataforwardingRuleTargetDisForwarding(dict):
         If omitted, the default project in the region will be used.
         """
         return pulumi.get(self, "project_id")
+
+
+@pulumi.output_type
+class DataforwardingRuleTargetFgsForwarding(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "funcName":
+            suggest = "func_name"
+        elif key == "funcUrn":
+            suggest = "func_urn"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in DataforwardingRuleTargetFgsForwarding. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        DataforwardingRuleTargetFgsForwarding.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        DataforwardingRuleTargetFgsForwarding.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 func_name: str,
+                 func_urn: str):
+        """
+        :param str func_name: Specifies the function name.
+        :param str func_urn: Specifies the function URN.
+        """
+        pulumi.set(__self__, "func_name", func_name)
+        pulumi.set(__self__, "func_urn", func_urn)
+
+    @property
+    @pulumi.getter(name="funcName")
+    def func_name(self) -> str:
+        """
+        Specifies the function name.
+        """
+        return pulumi.get(self, "func_name")
+
+    @property
+    @pulumi.getter(name="funcUrn")
+    def func_urn(self) -> str:
+        """
+        Specifies the function URN.
+        """
+        return pulumi.get(self, "func_urn")
 
 
 @pulumi.output_type
@@ -473,7 +548,7 @@ class DataforwardingRuleTargetObsForwarding(dict):
         :param str bucket: Specifies the OBS Bucket.
         :param str region: Specifies the region to which the KAFKA belongs.
         :param str custom_directory: Specifies the custom directory for storing channel files. The ID contains a
-               maximum of 256 characters. Multi-level directories can be separated by (/), and cannot start or end with a slash (/),
+               maximum of `256` characters. Multi-level directories can be separated by (/), and cannot start or end with a slash (/),
                and cannot contain more than two adjacent slashes (/). Only letters, digits, hyphens (-), underscores (_), slash (/)
                and braces ({}) are allowed. Braces can be used only for the time template parameters. For example, if the custom
                directory is in the format of {YYYY}/{MM}/{DD}/{HH}, data is generated in the directory based on the current
@@ -509,7 +584,7 @@ class DataforwardingRuleTargetObsForwarding(dict):
     def custom_directory(self) -> Optional[str]:
         """
         Specifies the custom directory for storing channel files. The ID contains a
-        maximum of 256 characters. Multi-level directories can be separated by (/), and cannot start or end with a slash (/),
+        maximum of `256` characters. Multi-level directories can be separated by (/), and cannot start or end with a slash (/),
         and cannot contain more than two adjacent slashes (/). Only letters, digits, hyphens (-), underscores (_), slash (/)
         and braces ({}) are allowed. Braces can be used only for the time template parameters. For example, if the custom
         directory is in the format of {YYYY}/{MM}/{DD}/{HH}, data is generated in the directory based on the current
@@ -618,7 +693,8 @@ class DeviceLinkageRuleActionDeviceAlarm(dict):
                  name: str,
                  severity: str,
                  type: str,
-                 description: Optional[str] = None):
+                 description: Optional[str] = None,
+                 dimension: Optional[str] = None):
         """
         :param str name: Specifies the name of the alarm.
         :param str severity: Specifies the severity level of the alarm.
@@ -626,13 +702,21 @@ class DeviceLinkageRuleActionDeviceAlarm(dict):
         :param str type: Specifies the type of the alarm. The options are as follows:
                + **fault**: Report alarms.
                + **recovery**: Clear alarms.
-        :param str description: Specifies the description of the alarm.
+        :param str description: Specifies the description of the alarm.  
+               The value can contain a maximum of `256` characters.
+        :param str dimension: Specifies the dimension of the alarm. Combine the alarm name and alarm level to
+               jointly identify an alarm.
+               The valid values are as follows:
+               + **device**: Device dimension
+               + **app**: Resource space dimension.
         """
         pulumi.set(__self__, "name", name)
         pulumi.set(__self__, "severity", severity)
         pulumi.set(__self__, "type", type)
         if description is not None:
             pulumi.set(__self__, "description", description)
+        if dimension is not None:
+            pulumi.set(__self__, "dimension", dimension)
 
     @property
     @pulumi.getter
@@ -665,9 +749,22 @@ class DeviceLinkageRuleActionDeviceAlarm(dict):
     @pulumi.getter
     def description(self) -> Optional[str]:
         """
-        Specifies the description of the alarm.
+        Specifies the description of the alarm.  
+        The value can contain a maximum of `256` characters.
         """
         return pulumi.get(self, "description")
+
+    @property
+    @pulumi.getter
+    def dimension(self) -> Optional[str]:
+        """
+        Specifies the dimension of the alarm. Combine the alarm name and alarm level to
+        jointly identify an alarm.
+        The valid values are as follows:
+        + **device**: Device dimension
+        + **app**: Resource space dimension.
+        """
+        return pulumi.get(self, "dimension")
 
 
 @pulumi.output_type
@@ -683,6 +780,10 @@ class DeviceLinkageRuleActionDeviceCommand(dict):
             suggest = "device_id"
         elif key == "serviceId":
             suggest = "service_id"
+        elif key == "bufferTimeout":
+            suggest = "buffer_timeout"
+        elif key == "responseTimeout":
+            suggest = "response_timeout"
 
         if suggest:
             pulumi.log.warn(f"Key '{key}' not found in DeviceLinkageRuleActionDeviceCommand. Access the value via the '{suggest}' property getter instead.")
@@ -699,7 +800,10 @@ class DeviceLinkageRuleActionDeviceCommand(dict):
                  command_body: str,
                  command_name: str,
                  device_id: str,
-                 service_id: str):
+                 service_id: str,
+                 buffer_timeout: Optional[int] = None,
+                 mode: Optional[str] = None,
+                 response_timeout: Optional[int] = None):
         """
         :param str command_body: Specifies the command parameters, in json format.
                + Example of device command using LWM2M protocol: `{"value":"1"}`, there are key-value pairs, each key is the
@@ -718,13 +822,33 @@ class DeviceLinkageRuleActionDeviceCommand(dict):
                - **body**: optional, the message body of the command, which contains key-value pairs, each key is the parameter
                name of the command in the product model. The specific format requires application and device conventions.
         :param str command_name: Specifies the command name.
-        :param str device_id: Specifies the device id which excutes the command.
+        :param str device_id: Specifies the device id which executes the command.
         :param str service_id: Specifies the service id to which the command belongs.
+        :param int buffer_timeout: Specifies the cache time of device commands, in seconds. Representing the effective
+               time for the IoT platform to cache commands before issuing them to the device. After this time, the commands will no
+               longer be issued. The default value is `172,800` seconds (`48` hours). If set to `0`, the command will be immediately
+               issued to the device regardless of the command issuance mode set on the IoT platform.
+        :param str mode: Specifies the issuance mode of device commands, which is only valid when the value of
+               `buffer_timeout` is greater than `0`.
+               The valid values are as follows:
+               + **ACTIVE**: Active mode, the IoT platform actively issues commands to devices.
+               + **PASSIVE**: Passive mode, after the IoT platform creates device commands, it will directly cache the commands.
+               Wait until the device goes online again or reports the execution result of the previous command before issuing the
+               command.
+        :param int response_timeout: Specifies the effective time of the command response, in seconds. Indicating that
+               the device responds effectively within the `response_timeout` time after receiving the command. If no response is
+               received after this time, the command response is considered to have timed out. The default value is `1,800` seconds.
         """
         pulumi.set(__self__, "command_body", command_body)
         pulumi.set(__self__, "command_name", command_name)
         pulumi.set(__self__, "device_id", device_id)
         pulumi.set(__self__, "service_id", service_id)
+        if buffer_timeout is not None:
+            pulumi.set(__self__, "buffer_timeout", buffer_timeout)
+        if mode is not None:
+            pulumi.set(__self__, "mode", mode)
+        if response_timeout is not None:
+            pulumi.set(__self__, "response_timeout", response_timeout)
 
     @property
     @pulumi.getter(name="commandBody")
@@ -761,7 +885,7 @@ class DeviceLinkageRuleActionDeviceCommand(dict):
     @pulumi.getter(name="deviceId")
     def device_id(self) -> str:
         """
-        Specifies the device id which excutes the command.
+        Specifies the device id which executes the command.
         """
         return pulumi.get(self, "device_id")
 
@@ -773,20 +897,57 @@ class DeviceLinkageRuleActionDeviceCommand(dict):
         """
         return pulumi.get(self, "service_id")
 
+    @property
+    @pulumi.getter(name="bufferTimeout")
+    def buffer_timeout(self) -> Optional[int]:
+        """
+        Specifies the cache time of device commands, in seconds. Representing the effective
+        time for the IoT platform to cache commands before issuing them to the device. After this time, the commands will no
+        longer be issued. The default value is `172,800` seconds (`48` hours). If set to `0`, the command will be immediately
+        issued to the device regardless of the command issuance mode set on the IoT platform.
+        """
+        return pulumi.get(self, "buffer_timeout")
+
+    @property
+    @pulumi.getter
+    def mode(self) -> Optional[str]:
+        """
+        Specifies the issuance mode of device commands, which is only valid when the value of
+        `buffer_timeout` is greater than `0`.
+        The valid values are as follows:
+        + **ACTIVE**: Active mode, the IoT platform actively issues commands to devices.
+        + **PASSIVE**: Passive mode, after the IoT platform creates device commands, it will directly cache the commands.
+        Wait until the device goes online again or reports the execution result of the previous command before issuing the
+        command.
+        """
+        return pulumi.get(self, "mode")
+
+    @property
+    @pulumi.getter(name="responseTimeout")
+    def response_timeout(self) -> Optional[int]:
+        """
+        Specifies the effective time of the command response, in seconds. Indicating that
+        the device responds effectively within the `response_timeout` time after receiving the command. If no response is
+        received after this time, the command response is considered to have timed out. The default value is `1,800` seconds.
+        """
+        return pulumi.get(self, "response_timeout")
+
 
 @pulumi.output_type
 class DeviceLinkageRuleActionSmnForwarding(dict):
     @staticmethod
     def __key_warning(key: str):
         suggest = None
-        if key == "messageContent":
-            suggest = "message_content"
-        elif key == "messageTitle":
+        if key == "messageTitle":
             suggest = "message_title"
         elif key == "topicName":
             suggest = "topic_name"
         elif key == "topicUrn":
             suggest = "topic_urn"
+        elif key == "messageContent":
+            suggest = "message_content"
+        elif key == "messageTemplateName":
+            suggest = "message_template_name"
         elif key == "projectId":
             suggest = "project_id"
 
@@ -802,36 +963,33 @@ class DeviceLinkageRuleActionSmnForwarding(dict):
         return super().get(key, default)
 
     def __init__(__self__, *,
-                 message_content: str,
                  message_title: str,
                  region: str,
                  topic_name: str,
                  topic_urn: str,
+                 message_content: Optional[str] = None,
+                 message_template_name: Optional[str] = None,
                  project_id: Optional[str] = None):
         """
-        :param str message_content: Specifies the message content.
         :param str message_title: Specifies the message title.
         :param str region: Specifies the region to which the SMN belongs.
         :param str topic_name: Specifies the topic name of the SMN.
         :param str topic_urn: Specifies the topic URN of the SMN.
+        :param str message_content: Specifies the message content.
+        :param str message_template_name: Specifies the template name corresponding to the SMN service.
         :param str project_id: Specifies the project ID to which the SMN belongs.
                If omitted, the default project in the region will be used.
         """
-        pulumi.set(__self__, "message_content", message_content)
         pulumi.set(__self__, "message_title", message_title)
         pulumi.set(__self__, "region", region)
         pulumi.set(__self__, "topic_name", topic_name)
         pulumi.set(__self__, "topic_urn", topic_urn)
+        if message_content is not None:
+            pulumi.set(__self__, "message_content", message_content)
+        if message_template_name is not None:
+            pulumi.set(__self__, "message_template_name", message_template_name)
         if project_id is not None:
             pulumi.set(__self__, "project_id", project_id)
-
-    @property
-    @pulumi.getter(name="messageContent")
-    def message_content(self) -> str:
-        """
-        Specifies the message content.
-        """
-        return pulumi.get(self, "message_content")
 
     @property
     @pulumi.getter(name="messageTitle")
@@ -864,6 +1022,22 @@ class DeviceLinkageRuleActionSmnForwarding(dict):
         Specifies the topic URN of the SMN.
         """
         return pulumi.get(self, "topic_urn")
+
+    @property
+    @pulumi.getter(name="messageContent")
+    def message_content(self) -> Optional[str]:
+        """
+        Specifies the message content.
+        """
+        return pulumi.get(self, "message_content")
+
+    @property
+    @pulumi.getter(name="messageTemplateName")
+    def message_template_name(self) -> Optional[str]:
+        """
+        Specifies the template name corresponding to the SMN service.
+        """
+        return pulumi.get(self, "message_template_name")
 
     @property
     @pulumi.getter(name="projectId")
@@ -952,6 +1126,8 @@ class DeviceLinkageRuleTrigger(dict):
             suggest = "daily_timer_condition"
         elif key == "deviceDataCondition":
             suggest = "device_data_condition"
+        elif key == "deviceLinkageStatusCondition":
+            suggest = "device_linkage_status_condition"
         elif key == "simpleTimerCondition":
             suggest = "simple_timer_condition"
 
@@ -970,25 +1146,32 @@ class DeviceLinkageRuleTrigger(dict):
                  type: str,
                  daily_timer_condition: Optional['outputs.DeviceLinkageRuleTriggerDailyTimerCondition'] = None,
                  device_data_condition: Optional['outputs.DeviceLinkageRuleTriggerDeviceDataCondition'] = None,
+                 device_linkage_status_condition: Optional['outputs.DeviceLinkageRuleTriggerDeviceLinkageStatusCondition'] = None,
                  simple_timer_condition: Optional['outputs.DeviceLinkageRuleTriggerSimpleTimerCondition'] = None):
         """
         :param str type: Specifies the type of the alarm. The options are as follows:
                + **fault**: Report alarms.
                + **recovery**: Clear alarms.
         :param 'DeviceLinkageRuleTriggerDailyTimerConditionArgs' daily_timer_condition: Specifies the condition triggered at specified time every day. It is
-               required when type is `DAILY_TIMER`. The daily_timer_condition structure is
-               documented below.
+               required when `type` is **DAILY_TIMER**.
+               The daily_timer_condition structure is documented below.
         :param 'DeviceLinkageRuleTriggerDeviceDataConditionArgs' device_data_condition: Specifies the condition triggered upon the property of device. It is
-               required when type is `DEVICE_DATA`. The device_data_condition structure is
-               documented below.
-        :param 'DeviceLinkageRuleTriggerSimpleTimerConditionArgs' simple_timer_condition: Specifies the condition triggered by policy. It is required when type
-               is `SIMPLE_TIMER`. The simple_timer_condition structure is documented below.
+               required when `type` is **DEVICE_DATA**.
+               The device_data_condition structure is documented below.
+        :param 'DeviceLinkageRuleTriggerDeviceLinkageStatusConditionArgs' device_linkage_status_condition: Specifies the condition triggered by device status. It is
+               required when `type` is **DEVICE_LINKAGE_STATUS**.
+               The device_linkage_status_condition structure is documented below.
+        :param 'DeviceLinkageRuleTriggerSimpleTimerConditionArgs' simple_timer_condition: Specifies the condition triggered by policy. It is required when `type`
+               is **SIMPLE_TIMER**.
+               The simple_timer_condition structure is documented below.
         """
         pulumi.set(__self__, "type", type)
         if daily_timer_condition is not None:
             pulumi.set(__self__, "daily_timer_condition", daily_timer_condition)
         if device_data_condition is not None:
             pulumi.set(__self__, "device_data_condition", device_data_condition)
+        if device_linkage_status_condition is not None:
+            pulumi.set(__self__, "device_linkage_status_condition", device_linkage_status_condition)
         if simple_timer_condition is not None:
             pulumi.set(__self__, "simple_timer_condition", simple_timer_condition)
 
@@ -1007,8 +1190,8 @@ class DeviceLinkageRuleTrigger(dict):
     def daily_timer_condition(self) -> Optional['outputs.DeviceLinkageRuleTriggerDailyTimerCondition']:
         """
         Specifies the condition triggered at specified time every day. It is
-        required when type is `DAILY_TIMER`. The daily_timer_condition structure is
-        documented below.
+        required when `type` is **DAILY_TIMER**.
+        The daily_timer_condition structure is documented below.
         """
         return pulumi.get(self, "daily_timer_condition")
 
@@ -1017,17 +1200,28 @@ class DeviceLinkageRuleTrigger(dict):
     def device_data_condition(self) -> Optional['outputs.DeviceLinkageRuleTriggerDeviceDataCondition']:
         """
         Specifies the condition triggered upon the property of device. It is
-        required when type is `DEVICE_DATA`. The device_data_condition structure is
-        documented below.
+        required when `type` is **DEVICE_DATA**.
+        The device_data_condition structure is documented below.
         """
         return pulumi.get(self, "device_data_condition")
+
+    @property
+    @pulumi.getter(name="deviceLinkageStatusCondition")
+    def device_linkage_status_condition(self) -> Optional['outputs.DeviceLinkageRuleTriggerDeviceLinkageStatusCondition']:
+        """
+        Specifies the condition triggered by device status. It is
+        required when `type` is **DEVICE_LINKAGE_STATUS**.
+        The device_linkage_status_condition structure is documented below.
+        """
+        return pulumi.get(self, "device_linkage_status_condition")
 
     @property
     @pulumi.getter(name="simpleTimerCondition")
     def simple_timer_condition(self) -> Optional['outputs.DeviceLinkageRuleTriggerSimpleTimerCondition']:
         """
-        Specifies the condition triggered by policy. It is required when type
-        is `SIMPLE_TIMER`. The simple_timer_condition structure is documented below.
+        Specifies the condition triggered by policy. It is required when `type`
+        is **SIMPLE_TIMER**.
+        The simple_timer_condition structure is documented below.
         """
         return pulumi.get(self, "simple_timer_condition")
 
@@ -1094,6 +1288,8 @@ class DeviceLinkageRuleTriggerDeviceDataCondition(dict):
             suggest = "data_validatiy_period"
         elif key == "deviceId":
             suggest = "device_id"
+        elif key == "inValues":
+            suggest = "in_values"
         elif key == "productId":
             suggest = "product_id"
         elif key == "triggerStrategy":
@@ -1113,48 +1309,55 @@ class DeviceLinkageRuleTriggerDeviceDataCondition(dict):
     def __init__(__self__, *,
                  operator: str,
                  path: str,
-                 value: str,
                  data_validatiy_period: Optional[int] = None,
                  device_id: Optional[str] = None,
+                 in_values: Optional[Sequence[str]] = None,
                  product_id: Optional[str] = None,
-                 trigger_strategy: Optional[str] = None):
+                 trigger_strategy: Optional[str] = None,
+                 value: Optional[str] = None):
         """
         :param str operator: Specifies the data comparison operator. The valid values are: **>**, **<**,
-               **>=**, **<=**, **=** and **between**.
+               **>=**, **<=**, **=**, **in** and **between**.
         :param str path: Specifies the path of the device property, in the format: **service_id/DataProperty**.
-        :param str value: Specifies the Rvalue of a data comparison expression. When the `operator` is `between`,
-               the Rvalue represents the minimum and maximum values, separated by commas, such as "20,30",
-               which means greater than or equal to 20 and less than 30.
         :param int data_validatiy_period: Specifies data validity period, Unit is `seconds`. Defaults to `300`.
                For example, if Data Validity Period is set to 30 minutes, a device generates data at 19:00, and the platform receives
-               the data at 20:00, the action is nottriggered regardless of whether the conditions are met.
-        :param str device_id: Specifies the device id which excutes the command.
-        :param str product_id: Specifies the product id, all devices belonging to this product will trigger
-               the rule. Exactly one of `device_id` or `product_id` must be provided.
+               the data at 20:00, the action is not triggered regardless of whether the conditions are met.
+        :param str device_id: Specifies the device id which executes the command.
+        :param Sequence[str] in_values: Specifies the Rvalue of a data comparison expression. Only when the `operator` is
+               **in**, this field is valid and required, with a maximum of `20` characters, represents matching within the specified
+               values, e.g. **20,30,40**,
+        :param str product_id: Specifies the product ID. If this field is set and the `device_id` is empty, the
+               device attribute will trigger the matching of all devices under this product.
         :param str trigger_strategy: Specifies the trigger strategy. The options are as follows:
                + **pulse**: When the data reported by the device meets the conditions, the rule can be triggered.
                + **reverse**: Repetition suppression. For example, if an alarm is configured to be triggered when the battery level
                is lower than 20%, the alarm will be triggered once the battery initially drops below 20% but will not be triggered
                again each time the battery drops to a lower level.
+        :param str value: Specifies the Rvalue of a data comparison expression. When the `operator` is **between**,
+               the Rvalue represents the minimum and maximum values, separated by commas, such as **20,30**,
+               which means greater than or equal to `20` and less than `30`.
         """
         pulumi.set(__self__, "operator", operator)
         pulumi.set(__self__, "path", path)
-        pulumi.set(__self__, "value", value)
         if data_validatiy_period is not None:
             pulumi.set(__self__, "data_validatiy_period", data_validatiy_period)
         if device_id is not None:
             pulumi.set(__self__, "device_id", device_id)
+        if in_values is not None:
+            pulumi.set(__self__, "in_values", in_values)
         if product_id is not None:
             pulumi.set(__self__, "product_id", product_id)
         if trigger_strategy is not None:
             pulumi.set(__self__, "trigger_strategy", trigger_strategy)
+        if value is not None:
+            pulumi.set(__self__, "value", value)
 
     @property
     @pulumi.getter
     def operator(self) -> str:
         """
         Specifies the data comparison operator. The valid values are: **>**, **<**,
-        **>=**, **<=**, **=** and **between**.
+        **>=**, **<=**, **=**, **in** and **between**.
         """
         return pulumi.get(self, "operator")
 
@@ -1167,22 +1370,12 @@ class DeviceLinkageRuleTriggerDeviceDataCondition(dict):
         return pulumi.get(self, "path")
 
     @property
-    @pulumi.getter
-    def value(self) -> str:
-        """
-        Specifies the Rvalue of a data comparison expression. When the `operator` is `between`,
-        the Rvalue represents the minimum and maximum values, separated by commas, such as "20,30",
-        which means greater than or equal to 20 and less than 30.
-        """
-        return pulumi.get(self, "value")
-
-    @property
     @pulumi.getter(name="dataValidatiyPeriod")
     def data_validatiy_period(self) -> Optional[int]:
         """
         Specifies data validity period, Unit is `seconds`. Defaults to `300`.
         For example, if Data Validity Period is set to 30 minutes, a device generates data at 19:00, and the platform receives
-        the data at 20:00, the action is nottriggered regardless of whether the conditions are met.
+        the data at 20:00, the action is not triggered regardless of whether the conditions are met.
         """
         return pulumi.get(self, "data_validatiy_period")
 
@@ -1190,16 +1383,26 @@ class DeviceLinkageRuleTriggerDeviceDataCondition(dict):
     @pulumi.getter(name="deviceId")
     def device_id(self) -> Optional[str]:
         """
-        Specifies the device id which excutes the command.
+        Specifies the device id which executes the command.
         """
         return pulumi.get(self, "device_id")
+
+    @property
+    @pulumi.getter(name="inValues")
+    def in_values(self) -> Optional[Sequence[str]]:
+        """
+        Specifies the Rvalue of a data comparison expression. Only when the `operator` is
+        **in**, this field is valid and required, with a maximum of `20` characters, represents matching within the specified
+        values, e.g. **20,30,40**,
+        """
+        return pulumi.get(self, "in_values")
 
     @property
     @pulumi.getter(name="productId")
     def product_id(self) -> Optional[str]:
         """
-        Specifies the product id, all devices belonging to this product will trigger
-        the rule. Exactly one of `device_id` or `product_id` must be provided.
+        Specifies the product ID. If this field is set and the `device_id` is empty, the
+        device attribute will trigger the matching of all devices under this product.
         """
         return pulumi.get(self, "product_id")
 
@@ -1214,6 +1417,102 @@ class DeviceLinkageRuleTriggerDeviceDataCondition(dict):
         again each time the battery drops to a lower level.
         """
         return pulumi.get(self, "trigger_strategy")
+
+    @property
+    @pulumi.getter
+    def value(self) -> Optional[str]:
+        """
+        Specifies the Rvalue of a data comparison expression. When the `operator` is **between**,
+        the Rvalue represents the minimum and maximum values, separated by commas, such as **20,30**,
+        which means greater than or equal to `20` and less than `30`.
+        """
+        return pulumi.get(self, "value")
+
+
+@pulumi.output_type
+class DeviceLinkageRuleTriggerDeviceLinkageStatusCondition(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "deviceId":
+            suggest = "device_id"
+        elif key == "productId":
+            suggest = "product_id"
+        elif key == "statusLists":
+            suggest = "status_lists"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in DeviceLinkageRuleTriggerDeviceLinkageStatusCondition. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        DeviceLinkageRuleTriggerDeviceLinkageStatusCondition.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        DeviceLinkageRuleTriggerDeviceLinkageStatusCondition.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 device_id: Optional[str] = None,
+                 duration: Optional[int] = None,
+                 product_id: Optional[str] = None,
+                 status_lists: Optional[Sequence[str]] = None):
+        """
+        :param str device_id: Specifies the device id which executes the command.
+        :param int duration: Specifies the duration of device status. The valid value ranges from `0` to `60` minutes.
+        :param str product_id: Specifies the product ID. If this field is set and the `device_id` is empty, the
+               device attribute will trigger the matching of all devices under this product.
+        :param Sequence[str] status_lists: Specifies device status list, separate multiple status with commas.
+               e.g. **ONLINE**, **OFFLINE**.
+               The valid device status values are as follows:
+               + **ONLINE**: Device online.
+               + **OFFLINE**: Device offline.
+        """
+        if device_id is not None:
+            pulumi.set(__self__, "device_id", device_id)
+        if duration is not None:
+            pulumi.set(__self__, "duration", duration)
+        if product_id is not None:
+            pulumi.set(__self__, "product_id", product_id)
+        if status_lists is not None:
+            pulumi.set(__self__, "status_lists", status_lists)
+
+    @property
+    @pulumi.getter(name="deviceId")
+    def device_id(self) -> Optional[str]:
+        """
+        Specifies the device id which executes the command.
+        """
+        return pulumi.get(self, "device_id")
+
+    @property
+    @pulumi.getter
+    def duration(self) -> Optional[int]:
+        """
+        Specifies the duration of device status. The valid value ranges from `0` to `60` minutes.
+        """
+        return pulumi.get(self, "duration")
+
+    @property
+    @pulumi.getter(name="productId")
+    def product_id(self) -> Optional[str]:
+        """
+        Specifies the product ID. If this field is set and the `device_id` is empty, the
+        device attribute will trigger the matching of all devices under this product.
+        """
+        return pulumi.get(self, "product_id")
+
+    @property
+    @pulumi.getter(name="statusLists")
+    def status_lists(self) -> Optional[Sequence[str]]:
+        """
+        Specifies device status list, separate multiple status with commas.
+        e.g. **ONLINE**, **OFFLINE**.
+        The valid device status values are as follows:
+        + **ONLINE**: Device online.
+        + **OFFLINE**: Device offline.
+        """
+        return pulumi.get(self, "status_lists")
 
 
 @pulumi.output_type
@@ -1280,21 +1579,80 @@ class DeviceLinkageRuleTriggerSimpleTimerCondition(dict):
 
 
 @pulumi.output_type
+class DeviceShadow(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "serviceId":
+            suggest = "service_id"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in DeviceShadow. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        DeviceShadow.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        DeviceShadow.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 desired: Mapping[str, str],
+                 service_id: str):
+        """
+        :param Mapping[str, str] desired: Specifies the initial properties data of the device.
+               The each key is a parameter name of a property in the product model.
+               If you want to delete the entire `desired`, please enter an empty Map. e.g. **desired = {}**.
+        :param str service_id: Specifies the service ID of the device.
+               Which is defined in the product model associated with the device.
+        """
+        pulumi.set(__self__, "desired", desired)
+        pulumi.set(__self__, "service_id", service_id)
+
+    @property
+    @pulumi.getter
+    def desired(self) -> Mapping[str, str]:
+        """
+        Specifies the initial properties data of the device.
+        The each key is a parameter name of a property in the product model.
+        If you want to delete the entire `desired`, please enter an empty Map. e.g. **desired = {}**.
+        """
+        return pulumi.get(self, "desired")
+
+    @property
+    @pulumi.getter(name="serviceId")
+    def service_id(self) -> str:
+        """
+        Specifies the service ID of the device.
+        Which is defined in the product model associated with the device.
+        """
+        return pulumi.get(self, "service_id")
+
+
+@pulumi.output_type
 class ProductService(dict):
     def __init__(__self__, *,
                  id: str,
                  commands: Optional[Sequence['outputs.ProductServiceCommand']] = None,
                  description: Optional[str] = None,
+                 option: Optional[str] = None,
                  properties: Optional[Sequence['outputs.ProductServiceProperty']] = None,
                  type: Optional[str] = None):
         """
-        :param str id: Specifies the service ID. The ID contains a maximum of 64 characters. Only letters,
+        :param str id: Specifies the service ID. The ID contains a maximum of `64` characters. Only letters,
                Chinese characters, digits, hyphens (-), underscores (_) and the following special characters are allowed: `?'#().,&%@!`.
         :param Sequence['ProductServiceCommandArgs'] commands: Specifies the list of commands for the service.
                The commands structure is documented below.
         :param str description: Specifies the description of the parameter. The description contains a maximum of
-               128 characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special
+               `128` characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special
                characters are allowed: `?'#().,&%@!`.
+        :param str option: Specifies whether the device service is mandatory.
+               Currently, this field is not a functional field and is used only for identification.
+               The valid values are as follows:
+               + **Master**: The master service.
+               + **Mandatory**: The mandatory service.
+               + **Optional**:  The optional service.
         :param Sequence['ProductServicePropertyArgs'] properties: Specifies the list of properties for the service.
                The properties structure is documented below.
         :param str type: Specifies the type of the parameter.
@@ -1305,6 +1663,8 @@ class ProductService(dict):
             pulumi.set(__self__, "commands", commands)
         if description is not None:
             pulumi.set(__self__, "description", description)
+        if option is not None:
+            pulumi.set(__self__, "option", option)
         if properties is not None:
             pulumi.set(__self__, "properties", properties)
         if type is not None:
@@ -1314,7 +1674,7 @@ class ProductService(dict):
     @pulumi.getter
     def id(self) -> str:
         """
-        Specifies the service ID. The ID contains a maximum of 64 characters. Only letters,
+        Specifies the service ID. The ID contains a maximum of `64` characters. Only letters,
         Chinese characters, digits, hyphens (-), underscores (_) and the following special characters are allowed: `?'#().,&%@!`.
         """
         return pulumi.get(self, "id")
@@ -1333,10 +1693,23 @@ class ProductService(dict):
     def description(self) -> Optional[str]:
         """
         Specifies the description of the parameter. The description contains a maximum of
-        128 characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special
+        `128` characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special
         characters are allowed: `?'#().,&%@!`.
         """
         return pulumi.get(self, "description")
+
+    @property
+    @pulumi.getter
+    def option(self) -> Optional[str]:
+        """
+        Specifies whether the device service is mandatory.
+        Currently, this field is not a functional field and is used only for identification.
+        The valid values are as follows:
+        + **Master**: The master service.
+        + **Mandatory**: The mandatory service.
+        + **Optional**:  The optional service.
+        """
+        return pulumi.get(self, "option")
 
     @property
     @pulumi.getter
@@ -1364,7 +1737,7 @@ class ProductServiceCommand(dict):
                  paras: Optional[Sequence['outputs.ProductServiceCommandPara']] = None,
                  responses: Optional[Sequence['outputs.ProductServiceCommandResponse']] = None):
         """
-        :param str name: Specifies the name of the parameter. The name contains a maximum of 64 characters.
+        :param str name: Specifies the name of the parameter. The name contains a maximum of `64` characters.
                Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special characters are
                allowed: `?'#().,&%@!`.
         :param Sequence['ProductServiceCommandParaArgs'] paras: Specifies the list of parameters for the command.
@@ -1382,7 +1755,7 @@ class ProductServiceCommand(dict):
     @pulumi.getter
     def name(self) -> str:
         """
-        Specifies the name of the parameter. The name contains a maximum of 64 characters.
+        Specifies the name of the parameter. The name contains a maximum of `64` characters.
         Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special characters are
         allowed: `?'#().,&%@!`.
         """
@@ -1412,7 +1785,9 @@ class ProductServiceCommandPara(dict):
     @staticmethod
     def __key_warning(key: str):
         suggest = None
-        if key == "enumLists":
+        if key == "defaultValue":
+            suggest = "default_value"
+        elif key == "enumLists":
             suggest = "enum_lists"
         elif key == "maxLength":
             suggest = "max_length"
@@ -1431,36 +1806,46 @@ class ProductServiceCommandPara(dict):
     def __init__(__self__, *,
                  name: str,
                  type: str,
+                 default_value: Optional[str] = None,
                  description: Optional[str] = None,
                  enum_lists: Optional[Sequence[str]] = None,
                  max: Optional[str] = None,
                  max_length: Optional[int] = None,
                  min: Optional[str] = None,
+                 required: Optional[bool] = None,
                  step: Optional[float] = None,
                  unit: Optional[str] = None):
         """
-        :param str name: Specifies the name of the parameter. The name contains a maximum of 64 characters.
+        :param str name: Specifies the name of the parameter. The name contains a maximum of `64` characters.
                Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special characters are
                allowed: `?'#().,&%@!`.
         :param str type: Specifies the type of the parameter.
                The valid values are **int**, **decimal**, **string**, **DateTime**, **jsonObject** and **string list**.
+        :param str default_value: Specifies the default value of the device property.
+               This parameter allowed value is a JSON string. e.g. **{\\"foo\\":\\"bar\\"}**
+               If this parameter is set value, the value will be written to the desired data of the device shadow when
+               the product is used to create a device. When the device goes online, the value will be delivered to the device.
         :param str description: Specifies the description of the parameter. The description contains a maximum of
-               128 characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special
+               `128` characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special
                characters are allowed: `?'#().,&%@!`.
         :param Sequence[str] enum_lists: Specifies the list of enumerated values of the parameter.
         :param str max: Specifies the max value of the parameter when the `type` is **int** or **decimal**.
                Value range: -2147483647 ~ 2147483647. Defaults to **"65535"**.
         :param int max_length: Specifies the max length of the parameter when the `type` is **string**, **DateTime**,
-               **jsonObject** or **string list**. Value range: 0 ~ 2147483647. Defaults to **0**.
+               **jsonObject** or **string list**. Value range: `0` ~ `2,147,483,647`. Defaults to `0`.
         :param str min: Specifies the min value of the parameter when the `type` is **int** or **decimal**.
                Value range: -2147483647 ~ 2147483647. Defaults to **"0"**.
+        :param bool required: Specifies the parameter is mandatory or not.
+               The default value is **false**.
         :param float step: Specifies the step of the parameter when the `type` is **int** or **decimal**.
-               Value range: 0 ~ 2147483647. Defaults to **0**.
+               Value range: `0` ~ `2,147,483,647`. Defaults to `0`.
         :param str unit: Specifies the unit of the parameter when the `type` is **int** or **decimal**.
                The unit contains a maximum of 16 characters.
         """
         pulumi.set(__self__, "name", name)
         pulumi.set(__self__, "type", type)
+        if default_value is not None:
+            pulumi.set(__self__, "default_value", default_value)
         if description is not None:
             pulumi.set(__self__, "description", description)
         if enum_lists is not None:
@@ -1471,6 +1856,8 @@ class ProductServiceCommandPara(dict):
             pulumi.set(__self__, "max_length", max_length)
         if min is not None:
             pulumi.set(__self__, "min", min)
+        if required is not None:
+            pulumi.set(__self__, "required", required)
         if step is not None:
             pulumi.set(__self__, "step", step)
         if unit is not None:
@@ -1480,7 +1867,7 @@ class ProductServiceCommandPara(dict):
     @pulumi.getter
     def name(self) -> str:
         """
-        Specifies the name of the parameter. The name contains a maximum of 64 characters.
+        Specifies the name of the parameter. The name contains a maximum of `64` characters.
         Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special characters are
         allowed: `?'#().,&%@!`.
         """
@@ -1496,11 +1883,22 @@ class ProductServiceCommandPara(dict):
         return pulumi.get(self, "type")
 
     @property
+    @pulumi.getter(name="defaultValue")
+    def default_value(self) -> Optional[str]:
+        """
+        Specifies the default value of the device property.
+        This parameter allowed value is a JSON string. e.g. **{\\"foo\\":\\"bar\\"}**
+        If this parameter is set value, the value will be written to the desired data of the device shadow when
+        the product is used to create a device. When the device goes online, the value will be delivered to the device.
+        """
+        return pulumi.get(self, "default_value")
+
+    @property
     @pulumi.getter
     def description(self) -> Optional[str]:
         """
         Specifies the description of the parameter. The description contains a maximum of
-        128 characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special
+        `128` characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special
         characters are allowed: `?'#().,&%@!`.
         """
         return pulumi.get(self, "description")
@@ -1527,7 +1925,7 @@ class ProductServiceCommandPara(dict):
     def max_length(self) -> Optional[int]:
         """
         Specifies the max length of the parameter when the `type` is **string**, **DateTime**,
-        **jsonObject** or **string list**. Value range: 0 ~ 2147483647. Defaults to **0**.
+        **jsonObject** or **string list**. Value range: `0` ~ `2,147,483,647`. Defaults to `0`.
         """
         return pulumi.get(self, "max_length")
 
@@ -1542,10 +1940,19 @@ class ProductServiceCommandPara(dict):
 
     @property
     @pulumi.getter
+    def required(self) -> Optional[bool]:
+        """
+        Specifies the parameter is mandatory or not.
+        The default value is **false**.
+        """
+        return pulumi.get(self, "required")
+
+    @property
+    @pulumi.getter
     def step(self) -> Optional[float]:
         """
         Specifies the step of the parameter when the `type` is **int** or **decimal**.
-        Value range: 0 ~ 2147483647. Defaults to **0**.
+        Value range: `0` ~ `2,147,483,647`. Defaults to `0`.
         """
         return pulumi.get(self, "step")
 
@@ -1564,7 +1971,9 @@ class ProductServiceCommandResponse(dict):
     @staticmethod
     def __key_warning(key: str):
         suggest = None
-        if key == "enumLists":
+        if key == "defaultValue":
+            suggest = "default_value"
+        elif key == "enumLists":
             suggest = "enum_lists"
         elif key == "maxLength":
             suggest = "max_length"
@@ -1583,36 +1992,46 @@ class ProductServiceCommandResponse(dict):
     def __init__(__self__, *,
                  name: str,
                  type: str,
+                 default_value: Optional[str] = None,
                  description: Optional[str] = None,
                  enum_lists: Optional[Sequence[str]] = None,
                  max: Optional[str] = None,
                  max_length: Optional[int] = None,
                  min: Optional[str] = None,
+                 required: Optional[bool] = None,
                  step: Optional[float] = None,
                  unit: Optional[str] = None):
         """
-        :param str name: Specifies the name of the parameter. The name contains a maximum of 64 characters.
+        :param str name: Specifies the name of the parameter. The name contains a maximum of `64` characters.
                Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special characters are
                allowed: `?'#().,&%@!`.
         :param str type: Specifies the type of the parameter.
                The valid values are **int**, **decimal**, **string**, **DateTime**, **jsonObject** and **string list**.
+        :param str default_value: Specifies the default value of the device property.
+               This parameter allowed value is a JSON string. e.g. **{\\"foo\\":\\"bar\\"}**
+               If this parameter is set value, the value will be written to the desired data of the device shadow when
+               the product is used to create a device. When the device goes online, the value will be delivered to the device.
         :param str description: Specifies the description of the parameter. The description contains a maximum of
-               128 characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special
+               `128` characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special
                characters are allowed: `?'#().,&%@!`.
         :param Sequence[str] enum_lists: Specifies the list of enumerated values of the parameter.
         :param str max: Specifies the max value of the parameter when the `type` is **int** or **decimal**.
                Value range: -2147483647 ~ 2147483647. Defaults to **"65535"**.
         :param int max_length: Specifies the max length of the parameter when the `type` is **string**, **DateTime**,
-               **jsonObject** or **string list**. Value range: 0 ~ 2147483647. Defaults to **0**.
+               **jsonObject** or **string list**. Value range: `0` ~ `2,147,483,647`. Defaults to `0`.
         :param str min: Specifies the min value of the parameter when the `type` is **int** or **decimal**.
                Value range: -2147483647 ~ 2147483647. Defaults to **"0"**.
+        :param bool required: Specifies the parameter is mandatory or not.
+               The default value is **false**.
         :param float step: Specifies the step of the parameter when the `type` is **int** or **decimal**.
-               Value range: 0 ~ 2147483647. Defaults to **0**.
+               Value range: `0` ~ `2,147,483,647`. Defaults to `0`.
         :param str unit: Specifies the unit of the parameter when the `type` is **int** or **decimal**.
                The unit contains a maximum of 16 characters.
         """
         pulumi.set(__self__, "name", name)
         pulumi.set(__self__, "type", type)
+        if default_value is not None:
+            pulumi.set(__self__, "default_value", default_value)
         if description is not None:
             pulumi.set(__self__, "description", description)
         if enum_lists is not None:
@@ -1623,6 +2042,8 @@ class ProductServiceCommandResponse(dict):
             pulumi.set(__self__, "max_length", max_length)
         if min is not None:
             pulumi.set(__self__, "min", min)
+        if required is not None:
+            pulumi.set(__self__, "required", required)
         if step is not None:
             pulumi.set(__self__, "step", step)
         if unit is not None:
@@ -1632,7 +2053,7 @@ class ProductServiceCommandResponse(dict):
     @pulumi.getter
     def name(self) -> str:
         """
-        Specifies the name of the parameter. The name contains a maximum of 64 characters.
+        Specifies the name of the parameter. The name contains a maximum of `64` characters.
         Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special characters are
         allowed: `?'#().,&%@!`.
         """
@@ -1648,11 +2069,22 @@ class ProductServiceCommandResponse(dict):
         return pulumi.get(self, "type")
 
     @property
+    @pulumi.getter(name="defaultValue")
+    def default_value(self) -> Optional[str]:
+        """
+        Specifies the default value of the device property.
+        This parameter allowed value is a JSON string. e.g. **{\\"foo\\":\\"bar\\"}**
+        If this parameter is set value, the value will be written to the desired data of the device shadow when
+        the product is used to create a device. When the device goes online, the value will be delivered to the device.
+        """
+        return pulumi.get(self, "default_value")
+
+    @property
     @pulumi.getter
     def description(self) -> Optional[str]:
         """
         Specifies the description of the parameter. The description contains a maximum of
-        128 characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special
+        `128` characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special
         characters are allowed: `?'#().,&%@!`.
         """
         return pulumi.get(self, "description")
@@ -1679,7 +2111,7 @@ class ProductServiceCommandResponse(dict):
     def max_length(self) -> Optional[int]:
         """
         Specifies the max length of the parameter when the `type` is **string**, **DateTime**,
-        **jsonObject** or **string list**. Value range: 0 ~ 2147483647. Defaults to **0**.
+        **jsonObject** or **string list**. Value range: `0` ~ `2,147,483,647`. Defaults to `0`.
         """
         return pulumi.get(self, "max_length")
 
@@ -1694,10 +2126,19 @@ class ProductServiceCommandResponse(dict):
 
     @property
     @pulumi.getter
+    def required(self) -> Optional[bool]:
+        """
+        Specifies the parameter is mandatory or not.
+        The default value is **false**.
+        """
+        return pulumi.get(self, "required")
+
+    @property
+    @pulumi.getter
     def step(self) -> Optional[float]:
         """
         Specifies the step of the parameter when the `type` is **int** or **decimal**.
-        Value range: 0 ~ 2147483647. Defaults to **0**.
+        Value range: `0` ~ `2,147,483,647`. Defaults to `0`.
         """
         return pulumi.get(self, "step")
 
@@ -1716,7 +2157,9 @@ class ProductServiceProperty(dict):
     @staticmethod
     def __key_warning(key: str):
         suggest = None
-        if key == "enumLists":
+        if key == "defaultValue":
+            suggest = "default_value"
+        elif key == "enumLists":
             suggest = "enum_lists"
         elif key == "maxLength":
             suggest = "max_length"
@@ -1736,39 +2179,50 @@ class ProductServiceProperty(dict):
                  method: str,
                  name: str,
                  type: str,
+                 default_value: Optional[str] = None,
                  description: Optional[str] = None,
                  enum_lists: Optional[Sequence[str]] = None,
                  max: Optional[str] = None,
                  max_length: Optional[int] = None,
                  min: Optional[str] = None,
+                 required: Optional[bool] = None,
                  step: Optional[float] = None,
                  unit: Optional[str] = None):
         """
         :param str method: Specifies the access mode of the device property.
-               Options: **RW**, **W**, **R**.
-        :param str name: Specifies the name of the parameter. The name contains a maximum of 64 characters.
+               The value can be **RWE**, **RW**, **RE**, **WE**, **R** (the property value can be read),
+               **W** (the property value can be written) or **E** (the property value can be subscribed to).
+        :param str name: Specifies the name of the parameter. The name contains a maximum of `64` characters.
                Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special characters are
                allowed: `?'#().,&%@!`.
         :param str type: Specifies the type of the parameter.
                The valid values are **int**, **decimal**, **string**, **DateTime**, **jsonObject** and **string list**.
+        :param str default_value: Specifies the default value of the device property.
+               This parameter allowed value is a JSON string. e.g. **{\\"foo\\":\\"bar\\"}**
+               If this parameter is set value, the value will be written to the desired data of the device shadow when
+               the product is used to create a device. When the device goes online, the value will be delivered to the device.
         :param str description: Specifies the description of the parameter. The description contains a maximum of
-               128 characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special
+               `128` characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special
                characters are allowed: `?'#().,&%@!`.
         :param Sequence[str] enum_lists: Specifies the list of enumerated values of the parameter.
         :param str max: Specifies the max value of the parameter when the `type` is **int** or **decimal**.
                Value range: -2147483647 ~ 2147483647. Defaults to **"65535"**.
         :param int max_length: Specifies the max length of the parameter when the `type` is **string**, **DateTime**,
-               **jsonObject** or **string list**. Value range: 0 ~ 2147483647. Defaults to **0**.
+               **jsonObject** or **string list**. Value range: `0` ~ `2,147,483,647`. Defaults to `0`.
         :param str min: Specifies the min value of the parameter when the `type` is **int** or **decimal**.
                Value range: -2147483647 ~ 2147483647. Defaults to **"0"**.
+        :param bool required: Specifies the parameter is mandatory or not.
+               The default value is **false**.
         :param float step: Specifies the step of the parameter when the `type` is **int** or **decimal**.
-               Value range: 0 ~ 2147483647. Defaults to **0**.
+               Value range: `0` ~ `2,147,483,647`. Defaults to `0`.
         :param str unit: Specifies the unit of the parameter when the `type` is **int** or **decimal**.
                The unit contains a maximum of 16 characters.
         """
         pulumi.set(__self__, "method", method)
         pulumi.set(__self__, "name", name)
         pulumi.set(__self__, "type", type)
+        if default_value is not None:
+            pulumi.set(__self__, "default_value", default_value)
         if description is not None:
             pulumi.set(__self__, "description", description)
         if enum_lists is not None:
@@ -1779,6 +2233,8 @@ class ProductServiceProperty(dict):
             pulumi.set(__self__, "max_length", max_length)
         if min is not None:
             pulumi.set(__self__, "min", min)
+        if required is not None:
+            pulumi.set(__self__, "required", required)
         if step is not None:
             pulumi.set(__self__, "step", step)
         if unit is not None:
@@ -1789,7 +2245,8 @@ class ProductServiceProperty(dict):
     def method(self) -> str:
         """
         Specifies the access mode of the device property.
-        Options: **RW**, **W**, **R**.
+        The value can be **RWE**, **RW**, **RE**, **WE**, **R** (the property value can be read),
+        **W** (the property value can be written) or **E** (the property value can be subscribed to).
         """
         return pulumi.get(self, "method")
 
@@ -1797,7 +2254,7 @@ class ProductServiceProperty(dict):
     @pulumi.getter
     def name(self) -> str:
         """
-        Specifies the name of the parameter. The name contains a maximum of 64 characters.
+        Specifies the name of the parameter. The name contains a maximum of `64` characters.
         Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special characters are
         allowed: `?'#().,&%@!`.
         """
@@ -1813,11 +2270,22 @@ class ProductServiceProperty(dict):
         return pulumi.get(self, "type")
 
     @property
+    @pulumi.getter(name="defaultValue")
+    def default_value(self) -> Optional[str]:
+        """
+        Specifies the default value of the device property.
+        This parameter allowed value is a JSON string. e.g. **{\\"foo\\":\\"bar\\"}**
+        If this parameter is set value, the value will be written to the desired data of the device shadow when
+        the product is used to create a device. When the device goes online, the value will be delivered to the device.
+        """
+        return pulumi.get(self, "default_value")
+
+    @property
     @pulumi.getter
     def description(self) -> Optional[str]:
         """
         Specifies the description of the parameter. The description contains a maximum of
-        128 characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special
+        `128` characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special
         characters are allowed: `?'#().,&%@!`.
         """
         return pulumi.get(self, "description")
@@ -1844,7 +2312,7 @@ class ProductServiceProperty(dict):
     def max_length(self) -> Optional[int]:
         """
         Specifies the max length of the parameter when the `type` is **string**, **DateTime**,
-        **jsonObject** or **string list**. Value range: 0 ~ 2147483647. Defaults to **0**.
+        **jsonObject** or **string list**. Value range: `0` ~ `2,147,483,647`. Defaults to `0`.
         """
         return pulumi.get(self, "max_length")
 
@@ -1859,10 +2327,19 @@ class ProductServiceProperty(dict):
 
     @property
     @pulumi.getter
+    def required(self) -> Optional[bool]:
+        """
+        Specifies the parameter is mandatory or not.
+        The default value is **false**.
+        """
+        return pulumi.get(self, "required")
+
+    @property
+    @pulumi.getter
     def step(self) -> Optional[float]:
         """
         Specifies the step of the parameter when the `type` is **int** or **decimal**.
-        Value range: 0 ~ 2147483647. Defaults to **0**.
+        Value range: `0` ~ `2,147,483,647`. Defaults to `0`.
         """
         return pulumi.get(self, "step")
 

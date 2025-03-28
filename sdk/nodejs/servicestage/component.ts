@@ -12,7 +12,7 @@ import * as utilities from "../utilities";
  *
  * ## Import
  *
- * Components can be imported using their `application_id` and `id`, separated by a slash (/), e.g.
+ * Components can be imported using their `application_id` and `id`, separated by a slash (/), e.g. bash
  *
  * ```sh
  *  $ pulumi import huaweicloud:ServiceStage/component:Component test dd7a1ce2-c48c-4f41-85bb-d0d09969eec9/9ab8ef79-d318-4de5-acf9-e1e1e25a0395
@@ -66,8 +66,8 @@ export class Component extends pulumi.CustomResource {
     public readonly framework!: pulumi.Output<string | undefined>;
     /**
      * Specifies the authorization name.
-     * The name can contain of 2 to 64 characters, only letters, digits, underscores (_) and hyphens (-) are allowed, and the
-     * name must start with a letter and end with a letter or digit.
+     * The name can contain of `2` to `64` characters, only letters, digits, underscores (_) and hyphens (-) are allowed,
+     * and the name must start with a letter and end with a letter or digit.
      */
     public readonly name!: pulumi.Output<string>;
     /**
@@ -161,8 +161,8 @@ export interface ComponentState {
     framework?: pulumi.Input<string>;
     /**
      * Specifies the authorization name.
-     * The name can contain of 2 to 64 characters, only letters, digits, underscores (_) and hyphens (-) are allowed, and the
-     * name must start with a letter and end with a letter or digit.
+     * The name can contain of `2` to `64` characters, only letters, digits, underscores (_) and hyphens (-) are allowed,
+     * and the name must start with a letter and end with a letter or digit.
      */
     name?: pulumi.Input<string>;
     /**
@@ -211,8 +211,8 @@ export interface ComponentArgs {
     framework?: pulumi.Input<string>;
     /**
      * Specifies the authorization name.
-     * The name can contain of 2 to 64 characters, only letters, digits, underscores (_) and hyphens (-) are allowed, and the
-     * name must start with a letter and end with a letter or digit.
+     * The name can contain of `2` to `64` characters, only letters, digits, underscores (_) and hyphens (-) are allowed,
+     * and the name must start with a letter and end with a letter or digit.
      */
     name?: pulumi.Input<string>;
     /**

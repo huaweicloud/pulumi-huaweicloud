@@ -5,7 +5,7 @@ import * as pulumi from "@pulumi/pulumi";
 import * as utilities from "../utilities";
 
 /**
- * Manages CTS **system** tracker resource within HuaweiCloud.
+ * Manages CTS system tracker resource within HuaweiCloud.
  *
  * ## Example Usage
  *
@@ -24,11 +24,25 @@ import * as utilities from "../utilities";
  *
  * ## Import
  *
- * CTS tracker can be imported using `name`, only **system** is available. e.g.
+ * CTS tracker can be imported using `name`, only **system** is available. e.g. bash
  *
  * ```sh
  *  $ pulumi import huaweicloud:Cts/tracker:Tracker tracker system
  * ```
+ *
+ *  Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`tags`, `delete_tracker`. It is generally recommended running `terraform plan` after importing the resource. You can then decide if changes should be applied to the instance, or the resource definition should be updated to align with the resource. Also you can ignore changes as below. hcl resource "huaweicloud_cts_tracker" "test" {
+ *
+ *  ...
+ *
+ *  lifecycle {
+ *
+ *  ignore_changes = [
+ *
+ *  tags, delete_tracker
+ *
+ *  ]
+ *
+ *  } }
  */
 export class Tracker extends pulumi.CustomResource {
     /**
@@ -59,23 +73,74 @@ export class Tracker extends pulumi.CustomResource {
     }
 
     /**
+     * The cloud service delegation name.
+     */
+    public /*out*/ readonly agencyName!: pulumi.Output<string>;
+    /**
      * Specifies the OBS bucket to which traces will be transferred.
      */
     public readonly bucketName!: pulumi.Output<string | undefined>;
+    /**
+     * Specifies the compression type of trace files. The value can be
+     * **gzip** or **json**. The default value is **gzip**.
+     */
+    public readonly compressType!: pulumi.Output<string | undefined>;
+    /**
+     * The creation time of the tracker.
+     */
+    public /*out*/ readonly createTime!: pulumi.Output<number>;
+    /**
+     * Specifies whether the tracker can be deleted.
+     */
+    public readonly deleteTracker!: pulumi.Output<boolean | undefined>;
+    /**
+     * It indicates the cause of the abnormal status.
+     */
+    public /*out*/ readonly detail!: pulumi.Output<string>;
+    /**
+     * The Account ID.
+     */
+    public /*out*/ readonly domainId!: pulumi.Output<string>;
     /**
      * Specifies whether tracker is enabled.
      */
     public readonly enabled!: pulumi.Output<boolean | undefined>;
     /**
+     * Specifies the names of the cloud services for which traces don't need to be transferred.
+     * Currently, only **KMS** is supported.
+     */
+    public readonly excludeServices!: pulumi.Output<string[] | undefined>;
+    /**
      * Specifies the file name prefix to mark trace files that need to be stored
-     * in an OBS bucket. The value contains 0 to 64 characters. Only letters, numbers, hyphens (-), underscores (_),
+     * in an OBS bucket. The value contains `0` to `64` characters. Only letters, numbers, hyphens (-), underscores (_),
      * and periods (.) are allowed.
      */
     public readonly filePrefix!: pulumi.Output<string | undefined>;
     /**
+     * The LTS log group ID.
+     */
+    public /*out*/ readonly groupId!: pulumi.Output<string>;
+    /**
+     * Whether CTS has been granted permissions to perform operations on the OBS bucket.
+     */
+    public /*out*/ readonly isAuthorizedBucket!: pulumi.Output<boolean>;
+    /**
+     * Specifies whether to divide the path of the trace file by cloud service.
+     * The default value is **true**.
+     */
+    public readonly isSortByService!: pulumi.Output<boolean | undefined>;
+    /**
      * Specifies the ID of KMS key used for trace file encryption.
      */
     public readonly kmsId!: pulumi.Output<string | undefined>;
+    /**
+     * The name of the log group that CTS creates in LTS.
+     */
+    public /*out*/ readonly logGroupName!: pulumi.Output<string>;
+    /**
+     * The name of the log topic that CTS creates in LTS.
+     */
+    public /*out*/ readonly logTopicName!: pulumi.Output<string>;
     /**
      * Specifies whether trace analysis is enabled.
      */
@@ -85,6 +150,12 @@ export class Tracker extends pulumi.CustomResource {
      */
     public /*out*/ readonly name!: pulumi.Output<string>;
     /**
+     * Specifies whether to apply the tracker configuration to the organization.
+     * If the value is set to **true**, the audit logs of all members in the organization in the current region will be
+     * transferred to the OBS bucket or LTS log stream configured for the management tracker.
+     */
+    public readonly organizationEnabled!: pulumi.Output<boolean>;
+    /**
      * Specifies the region in which to manage the CTS system tracker resource.
      * If omitted, the provider-level region will be used. Changing this creates a new resource.
      */
@@ -93,6 +164,14 @@ export class Tracker extends pulumi.CustomResource {
      * The tracker status, the value can be **enabled**, **disabled** or **error**.
      */
     public /*out*/ readonly status!: pulumi.Output<string>;
+    /**
+     * The LTS log stream ID.
+     */
+    public /*out*/ readonly streamId!: pulumi.Output<string>;
+    /**
+     * Specifies the key/value pairs to associate with the CTS tracker.
+     */
+    public readonly tags!: pulumi.Output<{[key: string]: string} | undefined>;
     /**
      * Whether traces will be transferred.
      */
@@ -119,28 +198,58 @@ export class Tracker extends pulumi.CustomResource {
         opts = opts || {};
         if (opts.id) {
             const state = argsOrState as TrackerState | undefined;
+            resourceInputs["agencyName"] = state ? state.agencyName : undefined;
             resourceInputs["bucketName"] = state ? state.bucketName : undefined;
+            resourceInputs["compressType"] = state ? state.compressType : undefined;
+            resourceInputs["createTime"] = state ? state.createTime : undefined;
+            resourceInputs["deleteTracker"] = state ? state.deleteTracker : undefined;
+            resourceInputs["detail"] = state ? state.detail : undefined;
+            resourceInputs["domainId"] = state ? state.domainId : undefined;
             resourceInputs["enabled"] = state ? state.enabled : undefined;
+            resourceInputs["excludeServices"] = state ? state.excludeServices : undefined;
             resourceInputs["filePrefix"] = state ? state.filePrefix : undefined;
+            resourceInputs["groupId"] = state ? state.groupId : undefined;
+            resourceInputs["isAuthorizedBucket"] = state ? state.isAuthorizedBucket : undefined;
+            resourceInputs["isSortByService"] = state ? state.isSortByService : undefined;
             resourceInputs["kmsId"] = state ? state.kmsId : undefined;
+            resourceInputs["logGroupName"] = state ? state.logGroupName : undefined;
+            resourceInputs["logTopicName"] = state ? state.logTopicName : undefined;
             resourceInputs["ltsEnabled"] = state ? state.ltsEnabled : undefined;
             resourceInputs["name"] = state ? state.name : undefined;
+            resourceInputs["organizationEnabled"] = state ? state.organizationEnabled : undefined;
             resourceInputs["region"] = state ? state.region : undefined;
             resourceInputs["status"] = state ? state.status : undefined;
+            resourceInputs["streamId"] = state ? state.streamId : undefined;
+            resourceInputs["tags"] = state ? state.tags : undefined;
             resourceInputs["transferEnabled"] = state ? state.transferEnabled : undefined;
             resourceInputs["type"] = state ? state.type : undefined;
             resourceInputs["validateFile"] = state ? state.validateFile : undefined;
         } else {
             const args = argsOrState as TrackerArgs | undefined;
             resourceInputs["bucketName"] = args ? args.bucketName : undefined;
+            resourceInputs["compressType"] = args ? args.compressType : undefined;
+            resourceInputs["deleteTracker"] = args ? args.deleteTracker : undefined;
             resourceInputs["enabled"] = args ? args.enabled : undefined;
+            resourceInputs["excludeServices"] = args ? args.excludeServices : undefined;
             resourceInputs["filePrefix"] = args ? args.filePrefix : undefined;
+            resourceInputs["isSortByService"] = args ? args.isSortByService : undefined;
             resourceInputs["kmsId"] = args ? args.kmsId : undefined;
             resourceInputs["ltsEnabled"] = args ? args.ltsEnabled : undefined;
+            resourceInputs["organizationEnabled"] = args ? args.organizationEnabled : undefined;
             resourceInputs["region"] = args ? args.region : undefined;
+            resourceInputs["tags"] = args ? args.tags : undefined;
             resourceInputs["validateFile"] = args ? args.validateFile : undefined;
+            resourceInputs["agencyName"] = undefined /*out*/;
+            resourceInputs["createTime"] = undefined /*out*/;
+            resourceInputs["detail"] = undefined /*out*/;
+            resourceInputs["domainId"] = undefined /*out*/;
+            resourceInputs["groupId"] = undefined /*out*/;
+            resourceInputs["isAuthorizedBucket"] = undefined /*out*/;
+            resourceInputs["logGroupName"] = undefined /*out*/;
+            resourceInputs["logTopicName"] = undefined /*out*/;
             resourceInputs["name"] = undefined /*out*/;
             resourceInputs["status"] = undefined /*out*/;
+            resourceInputs["streamId"] = undefined /*out*/;
             resourceInputs["transferEnabled"] = undefined /*out*/;
             resourceInputs["type"] = undefined /*out*/;
         }
@@ -154,23 +263,74 @@ export class Tracker extends pulumi.CustomResource {
  */
 export interface TrackerState {
     /**
+     * The cloud service delegation name.
+     */
+    agencyName?: pulumi.Input<string>;
+    /**
      * Specifies the OBS bucket to which traces will be transferred.
      */
     bucketName?: pulumi.Input<string>;
+    /**
+     * Specifies the compression type of trace files. The value can be
+     * **gzip** or **json**. The default value is **gzip**.
+     */
+    compressType?: pulumi.Input<string>;
+    /**
+     * The creation time of the tracker.
+     */
+    createTime?: pulumi.Input<number>;
+    /**
+     * Specifies whether the tracker can be deleted.
+     */
+    deleteTracker?: pulumi.Input<boolean>;
+    /**
+     * It indicates the cause of the abnormal status.
+     */
+    detail?: pulumi.Input<string>;
+    /**
+     * The Account ID.
+     */
+    domainId?: pulumi.Input<string>;
     /**
      * Specifies whether tracker is enabled.
      */
     enabled?: pulumi.Input<boolean>;
     /**
+     * Specifies the names of the cloud services for which traces don't need to be transferred.
+     * Currently, only **KMS** is supported.
+     */
+    excludeServices?: pulumi.Input<pulumi.Input<string>[]>;
+    /**
      * Specifies the file name prefix to mark trace files that need to be stored
-     * in an OBS bucket. The value contains 0 to 64 characters. Only letters, numbers, hyphens (-), underscores (_),
+     * in an OBS bucket. The value contains `0` to `64` characters. Only letters, numbers, hyphens (-), underscores (_),
      * and periods (.) are allowed.
      */
     filePrefix?: pulumi.Input<string>;
     /**
+     * The LTS log group ID.
+     */
+    groupId?: pulumi.Input<string>;
+    /**
+     * Whether CTS has been granted permissions to perform operations on the OBS bucket.
+     */
+    isAuthorizedBucket?: pulumi.Input<boolean>;
+    /**
+     * Specifies whether to divide the path of the trace file by cloud service.
+     * The default value is **true**.
+     */
+    isSortByService?: pulumi.Input<boolean>;
+    /**
      * Specifies the ID of KMS key used for trace file encryption.
      */
     kmsId?: pulumi.Input<string>;
+    /**
+     * The name of the log group that CTS creates in LTS.
+     */
+    logGroupName?: pulumi.Input<string>;
+    /**
+     * The name of the log topic that CTS creates in LTS.
+     */
+    logTopicName?: pulumi.Input<string>;
     /**
      * Specifies whether trace analysis is enabled.
      */
@@ -180,6 +340,12 @@ export interface TrackerState {
      */
     name?: pulumi.Input<string>;
     /**
+     * Specifies whether to apply the tracker configuration to the organization.
+     * If the value is set to **true**, the audit logs of all members in the organization in the current region will be
+     * transferred to the OBS bucket or LTS log stream configured for the management tracker.
+     */
+    organizationEnabled?: pulumi.Input<boolean>;
+    /**
      * Specifies the region in which to manage the CTS system tracker resource.
      * If omitted, the provider-level region will be used. Changing this creates a new resource.
      */
@@ -188,6 +354,14 @@ export interface TrackerState {
      * The tracker status, the value can be **enabled**, **disabled** or **error**.
      */
     status?: pulumi.Input<string>;
+    /**
+     * The LTS log stream ID.
+     */
+    streamId?: pulumi.Input<string>;
+    /**
+     * Specifies the key/value pairs to associate with the CTS tracker.
+     */
+    tags?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
     /**
      * Whether traces will be transferred.
      */
@@ -211,15 +385,34 @@ export interface TrackerArgs {
      */
     bucketName?: pulumi.Input<string>;
     /**
+     * Specifies the compression type of trace files. The value can be
+     * **gzip** or **json**. The default value is **gzip**.
+     */
+    compressType?: pulumi.Input<string>;
+    /**
+     * Specifies whether the tracker can be deleted.
+     */
+    deleteTracker?: pulumi.Input<boolean>;
+    /**
      * Specifies whether tracker is enabled.
      */
     enabled?: pulumi.Input<boolean>;
     /**
+     * Specifies the names of the cloud services for which traces don't need to be transferred.
+     * Currently, only **KMS** is supported.
+     */
+    excludeServices?: pulumi.Input<pulumi.Input<string>[]>;
+    /**
      * Specifies the file name prefix to mark trace files that need to be stored
-     * in an OBS bucket. The value contains 0 to 64 characters. Only letters, numbers, hyphens (-), underscores (_),
+     * in an OBS bucket. The value contains `0` to `64` characters. Only letters, numbers, hyphens (-), underscores (_),
      * and periods (.) are allowed.
      */
     filePrefix?: pulumi.Input<string>;
+    /**
+     * Specifies whether to divide the path of the trace file by cloud service.
+     * The default value is **true**.
+     */
+    isSortByService?: pulumi.Input<boolean>;
     /**
      * Specifies the ID of KMS key used for trace file encryption.
      */
@@ -229,10 +422,20 @@ export interface TrackerArgs {
      */
     ltsEnabled?: pulumi.Input<boolean>;
     /**
+     * Specifies whether to apply the tracker configuration to the organization.
+     * If the value is set to **true**, the audit logs of all members in the organization in the current region will be
+     * transferred to the OBS bucket or LTS log stream configured for the management tracker.
+     */
+    organizationEnabled?: pulumi.Input<boolean>;
+    /**
      * Specifies the region in which to manage the CTS system tracker resource.
      * If omitted, the provider-level region will be used. Changing this creates a new resource.
      */
     region?: pulumi.Input<string>;
+    /**
+     * Specifies the key/value pairs to associate with the CTS tracker.
+     */
+    tags?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
     /**
      * Specifies whether trace file verification is enabled during trace transfer.
      */

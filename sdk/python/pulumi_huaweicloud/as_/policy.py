@@ -19,6 +19,7 @@ class PolicyArgs:
                  scaling_group_id: pulumi.Input[str],
                  scaling_policy_name: pulumi.Input[str],
                  scaling_policy_type: pulumi.Input[str],
+                 action: Optional[pulumi.Input[str]] = None,
                  alarm_id: Optional[pulumi.Input[str]] = None,
                  cool_down_time: Optional[pulumi.Input[int]] = None,
                  region: Optional[pulumi.Input[str]] = None,
@@ -33,6 +34,10 @@ class PolicyArgs:
                + **ALARM**: indicates that the scaling action is triggered by an alarm.
                + **SCHEDULED**: indicates that the scaling action is triggered as scheduled.
                + **RECURRENCE**: indicates that the scaling action is triggered periodically.
+        :param pulumi.Input[str] action: Specifies the operation for the AS policy.
+               The default value is **resume**. The valid values are as follows:
+               + **resume**: Enables the AS policy.
+               + **pause**: Disables the AS policy.
         :param pulumi.Input[int] cool_down_time: Specifies the cooling duration (in seconds).
                The value ranges from 0 to 86400 and is 300 by default.
         :param pulumi.Input[str] region: Specifies the region in which to create the AS policy. If omitted, the
@@ -46,6 +51,8 @@ class PolicyArgs:
         pulumi.set(__self__, "scaling_group_id", scaling_group_id)
         pulumi.set(__self__, "scaling_policy_name", scaling_policy_name)
         pulumi.set(__self__, "scaling_policy_type", scaling_policy_type)
+        if action is not None:
+            pulumi.set(__self__, "action", action)
         if alarm_id is not None:
             pulumi.set(__self__, "alarm_id", alarm_id)
         if cool_down_time is not None:
@@ -96,6 +103,21 @@ class PolicyArgs:
     @scaling_policy_type.setter
     def scaling_policy_type(self, value: pulumi.Input[str]):
         pulumi.set(self, "scaling_policy_type", value)
+
+    @property
+    @pulumi.getter
+    def action(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the operation for the AS policy.
+        The default value is **resume**. The valid values are as follows:
+        + **resume**: Enables the AS policy.
+        + **pause**: Disables the AS policy.
+        """
+        return pulumi.get(self, "action")
+
+    @action.setter
+    def action(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "action", value)
 
     @property
     @pulumi.getter(name="alarmId")
@@ -163,6 +185,7 @@ class PolicyArgs:
 @pulumi.input_type
 class _PolicyState:
     def __init__(__self__, *,
+                 action: Optional[pulumi.Input[str]] = None,
                  alarm_id: Optional[pulumi.Input[str]] = None,
                  cool_down_time: Optional[pulumi.Input[int]] = None,
                  region: Optional[pulumi.Input[str]] = None,
@@ -174,6 +197,10 @@ class _PolicyState:
                  status: Optional[pulumi.Input[str]] = None):
         """
         Input properties used for looking up and filtering Policy resources.
+        :param pulumi.Input[str] action: Specifies the operation for the AS policy.
+               The default value is **resume**. The valid values are as follows:
+               + **resume**: Enables the AS policy.
+               + **pause**: Disables the AS policy.
         :param pulumi.Input[int] cool_down_time: Specifies the cooling duration (in seconds).
                The value ranges from 0 to 86400 and is 300 by default.
         :param pulumi.Input[str] region: Specifies the region in which to create the AS policy. If omitted, the
@@ -192,6 +219,8 @@ class _PolicyState:
                The object structure is documented below.
         :param pulumi.Input[str] status: The AS policy status. The value can be *INSERVICE*, *PAUSED* or *EXECUTING*.
         """
+        if action is not None:
+            pulumi.set(__self__, "action", action)
         if alarm_id is not None:
             pulumi.set(__self__, "alarm_id", alarm_id)
         if cool_down_time is not None:
@@ -210,6 +239,21 @@ class _PolicyState:
             pulumi.set(__self__, "scheduled_policy", scheduled_policy)
         if status is not None:
             pulumi.set(__self__, "status", status)
+
+    @property
+    @pulumi.getter
+    def action(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the operation for the AS policy.
+        The default value is **resume**. The valid values are as follows:
+        + **resume**: Enables the AS policy.
+        + **pause**: Disables the AS policy.
+        """
+        return pulumi.get(self, "action")
+
+    @action.setter
+    def action(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "action", value)
 
     @property
     @pulumi.getter(name="alarmId")
@@ -331,6 +375,7 @@ class Policy(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
+                 action: Optional[pulumi.Input[str]] = None,
                  alarm_id: Optional[pulumi.Input[str]] = None,
                  cool_down_time: Optional[pulumi.Input[int]] = None,
                  region: Optional[pulumi.Input[str]] = None,
@@ -431,7 +476,7 @@ class Policy(pulumi.CustomResource):
 
         ## Import
 
-        AS policies can be imported by their `id`, e.g.
+        AS policies can be imported by their `id`, e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:As/policy:Policy test 9fcb65fe-fd79-4407-8fa0-07602044e1c3
@@ -439,6 +484,10 @@ class Policy(pulumi.CustomResource):
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
+        :param pulumi.Input[str] action: Specifies the operation for the AS policy.
+               The default value is **resume**. The valid values are as follows:
+               + **resume**: Enables the AS policy.
+               + **pause**: Disables the AS policy.
         :param pulumi.Input[int] cool_down_time: Specifies the cooling duration (in seconds).
                The value ranges from 0 to 86400 and is 300 by default.
         :param pulumi.Input[str] region: Specifies the region in which to create the AS policy. If omitted, the
@@ -553,7 +602,7 @@ class Policy(pulumi.CustomResource):
 
         ## Import
 
-        AS policies can be imported by their `id`, e.g.
+        AS policies can be imported by their `id`, e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:As/policy:Policy test 9fcb65fe-fd79-4407-8fa0-07602044e1c3
@@ -574,6 +623,7 @@ class Policy(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
+                 action: Optional[pulumi.Input[str]] = None,
                  alarm_id: Optional[pulumi.Input[str]] = None,
                  cool_down_time: Optional[pulumi.Input[int]] = None,
                  region: Optional[pulumi.Input[str]] = None,
@@ -591,6 +641,7 @@ class Policy(pulumi.CustomResource):
                 raise TypeError('__props__ is only valid when passed in combination with a valid opts.id to get an existing resource')
             __props__ = PolicyArgs.__new__(PolicyArgs)
 
+            __props__.__dict__["action"] = action
             __props__.__dict__["alarm_id"] = alarm_id
             __props__.__dict__["cool_down_time"] = cool_down_time
             __props__.__dict__["region"] = region
@@ -616,6 +667,7 @@ class Policy(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
+            action: Optional[pulumi.Input[str]] = None,
             alarm_id: Optional[pulumi.Input[str]] = None,
             cool_down_time: Optional[pulumi.Input[int]] = None,
             region: Optional[pulumi.Input[str]] = None,
@@ -632,6 +684,10 @@ class Policy(pulumi.CustomResource):
         :param str resource_name: The unique name of the resulting resource.
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
+        :param pulumi.Input[str] action: Specifies the operation for the AS policy.
+               The default value is **resume**. The valid values are as follows:
+               + **resume**: Enables the AS policy.
+               + **pause**: Disables the AS policy.
         :param pulumi.Input[int] cool_down_time: Specifies the cooling duration (in seconds).
                The value ranges from 0 to 86400 and is 300 by default.
         :param pulumi.Input[str] region: Specifies the region in which to create the AS policy. If omitted, the
@@ -654,6 +710,7 @@ class Policy(pulumi.CustomResource):
 
         __props__ = _PolicyState.__new__(_PolicyState)
 
+        __props__.__dict__["action"] = action
         __props__.__dict__["alarm_id"] = alarm_id
         __props__.__dict__["cool_down_time"] = cool_down_time
         __props__.__dict__["region"] = region
@@ -664,6 +721,17 @@ class Policy(pulumi.CustomResource):
         __props__.__dict__["scheduled_policy"] = scheduled_policy
         __props__.__dict__["status"] = status
         return Policy(resource_name, opts=opts, __props__=__props__)
+
+    @property
+    @pulumi.getter
+    def action(self) -> pulumi.Output[str]:
+        """
+        Specifies the operation for the AS policy.
+        The default value is **resume**. The valid values are as follows:
+        + **resume**: Enables the AS policy.
+        + **pause**: Disables the AS policy.
+        """
+        return pulumi.get(self, "action")
 
     @property
     @pulumi.getter(name="alarmId")

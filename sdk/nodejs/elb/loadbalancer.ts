@@ -31,7 +31,7 @@ import * as utilities from "../utilities";
  *
  * const config = new pulumi.Config();
  * const ipv4SubnetId = config.requireObject("ipv4SubnetId");
- * const lb1 = new huaweicloud.elb.Loadbalancer("lb1", {vipSubnetId: ipv4_subnet_id});
+ * const lb1 = new huaweicloud.elb.Loadbalancer("lb1", {vipSubnetId: ipv4SubnetId});
  * const eip1 = new huaweicloud.vpc.EipAssociate("eip1", {
  *     publicIp: "1.2.3.4",
  *     portId: lb1.vipPortId,
@@ -40,11 +40,25 @@ import * as utilities from "../utilities";
  *
  * ## Import
  *
- * Load balancers can be imported using the `id`, e.g.
+ * Load balancers can be imported using the `id`, e.g. bash
  *
  * ```sh
  *  $ pulumi import huaweicloud:Elb/loadbalancer:Loadbalancer test 3e3632db-36c6-4b28-a92e-e72e6562daa6
  * ```
+ *
+ *  Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`period_unit`, `period`, `auto_renew`. It is generally recommended running `terraform plan` after importing a loadbalancer. You can then decide if changes should be applied to the loadbalancer, or the resource definition should be updated to align with the loadbalancer. Also you can ignore changes as below. hcl resource "huaweicloud_lb_loadbalancer" "test" {
+ *
+ *  ...
+ *
+ *  lifecycle {
+ *
+ *  ignore_changes = [
+ *
+ *  period_unit, period, auto_renew,
+ *
+ *  ]
+ *
+ *  } }
  */
 export class Loadbalancer extends pulumi.CustomResource {
     /**
@@ -74,20 +88,44 @@ export class Loadbalancer extends pulumi.CustomResource {
         return obj['__pulumiType'] === Loadbalancer.__pulumiType;
     }
 
+    /**
+     * schema: Deprecated
+     */
     public readonly adminStateUp!: pulumi.Output<boolean | undefined>;
+    /**
+     * Specifies whether auto renew is enabled.  
+     * Valid values are **true** and **false**. Defaults to **false**.
+     */
+    public readonly autoRenew!: pulumi.Output<string | undefined>;
+    /**
+     * Indicates how the load balancer will be billed.
+     */
+    public /*out*/ readonly chargeMode!: pulumi.Output<string>;
+    /**
+     * Specifies the charging mode of the loadbalancer.  
+     * The valid values are **prePaid** and **postPaid**, defaults to **postPaid**.
+     */
+    public readonly chargingMode!: pulumi.Output<string>;
+    /**
+     * The create time of the load balancer.
+     */
+    public /*out*/ readonly createdAt!: pulumi.Output<string>;
     /**
      * Human-readable description for the loadbalancer.
      */
     public readonly description!: pulumi.Output<string | undefined>;
     /**
-     * The enterprise project id of the loadbalancer. Changing this
-     * creates a new loadbalancer.
+     * The enterprise project id of the loadbalancer.
      */
     public readonly enterpriseProjectId!: pulumi.Output<string>;
     /**
      * schema: Deprecated
      */
     public readonly flavor!: pulumi.Output<string | undefined>;
+    /**
+     * Indicates the scenario where the load balancer is frozen.
+     */
+    public /*out*/ readonly frozenScene!: pulumi.Output<string>;
     /**
      * schema: Deprecated
      */
@@ -96,6 +134,28 @@ export class Loadbalancer extends pulumi.CustomResource {
      * Human-readable name for the loadbalancer. Does not have to be unique.
      */
     public readonly name!: pulumi.Output<string>;
+    /**
+     * Specifies the charging period of the loadbalancer.
+     * + If `periodUnit` is set to **month**, the value ranges from `1` to `9`.
+     * + If `periodUnit` is set to **year**, the value ranges from `1` to `3`.
+     */
+    public readonly period!: pulumi.Output<number | undefined>;
+    /**
+     * Specifies the charging period unit of the loadbalancer.  
+     * Valid values are **month** and **year**. This parameter is mandatory if `chargingMode` is set to **prePaid**.
+     */
+    public readonly periodUnit!: pulumi.Output<string | undefined>;
+    /**
+     * Specifies the reason to enable modification protection. Only valid when
+     * `protectionStatus` is **consoleProtection**.
+     */
+    public readonly protectionReason!: pulumi.Output<string | undefined>;
+    /**
+     * Specifies whether modification protection is enabled. Value options:
+     * + **nonProtection**: No protection.
+     * + **consoleProtection**: Console modification protection.
+     */
+    public readonly protectionStatus!: pulumi.Output<string>;
     /**
      * The EIP address that is associated to the Load Balancer instance.
      */
@@ -117,6 +177,10 @@ export class Loadbalancer extends pulumi.CustomResource {
      * @deprecated tenant_id is deprecated
      */
     public readonly tenantId!: pulumi.Output<string>;
+    /**
+     * The update time of the load balancer.
+     */
+    public /*out*/ readonly updatedAt!: pulumi.Output<string>;
     /**
      * The ip address of the load balancer. Changing this creates a new
      * loadbalancer.
@@ -146,16 +210,26 @@ export class Loadbalancer extends pulumi.CustomResource {
         if (opts.id) {
             const state = argsOrState as LoadbalancerState | undefined;
             resourceInputs["adminStateUp"] = state ? state.adminStateUp : undefined;
+            resourceInputs["autoRenew"] = state ? state.autoRenew : undefined;
+            resourceInputs["chargeMode"] = state ? state.chargeMode : undefined;
+            resourceInputs["chargingMode"] = state ? state.chargingMode : undefined;
+            resourceInputs["createdAt"] = state ? state.createdAt : undefined;
             resourceInputs["description"] = state ? state.description : undefined;
             resourceInputs["enterpriseProjectId"] = state ? state.enterpriseProjectId : undefined;
             resourceInputs["flavor"] = state ? state.flavor : undefined;
+            resourceInputs["frozenScene"] = state ? state.frozenScene : undefined;
             resourceInputs["loadbalancerProvider"] = state ? state.loadbalancerProvider : undefined;
             resourceInputs["name"] = state ? state.name : undefined;
+            resourceInputs["period"] = state ? state.period : undefined;
+            resourceInputs["periodUnit"] = state ? state.periodUnit : undefined;
+            resourceInputs["protectionReason"] = state ? state.protectionReason : undefined;
+            resourceInputs["protectionStatus"] = state ? state.protectionStatus : undefined;
             resourceInputs["publicIp"] = state ? state.publicIp : undefined;
             resourceInputs["region"] = state ? state.region : undefined;
             resourceInputs["securityGroupIds"] = state ? state.securityGroupIds : undefined;
             resourceInputs["tags"] = state ? state.tags : undefined;
             resourceInputs["tenantId"] = state ? state.tenantId : undefined;
+            resourceInputs["updatedAt"] = state ? state.updatedAt : undefined;
             resourceInputs["vipAddress"] = state ? state.vipAddress : undefined;
             resourceInputs["vipPortId"] = state ? state.vipPortId : undefined;
             resourceInputs["vipSubnetId"] = state ? state.vipSubnetId : undefined;
@@ -165,18 +239,28 @@ export class Loadbalancer extends pulumi.CustomResource {
                 throw new Error("Missing required property 'vipSubnetId'");
             }
             resourceInputs["adminStateUp"] = args ? args.adminStateUp : undefined;
+            resourceInputs["autoRenew"] = args ? args.autoRenew : undefined;
+            resourceInputs["chargingMode"] = args ? args.chargingMode : undefined;
             resourceInputs["description"] = args ? args.description : undefined;
             resourceInputs["enterpriseProjectId"] = args ? args.enterpriseProjectId : undefined;
             resourceInputs["flavor"] = args ? args.flavor : undefined;
             resourceInputs["loadbalancerProvider"] = args ? args.loadbalancerProvider : undefined;
             resourceInputs["name"] = args ? args.name : undefined;
+            resourceInputs["period"] = args ? args.period : undefined;
+            resourceInputs["periodUnit"] = args ? args.periodUnit : undefined;
+            resourceInputs["protectionReason"] = args ? args.protectionReason : undefined;
+            resourceInputs["protectionStatus"] = args ? args.protectionStatus : undefined;
             resourceInputs["region"] = args ? args.region : undefined;
             resourceInputs["securityGroupIds"] = args ? args.securityGroupIds : undefined;
             resourceInputs["tags"] = args ? args.tags : undefined;
             resourceInputs["tenantId"] = args ? args.tenantId : undefined;
             resourceInputs["vipAddress"] = args ? args.vipAddress : undefined;
             resourceInputs["vipSubnetId"] = args ? args.vipSubnetId : undefined;
+            resourceInputs["chargeMode"] = undefined /*out*/;
+            resourceInputs["createdAt"] = undefined /*out*/;
+            resourceInputs["frozenScene"] = undefined /*out*/;
             resourceInputs["publicIp"] = undefined /*out*/;
+            resourceInputs["updatedAt"] = undefined /*out*/;
             resourceInputs["vipPortId"] = undefined /*out*/;
         }
         opts = pulumi.mergeOptions(utilities.resourceOptsDefaults(), opts);
@@ -188,20 +272,44 @@ export class Loadbalancer extends pulumi.CustomResource {
  * Input properties used for looking up and filtering Loadbalancer resources.
  */
 export interface LoadbalancerState {
+    /**
+     * schema: Deprecated
+     */
     adminStateUp?: pulumi.Input<boolean>;
+    /**
+     * Specifies whether auto renew is enabled.  
+     * Valid values are **true** and **false**. Defaults to **false**.
+     */
+    autoRenew?: pulumi.Input<string>;
+    /**
+     * Indicates how the load balancer will be billed.
+     */
+    chargeMode?: pulumi.Input<string>;
+    /**
+     * Specifies the charging mode of the loadbalancer.  
+     * The valid values are **prePaid** and **postPaid**, defaults to **postPaid**.
+     */
+    chargingMode?: pulumi.Input<string>;
+    /**
+     * The create time of the load balancer.
+     */
+    createdAt?: pulumi.Input<string>;
     /**
      * Human-readable description for the loadbalancer.
      */
     description?: pulumi.Input<string>;
     /**
-     * The enterprise project id of the loadbalancer. Changing this
-     * creates a new loadbalancer.
+     * The enterprise project id of the loadbalancer.
      */
     enterpriseProjectId?: pulumi.Input<string>;
     /**
      * schema: Deprecated
      */
     flavor?: pulumi.Input<string>;
+    /**
+     * Indicates the scenario where the load balancer is frozen.
+     */
+    frozenScene?: pulumi.Input<string>;
     /**
      * schema: Deprecated
      */
@@ -210,6 +318,28 @@ export interface LoadbalancerState {
      * Human-readable name for the loadbalancer. Does not have to be unique.
      */
     name?: pulumi.Input<string>;
+    /**
+     * Specifies the charging period of the loadbalancer.
+     * + If `periodUnit` is set to **month**, the value ranges from `1` to `9`.
+     * + If `periodUnit` is set to **year**, the value ranges from `1` to `3`.
+     */
+    period?: pulumi.Input<number>;
+    /**
+     * Specifies the charging period unit of the loadbalancer.  
+     * Valid values are **month** and **year**. This parameter is mandatory if `chargingMode` is set to **prePaid**.
+     */
+    periodUnit?: pulumi.Input<string>;
+    /**
+     * Specifies the reason to enable modification protection. Only valid when
+     * `protectionStatus` is **consoleProtection**.
+     */
+    protectionReason?: pulumi.Input<string>;
+    /**
+     * Specifies whether modification protection is enabled. Value options:
+     * + **nonProtection**: No protection.
+     * + **consoleProtection**: Console modification protection.
+     */
+    protectionStatus?: pulumi.Input<string>;
     /**
      * The EIP address that is associated to the Load Balancer instance.
      */
@@ -232,6 +362,10 @@ export interface LoadbalancerState {
      */
     tenantId?: pulumi.Input<string>;
     /**
+     * The update time of the load balancer.
+     */
+    updatedAt?: pulumi.Input<string>;
+    /**
      * The ip address of the load balancer. Changing this creates a new
      * loadbalancer.
      */
@@ -251,14 +385,26 @@ export interface LoadbalancerState {
  * The set of arguments for constructing a Loadbalancer resource.
  */
 export interface LoadbalancerArgs {
+    /**
+     * schema: Deprecated
+     */
     adminStateUp?: pulumi.Input<boolean>;
+    /**
+     * Specifies whether auto renew is enabled.  
+     * Valid values are **true** and **false**. Defaults to **false**.
+     */
+    autoRenew?: pulumi.Input<string>;
+    /**
+     * Specifies the charging mode of the loadbalancer.  
+     * The valid values are **prePaid** and **postPaid**, defaults to **postPaid**.
+     */
+    chargingMode?: pulumi.Input<string>;
     /**
      * Human-readable description for the loadbalancer.
      */
     description?: pulumi.Input<string>;
     /**
-     * The enterprise project id of the loadbalancer. Changing this
-     * creates a new loadbalancer.
+     * The enterprise project id of the loadbalancer.
      */
     enterpriseProjectId?: pulumi.Input<string>;
     /**
@@ -273,6 +419,28 @@ export interface LoadbalancerArgs {
      * Human-readable name for the loadbalancer. Does not have to be unique.
      */
     name?: pulumi.Input<string>;
+    /**
+     * Specifies the charging period of the loadbalancer.
+     * + If `periodUnit` is set to **month**, the value ranges from `1` to `9`.
+     * + If `periodUnit` is set to **year**, the value ranges from `1` to `3`.
+     */
+    period?: pulumi.Input<number>;
+    /**
+     * Specifies the charging period unit of the loadbalancer.  
+     * Valid values are **month** and **year**. This parameter is mandatory if `chargingMode` is set to **prePaid**.
+     */
+    periodUnit?: pulumi.Input<string>;
+    /**
+     * Specifies the reason to enable modification protection. Only valid when
+     * `protectionStatus` is **consoleProtection**.
+     */
+    protectionReason?: pulumi.Input<string>;
+    /**
+     * Specifies whether modification protection is enabled. Value options:
+     * + **nonProtection**: No protection.
+     * + **consoleProtection**: Console modification protection.
+     */
+    protectionStatus?: pulumi.Input<string>;
     /**
      * The region in which to create the loadbalancer resource. If omitted, the
      * provider-level region will be used. Changing this creates a new loadbalancer.

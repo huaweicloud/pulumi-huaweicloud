@@ -54,7 +54,8 @@ func GetFlavors(ctx *pulumi.Context, args *GetFlavorsArgs, opts ...pulumi.Invoke
 type GetFlavorsArgs struct {
 	// Specifies the availability zone which the RDS flavor belongs to.
 	AvailabilityZone *string `pulumi:"availabilityZone"`
-	// Specifies the DB engine. Value: MySQL, PostgreSQL, SQLServer.
+	// Specifies the DB engine. The value can be **MySQL**, **PostgreSQL**, **SQLServer**,
+	// **MariaDB**.
 	DbType string `pulumi:"dbType"`
 	// Specifies the database version. For more detail, please see
 	// [DB Engines and Versions](https://support.huaweicloud.com/intl/en-us/productdesc-rds/en-us_topic_0043898356.html).
@@ -76,8 +77,8 @@ type GetFlavorsArgs struct {
 	//   For PostgreSQL and SQL Server engines: Dedicated, only supported by ultra-fast SSDs.
 	// + **bigmem**: Large memory type.
 	GroupType *string `pulumi:"groupType"`
-	// The mode of instance. Value: *ha*(indicates primary/standby instance),
-	// *single*(indicates single instance) and *replica*(indicates read replicas).
+	// The mode of instance. The value can be **ha**(indicates primary/standby
+	// instance), **single**(indicates single instance) and **replica**(indicates read replicas).
 	InstanceMode *string `pulumi:"instanceMode"`
 	// Specifies the memory size(GB) in the RDS flavor.
 	Memory *int `pulumi:"memory"`
@@ -125,7 +126,8 @@ func GetFlavorsOutput(ctx *pulumi.Context, args GetFlavorsOutputArgs, opts ...pu
 type GetFlavorsOutputArgs struct {
 	// Specifies the availability zone which the RDS flavor belongs to.
 	AvailabilityZone pulumi.StringPtrInput `pulumi:"availabilityZone"`
-	// Specifies the DB engine. Value: MySQL, PostgreSQL, SQLServer.
+	// Specifies the DB engine. The value can be **MySQL**, **PostgreSQL**, **SQLServer**,
+	// **MariaDB**.
 	DbType pulumi.StringInput `pulumi:"dbType"`
 	// Specifies the database version. For more detail, please see
 	// [DB Engines and Versions](https://support.huaweicloud.com/intl/en-us/productdesc-rds/en-us_topic_0043898356.html).
@@ -147,8 +149,8 @@ type GetFlavorsOutputArgs struct {
 	//   For PostgreSQL and SQL Server engines: Dedicated, only supported by ultra-fast SSDs.
 	// + **bigmem**: Large memory type.
 	GroupType pulumi.StringPtrInput `pulumi:"groupType"`
-	// The mode of instance. Value: *ha*(indicates primary/standby instance),
-	// *single*(indicates single instance) and *replica*(indicates read replicas).
+	// The mode of instance. The value can be **ha**(indicates primary/standby
+	// instance), **single**(indicates single instance) and **replica**(indicates read replicas).
 	InstanceMode pulumi.StringPtrInput `pulumi:"instanceMode"`
 	// Specifies the memory size(GB) in the RDS flavor.
 	Memory pulumi.IntPtrInput `pulumi:"memory"`

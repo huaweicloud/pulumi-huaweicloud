@@ -48,6 +48,8 @@ import (
 type Ipgroup struct {
 	pulumi.CustomResourceState
 
+	// The create time of the ip group.
+	CreatedAt pulumi.StringOutput `pulumi:"createdAt"`
 	// Human-readable description for the ip.
 	Description pulumi.StringPtrOutput `pulumi:"description"`
 	// The enterprise project id of the ip group. Changing this
@@ -56,11 +58,15 @@ type Ipgroup struct {
 	// Specifies an array of one or more ip addresses. The ipList object structure is
 	// documented below.
 	IpLists IpgroupIpListArrayOutput `pulumi:"ipLists"`
+	// The listener IDs which the ip group associated with.
+	ListenerIds pulumi.StringArrayOutput `pulumi:"listenerIds"`
 	// Human-readable name for the ip group.
 	Name pulumi.StringOutput `pulumi:"name"`
 	// The region in which to create the ip group resource. If omitted, the
 	// provider-level region will be used. Changing this creates a new ip group.
 	Region pulumi.StringOutput `pulumi:"region"`
+	// The update time of the ip group.
+	UpdatedAt pulumi.StringOutput `pulumi:"updatedAt"`
 }
 
 // NewIpgroup registers a new resource with the given unique name, arguments, and options.
@@ -96,6 +102,8 @@ func GetIpgroup(ctx *pulumi.Context,
 
 // Input properties used for looking up and filtering Ipgroup resources.
 type ipgroupState struct {
+	// The create time of the ip group.
+	CreatedAt *string `pulumi:"createdAt"`
 	// Human-readable description for the ip.
 	Description *string `pulumi:"description"`
 	// The enterprise project id of the ip group. Changing this
@@ -104,14 +112,20 @@ type ipgroupState struct {
 	// Specifies an array of one or more ip addresses. The ipList object structure is
 	// documented below.
 	IpLists []IpgroupIpList `pulumi:"ipLists"`
+	// The listener IDs which the ip group associated with.
+	ListenerIds []string `pulumi:"listenerIds"`
 	// Human-readable name for the ip group.
 	Name *string `pulumi:"name"`
 	// The region in which to create the ip group resource. If omitted, the
 	// provider-level region will be used. Changing this creates a new ip group.
 	Region *string `pulumi:"region"`
+	// The update time of the ip group.
+	UpdatedAt *string `pulumi:"updatedAt"`
 }
 
 type IpgroupState struct {
+	// The create time of the ip group.
+	CreatedAt pulumi.StringPtrInput
 	// Human-readable description for the ip.
 	Description pulumi.StringPtrInput
 	// The enterprise project id of the ip group. Changing this
@@ -120,11 +134,15 @@ type IpgroupState struct {
 	// Specifies an array of one or more ip addresses. The ipList object structure is
 	// documented below.
 	IpLists IpgroupIpListArrayInput
+	// The listener IDs which the ip group associated with.
+	ListenerIds pulumi.StringArrayInput
 	// Human-readable name for the ip group.
 	Name pulumi.StringPtrInput
 	// The region in which to create the ip group resource. If omitted, the
 	// provider-level region will be used. Changing this creates a new ip group.
 	Region pulumi.StringPtrInput
+	// The update time of the ip group.
+	UpdatedAt pulumi.StringPtrInput
 }
 
 func (IpgroupState) ElementType() reflect.Type {
@@ -251,6 +269,11 @@ func (o IpgroupOutput) ToIpgroupOutputWithContext(ctx context.Context) IpgroupOu
 	return o
 }
 
+// The create time of the ip group.
+func (o IpgroupOutput) CreatedAt() pulumi.StringOutput {
+	return o.ApplyT(func(v *Ipgroup) pulumi.StringOutput { return v.CreatedAt }).(pulumi.StringOutput)
+}
+
 // Human-readable description for the ip.
 func (o IpgroupOutput) Description() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Ipgroup) pulumi.StringPtrOutput { return v.Description }).(pulumi.StringPtrOutput)
@@ -268,6 +291,11 @@ func (o IpgroupOutput) IpLists() IpgroupIpListArrayOutput {
 	return o.ApplyT(func(v *Ipgroup) IpgroupIpListArrayOutput { return v.IpLists }).(IpgroupIpListArrayOutput)
 }
 
+// The listener IDs which the ip group associated with.
+func (o IpgroupOutput) ListenerIds() pulumi.StringArrayOutput {
+	return o.ApplyT(func(v *Ipgroup) pulumi.StringArrayOutput { return v.ListenerIds }).(pulumi.StringArrayOutput)
+}
+
 // Human-readable name for the ip group.
 func (o IpgroupOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v *Ipgroup) pulumi.StringOutput { return v.Name }).(pulumi.StringOutput)
@@ -277,6 +305,11 @@ func (o IpgroupOutput) Name() pulumi.StringOutput {
 // provider-level region will be used. Changing this creates a new ip group.
 func (o IpgroupOutput) Region() pulumi.StringOutput {
 	return o.ApplyT(func(v *Ipgroup) pulumi.StringOutput { return v.Region }).(pulumi.StringOutput)
+}
+
+// The update time of the ip group.
+func (o IpgroupOutput) UpdatedAt() pulumi.StringOutput {
+	return o.ApplyT(func(v *Ipgroup) pulumi.StringOutput { return v.UpdatedAt }).(pulumi.StringOutput)
 }
 
 type IpgroupArrayOutput struct{ *pulumi.OutputState }

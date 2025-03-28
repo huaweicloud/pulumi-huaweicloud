@@ -6,45 +6,54 @@ import { input as inputs, output as outputs } from "../types";
 import * as utilities from "../utilities";
 
 /**
- * Manages a DNS zone in the HuaweiCloud DNS Service.
+ * Manages a DNS zone resource within HuaweiCloud.
  *
  * ## Example Usage
  * ### Create a public DNS zone
  *
  * ```typescript
  * import * as pulumi from "@pulumi/pulumi";
- * import * as huaweicloud from "@pulumi/huaweicloud";
+ * import * as pulumi from "@huaweicloudos/pulumi";
  *
- * const myPublicZone = new huaweicloud.Dns.Zone("my_public_zone", {
- *     description: "An example zone",
- *     email: "jdoe@example.com",
- *     ttl: 3000,
+ * const config = new pulumi.Config();
+ * const zoneName = config.requireObject("zoneName");
+ * const email = config.requireObject("email");
+ * const description = config.requireObject("description");
+ * const test = new huaweicloud.dns.Zone("test", {
+ *     email: email,
  *     zoneType: "public",
+ *     ttl: 3000,
+ *     description: description,
  * });
  * ```
  * ### Create a private DNS zone
  *
  * ```typescript
  * import * as pulumi from "@pulumi/pulumi";
- * import * as huaweicloud from "@pulumi/huaweicloud";
+ * import * as pulumi from "@huaweicloudos/pulumi";
  *
- * const myPrivateZone = new huaweicloud.Dns.Zone("my_private_zone", {
- *     description: "An example zone",
- *     email: "jdoe@example.com",
- *     routers: [{
- *         routerId: "2c1fe4bd-ebad-44ca-ae9d-e94e63847b75",
- *     }],
- *     ttl: 3000,
+ * const config = new pulumi.Config();
+ * const zoneName = config.requireObject("zoneName");
+ * const email = config.requireObject("email");
+ * const description = config.requireObject("description");
+ * const routerId = config.requireObject("routerId");
+ * const test = new huaweicloud.dns.Zone("test", {
+ *     email: email,
  *     zoneType: "private",
+ *     ttl: 3000,
+ *     description: description,
+ *     routers: [{
+ *         routerId: routerId,
+ *     }],
  * });
  * ```
  *
  * ## Import
  *
- * This resource can be imported by specifying the zone ID
+ * This resource can be imported using the `id`, e.g. bash
  *
  * ```sh
- *  $ pulumi import huaweicloud:Dns/zone:Zone zone_1 <zone_id>
+ *  $ pulumi import huaweicloud:Dns/zone:Zone test <id>
  * ```
  */
 export class Zone extends pulumi.CustomResource {
@@ -76,48 +85,72 @@ export class Zone extends pulumi.CustomResource {
     }
 
     /**
-     * A description of the zone.
+     * Specifies the description of the zone.  
+     * A maximum of `255` characters are allowed.
      */
     public readonly description!: pulumi.Output<string | undefined>;
     /**
-     * The email address of the administrator managing the zone.
+     * Specifies the email address of the administrator managing the zone.
      */
     public readonly email!: pulumi.Output<string>;
     /**
-     * The enterprise project id of the zone. Changing this creates a
-     * new zone.
+     * Specifies the enterprise project ID of the zone.  
+     * Changing this parameter will create a new resource.
+     * This parameter is only valid for enterprise users, if omitted, default enterprise project will be used.
      */
     public readonly enterpriseProjectId!: pulumi.Output<string>;
     /**
-     * An array of master DNS servers.
+     * The list of the masters of the DNS server.
      */
     public /*out*/ readonly masters!: pulumi.Output<string[]>;
     /**
-     * The name of the zone. Note the `.` at the end of the name. Changing this creates
-     * a new DNS zone.
+     * Specifies the name of the zone. Note the `.` at the end of the name.  
+     * Changing this parameter will create a new resource.
      */
     public readonly name!: pulumi.Output<string>;
     /**
-     * The region in which to create the DNS zone. If omitted, the `region` argument
-     * of the provider will be used. Changing this creates a new DNS zone.
+     * Specifies the recursive resolution proxy mode for subdomains of
+     * the private zone.
+     * Defaults to **AUTHORITY**.
+     * Changing this parameter will create a new resource.
+     * The valid values are as follows:
+     * + **AUTHORITY**: The recursive resolution proxy is disabled for the private zone.
+     * + **RECURSIVE**: The recursive resolution proxy is enabled for the private zone.
+     */
+    public readonly proxyPattern!: pulumi.Output<string>;
+    /**
+     * Specifies the region in which to create the resource.
+     * If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
      */
     public readonly region!: pulumi.Output<string>;
     /**
-     * Router configuration block which is required if zoneType is private. The router
-     * structure is documented below.
+     * Specifies the list of the router of the zone.
+     * Router configuration block which is required if zoneType is private.
+     * The router structure is documented below.
      */
     public readonly routers!: pulumi.Output<outputs.Dns.ZoneRouter[] | undefined>;
     /**
-     * The key/value pairs to associate with the zone.
+     * Specifies the status of the zone, defaults to **ENABLE**.  
+     * The valid values are as follows:
+     * + **ENABLE**
+     * + **DISABLE**
+     */
+    public readonly status!: pulumi.Output<string>;
+    /**
+     * Specifies the key/value pairs to associate with the zone.
      */
     public readonly tags!: pulumi.Output<{[key: string]: string} | undefined>;
     /**
-     * The time to live (TTL) of the zone.
+     * Specifies the time to live (TTL) of the zone, defaults to `300`.  
+     * The valid value is range from `1` to `2,147,483,647`.
      */
     public readonly ttl!: pulumi.Output<number | undefined>;
     /**
-     * The type of zone. Can either be `public` or `private`. Changing this
-     * creates a new DNS zone.
+     * Specifies the type of zone, defaults to **public**.  
+     * Changing this parameter will create a new resource.
+     * The valid values are as follows:
+     * + **public**
+     * + **private**
      */
     public readonly zoneType!: pulumi.Output<string | undefined>;
 
@@ -139,8 +172,10 @@ export class Zone extends pulumi.CustomResource {
             resourceInputs["enterpriseProjectId"] = state ? state.enterpriseProjectId : undefined;
             resourceInputs["masters"] = state ? state.masters : undefined;
             resourceInputs["name"] = state ? state.name : undefined;
+            resourceInputs["proxyPattern"] = state ? state.proxyPattern : undefined;
             resourceInputs["region"] = state ? state.region : undefined;
             resourceInputs["routers"] = state ? state.routers : undefined;
+            resourceInputs["status"] = state ? state.status : undefined;
             resourceInputs["tags"] = state ? state.tags : undefined;
             resourceInputs["ttl"] = state ? state.ttl : undefined;
             resourceInputs["zoneType"] = state ? state.zoneType : undefined;
@@ -150,8 +185,10 @@ export class Zone extends pulumi.CustomResource {
             resourceInputs["email"] = args ? args.email : undefined;
             resourceInputs["enterpriseProjectId"] = args ? args.enterpriseProjectId : undefined;
             resourceInputs["name"] = args ? args.name : undefined;
+            resourceInputs["proxyPattern"] = args ? args.proxyPattern : undefined;
             resourceInputs["region"] = args ? args.region : undefined;
             resourceInputs["routers"] = args ? args.routers : undefined;
+            resourceInputs["status"] = args ? args.status : undefined;
             resourceInputs["tags"] = args ? args.tags : undefined;
             resourceInputs["ttl"] = args ? args.ttl : undefined;
             resourceInputs["zoneType"] = args ? args.zoneType : undefined;
@@ -167,48 +204,72 @@ export class Zone extends pulumi.CustomResource {
  */
 export interface ZoneState {
     /**
-     * A description of the zone.
+     * Specifies the description of the zone.  
+     * A maximum of `255` characters are allowed.
      */
     description?: pulumi.Input<string>;
     /**
-     * The email address of the administrator managing the zone.
+     * Specifies the email address of the administrator managing the zone.
      */
     email?: pulumi.Input<string>;
     /**
-     * The enterprise project id of the zone. Changing this creates a
-     * new zone.
+     * Specifies the enterprise project ID of the zone.  
+     * Changing this parameter will create a new resource.
+     * This parameter is only valid for enterprise users, if omitted, default enterprise project will be used.
      */
     enterpriseProjectId?: pulumi.Input<string>;
     /**
-     * An array of master DNS servers.
+     * The list of the masters of the DNS server.
      */
     masters?: pulumi.Input<pulumi.Input<string>[]>;
     /**
-     * The name of the zone. Note the `.` at the end of the name. Changing this creates
-     * a new DNS zone.
+     * Specifies the name of the zone. Note the `.` at the end of the name.  
+     * Changing this parameter will create a new resource.
      */
     name?: pulumi.Input<string>;
     /**
-     * The region in which to create the DNS zone. If omitted, the `region` argument
-     * of the provider will be used. Changing this creates a new DNS zone.
+     * Specifies the recursive resolution proxy mode for subdomains of
+     * the private zone.
+     * Defaults to **AUTHORITY**.
+     * Changing this parameter will create a new resource.
+     * The valid values are as follows:
+     * + **AUTHORITY**: The recursive resolution proxy is disabled for the private zone.
+     * + **RECURSIVE**: The recursive resolution proxy is enabled for the private zone.
+     */
+    proxyPattern?: pulumi.Input<string>;
+    /**
+     * Specifies the region in which to create the resource.
+     * If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
      */
     region?: pulumi.Input<string>;
     /**
-     * Router configuration block which is required if zoneType is private. The router
-     * structure is documented below.
+     * Specifies the list of the router of the zone.
+     * Router configuration block which is required if zoneType is private.
+     * The router structure is documented below.
      */
     routers?: pulumi.Input<pulumi.Input<inputs.Dns.ZoneRouter>[]>;
     /**
-     * The key/value pairs to associate with the zone.
+     * Specifies the status of the zone, defaults to **ENABLE**.  
+     * The valid values are as follows:
+     * + **ENABLE**
+     * + **DISABLE**
+     */
+    status?: pulumi.Input<string>;
+    /**
+     * Specifies the key/value pairs to associate with the zone.
      */
     tags?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
     /**
-     * The time to live (TTL) of the zone.
+     * Specifies the time to live (TTL) of the zone, defaults to `300`.  
+     * The valid value is range from `1` to `2,147,483,647`.
      */
     ttl?: pulumi.Input<number>;
     /**
-     * The type of zone. Can either be `public` or `private`. Changing this
-     * creates a new DNS zone.
+     * Specifies the type of zone, defaults to **public**.  
+     * Changing this parameter will create a new resource.
+     * The valid values are as follows:
+     * + **public**
+     * + **private**
      */
     zoneType?: pulumi.Input<string>;
 }
@@ -218,44 +279,68 @@ export interface ZoneState {
  */
 export interface ZoneArgs {
     /**
-     * A description of the zone.
+     * Specifies the description of the zone.  
+     * A maximum of `255` characters are allowed.
      */
     description?: pulumi.Input<string>;
     /**
-     * The email address of the administrator managing the zone.
+     * Specifies the email address of the administrator managing the zone.
      */
     email?: pulumi.Input<string>;
     /**
-     * The enterprise project id of the zone. Changing this creates a
-     * new zone.
+     * Specifies the enterprise project ID of the zone.  
+     * Changing this parameter will create a new resource.
+     * This parameter is only valid for enterprise users, if omitted, default enterprise project will be used.
      */
     enterpriseProjectId?: pulumi.Input<string>;
     /**
-     * The name of the zone. Note the `.` at the end of the name. Changing this creates
-     * a new DNS zone.
+     * Specifies the name of the zone. Note the `.` at the end of the name.  
+     * Changing this parameter will create a new resource.
      */
     name?: pulumi.Input<string>;
     /**
-     * The region in which to create the DNS zone. If omitted, the `region` argument
-     * of the provider will be used. Changing this creates a new DNS zone.
+     * Specifies the recursive resolution proxy mode for subdomains of
+     * the private zone.
+     * Defaults to **AUTHORITY**.
+     * Changing this parameter will create a new resource.
+     * The valid values are as follows:
+     * + **AUTHORITY**: The recursive resolution proxy is disabled for the private zone.
+     * + **RECURSIVE**: The recursive resolution proxy is enabled for the private zone.
+     */
+    proxyPattern?: pulumi.Input<string>;
+    /**
+     * Specifies the region in which to create the resource.
+     * If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
      */
     region?: pulumi.Input<string>;
     /**
-     * Router configuration block which is required if zoneType is private. The router
-     * structure is documented below.
+     * Specifies the list of the router of the zone.
+     * Router configuration block which is required if zoneType is private.
+     * The router structure is documented below.
      */
     routers?: pulumi.Input<pulumi.Input<inputs.Dns.ZoneRouter>[]>;
     /**
-     * The key/value pairs to associate with the zone.
+     * Specifies the status of the zone, defaults to **ENABLE**.  
+     * The valid values are as follows:
+     * + **ENABLE**
+     * + **DISABLE**
+     */
+    status?: pulumi.Input<string>;
+    /**
+     * Specifies the key/value pairs to associate with the zone.
      */
     tags?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
     /**
-     * The time to live (TTL) of the zone.
+     * Specifies the time to live (TTL) of the zone, defaults to `300`.  
+     * The valid value is range from `1` to `2,147,483,647`.
      */
     ttl?: pulumi.Input<number>;
     /**
-     * The type of zone. Can either be `public` or `private`. Changing this
-     * creates a new DNS zone.
+     * Specifies the type of zone, defaults to **public**.  
+     * Changing this parameter will create a new resource.
+     * The valid values are as follows:
+     * + **public**
+     * + **private**
      */
     zoneType?: pulumi.Input<string>;
 }

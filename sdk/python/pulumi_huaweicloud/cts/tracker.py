@@ -15,37 +15,66 @@ __all__ = ['TrackerArgs', 'Tracker']
 class TrackerArgs:
     def __init__(__self__, *,
                  bucket_name: Optional[pulumi.Input[str]] = None,
+                 compress_type: Optional[pulumi.Input[str]] = None,
+                 delete_tracker: Optional[pulumi.Input[bool]] = None,
                  enabled: Optional[pulumi.Input[bool]] = None,
+                 exclude_services: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  file_prefix: Optional[pulumi.Input[str]] = None,
+                 is_sort_by_service: Optional[pulumi.Input[bool]] = None,
                  kms_id: Optional[pulumi.Input[str]] = None,
                  lts_enabled: Optional[pulumi.Input[bool]] = None,
+                 organization_enabled: Optional[pulumi.Input[bool]] = None,
                  region: Optional[pulumi.Input[str]] = None,
+                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  validate_file: Optional[pulumi.Input[bool]] = None):
         """
         The set of arguments for constructing a Tracker resource.
         :param pulumi.Input[str] bucket_name: Specifies the OBS bucket to which traces will be transferred.
+        :param pulumi.Input[str] compress_type: Specifies the compression type of trace files. The value can be
+               **gzip** or **json**. The default value is **gzip**.
+        :param pulumi.Input[bool] delete_tracker: Specifies whether the tracker can be deleted.
         :param pulumi.Input[bool] enabled: Specifies whether tracker is enabled.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] exclude_services: Specifies the names of the cloud services for which traces don't need to be transferred.
+               Currently, only **KMS** is supported.
         :param pulumi.Input[str] file_prefix: Specifies the file name prefix to mark trace files that need to be stored
-               in an OBS bucket. The value contains 0 to 64 characters. Only letters, numbers, hyphens (-), underscores (_),
+               in an OBS bucket. The value contains `0` to `64` characters. Only letters, numbers, hyphens (-), underscores (_),
                and periods (.) are allowed.
+        :param pulumi.Input[bool] is_sort_by_service: Specifies whether to divide the path of the trace file by cloud service.
+               The default value is **true**.
         :param pulumi.Input[str] kms_id: Specifies the ID of KMS key used for trace file encryption.
         :param pulumi.Input[bool] lts_enabled: Specifies whether trace analysis is enabled.
+        :param pulumi.Input[bool] organization_enabled: Specifies whether to apply the tracker configuration to the organization.
+               If the value is set to **true**, the audit logs of all members in the organization in the current region will be
+               transferred to the OBS bucket or LTS log stream configured for the management tracker.
         :param pulumi.Input[str] region: Specifies the region in which to manage the CTS system tracker resource.
                If omitted, the provider-level region will be used. Changing this creates a new resource.
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the CTS tracker.
         :param pulumi.Input[bool] validate_file: Specifies whether trace file verification is enabled during trace transfer.
         """
         if bucket_name is not None:
             pulumi.set(__self__, "bucket_name", bucket_name)
+        if compress_type is not None:
+            pulumi.set(__self__, "compress_type", compress_type)
+        if delete_tracker is not None:
+            pulumi.set(__self__, "delete_tracker", delete_tracker)
         if enabled is not None:
             pulumi.set(__self__, "enabled", enabled)
+        if exclude_services is not None:
+            pulumi.set(__self__, "exclude_services", exclude_services)
         if file_prefix is not None:
             pulumi.set(__self__, "file_prefix", file_prefix)
+        if is_sort_by_service is not None:
+            pulumi.set(__self__, "is_sort_by_service", is_sort_by_service)
         if kms_id is not None:
             pulumi.set(__self__, "kms_id", kms_id)
         if lts_enabled is not None:
             pulumi.set(__self__, "lts_enabled", lts_enabled)
+        if organization_enabled is not None:
+            pulumi.set(__self__, "organization_enabled", organization_enabled)
         if region is not None:
             pulumi.set(__self__, "region", region)
+        if tags is not None:
+            pulumi.set(__self__, "tags", tags)
         if validate_file is not None:
             pulumi.set(__self__, "validate_file", validate_file)
 
@@ -62,6 +91,31 @@ class TrackerArgs:
         pulumi.set(self, "bucket_name", value)
 
     @property
+    @pulumi.getter(name="compressType")
+    def compress_type(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the compression type of trace files. The value can be
+        **gzip** or **json**. The default value is **gzip**.
+        """
+        return pulumi.get(self, "compress_type")
+
+    @compress_type.setter
+    def compress_type(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "compress_type", value)
+
+    @property
+    @pulumi.getter(name="deleteTracker")
+    def delete_tracker(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies whether the tracker can be deleted.
+        """
+        return pulumi.get(self, "delete_tracker")
+
+    @delete_tracker.setter
+    def delete_tracker(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "delete_tracker", value)
+
+    @property
     @pulumi.getter
     def enabled(self) -> Optional[pulumi.Input[bool]]:
         """
@@ -74,11 +128,24 @@ class TrackerArgs:
         pulumi.set(self, "enabled", value)
 
     @property
+    @pulumi.getter(name="excludeServices")
+    def exclude_services(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]:
+        """
+        Specifies the names of the cloud services for which traces don't need to be transferred.
+        Currently, only **KMS** is supported.
+        """
+        return pulumi.get(self, "exclude_services")
+
+    @exclude_services.setter
+    def exclude_services(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]):
+        pulumi.set(self, "exclude_services", value)
+
+    @property
     @pulumi.getter(name="filePrefix")
     def file_prefix(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the file name prefix to mark trace files that need to be stored
-        in an OBS bucket. The value contains 0 to 64 characters. Only letters, numbers, hyphens (-), underscores (_),
+        in an OBS bucket. The value contains `0` to `64` characters. Only letters, numbers, hyphens (-), underscores (_),
         and periods (.) are allowed.
         """
         return pulumi.get(self, "file_prefix")
@@ -86,6 +153,19 @@ class TrackerArgs:
     @file_prefix.setter
     def file_prefix(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "file_prefix", value)
+
+    @property
+    @pulumi.getter(name="isSortByService")
+    def is_sort_by_service(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies whether to divide the path of the trace file by cloud service.
+        The default value is **true**.
+        """
+        return pulumi.get(self, "is_sort_by_service")
+
+    @is_sort_by_service.setter
+    def is_sort_by_service(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "is_sort_by_service", value)
 
     @property
     @pulumi.getter(name="kmsId")
@@ -112,6 +192,20 @@ class TrackerArgs:
         pulumi.set(self, "lts_enabled", value)
 
     @property
+    @pulumi.getter(name="organizationEnabled")
+    def organization_enabled(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies whether to apply the tracker configuration to the organization.
+        If the value is set to **true**, the audit logs of all members in the organization in the current region will be
+        transferred to the OBS bucket or LTS log stream configured for the management tracker.
+        """
+        return pulumi.get(self, "organization_enabled")
+
+    @organization_enabled.setter
+    def organization_enabled(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "organization_enabled", value)
+
+    @property
     @pulumi.getter
     def region(self) -> Optional[pulumi.Input[str]]:
         """
@@ -123,6 +217,18 @@ class TrackerArgs:
     @region.setter
     def region(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "region", value)
+
+    @property
+    @pulumi.getter
+    def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]:
+        """
+        Specifies the key/value pairs to associate with the CTS tracker.
+        """
+        return pulumi.get(self, "tags")
+
+    @tags.setter
+    def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]):
+        pulumi.set(self, "tags", value)
 
     @property
     @pulumi.getter(name="validateFile")
@@ -140,56 +246,133 @@ class TrackerArgs:
 @pulumi.input_type
 class _TrackerState:
     def __init__(__self__, *,
+                 agency_name: Optional[pulumi.Input[str]] = None,
                  bucket_name: Optional[pulumi.Input[str]] = None,
+                 compress_type: Optional[pulumi.Input[str]] = None,
+                 create_time: Optional[pulumi.Input[int]] = None,
+                 delete_tracker: Optional[pulumi.Input[bool]] = None,
+                 detail: Optional[pulumi.Input[str]] = None,
+                 domain_id: Optional[pulumi.Input[str]] = None,
                  enabled: Optional[pulumi.Input[bool]] = None,
+                 exclude_services: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  file_prefix: Optional[pulumi.Input[str]] = None,
+                 group_id: Optional[pulumi.Input[str]] = None,
+                 is_authorized_bucket: Optional[pulumi.Input[bool]] = None,
+                 is_sort_by_service: Optional[pulumi.Input[bool]] = None,
                  kms_id: Optional[pulumi.Input[str]] = None,
+                 log_group_name: Optional[pulumi.Input[str]] = None,
+                 log_topic_name: Optional[pulumi.Input[str]] = None,
                  lts_enabled: Optional[pulumi.Input[bool]] = None,
                  name: Optional[pulumi.Input[str]] = None,
+                 organization_enabled: Optional[pulumi.Input[bool]] = None,
                  region: Optional[pulumi.Input[str]] = None,
                  status: Optional[pulumi.Input[str]] = None,
+                 stream_id: Optional[pulumi.Input[str]] = None,
+                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  transfer_enabled: Optional[pulumi.Input[bool]] = None,
                  type: Optional[pulumi.Input[str]] = None,
                  validate_file: Optional[pulumi.Input[bool]] = None):
         """
         Input properties used for looking up and filtering Tracker resources.
+        :param pulumi.Input[str] agency_name: The cloud service delegation name.
         :param pulumi.Input[str] bucket_name: Specifies the OBS bucket to which traces will be transferred.
+        :param pulumi.Input[str] compress_type: Specifies the compression type of trace files. The value can be
+               **gzip** or **json**. The default value is **gzip**.
+        :param pulumi.Input[int] create_time: The creation time of the tracker.
+        :param pulumi.Input[bool] delete_tracker: Specifies whether the tracker can be deleted.
+        :param pulumi.Input[str] detail: It indicates the cause of the abnormal status.
+        :param pulumi.Input[str] domain_id: The Account ID.
         :param pulumi.Input[bool] enabled: Specifies whether tracker is enabled.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] exclude_services: Specifies the names of the cloud services for which traces don't need to be transferred.
+               Currently, only **KMS** is supported.
         :param pulumi.Input[str] file_prefix: Specifies the file name prefix to mark trace files that need to be stored
-               in an OBS bucket. The value contains 0 to 64 characters. Only letters, numbers, hyphens (-), underscores (_),
+               in an OBS bucket. The value contains `0` to `64` characters. Only letters, numbers, hyphens (-), underscores (_),
                and periods (.) are allowed.
+        :param pulumi.Input[str] group_id: The LTS log group ID.
+        :param pulumi.Input[bool] is_authorized_bucket: Whether CTS has been granted permissions to perform operations on the OBS bucket.
+        :param pulumi.Input[bool] is_sort_by_service: Specifies whether to divide the path of the trace file by cloud service.
+               The default value is **true**.
         :param pulumi.Input[str] kms_id: Specifies the ID of KMS key used for trace file encryption.
+        :param pulumi.Input[str] log_group_name: The name of the log group that CTS creates in LTS.
+        :param pulumi.Input[str] log_topic_name: The name of the log topic that CTS creates in LTS.
         :param pulumi.Input[bool] lts_enabled: Specifies whether trace analysis is enabled.
         :param pulumi.Input[str] name: The tracker name, only **system** is available.
+        :param pulumi.Input[bool] organization_enabled: Specifies whether to apply the tracker configuration to the organization.
+               If the value is set to **true**, the audit logs of all members in the organization in the current region will be
+               transferred to the OBS bucket or LTS log stream configured for the management tracker.
         :param pulumi.Input[str] region: Specifies the region in which to manage the CTS system tracker resource.
                If omitted, the provider-level region will be used. Changing this creates a new resource.
         :param pulumi.Input[str] status: The tracker status, the value can be **enabled**, **disabled** or **error**.
+        :param pulumi.Input[str] stream_id: The LTS log stream ID.
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the CTS tracker.
         :param pulumi.Input[bool] transfer_enabled: Whether traces will be transferred.
         :param pulumi.Input[str] type: The tracker type, only **system** is available.
         :param pulumi.Input[bool] validate_file: Specifies whether trace file verification is enabled during trace transfer.
         """
+        if agency_name is not None:
+            pulumi.set(__self__, "agency_name", agency_name)
         if bucket_name is not None:
             pulumi.set(__self__, "bucket_name", bucket_name)
+        if compress_type is not None:
+            pulumi.set(__self__, "compress_type", compress_type)
+        if create_time is not None:
+            pulumi.set(__self__, "create_time", create_time)
+        if delete_tracker is not None:
+            pulumi.set(__self__, "delete_tracker", delete_tracker)
+        if detail is not None:
+            pulumi.set(__self__, "detail", detail)
+        if domain_id is not None:
+            pulumi.set(__self__, "domain_id", domain_id)
         if enabled is not None:
             pulumi.set(__self__, "enabled", enabled)
+        if exclude_services is not None:
+            pulumi.set(__self__, "exclude_services", exclude_services)
         if file_prefix is not None:
             pulumi.set(__self__, "file_prefix", file_prefix)
+        if group_id is not None:
+            pulumi.set(__self__, "group_id", group_id)
+        if is_authorized_bucket is not None:
+            pulumi.set(__self__, "is_authorized_bucket", is_authorized_bucket)
+        if is_sort_by_service is not None:
+            pulumi.set(__self__, "is_sort_by_service", is_sort_by_service)
         if kms_id is not None:
             pulumi.set(__self__, "kms_id", kms_id)
+        if log_group_name is not None:
+            pulumi.set(__self__, "log_group_name", log_group_name)
+        if log_topic_name is not None:
+            pulumi.set(__self__, "log_topic_name", log_topic_name)
         if lts_enabled is not None:
             pulumi.set(__self__, "lts_enabled", lts_enabled)
         if name is not None:
             pulumi.set(__self__, "name", name)
+        if organization_enabled is not None:
+            pulumi.set(__self__, "organization_enabled", organization_enabled)
         if region is not None:
             pulumi.set(__self__, "region", region)
         if status is not None:
             pulumi.set(__self__, "status", status)
+        if stream_id is not None:
+            pulumi.set(__self__, "stream_id", stream_id)
+        if tags is not None:
+            pulumi.set(__self__, "tags", tags)
         if transfer_enabled is not None:
             pulumi.set(__self__, "transfer_enabled", transfer_enabled)
         if type is not None:
             pulumi.set(__self__, "type", type)
         if validate_file is not None:
             pulumi.set(__self__, "validate_file", validate_file)
+
+    @property
+    @pulumi.getter(name="agencyName")
+    def agency_name(self) -> Optional[pulumi.Input[str]]:
+        """
+        The cloud service delegation name.
+        """
+        return pulumi.get(self, "agency_name")
+
+    @agency_name.setter
+    def agency_name(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "agency_name", value)
 
     @property
     @pulumi.getter(name="bucketName")
@@ -204,6 +387,67 @@ class _TrackerState:
         pulumi.set(self, "bucket_name", value)
 
     @property
+    @pulumi.getter(name="compressType")
+    def compress_type(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the compression type of trace files. The value can be
+        **gzip** or **json**. The default value is **gzip**.
+        """
+        return pulumi.get(self, "compress_type")
+
+    @compress_type.setter
+    def compress_type(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "compress_type", value)
+
+    @property
+    @pulumi.getter(name="createTime")
+    def create_time(self) -> Optional[pulumi.Input[int]]:
+        """
+        The creation time of the tracker.
+        """
+        return pulumi.get(self, "create_time")
+
+    @create_time.setter
+    def create_time(self, value: Optional[pulumi.Input[int]]):
+        pulumi.set(self, "create_time", value)
+
+    @property
+    @pulumi.getter(name="deleteTracker")
+    def delete_tracker(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies whether the tracker can be deleted.
+        """
+        return pulumi.get(self, "delete_tracker")
+
+    @delete_tracker.setter
+    def delete_tracker(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "delete_tracker", value)
+
+    @property
+    @pulumi.getter
+    def detail(self) -> Optional[pulumi.Input[str]]:
+        """
+        It indicates the cause of the abnormal status.
+        """
+        return pulumi.get(self, "detail")
+
+    @detail.setter
+    def detail(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "detail", value)
+
+    @property
+    @pulumi.getter(name="domainId")
+    def domain_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        The Account ID.
+        """
+        return pulumi.get(self, "domain_id")
+
+    @domain_id.setter
+    def domain_id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "domain_id", value)
+
+    @property
     @pulumi.getter
     def enabled(self) -> Optional[pulumi.Input[bool]]:
         """
@@ -216,11 +460,24 @@ class _TrackerState:
         pulumi.set(self, "enabled", value)
 
     @property
+    @pulumi.getter(name="excludeServices")
+    def exclude_services(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]:
+        """
+        Specifies the names of the cloud services for which traces don't need to be transferred.
+        Currently, only **KMS** is supported.
+        """
+        return pulumi.get(self, "exclude_services")
+
+    @exclude_services.setter
+    def exclude_services(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]):
+        pulumi.set(self, "exclude_services", value)
+
+    @property
     @pulumi.getter(name="filePrefix")
     def file_prefix(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the file name prefix to mark trace files that need to be stored
-        in an OBS bucket. The value contains 0 to 64 characters. Only letters, numbers, hyphens (-), underscores (_),
+        in an OBS bucket. The value contains `0` to `64` characters. Only letters, numbers, hyphens (-), underscores (_),
         and periods (.) are allowed.
         """
         return pulumi.get(self, "file_prefix")
@@ -228,6 +485,43 @@ class _TrackerState:
     @file_prefix.setter
     def file_prefix(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "file_prefix", value)
+
+    @property
+    @pulumi.getter(name="groupId")
+    def group_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        The LTS log group ID.
+        """
+        return pulumi.get(self, "group_id")
+
+    @group_id.setter
+    def group_id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "group_id", value)
+
+    @property
+    @pulumi.getter(name="isAuthorizedBucket")
+    def is_authorized_bucket(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Whether CTS has been granted permissions to perform operations on the OBS bucket.
+        """
+        return pulumi.get(self, "is_authorized_bucket")
+
+    @is_authorized_bucket.setter
+    def is_authorized_bucket(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "is_authorized_bucket", value)
+
+    @property
+    @pulumi.getter(name="isSortByService")
+    def is_sort_by_service(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies whether to divide the path of the trace file by cloud service.
+        The default value is **true**.
+        """
+        return pulumi.get(self, "is_sort_by_service")
+
+    @is_sort_by_service.setter
+    def is_sort_by_service(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "is_sort_by_service", value)
 
     @property
     @pulumi.getter(name="kmsId")
@@ -240,6 +534,30 @@ class _TrackerState:
     @kms_id.setter
     def kms_id(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "kms_id", value)
+
+    @property
+    @pulumi.getter(name="logGroupName")
+    def log_group_name(self) -> Optional[pulumi.Input[str]]:
+        """
+        The name of the log group that CTS creates in LTS.
+        """
+        return pulumi.get(self, "log_group_name")
+
+    @log_group_name.setter
+    def log_group_name(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "log_group_name", value)
+
+    @property
+    @pulumi.getter(name="logTopicName")
+    def log_topic_name(self) -> Optional[pulumi.Input[str]]:
+        """
+        The name of the log topic that CTS creates in LTS.
+        """
+        return pulumi.get(self, "log_topic_name")
+
+    @log_topic_name.setter
+    def log_topic_name(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "log_topic_name", value)
 
     @property
     @pulumi.getter(name="ltsEnabled")
@@ -266,6 +584,20 @@ class _TrackerState:
         pulumi.set(self, "name", value)
 
     @property
+    @pulumi.getter(name="organizationEnabled")
+    def organization_enabled(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies whether to apply the tracker configuration to the organization.
+        If the value is set to **true**, the audit logs of all members in the organization in the current region will be
+        transferred to the OBS bucket or LTS log stream configured for the management tracker.
+        """
+        return pulumi.get(self, "organization_enabled")
+
+    @organization_enabled.setter
+    def organization_enabled(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "organization_enabled", value)
+
+    @property
     @pulumi.getter
     def region(self) -> Optional[pulumi.Input[str]]:
         """
@@ -289,6 +621,30 @@ class _TrackerState:
     @status.setter
     def status(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "status", value)
+
+    @property
+    @pulumi.getter(name="streamId")
+    def stream_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        The LTS log stream ID.
+        """
+        return pulumi.get(self, "stream_id")
+
+    @stream_id.setter
+    def stream_id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "stream_id", value)
+
+    @property
+    @pulumi.getter
+    def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]:
+        """
+        Specifies the key/value pairs to associate with the CTS tracker.
+        """
+        return pulumi.get(self, "tags")
+
+    @tags.setter
+    def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]):
+        pulumi.set(self, "tags", value)
 
     @property
     @pulumi.getter(name="transferEnabled")
@@ -333,15 +689,21 @@ class Tracker(pulumi.CustomResource):
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
                  bucket_name: Optional[pulumi.Input[str]] = None,
+                 compress_type: Optional[pulumi.Input[str]] = None,
+                 delete_tracker: Optional[pulumi.Input[bool]] = None,
                  enabled: Optional[pulumi.Input[bool]] = None,
+                 exclude_services: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  file_prefix: Optional[pulumi.Input[str]] = None,
+                 is_sort_by_service: Optional[pulumi.Input[bool]] = None,
                  kms_id: Optional[pulumi.Input[str]] = None,
                  lts_enabled: Optional[pulumi.Input[bool]] = None,
+                 organization_enabled: Optional[pulumi.Input[bool]] = None,
                  region: Optional[pulumi.Input[str]] = None,
+                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  validate_file: Optional[pulumi.Input[bool]] = None,
                  __props__=None):
         """
-        Manages CTS **system** tracker resource within HuaweiCloud.
+        Manages CTS system tracker resource within HuaweiCloud.
 
         ## Example Usage
 
@@ -359,23 +721,48 @@ class Tracker(pulumi.CustomResource):
 
         ## Import
 
-        CTS tracker can be imported using `name`, only **system** is available. e.g.
+        CTS tracker can be imported using `name`, only **system** is available. e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:Cts/tracker:Tracker tracker system
         ```
 
+         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`tags`, `delete_tracker`. It is generally recommended running `terraform plan` after importing the resource. You can then decide if changes should be applied to the instance, or the resource definition should be updated to align with the resource. Also you can ignore changes as below. hcl resource "huaweicloud_cts_tracker" "test" {
+
+         ...
+
+         lifecycle {
+
+         ignore_changes = [
+
+         tags, delete_tracker
+
+         ]
+
+         } }
+
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[str] bucket_name: Specifies the OBS bucket to which traces will be transferred.
+        :param pulumi.Input[str] compress_type: Specifies the compression type of trace files. The value can be
+               **gzip** or **json**. The default value is **gzip**.
+        :param pulumi.Input[bool] delete_tracker: Specifies whether the tracker can be deleted.
         :param pulumi.Input[bool] enabled: Specifies whether tracker is enabled.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] exclude_services: Specifies the names of the cloud services for which traces don't need to be transferred.
+               Currently, only **KMS** is supported.
         :param pulumi.Input[str] file_prefix: Specifies the file name prefix to mark trace files that need to be stored
-               in an OBS bucket. The value contains 0 to 64 characters. Only letters, numbers, hyphens (-), underscores (_),
+               in an OBS bucket. The value contains `0` to `64` characters. Only letters, numbers, hyphens (-), underscores (_),
                and periods (.) are allowed.
+        :param pulumi.Input[bool] is_sort_by_service: Specifies whether to divide the path of the trace file by cloud service.
+               The default value is **true**.
         :param pulumi.Input[str] kms_id: Specifies the ID of KMS key used for trace file encryption.
         :param pulumi.Input[bool] lts_enabled: Specifies whether trace analysis is enabled.
+        :param pulumi.Input[bool] organization_enabled: Specifies whether to apply the tracker configuration to the organization.
+               If the value is set to **true**, the audit logs of all members in the organization in the current region will be
+               transferred to the OBS bucket or LTS log stream configured for the management tracker.
         :param pulumi.Input[str] region: Specifies the region in which to manage the CTS system tracker resource.
                If omitted, the provider-level region will be used. Changing this creates a new resource.
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the CTS tracker.
         :param pulumi.Input[bool] validate_file: Specifies whether trace file verification is enabled during trace transfer.
         """
         ...
@@ -385,7 +772,7 @@ class Tracker(pulumi.CustomResource):
                  args: Optional[TrackerArgs] = None,
                  opts: Optional[pulumi.ResourceOptions] = None):
         """
-        Manages CTS **system** tracker resource within HuaweiCloud.
+        Manages CTS system tracker resource within HuaweiCloud.
 
         ## Example Usage
 
@@ -403,11 +790,25 @@ class Tracker(pulumi.CustomResource):
 
         ## Import
 
-        CTS tracker can be imported using `name`, only **system** is available. e.g.
+        CTS tracker can be imported using `name`, only **system** is available. e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:Cts/tracker:Tracker tracker system
         ```
+
+         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`tags`, `delete_tracker`. It is generally recommended running `terraform plan` after importing the resource. You can then decide if changes should be applied to the instance, or the resource definition should be updated to align with the resource. Also you can ignore changes as below. hcl resource "huaweicloud_cts_tracker" "test" {
+
+         ...
+
+         lifecycle {
+
+         ignore_changes = [
+
+         tags, delete_tracker
+
+         ]
+
+         } }
 
         :param str resource_name: The name of the resource.
         :param TrackerArgs args: The arguments to use to populate this resource's properties.
@@ -425,11 +826,17 @@ class Tracker(pulumi.CustomResource):
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
                  bucket_name: Optional[pulumi.Input[str]] = None,
+                 compress_type: Optional[pulumi.Input[str]] = None,
+                 delete_tracker: Optional[pulumi.Input[bool]] = None,
                  enabled: Optional[pulumi.Input[bool]] = None,
+                 exclude_services: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  file_prefix: Optional[pulumi.Input[str]] = None,
+                 is_sort_by_service: Optional[pulumi.Input[bool]] = None,
                  kms_id: Optional[pulumi.Input[str]] = None,
                  lts_enabled: Optional[pulumi.Input[bool]] = None,
+                 organization_enabled: Optional[pulumi.Input[bool]] = None,
                  region: Optional[pulumi.Input[str]] = None,
+                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  validate_file: Optional[pulumi.Input[bool]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
@@ -441,14 +848,29 @@ class Tracker(pulumi.CustomResource):
             __props__ = TrackerArgs.__new__(TrackerArgs)
 
             __props__.__dict__["bucket_name"] = bucket_name
+            __props__.__dict__["compress_type"] = compress_type
+            __props__.__dict__["delete_tracker"] = delete_tracker
             __props__.__dict__["enabled"] = enabled
+            __props__.__dict__["exclude_services"] = exclude_services
             __props__.__dict__["file_prefix"] = file_prefix
+            __props__.__dict__["is_sort_by_service"] = is_sort_by_service
             __props__.__dict__["kms_id"] = kms_id
             __props__.__dict__["lts_enabled"] = lts_enabled
+            __props__.__dict__["organization_enabled"] = organization_enabled
             __props__.__dict__["region"] = region
+            __props__.__dict__["tags"] = tags
             __props__.__dict__["validate_file"] = validate_file
+            __props__.__dict__["agency_name"] = None
+            __props__.__dict__["create_time"] = None
+            __props__.__dict__["detail"] = None
+            __props__.__dict__["domain_id"] = None
+            __props__.__dict__["group_id"] = None
+            __props__.__dict__["is_authorized_bucket"] = None
+            __props__.__dict__["log_group_name"] = None
+            __props__.__dict__["log_topic_name"] = None
             __props__.__dict__["name"] = None
             __props__.__dict__["status"] = None
+            __props__.__dict__["stream_id"] = None
             __props__.__dict__["transfer_enabled"] = None
             __props__.__dict__["type"] = None
         super(Tracker, __self__).__init__(
@@ -461,14 +883,29 @@ class Tracker(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
+            agency_name: Optional[pulumi.Input[str]] = None,
             bucket_name: Optional[pulumi.Input[str]] = None,
+            compress_type: Optional[pulumi.Input[str]] = None,
+            create_time: Optional[pulumi.Input[int]] = None,
+            delete_tracker: Optional[pulumi.Input[bool]] = None,
+            detail: Optional[pulumi.Input[str]] = None,
+            domain_id: Optional[pulumi.Input[str]] = None,
             enabled: Optional[pulumi.Input[bool]] = None,
+            exclude_services: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
             file_prefix: Optional[pulumi.Input[str]] = None,
+            group_id: Optional[pulumi.Input[str]] = None,
+            is_authorized_bucket: Optional[pulumi.Input[bool]] = None,
+            is_sort_by_service: Optional[pulumi.Input[bool]] = None,
             kms_id: Optional[pulumi.Input[str]] = None,
+            log_group_name: Optional[pulumi.Input[str]] = None,
+            log_topic_name: Optional[pulumi.Input[str]] = None,
             lts_enabled: Optional[pulumi.Input[bool]] = None,
             name: Optional[pulumi.Input[str]] = None,
+            organization_enabled: Optional[pulumi.Input[bool]] = None,
             region: Optional[pulumi.Input[str]] = None,
             status: Optional[pulumi.Input[str]] = None,
+            stream_id: Optional[pulumi.Input[str]] = None,
+            tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
             transfer_enabled: Optional[pulumi.Input[bool]] = None,
             type: Optional[pulumi.Input[str]] = None,
             validate_file: Optional[pulumi.Input[bool]] = None) -> 'Tracker':
@@ -479,17 +916,37 @@ class Tracker(pulumi.CustomResource):
         :param str resource_name: The unique name of the resulting resource.
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
+        :param pulumi.Input[str] agency_name: The cloud service delegation name.
         :param pulumi.Input[str] bucket_name: Specifies the OBS bucket to which traces will be transferred.
+        :param pulumi.Input[str] compress_type: Specifies the compression type of trace files. The value can be
+               **gzip** or **json**. The default value is **gzip**.
+        :param pulumi.Input[int] create_time: The creation time of the tracker.
+        :param pulumi.Input[bool] delete_tracker: Specifies whether the tracker can be deleted.
+        :param pulumi.Input[str] detail: It indicates the cause of the abnormal status.
+        :param pulumi.Input[str] domain_id: The Account ID.
         :param pulumi.Input[bool] enabled: Specifies whether tracker is enabled.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] exclude_services: Specifies the names of the cloud services for which traces don't need to be transferred.
+               Currently, only **KMS** is supported.
         :param pulumi.Input[str] file_prefix: Specifies the file name prefix to mark trace files that need to be stored
-               in an OBS bucket. The value contains 0 to 64 characters. Only letters, numbers, hyphens (-), underscores (_),
+               in an OBS bucket. The value contains `0` to `64` characters. Only letters, numbers, hyphens (-), underscores (_),
                and periods (.) are allowed.
+        :param pulumi.Input[str] group_id: The LTS log group ID.
+        :param pulumi.Input[bool] is_authorized_bucket: Whether CTS has been granted permissions to perform operations on the OBS bucket.
+        :param pulumi.Input[bool] is_sort_by_service: Specifies whether to divide the path of the trace file by cloud service.
+               The default value is **true**.
         :param pulumi.Input[str] kms_id: Specifies the ID of KMS key used for trace file encryption.
+        :param pulumi.Input[str] log_group_name: The name of the log group that CTS creates in LTS.
+        :param pulumi.Input[str] log_topic_name: The name of the log topic that CTS creates in LTS.
         :param pulumi.Input[bool] lts_enabled: Specifies whether trace analysis is enabled.
         :param pulumi.Input[str] name: The tracker name, only **system** is available.
+        :param pulumi.Input[bool] organization_enabled: Specifies whether to apply the tracker configuration to the organization.
+               If the value is set to **true**, the audit logs of all members in the organization in the current region will be
+               transferred to the OBS bucket or LTS log stream configured for the management tracker.
         :param pulumi.Input[str] region: Specifies the region in which to manage the CTS system tracker resource.
                If omitted, the provider-level region will be used. Changing this creates a new resource.
         :param pulumi.Input[str] status: The tracker status, the value can be **enabled**, **disabled** or **error**.
+        :param pulumi.Input[str] stream_id: The LTS log stream ID.
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the CTS tracker.
         :param pulumi.Input[bool] transfer_enabled: Whether traces will be transferred.
         :param pulumi.Input[str] type: The tracker type, only **system** is available.
         :param pulumi.Input[bool] validate_file: Specifies whether trace file verification is enabled during trace transfer.
@@ -498,18 +955,41 @@ class Tracker(pulumi.CustomResource):
 
         __props__ = _TrackerState.__new__(_TrackerState)
 
+        __props__.__dict__["agency_name"] = agency_name
         __props__.__dict__["bucket_name"] = bucket_name
+        __props__.__dict__["compress_type"] = compress_type
+        __props__.__dict__["create_time"] = create_time
+        __props__.__dict__["delete_tracker"] = delete_tracker
+        __props__.__dict__["detail"] = detail
+        __props__.__dict__["domain_id"] = domain_id
         __props__.__dict__["enabled"] = enabled
+        __props__.__dict__["exclude_services"] = exclude_services
         __props__.__dict__["file_prefix"] = file_prefix
+        __props__.__dict__["group_id"] = group_id
+        __props__.__dict__["is_authorized_bucket"] = is_authorized_bucket
+        __props__.__dict__["is_sort_by_service"] = is_sort_by_service
         __props__.__dict__["kms_id"] = kms_id
+        __props__.__dict__["log_group_name"] = log_group_name
+        __props__.__dict__["log_topic_name"] = log_topic_name
         __props__.__dict__["lts_enabled"] = lts_enabled
         __props__.__dict__["name"] = name
+        __props__.__dict__["organization_enabled"] = organization_enabled
         __props__.__dict__["region"] = region
         __props__.__dict__["status"] = status
+        __props__.__dict__["stream_id"] = stream_id
+        __props__.__dict__["tags"] = tags
         __props__.__dict__["transfer_enabled"] = transfer_enabled
         __props__.__dict__["type"] = type
         __props__.__dict__["validate_file"] = validate_file
         return Tracker(resource_name, opts=opts, __props__=__props__)
+
+    @property
+    @pulumi.getter(name="agencyName")
+    def agency_name(self) -> pulumi.Output[str]:
+        """
+        The cloud service delegation name.
+        """
+        return pulumi.get(self, "agency_name")
 
     @property
     @pulumi.getter(name="bucketName")
@@ -520,6 +1000,47 @@ class Tracker(pulumi.CustomResource):
         return pulumi.get(self, "bucket_name")
 
     @property
+    @pulumi.getter(name="compressType")
+    def compress_type(self) -> pulumi.Output[Optional[str]]:
+        """
+        Specifies the compression type of trace files. The value can be
+        **gzip** or **json**. The default value is **gzip**.
+        """
+        return pulumi.get(self, "compress_type")
+
+    @property
+    @pulumi.getter(name="createTime")
+    def create_time(self) -> pulumi.Output[int]:
+        """
+        The creation time of the tracker.
+        """
+        return pulumi.get(self, "create_time")
+
+    @property
+    @pulumi.getter(name="deleteTracker")
+    def delete_tracker(self) -> pulumi.Output[Optional[bool]]:
+        """
+        Specifies whether the tracker can be deleted.
+        """
+        return pulumi.get(self, "delete_tracker")
+
+    @property
+    @pulumi.getter
+    def detail(self) -> pulumi.Output[str]:
+        """
+        It indicates the cause of the abnormal status.
+        """
+        return pulumi.get(self, "detail")
+
+    @property
+    @pulumi.getter(name="domainId")
+    def domain_id(self) -> pulumi.Output[str]:
+        """
+        The Account ID.
+        """
+        return pulumi.get(self, "domain_id")
+
+    @property
     @pulumi.getter
     def enabled(self) -> pulumi.Output[Optional[bool]]:
         """
@@ -528,14 +1049,48 @@ class Tracker(pulumi.CustomResource):
         return pulumi.get(self, "enabled")
 
     @property
+    @pulumi.getter(name="excludeServices")
+    def exclude_services(self) -> pulumi.Output[Optional[Sequence[str]]]:
+        """
+        Specifies the names of the cloud services for which traces don't need to be transferred.
+        Currently, only **KMS** is supported.
+        """
+        return pulumi.get(self, "exclude_services")
+
+    @property
     @pulumi.getter(name="filePrefix")
     def file_prefix(self) -> pulumi.Output[Optional[str]]:
         """
         Specifies the file name prefix to mark trace files that need to be stored
-        in an OBS bucket. The value contains 0 to 64 characters. Only letters, numbers, hyphens (-), underscores (_),
+        in an OBS bucket. The value contains `0` to `64` characters. Only letters, numbers, hyphens (-), underscores (_),
         and periods (.) are allowed.
         """
         return pulumi.get(self, "file_prefix")
+
+    @property
+    @pulumi.getter(name="groupId")
+    def group_id(self) -> pulumi.Output[str]:
+        """
+        The LTS log group ID.
+        """
+        return pulumi.get(self, "group_id")
+
+    @property
+    @pulumi.getter(name="isAuthorizedBucket")
+    def is_authorized_bucket(self) -> pulumi.Output[bool]:
+        """
+        Whether CTS has been granted permissions to perform operations on the OBS bucket.
+        """
+        return pulumi.get(self, "is_authorized_bucket")
+
+    @property
+    @pulumi.getter(name="isSortByService")
+    def is_sort_by_service(self) -> pulumi.Output[Optional[bool]]:
+        """
+        Specifies whether to divide the path of the trace file by cloud service.
+        The default value is **true**.
+        """
+        return pulumi.get(self, "is_sort_by_service")
 
     @property
     @pulumi.getter(name="kmsId")
@@ -544,6 +1099,22 @@ class Tracker(pulumi.CustomResource):
         Specifies the ID of KMS key used for trace file encryption.
         """
         return pulumi.get(self, "kms_id")
+
+    @property
+    @pulumi.getter(name="logGroupName")
+    def log_group_name(self) -> pulumi.Output[str]:
+        """
+        The name of the log group that CTS creates in LTS.
+        """
+        return pulumi.get(self, "log_group_name")
+
+    @property
+    @pulumi.getter(name="logTopicName")
+    def log_topic_name(self) -> pulumi.Output[str]:
+        """
+        The name of the log topic that CTS creates in LTS.
+        """
+        return pulumi.get(self, "log_topic_name")
 
     @property
     @pulumi.getter(name="ltsEnabled")
@@ -562,6 +1133,16 @@ class Tracker(pulumi.CustomResource):
         return pulumi.get(self, "name")
 
     @property
+    @pulumi.getter(name="organizationEnabled")
+    def organization_enabled(self) -> pulumi.Output[bool]:
+        """
+        Specifies whether to apply the tracker configuration to the organization.
+        If the value is set to **true**, the audit logs of all members in the organization in the current region will be
+        transferred to the OBS bucket or LTS log stream configured for the management tracker.
+        """
+        return pulumi.get(self, "organization_enabled")
+
+    @property
     @pulumi.getter
     def region(self) -> pulumi.Output[str]:
         """
@@ -577,6 +1158,22 @@ class Tracker(pulumi.CustomResource):
         The tracker status, the value can be **enabled**, **disabled** or **error**.
         """
         return pulumi.get(self, "status")
+
+    @property
+    @pulumi.getter(name="streamId")
+    def stream_id(self) -> pulumi.Output[str]:
+        """
+        The LTS log stream ID.
+        """
+        return pulumi.get(self, "stream_id")
+
+    @property
+    @pulumi.getter
+    def tags(self) -> pulumi.Output[Optional[Mapping[str, str]]]:
+        """
+        Specifies the key/value pairs to associate with the CTS tracker.
+        """
+        return pulumi.get(self, "tags")
 
     @property
     @pulumi.getter(name="transferEnabled")

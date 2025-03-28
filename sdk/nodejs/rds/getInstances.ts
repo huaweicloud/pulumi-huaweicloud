@@ -42,7 +42,8 @@ export function getInstances(args?: GetInstancesArgs, opts?: pulumi.InvokeOption
  */
 export interface GetInstancesArgs {
     /**
-     * Specifies the type of the database. Valid values are: MySQL, PostgreSQL, and SQLServer.
+     * Specifies the type of the database. Valid values are **MySQL**, **PostgreSQL**,
+     * **SQLServer** and **MariaDB**.
      */
     datastoreType?: string;
     /**
@@ -63,7 +64,8 @@ export interface GetInstancesArgs {
      */
     subnetId?: string;
     /**
-     * Specifies the type of the instance. Valid values are: Single, Ha, Replica, and Enterprise.
+     * Specifies the type of the instance. Valid values are **Single**, **Ha**, **Replica**,
+     * and **Enterprise**.
      */
     type?: string;
     /**
@@ -120,7 +122,8 @@ export function getInstancesOutput(args?: GetInstancesOutputArgs, opts?: pulumi.
  */
 export interface GetInstancesOutputArgs {
     /**
-     * Specifies the type of the database. Valid values are: MySQL, PostgreSQL, and SQLServer.
+     * Specifies the type of the database. Valid values are **MySQL**, **PostgreSQL**,
+     * **SQLServer** and **MariaDB**.
      */
     datastoreType?: pulumi.Input<string>;
     /**
@@ -141,7 +144,8 @@ export interface GetInstancesOutputArgs {
      */
     subnetId?: pulumi.Input<string>;
     /**
-     * Specifies the type of the instance. Valid values are: Single, Ha, Replica, and Enterprise.
+     * Specifies the type of the instance. Valid values are **Single**, **Ha**, **Replica**,
+     * and **Enterprise**.
      */
     type?: pulumi.Input<string>;
     /**

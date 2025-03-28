@@ -82,15 +82,91 @@ import * as utilities from "../utilities";
  *
  *   > You need to remove all nodes in the node pool on the console, before deleting a prepaid node pool.
  *
- * ## Import
+ * ## Node pool with extension scale groups
  *
- * CCE node pool can be imported using the cluster ID and node pool ID separated by a slash, e.g.
+ * ```typescript
+ * import * as pulumi from "@pulumi/pulumi";
+ * import * as pulumi from "@huaweicloudos/pulumi";
  *
- * ```sh
- *  $ pulumi import huaweicloud:Cce/nodePool:NodePool my_node_pool 5c20fdad-7288-11eb-b817-0255ac10158b/e9287dff-7288-11eb-b817-0255ac10158b
+ * const config = new pulumi.Config();
+ * const clusterId = config.requireObject("clusterId");
+ * const keyPair = config.requireObject("keyPair");
+ * const availabilityZone1 = config.requireObject("availabilityZone1");
+ * const availabilityZone2 = config.requireObject("availabilityZone2");
+ * const nodePool = new huaweicloud.cce.NodePool("nodePool", {
+ *     clusterId: clusterId,
+ *     os: "EulerOS 2.5",
+ *     initialNodeCount: 2,
+ *     flavorId: "s3.large.4",
+ *     availabilityZone: availabilityZone1,
+ *     keyPair: _var.keypair,
+ *     scallEnable: true,
+ *     minNodeCount: 1,
+ *     maxNodeCount: 10,
+ *     scaleDownCooldownTime: 100,
+ *     priority: 1,
+ *     type: "vm",
+ *     rootVolume: {
+ *         size: 40,
+ *         volumetype: "SAS",
+ *     },
+ *     dataVolumes: [{
+ *         size: 100,
+ *         volumetype: "SAS",
+ *     }],
+ *     extensionScaleGroups: [
+ *         {
+ *             metadata: {
+ *                 name: "group1",
+ *             },
+ *             spec: {
+ *                 flavor: "s3.large.4",
+ *                 az: availabilityZone1,
+ *                 autoscaling: {
+ *                     extensionPriority: 1,
+ *                     enable: true,
+ *                 },
+ *             },
+ *         },
+ *         {
+ *             metadata: {
+ *                 name: "group2",
+ *             },
+ *             spec: {
+ *                 flavor: "s3.xlarge.4",
+ *                 az: availabilityZone1,
+ *                 autoscaling: {
+ *                     extensionPriority: 1,
+ *                     enable: true,
+ *                 },
+ *             },
+ *         },
+ *         {
+ *             metadata: {
+ *                 name: "group3",
+ *             },
+ *             spec: {
+ *                 flavor: "s3.xlarge.4",
+ *                 az: availabilityZone2,
+ *                 autoscaling: {
+ *                     extensionPriority: 1,
+ *                     enable: true,
+ *                 },
+ *             },
+ *         },
+ *     ],
+ * });
  * ```
  *
- *  Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`password`, `subnet_id`, `preinstall`, `posteinstall`, `taints`, `initial_node_count` and `pod_security_groups`. It is generally recommended running `terraform plan` after importing a node pool. You can then decide if changes should be applied to the node pool, or the resource definition should be updated to align with the node pool. Also you can ignore changes as below. resource "huaweicloud_cce_node_pool" "my_node_pool" {
+ * ## Import
+ *
+ * CCE node pool can be imported using the cluster ID and node pool ID separated by a slash, e.g. bash
+ *
+ * ```sh
+ *  $ pulumi import huaweicloud:Cce/nodePool:NodePool my_node_pool <cluster_id>/<id>
+ * ```
+ *
+ *  Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`password`, `extend_params`, `taints`, `initial_node_count`, `pod_security_groups` and `extension_scale_groups`. It is generally recommended running `terraform plan` after importing a node pool. You can then decide if changes should be applied to the node pool, or the resource definition should be updated to align with the node pool. Also you can ignore changes as below. hcl resource "huaweicloud_cce_node_pool" "my_node_pool" {
  *
  *  ...
  *
@@ -98,7 +174,7 @@ import * as utilities from "../utilities";
  *
  *  ignore_changes = [
  *
- *  password, subnet_id,
+ *  password, extend_params,
  *
  *  ]
  *
@@ -171,36 +247,63 @@ export class NodePool extends pulumi.CustomResource {
      */
     public readonly ecsGroupId!: pulumi.Output<string | undefined>;
     /**
-     * Specifies the extended parameter.
-     * Changing this parameter will create a new resource.
-     * The available keys are as follows:
-     * + **agency_name**: The agency name to provide temporary credentials for CCE node to access other cloud services.
-     * + **alpha.cce/NodeImageID**: The custom image ID used to create the BMS nodes.
-     * + **dockerBaseSize**: The available disk space of a single docker container on the node in device mapper mode.
-     * + **DockerLVMConfigOverride**: Specifies the data disk configurations of Docker.
+     * Specifies the enterprise project ID of the node pool.
+     * If updated, the new value will apply only to new nodes.
      */
-    public readonly extendParam!: pulumi.Output<{[key: string]: string}>;
+    public readonly enterpriseProjectId!: pulumi.Output<string>;
+    /**
+     * schema: Deprecated; This parameter has been replaced by the 'extend_params' parameter.
+     */
+    public readonly extendParam!: pulumi.Output<{[key: string]: string} | undefined>;
+    /**
+     * Specifies the disk expansion parameters.
+     * Changing this parameter will create a new resource.
+     */
+    public readonly extendParams!: pulumi.Output<outputs.Cce.NodePoolExtendParams | undefined>;
+    /**
+     * Specifies the configurations of extended scaling groups in the node pool.
+     * The object structure is documented below.
+     */
+    public readonly extensionScaleGroups!: pulumi.Output<outputs.Cce.NodePoolExtensionScaleGroup[] | undefined>;
     /**
      * Specifies the flavor ID. Changing this parameter will create a new
      * resource.
      */
     public readonly flavorId!: pulumi.Output<string>;
     /**
+     * Specifies the hostname config of the kubernetes node,
+     * which is supported by clusters of v1.23.6-r0 to v1.25 or clusters of v1.25.2-r0 or later versions.
+     * The object structure is documented below.
+     * Changing this parameter will create a new resource.
+     */
+    public readonly hostnameConfig!: pulumi.Output<outputs.Cce.NodePoolHostnameConfig>;
+    /**
      * Specifies the initial number of expected nodes in the node pool.
      * This parameter can be also used to manually scale the node count afterwards.
      */
     public readonly initialNodeCount!: pulumi.Output<number>;
+    /**
+     * Specifies the custom initialization flags.
+     */
+    public readonly initializedConditions!: pulumi.Output<string[]>;
     /**
      * Specifies the key pair name when logging in to select the key pair mode.
      * This parameter and `password` are alternative. Changing this parameter will create a new resource.
      */
     public readonly keyPair!: pulumi.Output<string | undefined>;
     /**
+     * Specifies the label policy on existing nodes.
+     * The value can be **ignore** and **refresh**, defaults to **refresh**.
+     */
+    public readonly labelPolicyOnExistingNodes!: pulumi.Output<string>;
+    /**
      * Specifies the tags of a Kubernetes node, key/value pair format.
      */
     public readonly labels!: pulumi.Output<{[key: string]: string} | undefined>;
     /**
-     * Specifies the maximum number of nodes allowed if auto scaling is enabled.
+     * Specifies the maximum number of nodes that can be retained in the scaling group
+     * during auto scaling. The value must be greater than or equal to that of `minNodeCount`, and can neither be greater
+     * than the maximum number of nodes allowed by the cluster nor the maximum number of nodes in the node pool.
      */
     public readonly maxNodeCount!: pulumi.Output<number | undefined>;
     /**
@@ -209,21 +312,27 @@ export class NodePool extends pulumi.CustomResource {
      */
     public readonly maxPods!: pulumi.Output<number>;
     /**
-     * Specifies the minimum number of nodes allowed if auto scaling is enabled.
+     * Specifies the minimum number of nodes in the scaling group during auto scaling.
+     * The value must be greater than **0**.
      */
     public readonly minNodeCount!: pulumi.Output<number | undefined>;
     /**
-     * Specifies the virtual space name. Currently, only **kubernetes**, **runtime**,
-     * and **user** are supported. Changing this parameter will create a new resource.
+     * Specifies the name of an extended scaling group.
+     * The value cannot be default and can contain a maximum of 55 characters.
+     * Only digits, lowercase letters, and hyphens (-) are allowed.
      */
     public readonly name!: pulumi.Output<string>;
     /**
      * Specifies the operating system of the node.
-     * Changing this parameter will create a new resource.
+     * The value can be **EulerOS 2.9** and **CentOS 7.6** e.g. For more details,
+     * please see [documentation](https://support.huaweicloud.com/intl/en-us/api-cce/node-os.html).
+     * This parameter is required when the `nodeImageId` in `extendParams` is not specified.
      */
     public readonly os!: pulumi.Output<string>;
     /**
      * Specifies the root password when logging in to select the password mode.
+     * The password consists of 8 to 26 characters and must contain at least three of following: uppercase letters,
+     * lowercase letters, digits, special characters(!@$%^-_=+[{}]:,./?~#*).
      * This parameter can be plain or salted and is alternative to `keyPair`.
      * Changing this parameter will create a new resource.
      */
@@ -298,26 +407,48 @@ export class NodePool extends pulumi.CustomResource {
     /**
      * Specifies the disk initialization management parameter.
      * If omitted, disks are managed based on the DockerLVMConfigOverride parameter in extendParam.
-     * This parameter is supported for clusters of v1.15.11 and later. Changing this parameter will create a new resource.
-     */
-    public readonly storage!: pulumi.Output<outputs.Cce.NodePoolStorage>;
-    /**
-     * Specifies the ID of the subnet to which the NIC belongs.
+     * This parameter is supported for clusters of v1.15.11 and later.
+     * If the node has both local and EVS disks attached,
+     * this parameter must be specified, or it may result in unexpected disk partitions.
+     * If you want to change the value range of a data disk to **20** to **32768**, this parameter must be specified.
+     * If you want to use the shared disk space (with the runtime and Kubernetes partitions cancelled),
+     * this parameter must be specified.
+     * If you want to store system components in the system disk, this parameter must be specified.
      * Changing this parameter will create a new resource.
      */
-    public readonly subnetId!: pulumi.Output<string | undefined>;
+    public readonly storage!: pulumi.Output<outputs.Cce.NodePoolStorage | undefined>;
+    /**
+     * Specifies the ID of the subnet to which the NIC belongs.
+     */
+    public readonly subnetId!: pulumi.Output<string>;
+    /**
+     * Specifies the ID list of the subnet to which the NIC belongs.
+     */
+    public readonly subnetLists!: pulumi.Output<string[] | undefined>;
+    /**
+     * Specifies the tag policy on existing nodes.
+     * The value can be **ignore** and **refresh**, defaults to **ignore**.
+     */
+    public readonly tagPolicyOnExistingNodes!: pulumi.Output<string>;
     /**
      * Specifies the tags of a VM node, key/value pair format.
      */
     public readonly tags!: pulumi.Output<{[key: string]: string} | undefined>;
+    /**
+     * Specifies the taint policy on existing nodes.
+     * The value can be **ignore** and **refresh**, defaults to **refresh**.
+     */
+    public readonly taintPolicyOnExistingNodes!: pulumi.Output<string>;
     /**
      * Specifies the taints configuration of the nodes to set anti-affinity.
      * The structure is described below.
      */
     public readonly taints!: pulumi.Output<outputs.Cce.NodePoolTaint[] | undefined>;
     /**
-     * Specifies the storage type. Currently, only **evs (EVS volumes)** is supported.
-     * The default value is **evs**. Changing this parameter will create a new resource.
+     * Specifies the hostname type of the kubernetes node.
+     * The value can be:
+     * + **privateIp**: The Kubernetes node is named after its IP address.
+     * + **cceNodeName**: The Kubernetes node is named after the CCE node.
      */
     public readonly type!: pulumi.Output<string>;
 
@@ -342,10 +473,16 @@ export class NodePool extends pulumi.CustomResource {
             resourceInputs["currentNodeCount"] = state ? state.currentNodeCount : undefined;
             resourceInputs["dataVolumes"] = state ? state.dataVolumes : undefined;
             resourceInputs["ecsGroupId"] = state ? state.ecsGroupId : undefined;
+            resourceInputs["enterpriseProjectId"] = state ? state.enterpriseProjectId : undefined;
             resourceInputs["extendParam"] = state ? state.extendParam : undefined;
+            resourceInputs["extendParams"] = state ? state.extendParams : undefined;
+            resourceInputs["extensionScaleGroups"] = state ? state.extensionScaleGroups : undefined;
             resourceInputs["flavorId"] = state ? state.flavorId : undefined;
+            resourceInputs["hostnameConfig"] = state ? state.hostnameConfig : undefined;
             resourceInputs["initialNodeCount"] = state ? state.initialNodeCount : undefined;
+            resourceInputs["initializedConditions"] = state ? state.initializedConditions : undefined;
             resourceInputs["keyPair"] = state ? state.keyPair : undefined;
+            resourceInputs["labelPolicyOnExistingNodes"] = state ? state.labelPolicyOnExistingNodes : undefined;
             resourceInputs["labels"] = state ? state.labels : undefined;
             resourceInputs["maxNodeCount"] = state ? state.maxNodeCount : undefined;
             resourceInputs["maxPods"] = state ? state.maxPods : undefined;
@@ -368,16 +505,16 @@ export class NodePool extends pulumi.CustomResource {
             resourceInputs["status"] = state ? state.status : undefined;
             resourceInputs["storage"] = state ? state.storage : undefined;
             resourceInputs["subnetId"] = state ? state.subnetId : undefined;
+            resourceInputs["subnetLists"] = state ? state.subnetLists : undefined;
+            resourceInputs["tagPolicyOnExistingNodes"] = state ? state.tagPolicyOnExistingNodes : undefined;
             resourceInputs["tags"] = state ? state.tags : undefined;
+            resourceInputs["taintPolicyOnExistingNodes"] = state ? state.taintPolicyOnExistingNodes : undefined;
             resourceInputs["taints"] = state ? state.taints : undefined;
             resourceInputs["type"] = state ? state.type : undefined;
         } else {
             const args = argsOrState as NodePoolArgs | undefined;
             if ((!args || args.clusterId === undefined) && !opts.urn) {
                 throw new Error("Missing required property 'clusterId'");
-            }
-            if ((!args || args.dataVolumes === undefined) && !opts.urn) {
-                throw new Error("Missing required property 'dataVolumes'");
             }
             if ((!args || args.flavorId === undefined) && !opts.urn) {
                 throw new Error("Missing required property 'flavorId'");
@@ -394,10 +531,16 @@ export class NodePool extends pulumi.CustomResource {
             resourceInputs["clusterId"] = args ? args.clusterId : undefined;
             resourceInputs["dataVolumes"] = args ? args.dataVolumes : undefined;
             resourceInputs["ecsGroupId"] = args ? args.ecsGroupId : undefined;
+            resourceInputs["enterpriseProjectId"] = args ? args.enterpriseProjectId : undefined;
             resourceInputs["extendParam"] = args ? args.extendParam : undefined;
+            resourceInputs["extendParams"] = args ? args.extendParams : undefined;
+            resourceInputs["extensionScaleGroups"] = args ? args.extensionScaleGroups : undefined;
             resourceInputs["flavorId"] = args ? args.flavorId : undefined;
+            resourceInputs["hostnameConfig"] = args ? args.hostnameConfig : undefined;
             resourceInputs["initialNodeCount"] = args ? args.initialNodeCount : undefined;
+            resourceInputs["initializedConditions"] = args ? args.initializedConditions : undefined;
             resourceInputs["keyPair"] = args ? args.keyPair : undefined;
+            resourceInputs["labelPolicyOnExistingNodes"] = args ? args.labelPolicyOnExistingNodes : undefined;
             resourceInputs["labels"] = args ? args.labels : undefined;
             resourceInputs["maxNodeCount"] = args ? args.maxNodeCount : undefined;
             resourceInputs["maxPods"] = args ? args.maxPods : undefined;
@@ -419,7 +562,10 @@ export class NodePool extends pulumi.CustomResource {
             resourceInputs["securityGroups"] = args ? args.securityGroups : undefined;
             resourceInputs["storage"] = args ? args.storage : undefined;
             resourceInputs["subnetId"] = args ? args.subnetId : undefined;
+            resourceInputs["subnetLists"] = args ? args.subnetLists : undefined;
+            resourceInputs["tagPolicyOnExistingNodes"] = args ? args.tagPolicyOnExistingNodes : undefined;
             resourceInputs["tags"] = args ? args.tags : undefined;
+            resourceInputs["taintPolicyOnExistingNodes"] = args ? args.taintPolicyOnExistingNodes : undefined;
             resourceInputs["taints"] = args ? args.taints : undefined;
             resourceInputs["type"] = args ? args.type : undefined;
             resourceInputs["billingMode"] = undefined /*out*/;
@@ -474,36 +620,63 @@ export interface NodePoolState {
      */
     ecsGroupId?: pulumi.Input<string>;
     /**
-     * Specifies the extended parameter.
-     * Changing this parameter will create a new resource.
-     * The available keys are as follows:
-     * + **agency_name**: The agency name to provide temporary credentials for CCE node to access other cloud services.
-     * + **alpha.cce/NodeImageID**: The custom image ID used to create the BMS nodes.
-     * + **dockerBaseSize**: The available disk space of a single docker container on the node in device mapper mode.
-     * + **DockerLVMConfigOverride**: Specifies the data disk configurations of Docker.
+     * Specifies the enterprise project ID of the node pool.
+     * If updated, the new value will apply only to new nodes.
+     */
+    enterpriseProjectId?: pulumi.Input<string>;
+    /**
+     * schema: Deprecated; This parameter has been replaced by the 'extend_params' parameter.
      */
     extendParam?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
+    /**
+     * Specifies the disk expansion parameters.
+     * Changing this parameter will create a new resource.
+     */
+    extendParams?: pulumi.Input<inputs.Cce.NodePoolExtendParams>;
+    /**
+     * Specifies the configurations of extended scaling groups in the node pool.
+     * The object structure is documented below.
+     */
+    extensionScaleGroups?: pulumi.Input<pulumi.Input<inputs.Cce.NodePoolExtensionScaleGroup>[]>;
     /**
      * Specifies the flavor ID. Changing this parameter will create a new
      * resource.
      */
     flavorId?: pulumi.Input<string>;
     /**
+     * Specifies the hostname config of the kubernetes node,
+     * which is supported by clusters of v1.23.6-r0 to v1.25 or clusters of v1.25.2-r0 or later versions.
+     * The object structure is documented below.
+     * Changing this parameter will create a new resource.
+     */
+    hostnameConfig?: pulumi.Input<inputs.Cce.NodePoolHostnameConfig>;
+    /**
      * Specifies the initial number of expected nodes in the node pool.
      * This parameter can be also used to manually scale the node count afterwards.
      */
     initialNodeCount?: pulumi.Input<number>;
+    /**
+     * Specifies the custom initialization flags.
+     */
+    initializedConditions?: pulumi.Input<pulumi.Input<string>[]>;
     /**
      * Specifies the key pair name when logging in to select the key pair mode.
      * This parameter and `password` are alternative. Changing this parameter will create a new resource.
      */
     keyPair?: pulumi.Input<string>;
     /**
+     * Specifies the label policy on existing nodes.
+     * The value can be **ignore** and **refresh**, defaults to **refresh**.
+     */
+    labelPolicyOnExistingNodes?: pulumi.Input<string>;
+    /**
      * Specifies the tags of a Kubernetes node, key/value pair format.
      */
     labels?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
     /**
-     * Specifies the maximum number of nodes allowed if auto scaling is enabled.
+     * Specifies the maximum number of nodes that can be retained in the scaling group
+     * during auto scaling. The value must be greater than or equal to that of `minNodeCount`, and can neither be greater
+     * than the maximum number of nodes allowed by the cluster nor the maximum number of nodes in the node pool.
      */
     maxNodeCount?: pulumi.Input<number>;
     /**
@@ -512,21 +685,27 @@ export interface NodePoolState {
      */
     maxPods?: pulumi.Input<number>;
     /**
-     * Specifies the minimum number of nodes allowed if auto scaling is enabled.
+     * Specifies the minimum number of nodes in the scaling group during auto scaling.
+     * The value must be greater than **0**.
      */
     minNodeCount?: pulumi.Input<number>;
     /**
-     * Specifies the virtual space name. Currently, only **kubernetes**, **runtime**,
-     * and **user** are supported. Changing this parameter will create a new resource.
+     * Specifies the name of an extended scaling group.
+     * The value cannot be default and can contain a maximum of 55 characters.
+     * Only digits, lowercase letters, and hyphens (-) are allowed.
      */
     name?: pulumi.Input<string>;
     /**
      * Specifies the operating system of the node.
-     * Changing this parameter will create a new resource.
+     * The value can be **EulerOS 2.9** and **CentOS 7.6** e.g. For more details,
+     * please see [documentation](https://support.huaweicloud.com/intl/en-us/api-cce/node-os.html).
+     * This parameter is required when the `nodeImageId` in `extendParams` is not specified.
      */
     os?: pulumi.Input<string>;
     /**
      * Specifies the root password when logging in to select the password mode.
+     * The password consists of 8 to 26 characters and must contain at least three of following: uppercase letters,
+     * lowercase letters, digits, special characters(!@$%^-_=+[{}]:,./?~#*).
      * This parameter can be plain or salted and is alternative to `keyPair`.
      * Changing this parameter will create a new resource.
      */
@@ -601,26 +780,48 @@ export interface NodePoolState {
     /**
      * Specifies the disk initialization management parameter.
      * If omitted, disks are managed based on the DockerLVMConfigOverride parameter in extendParam.
-     * This parameter is supported for clusters of v1.15.11 and later. Changing this parameter will create a new resource.
+     * This parameter is supported for clusters of v1.15.11 and later.
+     * If the node has both local and EVS disks attached,
+     * this parameter must be specified, or it may result in unexpected disk partitions.
+     * If you want to change the value range of a data disk to **20** to **32768**, this parameter must be specified.
+     * If you want to use the shared disk space (with the runtime and Kubernetes partitions cancelled),
+     * this parameter must be specified.
+     * If you want to store system components in the system disk, this parameter must be specified.
+     * Changing this parameter will create a new resource.
      */
     storage?: pulumi.Input<inputs.Cce.NodePoolStorage>;
     /**
      * Specifies the ID of the subnet to which the NIC belongs.
-     * Changing this parameter will create a new resource.
      */
     subnetId?: pulumi.Input<string>;
+    /**
+     * Specifies the ID list of the subnet to which the NIC belongs.
+     */
+    subnetLists?: pulumi.Input<pulumi.Input<string>[]>;
+    /**
+     * Specifies the tag policy on existing nodes.
+     * The value can be **ignore** and **refresh**, defaults to **ignore**.
+     */
+    tagPolicyOnExistingNodes?: pulumi.Input<string>;
     /**
      * Specifies the tags of a VM node, key/value pair format.
      */
     tags?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
+    /**
+     * Specifies the taint policy on existing nodes.
+     * The value can be **ignore** and **refresh**, defaults to **refresh**.
+     */
+    taintPolicyOnExistingNodes?: pulumi.Input<string>;
     /**
      * Specifies the taints configuration of the nodes to set anti-affinity.
      * The structure is described below.
      */
     taints?: pulumi.Input<pulumi.Input<inputs.Cce.NodePoolTaint>[]>;
     /**
-     * Specifies the storage type. Currently, only **evs (EVS volumes)** is supported.
-     * The default value is **evs**. Changing this parameter will create a new resource.
+     * Specifies the hostname type of the kubernetes node.
+     * The value can be:
+     * + **privateIp**: The Kubernetes node is named after its IP address.
+     * + **cceNodeName**: The Kubernetes node is named after the CCE node.
      */
     type?: pulumi.Input<string>;
 }
@@ -653,43 +854,70 @@ export interface NodePoolArgs {
      * Specifies the configuration of the data disks.
      * The structure is described below. Changing this parameter will create a new resource.
      */
-    dataVolumes: pulumi.Input<pulumi.Input<inputs.Cce.NodePoolDataVolume>[]>;
+    dataVolumes?: pulumi.Input<pulumi.Input<inputs.Cce.NodePoolDataVolume>[]>;
     /**
      * Specifies the ECS group ID. If specified, the node will be created under
      * the cloud server group. Changing this parameter will create a new resource.
      */
     ecsGroupId?: pulumi.Input<string>;
     /**
-     * Specifies the extended parameter.
-     * Changing this parameter will create a new resource.
-     * The available keys are as follows:
-     * + **agency_name**: The agency name to provide temporary credentials for CCE node to access other cloud services.
-     * + **alpha.cce/NodeImageID**: The custom image ID used to create the BMS nodes.
-     * + **dockerBaseSize**: The available disk space of a single docker container on the node in device mapper mode.
-     * + **DockerLVMConfigOverride**: Specifies the data disk configurations of Docker.
+     * Specifies the enterprise project ID of the node pool.
+     * If updated, the new value will apply only to new nodes.
+     */
+    enterpriseProjectId?: pulumi.Input<string>;
+    /**
+     * schema: Deprecated; This parameter has been replaced by the 'extend_params' parameter.
      */
     extendParam?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
+    /**
+     * Specifies the disk expansion parameters.
+     * Changing this parameter will create a new resource.
+     */
+    extendParams?: pulumi.Input<inputs.Cce.NodePoolExtendParams>;
+    /**
+     * Specifies the configurations of extended scaling groups in the node pool.
+     * The object structure is documented below.
+     */
+    extensionScaleGroups?: pulumi.Input<pulumi.Input<inputs.Cce.NodePoolExtensionScaleGroup>[]>;
     /**
      * Specifies the flavor ID. Changing this parameter will create a new
      * resource.
      */
     flavorId: pulumi.Input<string>;
     /**
+     * Specifies the hostname config of the kubernetes node,
+     * which is supported by clusters of v1.23.6-r0 to v1.25 or clusters of v1.25.2-r0 or later versions.
+     * The object structure is documented below.
+     * Changing this parameter will create a new resource.
+     */
+    hostnameConfig?: pulumi.Input<inputs.Cce.NodePoolHostnameConfig>;
+    /**
      * Specifies the initial number of expected nodes in the node pool.
      * This parameter can be also used to manually scale the node count afterwards.
      */
     initialNodeCount: pulumi.Input<number>;
+    /**
+     * Specifies the custom initialization flags.
+     */
+    initializedConditions?: pulumi.Input<pulumi.Input<string>[]>;
     /**
      * Specifies the key pair name when logging in to select the key pair mode.
      * This parameter and `password` are alternative. Changing this parameter will create a new resource.
      */
     keyPair?: pulumi.Input<string>;
     /**
+     * Specifies the label policy on existing nodes.
+     * The value can be **ignore** and **refresh**, defaults to **refresh**.
+     */
+    labelPolicyOnExistingNodes?: pulumi.Input<string>;
+    /**
      * Specifies the tags of a Kubernetes node, key/value pair format.
      */
     labels?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
     /**
-     * Specifies the maximum number of nodes allowed if auto scaling is enabled.
+     * Specifies the maximum number of nodes that can be retained in the scaling group
+     * during auto scaling. The value must be greater than or equal to that of `minNodeCount`, and can neither be greater
+     * than the maximum number of nodes allowed by the cluster nor the maximum number of nodes in the node pool.
      */
     maxNodeCount?: pulumi.Input<number>;
     /**
@@ -698,21 +926,27 @@ export interface NodePoolArgs {
      */
     maxPods?: pulumi.Input<number>;
     /**
-     * Specifies the minimum number of nodes allowed if auto scaling is enabled.
+     * Specifies the minimum number of nodes in the scaling group during auto scaling.
+     * The value must be greater than **0**.
      */
     minNodeCount?: pulumi.Input<number>;
     /**
-     * Specifies the virtual space name. Currently, only **kubernetes**, **runtime**,
-     * and **user** are supported. Changing this parameter will create a new resource.
+     * Specifies the name of an extended scaling group.
+     * The value cannot be default and can contain a maximum of 55 characters.
+     * Only digits, lowercase letters, and hyphens (-) are allowed.
      */
     name?: pulumi.Input<string>;
     /**
      * Specifies the operating system of the node.
-     * Changing this parameter will create a new resource.
+     * The value can be **EulerOS 2.9** and **CentOS 7.6** e.g. For more details,
+     * please see [documentation](https://support.huaweicloud.com/intl/en-us/api-cce/node-os.html).
+     * This parameter is required when the `nodeImageId` in `extendParams` is not specified.
      */
     os?: pulumi.Input<string>;
     /**
      * Specifies the root password when logging in to select the password mode.
+     * The password consists of 8 to 26 characters and must contain at least three of following: uppercase letters,
+     * lowercase letters, digits, special characters(!@$%^-_=+[{}]:,./?~#*).
      * This parameter can be plain or salted and is alternative to `keyPair`.
      * Changing this parameter will create a new resource.
      */
@@ -783,26 +1017,48 @@ export interface NodePoolArgs {
     /**
      * Specifies the disk initialization management parameter.
      * If omitted, disks are managed based on the DockerLVMConfigOverride parameter in extendParam.
-     * This parameter is supported for clusters of v1.15.11 and later. Changing this parameter will create a new resource.
+     * This parameter is supported for clusters of v1.15.11 and later.
+     * If the node has both local and EVS disks attached,
+     * this parameter must be specified, or it may result in unexpected disk partitions.
+     * If you want to change the value range of a data disk to **20** to **32768**, this parameter must be specified.
+     * If you want to use the shared disk space (with the runtime and Kubernetes partitions cancelled),
+     * this parameter must be specified.
+     * If you want to store system components in the system disk, this parameter must be specified.
+     * Changing this parameter will create a new resource.
      */
     storage?: pulumi.Input<inputs.Cce.NodePoolStorage>;
     /**
      * Specifies the ID of the subnet to which the NIC belongs.
-     * Changing this parameter will create a new resource.
      */
     subnetId?: pulumi.Input<string>;
+    /**
+     * Specifies the ID list of the subnet to which the NIC belongs.
+     */
+    subnetLists?: pulumi.Input<pulumi.Input<string>[]>;
+    /**
+     * Specifies the tag policy on existing nodes.
+     * The value can be **ignore** and **refresh**, defaults to **ignore**.
+     */
+    tagPolicyOnExistingNodes?: pulumi.Input<string>;
     /**
      * Specifies the tags of a VM node, key/value pair format.
      */
     tags?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
+    /**
+     * Specifies the taint policy on existing nodes.
+     * The value can be **ignore** and **refresh**, defaults to **refresh**.
+     */
+    taintPolicyOnExistingNodes?: pulumi.Input<string>;
     /**
      * Specifies the taints configuration of the nodes to set anti-affinity.
      * The structure is described below.
      */
     taints?: pulumi.Input<pulumi.Input<inputs.Cce.NodePoolTaint>[]>;
     /**
-     * Specifies the storage type. Currently, only **evs (EVS volumes)** is supported.
-     * The default value is **evs**. Changing this parameter will create a new resource.
+     * Specifies the hostname type of the kubernetes node.
+     * The value can be:
+     * + **privateIp**: The Kubernetes node is named after its IP address.
+     * + **cceNodeName**: The Kubernetes node is named after the CCE node.
      */
     type?: pulumi.Input<string>;
 }

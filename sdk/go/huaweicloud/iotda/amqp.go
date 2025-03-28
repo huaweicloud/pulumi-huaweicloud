@@ -10,7 +10,15 @@ import (
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
-// Manages an IoTDA AMQP queue within HuaweiCloud.
+// Manages an IoTDA AMQP queue resource within HuaweiCloud.
+//
+// > When accessing an IoTDA **standard** or **enterprise** edition instance, you need to specify the IoTDA service
+//
+//	endpoint in `provider` block.
+//	You can login to the IoTDA console, choose the instance **Overview** and click **Access Details**
+//	to view the HTTPS application access address. An example of the access address might be
+//	**9bc34xxxxx.st1.iotda-app.ap-southeast-1.myhuaweicloud.com**, then you need to configure the
+//	`provider` block as follows:
 //
 // ## Example Usage
 //
@@ -21,12 +29,15 @@ import (
 //
 //	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud/IoTDA"
 //	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi/config"
 //
 // )
 //
 //	func main() {
 //		pulumi.Run(func(ctx *pulumi.Context) error {
-//			_, err := IoTDA.NewAmqp(ctx, "queue", nil)
+//			cfg := config.New(ctx, "")
+//			queueName := cfg.RequireObject("queueName")
+//			_, err := IoTDA.NewAmqp(ctx, "test", nil)
 //			if err != nil {
 //				return err
 //			}
@@ -38,23 +49,29 @@ import (
 //
 // ## Import
 //
-// AMQP queues can be imported using the `id`, e.g.
+// The AMQP queue can be imported using the `id`, e.g. bash
 //
 // ```sh
 //
-//	$ pulumi import huaweicloud:IoTDA/amqp:Amqp test 10022532f4f94f26b01daa1e424853e1
+//	$ pulumi import huaweicloud:IoTDA/amqp:Amqp test <id>
 //
 // ```
 type Amqp struct {
 	pulumi.CustomResourceState
 
-	// Specifies the AMQP queue name, which contains 8 to 128 characters.
+	// The creation time of the AMQP queue.
+	// The format is **yyyyMMdd'T'HHmmss'Z'**. e.g. **20151212T121212Z**.
+	CreatedAt pulumi.StringOutput `pulumi:"createdAt"`
+	// Specifies the AMQP queue name, which contains `8` to `128` characters.
 	// Only letters, digits, hyphens (-), underscores (_), dots (.) and colons (:) are allowed.
 	// Changing this parameter will create a new resource.
 	Name pulumi.StringOutput `pulumi:"name"`
 	// Specifies the region in which to create the IoTDA AMQP queue resource.
 	// If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
 	Region pulumi.StringOutput `pulumi:"region"`
+	// The latest update time of the AMQP queue.
+	// The format is **yyyyMMdd'T'HHmmss'Z'**. e.g. **20151212T121212Z**.
+	UpdatedAt pulumi.StringOutput `pulumi:"updatedAt"`
 }
 
 // NewAmqp registers a new resource with the given unique name, arguments, and options.
@@ -87,23 +104,35 @@ func GetAmqp(ctx *pulumi.Context,
 
 // Input properties used for looking up and filtering Amqp resources.
 type amqpState struct {
-	// Specifies the AMQP queue name, which contains 8 to 128 characters.
+	// The creation time of the AMQP queue.
+	// The format is **yyyyMMdd'T'HHmmss'Z'**. e.g. **20151212T121212Z**.
+	CreatedAt *string `pulumi:"createdAt"`
+	// Specifies the AMQP queue name, which contains `8` to `128` characters.
 	// Only letters, digits, hyphens (-), underscores (_), dots (.) and colons (:) are allowed.
 	// Changing this parameter will create a new resource.
 	Name *string `pulumi:"name"`
 	// Specifies the region in which to create the IoTDA AMQP queue resource.
 	// If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
 	Region *string `pulumi:"region"`
+	// The latest update time of the AMQP queue.
+	// The format is **yyyyMMdd'T'HHmmss'Z'**. e.g. **20151212T121212Z**.
+	UpdatedAt *string `pulumi:"updatedAt"`
 }
 
 type AmqpState struct {
-	// Specifies the AMQP queue name, which contains 8 to 128 characters.
+	// The creation time of the AMQP queue.
+	// The format is **yyyyMMdd'T'HHmmss'Z'**. e.g. **20151212T121212Z**.
+	CreatedAt pulumi.StringPtrInput
+	// Specifies the AMQP queue name, which contains `8` to `128` characters.
 	// Only letters, digits, hyphens (-), underscores (_), dots (.) and colons (:) are allowed.
 	// Changing this parameter will create a new resource.
 	Name pulumi.StringPtrInput
 	// Specifies the region in which to create the IoTDA AMQP queue resource.
 	// If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
 	Region pulumi.StringPtrInput
+	// The latest update time of the AMQP queue.
+	// The format is **yyyyMMdd'T'HHmmss'Z'**. e.g. **20151212T121212Z**.
+	UpdatedAt pulumi.StringPtrInput
 }
 
 func (AmqpState) ElementType() reflect.Type {
@@ -111,7 +140,7 @@ func (AmqpState) ElementType() reflect.Type {
 }
 
 type amqpArgs struct {
-	// Specifies the AMQP queue name, which contains 8 to 128 characters.
+	// Specifies the AMQP queue name, which contains `8` to `128` characters.
 	// Only letters, digits, hyphens (-), underscores (_), dots (.) and colons (:) are allowed.
 	// Changing this parameter will create a new resource.
 	Name *string `pulumi:"name"`
@@ -122,7 +151,7 @@ type amqpArgs struct {
 
 // The set of arguments for constructing a Amqp resource.
 type AmqpArgs struct {
-	// Specifies the AMQP queue name, which contains 8 to 128 characters.
+	// Specifies the AMQP queue name, which contains `8` to `128` characters.
 	// Only letters, digits, hyphens (-), underscores (_), dots (.) and colons (:) are allowed.
 	// Changing this parameter will create a new resource.
 	Name pulumi.StringPtrInput
@@ -218,7 +247,13 @@ func (o AmqpOutput) ToAmqpOutputWithContext(ctx context.Context) AmqpOutput {
 	return o
 }
 
-// Specifies the AMQP queue name, which contains 8 to 128 characters.
+// The creation time of the AMQP queue.
+// The format is **yyyyMMdd'T'HHmmss'Z'**. e.g. **20151212T121212Z**.
+func (o AmqpOutput) CreatedAt() pulumi.StringOutput {
+	return o.ApplyT(func(v *Amqp) pulumi.StringOutput { return v.CreatedAt }).(pulumi.StringOutput)
+}
+
+// Specifies the AMQP queue name, which contains `8` to `128` characters.
 // Only letters, digits, hyphens (-), underscores (_), dots (.) and colons (:) are allowed.
 // Changing this parameter will create a new resource.
 func (o AmqpOutput) Name() pulumi.StringOutput {
@@ -229,6 +264,12 @@ func (o AmqpOutput) Name() pulumi.StringOutput {
 // If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
 func (o AmqpOutput) Region() pulumi.StringOutput {
 	return o.ApplyT(func(v *Amqp) pulumi.StringOutput { return v.Region }).(pulumi.StringOutput)
+}
+
+// The latest update time of the AMQP queue.
+// The format is **yyyyMMdd'T'HHmmss'Z'**. e.g. **20151212T121212Z**.
+func (o AmqpOutput) UpdatedAt() pulumi.StringOutput {
+	return o.ApplyT(func(v *Amqp) pulumi.StringOutput { return v.UpdatedAt }).(pulumi.StringOutput)
 }
 
 type AmqpArrayOutput struct{ *pulumi.OutputState }

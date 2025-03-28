@@ -60,7 +60,7 @@ export class Package extends pulumi.CustomResource {
      * Specifies the group name which the package belongs to.
      * Changing this parameter will delete the current package and upload a new package.
      */
-    public readonly groupName!: pulumi.Output<string>;
+    public readonly groupName!: pulumi.Output<string | undefined>;
     /**
      * Specifies whether to upload resource packages in asynchronous mode.
      * The default value is **false**. Changing this parameter will delete the current package and upload a new package.
@@ -91,14 +91,19 @@ export class Package extends pulumi.CustomResource {
      */
     public /*out*/ readonly status!: pulumi.Output<string>;
     /**
+     * Specifies the key/value pairs to associate with the package.
+     */
+    public readonly tags!: pulumi.Output<{[key: string]: string} | undefined>;
+    /**
      * Specifies the package type.
      * + **jar**: `.jar` or jar related files.
      * + **pyFile**: `.py` or python related files.
      * + **file**: Other user files.
+     * + **modelFile**: User AI model files.
      */
     public readonly type!: pulumi.Output<string>;
     /**
-     * The last time when the package configuration update has complated.
+     * The last time when the package configuration update has completed.
      */
     public /*out*/ readonly updatedAt!: pulumi.Output<string>;
 
@@ -123,13 +128,11 @@ export class Package extends pulumi.CustomResource {
             resourceInputs["owner"] = state ? state.owner : undefined;
             resourceInputs["region"] = state ? state.region : undefined;
             resourceInputs["status"] = state ? state.status : undefined;
+            resourceInputs["tags"] = state ? state.tags : undefined;
             resourceInputs["type"] = state ? state.type : undefined;
             resourceInputs["updatedAt"] = state ? state.updatedAt : undefined;
         } else {
             const args = argsOrState as PackageArgs | undefined;
-            if ((!args || args.groupName === undefined) && !opts.urn) {
-                throw new Error("Missing required property 'groupName'");
-            }
             if ((!args || args.objectPath === undefined) && !opts.urn) {
                 throw new Error("Missing required property 'objectPath'");
             }
@@ -141,6 +144,7 @@ export class Package extends pulumi.CustomResource {
             resourceInputs["objectPath"] = args ? args.objectPath : undefined;
             resourceInputs["owner"] = args ? args.owner : undefined;
             resourceInputs["region"] = args ? args.region : undefined;
+            resourceInputs["tags"] = args ? args.tags : undefined;
             resourceInputs["type"] = args ? args.type : undefined;
             resourceInputs["createdAt"] = undefined /*out*/;
             resourceInputs["objectName"] = undefined /*out*/;
@@ -195,14 +199,19 @@ export interface PackageState {
      */
     status?: pulumi.Input<string>;
     /**
+     * Specifies the key/value pairs to associate with the package.
+     */
+    tags?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
+    /**
      * Specifies the package type.
      * + **jar**: `.jar` or jar related files.
      * + **pyFile**: `.py` or python related files.
      * + **file**: Other user files.
+     * + **modelFile**: User AI model files.
      */
     type?: pulumi.Input<string>;
     /**
-     * The last time when the package configuration update has complated.
+     * The last time when the package configuration update has completed.
      */
     updatedAt?: pulumi.Input<string>;
 }
@@ -215,7 +224,7 @@ export interface PackageArgs {
      * Specifies the group name which the package belongs to.
      * Changing this parameter will delete the current package and upload a new package.
      */
-    groupName: pulumi.Input<string>;
+    groupName?: pulumi.Input<string>;
     /**
      * Specifies whether to upload resource packages in asynchronous mode.
      * The default value is **false**. Changing this parameter will delete the current package and upload a new package.
@@ -238,10 +247,15 @@ export interface PackageArgs {
      */
     region?: pulumi.Input<string>;
     /**
+     * Specifies the key/value pairs to associate with the package.
+     */
+    tags?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
+    /**
      * Specifies the package type.
      * + **jar**: `.jar` or jar related files.
      * + **pyFile**: `.py` or python related files.
      * + **file**: Other user files.
+     * + **modelFile**: User AI model files.
      */
     type: pulumi.Input<string>;
 }

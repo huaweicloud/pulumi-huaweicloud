@@ -94,19 +94,19 @@ import * as utilities from "../utilities";
  *
  * ## Import
  *
- * Conferences (only scheduled conference and progressing conference) can be imported using their `id` and authorization parameters, separated by slashes, e.g. Import a conference and authenticated by account.
+ * Conferences (only scheduled conference and progressing conference) can be imported using their `id` and authorization parameters, separated by slashes, e.g. Import a conference and authenticated by account. bash
  *
  * ```sh
- *  $ pulumi import huaweicloud:Meeting/conference:Conference test &ltid&gt/&ltaccount_name&gt/&ltaccount_password&gt
+ *  $ pulumi import huaweicloud:Meeting/conference:Conference test <id>/<account_name>/<account_password>
  * ```
  *
- *  Import a conference and authenticated by `APP ID`/`APP Key`.
+ *  Import a conference and authenticated by `APP ID`/`APP Key`. bash
  *
  * ```sh
- *  $ pulumi import huaweicloud:Meeting/conference:Conference test &ltid&gt/&ltapp_id&gt/&ltapp_key&gt/&ltcorp_id&gt/&ltuser_id&gt
+ *  $ pulumi import huaweicloud:Meeting/conference:Conference test <id>/<app_id>/<app_key>/<corp_id>/<user_id>
  * ```
  *
- *  The slashes cannot be missing even corporation ID and user ID are empty. Note that importing is not supported for expired conferences and the start time of the meeting is not imported along with it. You can ignore this change as below. resource "huaweicloud_meeting_conference" "test" {
+ *  The slashes cannot be missing even corporation ID and user ID are empty. Note that importing is not supported for expired conferences and the start time of the meeting is not imported along with it. You can ignore this change as below. hcl resource "huaweicloud_meeting_conference" "test" {
  *
  *  ...
  *
@@ -178,7 +178,7 @@ export class Conference extends pulumi.CustomResource {
     public /*out*/ readonly audienceJoinUri!: pulumi.Output<string>;
     /**
      * Specifies the auxiliary streaming address, the maximum length is 255 characters.
-     * Only available if `recordType` is **2** or **3**.
+     * Only available if `recordType` is `2` or `3`.
      */
     public readonly auxAddress!: pulumi.Output<string>;
     /**
@@ -214,14 +214,14 @@ export class Conference extends pulumi.CustomResource {
     public readonly cycleParams!: pulumi.Output<outputs.Meeting.ConferenceCycleParams>;
     /**
      * Specifies the duration of the conference, in minutes.
-     * The valid value is range from `15` to `1440`, defaults to `30`.
+     * The valid value is range from `15` to `1,440`, defaults to `30`.
      */
     public readonly duration!: pulumi.Output<number>;
     /**
      * Specifies the conference media encryption mode.
-     * **0**: Adaptive encryption.
-     * **1**: Force encryption.
-     * **2**: Do not encrypt.
+     * + **0**: Adaptive encryption.
+     * + **1**: Force encryption.
+     * + **2**: Do not encrypt.
      */
     public readonly encryptMode!: pulumi.Output<number>;
     /**
@@ -256,7 +256,7 @@ export class Conference extends pulumi.CustomResource {
     public readonly language!: pulumi.Output<string>;
     /**
      * Specifies the mainstream live broadcast address, with a maximum of 255 characters.
-     * Only available if `recordType` is **2** or **3**.
+     * Only available if `recordType` is `2` or `3`.
      */
     public readonly liveAddress!: pulumi.Output<string>;
     /**
@@ -275,7 +275,7 @@ export class Conference extends pulumi.CustomResource {
     public readonly meetingRoomId!: pulumi.Output<string>;
     /**
      * Specifies the number of parties in the conference, the maximum number of
-     * participants in the conference. Defaults to **0** (Unlimited).
+     * participants in the conference. Defaults to `0` (Unlimited).
      */
     public readonly participantNumber!: pulumi.Output<number | undefined>;
     /**
@@ -285,9 +285,9 @@ export class Conference extends pulumi.CustomResource {
     public readonly participants!: pulumi.Output<outputs.Meeting.ConferenceParticipant[] | undefined>;
     /**
      * Specifies the recording authentication method.
-     * **0**: Viewable/downloadable via link.
-     * **1**: Enterprise users can watch/download.
-     * **2**: Attendees can watch/download.
+     * + **0**: Viewable/downloadable via link.
+     * + **1**: Enterprise users can watch/download.
+     * + **2**: Attendees can watch/download.
      */
     public readonly recordAuthType!: pulumi.Output<number>;
     /**
@@ -459,7 +459,7 @@ export interface ConferenceState {
     audienceJoinUri?: pulumi.Input<string>;
     /**
      * Specifies the auxiliary streaming address, the maximum length is 255 characters.
-     * Only available if `recordType` is **2** or **3**.
+     * Only available if `recordType` is `2` or `3`.
      */
     auxAddress?: pulumi.Input<string>;
     /**
@@ -495,14 +495,14 @@ export interface ConferenceState {
     cycleParams?: pulumi.Input<inputs.Meeting.ConferenceCycleParams>;
     /**
      * Specifies the duration of the conference, in minutes.
-     * The valid value is range from `15` to `1440`, defaults to `30`.
+     * The valid value is range from `15` to `1,440`, defaults to `30`.
      */
     duration?: pulumi.Input<number>;
     /**
      * Specifies the conference media encryption mode.
-     * **0**: Adaptive encryption.
-     * **1**: Force encryption.
-     * **2**: Do not encrypt.
+     * + **0**: Adaptive encryption.
+     * + **1**: Force encryption.
+     * + **2**: Do not encrypt.
      */
     encryptMode?: pulumi.Input<number>;
     /**
@@ -537,7 +537,7 @@ export interface ConferenceState {
     language?: pulumi.Input<string>;
     /**
      * Specifies the mainstream live broadcast address, with a maximum of 255 characters.
-     * Only available if `recordType` is **2** or **3**.
+     * Only available if `recordType` is `2` or `3`.
      */
     liveAddress?: pulumi.Input<string>;
     /**
@@ -556,7 +556,7 @@ export interface ConferenceState {
     meetingRoomId?: pulumi.Input<string>;
     /**
      * Specifies the number of parties in the conference, the maximum number of
-     * participants in the conference. Defaults to **0** (Unlimited).
+     * participants in the conference. Defaults to `0` (Unlimited).
      */
     participantNumber?: pulumi.Input<number>;
     /**
@@ -566,9 +566,9 @@ export interface ConferenceState {
     participants?: pulumi.Input<pulumi.Input<inputs.Meeting.ConferenceParticipant>[]>;
     /**
      * Specifies the recording authentication method.
-     * **0**: Viewable/downloadable via link.
-     * **1**: Enterprise users can watch/download.
-     * **2**: Attendees can watch/download.
+     * + **0**: Viewable/downloadable via link.
+     * + **1**: Enterprise users can watch/download.
+     * + **2**: Attendees can watch/download.
      */
     recordAuthType?: pulumi.Input<number>;
     /**
@@ -637,7 +637,7 @@ export interface ConferenceArgs {
     appKey?: pulumi.Input<string>;
     /**
      * Specifies the auxiliary streaming address, the maximum length is 255 characters.
-     * Only available if `recordType` is **2** or **3**.
+     * Only available if `recordType` is `2` or `3`.
      */
     auxAddress?: pulumi.Input<string>;
     /**
@@ -658,14 +658,14 @@ export interface ConferenceArgs {
     cycleParams?: pulumi.Input<inputs.Meeting.ConferenceCycleParams>;
     /**
      * Specifies the duration of the conference, in minutes.
-     * The valid value is range from `15` to `1440`, defaults to `30`.
+     * The valid value is range from `15` to `1,440`, defaults to `30`.
      */
     duration: pulumi.Input<number>;
     /**
      * Specifies the conference media encryption mode.
-     * **0**: Adaptive encryption.
-     * **1**: Force encryption.
-     * **2**: Do not encrypt.
+     * + **0**: Adaptive encryption.
+     * + **1**: Force encryption.
+     * + **2**: Do not encrypt.
      */
     encryptMode?: pulumi.Input<number>;
     /**
@@ -691,7 +691,7 @@ export interface ConferenceArgs {
     language?: pulumi.Input<string>;
     /**
      * Specifies the mainstream live broadcast address, with a maximum of 255 characters.
-     * Only available if `recordType` is **2** or **3**.
+     * Only available if `recordType` is `2` or `3`.
      */
     liveAddress?: pulumi.Input<string>;
     /**
@@ -710,7 +710,7 @@ export interface ConferenceArgs {
     meetingRoomId: pulumi.Input<string>;
     /**
      * Specifies the number of parties in the conference, the maximum number of
-     * participants in the conference. Defaults to **0** (Unlimited).
+     * participants in the conference. Defaults to `0` (Unlimited).
      */
     participantNumber?: pulumi.Input<number>;
     /**
@@ -720,9 +720,9 @@ export interface ConferenceArgs {
     participants?: pulumi.Input<pulumi.Input<inputs.Meeting.ConferenceParticipant>[]>;
     /**
      * Specifies the recording authentication method.
-     * **0**: Viewable/downloadable via link.
-     * **1**: Enterprise users can watch/download.
-     * **2**: Attendees can watch/download.
+     * + **0**: Viewable/downloadable via link.
+     * + **1**: Enterprise users can watch/download.
+     * + **2**: Attendees can watch/download.
      */
     recordAuthType?: pulumi.Input<number>;
     /**

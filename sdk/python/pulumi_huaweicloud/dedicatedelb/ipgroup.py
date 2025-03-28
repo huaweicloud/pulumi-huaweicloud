@@ -109,32 +109,56 @@ class IpgroupArgs:
 @pulumi.input_type
 class _IpgroupState:
     def __init__(__self__, *,
+                 created_at: Optional[pulumi.Input[str]] = None,
                  description: Optional[pulumi.Input[str]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  ip_lists: Optional[pulumi.Input[Sequence[pulumi.Input['IpgroupIpListArgs']]]] = None,
+                 listener_ids: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  name: Optional[pulumi.Input[str]] = None,
-                 region: Optional[pulumi.Input[str]] = None):
+                 region: Optional[pulumi.Input[str]] = None,
+                 updated_at: Optional[pulumi.Input[str]] = None):
         """
         Input properties used for looking up and filtering Ipgroup resources.
+        :param pulumi.Input[str] created_at: The create time of the ip group.
         :param pulumi.Input[str] description: Human-readable description for the ip.
         :param pulumi.Input[str] enterprise_project_id: The enterprise project id of the ip group. Changing this
                creates a new ip group.
         :param pulumi.Input[Sequence[pulumi.Input['IpgroupIpListArgs']]] ip_lists: Specifies an array of one or more ip addresses. The ip_list object structure is
                documented below.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] listener_ids: The listener IDs which the ip group associated with.
         :param pulumi.Input[str] name: Human-readable name for the ip group.
         :param pulumi.Input[str] region: The region in which to create the ip group resource. If omitted, the
                provider-level region will be used. Changing this creates a new ip group.
+        :param pulumi.Input[str] updated_at: The update time of the ip group.
         """
+        if created_at is not None:
+            pulumi.set(__self__, "created_at", created_at)
         if description is not None:
             pulumi.set(__self__, "description", description)
         if enterprise_project_id is not None:
             pulumi.set(__self__, "enterprise_project_id", enterprise_project_id)
         if ip_lists is not None:
             pulumi.set(__self__, "ip_lists", ip_lists)
+        if listener_ids is not None:
+            pulumi.set(__self__, "listener_ids", listener_ids)
         if name is not None:
             pulumi.set(__self__, "name", name)
         if region is not None:
             pulumi.set(__self__, "region", region)
+        if updated_at is not None:
+            pulumi.set(__self__, "updated_at", updated_at)
+
+    @property
+    @pulumi.getter(name="createdAt")
+    def created_at(self) -> Optional[pulumi.Input[str]]:
+        """
+        The create time of the ip group.
+        """
+        return pulumi.get(self, "created_at")
+
+    @created_at.setter
+    def created_at(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "created_at", value)
 
     @property
     @pulumi.getter
@@ -175,6 +199,18 @@ class _IpgroupState:
         pulumi.set(self, "ip_lists", value)
 
     @property
+    @pulumi.getter(name="listenerIds")
+    def listener_ids(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]:
+        """
+        The listener IDs which the ip group associated with.
+        """
+        return pulumi.get(self, "listener_ids")
+
+    @listener_ids.setter
+    def listener_ids(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]):
+        pulumi.set(self, "listener_ids", value)
+
+    @property
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
@@ -198,6 +234,18 @@ class _IpgroupState:
     @region.setter
     def region(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "region", value)
+
+    @property
+    @pulumi.getter(name="updatedAt")
+    def updated_at(self) -> Optional[pulumi.Input[str]]:
+        """
+        The update time of the ip group.
+        """
+        return pulumi.get(self, "updated_at")
+
+    @updated_at.setter
+    def updated_at(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "updated_at", value)
 
 
 class Ipgroup(pulumi.CustomResource):
@@ -298,6 +346,9 @@ class Ipgroup(pulumi.CustomResource):
             __props__.__dict__["ip_lists"] = ip_lists
             __props__.__dict__["name"] = name
             __props__.__dict__["region"] = region
+            __props__.__dict__["created_at"] = None
+            __props__.__dict__["listener_ids"] = None
+            __props__.__dict__["updated_at"] = None
         super(Ipgroup, __self__).__init__(
             'huaweicloud:DedicatedElb/ipgroup:Ipgroup',
             resource_name,
@@ -308,11 +359,14 @@ class Ipgroup(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
+            created_at: Optional[pulumi.Input[str]] = None,
             description: Optional[pulumi.Input[str]] = None,
             enterprise_project_id: Optional[pulumi.Input[str]] = None,
             ip_lists: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['IpgroupIpListArgs']]]]] = None,
+            listener_ids: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
             name: Optional[pulumi.Input[str]] = None,
-            region: Optional[pulumi.Input[str]] = None) -> 'Ipgroup':
+            region: Optional[pulumi.Input[str]] = None,
+            updated_at: Optional[pulumi.Input[str]] = None) -> 'Ipgroup':
         """
         Get an existing Ipgroup resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.
@@ -320,25 +374,39 @@ class Ipgroup(pulumi.CustomResource):
         :param str resource_name: The unique name of the resulting resource.
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
+        :param pulumi.Input[str] created_at: The create time of the ip group.
         :param pulumi.Input[str] description: Human-readable description for the ip.
         :param pulumi.Input[str] enterprise_project_id: The enterprise project id of the ip group. Changing this
                creates a new ip group.
         :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['IpgroupIpListArgs']]]] ip_lists: Specifies an array of one or more ip addresses. The ip_list object structure is
                documented below.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] listener_ids: The listener IDs which the ip group associated with.
         :param pulumi.Input[str] name: Human-readable name for the ip group.
         :param pulumi.Input[str] region: The region in which to create the ip group resource. If omitted, the
                provider-level region will be used. Changing this creates a new ip group.
+        :param pulumi.Input[str] updated_at: The update time of the ip group.
         """
         opts = pulumi.ResourceOptions.merge(opts, pulumi.ResourceOptions(id=id))
 
         __props__ = _IpgroupState.__new__(_IpgroupState)
 
+        __props__.__dict__["created_at"] = created_at
         __props__.__dict__["description"] = description
         __props__.__dict__["enterprise_project_id"] = enterprise_project_id
         __props__.__dict__["ip_lists"] = ip_lists
+        __props__.__dict__["listener_ids"] = listener_ids
         __props__.__dict__["name"] = name
         __props__.__dict__["region"] = region
+        __props__.__dict__["updated_at"] = updated_at
         return Ipgroup(resource_name, opts=opts, __props__=__props__)
+
+    @property
+    @pulumi.getter(name="createdAt")
+    def created_at(self) -> pulumi.Output[str]:
+        """
+        The create time of the ip group.
+        """
+        return pulumi.get(self, "created_at")
 
     @property
     @pulumi.getter
@@ -367,6 +435,14 @@ class Ipgroup(pulumi.CustomResource):
         return pulumi.get(self, "ip_lists")
 
     @property
+    @pulumi.getter(name="listenerIds")
+    def listener_ids(self) -> pulumi.Output[Sequence[str]]:
+        """
+        The listener IDs which the ip group associated with.
+        """
+        return pulumi.get(self, "listener_ids")
+
+    @property
     @pulumi.getter
     def name(self) -> pulumi.Output[str]:
         """
@@ -382,4 +458,12 @@ class Ipgroup(pulumi.CustomResource):
         provider-level region will be used. Changing this creates a new ip group.
         """
         return pulumi.get(self, "region")
+
+    @property
+    @pulumi.getter(name="updatedAt")
+    def updated_at(self) -> pulumi.Output[str]:
+        """
+        The update time of the ip group.
+        """
+        return pulumi.get(self, "updated_at")
 

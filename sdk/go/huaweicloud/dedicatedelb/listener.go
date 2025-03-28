@@ -13,39 +13,135 @@ import (
 
 // Manages an ELB listener resource within HuaweiCloud.
 //
+// ## Example Usage
+//
+// ```go
+// package main
+//
+// import (
+//
+//	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud/DedicatedElb"
+//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi/config"
+//
+// )
+//
+//	func main() {
+//		pulumi.Run(func(ctx *pulumi.Context) error {
+//			cfg := config.New(ctx, "")
+//			loadbalancerId := cfg.RequireObject("loadbalancerId")
+//			_, err := DedicatedElb.NewListener(ctx, "basic", &DedicatedElb.ListenerArgs{
+//				Description:     pulumi.String("basic description"),
+//				Protocol:        pulumi.String("HTTP"),
+//				ProtocolPort:    pulumi.Int(8080),
+//				LoadbalancerId:  pulumi.Any(loadbalancerId),
+//				IdleTimeout:     pulumi.Int(60),
+//				RequestTimeout:  pulumi.Int(60),
+//				ResponseTimeout: pulumi.Int(60),
+//				Tags: pulumi.StringMap{
+//					"key": pulumi.String("value"),
+//				},
+//			})
+//			if err != nil {
+//				return err
+//			}
+//			return nil
+//		})
+//	}
+//
+// ```
+//
 // ## Import
 //
-// ELB listener can be imported using the listener ID, e.g.
+// ELB listener can be imported using the listener ID, e.g. bash
 //
 // ```sh
 //
 //	$ pulumi import huaweicloud:DedicatedElb/listener:Listener listener_1 5c20fdad-7288-11eb-b817-0255ac10158b
 //
 // ```
+//
+//	Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`force_delete`. It is generally recommended running `terraform plan` after importing a listener. You can then decide if changes should be applied to the listener, or the resource definition should be updated to align with the listener. Also you can ignore changes as below. hcl resource "huaweicloud_elb_listener" "listener_1" {
+//
+//	...
+//
+//	lifecycle {
+//
+//	ignore_changes = [
+//
+//	force_delete,
+//
+//	]
+//
+//	} }
 type Listener struct {
 	pulumi.CustomResourceState
 
-	// Specifies the access policy for the listener. Valid options are *white* and
-	// *black*.
+	// Specifies the access policy for the listener. Valid options are **white** and
+	// **black**.
 	AccessPolicy pulumi.StringPtrOutput `pulumi:"accessPolicy"`
 	// Specifies whether to enable advanced forwarding.
 	// If advanced forwarding is enabled, more flexible forwarding policies and rules are supported.
 	AdvancedForwardingEnabled pulumi.BoolOutput `pulumi:"advancedForwardingEnabled"`
 	// Specifies the ID of the CA certificate used by the listener. This parameter is
-	// valid when protocol is set to *HTTPS*.
+	// valid when protocol is set to **HTTPS**.
 	CaCertificate pulumi.StringPtrOutput `pulumi:"caCertificate"`
+	// The create time of the listener.
+	CreatedAt pulumi.StringOutput `pulumi:"createdAt"`
 	// The ID of the default pool with which the listener is associated. Changing this
 	// creates a new listener.
 	DefaultPoolId pulumi.StringOutput `pulumi:"defaultPoolId"`
 	// Human-readable description for the listener.
 	Description pulumi.StringPtrOutput `pulumi:"description"`
+	// Specifies whether to enable health check retries for backend servers.
+	// The default value is true. It is available only when protocol is set to **HTTP**, **HTTPS**, or **QUIC**.
+	EnableMemberRetry pulumi.BoolOutput `pulumi:"enableMemberRetry"`
+	// Specifies whether to forcibly delete the listener, remove the listener, l7 policies,
+	// unbind associated pools. Defaults to **false**.
+	ForceDelete pulumi.BoolPtrOutput `pulumi:"forceDelete"`
 	// Specifies whether transfer the load balancer EIP in the X-Forward-EIP header to
-	// backend servers. The default value is false. This parameter is valid only when the protocol is set to *HTTP* or
-	// *HTTPS*.
-	ForwardEip pulumi.BoolPtrOutput `pulumi:"forwardEip"`
+	// backend servers. The default value is false. This parameter is valid only when the protocol is set to **HTTP** or
+	// **HTTPS**.
+	ForwardEip pulumi.BoolOutput `pulumi:"forwardEip"`
+	// Specifies whether to transfer the load balancer ID to backend servers through the HTTP
+	// header of the packet. The default value is false. This parameter is valid only when the protocol is set to **HTTP** or
+	// **HTTPS**.
+	ForwardElb pulumi.BoolOutput `pulumi:"forwardElb"`
+	// Specifies whether to rewrite the X-Forwarded-Host header. If X-Forwarded-Host is
+	// set to true, X-Forwarded-Host in the request header from the clients can be set to Host in the request header sent
+	// from the load balancer to backend servers. The default value is true. This parameter is valid only when the protocol
+	// is set to **HTTP** or **HTTPS**.
+	ForwardHost pulumi.BoolPtrOutput `pulumi:"forwardHost"`
+	// Specifies whether transfer the listening port of the load balancer in the
+	// X-Forwarded-Port header to backend servers. The default value is false. This parameter is valid only when the
+	// protocol is set to **HTTP** or **HTTPS**.
+	ForwardPort pulumi.BoolOutput `pulumi:"forwardPort"`
+	// Specifies whether to transfer the listener protocol of the load balancer to backend
+	// servers through the HTTP header of the packet. The default value is false. This parameter is valid only when the
+	// protocol is set to **HTTP** or **HTTPS**.
+	ForwardProto pulumi.BoolOutput `pulumi:"forwardProto"`
+	// Specifies whether transfer the source port of the client in the
+	// X-Forwarded-For-Port header to backend servers. The default value is false. This parameter is valid only when the
+	// protocol is set to **HTTP** or **HTTPS**.
+	ForwardRequestPort pulumi.BoolOutput `pulumi:"forwardRequestPort"`
+	// Specifies whether to transfer the certificate ID of the load balancer to
+	// backend servers through the HTTP header of the packet. The default value is false. This parameter is valid only when
+	// the protocol is set to **HTTPS**.
+	ForwardTlsCertificate pulumi.BoolOutput `pulumi:"forwardTlsCertificate"`
+	// Specifies whether to transfer the algorithm suite of the load balancer to
+	// backend servers through the HTTP header of the packet. The default value is false. This parameter is valid only when
+	// the protocol is set to **HTTPS**.
+	ForwardTlsCipher pulumi.BoolOutput `pulumi:"forwardTlsCipher"`
+	// Specifies whether to transfer the algorithm protocol of the load balancer to
+	// backend servers through the HTTP header of the packet. The default value is false. This parameter is valid only when
+	// the protocol is set to **HTTPS**.
+	ForwardTlsProtocol pulumi.BoolOutput `pulumi:"forwardTlsProtocol"`
+	// Specifies whether to enable gzip compression for a load balancer. The default value
+	// is **false**. This parameter can be configured only for **HTTP**, **HTTPS**, and **QUIC** listeners.
+	GzipEnable pulumi.BoolOutput `pulumi:"gzipEnable"`
 	// Specifies whether to use HTTP/2. The default value is false. This parameter is valid
-	// only when the protocol is set to *HTTPS*.
-	Http2Enable pulumi.BoolPtrOutput `pulumi:"http2Enable"`
+	// only when the protocol is set to **HTTPS**.
+	Http2Enable pulumi.BoolOutput `pulumi:"http2Enable"`
 	// Specifies the idle timeout for the listener. Value range: 0 to 4000.
 	IdleTimeout pulumi.IntOutput `pulumi:"idleTimeout"`
 	// Specifies the ip group id for the listener.
@@ -55,33 +151,73 @@ type Listener struct {
 	LoadbalancerId pulumi.StringOutput `pulumi:"loadbalancerId"`
 	// Human-readable name for the listener.
 	Name pulumi.StringOutput `pulumi:"name"`
-	// The protocol can either be TCP, UDP, HTTP or HTTPS. Changing this creates a
-	// new listener.
+	// Specifies the port monitoring range (closed range), specify up to 10 port
+	// groups, each group range must not overlap. This field can only be passed in when `protocolPort` is `0` or empty.
+	// Only **TCP**, **UDP**, and **TLS** listener support this field. Changing this creates a new listener.
+	// The portRanges structure is documented below.
+	PortRanges ListenerPortRangeArrayOutput `pulumi:"portRanges"`
+	// The reason for update protection. Only valid when `protectionStatus` is
+	// **consoleProtection**.
+	ProtectionReason pulumi.StringPtrOutput `pulumi:"protectionReason"`
+	// The protection status for update. Value options:
+	// + **nonProtection**: No protection.
+	// + **consoleProtection**: Console modification protection.
+	ProtectionStatus pulumi.StringOutput `pulumi:"protectionStatus"`
+	// The protocol can either be **TCP**, **UDP**, **HTTP**, **HTTPS**, **QUIC**,
+	// **IP** or **TLS**. **IP** is only available for listeners that will be added to gateway load balancers. Changing this
+	// creates a new listener.
 	Protocol pulumi.StringOutput `pulumi:"protocol"`
-	// The port on which to listen for client traffic. Changing this creates a
-	// new listener.
+	// Specifies the port used by the listener.
+	// + The **QUIC** listener port cannot be `4789` or the same as the **UDP** listener port.
+	// + If `protocol` is set to **IP**, the value can only be `0` or empty.
+	// + If it is set to `0` and `protocol` is not set to **IP**, `portRanges` is required.
 	ProtocolPort pulumi.IntOutput `pulumi:"protocolPort"`
+	// Specifies whether to enable the proxy protocol option to pass the source IP
+	// addresses of the clients to backend servers. The default value is false. This parameter is available only for **TLS**
+	// listeners and does not take effect for other types of listeners.
+	ProxyProtocolEnable pulumi.BoolOutput `pulumi:"proxyProtocolEnable"`
+	// Specifies the ID of the QUIC listener. If it is set, HTTPS listener will be
+	// upgraded to QUIC listener. This parameter is valid only when protocol is set to **HTTPS**.
+	QuicListenerId pulumi.StringPtrOutput `pulumi:"quicListenerId"`
+	// Specifies whether to transfer the source IP address of the client to backend servers
+	// through the HTTP header of the packet. The default value is false. This parameter is valid only when the protocol is
+	// set to **HTTP** or **HTTPS**.
+	RealIp pulumi.BoolOutput `pulumi:"realIp"`
 	// The region in which to create the listener resource. If omitted, the
 	// provider-level region will be used. Changing this creates a new listener.
 	Region pulumi.StringOutput `pulumi:"region"`
 	// Specifies the request timeout for the listener. Value range: 1 to 300. This
-	// parameter is valid when protocol is set to *HTTP* or *HTTPS*.
+	// parameter is valid when protocol is set to **HTTP** or **HTTPS**.
 	RequestTimeout pulumi.IntOutput `pulumi:"requestTimeout"`
 	// Specifies the response timeout for the listener. Value range: 1 to 300. This
-	// parameter is valid when protocol is set to *HTTP* or *HTTPS*.
+	// parameter is valid when protocol is set to **HTTP** or **HTTPS**.
 	ResponseTimeout pulumi.IntOutput `pulumi:"responseTimeout"`
+	// Specifies the ID of the custom security policy. This parameter is available
+	// only for **HTTPS** listeners added to a dedicated load balancer. If both `securityPolicyId` and `tlsCiphersPolicy`
+	// are specified, only `securityPolicyId` will take effect. This parameter is valid when protocol is set to **HTTPS**.
+	SecurityPolicyId pulumi.StringPtrOutput `pulumi:"securityPolicyId"`
 	// Specifies the ID of the server certificate used by the listener. This
-	// parameter is mandatory when protocol is set to *HTTPS*.
+	// parameter is mandatory when protocol is set to **HTTPS**.
 	ServerCertificate pulumi.StringPtrOutput `pulumi:"serverCertificate"`
 	// Lists the IDs of SNI certificates (server certificates with a domain name) used
-	// by the listener. This parameter is valid when protocol is set to *HTTPS*.
+	// by the listener. This parameter is valid when protocol is set to **HTTPS**.
 	SniCertificates pulumi.StringArrayOutput `pulumi:"sniCertificates"`
+	// Specifies how wildcard domain name matches with the SNI certificates used by the
+	// listener. **longest_suffix** indicates longest suffix match. **wildcard** indicates wildcard match.
+	// The default value is **wildcard**.
+	SniMatchAlgo pulumi.StringOutput `pulumi:"sniMatchAlgo"`
+	// Specifies whether to enable 0-RTT capability, it is available only when
+	// protocol is set to **HTTPS** and relys on the **TLSv1.3** security policy protocol. The default value is false.
+	SslEarlyDataEnable pulumi.BoolPtrOutput `pulumi:"sslEarlyDataEnable"`
 	// The key/value pairs to associate with the listener.
 	Tags pulumi.StringMapOutput `pulumi:"tags"`
 	// Specifies the TLS cipher policy for the listener. Valid options are:
-	// tls-1-0-inherit, tls-1-0, tls-1-1, tls-1-2, tls-1-2-strict, tls-1-2-fs, tls-1-0-with-1-3, and tls-1-2-fs-with-1-3.
-	// This parameter is valid when protocol is set to *HTTPS*.
+	// **tls-1-0-inherit**, **tls-1-0**, **tls-1-1**, **tls-1-2**, **tls-1-2-strict**, **tls-1-2-fs**, **tls-1-0-with-1-3**,
+	// **tls-1-2-fs-with-1-3**, **hybrid-policy-1-0** and **tls-1-2-strict-no-cbc**. Defaults to **tls-1-0**.
+	// This parameter is valid when protocol is set to **HTTPS**.
 	TlsCiphersPolicy pulumi.StringOutput `pulumi:"tlsCiphersPolicy"`
+	// The update time of the listener.
+	UpdatedAt pulumi.StringOutput `pulumi:"updatedAt"`
 }
 
 // NewListener registers a new resource with the given unique name, arguments, and options.
@@ -96,9 +232,6 @@ func NewListener(ctx *pulumi.Context,
 	}
 	if args.Protocol == nil {
 		return nil, errors.New("invalid value for required argument 'Protocol'")
-	}
-	if args.ProtocolPort == nil {
-		return nil, errors.New("invalid value for required argument 'ProtocolPort'")
 	}
 	opts = pkgResourceDefaultOpts(opts)
 	var resource Listener
@@ -123,26 +256,70 @@ func GetListener(ctx *pulumi.Context,
 
 // Input properties used for looking up and filtering Listener resources.
 type listenerState struct {
-	// Specifies the access policy for the listener. Valid options are *white* and
-	// *black*.
+	// Specifies the access policy for the listener. Valid options are **white** and
+	// **black**.
 	AccessPolicy *string `pulumi:"accessPolicy"`
 	// Specifies whether to enable advanced forwarding.
 	// If advanced forwarding is enabled, more flexible forwarding policies and rules are supported.
 	AdvancedForwardingEnabled *bool `pulumi:"advancedForwardingEnabled"`
 	// Specifies the ID of the CA certificate used by the listener. This parameter is
-	// valid when protocol is set to *HTTPS*.
+	// valid when protocol is set to **HTTPS**.
 	CaCertificate *string `pulumi:"caCertificate"`
+	// The create time of the listener.
+	CreatedAt *string `pulumi:"createdAt"`
 	// The ID of the default pool with which the listener is associated. Changing this
 	// creates a new listener.
 	DefaultPoolId *string `pulumi:"defaultPoolId"`
 	// Human-readable description for the listener.
 	Description *string `pulumi:"description"`
+	// Specifies whether to enable health check retries for backend servers.
+	// The default value is true. It is available only when protocol is set to **HTTP**, **HTTPS**, or **QUIC**.
+	EnableMemberRetry *bool `pulumi:"enableMemberRetry"`
+	// Specifies whether to forcibly delete the listener, remove the listener, l7 policies,
+	// unbind associated pools. Defaults to **false**.
+	ForceDelete *bool `pulumi:"forceDelete"`
 	// Specifies whether transfer the load balancer EIP in the X-Forward-EIP header to
-	// backend servers. The default value is false. This parameter is valid only when the protocol is set to *HTTP* or
-	// *HTTPS*.
+	// backend servers. The default value is false. This parameter is valid only when the protocol is set to **HTTP** or
+	// **HTTPS**.
 	ForwardEip *bool `pulumi:"forwardEip"`
+	// Specifies whether to transfer the load balancer ID to backend servers through the HTTP
+	// header of the packet. The default value is false. This parameter is valid only when the protocol is set to **HTTP** or
+	// **HTTPS**.
+	ForwardElb *bool `pulumi:"forwardElb"`
+	// Specifies whether to rewrite the X-Forwarded-Host header. If X-Forwarded-Host is
+	// set to true, X-Forwarded-Host in the request header from the clients can be set to Host in the request header sent
+	// from the load balancer to backend servers. The default value is true. This parameter is valid only when the protocol
+	// is set to **HTTP** or **HTTPS**.
+	ForwardHost *bool `pulumi:"forwardHost"`
+	// Specifies whether transfer the listening port of the load balancer in the
+	// X-Forwarded-Port header to backend servers. The default value is false. This parameter is valid only when the
+	// protocol is set to **HTTP** or **HTTPS**.
+	ForwardPort *bool `pulumi:"forwardPort"`
+	// Specifies whether to transfer the listener protocol of the load balancer to backend
+	// servers through the HTTP header of the packet. The default value is false. This parameter is valid only when the
+	// protocol is set to **HTTP** or **HTTPS**.
+	ForwardProto *bool `pulumi:"forwardProto"`
+	// Specifies whether transfer the source port of the client in the
+	// X-Forwarded-For-Port header to backend servers. The default value is false. This parameter is valid only when the
+	// protocol is set to **HTTP** or **HTTPS**.
+	ForwardRequestPort *bool `pulumi:"forwardRequestPort"`
+	// Specifies whether to transfer the certificate ID of the load balancer to
+	// backend servers through the HTTP header of the packet. The default value is false. This parameter is valid only when
+	// the protocol is set to **HTTPS**.
+	ForwardTlsCertificate *bool `pulumi:"forwardTlsCertificate"`
+	// Specifies whether to transfer the algorithm suite of the load balancer to
+	// backend servers through the HTTP header of the packet. The default value is false. This parameter is valid only when
+	// the protocol is set to **HTTPS**.
+	ForwardTlsCipher *bool `pulumi:"forwardTlsCipher"`
+	// Specifies whether to transfer the algorithm protocol of the load balancer to
+	// backend servers through the HTTP header of the packet. The default value is false. This parameter is valid only when
+	// the protocol is set to **HTTPS**.
+	ForwardTlsProtocol *bool `pulumi:"forwardTlsProtocol"`
+	// Specifies whether to enable gzip compression for a load balancer. The default value
+	// is **false**. This parameter can be configured only for **HTTP**, **HTTPS**, and **QUIC** listeners.
+	GzipEnable *bool `pulumi:"gzipEnable"`
 	// Specifies whether to use HTTP/2. The default value is false. This parameter is valid
-	// only when the protocol is set to *HTTPS*.
+	// only when the protocol is set to **HTTPS**.
 	Http2Enable *bool `pulumi:"http2Enable"`
 	// Specifies the idle timeout for the listener. Value range: 0 to 4000.
 	IdleTimeout *int `pulumi:"idleTimeout"`
@@ -153,56 +330,140 @@ type listenerState struct {
 	LoadbalancerId *string `pulumi:"loadbalancerId"`
 	// Human-readable name for the listener.
 	Name *string `pulumi:"name"`
-	// The protocol can either be TCP, UDP, HTTP or HTTPS. Changing this creates a
-	// new listener.
+	// Specifies the port monitoring range (closed range), specify up to 10 port
+	// groups, each group range must not overlap. This field can only be passed in when `protocolPort` is `0` or empty.
+	// Only **TCP**, **UDP**, and **TLS** listener support this field. Changing this creates a new listener.
+	// The portRanges structure is documented below.
+	PortRanges []ListenerPortRange `pulumi:"portRanges"`
+	// The reason for update protection. Only valid when `protectionStatus` is
+	// **consoleProtection**.
+	ProtectionReason *string `pulumi:"protectionReason"`
+	// The protection status for update. Value options:
+	// + **nonProtection**: No protection.
+	// + **consoleProtection**: Console modification protection.
+	ProtectionStatus *string `pulumi:"protectionStatus"`
+	// The protocol can either be **TCP**, **UDP**, **HTTP**, **HTTPS**, **QUIC**,
+	// **IP** or **TLS**. **IP** is only available for listeners that will be added to gateway load balancers. Changing this
+	// creates a new listener.
 	Protocol *string `pulumi:"protocol"`
-	// The port on which to listen for client traffic. Changing this creates a
-	// new listener.
+	// Specifies the port used by the listener.
+	// + The **QUIC** listener port cannot be `4789` or the same as the **UDP** listener port.
+	// + If `protocol` is set to **IP**, the value can only be `0` or empty.
+	// + If it is set to `0` and `protocol` is not set to **IP**, `portRanges` is required.
 	ProtocolPort *int `pulumi:"protocolPort"`
+	// Specifies whether to enable the proxy protocol option to pass the source IP
+	// addresses of the clients to backend servers. The default value is false. This parameter is available only for **TLS**
+	// listeners and does not take effect for other types of listeners.
+	ProxyProtocolEnable *bool `pulumi:"proxyProtocolEnable"`
+	// Specifies the ID of the QUIC listener. If it is set, HTTPS listener will be
+	// upgraded to QUIC listener. This parameter is valid only when protocol is set to **HTTPS**.
+	QuicListenerId *string `pulumi:"quicListenerId"`
+	// Specifies whether to transfer the source IP address of the client to backend servers
+	// through the HTTP header of the packet. The default value is false. This parameter is valid only when the protocol is
+	// set to **HTTP** or **HTTPS**.
+	RealIp *bool `pulumi:"realIp"`
 	// The region in which to create the listener resource. If omitted, the
 	// provider-level region will be used. Changing this creates a new listener.
 	Region *string `pulumi:"region"`
 	// Specifies the request timeout for the listener. Value range: 1 to 300. This
-	// parameter is valid when protocol is set to *HTTP* or *HTTPS*.
+	// parameter is valid when protocol is set to **HTTP** or **HTTPS**.
 	RequestTimeout *int `pulumi:"requestTimeout"`
 	// Specifies the response timeout for the listener. Value range: 1 to 300. This
-	// parameter is valid when protocol is set to *HTTP* or *HTTPS*.
+	// parameter is valid when protocol is set to **HTTP** or **HTTPS**.
 	ResponseTimeout *int `pulumi:"responseTimeout"`
+	// Specifies the ID of the custom security policy. This parameter is available
+	// only for **HTTPS** listeners added to a dedicated load balancer. If both `securityPolicyId` and `tlsCiphersPolicy`
+	// are specified, only `securityPolicyId` will take effect. This parameter is valid when protocol is set to **HTTPS**.
+	SecurityPolicyId *string `pulumi:"securityPolicyId"`
 	// Specifies the ID of the server certificate used by the listener. This
-	// parameter is mandatory when protocol is set to *HTTPS*.
+	// parameter is mandatory when protocol is set to **HTTPS**.
 	ServerCertificate *string `pulumi:"serverCertificate"`
 	// Lists the IDs of SNI certificates (server certificates with a domain name) used
-	// by the listener. This parameter is valid when protocol is set to *HTTPS*.
+	// by the listener. This parameter is valid when protocol is set to **HTTPS**.
 	SniCertificates []string `pulumi:"sniCertificates"`
+	// Specifies how wildcard domain name matches with the SNI certificates used by the
+	// listener. **longest_suffix** indicates longest suffix match. **wildcard** indicates wildcard match.
+	// The default value is **wildcard**.
+	SniMatchAlgo *string `pulumi:"sniMatchAlgo"`
+	// Specifies whether to enable 0-RTT capability, it is available only when
+	// protocol is set to **HTTPS** and relys on the **TLSv1.3** security policy protocol. The default value is false.
+	SslEarlyDataEnable *bool `pulumi:"sslEarlyDataEnable"`
 	// The key/value pairs to associate with the listener.
 	Tags map[string]string `pulumi:"tags"`
 	// Specifies the TLS cipher policy for the listener. Valid options are:
-	// tls-1-0-inherit, tls-1-0, tls-1-1, tls-1-2, tls-1-2-strict, tls-1-2-fs, tls-1-0-with-1-3, and tls-1-2-fs-with-1-3.
-	// This parameter is valid when protocol is set to *HTTPS*.
+	// **tls-1-0-inherit**, **tls-1-0**, **tls-1-1**, **tls-1-2**, **tls-1-2-strict**, **tls-1-2-fs**, **tls-1-0-with-1-3**,
+	// **tls-1-2-fs-with-1-3**, **hybrid-policy-1-0** and **tls-1-2-strict-no-cbc**. Defaults to **tls-1-0**.
+	// This parameter is valid when protocol is set to **HTTPS**.
 	TlsCiphersPolicy *string `pulumi:"tlsCiphersPolicy"`
+	// The update time of the listener.
+	UpdatedAt *string `pulumi:"updatedAt"`
 }
 
 type ListenerState struct {
-	// Specifies the access policy for the listener. Valid options are *white* and
-	// *black*.
+	// Specifies the access policy for the listener. Valid options are **white** and
+	// **black**.
 	AccessPolicy pulumi.StringPtrInput
 	// Specifies whether to enable advanced forwarding.
 	// If advanced forwarding is enabled, more flexible forwarding policies and rules are supported.
 	AdvancedForwardingEnabled pulumi.BoolPtrInput
 	// Specifies the ID of the CA certificate used by the listener. This parameter is
-	// valid when protocol is set to *HTTPS*.
+	// valid when protocol is set to **HTTPS**.
 	CaCertificate pulumi.StringPtrInput
+	// The create time of the listener.
+	CreatedAt pulumi.StringPtrInput
 	// The ID of the default pool with which the listener is associated. Changing this
 	// creates a new listener.
 	DefaultPoolId pulumi.StringPtrInput
 	// Human-readable description for the listener.
 	Description pulumi.StringPtrInput
+	// Specifies whether to enable health check retries for backend servers.
+	// The default value is true. It is available only when protocol is set to **HTTP**, **HTTPS**, or **QUIC**.
+	EnableMemberRetry pulumi.BoolPtrInput
+	// Specifies whether to forcibly delete the listener, remove the listener, l7 policies,
+	// unbind associated pools. Defaults to **false**.
+	ForceDelete pulumi.BoolPtrInput
 	// Specifies whether transfer the load balancer EIP in the X-Forward-EIP header to
-	// backend servers. The default value is false. This parameter is valid only when the protocol is set to *HTTP* or
-	// *HTTPS*.
+	// backend servers. The default value is false. This parameter is valid only when the protocol is set to **HTTP** or
+	// **HTTPS**.
 	ForwardEip pulumi.BoolPtrInput
+	// Specifies whether to transfer the load balancer ID to backend servers through the HTTP
+	// header of the packet. The default value is false. This parameter is valid only when the protocol is set to **HTTP** or
+	// **HTTPS**.
+	ForwardElb pulumi.BoolPtrInput
+	// Specifies whether to rewrite the X-Forwarded-Host header. If X-Forwarded-Host is
+	// set to true, X-Forwarded-Host in the request header from the clients can be set to Host in the request header sent
+	// from the load balancer to backend servers. The default value is true. This parameter is valid only when the protocol
+	// is set to **HTTP** or **HTTPS**.
+	ForwardHost pulumi.BoolPtrInput
+	// Specifies whether transfer the listening port of the load balancer in the
+	// X-Forwarded-Port header to backend servers. The default value is false. This parameter is valid only when the
+	// protocol is set to **HTTP** or **HTTPS**.
+	ForwardPort pulumi.BoolPtrInput
+	// Specifies whether to transfer the listener protocol of the load balancer to backend
+	// servers through the HTTP header of the packet. The default value is false. This parameter is valid only when the
+	// protocol is set to **HTTP** or **HTTPS**.
+	ForwardProto pulumi.BoolPtrInput
+	// Specifies whether transfer the source port of the client in the
+	// X-Forwarded-For-Port header to backend servers. The default value is false. This parameter is valid only when the
+	// protocol is set to **HTTP** or **HTTPS**.
+	ForwardRequestPort pulumi.BoolPtrInput
+	// Specifies whether to transfer the certificate ID of the load balancer to
+	// backend servers through the HTTP header of the packet. The default value is false. This parameter is valid only when
+	// the protocol is set to **HTTPS**.
+	ForwardTlsCertificate pulumi.BoolPtrInput
+	// Specifies whether to transfer the algorithm suite of the load balancer to
+	// backend servers through the HTTP header of the packet. The default value is false. This parameter is valid only when
+	// the protocol is set to **HTTPS**.
+	ForwardTlsCipher pulumi.BoolPtrInput
+	// Specifies whether to transfer the algorithm protocol of the load balancer to
+	// backend servers through the HTTP header of the packet. The default value is false. This parameter is valid only when
+	// the protocol is set to **HTTPS**.
+	ForwardTlsProtocol pulumi.BoolPtrInput
+	// Specifies whether to enable gzip compression for a load balancer. The default value
+	// is **false**. This parameter can be configured only for **HTTP**, **HTTPS**, and **QUIC** listeners.
+	GzipEnable pulumi.BoolPtrInput
 	// Specifies whether to use HTTP/2. The default value is false. This parameter is valid
-	// only when the protocol is set to *HTTPS*.
+	// only when the protocol is set to **HTTPS**.
 	Http2Enable pulumi.BoolPtrInput
 	// Specifies the idle timeout for the listener. Value range: 0 to 4000.
 	IdleTimeout pulumi.IntPtrInput
@@ -213,33 +474,73 @@ type ListenerState struct {
 	LoadbalancerId pulumi.StringPtrInput
 	// Human-readable name for the listener.
 	Name pulumi.StringPtrInput
-	// The protocol can either be TCP, UDP, HTTP or HTTPS. Changing this creates a
-	// new listener.
+	// Specifies the port monitoring range (closed range), specify up to 10 port
+	// groups, each group range must not overlap. This field can only be passed in when `protocolPort` is `0` or empty.
+	// Only **TCP**, **UDP**, and **TLS** listener support this field. Changing this creates a new listener.
+	// The portRanges structure is documented below.
+	PortRanges ListenerPortRangeArrayInput
+	// The reason for update protection. Only valid when `protectionStatus` is
+	// **consoleProtection**.
+	ProtectionReason pulumi.StringPtrInput
+	// The protection status for update. Value options:
+	// + **nonProtection**: No protection.
+	// + **consoleProtection**: Console modification protection.
+	ProtectionStatus pulumi.StringPtrInput
+	// The protocol can either be **TCP**, **UDP**, **HTTP**, **HTTPS**, **QUIC**,
+	// **IP** or **TLS**. **IP** is only available for listeners that will be added to gateway load balancers. Changing this
+	// creates a new listener.
 	Protocol pulumi.StringPtrInput
-	// The port on which to listen for client traffic. Changing this creates a
-	// new listener.
+	// Specifies the port used by the listener.
+	// + The **QUIC** listener port cannot be `4789` or the same as the **UDP** listener port.
+	// + If `protocol` is set to **IP**, the value can only be `0` or empty.
+	// + If it is set to `0` and `protocol` is not set to **IP**, `portRanges` is required.
 	ProtocolPort pulumi.IntPtrInput
+	// Specifies whether to enable the proxy protocol option to pass the source IP
+	// addresses of the clients to backend servers. The default value is false. This parameter is available only for **TLS**
+	// listeners and does not take effect for other types of listeners.
+	ProxyProtocolEnable pulumi.BoolPtrInput
+	// Specifies the ID of the QUIC listener. If it is set, HTTPS listener will be
+	// upgraded to QUIC listener. This parameter is valid only when protocol is set to **HTTPS**.
+	QuicListenerId pulumi.StringPtrInput
+	// Specifies whether to transfer the source IP address of the client to backend servers
+	// through the HTTP header of the packet. The default value is false. This parameter is valid only when the protocol is
+	// set to **HTTP** or **HTTPS**.
+	RealIp pulumi.BoolPtrInput
 	// The region in which to create the listener resource. If omitted, the
 	// provider-level region will be used. Changing this creates a new listener.
 	Region pulumi.StringPtrInput
 	// Specifies the request timeout for the listener. Value range: 1 to 300. This
-	// parameter is valid when protocol is set to *HTTP* or *HTTPS*.
+	// parameter is valid when protocol is set to **HTTP** or **HTTPS**.
 	RequestTimeout pulumi.IntPtrInput
 	// Specifies the response timeout for the listener. Value range: 1 to 300. This
-	// parameter is valid when protocol is set to *HTTP* or *HTTPS*.
+	// parameter is valid when protocol is set to **HTTP** or **HTTPS**.
 	ResponseTimeout pulumi.IntPtrInput
+	// Specifies the ID of the custom security policy. This parameter is available
+	// only for **HTTPS** listeners added to a dedicated load balancer. If both `securityPolicyId` and `tlsCiphersPolicy`
+	// are specified, only `securityPolicyId` will take effect. This parameter is valid when protocol is set to **HTTPS**.
+	SecurityPolicyId pulumi.StringPtrInput
 	// Specifies the ID of the server certificate used by the listener. This
-	// parameter is mandatory when protocol is set to *HTTPS*.
+	// parameter is mandatory when protocol is set to **HTTPS**.
 	ServerCertificate pulumi.StringPtrInput
 	// Lists the IDs of SNI certificates (server certificates with a domain name) used
-	// by the listener. This parameter is valid when protocol is set to *HTTPS*.
+	// by the listener. This parameter is valid when protocol is set to **HTTPS**.
 	SniCertificates pulumi.StringArrayInput
+	// Specifies how wildcard domain name matches with the SNI certificates used by the
+	// listener. **longest_suffix** indicates longest suffix match. **wildcard** indicates wildcard match.
+	// The default value is **wildcard**.
+	SniMatchAlgo pulumi.StringPtrInput
+	// Specifies whether to enable 0-RTT capability, it is available only when
+	// protocol is set to **HTTPS** and relys on the **TLSv1.3** security policy protocol. The default value is false.
+	SslEarlyDataEnable pulumi.BoolPtrInput
 	// The key/value pairs to associate with the listener.
 	Tags pulumi.StringMapInput
 	// Specifies the TLS cipher policy for the listener. Valid options are:
-	// tls-1-0-inherit, tls-1-0, tls-1-1, tls-1-2, tls-1-2-strict, tls-1-2-fs, tls-1-0-with-1-3, and tls-1-2-fs-with-1-3.
-	// This parameter is valid when protocol is set to *HTTPS*.
+	// **tls-1-0-inherit**, **tls-1-0**, **tls-1-1**, **tls-1-2**, **tls-1-2-strict**, **tls-1-2-fs**, **tls-1-0-with-1-3**,
+	// **tls-1-2-fs-with-1-3**, **hybrid-policy-1-0** and **tls-1-2-strict-no-cbc**. Defaults to **tls-1-0**.
+	// This parameter is valid when protocol is set to **HTTPS**.
 	TlsCiphersPolicy pulumi.StringPtrInput
+	// The update time of the listener.
+	UpdatedAt pulumi.StringPtrInput
 }
 
 func (ListenerState) ElementType() reflect.Type {
@@ -247,26 +548,68 @@ func (ListenerState) ElementType() reflect.Type {
 }
 
 type listenerArgs struct {
-	// Specifies the access policy for the listener. Valid options are *white* and
-	// *black*.
+	// Specifies the access policy for the listener. Valid options are **white** and
+	// **black**.
 	AccessPolicy *string `pulumi:"accessPolicy"`
 	// Specifies whether to enable advanced forwarding.
 	// If advanced forwarding is enabled, more flexible forwarding policies and rules are supported.
 	AdvancedForwardingEnabled *bool `pulumi:"advancedForwardingEnabled"`
 	// Specifies the ID of the CA certificate used by the listener. This parameter is
-	// valid when protocol is set to *HTTPS*.
+	// valid when protocol is set to **HTTPS**.
 	CaCertificate *string `pulumi:"caCertificate"`
 	// The ID of the default pool with which the listener is associated. Changing this
 	// creates a new listener.
 	DefaultPoolId *string `pulumi:"defaultPoolId"`
 	// Human-readable description for the listener.
 	Description *string `pulumi:"description"`
+	// Specifies whether to enable health check retries for backend servers.
+	// The default value is true. It is available only when protocol is set to **HTTP**, **HTTPS**, or **QUIC**.
+	EnableMemberRetry *bool `pulumi:"enableMemberRetry"`
+	// Specifies whether to forcibly delete the listener, remove the listener, l7 policies,
+	// unbind associated pools. Defaults to **false**.
+	ForceDelete *bool `pulumi:"forceDelete"`
 	// Specifies whether transfer the load balancer EIP in the X-Forward-EIP header to
-	// backend servers. The default value is false. This parameter is valid only when the protocol is set to *HTTP* or
-	// *HTTPS*.
+	// backend servers. The default value is false. This parameter is valid only when the protocol is set to **HTTP** or
+	// **HTTPS**.
 	ForwardEip *bool `pulumi:"forwardEip"`
+	// Specifies whether to transfer the load balancer ID to backend servers through the HTTP
+	// header of the packet. The default value is false. This parameter is valid only when the protocol is set to **HTTP** or
+	// **HTTPS**.
+	ForwardElb *bool `pulumi:"forwardElb"`
+	// Specifies whether to rewrite the X-Forwarded-Host header. If X-Forwarded-Host is
+	// set to true, X-Forwarded-Host in the request header from the clients can be set to Host in the request header sent
+	// from the load balancer to backend servers. The default value is true. This parameter is valid only when the protocol
+	// is set to **HTTP** or **HTTPS**.
+	ForwardHost *bool `pulumi:"forwardHost"`
+	// Specifies whether transfer the listening port of the load balancer in the
+	// X-Forwarded-Port header to backend servers. The default value is false. This parameter is valid only when the
+	// protocol is set to **HTTP** or **HTTPS**.
+	ForwardPort *bool `pulumi:"forwardPort"`
+	// Specifies whether to transfer the listener protocol of the load balancer to backend
+	// servers through the HTTP header of the packet. The default value is false. This parameter is valid only when the
+	// protocol is set to **HTTP** or **HTTPS**.
+	ForwardProto *bool `pulumi:"forwardProto"`
+	// Specifies whether transfer the source port of the client in the
+	// X-Forwarded-For-Port header to backend servers. The default value is false. This parameter is valid only when the
+	// protocol is set to **HTTP** or **HTTPS**.
+	ForwardRequestPort *bool `pulumi:"forwardRequestPort"`
+	// Specifies whether to transfer the certificate ID of the load balancer to
+	// backend servers through the HTTP header of the packet. The default value is false. This parameter is valid only when
+	// the protocol is set to **HTTPS**.
+	ForwardTlsCertificate *bool `pulumi:"forwardTlsCertificate"`
+	// Specifies whether to transfer the algorithm suite of the load balancer to
+	// backend servers through the HTTP header of the packet. The default value is false. This parameter is valid only when
+	// the protocol is set to **HTTPS**.
+	ForwardTlsCipher *bool `pulumi:"forwardTlsCipher"`
+	// Specifies whether to transfer the algorithm protocol of the load balancer to
+	// backend servers through the HTTP header of the packet. The default value is false. This parameter is valid only when
+	// the protocol is set to **HTTPS**.
+	ForwardTlsProtocol *bool `pulumi:"forwardTlsProtocol"`
+	// Specifies whether to enable gzip compression for a load balancer. The default value
+	// is **false**. This parameter can be configured only for **HTTP**, **HTTPS**, and **QUIC** listeners.
+	GzipEnable *bool `pulumi:"gzipEnable"`
 	// Specifies whether to use HTTP/2. The default value is false. This parameter is valid
-	// only when the protocol is set to *HTTPS*.
+	// only when the protocol is set to **HTTPS**.
 	Http2Enable *bool `pulumi:"http2Enable"`
 	// Specifies the idle timeout for the listener. Value range: 0 to 4000.
 	IdleTimeout *int `pulumi:"idleTimeout"`
@@ -277,57 +620,137 @@ type listenerArgs struct {
 	LoadbalancerId string `pulumi:"loadbalancerId"`
 	// Human-readable name for the listener.
 	Name *string `pulumi:"name"`
-	// The protocol can either be TCP, UDP, HTTP or HTTPS. Changing this creates a
-	// new listener.
+	// Specifies the port monitoring range (closed range), specify up to 10 port
+	// groups, each group range must not overlap. This field can only be passed in when `protocolPort` is `0` or empty.
+	// Only **TCP**, **UDP**, and **TLS** listener support this field. Changing this creates a new listener.
+	// The portRanges structure is documented below.
+	PortRanges []ListenerPortRange `pulumi:"portRanges"`
+	// The reason for update protection. Only valid when `protectionStatus` is
+	// **consoleProtection**.
+	ProtectionReason *string `pulumi:"protectionReason"`
+	// The protection status for update. Value options:
+	// + **nonProtection**: No protection.
+	// + **consoleProtection**: Console modification protection.
+	ProtectionStatus *string `pulumi:"protectionStatus"`
+	// The protocol can either be **TCP**, **UDP**, **HTTP**, **HTTPS**, **QUIC**,
+	// **IP** or **TLS**. **IP** is only available for listeners that will be added to gateway load balancers. Changing this
+	// creates a new listener.
 	Protocol string `pulumi:"protocol"`
-	// The port on which to listen for client traffic. Changing this creates a
-	// new listener.
-	ProtocolPort int `pulumi:"protocolPort"`
+	// Specifies the port used by the listener.
+	// + The **QUIC** listener port cannot be `4789` or the same as the **UDP** listener port.
+	// + If `protocol` is set to **IP**, the value can only be `0` or empty.
+	// + If it is set to `0` and `protocol` is not set to **IP**, `portRanges` is required.
+	ProtocolPort *int `pulumi:"protocolPort"`
+	// Specifies whether to enable the proxy protocol option to pass the source IP
+	// addresses of the clients to backend servers. The default value is false. This parameter is available only for **TLS**
+	// listeners and does not take effect for other types of listeners.
+	ProxyProtocolEnable *bool `pulumi:"proxyProtocolEnable"`
+	// Specifies the ID of the QUIC listener. If it is set, HTTPS listener will be
+	// upgraded to QUIC listener. This parameter is valid only when protocol is set to **HTTPS**.
+	QuicListenerId *string `pulumi:"quicListenerId"`
+	// Specifies whether to transfer the source IP address of the client to backend servers
+	// through the HTTP header of the packet. The default value is false. This parameter is valid only when the protocol is
+	// set to **HTTP** or **HTTPS**.
+	RealIp *bool `pulumi:"realIp"`
 	// The region in which to create the listener resource. If omitted, the
 	// provider-level region will be used. Changing this creates a new listener.
 	Region *string `pulumi:"region"`
 	// Specifies the request timeout for the listener. Value range: 1 to 300. This
-	// parameter is valid when protocol is set to *HTTP* or *HTTPS*.
+	// parameter is valid when protocol is set to **HTTP** or **HTTPS**.
 	RequestTimeout *int `pulumi:"requestTimeout"`
 	// Specifies the response timeout for the listener. Value range: 1 to 300. This
-	// parameter is valid when protocol is set to *HTTP* or *HTTPS*.
+	// parameter is valid when protocol is set to **HTTP** or **HTTPS**.
 	ResponseTimeout *int `pulumi:"responseTimeout"`
+	// Specifies the ID of the custom security policy. This parameter is available
+	// only for **HTTPS** listeners added to a dedicated load balancer. If both `securityPolicyId` and `tlsCiphersPolicy`
+	// are specified, only `securityPolicyId` will take effect. This parameter is valid when protocol is set to **HTTPS**.
+	SecurityPolicyId *string `pulumi:"securityPolicyId"`
 	// Specifies the ID of the server certificate used by the listener. This
-	// parameter is mandatory when protocol is set to *HTTPS*.
+	// parameter is mandatory when protocol is set to **HTTPS**.
 	ServerCertificate *string `pulumi:"serverCertificate"`
 	// Lists the IDs of SNI certificates (server certificates with a domain name) used
-	// by the listener. This parameter is valid when protocol is set to *HTTPS*.
+	// by the listener. This parameter is valid when protocol is set to **HTTPS**.
 	SniCertificates []string `pulumi:"sniCertificates"`
+	// Specifies how wildcard domain name matches with the SNI certificates used by the
+	// listener. **longest_suffix** indicates longest suffix match. **wildcard** indicates wildcard match.
+	// The default value is **wildcard**.
+	SniMatchAlgo *string `pulumi:"sniMatchAlgo"`
+	// Specifies whether to enable 0-RTT capability, it is available only when
+	// protocol is set to **HTTPS** and relys on the **TLSv1.3** security policy protocol. The default value is false.
+	SslEarlyDataEnable *bool `pulumi:"sslEarlyDataEnable"`
 	// The key/value pairs to associate with the listener.
 	Tags map[string]string `pulumi:"tags"`
 	// Specifies the TLS cipher policy for the listener. Valid options are:
-	// tls-1-0-inherit, tls-1-0, tls-1-1, tls-1-2, tls-1-2-strict, tls-1-2-fs, tls-1-0-with-1-3, and tls-1-2-fs-with-1-3.
-	// This parameter is valid when protocol is set to *HTTPS*.
+	// **tls-1-0-inherit**, **tls-1-0**, **tls-1-1**, **tls-1-2**, **tls-1-2-strict**, **tls-1-2-fs**, **tls-1-0-with-1-3**,
+	// **tls-1-2-fs-with-1-3**, **hybrid-policy-1-0** and **tls-1-2-strict-no-cbc**. Defaults to **tls-1-0**.
+	// This parameter is valid when protocol is set to **HTTPS**.
 	TlsCiphersPolicy *string `pulumi:"tlsCiphersPolicy"`
 }
 
 // The set of arguments for constructing a Listener resource.
 type ListenerArgs struct {
-	// Specifies the access policy for the listener. Valid options are *white* and
-	// *black*.
+	// Specifies the access policy for the listener. Valid options are **white** and
+	// **black**.
 	AccessPolicy pulumi.StringPtrInput
 	// Specifies whether to enable advanced forwarding.
 	// If advanced forwarding is enabled, more flexible forwarding policies and rules are supported.
 	AdvancedForwardingEnabled pulumi.BoolPtrInput
 	// Specifies the ID of the CA certificate used by the listener. This parameter is
-	// valid when protocol is set to *HTTPS*.
+	// valid when protocol is set to **HTTPS**.
 	CaCertificate pulumi.StringPtrInput
 	// The ID of the default pool with which the listener is associated. Changing this
 	// creates a new listener.
 	DefaultPoolId pulumi.StringPtrInput
 	// Human-readable description for the listener.
 	Description pulumi.StringPtrInput
+	// Specifies whether to enable health check retries for backend servers.
+	// The default value is true. It is available only when protocol is set to **HTTP**, **HTTPS**, or **QUIC**.
+	EnableMemberRetry pulumi.BoolPtrInput
+	// Specifies whether to forcibly delete the listener, remove the listener, l7 policies,
+	// unbind associated pools. Defaults to **false**.
+	ForceDelete pulumi.BoolPtrInput
 	// Specifies whether transfer the load balancer EIP in the X-Forward-EIP header to
-	// backend servers. The default value is false. This parameter is valid only when the protocol is set to *HTTP* or
-	// *HTTPS*.
+	// backend servers. The default value is false. This parameter is valid only when the protocol is set to **HTTP** or
+	// **HTTPS**.
 	ForwardEip pulumi.BoolPtrInput
+	// Specifies whether to transfer the load balancer ID to backend servers through the HTTP
+	// header of the packet. The default value is false. This parameter is valid only when the protocol is set to **HTTP** or
+	// **HTTPS**.
+	ForwardElb pulumi.BoolPtrInput
+	// Specifies whether to rewrite the X-Forwarded-Host header. If X-Forwarded-Host is
+	// set to true, X-Forwarded-Host in the request header from the clients can be set to Host in the request header sent
+	// from the load balancer to backend servers. The default value is true. This parameter is valid only when the protocol
+	// is set to **HTTP** or **HTTPS**.
+	ForwardHost pulumi.BoolPtrInput
+	// Specifies whether transfer the listening port of the load balancer in the
+	// X-Forwarded-Port header to backend servers. The default value is false. This parameter is valid only when the
+	// protocol is set to **HTTP** or **HTTPS**.
+	ForwardPort pulumi.BoolPtrInput
+	// Specifies whether to transfer the listener protocol of the load balancer to backend
+	// servers through the HTTP header of the packet. The default value is false. This parameter is valid only when the
+	// protocol is set to **HTTP** or **HTTPS**.
+	ForwardProto pulumi.BoolPtrInput
+	// Specifies whether transfer the source port of the client in the
+	// X-Forwarded-For-Port header to backend servers. The default value is false. This parameter is valid only when the
+	// protocol is set to **HTTP** or **HTTPS**.
+	ForwardRequestPort pulumi.BoolPtrInput
+	// Specifies whether to transfer the certificate ID of the load balancer to
+	// backend servers through the HTTP header of the packet. The default value is false. This parameter is valid only when
+	// the protocol is set to **HTTPS**.
+	ForwardTlsCertificate pulumi.BoolPtrInput
+	// Specifies whether to transfer the algorithm suite of the load balancer to
+	// backend servers through the HTTP header of the packet. The default value is false. This parameter is valid only when
+	// the protocol is set to **HTTPS**.
+	ForwardTlsCipher pulumi.BoolPtrInput
+	// Specifies whether to transfer the algorithm protocol of the load balancer to
+	// backend servers through the HTTP header of the packet. The default value is false. This parameter is valid only when
+	// the protocol is set to **HTTPS**.
+	ForwardTlsProtocol pulumi.BoolPtrInput
+	// Specifies whether to enable gzip compression for a load balancer. The default value
+	// is **false**. This parameter can be configured only for **HTTP**, **HTTPS**, and **QUIC** listeners.
+	GzipEnable pulumi.BoolPtrInput
 	// Specifies whether to use HTTP/2. The default value is false. This parameter is valid
-	// only when the protocol is set to *HTTPS*.
+	// only when the protocol is set to **HTTPS**.
 	Http2Enable pulumi.BoolPtrInput
 	// Specifies the idle timeout for the listener. Value range: 0 to 4000.
 	IdleTimeout pulumi.IntPtrInput
@@ -338,32 +761,70 @@ type ListenerArgs struct {
 	LoadbalancerId pulumi.StringInput
 	// Human-readable name for the listener.
 	Name pulumi.StringPtrInput
-	// The protocol can either be TCP, UDP, HTTP or HTTPS. Changing this creates a
-	// new listener.
+	// Specifies the port monitoring range (closed range), specify up to 10 port
+	// groups, each group range must not overlap. This field can only be passed in when `protocolPort` is `0` or empty.
+	// Only **TCP**, **UDP**, and **TLS** listener support this field. Changing this creates a new listener.
+	// The portRanges structure is documented below.
+	PortRanges ListenerPortRangeArrayInput
+	// The reason for update protection. Only valid when `protectionStatus` is
+	// **consoleProtection**.
+	ProtectionReason pulumi.StringPtrInput
+	// The protection status for update. Value options:
+	// + **nonProtection**: No protection.
+	// + **consoleProtection**: Console modification protection.
+	ProtectionStatus pulumi.StringPtrInput
+	// The protocol can either be **TCP**, **UDP**, **HTTP**, **HTTPS**, **QUIC**,
+	// **IP** or **TLS**. **IP** is only available for listeners that will be added to gateway load balancers. Changing this
+	// creates a new listener.
 	Protocol pulumi.StringInput
-	// The port on which to listen for client traffic. Changing this creates a
-	// new listener.
-	ProtocolPort pulumi.IntInput
+	// Specifies the port used by the listener.
+	// + The **QUIC** listener port cannot be `4789` or the same as the **UDP** listener port.
+	// + If `protocol` is set to **IP**, the value can only be `0` or empty.
+	// + If it is set to `0` and `protocol` is not set to **IP**, `portRanges` is required.
+	ProtocolPort pulumi.IntPtrInput
+	// Specifies whether to enable the proxy protocol option to pass the source IP
+	// addresses of the clients to backend servers. The default value is false. This parameter is available only for **TLS**
+	// listeners and does not take effect for other types of listeners.
+	ProxyProtocolEnable pulumi.BoolPtrInput
+	// Specifies the ID of the QUIC listener. If it is set, HTTPS listener will be
+	// upgraded to QUIC listener. This parameter is valid only when protocol is set to **HTTPS**.
+	QuicListenerId pulumi.StringPtrInput
+	// Specifies whether to transfer the source IP address of the client to backend servers
+	// through the HTTP header of the packet. The default value is false. This parameter is valid only when the protocol is
+	// set to **HTTP** or **HTTPS**.
+	RealIp pulumi.BoolPtrInput
 	// The region in which to create the listener resource. If omitted, the
 	// provider-level region will be used. Changing this creates a new listener.
 	Region pulumi.StringPtrInput
 	// Specifies the request timeout for the listener. Value range: 1 to 300. This
-	// parameter is valid when protocol is set to *HTTP* or *HTTPS*.
+	// parameter is valid when protocol is set to **HTTP** or **HTTPS**.
 	RequestTimeout pulumi.IntPtrInput
 	// Specifies the response timeout for the listener. Value range: 1 to 300. This
-	// parameter is valid when protocol is set to *HTTP* or *HTTPS*.
+	// parameter is valid when protocol is set to **HTTP** or **HTTPS**.
 	ResponseTimeout pulumi.IntPtrInput
+	// Specifies the ID of the custom security policy. This parameter is available
+	// only for **HTTPS** listeners added to a dedicated load balancer. If both `securityPolicyId` and `tlsCiphersPolicy`
+	// are specified, only `securityPolicyId` will take effect. This parameter is valid when protocol is set to **HTTPS**.
+	SecurityPolicyId pulumi.StringPtrInput
 	// Specifies the ID of the server certificate used by the listener. This
-	// parameter is mandatory when protocol is set to *HTTPS*.
+	// parameter is mandatory when protocol is set to **HTTPS**.
 	ServerCertificate pulumi.StringPtrInput
 	// Lists the IDs of SNI certificates (server certificates with a domain name) used
-	// by the listener. This parameter is valid when protocol is set to *HTTPS*.
+	// by the listener. This parameter is valid when protocol is set to **HTTPS**.
 	SniCertificates pulumi.StringArrayInput
+	// Specifies how wildcard domain name matches with the SNI certificates used by the
+	// listener. **longest_suffix** indicates longest suffix match. **wildcard** indicates wildcard match.
+	// The default value is **wildcard**.
+	SniMatchAlgo pulumi.StringPtrInput
+	// Specifies whether to enable 0-RTT capability, it is available only when
+	// protocol is set to **HTTPS** and relys on the **TLSv1.3** security policy protocol. The default value is false.
+	SslEarlyDataEnable pulumi.BoolPtrInput
 	// The key/value pairs to associate with the listener.
 	Tags pulumi.StringMapInput
 	// Specifies the TLS cipher policy for the listener. Valid options are:
-	// tls-1-0-inherit, tls-1-0, tls-1-1, tls-1-2, tls-1-2-strict, tls-1-2-fs, tls-1-0-with-1-3, and tls-1-2-fs-with-1-3.
-	// This parameter is valid when protocol is set to *HTTPS*.
+	// **tls-1-0-inherit**, **tls-1-0**, **tls-1-1**, **tls-1-2**, **tls-1-2-strict**, **tls-1-2-fs**, **tls-1-0-with-1-3**,
+	// **tls-1-2-fs-with-1-3**, **hybrid-policy-1-0** and **tls-1-2-strict-no-cbc**. Defaults to **tls-1-0**.
+	// This parameter is valid when protocol is set to **HTTPS**.
 	TlsCiphersPolicy pulumi.StringPtrInput
 }
 
@@ -454,8 +915,8 @@ func (o ListenerOutput) ToListenerOutputWithContext(ctx context.Context) Listene
 	return o
 }
 
-// Specifies the access policy for the listener. Valid options are *white* and
-// *black*.
+// Specifies the access policy for the listener. Valid options are **white** and
+// **black**.
 func (o ListenerOutput) AccessPolicy() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Listener) pulumi.StringPtrOutput { return v.AccessPolicy }).(pulumi.StringPtrOutput)
 }
@@ -467,9 +928,14 @@ func (o ListenerOutput) AdvancedForwardingEnabled() pulumi.BoolOutput {
 }
 
 // Specifies the ID of the CA certificate used by the listener. This parameter is
-// valid when protocol is set to *HTTPS*.
+// valid when protocol is set to **HTTPS**.
 func (o ListenerOutput) CaCertificate() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Listener) pulumi.StringPtrOutput { return v.CaCertificate }).(pulumi.StringPtrOutput)
+}
+
+// The create time of the listener.
+func (o ListenerOutput) CreatedAt() pulumi.StringOutput {
+	return o.ApplyT(func(v *Listener) pulumi.StringOutput { return v.CreatedAt }).(pulumi.StringOutput)
 }
 
 // The ID of the default pool with which the listener is associated. Changing this
@@ -483,17 +949,92 @@ func (o ListenerOutput) Description() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Listener) pulumi.StringPtrOutput { return v.Description }).(pulumi.StringPtrOutput)
 }
 
+// Specifies whether to enable health check retries for backend servers.
+// The default value is true. It is available only when protocol is set to **HTTP**, **HTTPS**, or **QUIC**.
+func (o ListenerOutput) EnableMemberRetry() pulumi.BoolOutput {
+	return o.ApplyT(func(v *Listener) pulumi.BoolOutput { return v.EnableMemberRetry }).(pulumi.BoolOutput)
+}
+
+// Specifies whether to forcibly delete the listener, remove the listener, l7 policies,
+// unbind associated pools. Defaults to **false**.
+func (o ListenerOutput) ForceDelete() pulumi.BoolPtrOutput {
+	return o.ApplyT(func(v *Listener) pulumi.BoolPtrOutput { return v.ForceDelete }).(pulumi.BoolPtrOutput)
+}
+
 // Specifies whether transfer the load balancer EIP in the X-Forward-EIP header to
-// backend servers. The default value is false. This parameter is valid only when the protocol is set to *HTTP* or
-// *HTTPS*.
-func (o ListenerOutput) ForwardEip() pulumi.BoolPtrOutput {
-	return o.ApplyT(func(v *Listener) pulumi.BoolPtrOutput { return v.ForwardEip }).(pulumi.BoolPtrOutput)
+// backend servers. The default value is false. This parameter is valid only when the protocol is set to **HTTP** or
+// **HTTPS**.
+func (o ListenerOutput) ForwardEip() pulumi.BoolOutput {
+	return o.ApplyT(func(v *Listener) pulumi.BoolOutput { return v.ForwardEip }).(pulumi.BoolOutput)
+}
+
+// Specifies whether to transfer the load balancer ID to backend servers through the HTTP
+// header of the packet. The default value is false. This parameter is valid only when the protocol is set to **HTTP** or
+// **HTTPS**.
+func (o ListenerOutput) ForwardElb() pulumi.BoolOutput {
+	return o.ApplyT(func(v *Listener) pulumi.BoolOutput { return v.ForwardElb }).(pulumi.BoolOutput)
+}
+
+// Specifies whether to rewrite the X-Forwarded-Host header. If X-Forwarded-Host is
+// set to true, X-Forwarded-Host in the request header from the clients can be set to Host in the request header sent
+// from the load balancer to backend servers. The default value is true. This parameter is valid only when the protocol
+// is set to **HTTP** or **HTTPS**.
+func (o ListenerOutput) ForwardHost() pulumi.BoolPtrOutput {
+	return o.ApplyT(func(v *Listener) pulumi.BoolPtrOutput { return v.ForwardHost }).(pulumi.BoolPtrOutput)
+}
+
+// Specifies whether transfer the listening port of the load balancer in the
+// X-Forwarded-Port header to backend servers. The default value is false. This parameter is valid only when the
+// protocol is set to **HTTP** or **HTTPS**.
+func (o ListenerOutput) ForwardPort() pulumi.BoolOutput {
+	return o.ApplyT(func(v *Listener) pulumi.BoolOutput { return v.ForwardPort }).(pulumi.BoolOutput)
+}
+
+// Specifies whether to transfer the listener protocol of the load balancer to backend
+// servers through the HTTP header of the packet. The default value is false. This parameter is valid only when the
+// protocol is set to **HTTP** or **HTTPS**.
+func (o ListenerOutput) ForwardProto() pulumi.BoolOutput {
+	return o.ApplyT(func(v *Listener) pulumi.BoolOutput { return v.ForwardProto }).(pulumi.BoolOutput)
+}
+
+// Specifies whether transfer the source port of the client in the
+// X-Forwarded-For-Port header to backend servers. The default value is false. This parameter is valid only when the
+// protocol is set to **HTTP** or **HTTPS**.
+func (o ListenerOutput) ForwardRequestPort() pulumi.BoolOutput {
+	return o.ApplyT(func(v *Listener) pulumi.BoolOutput { return v.ForwardRequestPort }).(pulumi.BoolOutput)
+}
+
+// Specifies whether to transfer the certificate ID of the load balancer to
+// backend servers through the HTTP header of the packet. The default value is false. This parameter is valid only when
+// the protocol is set to **HTTPS**.
+func (o ListenerOutput) ForwardTlsCertificate() pulumi.BoolOutput {
+	return o.ApplyT(func(v *Listener) pulumi.BoolOutput { return v.ForwardTlsCertificate }).(pulumi.BoolOutput)
+}
+
+// Specifies whether to transfer the algorithm suite of the load balancer to
+// backend servers through the HTTP header of the packet. The default value is false. This parameter is valid only when
+// the protocol is set to **HTTPS**.
+func (o ListenerOutput) ForwardTlsCipher() pulumi.BoolOutput {
+	return o.ApplyT(func(v *Listener) pulumi.BoolOutput { return v.ForwardTlsCipher }).(pulumi.BoolOutput)
+}
+
+// Specifies whether to transfer the algorithm protocol of the load balancer to
+// backend servers through the HTTP header of the packet. The default value is false. This parameter is valid only when
+// the protocol is set to **HTTPS**.
+func (o ListenerOutput) ForwardTlsProtocol() pulumi.BoolOutput {
+	return o.ApplyT(func(v *Listener) pulumi.BoolOutput { return v.ForwardTlsProtocol }).(pulumi.BoolOutput)
+}
+
+// Specifies whether to enable gzip compression for a load balancer. The default value
+// is **false**. This parameter can be configured only for **HTTP**, **HTTPS**, and **QUIC** listeners.
+func (o ListenerOutput) GzipEnable() pulumi.BoolOutput {
+	return o.ApplyT(func(v *Listener) pulumi.BoolOutput { return v.GzipEnable }).(pulumi.BoolOutput)
 }
 
 // Specifies whether to use HTTP/2. The default value is false. This parameter is valid
-// only when the protocol is set to *HTTPS*.
-func (o ListenerOutput) Http2Enable() pulumi.BoolPtrOutput {
-	return o.ApplyT(func(v *Listener) pulumi.BoolPtrOutput { return v.Http2Enable }).(pulumi.BoolPtrOutput)
+// only when the protocol is set to **HTTPS**.
+func (o ListenerOutput) Http2Enable() pulumi.BoolOutput {
+	return o.ApplyT(func(v *Listener) pulumi.BoolOutput { return v.Http2Enable }).(pulumi.BoolOutput)
 }
 
 // Specifies the idle timeout for the listener. Value range: 0 to 4000.
@@ -517,16 +1058,60 @@ func (o ListenerOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v *Listener) pulumi.StringOutput { return v.Name }).(pulumi.StringOutput)
 }
 
-// The protocol can either be TCP, UDP, HTTP or HTTPS. Changing this creates a
-// new listener.
+// Specifies the port monitoring range (closed range), specify up to 10 port
+// groups, each group range must not overlap. This field can only be passed in when `protocolPort` is `0` or empty.
+// Only **TCP**, **UDP**, and **TLS** listener support this field. Changing this creates a new listener.
+// The portRanges structure is documented below.
+func (o ListenerOutput) PortRanges() ListenerPortRangeArrayOutput {
+	return o.ApplyT(func(v *Listener) ListenerPortRangeArrayOutput { return v.PortRanges }).(ListenerPortRangeArrayOutput)
+}
+
+// The reason for update protection. Only valid when `protectionStatus` is
+// **consoleProtection**.
+func (o ListenerOutput) ProtectionReason() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *Listener) pulumi.StringPtrOutput { return v.ProtectionReason }).(pulumi.StringPtrOutput)
+}
+
+// The protection status for update. Value options:
+// + **nonProtection**: No protection.
+// + **consoleProtection**: Console modification protection.
+func (o ListenerOutput) ProtectionStatus() pulumi.StringOutput {
+	return o.ApplyT(func(v *Listener) pulumi.StringOutput { return v.ProtectionStatus }).(pulumi.StringOutput)
+}
+
+// The protocol can either be **TCP**, **UDP**, **HTTP**, **HTTPS**, **QUIC**,
+// **IP** or **TLS**. **IP** is only available for listeners that will be added to gateway load balancers. Changing this
+// creates a new listener.
 func (o ListenerOutput) Protocol() pulumi.StringOutput {
 	return o.ApplyT(func(v *Listener) pulumi.StringOutput { return v.Protocol }).(pulumi.StringOutput)
 }
 
-// The port on which to listen for client traffic. Changing this creates a
-// new listener.
+// Specifies the port used by the listener.
+// + The **QUIC** listener port cannot be `4789` or the same as the **UDP** listener port.
+// + If `protocol` is set to **IP**, the value can only be `0` or empty.
+// + If it is set to `0` and `protocol` is not set to **IP**, `portRanges` is required.
 func (o ListenerOutput) ProtocolPort() pulumi.IntOutput {
 	return o.ApplyT(func(v *Listener) pulumi.IntOutput { return v.ProtocolPort }).(pulumi.IntOutput)
+}
+
+// Specifies whether to enable the proxy protocol option to pass the source IP
+// addresses of the clients to backend servers. The default value is false. This parameter is available only for **TLS**
+// listeners and does not take effect for other types of listeners.
+func (o ListenerOutput) ProxyProtocolEnable() pulumi.BoolOutput {
+	return o.ApplyT(func(v *Listener) pulumi.BoolOutput { return v.ProxyProtocolEnable }).(pulumi.BoolOutput)
+}
+
+// Specifies the ID of the QUIC listener. If it is set, HTTPS listener will be
+// upgraded to QUIC listener. This parameter is valid only when protocol is set to **HTTPS**.
+func (o ListenerOutput) QuicListenerId() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *Listener) pulumi.StringPtrOutput { return v.QuicListenerId }).(pulumi.StringPtrOutput)
+}
+
+// Specifies whether to transfer the source IP address of the client to backend servers
+// through the HTTP header of the packet. The default value is false. This parameter is valid only when the protocol is
+// set to **HTTP** or **HTTPS**.
+func (o ListenerOutput) RealIp() pulumi.BoolOutput {
+	return o.ApplyT(func(v *Listener) pulumi.BoolOutput { return v.RealIp }).(pulumi.BoolOutput)
 }
 
 // The region in which to create the listener resource. If omitted, the
@@ -536,27 +1121,47 @@ func (o ListenerOutput) Region() pulumi.StringOutput {
 }
 
 // Specifies the request timeout for the listener. Value range: 1 to 300. This
-// parameter is valid when protocol is set to *HTTP* or *HTTPS*.
+// parameter is valid when protocol is set to **HTTP** or **HTTPS**.
 func (o ListenerOutput) RequestTimeout() pulumi.IntOutput {
 	return o.ApplyT(func(v *Listener) pulumi.IntOutput { return v.RequestTimeout }).(pulumi.IntOutput)
 }
 
 // Specifies the response timeout for the listener. Value range: 1 to 300. This
-// parameter is valid when protocol is set to *HTTP* or *HTTPS*.
+// parameter is valid when protocol is set to **HTTP** or **HTTPS**.
 func (o ListenerOutput) ResponseTimeout() pulumi.IntOutput {
 	return o.ApplyT(func(v *Listener) pulumi.IntOutput { return v.ResponseTimeout }).(pulumi.IntOutput)
 }
 
+// Specifies the ID of the custom security policy. This parameter is available
+// only for **HTTPS** listeners added to a dedicated load balancer. If both `securityPolicyId` and `tlsCiphersPolicy`
+// are specified, only `securityPolicyId` will take effect. This parameter is valid when protocol is set to **HTTPS**.
+func (o ListenerOutput) SecurityPolicyId() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *Listener) pulumi.StringPtrOutput { return v.SecurityPolicyId }).(pulumi.StringPtrOutput)
+}
+
 // Specifies the ID of the server certificate used by the listener. This
-// parameter is mandatory when protocol is set to *HTTPS*.
+// parameter is mandatory when protocol is set to **HTTPS**.
 func (o ListenerOutput) ServerCertificate() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Listener) pulumi.StringPtrOutput { return v.ServerCertificate }).(pulumi.StringPtrOutput)
 }
 
 // Lists the IDs of SNI certificates (server certificates with a domain name) used
-// by the listener. This parameter is valid when protocol is set to *HTTPS*.
+// by the listener. This parameter is valid when protocol is set to **HTTPS**.
 func (o ListenerOutput) SniCertificates() pulumi.StringArrayOutput {
 	return o.ApplyT(func(v *Listener) pulumi.StringArrayOutput { return v.SniCertificates }).(pulumi.StringArrayOutput)
+}
+
+// Specifies how wildcard domain name matches with the SNI certificates used by the
+// listener. **longest_suffix** indicates longest suffix match. **wildcard** indicates wildcard match.
+// The default value is **wildcard**.
+func (o ListenerOutput) SniMatchAlgo() pulumi.StringOutput {
+	return o.ApplyT(func(v *Listener) pulumi.StringOutput { return v.SniMatchAlgo }).(pulumi.StringOutput)
+}
+
+// Specifies whether to enable 0-RTT capability, it is available only when
+// protocol is set to **HTTPS** and relys on the **TLSv1.3** security policy protocol. The default value is false.
+func (o ListenerOutput) SslEarlyDataEnable() pulumi.BoolPtrOutput {
+	return o.ApplyT(func(v *Listener) pulumi.BoolPtrOutput { return v.SslEarlyDataEnable }).(pulumi.BoolPtrOutput)
 }
 
 // The key/value pairs to associate with the listener.
@@ -565,10 +1170,16 @@ func (o ListenerOutput) Tags() pulumi.StringMapOutput {
 }
 
 // Specifies the TLS cipher policy for the listener. Valid options are:
-// tls-1-0-inherit, tls-1-0, tls-1-1, tls-1-2, tls-1-2-strict, tls-1-2-fs, tls-1-0-with-1-3, and tls-1-2-fs-with-1-3.
-// This parameter is valid when protocol is set to *HTTPS*.
+// **tls-1-0-inherit**, **tls-1-0**, **tls-1-1**, **tls-1-2**, **tls-1-2-strict**, **tls-1-2-fs**, **tls-1-0-with-1-3**,
+// **tls-1-2-fs-with-1-3**, **hybrid-policy-1-0** and **tls-1-2-strict-no-cbc**. Defaults to **tls-1-0**.
+// This parameter is valid when protocol is set to **HTTPS**.
 func (o ListenerOutput) TlsCiphersPolicy() pulumi.StringOutput {
 	return o.ApplyT(func(v *Listener) pulumi.StringOutput { return v.TlsCiphersPolicy }).(pulumi.StringOutput)
+}
+
+// The update time of the listener.
+func (o ListenerOutput) UpdatedAt() pulumi.StringOutput {
+	return o.ApplyT(func(v *Listener) pulumi.StringOutput { return v.UpdatedAt }).(pulumi.StringOutput)
 }
 
 type ListenerArrayOutput struct{ *pulumi.OutputState }

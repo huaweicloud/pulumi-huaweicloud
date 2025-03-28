@@ -7,6 +7,28 @@ import * as utilities from "../utilities";
 
 /**
  * ## Example Usage
+ *
+ * ## Import
+ *
+ * The BCS instance can be imported using `id`, e.g. bash
+ *
+ * ```sh
+ *  $ pulumi import huaweicloud:Bcs/instance:Instance test <id>
+ * ```
+ *
+ *  Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`delete_storage`, `eip_enable`, `enterprise_project_id`, `fabric_version`, `orderer_node_num`, `org_disk_size`, `password` and `volume_type`. It is generally recommended running `terraform plan` after importing a instance. You can then decide if changes should be applied to the instance, or the resource definition should be updated to align with the instance. Also you can ignore changes as below. hcl resource "huaweicloud_bcs_instance" "test" {
+ *
+ *  ...
+ *
+ *  lifecycle {
+ *
+ *  ignore_changes = [
+ *
+ *  delete_storage, eip_enable, enterprise_project_id, fabric_version, orderer_node_num, org_disk_size, password, volume_type,
+ *
+ *  ]
+ *
+ *  } }
  */
 export class Instance extends pulumi.CustomResource {
     /**
@@ -38,7 +60,7 @@ export class Instance extends pulumi.CustomResource {
 
     /**
      * The agent addresses and port numbers on the user data plane of the BCS service.
-     * * `peer_orgs/pvc_name` - The name of the PersistenetVolumeClaim (PVC) used by the peer.
+     * * `peer_orgs/pvc_name` - The name of the PersistentVolumeClaim (PVC) used by the peer.
      * * `peer_orgs/status` - The peer status. The value contains `IsCreating`, `IsUpgrading`, `Adding/IsScaling`,
      * `Isdeleting`, `Normal`, `AbNormal` and `Unknown`.
      * * `peer_orgs/status_detail` - The peer status in the format like `1/1`. The denominator is the total number of peers in
@@ -114,12 +136,12 @@ export class Instance extends pulumi.CustomResource {
     public readonly edition!: pulumi.Output<number>;
     /**
      * Specifies whether to use the EIP of the CCE to bind the BCS instance.
-     * Changing this will create a new instance. Defalut is true.
+     * Changing this will create a new instance. Default is true.
      */
     public readonly eipEnable!: pulumi.Output<boolean | undefined>;
     /**
      * Specifies the ID of the enterprise project that the BCS
-     * instance belong to. Changing this will create a new instance.
+     * instance belong to.
      */
     public readonly enterpriseProjectId!: pulumi.Output<string>;
     /**
@@ -153,7 +175,7 @@ export class Instance extends pulumi.CustomResource {
      */
     public readonly orgDiskSize!: pulumi.Output<number>;
     /**
-     * Specifies the password of the couch datebase. The password consists of 8 to
+     * Specifies the password of the couch database. The password consists of 8 to
      * 26 characters and must consist at least three of following: uppercase letters, lowercase letters, digits, special
      * characters(!@$%^-_=+[{}]:,./?). Changing this creates a new instance.
      */
@@ -183,7 +205,7 @@ export class Instance extends pulumi.CustomResource {
      */
     public /*out*/ readonly rollbackSupport!: pulumi.Output<boolean>;
     /**
-     * Specifies the secutity mechanism used by the BCS instance. Valid
+     * Specifies the security mechanism used by the BCS instance. Valid
      * values are `ECDSA` and `SM2`(Chinese cryptographic algorithms, The basic and professional don't support this
      * algorithm). Default is `ECDSA`. Changing this will create a new instance.
      */
@@ -332,7 +354,7 @@ export class Instance extends pulumi.CustomResource {
 export interface InstanceState {
     /**
      * The agent addresses and port numbers on the user data plane of the BCS service.
-     * * `peer_orgs/pvc_name` - The name of the PersistenetVolumeClaim (PVC) used by the peer.
+     * * `peer_orgs/pvc_name` - The name of the PersistentVolumeClaim (PVC) used by the peer.
      * * `peer_orgs/status` - The peer status. The value contains `IsCreating`, `IsUpgrading`, `Adding/IsScaling`,
      * `Isdeleting`, `Normal`, `AbNormal` and `Unknown`.
      * * `peer_orgs/status_detail` - The peer status in the format like `1/1`. The denominator is the total number of peers in
@@ -408,12 +430,12 @@ export interface InstanceState {
     edition?: pulumi.Input<number>;
     /**
      * Specifies whether to use the EIP of the CCE to bind the BCS instance.
-     * Changing this will create a new instance. Defalut is true.
+     * Changing this will create a new instance. Default is true.
      */
     eipEnable?: pulumi.Input<boolean>;
     /**
      * Specifies the ID of the enterprise project that the BCS
-     * instance belong to. Changing this will create a new instance.
+     * instance belong to.
      */
     enterpriseProjectId?: pulumi.Input<string>;
     /**
@@ -447,7 +469,7 @@ export interface InstanceState {
      */
     orgDiskSize?: pulumi.Input<number>;
     /**
-     * Specifies the password of the couch datebase. The password consists of 8 to
+     * Specifies the password of the couch database. The password consists of 8 to
      * 26 characters and must consist at least three of following: uppercase letters, lowercase letters, digits, special
      * characters(!@$%^-_=+[{}]:,./?). Changing this creates a new instance.
      */
@@ -477,7 +499,7 @@ export interface InstanceState {
      */
     rollbackSupport?: pulumi.Input<boolean>;
     /**
-     * Specifies the secutity mechanism used by the BCS instance. Valid
+     * Specifies the security mechanism used by the BCS instance. Valid
      * values are `ECDSA` and `SM2`(Chinese cryptographic algorithms, The basic and professional don't support this
      * algorithm). Default is `ECDSA`. Changing this will create a new instance.
      */
@@ -568,12 +590,12 @@ export interface InstanceArgs {
     edition: pulumi.Input<number>;
     /**
      * Specifies whether to use the EIP of the CCE to bind the BCS instance.
-     * Changing this will create a new instance. Defalut is true.
+     * Changing this will create a new instance. Default is true.
      */
     eipEnable?: pulumi.Input<boolean>;
     /**
      * Specifies the ID of the enterprise project that the BCS
-     * instance belong to. Changing this will create a new instance.
+     * instance belong to.
      */
     enterpriseProjectId: pulumi.Input<string>;
     /**
@@ -603,7 +625,7 @@ export interface InstanceArgs {
      */
     orgDiskSize: pulumi.Input<number>;
     /**
-     * Specifies the password of the couch datebase. The password consists of 8 to
+     * Specifies the password of the couch database. The password consists of 8 to
      * 26 characters and must consist at least three of following: uppercase letters, lowercase letters, digits, special
      * characters(!@$%^-_=+[{}]:,./?). Changing this creates a new instance.
      */
@@ -625,7 +647,7 @@ export interface InstanceArgs {
      */
     restfulApiSupport?: pulumi.Input<boolean>;
     /**
-     * Specifies the secutity mechanism used by the BCS instance. Valid
+     * Specifies the security mechanism used by the BCS instance. Valid
      * values are `ECDSA` and `SM2`(Chinese cryptographic algorithms, The basic and professional don't support this
      * algorithm). Default is `ECDSA`. Changing this will create a new instance.
      */

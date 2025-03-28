@@ -19,8 +19,8 @@ class ZoneRouterArgs:
                  router_id: pulumi.Input[str],
                  router_region: Optional[pulumi.Input[str]] = None):
         """
-        :param pulumi.Input[str] router_id: ID of the associated VPC.
-        :param pulumi.Input[str] router_region: The region of the VPC.
+        :param pulumi.Input[str] router_id: Specifies the ID of the associated VPC.
+        :param pulumi.Input[str] router_region: Specifies the region of the VPC.
         """
         pulumi.set(__self__, "router_id", router_id)
         if router_region is not None:
@@ -30,7 +30,7 @@ class ZoneRouterArgs:
     @pulumi.getter(name="routerId")
     def router_id(self) -> pulumi.Input[str]:
         """
-        ID of the associated VPC.
+        Specifies the ID of the associated VPC.
         """
         return pulumi.get(self, "router_id")
 
@@ -42,7 +42,7 @@ class ZoneRouterArgs:
     @pulumi.getter(name="routerRegion")
     def router_region(self) -> Optional[pulumi.Input[str]]:
         """
-        The region of the VPC.
+        Specifies the region of the VPC.
         """
         return pulumi.get(self, "router_region")
 

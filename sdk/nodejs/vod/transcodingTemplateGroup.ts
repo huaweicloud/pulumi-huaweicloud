@@ -40,7 +40,7 @@ import * as utilities from "../utilities";
  *
  * ## Import
  *
- * VOD transcoding template groups can be imported using the `id`, e.g.
+ * VOD transcoding template groups can be imported using the `id`, e.g. bash
  *
  * ```sh
  *  $ pulumi import huaweicloud:Vod/transcodingTemplateGroup:TranscodingTemplateGroup test 589e49809bb84447a759f6fa9aa19949
@@ -90,8 +90,8 @@ export class TranscodingTemplateGroup extends pulumi.CustomResource {
      */
     public readonly description!: pulumi.Output<string | undefined>;
     /**
-     * Specifies the HLS segment duration. The value can be: **2**, **3**, **5**
-     * and **10**. Defaults to: **5**. This parameter is used only when `outputFormat` is set to **HLS** or **DASH_HLS**.
+     * Specifies the HLS segment duration. The value can be: `2`, `3`, `5`
+     * and `10`. Defaults to: `5`. This parameter is used only when `outputFormat` is set to **HLS** or **DASH_HLS**.
      */
     public readonly hlsSegmentDuration!: pulumi.Output<number>;
     /**
@@ -103,7 +103,7 @@ export class TranscodingTemplateGroup extends pulumi.CustomResource {
      */
     public readonly lowBitrateHd!: pulumi.Output<boolean | undefined>;
     /**
-     * Specifies the name of the template group. The value can be a string of 1 to 128
+     * Specifies the name of the template group. The value can be a string of `1` to `128`
      * characters that can consist of letters, digits and underscores (_).
      */
     public readonly name!: pulumi.Output<string>;
@@ -199,8 +199,8 @@ export interface TranscodingTemplateGroupState {
      */
     description?: pulumi.Input<string>;
     /**
-     * Specifies the HLS segment duration. The value can be: **2**, **3**, **5**
-     * and **10**. Defaults to: **5**. This parameter is used only when `outputFormat` is set to **HLS** or **DASH_HLS**.
+     * Specifies the HLS segment duration. The value can be: `2`, `3`, `5`
+     * and `10`. Defaults to: `5`. This parameter is used only when `outputFormat` is set to **HLS** or **DASH_HLS**.
      */
     hlsSegmentDuration?: pulumi.Input<number>;
     /**
@@ -212,7 +212,7 @@ export interface TranscodingTemplateGroupState {
      */
     lowBitrateHd?: pulumi.Input<boolean>;
     /**
-     * Specifies the name of the template group. The value can be a string of 1 to 128
+     * Specifies the name of the template group. The value can be a string of `1` to `128`
      * characters that can consist of letters, digits and underscores (_).
      */
     name?: pulumi.Input<string>;
@@ -261,8 +261,8 @@ export interface TranscodingTemplateGroupArgs {
      */
     description?: pulumi.Input<string>;
     /**
-     * Specifies the HLS segment duration. The value can be: **2**, **3**, **5**
-     * and **10**. Defaults to: **5**. This parameter is used only when `outputFormat` is set to **HLS** or **DASH_HLS**.
+     * Specifies the HLS segment duration. The value can be: `2`, `3`, `5`
+     * and `10`. Defaults to: `5`. This parameter is used only when `outputFormat` is set to **HLS** or **DASH_HLS**.
      */
     hlsSegmentDuration?: pulumi.Input<number>;
     /**
@@ -274,7 +274,7 @@ export interface TranscodingTemplateGroupArgs {
      */
     lowBitrateHd?: pulumi.Input<boolean>;
     /**
-     * Specifies the name of the template group. The value can be a string of 1 to 128
+     * Specifies the name of the template group. The value can be a string of `1` to `128`
      * characters that can consist of letters, digits and underscores (_).
      */
     name?: pulumi.Input<string>;

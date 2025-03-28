@@ -42,13 +42,27 @@ import (
 //
 // ## Import
 //
-// DLI SQL databases can be imported by their `name`, e.g.
+// DLI SQL databases can be imported by their `name`, e.g. bash
 //
 // ```sh
 //
 //	$ pulumi import huaweicloud:Dli/database:Database test terraform_test
 //
 // ```
+//
+//	Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`tags`. It is generally recommended running `terraform plan` after importing a resource. You can then decide if changes should be applied to the resource, or the resource definition should be updated to align with the resource. Also you can ignore changes as below. hcl resource "huaweicloud_dataarts_factory_script" "test" {
+//
+//	...
+//
+//	lifecycle {
+//
+//	ignore_changes = [
+//
+//	tags,
+//
+//	]
+//
+//	} }
 type Database struct {
 	pulumi.CustomResourceState
 
@@ -58,8 +72,9 @@ type Database struct {
 	// Specifies the enterprise project ID.
 	// The value 0 indicates the default enterprise project. Changing this parameter will create a new database resource.
 	EnterpriseProjectId pulumi.StringOutput `pulumi:"enterpriseProjectId"`
-	// Specifies the database name. The name consists of 1 to 128 characters, starting
-	// with a letter or digit. Only letters, digits and underscores (_) are allowed and the name cannot be all digits.
+	// Specifies the database name.\
+	// The name consists of `1` to `128` characters, starting with a letter or digit.
+	// Only letters, digits and underscores (_) are allowed and the name cannot be all digits.
 	// Changing this parameter will create a new database resource.
 	Name pulumi.StringOutput `pulumi:"name"`
 	// Specifies the name of the SQL database owner.
@@ -68,6 +83,9 @@ type Database struct {
 	// Specifies the region in which to create the DLI database resource.
 	// If omitted, the provider-level region will be used. Changing this parameter will create a new database resource.
 	Region pulumi.StringOutput `pulumi:"region"`
+	// Specifies the key/value pairs to associate with the database.\
+	// Changing this parameter will create a new resource.
+	Tags pulumi.StringMapOutput `pulumi:"tags"`
 }
 
 // NewDatabase registers a new resource with the given unique name, arguments, and options.
@@ -106,8 +124,9 @@ type databaseState struct {
 	// Specifies the enterprise project ID.
 	// The value 0 indicates the default enterprise project. Changing this parameter will create a new database resource.
 	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
-	// Specifies the database name. The name consists of 1 to 128 characters, starting
-	// with a letter or digit. Only letters, digits and underscores (_) are allowed and the name cannot be all digits.
+	// Specifies the database name.\
+	// The name consists of `1` to `128` characters, starting with a letter or digit.
+	// Only letters, digits and underscores (_) are allowed and the name cannot be all digits.
 	// Changing this parameter will create a new database resource.
 	Name *string `pulumi:"name"`
 	// Specifies the name of the SQL database owner.
@@ -116,6 +135,9 @@ type databaseState struct {
 	// Specifies the region in which to create the DLI database resource.
 	// If omitted, the provider-level region will be used. Changing this parameter will create a new database resource.
 	Region *string `pulumi:"region"`
+	// Specifies the key/value pairs to associate with the database.\
+	// Changing this parameter will create a new resource.
+	Tags map[string]string `pulumi:"tags"`
 }
 
 type DatabaseState struct {
@@ -125,8 +147,9 @@ type DatabaseState struct {
 	// Specifies the enterprise project ID.
 	// The value 0 indicates the default enterprise project. Changing this parameter will create a new database resource.
 	EnterpriseProjectId pulumi.StringPtrInput
-	// Specifies the database name. The name consists of 1 to 128 characters, starting
-	// with a letter or digit. Only letters, digits and underscores (_) are allowed and the name cannot be all digits.
+	// Specifies the database name.\
+	// The name consists of `1` to `128` characters, starting with a letter or digit.
+	// Only letters, digits and underscores (_) are allowed and the name cannot be all digits.
 	// Changing this parameter will create a new database resource.
 	Name pulumi.StringPtrInput
 	// Specifies the name of the SQL database owner.
@@ -135,6 +158,9 @@ type DatabaseState struct {
 	// Specifies the region in which to create the DLI database resource.
 	// If omitted, the provider-level region will be used. Changing this parameter will create a new database resource.
 	Region pulumi.StringPtrInput
+	// Specifies the key/value pairs to associate with the database.\
+	// Changing this parameter will create a new resource.
+	Tags pulumi.StringMapInput
 }
 
 func (DatabaseState) ElementType() reflect.Type {
@@ -148,8 +174,9 @@ type databaseArgs struct {
 	// Specifies the enterprise project ID.
 	// The value 0 indicates the default enterprise project. Changing this parameter will create a new database resource.
 	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
-	// Specifies the database name. The name consists of 1 to 128 characters, starting
-	// with a letter or digit. Only letters, digits and underscores (_) are allowed and the name cannot be all digits.
+	// Specifies the database name.\
+	// The name consists of `1` to `128` characters, starting with a letter or digit.
+	// Only letters, digits and underscores (_) are allowed and the name cannot be all digits.
 	// Changing this parameter will create a new database resource.
 	Name *string `pulumi:"name"`
 	// Specifies the name of the SQL database owner.
@@ -158,6 +185,9 @@ type databaseArgs struct {
 	// Specifies the region in which to create the DLI database resource.
 	// If omitted, the provider-level region will be used. Changing this parameter will create a new database resource.
 	Region *string `pulumi:"region"`
+	// Specifies the key/value pairs to associate with the database.\
+	// Changing this parameter will create a new resource.
+	Tags map[string]string `pulumi:"tags"`
 }
 
 // The set of arguments for constructing a Database resource.
@@ -168,8 +198,9 @@ type DatabaseArgs struct {
 	// Specifies the enterprise project ID.
 	// The value 0 indicates the default enterprise project. Changing this parameter will create a new database resource.
 	EnterpriseProjectId pulumi.StringPtrInput
-	// Specifies the database name. The name consists of 1 to 128 characters, starting
-	// with a letter or digit. Only letters, digits and underscores (_) are allowed and the name cannot be all digits.
+	// Specifies the database name.\
+	// The name consists of `1` to `128` characters, starting with a letter or digit.
+	// Only letters, digits and underscores (_) are allowed and the name cannot be all digits.
 	// Changing this parameter will create a new database resource.
 	Name pulumi.StringPtrInput
 	// Specifies the name of the SQL database owner.
@@ -178,6 +209,9 @@ type DatabaseArgs struct {
 	// Specifies the region in which to create the DLI database resource.
 	// If omitted, the provider-level region will be used. Changing this parameter will create a new database resource.
 	Region pulumi.StringPtrInput
+	// Specifies the key/value pairs to associate with the database.\
+	// Changing this parameter will create a new resource.
+	Tags pulumi.StringMapInput
 }
 
 func (DatabaseArgs) ElementType() reflect.Type {
@@ -279,8 +313,9 @@ func (o DatabaseOutput) EnterpriseProjectId() pulumi.StringOutput {
 	return o.ApplyT(func(v *Database) pulumi.StringOutput { return v.EnterpriseProjectId }).(pulumi.StringOutput)
 }
 
-// Specifies the database name. The name consists of 1 to 128 characters, starting
-// with a letter or digit. Only letters, digits and underscores (_) are allowed and the name cannot be all digits.
+// Specifies the database name.\
+// The name consists of `1` to `128` characters, starting with a letter or digit.
+// Only letters, digits and underscores (_) are allowed and the name cannot be all digits.
 // Changing this parameter will create a new database resource.
 func (o DatabaseOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v *Database) pulumi.StringOutput { return v.Name }).(pulumi.StringOutput)
@@ -296,6 +331,12 @@ func (o DatabaseOutput) Owner() pulumi.StringOutput {
 // If omitted, the provider-level region will be used. Changing this parameter will create a new database resource.
 func (o DatabaseOutput) Region() pulumi.StringOutput {
 	return o.ApplyT(func(v *Database) pulumi.StringOutput { return v.Region }).(pulumi.StringOutput)
+}
+
+// Specifies the key/value pairs to associate with the database.\
+// Changing this parameter will create a new resource.
+func (o DatabaseOutput) Tags() pulumi.StringMapOutput {
+	return o.ApplyT(func(v *Database) pulumi.StringMapOutput { return v.Tags }).(pulumi.StringMapOutput)
 }
 
 type DatabaseArrayOutput struct{ *pulumi.OutputState }

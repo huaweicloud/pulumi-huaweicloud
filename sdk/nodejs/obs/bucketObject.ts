@@ -53,13 +53,13 @@ import * as utilities from "../utilities";
  *
  * ## Import
  *
- * OBS bucket object can be imported using the bucket and key separated by a slash, e.g.
+ * OBS bucket object can be imported using the bucket and key separated by a slash, e.g. bash
  *
  * ```sh
  *  $ pulumi import huaweicloud:Obs/bucketObject:BucketObject object bucket/key
  * ```
  *
- *  Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`encryption`, `source`, `acl` and `kms_key_id`. It is generally recommended running `terraform plan` after importing an object. You can then decide if changes should be applied to the object, or the resource definition should be updated to align with the object. Also you can ignore changes as below. resource "huaweicloud_obs_bucket_object" "object" {
+ *  Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`encryption`, `source`, `acl` and `kms_key_id`. It is generally recommended running `terraform plan` after importing an object. You can then decide if changes should be applied to the object, or the resource definition should be updated to align with the object. Also you can ignore changes as below. hcl resource "huaweicloud_obs_bucket_object" "object" {
  *
  *  ...
  *

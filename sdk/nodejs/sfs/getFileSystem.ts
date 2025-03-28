@@ -5,6 +5,8 @@ import * as pulumi from "@pulumi/pulumi";
 import * as utilities from "../utilities";
 
 /**
+ * !> **WARNING:** It has been deprecated.
+ *
  * Provides information about an Shared File System (SFS) within HuaweiCloud.
  *
  * ## Example Usage

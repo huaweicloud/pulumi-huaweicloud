@@ -83,12 +83,12 @@ type LookupServerResult struct {
 	Name    string `pulumi:"name"`
 	// An array of one or more networks to attach to the IEC server. The object structure is documented below.
 	Nics []GetServerNic `pulumi:"nics"`
-	// The EIP address that is associted to the IEC server.
+	// The EIP address that is associated to the IEC server.
 	PublicIp string `pulumi:"publicIp"`
 	// An array of one or more security group IDs to associate with the IEC server.
 	SecurityGroups []string `pulumi:"securityGroups"`
 	Status         string   `pulumi:"status"`
-	// The system disk voume ID.
+	// The system disk volume ID.
 	SystemDiskId string `pulumi:"systemDiskId"`
 	// The user data (information after encoding) configured during IEC server creation.
 	UserData string `pulumi:"userData"`
@@ -194,7 +194,7 @@ func (o LookupServerResultOutput) Nics() GetServerNicArrayOutput {
 	return o.ApplyT(func(v LookupServerResult) []GetServerNic { return v.Nics }).(GetServerNicArrayOutput)
 }
 
-// The EIP address that is associted to the IEC server.
+// The EIP address that is associated to the IEC server.
 func (o LookupServerResultOutput) PublicIp() pulumi.StringOutput {
 	return o.ApplyT(func(v LookupServerResult) string { return v.PublicIp }).(pulumi.StringOutput)
 }
@@ -208,7 +208,7 @@ func (o LookupServerResultOutput) Status() pulumi.StringOutput {
 	return o.ApplyT(func(v LookupServerResult) string { return v.Status }).(pulumi.StringOutput)
 }
 
-// The system disk voume ID.
+// The system disk volume ID.
 func (o LookupServerResultOutput) SystemDiskId() pulumi.StringOutput {
 	return o.ApplyT(func(v LookupServerResult) string { return v.SystemDiskId }).(pulumi.StringOutput)
 }

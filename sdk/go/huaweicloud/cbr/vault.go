@@ -11,7 +11,7 @@ import (
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
-// Manages a CBR Vault resource within Huaweicloud.
+// Manages a CBR vault resource within HuaweiCloud.
 //
 // ## Example Usage
 // ### Create a server type vault
@@ -47,6 +47,64 @@ import (
 //				},
 //				Tags: pulumi.StringMap{
 //					"foo": pulumi.String("bar"),
+//				},
+//			})
+//			if err != nil {
+//				return err
+//			}
+//			return nil
+//		})
+//	}
+//
+// ```
+// ### Create a server type vault and associate backup and reprecation policies
+//
+// ```go
+// package main
+//
+// import (
+//
+//	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud/Cbr"
+//	"github.com/pulumi/pulumi-huaweicloud/sdk/go/huaweicloud/Cbr"
+//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi/config"
+//
+// )
+//
+//	func main() {
+//		pulumi.Run(func(ctx *pulumi.Context) error {
+//			cfg := config.New(ctx, "")
+//			destinationRegion := cfg.RequireObject("destinationRegion")
+//			destinationVaultName := cfg.RequireObject("destinationVaultName")
+//			vaultName := cfg.RequireObject("vaultName")
+//			backupPolicyId := cfg.RequireObject("backupPolicyId")
+//			replicationPolicyId := cfg.RequireObject("replicationPolicyId")
+//			destination, err := Cbr.NewVault(ctx, "destination", &Cbr.VaultArgs{
+//				Region:         pulumi.Any(destinationRegion),
+//				Type:           pulumi.String("server"),
+//				ProtectionType: pulumi.String("replication"),
+//				Size:           pulumi.Int(500),
+//			})
+//			if err != nil {
+//				return err
+//			}
+//			_, err = Cbr.NewVault(ctx, "test", &Cbr.VaultArgs{
+//				Type:            pulumi.String("server"),
+//				ProtectionType:  pulumi.String("backup"),
+//				ConsistentLevel: pulumi.String("crash_consistent"),
+//				Size:            pulumi.Int(500),
+//				AutoBind:        pulumi.Bool(true),
+//				BindRules: pulumi.StringMap{
+//					"service_name": pulumi.String("xxx"),
+//				},
+//				Policies: cbr.VaultPolicyArray{
+//					&cbr.VaultPolicyArgs{
+//						Id: pulumi.Any(backupPolicyId),
+//					},
+//					&cbr.VaultPolicyArgs{
+//						Id:                 pulumi.Any(replicationPolicyId),
+//						DestinationVaultId: destination.ID(),
+//					},
 //				},
 //			})
 //			if err != nil {
@@ -168,10 +226,103 @@ import (
 //	}
 //
 // ```
+// ### Create a Workspace type vault
+//
+// ```go
+// package main
+//
+// import (
+//
+//	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud/Cbr"
+//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi/config"
+//
+// )
+//
+//	func main() {
+//		pulumi.Run(func(ctx *pulumi.Context) error {
+//			cfg := config.New(ctx, "")
+//			vaultName := cfg.RequireObject("vaultName")
+//			_, err := Cbr.NewVault(ctx, "test", &Cbr.VaultArgs{
+//				Type:            pulumi.String("workspace"),
+//				ProtectionType:  pulumi.String("backup"),
+//				Size:            pulumi.Int(100),
+//				ConsistentLevel: pulumi.String("crash_consistent"),
+//			})
+//			if err != nil {
+//				return err
+//			}
+//			return nil
+//		})
+//	}
+//
+// ```
+// ### Create a VMware type vault
+//
+// ```go
+// package main
+//
+// import (
+//
+//	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud/Cbr"
+//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi/config"
+//
+// )
+//
+//	func main() {
+//		pulumi.Run(func(ctx *pulumi.Context) error {
+//			cfg := config.New(ctx, "")
+//			vaultName := cfg.RequireObject("vaultName")
+//			_, err := Cbr.NewVault(ctx, "test", &Cbr.VaultArgs{
+//				Type:            pulumi.String("vmware"),
+//				ProtectionType:  pulumi.String("backup"),
+//				Size:            pulumi.Int(100),
+//				ConsistentLevel: pulumi.String("crash_consistent"),
+//			})
+//			if err != nil {
+//				return err
+//			}
+//			return nil
+//		})
+//	}
+//
+// ```
+// ### Create a file type vault
+//
+// ```go
+// package main
+//
+// import (
+//
+//	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud/Cbr"
+//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi/config"
+//
+// )
+//
+//	func main() {
+//		pulumi.Run(func(ctx *pulumi.Context) error {
+//			cfg := config.New(ctx, "")
+//			vaultName := cfg.RequireObject("vaultName")
+//			_, err := Cbr.NewVault(ctx, "test", &Cbr.VaultArgs{
+//				Type:            pulumi.String("file"),
+//				ProtectionType:  pulumi.String("backup"),
+//				Size:            pulumi.Int(100),
+//				ConsistentLevel: pulumi.String("crash_consistent"),
+//			})
+//			if err != nil {
+//				return err
+//			}
+//			return nil
+//		})
+//	}
+//
+// ```
 //
 // ## Import
 //
-// Vaults can be imported by their `id`. For example,
+// Vaults can be imported by their `id`. For example, bash
 //
 // ```sh
 //
@@ -179,7 +330,7 @@ import (
 //
 // ```
 //
-//	Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`period_unit`, `period`, `auto_renew`. It is generally recommended running `terraform plan` after importing a vault. You can then decide if changes should be applied to the vault, or the resource definition should be updated to align with the vault. Also you can ignore changes as below. resource "huaweicloud_cbr_vault" "test" {
+//	Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`period_unit`, `period`, `auto_renew`. It is generally recommended running `terraform plan` after importing a vault. You can then decide if changes should be applied to the vault, or the resource definition should be updated to align with the vault. Also you can ignore changes as below. hcl resource "huaweicloud_cbr_vault" "test" {
 //
 //	...
 //
@@ -217,14 +368,19 @@ type Vault struct {
 	// + **prePaid**: the yearly/monthly billing mode.
 	// + **postPaid**: the pay-per-use billing mode.
 	ChargingMode pulumi.StringOutput `pulumi:"chargingMode"`
+	// Specifies the cloud type of the vault.\
+	// Changing this will create a new vault.
+	CloudType pulumi.StringOutput `pulumi:"cloudType"`
 	// Specifies the consistent level (specification) of the vault.
 	// The valid values are as follows:
 	// + **[crashConsistent](https://support.huaweicloud.com/intl/en-us/usermanual-cbr/cbr_03_0109.html)**
 	// + **[appConsistent](https://support.huaweicloud.com/intl/en-us/usermanual-cbr/cbr_03_0109.html)**
 	ConsistentLevel pulumi.StringPtrOutput `pulumi:"consistentLevel"`
-	// Specifies the ID of the enterprise project to which the vault
-	// belongs. Changing this will create a new vault.
+	// Specifies the ID of the enterprise project to which the vault belongs.
 	EnterpriseProjectId pulumi.StringOutput `pulumi:"enterpriseProjectId"`
+	// Specifies whether multiple availability zones are used for backing up.
+	// Defaults to **false**.
+	IsMultiAz pulumi.BoolOutput `pulumi:"isMultiAz"`
 	// Specifies a unique name of the CBR vault. This parameter can contain a maximum of 64
 	// characters, which may consist of letters, digits, underscores(_) and hyphens (-).
 	Name pulumi.StringOutput `pulumi:"name"`
@@ -250,7 +406,8 @@ type Vault struct {
 	// Specifies the region in which to create the CBR vault. If omitted, the
 	// provider-level region will be used. Changing this will create a new vault.
 	Region pulumi.StringOutput `pulumi:"region"`
-	// Specifies an array of one or more resources to attach to the CBR vault.
+	// Specifies an array of one or more resources to attach to the CBR vault.\
+	// This feature is not supported for the **vmware** type and the **file** type.
 	// The object structure is documented below.
 	Resources VaultResourceArrayOutput `pulumi:"resources"`
 	// Specifies the vault capacity, in GB. The valid value range is `1` to `10,485,760`.
@@ -264,10 +421,13 @@ type Vault struct {
 	// Specifies the key/value pairs to associate with the CBR vault.
 	Tags pulumi.StringMapOutput `pulumi:"tags"`
 	// Specifies the object type of the CBR vault.
-	// Changing this will create a new vault. Vaild values are as follows:
-	// + **server** (Cloud Servers)
-	// + **disk** (EVS Disks)
-	// + **turbo** (SFS Turbo file systems)
+	// Changing this will create a new vault. Valid values are as follows:
+	// + **server** (Elastic Cloud Server)
+	// + **disk** (EVS Disk)
+	// + **turbo** (SFS Turbo file system)
+	// + **workspace** (Workspace Desktop)
+	// + **vmware** (VMware)
+	// + **file** (File System)
 	Type pulumi.StringOutput `pulumi:"type"`
 	// The used capacity, in GB.
 	Used pulumi.Float64Output `pulumi:"used"`
@@ -334,14 +494,19 @@ type vaultState struct {
 	// + **prePaid**: the yearly/monthly billing mode.
 	// + **postPaid**: the pay-per-use billing mode.
 	ChargingMode *string `pulumi:"chargingMode"`
+	// Specifies the cloud type of the vault.\
+	// Changing this will create a new vault.
+	CloudType *string `pulumi:"cloudType"`
 	// Specifies the consistent level (specification) of the vault.
 	// The valid values are as follows:
 	// + **[crashConsistent](https://support.huaweicloud.com/intl/en-us/usermanual-cbr/cbr_03_0109.html)**
 	// + **[appConsistent](https://support.huaweicloud.com/intl/en-us/usermanual-cbr/cbr_03_0109.html)**
 	ConsistentLevel *string `pulumi:"consistentLevel"`
-	// Specifies the ID of the enterprise project to which the vault
-	// belongs. Changing this will create a new vault.
+	// Specifies the ID of the enterprise project to which the vault belongs.
 	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
+	// Specifies whether multiple availability zones are used for backing up.
+	// Defaults to **false**.
+	IsMultiAz *bool `pulumi:"isMultiAz"`
 	// Specifies a unique name of the CBR vault. This parameter can contain a maximum of 64
 	// characters, which may consist of letters, digits, underscores(_) and hyphens (-).
 	Name *string `pulumi:"name"`
@@ -367,7 +532,8 @@ type vaultState struct {
 	// Specifies the region in which to create the CBR vault. If omitted, the
 	// provider-level region will be used. Changing this will create a new vault.
 	Region *string `pulumi:"region"`
-	// Specifies an array of one or more resources to attach to the CBR vault.
+	// Specifies an array of one or more resources to attach to the CBR vault.\
+	// This feature is not supported for the **vmware** type and the **file** type.
 	// The object structure is documented below.
 	Resources []VaultResource `pulumi:"resources"`
 	// Specifies the vault capacity, in GB. The valid value range is `1` to `10,485,760`.
@@ -381,10 +547,13 @@ type vaultState struct {
 	// Specifies the key/value pairs to associate with the CBR vault.
 	Tags map[string]string `pulumi:"tags"`
 	// Specifies the object type of the CBR vault.
-	// Changing this will create a new vault. Vaild values are as follows:
-	// + **server** (Cloud Servers)
-	// + **disk** (EVS Disks)
-	// + **turbo** (SFS Turbo file systems)
+	// Changing this will create a new vault. Valid values are as follows:
+	// + **server** (Elastic Cloud Server)
+	// + **disk** (EVS Disk)
+	// + **turbo** (SFS Turbo file system)
+	// + **workspace** (Workspace Desktop)
+	// + **vmware** (VMware)
+	// + **file** (File System)
 	Type *string `pulumi:"type"`
 	// The used capacity, in GB.
 	Used *float64 `pulumi:"used"`
@@ -413,14 +582,19 @@ type VaultState struct {
 	// + **prePaid**: the yearly/monthly billing mode.
 	// + **postPaid**: the pay-per-use billing mode.
 	ChargingMode pulumi.StringPtrInput
+	// Specifies the cloud type of the vault.\
+	// Changing this will create a new vault.
+	CloudType pulumi.StringPtrInput
 	// Specifies the consistent level (specification) of the vault.
 	// The valid values are as follows:
 	// + **[crashConsistent](https://support.huaweicloud.com/intl/en-us/usermanual-cbr/cbr_03_0109.html)**
 	// + **[appConsistent](https://support.huaweicloud.com/intl/en-us/usermanual-cbr/cbr_03_0109.html)**
 	ConsistentLevel pulumi.StringPtrInput
-	// Specifies the ID of the enterprise project to which the vault
-	// belongs. Changing this will create a new vault.
+	// Specifies the ID of the enterprise project to which the vault belongs.
 	EnterpriseProjectId pulumi.StringPtrInput
+	// Specifies whether multiple availability zones are used for backing up.
+	// Defaults to **false**.
+	IsMultiAz pulumi.BoolPtrInput
 	// Specifies a unique name of the CBR vault. This parameter can contain a maximum of 64
 	// characters, which may consist of letters, digits, underscores(_) and hyphens (-).
 	Name pulumi.StringPtrInput
@@ -446,7 +620,8 @@ type VaultState struct {
 	// Specifies the region in which to create the CBR vault. If omitted, the
 	// provider-level region will be used. Changing this will create a new vault.
 	Region pulumi.StringPtrInput
-	// Specifies an array of one or more resources to attach to the CBR vault.
+	// Specifies an array of one or more resources to attach to the CBR vault.\
+	// This feature is not supported for the **vmware** type and the **file** type.
 	// The object structure is documented below.
 	Resources VaultResourceArrayInput
 	// Specifies the vault capacity, in GB. The valid value range is `1` to `10,485,760`.
@@ -460,10 +635,13 @@ type VaultState struct {
 	// Specifies the key/value pairs to associate with the CBR vault.
 	Tags pulumi.StringMapInput
 	// Specifies the object type of the CBR vault.
-	// Changing this will create a new vault. Vaild values are as follows:
-	// + **server** (Cloud Servers)
-	// + **disk** (EVS Disks)
-	// + **turbo** (SFS Turbo file systems)
+	// Changing this will create a new vault. Valid values are as follows:
+	// + **server** (Elastic Cloud Server)
+	// + **disk** (EVS Disk)
+	// + **turbo** (SFS Turbo file system)
+	// + **workspace** (Workspace Desktop)
+	// + **vmware** (VMware)
+	// + **file** (File System)
 	Type pulumi.StringPtrInput
 	// The used capacity, in GB.
 	Used pulumi.Float64PtrInput
@@ -494,14 +672,19 @@ type vaultArgs struct {
 	// + **prePaid**: the yearly/monthly billing mode.
 	// + **postPaid**: the pay-per-use billing mode.
 	ChargingMode *string `pulumi:"chargingMode"`
+	// Specifies the cloud type of the vault.\
+	// Changing this will create a new vault.
+	CloudType *string `pulumi:"cloudType"`
 	// Specifies the consistent level (specification) of the vault.
 	// The valid values are as follows:
 	// + **[crashConsistent](https://support.huaweicloud.com/intl/en-us/usermanual-cbr/cbr_03_0109.html)**
 	// + **[appConsistent](https://support.huaweicloud.com/intl/en-us/usermanual-cbr/cbr_03_0109.html)**
 	ConsistentLevel *string `pulumi:"consistentLevel"`
-	// Specifies the ID of the enterprise project to which the vault
-	// belongs. Changing this will create a new vault.
+	// Specifies the ID of the enterprise project to which the vault belongs.
 	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
+	// Specifies whether multiple availability zones are used for backing up.
+	// Defaults to **false**.
+	IsMultiAz *bool `pulumi:"isMultiAz"`
 	// Specifies a unique name of the CBR vault. This parameter can contain a maximum of 64
 	// characters, which may consist of letters, digits, underscores(_) and hyphens (-).
 	Name *string `pulumi:"name"`
@@ -527,7 +710,8 @@ type vaultArgs struct {
 	// Specifies the region in which to create the CBR vault. If omitted, the
 	// provider-level region will be used. Changing this will create a new vault.
 	Region *string `pulumi:"region"`
-	// Specifies an array of one or more resources to attach to the CBR vault.
+	// Specifies an array of one or more resources to attach to the CBR vault.\
+	// This feature is not supported for the **vmware** type and the **file** type.
 	// The object structure is documented below.
 	Resources []VaultResource `pulumi:"resources"`
 	// Specifies the vault capacity, in GB. The valid value range is `1` to `10,485,760`.
@@ -535,10 +719,13 @@ type vaultArgs struct {
 	// Specifies the key/value pairs to associate with the CBR vault.
 	Tags map[string]string `pulumi:"tags"`
 	// Specifies the object type of the CBR vault.
-	// Changing this will create a new vault. Vaild values are as follows:
-	// + **server** (Cloud Servers)
-	// + **disk** (EVS Disks)
-	// + **turbo** (SFS Turbo file systems)
+	// Changing this will create a new vault. Valid values are as follows:
+	// + **server** (Elastic Cloud Server)
+	// + **disk** (EVS Disk)
+	// + **turbo** (SFS Turbo file system)
+	// + **workspace** (Workspace Desktop)
+	// + **vmware** (VMware)
+	// + **file** (File System)
 	Type string `pulumi:"type"`
 }
 
@@ -564,14 +751,19 @@ type VaultArgs struct {
 	// + **prePaid**: the yearly/monthly billing mode.
 	// + **postPaid**: the pay-per-use billing mode.
 	ChargingMode pulumi.StringPtrInput
+	// Specifies the cloud type of the vault.\
+	// Changing this will create a new vault.
+	CloudType pulumi.StringPtrInput
 	// Specifies the consistent level (specification) of the vault.
 	// The valid values are as follows:
 	// + **[crashConsistent](https://support.huaweicloud.com/intl/en-us/usermanual-cbr/cbr_03_0109.html)**
 	// + **[appConsistent](https://support.huaweicloud.com/intl/en-us/usermanual-cbr/cbr_03_0109.html)**
 	ConsistentLevel pulumi.StringPtrInput
-	// Specifies the ID of the enterprise project to which the vault
-	// belongs. Changing this will create a new vault.
+	// Specifies the ID of the enterprise project to which the vault belongs.
 	EnterpriseProjectId pulumi.StringPtrInput
+	// Specifies whether multiple availability zones are used for backing up.
+	// Defaults to **false**.
+	IsMultiAz pulumi.BoolPtrInput
 	// Specifies a unique name of the CBR vault. This parameter can contain a maximum of 64
 	// characters, which may consist of letters, digits, underscores(_) and hyphens (-).
 	Name pulumi.StringPtrInput
@@ -597,7 +789,8 @@ type VaultArgs struct {
 	// Specifies the region in which to create the CBR vault. If omitted, the
 	// provider-level region will be used. Changing this will create a new vault.
 	Region pulumi.StringPtrInput
-	// Specifies an array of one or more resources to attach to the CBR vault.
+	// Specifies an array of one or more resources to attach to the CBR vault.\
+	// This feature is not supported for the **vmware** type and the **file** type.
 	// The object structure is documented below.
 	Resources VaultResourceArrayInput
 	// Specifies the vault capacity, in GB. The valid value range is `1` to `10,485,760`.
@@ -605,10 +798,13 @@ type VaultArgs struct {
 	// Specifies the key/value pairs to associate with the CBR vault.
 	Tags pulumi.StringMapInput
 	// Specifies the object type of the CBR vault.
-	// Changing this will create a new vault. Vaild values are as follows:
-	// + **server** (Cloud Servers)
-	// + **disk** (EVS Disks)
-	// + **turbo** (SFS Turbo file systems)
+	// Changing this will create a new vault. Valid values are as follows:
+	// + **server** (Elastic Cloud Server)
+	// + **disk** (EVS Disk)
+	// + **turbo** (SFS Turbo file system)
+	// + **workspace** (Workspace Desktop)
+	// + **vmware** (VMware)
+	// + **file** (File System)
 	Type pulumi.StringInput
 }
 
@@ -745,6 +941,12 @@ func (o VaultOutput) ChargingMode() pulumi.StringOutput {
 	return o.ApplyT(func(v *Vault) pulumi.StringOutput { return v.ChargingMode }).(pulumi.StringOutput)
 }
 
+// Specifies the cloud type of the vault.\
+// Changing this will create a new vault.
+func (o VaultOutput) CloudType() pulumi.StringOutput {
+	return o.ApplyT(func(v *Vault) pulumi.StringOutput { return v.CloudType }).(pulumi.StringOutput)
+}
+
 // Specifies the consistent level (specification) of the vault.
 // The valid values are as follows:
 // + **[crashConsistent](https://support.huaweicloud.com/intl/en-us/usermanual-cbr/cbr_03_0109.html)**
@@ -753,10 +955,15 @@ func (o VaultOutput) ConsistentLevel() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Vault) pulumi.StringPtrOutput { return v.ConsistentLevel }).(pulumi.StringPtrOutput)
 }
 
-// Specifies the ID of the enterprise project to which the vault
-// belongs. Changing this will create a new vault.
+// Specifies the ID of the enterprise project to which the vault belongs.
 func (o VaultOutput) EnterpriseProjectId() pulumi.StringOutput {
 	return o.ApplyT(func(v *Vault) pulumi.StringOutput { return v.EnterpriseProjectId }).(pulumi.StringOutput)
+}
+
+// Specifies whether multiple availability zones are used for backing up.
+// Defaults to **false**.
+func (o VaultOutput) IsMultiAz() pulumi.BoolOutput {
+	return o.ApplyT(func(v *Vault) pulumi.BoolOutput { return v.IsMultiAz }).(pulumi.BoolOutput)
 }
 
 // Specifies a unique name of the CBR vault. This parameter can contain a maximum of 64
@@ -805,7 +1012,8 @@ func (o VaultOutput) Region() pulumi.StringOutput {
 	return o.ApplyT(func(v *Vault) pulumi.StringOutput { return v.Region }).(pulumi.StringOutput)
 }
 
-// Specifies an array of one or more resources to attach to the CBR vault.
+// Specifies an array of one or more resources to attach to the CBR vault.\
+// This feature is not supported for the **vmware** type and the **file** type.
 // The object structure is documented below.
 func (o VaultOutput) Resources() VaultResourceArrayOutput {
 	return o.ApplyT(func(v *Vault) VaultResourceArrayOutput { return v.Resources }).(VaultResourceArrayOutput)
@@ -837,10 +1045,13 @@ func (o VaultOutput) Tags() pulumi.StringMapOutput {
 }
 
 // Specifies the object type of the CBR vault.
-// Changing this will create a new vault. Vaild values are as follows:
-// + **server** (Cloud Servers)
-// + **disk** (EVS Disks)
-// + **turbo** (SFS Turbo file systems)
+// Changing this will create a new vault. Valid values are as follows:
+// + **server** (Elastic Cloud Server)
+// + **disk** (EVS Disk)
+// + **turbo** (SFS Turbo file system)
+// + **workspace** (Workspace Desktop)
+// + **vmware** (VMware)
+// + **file** (File System)
 func (o VaultOutput) Type() pulumi.StringOutput {
 	return o.ApplyT(func(v *Vault) pulumi.StringOutput { return v.Type }).(pulumi.StringOutput)
 }

@@ -8,27 +8,6 @@ import * as utilities from "../utilities";
 /**
  * Manages an APIG (API) custom response resource within HuaweiCloud.
  *
- * ## Example Usage
- *
- * ```typescript
- * import * as pulumi from "@pulumi/pulumi";
- * import * as pulumi from "@huaweicloudos/pulumi";
- *
- * const config = new pulumi.Config();
- * const instanceId = config.requireObject("instanceId");
- * const groupId = config.requireObject("groupId");
- * const responseName = config.requireObject("responseName");
- * const test = new huaweicloud.dedicatedapig.Response("test", {
- *     instanceId: instanceId,
- *     groupId: groupId,
- *     rules: [{
- *         errorType: "AUTHORIZER_FAILURE",
- *         body: `{"code":"$context.authorizer.frontend.code","message":"$context.authorizer.frontend.message"}`,
- *         statusCode: 401,
- *     }],
- * });
- * ```
- *
  * ## Import
  *
  * API Responses can be imported using their `name` and IDs of the APIG dedicated instances and API groups to which the API response belongs, separated by slashes, e.g.
@@ -93,7 +72,7 @@ export class Response extends pulumi.CustomResource {
     public readonly region!: pulumi.Output<string>;
     /**
      * Specifies the API custom response rules definition.  
-     * The object structure is documented below.
+     * The rule structure is documented below.
      */
     public readonly rules!: pulumi.Output<outputs.DedicatedApig.ResponseRule[]>;
     /**
@@ -174,7 +153,7 @@ export interface ResponseState {
     region?: pulumi.Input<string>;
     /**
      * Specifies the API custom response rules definition.  
-     * The object structure is documented below.
+     * The rule structure is documented below.
      */
     rules?: pulumi.Input<pulumi.Input<inputs.DedicatedApig.ResponseRule>[]>;
     /**
@@ -211,7 +190,7 @@ export interface ResponseArgs {
     region?: pulumi.Input<string>;
     /**
      * Specifies the API custom response rules definition.  
-     * The object structure is documented below.
+     * The rule structure is documented below.
      */
     rules?: pulumi.Input<pulumi.Input<inputs.DedicatedApig.ResponseRule>[]>;
 }

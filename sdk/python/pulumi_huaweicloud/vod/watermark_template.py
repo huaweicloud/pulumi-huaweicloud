@@ -42,7 +42,7 @@ class WatermarkTemplateArgs:
                + **TRANSPARENT**: make the background color transparent.
                + **ORIGINAL**: only simple scaling, no other processing.
                + **GRAYED**: make the color image grayed.
-        :param pulumi.Input[str] name: Specifies the template name, which contains a maximum of 128 characters.
+        :param pulumi.Input[str] name: Specifies the template name, which contains a maximum of `128` characters.
         :param pulumi.Input[str] position: Specifies the location of the watermark. The valid values are **TOPRIGHT**,
                **TOPLEFT**, **BOTTOMRIGHT** and **BOTTOMLEFT**. Defaults to: **TOPRIGHT**.
         :param pulumi.Input[str] region: Specifies the region in which to create the resource. If omitted, the
@@ -154,7 +154,7 @@ class WatermarkTemplateArgs:
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the template name, which contains a maximum of 128 characters.
+        Specifies the template name, which contains a maximum of `128` characters.
         """
         return pulumi.get(self, "name")
 
@@ -277,7 +277,7 @@ class _WatermarkTemplateState:
         :param pulumi.Input[str] image_type: Specifies the image file type. The valid values are **PNG**, **JPG**
                and **JPEG**. Changing this creates a new resource.
         :param pulumi.Input[str] image_url: The watermark image URL.
-        :param pulumi.Input[str] name: Specifies the template name, which contains a maximum of 128 characters.
+        :param pulumi.Input[str] name: Specifies the template name, which contains a maximum of `128` characters.
         :param pulumi.Input[str] position: Specifies the location of the watermark. The valid values are **TOPRIGHT**,
                **TOPLEFT**, **BOTTOMRIGHT** and **BOTTOMLEFT**. Defaults to: **TOPRIGHT**.
         :param pulumi.Input[str] region: Specifies the region in which to create the resource. If omitted, the
@@ -408,7 +408,7 @@ class _WatermarkTemplateState:
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the template name, which contains a maximum of 128 characters.
+        Specifies the template name, which contains a maximum of `128` characters.
         """
         return pulumi.get(self, "name")
 
@@ -549,13 +549,13 @@ class WatermarkTemplate(pulumi.CustomResource):
 
         ## Import
 
-        The template can be imported using the `id`, e.g.
+        The template can be imported using the `id`, e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:Vod/watermarkTemplate:WatermarkTemplate test 81ac58796e25842ee2e90a904aa8a719
         ```
 
-         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`image_file`. It is generally recommended running `terraform plan` after importing a watermark template. You can then decide if changes should be applied to the watermark template, or the resource definition should be updated to align with the watermark template. Also you can ignore changes as below. resource "huaweicloud_vod_watermark_template" "test" {
+         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`image_file`. It is generally recommended running `terraform plan` after importing a watermark template. You can then decide if changes should be applied to the watermark template, or the resource definition should be updated to align with the watermark template. Also you can ignore changes as below. hcl resource "huaweicloud_vod_watermark_template" "test" {
 
          ...
 
@@ -585,7 +585,7 @@ class WatermarkTemplate(pulumi.CustomResource):
                + **GRAYED**: make the color image grayed.
         :param pulumi.Input[str] image_type: Specifies the image file type. The valid values are **PNG**, **JPG**
                and **JPEG**. Changing this creates a new resource.
-        :param pulumi.Input[str] name: Specifies the template name, which contains a maximum of 128 characters.
+        :param pulumi.Input[str] name: Specifies the template name, which contains a maximum of `128` characters.
         :param pulumi.Input[str] position: Specifies the location of the watermark. The valid values are **TOPRIGHT**,
                **TOPLEFT**, **BOTTOMRIGHT** and **BOTTOMLEFT**. Defaults to: **TOPRIGHT**.
         :param pulumi.Input[str] region: Specifies the region in which to create the resource. If omitted, the
@@ -629,13 +629,13 @@ class WatermarkTemplate(pulumi.CustomResource):
 
         ## Import
 
-        The template can be imported using the `id`, e.g.
+        The template can be imported using the `id`, e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:Vod/watermarkTemplate:WatermarkTemplate test 81ac58796e25842ee2e90a904aa8a719
         ```
 
-         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`image_file`. It is generally recommended running `terraform plan` after importing a watermark template. You can then decide if changes should be applied to the watermark template, or the resource definition should be updated to align with the watermark template. Also you can ignore changes as below. resource "huaweicloud_vod_watermark_template" "test" {
+         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`image_file`. It is generally recommended running `terraform plan` after importing a watermark template. You can then decide if changes should be applied to the watermark template, or the resource definition should be updated to align with the watermark template. Also you can ignore changes as below. hcl resource "huaweicloud_vod_watermark_template" "test" {
 
          ...
 
@@ -749,7 +749,7 @@ class WatermarkTemplate(pulumi.CustomResource):
         :param pulumi.Input[str] image_type: Specifies the image file type. The valid values are **PNG**, **JPG**
                and **JPEG**. Changing this creates a new resource.
         :param pulumi.Input[str] image_url: The watermark image URL.
-        :param pulumi.Input[str] name: Specifies the template name, which contains a maximum of 128 characters.
+        :param pulumi.Input[str] name: Specifies the template name, which contains a maximum of `128` characters.
         :param pulumi.Input[str] position: Specifies the location of the watermark. The valid values are **TOPRIGHT**,
                **TOPLEFT**, **BOTTOMRIGHT** and **BOTTOMLEFT**. Defaults to: **TOPRIGHT**.
         :param pulumi.Input[str] region: Specifies the region in which to create the resource. If omitted, the
@@ -847,7 +847,7 @@ class WatermarkTemplate(pulumi.CustomResource):
     @pulumi.getter
     def name(self) -> pulumi.Output[str]:
         """
-        Specifies the template name, which contains a maximum of 128 characters.
+        Specifies the template name, which contains a maximum of `128` characters.
         """
         return pulumi.get(self, "name")
 

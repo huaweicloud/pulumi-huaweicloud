@@ -36,8 +36,11 @@ export function getPools(args?: GetPoolsArgs, opts?: pulumi.InvokeOptions): Prom
         "loadbalancerId": args.loadbalancerId,
         "name": args.name,
         "poolId": args.poolId,
+        "protectionStatus": args.protectionStatus,
         "protocol": args.protocol,
         "region": args.region,
+        "type": args.type,
+        "vpcId": args.vpcId,
     }, opts);
 }
 
@@ -54,8 +57,8 @@ export interface GetPoolsArgs {
      */
     healthmonitorId?: string;
     /**
-     * Specifies the method of the ELB pool. Must be one of ROUND_ROBIN, LEAST_CONNECTIONS,
-     * or SOURCE_IP.
+     * Specifies the method of the ELB pool. Value options: **ROUND_ROBIN**,
+     * **LEAST_CONNECTIONS**, **SOURCE_IP** or **QUIC_CID**.
      */
     lbMethod?: string;
     /**
@@ -75,7 +78,13 @@ export interface GetPoolsArgs {
      */
     poolId?: string;
     /**
-     * Specifies the protocol of the ELB pool. This can either be TCP, UDP or HTTP.
+     * Specifies the protection status for update.
+     * Value options: **nonProtection**, **consoleProtection**.
+     */
+    protectionStatus?: string;
+    /**
+     * Specifies the protocol of the ELB pool. Value options: **TCP**, **UDP**, **HTTP**,
+     * **HTTPS**, **QUIC**, **GRPC** or **TLS**.
      */
     protocol?: string;
     /**
@@ -83,6 +92,14 @@ export interface GetPoolsArgs {
      * If omitted, the provider-level region will be used.
      */
     region?: string;
+    /**
+     * Specifies the type of the backend server group. Value options: **instance**, **ip**.
+     */
+    type?: string;
+    /**
+     * Specifies the ID of the VPC where the backend server group works.
+     */
+    vpcId?: string;
 }
 
 /**
@@ -118,10 +135,22 @@ export interface GetPoolsResult {
      */
     readonly pools: outputs.DedicatedElb.GetPoolsPool[];
     /**
+     * The protection status for update.
+     */
+    readonly protectionStatus?: string;
+    /**
      * The protocol of pool.
      */
     readonly protocol?: string;
     readonly region: string;
+    /**
+     * The type of persistence mode.
+     */
+    readonly type?: string;
+    /**
+     * The ID of the VPC where the backend server group works.
+     */
+    readonly vpcId?: string;
 }
 
 export function getPoolsOutput(args?: GetPoolsOutputArgs, opts?: pulumi.InvokeOptions): pulumi.Output<GetPoolsResult> {
@@ -141,8 +170,8 @@ export interface GetPoolsOutputArgs {
      */
     healthmonitorId?: pulumi.Input<string>;
     /**
-     * Specifies the method of the ELB pool. Must be one of ROUND_ROBIN, LEAST_CONNECTIONS,
-     * or SOURCE_IP.
+     * Specifies the method of the ELB pool. Value options: **ROUND_ROBIN**,
+     * **LEAST_CONNECTIONS**, **SOURCE_IP** or **QUIC_CID**.
      */
     lbMethod?: pulumi.Input<string>;
     /**
@@ -162,7 +191,13 @@ export interface GetPoolsOutputArgs {
      */
     poolId?: pulumi.Input<string>;
     /**
-     * Specifies the protocol of the ELB pool. This can either be TCP, UDP or HTTP.
+     * Specifies the protection status for update.
+     * Value options: **nonProtection**, **consoleProtection**.
+     */
+    protectionStatus?: pulumi.Input<string>;
+    /**
+     * Specifies the protocol of the ELB pool. Value options: **TCP**, **UDP**, **HTTP**,
+     * **HTTPS**, **QUIC**, **GRPC** or **TLS**.
      */
     protocol?: pulumi.Input<string>;
     /**
@@ -170,4 +205,12 @@ export interface GetPoolsOutputArgs {
      * If omitted, the provider-level region will be used.
      */
     region?: pulumi.Input<string>;
+    /**
+     * Specifies the type of the backend server group. Value options: **instance**, **ip**.
+     */
+    type?: pulumi.Input<string>;
+    /**
+     * Specifies the ID of the VPC where the backend server group works.
+     */
+    vpcId?: pulumi.Input<string>;
 }

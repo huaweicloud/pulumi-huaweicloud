@@ -24,6 +24,8 @@ class PoolArgs:
                  loadbalancer_id: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  persistences: Optional[pulumi.Input[Sequence[pulumi.Input['PoolPersistenceArgs']]]] = None,
+                 protection_reason: Optional[pulumi.Input[str]] = None,
+                 protection_status: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
                  tenant_id: Optional[pulumi.Input[str]] = None):
         """
@@ -41,12 +43,20 @@ class PoolArgs:
                creates a new pool. Note:  At least one of LoadbalancerID or ListenerID must be provided.
         :param pulumi.Input[str] name: Human-readable name for the pool.
         :param pulumi.Input[Sequence[pulumi.Input['PoolPersistenceArgs']]] persistences: Omit this field to prevent session persistence. Indicates whether
-               connections in the same session will be processed by the same Pool member or not. Changing this creates a new pool.
+               connections in the same session will be processed by the same Pool member or not.
+        :param pulumi.Input[str] protection_reason: The reason for update protection. Only valid when `protection_status` is
+               **consoleProtection**.
+        :param pulumi.Input[str] protection_status: The protection status for update. Value options:
+               + **nonProtection**: No protection.
+               + **consoleProtection**: Console modification protection.
         :param pulumi.Input[str] region: The region in which to create the ELB pool resource. If omitted, the the
                provider-level region will be used. Changing this creates a new pool.
         """
         pulumi.set(__self__, "lb_method", lb_method)
         pulumi.set(__self__, "protocol", protocol)
+        if admin_state_up is not None:
+            warnings.warn("""this field is deprecated""", DeprecationWarning)
+            pulumi.log.warn("""admin_state_up is deprecated: this field is deprecated""")
         if admin_state_up is not None:
             pulumi.set(__self__, "admin_state_up", admin_state_up)
         if description is not None:
@@ -59,6 +69,10 @@ class PoolArgs:
             pulumi.set(__self__, "name", name)
         if persistences is not None:
             pulumi.set(__self__, "persistences", persistences)
+        if protection_reason is not None:
+            pulumi.set(__self__, "protection_reason", protection_reason)
+        if protection_status is not None:
+            pulumi.set(__self__, "protection_status", protection_status)
         if region is not None:
             pulumi.set(__self__, "region", region)
         if tenant_id is not None:
@@ -159,13 +173,40 @@ class PoolArgs:
     def persistences(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['PoolPersistenceArgs']]]]:
         """
         Omit this field to prevent session persistence. Indicates whether
-        connections in the same session will be processed by the same Pool member or not. Changing this creates a new pool.
+        connections in the same session will be processed by the same Pool member or not.
         """
         return pulumi.get(self, "persistences")
 
     @persistences.setter
     def persistences(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['PoolPersistenceArgs']]]]):
         pulumi.set(self, "persistences", value)
+
+    @property
+    @pulumi.getter(name="protectionReason")
+    def protection_reason(self) -> Optional[pulumi.Input[str]]:
+        """
+        The reason for update protection. Only valid when `protection_status` is
+        **consoleProtection**.
+        """
+        return pulumi.get(self, "protection_reason")
+
+    @protection_reason.setter
+    def protection_reason(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "protection_reason", value)
+
+    @property
+    @pulumi.getter(name="protectionStatus")
+    def protection_status(self) -> Optional[pulumi.Input[str]]:
+        """
+        The protection status for update. Value options:
+        + **nonProtection**: No protection.
+        + **consoleProtection**: Console modification protection.
+        """
+        return pulumi.get(self, "protection_status")
+
+    @protection_status.setter
+    def protection_status(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "protection_status", value)
 
     @property
     @pulumi.getter
@@ -198,8 +239,11 @@ class _PoolState:
                  lb_method: Optional[pulumi.Input[str]] = None,
                  listener_id: Optional[pulumi.Input[str]] = None,
                  loadbalancer_id: Optional[pulumi.Input[str]] = None,
+                 monitor_id: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  persistences: Optional[pulumi.Input[Sequence[pulumi.Input['PoolPersistenceArgs']]]] = None,
+                 protection_reason: Optional[pulumi.Input[str]] = None,
+                 protection_status: Optional[pulumi.Input[str]] = None,
                  protocol: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
                  tenant_id: Optional[pulumi.Input[str]] = None):
@@ -212,9 +256,15 @@ class _PoolState:
                Changing this creates a new pool. Note:  At least one of LoadbalancerID or ListenerID must be provided.
         :param pulumi.Input[str] loadbalancer_id: The load balancer on which to provision this pool. Changing this
                creates a new pool. Note:  At least one of LoadbalancerID or ListenerID must be provided.
+        :param pulumi.Input[str] monitor_id: The ID of the health check configured for the backend server group.
         :param pulumi.Input[str] name: Human-readable name for the pool.
         :param pulumi.Input[Sequence[pulumi.Input['PoolPersistenceArgs']]] persistences: Omit this field to prevent session persistence. Indicates whether
-               connections in the same session will be processed by the same Pool member or not. Changing this creates a new pool.
+               connections in the same session will be processed by the same Pool member or not.
+        :param pulumi.Input[str] protection_reason: The reason for update protection. Only valid when `protection_status` is
+               **consoleProtection**.
+        :param pulumi.Input[str] protection_status: The protection status for update. Value options:
+               + **nonProtection**: No protection.
+               + **consoleProtection**: Console modification protection.
         :param pulumi.Input[str] protocol: The protocol - can either be TCP, UDP or HTTP.
                + When the protocol used by the listener is UDP, the protocol of the backend pool must be UDP.
                + When the protocol used by the listener is TCP, the protocol of the backend pool must be TCP.
@@ -222,6 +272,9 @@ class _PoolState:
         :param pulumi.Input[str] region: The region in which to create the ELB pool resource. If omitted, the the
                provider-level region will be used. Changing this creates a new pool.
         """
+        if admin_state_up is not None:
+            warnings.warn("""this field is deprecated""", DeprecationWarning)
+            pulumi.log.warn("""admin_state_up is deprecated: this field is deprecated""")
         if admin_state_up is not None:
             pulumi.set(__self__, "admin_state_up", admin_state_up)
         if description is not None:
@@ -232,10 +285,16 @@ class _PoolState:
             pulumi.set(__self__, "listener_id", listener_id)
         if loadbalancer_id is not None:
             pulumi.set(__self__, "loadbalancer_id", loadbalancer_id)
+        if monitor_id is not None:
+            pulumi.set(__self__, "monitor_id", monitor_id)
         if name is not None:
             pulumi.set(__self__, "name", name)
         if persistences is not None:
             pulumi.set(__self__, "persistences", persistences)
+        if protection_reason is not None:
+            pulumi.set(__self__, "protection_reason", protection_reason)
+        if protection_status is not None:
+            pulumi.set(__self__, "protection_status", protection_status)
         if protocol is not None:
             pulumi.set(__self__, "protocol", protocol)
         if region is not None:
@@ -307,6 +366,18 @@ class _PoolState:
         pulumi.set(self, "loadbalancer_id", value)
 
     @property
+    @pulumi.getter(name="monitorId")
+    def monitor_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        The ID of the health check configured for the backend server group.
+        """
+        return pulumi.get(self, "monitor_id")
+
+    @monitor_id.setter
+    def monitor_id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "monitor_id", value)
+
+    @property
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
@@ -323,13 +394,40 @@ class _PoolState:
     def persistences(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['PoolPersistenceArgs']]]]:
         """
         Omit this field to prevent session persistence. Indicates whether
-        connections in the same session will be processed by the same Pool member or not. Changing this creates a new pool.
+        connections in the same session will be processed by the same Pool member or not.
         """
         return pulumi.get(self, "persistences")
 
     @persistences.setter
     def persistences(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['PoolPersistenceArgs']]]]):
         pulumi.set(self, "persistences", value)
+
+    @property
+    @pulumi.getter(name="protectionReason")
+    def protection_reason(self) -> Optional[pulumi.Input[str]]:
+        """
+        The reason for update protection. Only valid when `protection_status` is
+        **consoleProtection**.
+        """
+        return pulumi.get(self, "protection_reason")
+
+    @protection_reason.setter
+    def protection_reason(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "protection_reason", value)
+
+    @property
+    @pulumi.getter(name="protectionStatus")
+    def protection_status(self) -> Optional[pulumi.Input[str]]:
+        """
+        The protection status for update. Value options:
+        + **nonProtection**: No protection.
+        + **consoleProtection**: Console modification protection.
+        """
+        return pulumi.get(self, "protection_status")
+
+    @protection_status.setter
+    def protection_status(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "protection_status", value)
 
     @property
     @pulumi.getter
@@ -381,6 +479,8 @@ class Pool(pulumi.CustomResource):
                  loadbalancer_id: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  persistences: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['PoolPersistenceArgs']]]]] = None,
+                 protection_reason: Optional[pulumi.Input[str]] = None,
+                 protection_status: Optional[pulumi.Input[str]] = None,
                  protocol: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
                  tenant_id: Optional[pulumi.Input[str]] = None,
@@ -406,7 +506,7 @@ class Pool(pulumi.CustomResource):
 
         ## Import
 
-        ELB pool can be imported using the pool ID, e.g.
+        ELB pool can be imported using the pool ID, e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:Elb/pool:Pool pool_1 5c20fdad-7288-11eb-b817-0255ac10158b
@@ -423,7 +523,12 @@ class Pool(pulumi.CustomResource):
                creates a new pool. Note:  At least one of LoadbalancerID or ListenerID must be provided.
         :param pulumi.Input[str] name: Human-readable name for the pool.
         :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['PoolPersistenceArgs']]]] persistences: Omit this field to prevent session persistence. Indicates whether
-               connections in the same session will be processed by the same Pool member or not. Changing this creates a new pool.
+               connections in the same session will be processed by the same Pool member or not.
+        :param pulumi.Input[str] protection_reason: The reason for update protection. Only valid when `protection_status` is
+               **consoleProtection**.
+        :param pulumi.Input[str] protection_status: The protection status for update. Value options:
+               + **nonProtection**: No protection.
+               + **consoleProtection**: Console modification protection.
         :param pulumi.Input[str] protocol: The protocol - can either be TCP, UDP or HTTP.
                + When the protocol used by the listener is UDP, the protocol of the backend pool must be UDP.
                + When the protocol used by the listener is TCP, the protocol of the backend pool must be TCP.
@@ -458,7 +563,7 @@ class Pool(pulumi.CustomResource):
 
         ## Import
 
-        ELB pool can be imported using the pool ID, e.g.
+        ELB pool can be imported using the pool ID, e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:Elb/pool:Pool pool_1 5c20fdad-7288-11eb-b817-0255ac10158b
@@ -486,6 +591,8 @@ class Pool(pulumi.CustomResource):
                  loadbalancer_id: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  persistences: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['PoolPersistenceArgs']]]]] = None,
+                 protection_reason: Optional[pulumi.Input[str]] = None,
+                 protection_status: Optional[pulumi.Input[str]] = None,
                  protocol: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
                  tenant_id: Optional[pulumi.Input[str]] = None,
@@ -498,6 +605,9 @@ class Pool(pulumi.CustomResource):
                 raise TypeError('__props__ is only valid when passed in combination with a valid opts.id to get an existing resource')
             __props__ = PoolArgs.__new__(PoolArgs)
 
+            if admin_state_up is not None and not opts.urn:
+                warnings.warn("""this field is deprecated""", DeprecationWarning)
+                pulumi.log.warn("""admin_state_up is deprecated: this field is deprecated""")
             __props__.__dict__["admin_state_up"] = admin_state_up
             __props__.__dict__["description"] = description
             if lb_method is None and not opts.urn:
@@ -507,6 +617,8 @@ class Pool(pulumi.CustomResource):
             __props__.__dict__["loadbalancer_id"] = loadbalancer_id
             __props__.__dict__["name"] = name
             __props__.__dict__["persistences"] = persistences
+            __props__.__dict__["protection_reason"] = protection_reason
+            __props__.__dict__["protection_status"] = protection_status
             if protocol is None and not opts.urn:
                 raise TypeError("Missing required property 'protocol'")
             __props__.__dict__["protocol"] = protocol
@@ -515,6 +627,7 @@ class Pool(pulumi.CustomResource):
                 warnings.warn("""tenant_id is deprecated""", DeprecationWarning)
                 pulumi.log.warn("""tenant_id is deprecated: tenant_id is deprecated""")
             __props__.__dict__["tenant_id"] = tenant_id
+            __props__.__dict__["monitor_id"] = None
         super(Pool, __self__).__init__(
             'huaweicloud:Elb/pool:Pool',
             resource_name,
@@ -530,8 +643,11 @@ class Pool(pulumi.CustomResource):
             lb_method: Optional[pulumi.Input[str]] = None,
             listener_id: Optional[pulumi.Input[str]] = None,
             loadbalancer_id: Optional[pulumi.Input[str]] = None,
+            monitor_id: Optional[pulumi.Input[str]] = None,
             name: Optional[pulumi.Input[str]] = None,
             persistences: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['PoolPersistenceArgs']]]]] = None,
+            protection_reason: Optional[pulumi.Input[str]] = None,
+            protection_status: Optional[pulumi.Input[str]] = None,
             protocol: Optional[pulumi.Input[str]] = None,
             region: Optional[pulumi.Input[str]] = None,
             tenant_id: Optional[pulumi.Input[str]] = None) -> 'Pool':
@@ -549,9 +665,15 @@ class Pool(pulumi.CustomResource):
                Changing this creates a new pool. Note:  At least one of LoadbalancerID or ListenerID must be provided.
         :param pulumi.Input[str] loadbalancer_id: The load balancer on which to provision this pool. Changing this
                creates a new pool. Note:  At least one of LoadbalancerID or ListenerID must be provided.
+        :param pulumi.Input[str] monitor_id: The ID of the health check configured for the backend server group.
         :param pulumi.Input[str] name: Human-readable name for the pool.
         :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['PoolPersistenceArgs']]]] persistences: Omit this field to prevent session persistence. Indicates whether
-               connections in the same session will be processed by the same Pool member or not. Changing this creates a new pool.
+               connections in the same session will be processed by the same Pool member or not.
+        :param pulumi.Input[str] protection_reason: The reason for update protection. Only valid when `protection_status` is
+               **consoleProtection**.
+        :param pulumi.Input[str] protection_status: The protection status for update. Value options:
+               + **nonProtection**: No protection.
+               + **consoleProtection**: Console modification protection.
         :param pulumi.Input[str] protocol: The protocol - can either be TCP, UDP or HTTP.
                + When the protocol used by the listener is UDP, the protocol of the backend pool must be UDP.
                + When the protocol used by the listener is TCP, the protocol of the backend pool must be TCP.
@@ -568,8 +690,11 @@ class Pool(pulumi.CustomResource):
         __props__.__dict__["lb_method"] = lb_method
         __props__.__dict__["listener_id"] = listener_id
         __props__.__dict__["loadbalancer_id"] = loadbalancer_id
+        __props__.__dict__["monitor_id"] = monitor_id
         __props__.__dict__["name"] = name
         __props__.__dict__["persistences"] = persistences
+        __props__.__dict__["protection_reason"] = protection_reason
+        __props__.__dict__["protection_status"] = protection_status
         __props__.__dict__["protocol"] = protocol
         __props__.__dict__["region"] = region
         __props__.__dict__["tenant_id"] = tenant_id
@@ -616,6 +741,14 @@ class Pool(pulumi.CustomResource):
         return pulumi.get(self, "loadbalancer_id")
 
     @property
+    @pulumi.getter(name="monitorId")
+    def monitor_id(self) -> pulumi.Output[str]:
+        """
+        The ID of the health check configured for the backend server group.
+        """
+        return pulumi.get(self, "monitor_id")
+
+    @property
     @pulumi.getter
     def name(self) -> pulumi.Output[str]:
         """
@@ -628,9 +761,28 @@ class Pool(pulumi.CustomResource):
     def persistences(self) -> pulumi.Output[Optional[Sequence['outputs.PoolPersistence']]]:
         """
         Omit this field to prevent session persistence. Indicates whether
-        connections in the same session will be processed by the same Pool member or not. Changing this creates a new pool.
+        connections in the same session will be processed by the same Pool member or not.
         """
         return pulumi.get(self, "persistences")
+
+    @property
+    @pulumi.getter(name="protectionReason")
+    def protection_reason(self) -> pulumi.Output[Optional[str]]:
+        """
+        The reason for update protection. Only valid when `protection_status` is
+        **consoleProtection**.
+        """
+        return pulumi.get(self, "protection_reason")
+
+    @property
+    @pulumi.getter(name="protectionStatus")
+    def protection_status(self) -> pulumi.Output[str]:
+        """
+        The protection status for update. Value options:
+        + **nonProtection**: No protection.
+        + **consoleProtection**: Console modification protection.
+        """
+        return pulumi.get(self, "protection_status")
 
     @property
     @pulumi.getter

@@ -21,12 +21,11 @@ type ClusterBackupStrategy struct {
 	// Specifies the number of days to retain the generated snapshots. Snapshots are reserved
 	// for seven days by default.
 	KeepDays *int `pulumi:"keepDays"`
-	// Specifies the prefix of the snapshot that is automatically created. The default value
-	// is "snapshot".
+	// Specifies the prefix of the snapshot that is automatically created. Defaults to **snapshot**.
 	Prefix *string `pulumi:"prefix"`
 	// Specifies the time when a snapshot is automatically created everyday. Snapshots can
 	// only be created on the hour. The time format is the time followed by the time zone, specifically, **HH:mm z**. In the
-	// format, HH:mm refers to the hour time and z refers to the time zone. For example, "00:00 GMT+08:00"
+	// format, **HH:mm** refers to the hour time and z refers to the time zone. For example, "00:00 GMT+08:00"
 	// and "01:00 GMT+08:00".
 	StartTime string `pulumi:"startTime"`
 }
@@ -53,12 +52,11 @@ type ClusterBackupStrategyArgs struct {
 	// Specifies the number of days to retain the generated snapshots. Snapshots are reserved
 	// for seven days by default.
 	KeepDays pulumi.IntPtrInput `pulumi:"keepDays"`
-	// Specifies the prefix of the snapshot that is automatically created. The default value
-	// is "snapshot".
+	// Specifies the prefix of the snapshot that is automatically created. Defaults to **snapshot**.
 	Prefix pulumi.StringPtrInput `pulumi:"prefix"`
 	// Specifies the time when a snapshot is automatically created everyday. Snapshots can
 	// only be created on the hour. The time format is the time followed by the time zone, specifically, **HH:mm z**. In the
-	// format, HH:mm refers to the hour time and z refers to the time zone. For example, "00:00 GMT+08:00"
+	// format, **HH:mm** refers to the hour time and z refers to the time zone. For example, "00:00 GMT+08:00"
 	// and "01:00 GMT+08:00".
 	StartTime pulumi.StringInput `pulumi:"startTime"`
 }
@@ -162,15 +160,14 @@ func (o ClusterBackupStrategyOutput) KeepDays() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v ClusterBackupStrategy) *int { return v.KeepDays }).(pulumi.IntPtrOutput)
 }
 
-// Specifies the prefix of the snapshot that is automatically created. The default value
-// is "snapshot".
+// Specifies the prefix of the snapshot that is automatically created. Defaults to **snapshot**.
 func (o ClusterBackupStrategyOutput) Prefix() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v ClusterBackupStrategy) *string { return v.Prefix }).(pulumi.StringPtrOutput)
 }
 
 // Specifies the time when a snapshot is automatically created everyday. Snapshots can
 // only be created on the hour. The time format is the time followed by the time zone, specifically, **HH:mm z**. In the
-// format, HH:mm refers to the hour time and z refers to the time zone. For example, "00:00 GMT+08:00"
+// format, **HH:mm** refers to the hour time and z refers to the time zone. For example, "00:00 GMT+08:00"
 // and "01:00 GMT+08:00".
 func (o ClusterBackupStrategyOutput) StartTime() pulumi.StringOutput {
 	return o.ApplyT(func(v ClusterBackupStrategy) string { return v.StartTime }).(pulumi.StringOutput)
@@ -242,8 +239,7 @@ func (o ClusterBackupStrategyPtrOutput) KeepDays() pulumi.IntPtrOutput {
 	}).(pulumi.IntPtrOutput)
 }
 
-// Specifies the prefix of the snapshot that is automatically created. The default value
-// is "snapshot".
+// Specifies the prefix of the snapshot that is automatically created. Defaults to **snapshot**.
 func (o ClusterBackupStrategyPtrOutput) Prefix() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *ClusterBackupStrategy) *string {
 		if v == nil {
@@ -255,7 +251,7 @@ func (o ClusterBackupStrategyPtrOutput) Prefix() pulumi.StringPtrOutput {
 
 // Specifies the time when a snapshot is automatically created everyday. Snapshots can
 // only be created on the hour. The time format is the time followed by the time zone, specifically, **HH:mm z**. In the
-// format, HH:mm refers to the hour time and z refers to the time zone. For example, "00:00 GMT+08:00"
+// format, **HH:mm** refers to the hour time and z refers to the time zone. For example, "00:00 GMT+08:00"
 // and "01:00 GMT+08:00".
 func (o ClusterBackupStrategyPtrOutput) StartTime() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *ClusterBackupStrategy) *string {
@@ -267,15 +263,14 @@ func (o ClusterBackupStrategyPtrOutput) StartTime() pulumi.StringPtrOutput {
 }
 
 type ClusterClientNodeConfig struct {
-	// Specifies the flavor name. For example: value range of flavor ess.spec-2u8g:
-	// 40 GB to 800 GB, value range of flavor ess.spec-4u16g: 40 GB to 1600 GB, value range of flavor ess.spec-8u32g: 80 GB
-	// to 3200 GB, value range of flavor ess.spec-16u64g: 100 GB to 6400 GB, value range of flavor ess.spec-32u128g: 100 GB
-	// to 10240 GB. Changing this parameter will create a new resource.
+	// Specifies the flavor name.
 	Flavor string `pulumi:"flavor"`
 	// Specifies the number of cluster instances.
-	// + When it is `masterNodeConfig`, The value range is 3 to 10.
-	// + When it is `clientNodeConfig`, The value range is 1 to 32.
+	// + When it is `masterNodeConfig`, The value range is `3` to `10`.
+	// + When it is `clientNodeConfig`, The value range is `1` to `32`.
 	InstanceNumber int `pulumi:"instanceNumber"`
+	// Specifies the node IDs that needs to be scaled down.
+	ShrinkNodeIds []string `pulumi:"shrinkNodeIds"`
 	// Specifies the information about the volume.
 	// The volume structure is documented below.
 	Volume ClusterClientNodeConfigVolume `pulumi:"volume"`
@@ -293,15 +288,14 @@ type ClusterClientNodeConfigInput interface {
 }
 
 type ClusterClientNodeConfigArgs struct {
-	// Specifies the flavor name. For example: value range of flavor ess.spec-2u8g:
-	// 40 GB to 800 GB, value range of flavor ess.spec-4u16g: 40 GB to 1600 GB, value range of flavor ess.spec-8u32g: 80 GB
-	// to 3200 GB, value range of flavor ess.spec-16u64g: 100 GB to 6400 GB, value range of flavor ess.spec-32u128g: 100 GB
-	// to 10240 GB. Changing this parameter will create a new resource.
+	// Specifies the flavor name.
 	Flavor pulumi.StringInput `pulumi:"flavor"`
 	// Specifies the number of cluster instances.
-	// + When it is `masterNodeConfig`, The value range is 3 to 10.
-	// + When it is `clientNodeConfig`, The value range is 1 to 32.
+	// + When it is `masterNodeConfig`, The value range is `3` to `10`.
+	// + When it is `clientNodeConfig`, The value range is `1` to `32`.
 	InstanceNumber pulumi.IntInput `pulumi:"instanceNumber"`
+	// Specifies the node IDs that needs to be scaled down.
+	ShrinkNodeIds pulumi.StringArrayInput `pulumi:"shrinkNodeIds"`
 	// Specifies the information about the volume.
 	// The volume structure is documented below.
 	Volume ClusterClientNodeConfigVolumeInput `pulumi:"volume"`
@@ -384,19 +378,21 @@ func (o ClusterClientNodeConfigOutput) ToClusterClientNodeConfigPtrOutputWithCon
 	}).(ClusterClientNodeConfigPtrOutput)
 }
 
-// Specifies the flavor name. For example: value range of flavor ess.spec-2u8g:
-// 40 GB to 800 GB, value range of flavor ess.spec-4u16g: 40 GB to 1600 GB, value range of flavor ess.spec-8u32g: 80 GB
-// to 3200 GB, value range of flavor ess.spec-16u64g: 100 GB to 6400 GB, value range of flavor ess.spec-32u128g: 100 GB
-// to 10240 GB. Changing this parameter will create a new resource.
+// Specifies the flavor name.
 func (o ClusterClientNodeConfigOutput) Flavor() pulumi.StringOutput {
 	return o.ApplyT(func(v ClusterClientNodeConfig) string { return v.Flavor }).(pulumi.StringOutput)
 }
 
 // Specifies the number of cluster instances.
-// + When it is `masterNodeConfig`, The value range is 3 to 10.
-// + When it is `clientNodeConfig`, The value range is 1 to 32.
+// + When it is `masterNodeConfig`, The value range is `3` to `10`.
+// + When it is `clientNodeConfig`, The value range is `1` to `32`.
 func (o ClusterClientNodeConfigOutput) InstanceNumber() pulumi.IntOutput {
 	return o.ApplyT(func(v ClusterClientNodeConfig) int { return v.InstanceNumber }).(pulumi.IntOutput)
+}
+
+// Specifies the node IDs that needs to be scaled down.
+func (o ClusterClientNodeConfigOutput) ShrinkNodeIds() pulumi.StringArrayOutput {
+	return o.ApplyT(func(v ClusterClientNodeConfig) []string { return v.ShrinkNodeIds }).(pulumi.StringArrayOutput)
 }
 
 // Specifies the information about the volume.
@@ -429,10 +425,7 @@ func (o ClusterClientNodeConfigPtrOutput) Elem() ClusterClientNodeConfigOutput {
 	}).(ClusterClientNodeConfigOutput)
 }
 
-// Specifies the flavor name. For example: value range of flavor ess.spec-2u8g:
-// 40 GB to 800 GB, value range of flavor ess.spec-4u16g: 40 GB to 1600 GB, value range of flavor ess.spec-8u32g: 80 GB
-// to 3200 GB, value range of flavor ess.spec-16u64g: 100 GB to 6400 GB, value range of flavor ess.spec-32u128g: 100 GB
-// to 10240 GB. Changing this parameter will create a new resource.
+// Specifies the flavor name.
 func (o ClusterClientNodeConfigPtrOutput) Flavor() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *ClusterClientNodeConfig) *string {
 		if v == nil {
@@ -443,8 +436,8 @@ func (o ClusterClientNodeConfigPtrOutput) Flavor() pulumi.StringPtrOutput {
 }
 
 // Specifies the number of cluster instances.
-// + When it is `masterNodeConfig`, The value range is 3 to 10.
-// + When it is `clientNodeConfig`, The value range is 1 to 32.
+// + When it is `masterNodeConfig`, The value range is `3` to `10`.
+// + When it is `clientNodeConfig`, The value range is `1` to `32`.
 func (o ClusterClientNodeConfigPtrOutput) InstanceNumber() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v *ClusterClientNodeConfig) *int {
 		if v == nil {
@@ -452,6 +445,16 @@ func (o ClusterClientNodeConfigPtrOutput) InstanceNumber() pulumi.IntPtrOutput {
 		}
 		return &v.InstanceNumber
 	}).(pulumi.IntPtrOutput)
+}
+
+// Specifies the node IDs that needs to be scaled down.
+func (o ClusterClientNodeConfigPtrOutput) ShrinkNodeIds() pulumi.StringArrayOutput {
+	return o.ApplyT(func(v *ClusterClientNodeConfig) []string {
+		if v == nil {
+			return nil
+		}
+		return v.ShrinkNodeIds
+	}).(pulumi.StringArrayOutput)
 }
 
 // Specifies the information about the volume.
@@ -466,8 +469,7 @@ func (o ClusterClientNodeConfigPtrOutput) Volume() ClusterClientNodeConfigVolume
 }
 
 type ClusterClientNodeConfigVolume struct {
-	// Specifies the volume size in GB, which must be a multiple of 10.
-	// Changing this parameter will create a new resource.
+	// Specifies the volume size in **GB**, which must be a multiple of `10`.
 	Size int `pulumi:"size"`
 	// Specifies the volume type. Value options are as follows:
 	// + **COMMON**: Common I/O. The SATA disk is used.
@@ -488,8 +490,7 @@ type ClusterClientNodeConfigVolumeInput interface {
 }
 
 type ClusterClientNodeConfigVolumeArgs struct {
-	// Specifies the volume size in GB, which must be a multiple of 10.
-	// Changing this parameter will create a new resource.
+	// Specifies the volume size in **GB**, which must be a multiple of `10`.
 	Size pulumi.IntInput `pulumi:"size"`
 	// Specifies the volume type. Value options are as follows:
 	// + **COMMON**: Common I/O. The SATA disk is used.
@@ -575,8 +576,7 @@ func (o ClusterClientNodeConfigVolumeOutput) ToClusterClientNodeConfigVolumePtrO
 	}).(ClusterClientNodeConfigVolumePtrOutput)
 }
 
-// Specifies the volume size in GB, which must be a multiple of 10.
-// Changing this parameter will create a new resource.
+// Specifies the volume size in **GB**, which must be a multiple of `10`.
 func (o ClusterClientNodeConfigVolumeOutput) Size() pulumi.IntOutput {
 	return o.ApplyT(func(v ClusterClientNodeConfigVolume) int { return v.Size }).(pulumi.IntOutput)
 }
@@ -613,8 +613,7 @@ func (o ClusterClientNodeConfigVolumePtrOutput) Elem() ClusterClientNodeConfigVo
 	}).(ClusterClientNodeConfigVolumeOutput)
 }
 
-// Specifies the volume size in GB, which must be a multiple of 10.
-// Changing this parameter will create a new resource.
+// Specifies the volume size in **GB**, which must be a multiple of `10`.
 func (o ClusterClientNodeConfigVolumePtrOutput) Size() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v *ClusterClientNodeConfigVolume) *int {
 		if v == nil {
@@ -638,15 +637,14 @@ func (o ClusterClientNodeConfigVolumePtrOutput) VolumeType() pulumi.StringPtrOut
 }
 
 type ClusterColdNodeConfig struct {
-	// Specifies the flavor name. For example: value range of flavor ess.spec-2u8g:
-	// 40 GB to 800 GB, value range of flavor ess.spec-4u16g: 40 GB to 1600 GB, value range of flavor ess.spec-8u32g: 80 GB
-	// to 3200 GB, value range of flavor ess.spec-16u64g: 100 GB to 6400 GB, value range of flavor ess.spec-32u128g: 100 GB
-	// to 10240 GB. Changing this parameter will create a new resource.
+	// Specifies the flavor name.
 	Flavor string `pulumi:"flavor"`
 	// Specifies the number of cluster instances.
-	// + When it is `masterNodeConfig`, The value range is 3 to 10.
-	// + When it is `clientNodeConfig`, The value range is 1 to 32.
+	// + When it is `masterNodeConfig`, The value range is `3` to `10`.
+	// + When it is `clientNodeConfig`, The value range is `1` to `32`.
 	InstanceNumber int `pulumi:"instanceNumber"`
+	// Specifies the node IDs that needs to be scaled down.
+	ShrinkNodeIds []string `pulumi:"shrinkNodeIds"`
 	// Specifies the information about the volume.
 	// The volume structure is documented below.
 	Volume *ClusterColdNodeConfigVolume `pulumi:"volume"`
@@ -664,15 +662,14 @@ type ClusterColdNodeConfigInput interface {
 }
 
 type ClusterColdNodeConfigArgs struct {
-	// Specifies the flavor name. For example: value range of flavor ess.spec-2u8g:
-	// 40 GB to 800 GB, value range of flavor ess.spec-4u16g: 40 GB to 1600 GB, value range of flavor ess.spec-8u32g: 80 GB
-	// to 3200 GB, value range of flavor ess.spec-16u64g: 100 GB to 6400 GB, value range of flavor ess.spec-32u128g: 100 GB
-	// to 10240 GB. Changing this parameter will create a new resource.
+	// Specifies the flavor name.
 	Flavor pulumi.StringInput `pulumi:"flavor"`
 	// Specifies the number of cluster instances.
-	// + When it is `masterNodeConfig`, The value range is 3 to 10.
-	// + When it is `clientNodeConfig`, The value range is 1 to 32.
+	// + When it is `masterNodeConfig`, The value range is `3` to `10`.
+	// + When it is `clientNodeConfig`, The value range is `1` to `32`.
 	InstanceNumber pulumi.IntInput `pulumi:"instanceNumber"`
+	// Specifies the node IDs that needs to be scaled down.
+	ShrinkNodeIds pulumi.StringArrayInput `pulumi:"shrinkNodeIds"`
 	// Specifies the information about the volume.
 	// The volume structure is documented below.
 	Volume ClusterColdNodeConfigVolumePtrInput `pulumi:"volume"`
@@ -755,19 +752,21 @@ func (o ClusterColdNodeConfigOutput) ToClusterColdNodeConfigPtrOutputWithContext
 	}).(ClusterColdNodeConfigPtrOutput)
 }
 
-// Specifies the flavor name. For example: value range of flavor ess.spec-2u8g:
-// 40 GB to 800 GB, value range of flavor ess.spec-4u16g: 40 GB to 1600 GB, value range of flavor ess.spec-8u32g: 80 GB
-// to 3200 GB, value range of flavor ess.spec-16u64g: 100 GB to 6400 GB, value range of flavor ess.spec-32u128g: 100 GB
-// to 10240 GB. Changing this parameter will create a new resource.
+// Specifies the flavor name.
 func (o ClusterColdNodeConfigOutput) Flavor() pulumi.StringOutput {
 	return o.ApplyT(func(v ClusterColdNodeConfig) string { return v.Flavor }).(pulumi.StringOutput)
 }
 
 // Specifies the number of cluster instances.
-// + When it is `masterNodeConfig`, The value range is 3 to 10.
-// + When it is `clientNodeConfig`, The value range is 1 to 32.
+// + When it is `masterNodeConfig`, The value range is `3` to `10`.
+// + When it is `clientNodeConfig`, The value range is `1` to `32`.
 func (o ClusterColdNodeConfigOutput) InstanceNumber() pulumi.IntOutput {
 	return o.ApplyT(func(v ClusterColdNodeConfig) int { return v.InstanceNumber }).(pulumi.IntOutput)
+}
+
+// Specifies the node IDs that needs to be scaled down.
+func (o ClusterColdNodeConfigOutput) ShrinkNodeIds() pulumi.StringArrayOutput {
+	return o.ApplyT(func(v ClusterColdNodeConfig) []string { return v.ShrinkNodeIds }).(pulumi.StringArrayOutput)
 }
 
 // Specifies the information about the volume.
@@ -800,10 +799,7 @@ func (o ClusterColdNodeConfigPtrOutput) Elem() ClusterColdNodeConfigOutput {
 	}).(ClusterColdNodeConfigOutput)
 }
 
-// Specifies the flavor name. For example: value range of flavor ess.spec-2u8g:
-// 40 GB to 800 GB, value range of flavor ess.spec-4u16g: 40 GB to 1600 GB, value range of flavor ess.spec-8u32g: 80 GB
-// to 3200 GB, value range of flavor ess.spec-16u64g: 100 GB to 6400 GB, value range of flavor ess.spec-32u128g: 100 GB
-// to 10240 GB. Changing this parameter will create a new resource.
+// Specifies the flavor name.
 func (o ClusterColdNodeConfigPtrOutput) Flavor() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *ClusterColdNodeConfig) *string {
 		if v == nil {
@@ -814,8 +810,8 @@ func (o ClusterColdNodeConfigPtrOutput) Flavor() pulumi.StringPtrOutput {
 }
 
 // Specifies the number of cluster instances.
-// + When it is `masterNodeConfig`, The value range is 3 to 10.
-// + When it is `clientNodeConfig`, The value range is 1 to 32.
+// + When it is `masterNodeConfig`, The value range is `3` to `10`.
+// + When it is `clientNodeConfig`, The value range is `1` to `32`.
 func (o ClusterColdNodeConfigPtrOutput) InstanceNumber() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v *ClusterColdNodeConfig) *int {
 		if v == nil {
@@ -823,6 +819,16 @@ func (o ClusterColdNodeConfigPtrOutput) InstanceNumber() pulumi.IntPtrOutput {
 		}
 		return &v.InstanceNumber
 	}).(pulumi.IntPtrOutput)
+}
+
+// Specifies the node IDs that needs to be scaled down.
+func (o ClusterColdNodeConfigPtrOutput) ShrinkNodeIds() pulumi.StringArrayOutput {
+	return o.ApplyT(func(v *ClusterColdNodeConfig) []string {
+		if v == nil {
+			return nil
+		}
+		return v.ShrinkNodeIds
+	}).(pulumi.StringArrayOutput)
 }
 
 // Specifies the information about the volume.
@@ -837,8 +843,7 @@ func (o ClusterColdNodeConfigPtrOutput) Volume() ClusterColdNodeConfigVolumePtrO
 }
 
 type ClusterColdNodeConfigVolume struct {
-	// Specifies the volume size in GB, which must be a multiple of 10.
-	// Changing this parameter will create a new resource.
+	// Specifies the volume size in **GB**, which must be a multiple of `10`.
 	Size int `pulumi:"size"`
 	// Specifies the volume type. Value options are as follows:
 	// + **COMMON**: Common I/O. The SATA disk is used.
@@ -859,8 +864,7 @@ type ClusterColdNodeConfigVolumeInput interface {
 }
 
 type ClusterColdNodeConfigVolumeArgs struct {
-	// Specifies the volume size in GB, which must be a multiple of 10.
-	// Changing this parameter will create a new resource.
+	// Specifies the volume size in **GB**, which must be a multiple of `10`.
 	Size pulumi.IntInput `pulumi:"size"`
 	// Specifies the volume type. Value options are as follows:
 	// + **COMMON**: Common I/O. The SATA disk is used.
@@ -946,8 +950,7 @@ func (o ClusterColdNodeConfigVolumeOutput) ToClusterColdNodeConfigVolumePtrOutpu
 	}).(ClusterColdNodeConfigVolumePtrOutput)
 }
 
-// Specifies the volume size in GB, which must be a multiple of 10.
-// Changing this parameter will create a new resource.
+// Specifies the volume size in **GB**, which must be a multiple of `10`.
 func (o ClusterColdNodeConfigVolumeOutput) Size() pulumi.IntOutput {
 	return o.ApplyT(func(v ClusterColdNodeConfigVolume) int { return v.Size }).(pulumi.IntOutput)
 }
@@ -984,8 +987,7 @@ func (o ClusterColdNodeConfigVolumePtrOutput) Elem() ClusterColdNodeConfigVolume
 	}).(ClusterColdNodeConfigVolumeOutput)
 }
 
-// Specifies the volume size in GB, which must be a multiple of 10.
-// Changing this parameter will create a new resource.
+// Specifies the volume size in **GB**, which must be a multiple of `10`.
 func (o ClusterColdNodeConfigVolumePtrOutput) Size() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v *ClusterColdNodeConfigVolume) *int {
 		if v == nil {
@@ -1009,15 +1011,14 @@ func (o ClusterColdNodeConfigVolumePtrOutput) VolumeType() pulumi.StringPtrOutpu
 }
 
 type ClusterEssNodeConfig struct {
-	// Specifies the flavor name. For example: value range of flavor ess.spec-2u8g:
-	// 40 GB to 800 GB, value range of flavor ess.spec-4u16g: 40 GB to 1600 GB, value range of flavor ess.spec-8u32g: 80 GB
-	// to 3200 GB, value range of flavor ess.spec-16u64g: 100 GB to 6400 GB, value range of flavor ess.spec-32u128g: 100 GB
-	// to 10240 GB. Changing this parameter will create a new resource.
+	// Specifies the flavor name.
 	Flavor string `pulumi:"flavor"`
 	// Specifies the number of cluster instances.
-	// + When it is `masterNodeConfig`, The value range is 3 to 10.
-	// + When it is `clientNodeConfig`, The value range is 1 to 32.
+	// + When it is `masterNodeConfig`, The value range is `3` to `10`.
+	// + When it is `clientNodeConfig`, The value range is `1` to `32`.
 	InstanceNumber int `pulumi:"instanceNumber"`
+	// Specifies the node IDs that needs to be scaled down.
+	ShrinkNodeIds []string `pulumi:"shrinkNodeIds"`
 	// Specifies the information about the volume.
 	// The volume structure is documented below.
 	Volume *ClusterEssNodeConfigVolume `pulumi:"volume"`
@@ -1035,15 +1036,14 @@ type ClusterEssNodeConfigInput interface {
 }
 
 type ClusterEssNodeConfigArgs struct {
-	// Specifies the flavor name. For example: value range of flavor ess.spec-2u8g:
-	// 40 GB to 800 GB, value range of flavor ess.spec-4u16g: 40 GB to 1600 GB, value range of flavor ess.spec-8u32g: 80 GB
-	// to 3200 GB, value range of flavor ess.spec-16u64g: 100 GB to 6400 GB, value range of flavor ess.spec-32u128g: 100 GB
-	// to 10240 GB. Changing this parameter will create a new resource.
+	// Specifies the flavor name.
 	Flavor pulumi.StringInput `pulumi:"flavor"`
 	// Specifies the number of cluster instances.
-	// + When it is `masterNodeConfig`, The value range is 3 to 10.
-	// + When it is `clientNodeConfig`, The value range is 1 to 32.
+	// + When it is `masterNodeConfig`, The value range is `3` to `10`.
+	// + When it is `clientNodeConfig`, The value range is `1` to `32`.
 	InstanceNumber pulumi.IntInput `pulumi:"instanceNumber"`
+	// Specifies the node IDs that needs to be scaled down.
+	ShrinkNodeIds pulumi.StringArrayInput `pulumi:"shrinkNodeIds"`
 	// Specifies the information about the volume.
 	// The volume structure is documented below.
 	Volume ClusterEssNodeConfigVolumePtrInput `pulumi:"volume"`
@@ -1126,19 +1126,21 @@ func (o ClusterEssNodeConfigOutput) ToClusterEssNodeConfigPtrOutputWithContext(c
 	}).(ClusterEssNodeConfigPtrOutput)
 }
 
-// Specifies the flavor name. For example: value range of flavor ess.spec-2u8g:
-// 40 GB to 800 GB, value range of flavor ess.spec-4u16g: 40 GB to 1600 GB, value range of flavor ess.spec-8u32g: 80 GB
-// to 3200 GB, value range of flavor ess.spec-16u64g: 100 GB to 6400 GB, value range of flavor ess.spec-32u128g: 100 GB
-// to 10240 GB. Changing this parameter will create a new resource.
+// Specifies the flavor name.
 func (o ClusterEssNodeConfigOutput) Flavor() pulumi.StringOutput {
 	return o.ApplyT(func(v ClusterEssNodeConfig) string { return v.Flavor }).(pulumi.StringOutput)
 }
 
 // Specifies the number of cluster instances.
-// + When it is `masterNodeConfig`, The value range is 3 to 10.
-// + When it is `clientNodeConfig`, The value range is 1 to 32.
+// + When it is `masterNodeConfig`, The value range is `3` to `10`.
+// + When it is `clientNodeConfig`, The value range is `1` to `32`.
 func (o ClusterEssNodeConfigOutput) InstanceNumber() pulumi.IntOutput {
 	return o.ApplyT(func(v ClusterEssNodeConfig) int { return v.InstanceNumber }).(pulumi.IntOutput)
+}
+
+// Specifies the node IDs that needs to be scaled down.
+func (o ClusterEssNodeConfigOutput) ShrinkNodeIds() pulumi.StringArrayOutput {
+	return o.ApplyT(func(v ClusterEssNodeConfig) []string { return v.ShrinkNodeIds }).(pulumi.StringArrayOutput)
 }
 
 // Specifies the information about the volume.
@@ -1171,10 +1173,7 @@ func (o ClusterEssNodeConfigPtrOutput) Elem() ClusterEssNodeConfigOutput {
 	}).(ClusterEssNodeConfigOutput)
 }
 
-// Specifies the flavor name. For example: value range of flavor ess.spec-2u8g:
-// 40 GB to 800 GB, value range of flavor ess.spec-4u16g: 40 GB to 1600 GB, value range of flavor ess.spec-8u32g: 80 GB
-// to 3200 GB, value range of flavor ess.spec-16u64g: 100 GB to 6400 GB, value range of flavor ess.spec-32u128g: 100 GB
-// to 10240 GB. Changing this parameter will create a new resource.
+// Specifies the flavor name.
 func (o ClusterEssNodeConfigPtrOutput) Flavor() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *ClusterEssNodeConfig) *string {
 		if v == nil {
@@ -1185,8 +1184,8 @@ func (o ClusterEssNodeConfigPtrOutput) Flavor() pulumi.StringPtrOutput {
 }
 
 // Specifies the number of cluster instances.
-// + When it is `masterNodeConfig`, The value range is 3 to 10.
-// + When it is `clientNodeConfig`, The value range is 1 to 32.
+// + When it is `masterNodeConfig`, The value range is `3` to `10`.
+// + When it is `clientNodeConfig`, The value range is `1` to `32`.
 func (o ClusterEssNodeConfigPtrOutput) InstanceNumber() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v *ClusterEssNodeConfig) *int {
 		if v == nil {
@@ -1194,6 +1193,16 @@ func (o ClusterEssNodeConfigPtrOutput) InstanceNumber() pulumi.IntPtrOutput {
 		}
 		return &v.InstanceNumber
 	}).(pulumi.IntPtrOutput)
+}
+
+// Specifies the node IDs that needs to be scaled down.
+func (o ClusterEssNodeConfigPtrOutput) ShrinkNodeIds() pulumi.StringArrayOutput {
+	return o.ApplyT(func(v *ClusterEssNodeConfig) []string {
+		if v == nil {
+			return nil
+		}
+		return v.ShrinkNodeIds
+	}).(pulumi.StringArrayOutput)
 }
 
 // Specifies the information about the volume.
@@ -1208,8 +1217,7 @@ func (o ClusterEssNodeConfigPtrOutput) Volume() ClusterEssNodeConfigVolumePtrOut
 }
 
 type ClusterEssNodeConfigVolume struct {
-	// Specifies the volume size in GB, which must be a multiple of 10.
-	// Changing this parameter will create a new resource.
+	// Specifies the volume size in **GB**, which must be a multiple of `10`.
 	Size int `pulumi:"size"`
 	// Specifies the volume type. Value options are as follows:
 	// + **COMMON**: Common I/O. The SATA disk is used.
@@ -1230,8 +1238,7 @@ type ClusterEssNodeConfigVolumeInput interface {
 }
 
 type ClusterEssNodeConfigVolumeArgs struct {
-	// Specifies the volume size in GB, which must be a multiple of 10.
-	// Changing this parameter will create a new resource.
+	// Specifies the volume size in **GB**, which must be a multiple of `10`.
 	Size pulumi.IntInput `pulumi:"size"`
 	// Specifies the volume type. Value options are as follows:
 	// + **COMMON**: Common I/O. The SATA disk is used.
@@ -1317,8 +1324,7 @@ func (o ClusterEssNodeConfigVolumeOutput) ToClusterEssNodeConfigVolumePtrOutputW
 	}).(ClusterEssNodeConfigVolumePtrOutput)
 }
 
-// Specifies the volume size in GB, which must be a multiple of 10.
-// Changing this parameter will create a new resource.
+// Specifies the volume size in **GB**, which must be a multiple of `10`.
 func (o ClusterEssNodeConfigVolumeOutput) Size() pulumi.IntOutput {
 	return o.ApplyT(func(v ClusterEssNodeConfigVolume) int { return v.Size }).(pulumi.IntOutput)
 }
@@ -1355,8 +1361,7 @@ func (o ClusterEssNodeConfigVolumePtrOutput) Elem() ClusterEssNodeConfigVolumeOu
 	}).(ClusterEssNodeConfigVolumeOutput)
 }
 
-// Specifies the volume size in GB, which must be a multiple of 10.
-// Changing this parameter will create a new resource.
+// Specifies the volume size in **GB**, which must be a multiple of `10`.
 func (o ClusterEssNodeConfigVolumePtrOutput) Size() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v *ClusterEssNodeConfigVolume) *int {
 		if v == nil {
@@ -1570,15 +1575,14 @@ func (o ClusterKibanaPublicAccessPtrOutput) WhitelistEnabled() pulumi.BoolPtrOut
 }
 
 type ClusterMasterNodeConfig struct {
-	// Specifies the flavor name. For example: value range of flavor ess.spec-2u8g:
-	// 40 GB to 800 GB, value range of flavor ess.spec-4u16g: 40 GB to 1600 GB, value range of flavor ess.spec-8u32g: 80 GB
-	// to 3200 GB, value range of flavor ess.spec-16u64g: 100 GB to 6400 GB, value range of flavor ess.spec-32u128g: 100 GB
-	// to 10240 GB. Changing this parameter will create a new resource.
+	// Specifies the flavor name.
 	Flavor string `pulumi:"flavor"`
 	// Specifies the number of cluster instances.
-	// + When it is `masterNodeConfig`, The value range is 3 to 10.
-	// + When it is `clientNodeConfig`, The value range is 1 to 32.
+	// + When it is `masterNodeConfig`, The value range is `3` to `10`.
+	// + When it is `clientNodeConfig`, The value range is `1` to `32`.
 	InstanceNumber int `pulumi:"instanceNumber"`
+	// Specifies the node IDs that needs to be scaled down.
+	ShrinkNodeIds []string `pulumi:"shrinkNodeIds"`
 	// Specifies the information about the volume.
 	// The volume structure is documented below.
 	Volume ClusterMasterNodeConfigVolume `pulumi:"volume"`
@@ -1596,15 +1600,14 @@ type ClusterMasterNodeConfigInput interface {
 }
 
 type ClusterMasterNodeConfigArgs struct {
-	// Specifies the flavor name. For example: value range of flavor ess.spec-2u8g:
-	// 40 GB to 800 GB, value range of flavor ess.spec-4u16g: 40 GB to 1600 GB, value range of flavor ess.spec-8u32g: 80 GB
-	// to 3200 GB, value range of flavor ess.spec-16u64g: 100 GB to 6400 GB, value range of flavor ess.spec-32u128g: 100 GB
-	// to 10240 GB. Changing this parameter will create a new resource.
+	// Specifies the flavor name.
 	Flavor pulumi.StringInput `pulumi:"flavor"`
 	// Specifies the number of cluster instances.
-	// + When it is `masterNodeConfig`, The value range is 3 to 10.
-	// + When it is `clientNodeConfig`, The value range is 1 to 32.
+	// + When it is `masterNodeConfig`, The value range is `3` to `10`.
+	// + When it is `clientNodeConfig`, The value range is `1` to `32`.
 	InstanceNumber pulumi.IntInput `pulumi:"instanceNumber"`
+	// Specifies the node IDs that needs to be scaled down.
+	ShrinkNodeIds pulumi.StringArrayInput `pulumi:"shrinkNodeIds"`
 	// Specifies the information about the volume.
 	// The volume structure is documented below.
 	Volume ClusterMasterNodeConfigVolumeInput `pulumi:"volume"`
@@ -1687,19 +1690,21 @@ func (o ClusterMasterNodeConfigOutput) ToClusterMasterNodeConfigPtrOutputWithCon
 	}).(ClusterMasterNodeConfigPtrOutput)
 }
 
-// Specifies the flavor name. For example: value range of flavor ess.spec-2u8g:
-// 40 GB to 800 GB, value range of flavor ess.spec-4u16g: 40 GB to 1600 GB, value range of flavor ess.spec-8u32g: 80 GB
-// to 3200 GB, value range of flavor ess.spec-16u64g: 100 GB to 6400 GB, value range of flavor ess.spec-32u128g: 100 GB
-// to 10240 GB. Changing this parameter will create a new resource.
+// Specifies the flavor name.
 func (o ClusterMasterNodeConfigOutput) Flavor() pulumi.StringOutput {
 	return o.ApplyT(func(v ClusterMasterNodeConfig) string { return v.Flavor }).(pulumi.StringOutput)
 }
 
 // Specifies the number of cluster instances.
-// + When it is `masterNodeConfig`, The value range is 3 to 10.
-// + When it is `clientNodeConfig`, The value range is 1 to 32.
+// + When it is `masterNodeConfig`, The value range is `3` to `10`.
+// + When it is `clientNodeConfig`, The value range is `1` to `32`.
 func (o ClusterMasterNodeConfigOutput) InstanceNumber() pulumi.IntOutput {
 	return o.ApplyT(func(v ClusterMasterNodeConfig) int { return v.InstanceNumber }).(pulumi.IntOutput)
+}
+
+// Specifies the node IDs that needs to be scaled down.
+func (o ClusterMasterNodeConfigOutput) ShrinkNodeIds() pulumi.StringArrayOutput {
+	return o.ApplyT(func(v ClusterMasterNodeConfig) []string { return v.ShrinkNodeIds }).(pulumi.StringArrayOutput)
 }
 
 // Specifies the information about the volume.
@@ -1732,10 +1737,7 @@ func (o ClusterMasterNodeConfigPtrOutput) Elem() ClusterMasterNodeConfigOutput {
 	}).(ClusterMasterNodeConfigOutput)
 }
 
-// Specifies the flavor name. For example: value range of flavor ess.spec-2u8g:
-// 40 GB to 800 GB, value range of flavor ess.spec-4u16g: 40 GB to 1600 GB, value range of flavor ess.spec-8u32g: 80 GB
-// to 3200 GB, value range of flavor ess.spec-16u64g: 100 GB to 6400 GB, value range of flavor ess.spec-32u128g: 100 GB
-// to 10240 GB. Changing this parameter will create a new resource.
+// Specifies the flavor name.
 func (o ClusterMasterNodeConfigPtrOutput) Flavor() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *ClusterMasterNodeConfig) *string {
 		if v == nil {
@@ -1746,8 +1748,8 @@ func (o ClusterMasterNodeConfigPtrOutput) Flavor() pulumi.StringPtrOutput {
 }
 
 // Specifies the number of cluster instances.
-// + When it is `masterNodeConfig`, The value range is 3 to 10.
-// + When it is `clientNodeConfig`, The value range is 1 to 32.
+// + When it is `masterNodeConfig`, The value range is `3` to `10`.
+// + When it is `clientNodeConfig`, The value range is `1` to `32`.
 func (o ClusterMasterNodeConfigPtrOutput) InstanceNumber() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v *ClusterMasterNodeConfig) *int {
 		if v == nil {
@@ -1755,6 +1757,16 @@ func (o ClusterMasterNodeConfigPtrOutput) InstanceNumber() pulumi.IntPtrOutput {
 		}
 		return &v.InstanceNumber
 	}).(pulumi.IntPtrOutput)
+}
+
+// Specifies the node IDs that needs to be scaled down.
+func (o ClusterMasterNodeConfigPtrOutput) ShrinkNodeIds() pulumi.StringArrayOutput {
+	return o.ApplyT(func(v *ClusterMasterNodeConfig) []string {
+		if v == nil {
+			return nil
+		}
+		return v.ShrinkNodeIds
+	}).(pulumi.StringArrayOutput)
 }
 
 // Specifies the information about the volume.
@@ -1769,8 +1781,7 @@ func (o ClusterMasterNodeConfigPtrOutput) Volume() ClusterMasterNodeConfigVolume
 }
 
 type ClusterMasterNodeConfigVolume struct {
-	// Specifies the volume size in GB, which must be a multiple of 10.
-	// Changing this parameter will create a new resource.
+	// Specifies the volume size in **GB**, which must be a multiple of `10`.
 	Size int `pulumi:"size"`
 	// Specifies the volume type. Value options are as follows:
 	// + **COMMON**: Common I/O. The SATA disk is used.
@@ -1791,8 +1802,7 @@ type ClusterMasterNodeConfigVolumeInput interface {
 }
 
 type ClusterMasterNodeConfigVolumeArgs struct {
-	// Specifies the volume size in GB, which must be a multiple of 10.
-	// Changing this parameter will create a new resource.
+	// Specifies the volume size in **GB**, which must be a multiple of `10`.
 	Size pulumi.IntInput `pulumi:"size"`
 	// Specifies the volume type. Value options are as follows:
 	// + **COMMON**: Common I/O. The SATA disk is used.
@@ -1878,8 +1888,7 @@ func (o ClusterMasterNodeConfigVolumeOutput) ToClusterMasterNodeConfigVolumePtrO
 	}).(ClusterMasterNodeConfigVolumePtrOutput)
 }
 
-// Specifies the volume size in GB, which must be a multiple of 10.
-// Changing this parameter will create a new resource.
+// Specifies the volume size in **GB**, which must be a multiple of `10`.
 func (o ClusterMasterNodeConfigVolumeOutput) Size() pulumi.IntOutput {
 	return o.ApplyT(func(v ClusterMasterNodeConfigVolume) int { return v.Size }).(pulumi.IntOutput)
 }
@@ -1916,8 +1925,7 @@ func (o ClusterMasterNodeConfigVolumePtrOutput) Elem() ClusterMasterNodeConfigVo
 	}).(ClusterMasterNodeConfigVolumeOutput)
 }
 
-// Specifies the volume size in GB, which must be a multiple of 10.
-// Changing this parameter will create a new resource.
+// Specifies the volume size in **GB**, which must be a multiple of `10`.
 func (o ClusterMasterNodeConfigVolumePtrOutput) Size() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v *ClusterMasterNodeConfigVolume) *int {
 		if v == nil {
@@ -1945,20 +1953,27 @@ type ClusterNode struct {
 	// Separate multiple AZs with commas (,), for example, az1,az2. AZs must be unique. The number of nodes must be greater
 	// than or equal to the number of AZs. If the number of nodes is a multiple of the number of AZs, the nodes are evenly
 	// distributed to each AZ. If the number of nodes is not a multiple of the number of AZs, the absolute difference
-	// between node quantity in any two AZs is 1 at most.
-	// Changing this parameter will create a new resource.
+	// between node quantity in any two AZs is **1** at most.
 	AvailabilityZone *string `pulumi:"availabilityZone"`
 	// Instance ID.
 	Id *string `pulumi:"id"`
-	// Specifies the cluster name. It contains 4 to 32 characters.
+	// Instance IP address.
+	Ip *string `pulumi:"ip"`
+	// Specifies the cluster name. It contains `4` to `32` characters.
 	// Only letters, digits, hyphens (-), and underscores (_) are allowed. The value must start with a letter.
 	// Changing this parameter will create a new resource.
 	Name *string `pulumi:"name"`
+	// The resource ID of this instance.
+	ResourceId *string `pulumi:"resourceId"`
 	// Instance specification code.
 	SpecCode *string `pulumi:"specCode"`
 	// Instance status.
 	Status *string `pulumi:"status"`
 	// Node type. The options are as follows:
+	// + **ess-master:** Indicates a master node.
+	// + **ess-client:** Indicates a client node.
+	// + **ess-cold:** Indicates a cold data node.
+	// + **ess indicates:** Indicates a data node.
 	Type *string `pulumi:"type"`
 }
 
@@ -1978,20 +1993,27 @@ type ClusterNodeArgs struct {
 	// Separate multiple AZs with commas (,), for example, az1,az2. AZs must be unique. The number of nodes must be greater
 	// than or equal to the number of AZs. If the number of nodes is a multiple of the number of AZs, the nodes are evenly
 	// distributed to each AZ. If the number of nodes is not a multiple of the number of AZs, the absolute difference
-	// between node quantity in any two AZs is 1 at most.
-	// Changing this parameter will create a new resource.
+	// between node quantity in any two AZs is **1** at most.
 	AvailabilityZone pulumi.StringPtrInput `pulumi:"availabilityZone"`
 	// Instance ID.
 	Id pulumi.StringPtrInput `pulumi:"id"`
-	// Specifies the cluster name. It contains 4 to 32 characters.
+	// Instance IP address.
+	Ip pulumi.StringPtrInput `pulumi:"ip"`
+	// Specifies the cluster name. It contains `4` to `32` characters.
 	// Only letters, digits, hyphens (-), and underscores (_) are allowed. The value must start with a letter.
 	// Changing this parameter will create a new resource.
 	Name pulumi.StringPtrInput `pulumi:"name"`
+	// The resource ID of this instance.
+	ResourceId pulumi.StringPtrInput `pulumi:"resourceId"`
 	// Instance specification code.
 	SpecCode pulumi.StringPtrInput `pulumi:"specCode"`
 	// Instance status.
 	Status pulumi.StringPtrInput `pulumi:"status"`
 	// Node type. The options are as follows:
+	// + **ess-master:** Indicates a master node.
+	// + **ess-client:** Indicates a client node.
+	// + **ess-cold:** Indicates a cold data node.
+	// + **ess indicates:** Indicates a data node.
 	Type pulumi.StringPtrInput `pulumi:"type"`
 }
 
@@ -2050,8 +2072,7 @@ func (o ClusterNodeOutput) ToClusterNodeOutputWithContext(ctx context.Context) C
 // Separate multiple AZs with commas (,), for example, az1,az2. AZs must be unique. The number of nodes must be greater
 // than or equal to the number of AZs. If the number of nodes is a multiple of the number of AZs, the nodes are evenly
 // distributed to each AZ. If the number of nodes is not a multiple of the number of AZs, the absolute difference
-// between node quantity in any two AZs is 1 at most.
-// Changing this parameter will create a new resource.
+// between node quantity in any two AZs is **1** at most.
 func (o ClusterNodeOutput) AvailabilityZone() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v ClusterNode) *string { return v.AvailabilityZone }).(pulumi.StringPtrOutput)
 }
@@ -2061,11 +2082,21 @@ func (o ClusterNodeOutput) Id() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v ClusterNode) *string { return v.Id }).(pulumi.StringPtrOutput)
 }
 
-// Specifies the cluster name. It contains 4 to 32 characters.
+// Instance IP address.
+func (o ClusterNodeOutput) Ip() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v ClusterNode) *string { return v.Ip }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the cluster name. It contains `4` to `32` characters.
 // Only letters, digits, hyphens (-), and underscores (_) are allowed. The value must start with a letter.
 // Changing this parameter will create a new resource.
 func (o ClusterNodeOutput) Name() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v ClusterNode) *string { return v.Name }).(pulumi.StringPtrOutput)
+}
+
+// The resource ID of this instance.
+func (o ClusterNodeOutput) ResourceId() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v ClusterNode) *string { return v.ResourceId }).(pulumi.StringPtrOutput)
 }
 
 // Instance specification code.
@@ -2079,6 +2110,10 @@ func (o ClusterNodeOutput) Status() pulumi.StringPtrOutput {
 }
 
 // Node type. The options are as follows:
+// + **ess-master:** Indicates a master node.
+// + **ess-client:** Indicates a client node.
+// + **ess-cold:** Indicates a cold data node.
+// + **ess indicates:** Indicates a data node.
 func (o ClusterNodeOutput) Type() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v ClusterNode) *string { return v.Type }).(pulumi.StringPtrOutput)
 }
@@ -2108,13 +2143,9 @@ type ClusterNodeConfig struct {
 	// Separate multiple AZs with commas (,), for example, az1,az2. AZs must be unique. The number of nodes must be greater
 	// than or equal to the number of AZs. If the number of nodes is a multiple of the number of AZs, the nodes are evenly
 	// distributed to each AZ. If the number of nodes is not a multiple of the number of AZs, the absolute difference
-	// between node quantity in any two AZs is 1 at most.
-	// Changing this parameter will create a new resource.
+	// between node quantity in any two AZs is **1** at most.
 	AvailabilityZone string `pulumi:"availabilityZone"`
-	// Specifies the flavor name. For example: value range of flavor ess.spec-2u8g:
-	// 40 GB to 800 GB, value range of flavor ess.spec-4u16g: 40 GB to 1600 GB, value range of flavor ess.spec-8u32g: 80 GB
-	// to 3200 GB, value range of flavor ess.spec-16u64g: 100 GB to 6400 GB, value range of flavor ess.spec-32u128g: 100 GB
-	// to 10240 GB. Changing this parameter will create a new resource.
+	// Specifies the flavor name.
 	Flavor      string                       `pulumi:"flavor"`
 	NetworkInfo ClusterNodeConfigNetworkInfo `pulumi:"networkInfo"`
 	// Specifies the information about the volume.
@@ -2138,13 +2169,9 @@ type ClusterNodeConfigArgs struct {
 	// Separate multiple AZs with commas (,), for example, az1,az2. AZs must be unique. The number of nodes must be greater
 	// than or equal to the number of AZs. If the number of nodes is a multiple of the number of AZs, the nodes are evenly
 	// distributed to each AZ. If the number of nodes is not a multiple of the number of AZs, the absolute difference
-	// between node quantity in any two AZs is 1 at most.
-	// Changing this parameter will create a new resource.
+	// between node quantity in any two AZs is **1** at most.
 	AvailabilityZone pulumi.StringInput `pulumi:"availabilityZone"`
-	// Specifies the flavor name. For example: value range of flavor ess.spec-2u8g:
-	// 40 GB to 800 GB, value range of flavor ess.spec-4u16g: 40 GB to 1600 GB, value range of flavor ess.spec-8u32g: 80 GB
-	// to 3200 GB, value range of flavor ess.spec-16u64g: 100 GB to 6400 GB, value range of flavor ess.spec-32u128g: 100 GB
-	// to 10240 GB. Changing this parameter will create a new resource.
+	// Specifies the flavor name.
 	Flavor      pulumi.StringInput                `pulumi:"flavor"`
 	NetworkInfo ClusterNodeConfigNetworkInfoInput `pulumi:"networkInfo"`
 	// Specifies the information about the volume.
@@ -2233,16 +2260,12 @@ func (o ClusterNodeConfigOutput) ToClusterNodeConfigPtrOutputWithContext(ctx con
 // Separate multiple AZs with commas (,), for example, az1,az2. AZs must be unique. The number of nodes must be greater
 // than or equal to the number of AZs. If the number of nodes is a multiple of the number of AZs, the nodes are evenly
 // distributed to each AZ. If the number of nodes is not a multiple of the number of AZs, the absolute difference
-// between node quantity in any two AZs is 1 at most.
-// Changing this parameter will create a new resource.
+// between node quantity in any two AZs is **1** at most.
 func (o ClusterNodeConfigOutput) AvailabilityZone() pulumi.StringOutput {
 	return o.ApplyT(func(v ClusterNodeConfig) string { return v.AvailabilityZone }).(pulumi.StringOutput)
 }
 
-// Specifies the flavor name. For example: value range of flavor ess.spec-2u8g:
-// 40 GB to 800 GB, value range of flavor ess.spec-4u16g: 40 GB to 1600 GB, value range of flavor ess.spec-8u32g: 80 GB
-// to 3200 GB, value range of flavor ess.spec-16u64g: 100 GB to 6400 GB, value range of flavor ess.spec-32u128g: 100 GB
-// to 10240 GB. Changing this parameter will create a new resource.
+// Specifies the flavor name.
 func (o ClusterNodeConfigOutput) Flavor() pulumi.StringOutput {
 	return o.ApplyT(func(v ClusterNodeConfig) string { return v.Flavor }).(pulumi.StringOutput)
 }
@@ -2285,8 +2308,7 @@ func (o ClusterNodeConfigPtrOutput) Elem() ClusterNodeConfigOutput {
 // Separate multiple AZs with commas (,), for example, az1,az2. AZs must be unique. The number of nodes must be greater
 // than or equal to the number of AZs. If the number of nodes is a multiple of the number of AZs, the nodes are evenly
 // distributed to each AZ. If the number of nodes is not a multiple of the number of AZs, the absolute difference
-// between node quantity in any two AZs is 1 at most.
-// Changing this parameter will create a new resource.
+// between node quantity in any two AZs is **1** at most.
 func (o ClusterNodeConfigPtrOutput) AvailabilityZone() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *ClusterNodeConfig) *string {
 		if v == nil {
@@ -2296,10 +2318,7 @@ func (o ClusterNodeConfigPtrOutput) AvailabilityZone() pulumi.StringPtrOutput {
 	}).(pulumi.StringPtrOutput)
 }
 
-// Specifies the flavor name. For example: value range of flavor ess.spec-2u8g:
-// 40 GB to 800 GB, value range of flavor ess.spec-4u16g: 40 GB to 1600 GB, value range of flavor ess.spec-8u32g: 80 GB
-// to 3200 GB, value range of flavor ess.spec-16u64g: 100 GB to 6400 GB, value range of flavor ess.spec-32u128g: 100 GB
-// to 10240 GB. Changing this parameter will create a new resource.
+// Specifies the flavor name.
 func (o ClusterNodeConfigPtrOutput) Flavor() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *ClusterNodeConfig) *string {
 		if v == nil {
@@ -2330,12 +2349,13 @@ func (o ClusterNodeConfigPtrOutput) Volume() ClusterNodeConfigVolumePtrOutput {
 }
 
 type ClusterNodeConfigNetworkInfo struct {
-	// Specifies Security group ID.
-	// Changing this parameter will create a new resource.
+	// Specifies the security group ID.
 	SecurityGroupId string `pulumi:"securityGroupId"`
-	// Specifies the Subnet ID. Changing this parameter will create a new resource.
+	// Specifies the Subnet ID.
+	// Changing this parameter will create a new resource.
 	SubnetId string `pulumi:"subnetId"`
-	// Specifies the VPC ID. Changing this parameter will create a new resource.
+	// Specifies the VPC ID.
+	// Changing this parameter will create a new resource.
 	VpcId string `pulumi:"vpcId"`
 }
 
@@ -2351,12 +2371,13 @@ type ClusterNodeConfigNetworkInfoInput interface {
 }
 
 type ClusterNodeConfigNetworkInfoArgs struct {
-	// Specifies Security group ID.
-	// Changing this parameter will create a new resource.
+	// Specifies the security group ID.
 	SecurityGroupId pulumi.StringInput `pulumi:"securityGroupId"`
-	// Specifies the Subnet ID. Changing this parameter will create a new resource.
+	// Specifies the Subnet ID.
+	// Changing this parameter will create a new resource.
 	SubnetId pulumi.StringInput `pulumi:"subnetId"`
-	// Specifies the VPC ID. Changing this parameter will create a new resource.
+	// Specifies the VPC ID.
+	// Changing this parameter will create a new resource.
 	VpcId pulumi.StringInput `pulumi:"vpcId"`
 }
 
@@ -2437,18 +2458,19 @@ func (o ClusterNodeConfigNetworkInfoOutput) ToClusterNodeConfigNetworkInfoPtrOut
 	}).(ClusterNodeConfigNetworkInfoPtrOutput)
 }
 
-// Specifies Security group ID.
-// Changing this parameter will create a new resource.
+// Specifies the security group ID.
 func (o ClusterNodeConfigNetworkInfoOutput) SecurityGroupId() pulumi.StringOutput {
 	return o.ApplyT(func(v ClusterNodeConfigNetworkInfo) string { return v.SecurityGroupId }).(pulumi.StringOutput)
 }
 
-// Specifies the Subnet ID. Changing this parameter will create a new resource.
+// Specifies the Subnet ID.
+// Changing this parameter will create a new resource.
 func (o ClusterNodeConfigNetworkInfoOutput) SubnetId() pulumi.StringOutput {
 	return o.ApplyT(func(v ClusterNodeConfigNetworkInfo) string { return v.SubnetId }).(pulumi.StringOutput)
 }
 
-// Specifies the VPC ID. Changing this parameter will create a new resource.
+// Specifies the VPC ID.
+// Changing this parameter will create a new resource.
 func (o ClusterNodeConfigNetworkInfoOutput) VpcId() pulumi.StringOutput {
 	return o.ApplyT(func(v ClusterNodeConfigNetworkInfo) string { return v.VpcId }).(pulumi.StringOutput)
 }
@@ -2477,8 +2499,7 @@ func (o ClusterNodeConfigNetworkInfoPtrOutput) Elem() ClusterNodeConfigNetworkIn
 	}).(ClusterNodeConfigNetworkInfoOutput)
 }
 
-// Specifies Security group ID.
-// Changing this parameter will create a new resource.
+// Specifies the security group ID.
 func (o ClusterNodeConfigNetworkInfoPtrOutput) SecurityGroupId() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *ClusterNodeConfigNetworkInfo) *string {
 		if v == nil {
@@ -2488,7 +2509,8 @@ func (o ClusterNodeConfigNetworkInfoPtrOutput) SecurityGroupId() pulumi.StringPt
 	}).(pulumi.StringPtrOutput)
 }
 
-// Specifies the Subnet ID. Changing this parameter will create a new resource.
+// Specifies the Subnet ID.
+// Changing this parameter will create a new resource.
 func (o ClusterNodeConfigNetworkInfoPtrOutput) SubnetId() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *ClusterNodeConfigNetworkInfo) *string {
 		if v == nil {
@@ -2498,7 +2520,8 @@ func (o ClusterNodeConfigNetworkInfoPtrOutput) SubnetId() pulumi.StringPtrOutput
 	}).(pulumi.StringPtrOutput)
 }
 
-// Specifies the VPC ID. Changing this parameter will create a new resource.
+// Specifies the VPC ID.
+// Changing this parameter will create a new resource.
 func (o ClusterNodeConfigNetworkInfoPtrOutput) VpcId() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *ClusterNodeConfigNetworkInfo) *string {
 		if v == nil {
@@ -2509,8 +2532,7 @@ func (o ClusterNodeConfigNetworkInfoPtrOutput) VpcId() pulumi.StringPtrOutput {
 }
 
 type ClusterNodeConfigVolume struct {
-	// Specifies the volume size in GB, which must be a multiple of 10.
-	// Changing this parameter will create a new resource.
+	// Specifies the volume size in **GB**, which must be a multiple of `10`.
 	Size int `pulumi:"size"`
 	// Specifies the volume type. Value options are as follows:
 	// + **COMMON**: Common I/O. The SATA disk is used.
@@ -2531,8 +2553,7 @@ type ClusterNodeConfigVolumeInput interface {
 }
 
 type ClusterNodeConfigVolumeArgs struct {
-	// Specifies the volume size in GB, which must be a multiple of 10.
-	// Changing this parameter will create a new resource.
+	// Specifies the volume size in **GB**, which must be a multiple of `10`.
 	Size pulumi.IntInput `pulumi:"size"`
 	// Specifies the volume type. Value options are as follows:
 	// + **COMMON**: Common I/O. The SATA disk is used.
@@ -2618,8 +2639,7 @@ func (o ClusterNodeConfigVolumeOutput) ToClusterNodeConfigVolumePtrOutputWithCon
 	}).(ClusterNodeConfigVolumePtrOutput)
 }
 
-// Specifies the volume size in GB, which must be a multiple of 10.
-// Changing this parameter will create a new resource.
+// Specifies the volume size in **GB**, which must be a multiple of `10`.
 func (o ClusterNodeConfigVolumeOutput) Size() pulumi.IntOutput {
 	return o.ApplyT(func(v ClusterNodeConfigVolume) int { return v.Size }).(pulumi.IntOutput)
 }
@@ -2656,8 +2676,7 @@ func (o ClusterNodeConfigVolumePtrOutput) Elem() ClusterNodeConfigVolumeOutput {
 	}).(ClusterNodeConfigVolumeOutput)
 }
 
-// Specifies the volume size in GB, which must be a multiple of 10.
-// Changing this parameter will create a new resource.
+// Specifies the volume size in **GB**, which must be a multiple of `10`.
 func (o ClusterNodeConfigVolumePtrOutput) Size() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v *ClusterNodeConfigVolume) *int {
 		if v == nil {
@@ -3027,6 +3046,8 @@ func (o ClusterVpcepEndpointPtrOutput) Whitelists() pulumi.StringArrayOutput {
 }
 
 type GetFlavorsFlavor struct {
+	// The valid availability zones for current flavor.
+	AvailabilityZones string `pulumi:"availabilityZones"`
 	// The disk capacity range of an instance, in GB.
 	DiskRange string `pulumi:"diskRange"`
 	// The ID of CSS flavor.
@@ -3060,6 +3081,8 @@ type GetFlavorsFlavorInput interface {
 }
 
 type GetFlavorsFlavorArgs struct {
+	// The valid availability zones for current flavor.
+	AvailabilityZones pulumi.StringInput `pulumi:"availabilityZones"`
 	// The disk capacity range of an instance, in GB.
 	DiskRange pulumi.StringInput `pulumi:"diskRange"`
 	// The ID of CSS flavor.
@@ -3130,6 +3153,11 @@ func (o GetFlavorsFlavorOutput) ToGetFlavorsFlavorOutput() GetFlavorsFlavorOutpu
 
 func (o GetFlavorsFlavorOutput) ToGetFlavorsFlavorOutputWithContext(ctx context.Context) GetFlavorsFlavorOutput {
 	return o
+}
+
+// The valid availability zones for current flavor.
+func (o GetFlavorsFlavorOutput) AvailabilityZones() pulumi.StringOutput {
+	return o.ApplyT(func(v GetFlavorsFlavor) string { return v.AvailabilityZones }).(pulumi.StringOutput)
 }
 
 // The disk capacity range of an instance, in GB.

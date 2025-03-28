@@ -10,10 +10,15 @@ import (
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
-// Use this data source to filter dependent packages of FGS from HuaweiCloud.
+// Use this data source to query dependency packages within HuaweiCloud.
+//
+// > Between `1.64.2` and `1.72.1`, the version list of each dependency package is queried by default.
+//
+//	<br>This will cause the query to take up a lot of time and may trigger flow control.
+//	<br>There are not recommended to use.
 //
 // ## Example Usage
-// ### Obtain all public dependent packages
+// ### Obtain all public dependency packages
 //
 // ```go
 // package main
@@ -37,7 +42,7 @@ import (
 //	}
 //
 // ```
-// ### Obtain specific public dependent package by name
+// ### Obtain specific public dependency package by name
 //
 // ```go
 // package main
@@ -64,7 +69,7 @@ import (
 //	}
 //
 // ```
-// ### Obtain all public Python2.7 dependent packages
+// ### Obtain all public Python2.7 dependency packages
 //
 // ```go
 // package main
@@ -103,29 +108,58 @@ func GetDependencies(ctx *pulumi.Context, args *GetDependenciesArgs, opts ...pul
 
 // A collection of arguments for invoking getDependencies.
 type GetDependenciesArgs struct {
-	// Specifies the dependent package runtime to match.
+	// Specifies whether to query the versions of each dependency package.
+	// Defaults to **false**.
+	IsVersionsQueryAllowed *bool `pulumi:"isVersionsQueryAllowed"`
+	// Specifies the name of the dependency package.
 	Name *string `pulumi:"name"`
-	// Specifies the region in which to obtain the dependent packages. If omitted, the
-	// provider-level region will be used.
+	// Specifies the region where the dependency packages are located.\
+	// If omitted, the provider-level region will be used.
 	Region *string `pulumi:"region"`
-	// Specifies the dependent package runtime to match. Valid values: **Java8**,
-	// **Node.js6.10**, **Node.js8.10**, **Node.js10.16**, **Node.js12.13**, **Python2.7**, **Python3.6**, **Go1.8**,
-	// **Go1.x**, **C#(.NET Core 2.0)**, **C#(.NET Core 2.1)**, **C#(.NET Core 3.1)** and **PHP7.3**.
+	// Specifies the runtime of the dependency package.\
+	// The valid values are as follows:
+	// + **Java8**
+	// + **Java11**
+	// + **Node.js6.10**
+	// + **Node.js8.10**
+	// + **Node.js10.16**
+	// + **Node.js12.13**
+	// + **Node.js14.18**
+	// + **Node.js16.17**
+	// + **Node.js18.15**
+	// + **Python2.7**
+	// + **Python3.6**
+	// + **Python3.9**
+	// + **Python3.10**
+	// + **Go1.x**
+	// + **C#(.NET Core 2.0)**
+	// + **C#(.NET Core 2.1)**
+	// + **C#(.NET Core 3.1)**
+	// + **Custom**
+	// + **PHP7.3**
+	// + **Cangjie1.0**
+	// + **http**
+	// + **Custom Image**
 	Runtime *string `pulumi:"runtime"`
-	// Specifies the dependent package type to match. Valid values: **public** and **private**.
+	// Specifies the type of the dependency package.\
+	// The valid values are as follows:
+	// + **public**
+	// + **private**
 	Type *string `pulumi:"type"`
 }
 
 // A collection of values returned by getDependencies.
 type GetDependenciesResult struct {
 	// The provider-assigned unique ID for this managed resource.
-	Id string `pulumi:"id"`
-	// Dependent package name.
+	Id                     string `pulumi:"id"`
+	IsVersionsQueryAllowed *bool  `pulumi:"isVersionsQueryAllowed"`
+	// The name of the dependency package.
 	Name *string `pulumi:"name"`
-	// All dependent packages that match.
+	// All dependency packages that match the filter parameters.
+	// The packages structure is documented below.
 	Packages []GetDependenciesPackage `pulumi:"packages"`
 	Region   string                   `pulumi:"region"`
-	// Dependent package runtime.
+	// The runtime of the dependency package.
 	Runtime *string `pulumi:"runtime"`
 	Type    *string `pulumi:"type"`
 }
@@ -145,16 +179,43 @@ func GetDependenciesOutput(ctx *pulumi.Context, args GetDependenciesOutputArgs, 
 
 // A collection of arguments for invoking getDependencies.
 type GetDependenciesOutputArgs struct {
-	// Specifies the dependent package runtime to match.
+	// Specifies whether to query the versions of each dependency package.
+	// Defaults to **false**.
+	IsVersionsQueryAllowed pulumi.BoolPtrInput `pulumi:"isVersionsQueryAllowed"`
+	// Specifies the name of the dependency package.
 	Name pulumi.StringPtrInput `pulumi:"name"`
-	// Specifies the region in which to obtain the dependent packages. If omitted, the
-	// provider-level region will be used.
+	// Specifies the region where the dependency packages are located.\
+	// If omitted, the provider-level region will be used.
 	Region pulumi.StringPtrInput `pulumi:"region"`
-	// Specifies the dependent package runtime to match. Valid values: **Java8**,
-	// **Node.js6.10**, **Node.js8.10**, **Node.js10.16**, **Node.js12.13**, **Python2.7**, **Python3.6**, **Go1.8**,
-	// **Go1.x**, **C#(.NET Core 2.0)**, **C#(.NET Core 2.1)**, **C#(.NET Core 3.1)** and **PHP7.3**.
+	// Specifies the runtime of the dependency package.\
+	// The valid values are as follows:
+	// + **Java8**
+	// + **Java11**
+	// + **Node.js6.10**
+	// + **Node.js8.10**
+	// + **Node.js10.16**
+	// + **Node.js12.13**
+	// + **Node.js14.18**
+	// + **Node.js16.17**
+	// + **Node.js18.15**
+	// + **Python2.7**
+	// + **Python3.6**
+	// + **Python3.9**
+	// + **Python3.10**
+	// + **Go1.x**
+	// + **C#(.NET Core 2.0)**
+	// + **C#(.NET Core 2.1)**
+	// + **C#(.NET Core 3.1)**
+	// + **Custom**
+	// + **PHP7.3**
+	// + **Cangjie1.0**
+	// + **http**
+	// + **Custom Image**
 	Runtime pulumi.StringPtrInput `pulumi:"runtime"`
-	// Specifies the dependent package type to match. Valid values: **public** and **private**.
+	// Specifies the type of the dependency package.\
+	// The valid values are as follows:
+	// + **public**
+	// + **private**
 	Type pulumi.StringPtrInput `pulumi:"type"`
 }
 
@@ -182,12 +243,17 @@ func (o GetDependenciesResultOutput) Id() pulumi.StringOutput {
 	return o.ApplyT(func(v GetDependenciesResult) string { return v.Id }).(pulumi.StringOutput)
 }
 
-// Dependent package name.
+func (o GetDependenciesResultOutput) IsVersionsQueryAllowed() pulumi.BoolPtrOutput {
+	return o.ApplyT(func(v GetDependenciesResult) *bool { return v.IsVersionsQueryAllowed }).(pulumi.BoolPtrOutput)
+}
+
+// The name of the dependency package.
 func (o GetDependenciesResultOutput) Name() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v GetDependenciesResult) *string { return v.Name }).(pulumi.StringPtrOutput)
 }
 
-// All dependent packages that match.
+// All dependency packages that match the filter parameters.
+// The packages structure is documented below.
 func (o GetDependenciesResultOutput) Packages() GetDependenciesPackageArrayOutput {
 	return o.ApplyT(func(v GetDependenciesResult) []GetDependenciesPackage { return v.Packages }).(GetDependenciesPackageArrayOutput)
 }
@@ -196,7 +262,7 @@ func (o GetDependenciesResultOutput) Region() pulumi.StringOutput {
 	return o.ApplyT(func(v GetDependenciesResult) string { return v.Region }).(pulumi.StringOutput)
 }
 
-// Dependent package runtime.
+// The runtime of the dependency package.
 func (o GetDependenciesResultOutput) Runtime() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v GetDependenciesResult) *string { return v.Runtime }).(pulumi.StringPtrOutput)
 }

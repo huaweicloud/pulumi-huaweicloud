@@ -17,13 +17,12 @@ __all__ = ['KafkaInstanceArgs', 'KafkaInstance']
 class KafkaInstanceArgs:
     def __init__(__self__, *,
                  engine_version: pulumi.Input[str],
-                 manager_password: pulumi.Input[str],
-                 manager_user: pulumi.Input[str],
                  network_id: pulumi.Input[str],
                  security_group_id: pulumi.Input[str],
                  storage_spec_code: pulumi.Input[str],
                  vpc_id: pulumi.Input[str],
                  access_user: Optional[pulumi.Input[str]] = None,
+                 arch_type: Optional[pulumi.Input[str]] = None,
                  auto_renew: Optional[pulumi.Input[str]] = None,
                  availability_zones: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  available_zones: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
@@ -34,11 +33,17 @@ class KafkaInstanceArgs:
                  description: Optional[pulumi.Input[str]] = None,
                  dumping: Optional[pulumi.Input[bool]] = None,
                  enable_auto_topic: Optional[pulumi.Input[bool]] = None,
+                 enabled_mechanisms: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  flavor_id: Optional[pulumi.Input[str]] = None,
+                 ipv6_enable: Optional[pulumi.Input[bool]] = None,
                  maintain_begin: Optional[pulumi.Input[str]] = None,
                  maintain_end: Optional[pulumi.Input[str]] = None,
+                 manager_password: Optional[pulumi.Input[str]] = None,
+                 manager_user: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
+                 new_tenant_ips: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
+                 parameters: Optional[pulumi.Input[Sequence[pulumi.Input['KafkaInstanceParameterArgs']]]] = None,
                  password: Optional[pulumi.Input[str]] = None,
                  period: Optional[pulumi.Input[int]] = None,
                  period_unit: Optional[pulumi.Input[str]] = None,
@@ -46,19 +51,15 @@ class KafkaInstanceArgs:
                  public_ip_ids: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  region: Optional[pulumi.Input[str]] = None,
                  retention_policy: Optional[pulumi.Input[str]] = None,
+                 security_protocol: Optional[pulumi.Input[str]] = None,
+                 ssl_enable: Optional[pulumi.Input[bool]] = None,
                  storage_space: Optional[pulumi.Input[int]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None):
+                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
+                 vpc_client_plain: Optional[pulumi.Input[bool]] = None):
         """
         The set of arguments for constructing a KafkaInstance resource.
         :param pulumi.Input[str] engine_version: Specifies the version of the Kafka engine,
                such as 1.1.0, 2.3.0, 2.7 or other supported versions. Changing this creates a new instance resource.
-        :param pulumi.Input[str] manager_password: Specifies the password for logging in to the Kafka Manager. The
-               password must meet the following complexity requirements: Must be 8 to 32 characters long. Must contain at least 2 of
-               the following character types: lowercase letters, uppercase letters, digits, and special characters (`~!@#$%^&*()-_
-               =+\\\\|[{}]:'",<.>/?). Changing this creates a new instance resource.
-        :param pulumi.Input[str] manager_user: Specifies the username for logging in to the Kafka Manager. The username
-               consists of 4 to 64 characters and can contain letters, digits, hyphens (-), and underscores (_). Changing this
-               creates a new instance resource.
         :param pulumi.Input[str] network_id: Specifies the ID of a subnet. Changing this creates a new instance
                resource.
         :param pulumi.Input[str] security_group_id: Specifies the ID of a security group.
@@ -69,6 +70,8 @@ class KafkaInstanceArgs:
         :param pulumi.Input[str] vpc_id: Specifies the ID of a VPC. Changing this creates a new instance resource.
         :param pulumi.Input[str] access_user: Specifies the username of SASL_SSL user. A username consists of 4
                to 64 characters and supports only letters, digits, and hyphens (-). Changing this creates a new instance resource.
+        :param pulumi.Input[str] arch_type: Specifies the CPU architecture. Valid value is **X86**.
+               Changing this creates a new instance resource.
         :param pulumi.Input[str] auto_renew: Specifies whether auto renew is enabled. Valid values are "true" and "false".
         :param pulumi.Input[Sequence[pulumi.Input[str]]] availability_zones: The names of the AZ where the Kafka instances reside.
                The parameter value can not be left blank or an empty array. Changing this creates a new instance resource.
@@ -80,16 +83,21 @@ class KafkaInstanceArgs:
                The object structure is documented below.
         :param pulumi.Input[str] description: Specifies the description of the DMS Kafka instance. It is a character string
                containing not more than 1,024 characters.
-        :param pulumi.Input[bool] dumping: Specifies whether to enable message dumping.
+        :param pulumi.Input[bool] dumping: Specifies whether to enable  message dumping(smart connect).
                Changing this creates a new instance resource.
         :param pulumi.Input[bool] enable_auto_topic: Specifies whether to enable automatic topic creation. If automatic
                topic creation is enabled, a topic will be automatically created with 3 partitions and 3 replicas when a message is
                produced to or consumed from a topic that does not exist.
                The default value is false.
-               Changing this creates a new instance resource.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] enabled_mechanisms: Specifies the authentication mechanisms to use after SASL is
+               enabled. Value options:
+               + **PLAIN**: Simple username and password verification.
+               + **SCRAM-SHA-512**: User credential verification, which is more secure than **PLAIN**.
         :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID of the Kafka instance.
         :param pulumi.Input[str] flavor_id: Specifies the Kafka [flavor ID](https://support.huaweicloud.com/intl/en-us/productdesc-kafka/Kafka-specification.html),
                e.g. **c6.2u4g.cluster**. This parameter and `product_id` are alternative.
+        :param pulumi.Input[bool] ipv6_enable: Specifies whether to enable IPv6. Defaults to **false**.
+               Changing this creates a new instance resource.
         :param pulumi.Input[str] maintain_begin: Specifies the time at which a maintenance time window starts. Format: HH:mm. The
                start time and end time of a maintenance time window must indicate the time segment of a supported maintenance time
                window. The start time must be set to 22:00, 02:00, 06:00, 10:00, 14:00, or 18:00. Parameters `maintain_begin`
@@ -101,12 +109,13 @@ class KafkaInstanceArgs:
                02:00. Parameters `maintain_begin`
                and `maintain_end` must be set in pairs. If parameter `maintain_end` is left blank, parameter
                `maintain_begin` is also blank. In this case, the system automatically allocates the default end time 06:00.
-        :param pulumi.Input[str] name: Specifies the name of the DMS Kafka instance. An instance name starts with a letter,
-               consists of 4 to 64 characters, and supports only letters, digits, hyphens (-) and underscores (_).
-        :param pulumi.Input[str] password: Specifies the password of SASL_SSL user. A password must meet the
-               following complexity requirements: Must be 8 to 32 characters long. Must contain at least 2 of the following character
-               types: lowercase letters, uppercase letters, digits, and special characters (`~!@#$%^&*()-_=+\\\\|[{}]:'",<.>/?).
-               Changing this creates a new instance resource.
+        :param pulumi.Input[str] name: Specifies the parameter name. Static parameter needs to restart the instance to take effect.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] new_tenant_ips: Specifies the IPv4 private IP addresses for the new brokers.
+        :param pulumi.Input[Sequence[pulumi.Input['KafkaInstanceParameterArgs']]] parameters: Specifies the array of one or more parameters to be set to the Kafka instance after
+               launched. The parameters structure is documented below.
+        :param pulumi.Input[str] password: Specifies the password of SASL_SSL user. A password must meet the following
+               complexity requirements: Must be 8 to 32 characters long. Must contain at least 2 of the following character types:
+               lowercase letters, uppercase letters, digits, and special characters (`~!@#$%^&*()-_=+\\\\|[{}]:'",<.>/?).
         :param pulumi.Input[int] period: Specifies the charging period of the instance. If `period_unit` is set to *month*
                , the value ranges from 1 to 9. If `period_unit` is set to *year*, the value ranges from 1 to 3. This parameter is
                mandatory if `charging_mode` is set to *prePaid*. Changing this creates a new resource.
@@ -125,6 +134,12 @@ class KafkaInstanceArgs:
                capacity threshold. The valid values are as follows:
                + **time_base**: Automatically delete the earliest messages.
                + **produce_reject**: Stop producing new messages.
+        :param pulumi.Input[str] security_protocol: Specifies the protocol to use after SASL is enabled. Value options:
+               + **SASL_SSL**: Data is encrypted with SSL certificates for high-security transmission.
+               + **SASL_PLAINTEXT**: Data is transmitted in plaintext with username and password authentication. This protocol only
+               uses the SCRAM-SHA-512 mechanism and delivers high performance.
+        :param pulumi.Input[bool] ssl_enable: Specifies whether the Kafka SASL_SSL is enabled.
+               Changing this creates a new resource.
         :param pulumi.Input[int] storage_space: Specifies the message storage capacity, the unit is GB.
                The storage spaces corresponding to the product IDs are as follows:
                + **c6.2u4g.cluster** (100MB bandwidth): `300` to `300,000` GB
@@ -133,16 +148,18 @@ class KafkaInstanceArgs:
                + **c6.12u12g.cluster**: `300` to `900,000` GB
                + **c6.16u32g.cluster** (1,200MB bandwidth): `300` to `900,000` GB
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: The key/value pairs to associate with the DMS Kafka instance.
+        :param pulumi.Input[bool] vpc_client_plain: Specifies whether the intra-VPC plaintext access is enabled.
+               Defaults to **false**. Changing this creates a new resource.
         """
         pulumi.set(__self__, "engine_version", engine_version)
-        pulumi.set(__self__, "manager_password", manager_password)
-        pulumi.set(__self__, "manager_user", manager_user)
         pulumi.set(__self__, "network_id", network_id)
         pulumi.set(__self__, "security_group_id", security_group_id)
         pulumi.set(__self__, "storage_spec_code", storage_spec_code)
         pulumi.set(__self__, "vpc_id", vpc_id)
         if access_user is not None:
             pulumi.set(__self__, "access_user", access_user)
+        if arch_type is not None:
+            pulumi.set(__self__, "arch_type", arch_type)
         if auto_renew is not None:
             pulumi.set(__self__, "auto_renew", auto_renew)
         if availability_zones is not None:
@@ -169,16 +186,34 @@ class KafkaInstanceArgs:
             pulumi.set(__self__, "dumping", dumping)
         if enable_auto_topic is not None:
             pulumi.set(__self__, "enable_auto_topic", enable_auto_topic)
+        if enabled_mechanisms is not None:
+            pulumi.set(__self__, "enabled_mechanisms", enabled_mechanisms)
         if enterprise_project_id is not None:
             pulumi.set(__self__, "enterprise_project_id", enterprise_project_id)
         if flavor_id is not None:
             pulumi.set(__self__, "flavor_id", flavor_id)
+        if ipv6_enable is not None:
+            pulumi.set(__self__, "ipv6_enable", ipv6_enable)
         if maintain_begin is not None:
             pulumi.set(__self__, "maintain_begin", maintain_begin)
         if maintain_end is not None:
             pulumi.set(__self__, "maintain_end", maintain_end)
+        if manager_password is not None:
+            warnings.warn("""Deprecated""", DeprecationWarning)
+            pulumi.log.warn("""manager_password is deprecated: Deprecated""")
+        if manager_password is not None:
+            pulumi.set(__self__, "manager_password", manager_password)
+        if manager_user is not None:
+            warnings.warn("""Deprecated""", DeprecationWarning)
+            pulumi.log.warn("""manager_user is deprecated: Deprecated""")
+        if manager_user is not None:
+            pulumi.set(__self__, "manager_user", manager_user)
         if name is not None:
             pulumi.set(__self__, "name", name)
+        if new_tenant_ips is not None:
+            pulumi.set(__self__, "new_tenant_ips", new_tenant_ips)
+        if parameters is not None:
+            pulumi.set(__self__, "parameters", parameters)
         if password is not None:
             pulumi.set(__self__, "password", password)
         if period is not None:
@@ -193,10 +228,16 @@ class KafkaInstanceArgs:
             pulumi.set(__self__, "region", region)
         if retention_policy is not None:
             pulumi.set(__self__, "retention_policy", retention_policy)
+        if security_protocol is not None:
+            pulumi.set(__self__, "security_protocol", security_protocol)
+        if ssl_enable is not None:
+            pulumi.set(__self__, "ssl_enable", ssl_enable)
         if storage_space is not None:
             pulumi.set(__self__, "storage_space", storage_space)
         if tags is not None:
             pulumi.set(__self__, "tags", tags)
+        if vpc_client_plain is not None:
+            pulumi.set(__self__, "vpc_client_plain", vpc_client_plain)
 
     @property
     @pulumi.getter(name="engineVersion")
@@ -210,35 +251,6 @@ class KafkaInstanceArgs:
     @engine_version.setter
     def engine_version(self, value: pulumi.Input[str]):
         pulumi.set(self, "engine_version", value)
-
-    @property
-    @pulumi.getter(name="managerPassword")
-    def manager_password(self) -> pulumi.Input[str]:
-        """
-        Specifies the password for logging in to the Kafka Manager. The
-        password must meet the following complexity requirements: Must be 8 to 32 characters long. Must contain at least 2 of
-        the following character types: lowercase letters, uppercase letters, digits, and special characters (`~!@#$%^&*()-_
-        =+\\\\|[{}]:'",<.>/?). Changing this creates a new instance resource.
-        """
-        return pulumi.get(self, "manager_password")
-
-    @manager_password.setter
-    def manager_password(self, value: pulumi.Input[str]):
-        pulumi.set(self, "manager_password", value)
-
-    @property
-    @pulumi.getter(name="managerUser")
-    def manager_user(self) -> pulumi.Input[str]:
-        """
-        Specifies the username for logging in to the Kafka Manager. The username
-        consists of 4 to 64 characters and can contain letters, digits, hyphens (-), and underscores (_). Changing this
-        creates a new instance resource.
-        """
-        return pulumi.get(self, "manager_user")
-
-    @manager_user.setter
-    def manager_user(self, value: pulumi.Input[str]):
-        pulumi.set(self, "manager_user", value)
 
     @property
     @pulumi.getter(name="networkId")
@@ -304,6 +316,19 @@ class KafkaInstanceArgs:
     @access_user.setter
     def access_user(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "access_user", value)
+
+    @property
+    @pulumi.getter(name="archType")
+    def arch_type(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the CPU architecture. Valid value is **X86**.
+        Changing this creates a new instance resource.
+        """
+        return pulumi.get(self, "arch_type")
+
+    @arch_type.setter
+    def arch_type(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "arch_type", value)
 
     @property
     @pulumi.getter(name="autoRenew")
@@ -404,7 +429,7 @@ class KafkaInstanceArgs:
     @pulumi.getter
     def dumping(self) -> Optional[pulumi.Input[bool]]:
         """
-        Specifies whether to enable message dumping.
+        Specifies whether to enable  message dumping(smart connect).
         Changing this creates a new instance resource.
         """
         return pulumi.get(self, "dumping")
@@ -421,13 +446,27 @@ class KafkaInstanceArgs:
         topic creation is enabled, a topic will be automatically created with 3 partitions and 3 replicas when a message is
         produced to or consumed from a topic that does not exist.
         The default value is false.
-        Changing this creates a new instance resource.
         """
         return pulumi.get(self, "enable_auto_topic")
 
     @enable_auto_topic.setter
     def enable_auto_topic(self, value: Optional[pulumi.Input[bool]]):
         pulumi.set(self, "enable_auto_topic", value)
+
+    @property
+    @pulumi.getter(name="enabledMechanisms")
+    def enabled_mechanisms(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]:
+        """
+        Specifies the authentication mechanisms to use after SASL is
+        enabled. Value options:
+        + **PLAIN**: Simple username and password verification.
+        + **SCRAM-SHA-512**: User credential verification, which is more secure than **PLAIN**.
+        """
+        return pulumi.get(self, "enabled_mechanisms")
+
+    @enabled_mechanisms.setter
+    def enabled_mechanisms(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]):
+        pulumi.set(self, "enabled_mechanisms", value)
 
     @property
     @pulumi.getter(name="enterpriseProjectId")
@@ -453,6 +492,19 @@ class KafkaInstanceArgs:
     @flavor_id.setter
     def flavor_id(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "flavor_id", value)
+
+    @property
+    @pulumi.getter(name="ipv6Enable")
+    def ipv6_enable(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies whether to enable IPv6. Defaults to **false**.
+        Changing this creates a new instance resource.
+        """
+        return pulumi.get(self, "ipv6_enable")
+
+    @ipv6_enable.setter
+    def ipv6_enable(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "ipv6_enable", value)
 
     @property
     @pulumi.getter(name="maintainBegin")
@@ -488,11 +540,28 @@ class KafkaInstanceArgs:
         pulumi.set(self, "maintain_end", value)
 
     @property
+    @pulumi.getter(name="managerPassword")
+    def manager_password(self) -> Optional[pulumi.Input[str]]:
+        return pulumi.get(self, "manager_password")
+
+    @manager_password.setter
+    def manager_password(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "manager_password", value)
+
+    @property
+    @pulumi.getter(name="managerUser")
+    def manager_user(self) -> Optional[pulumi.Input[str]]:
+        return pulumi.get(self, "manager_user")
+
+    @manager_user.setter
+    def manager_user(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "manager_user", value)
+
+    @property
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the name of the DMS Kafka instance. An instance name starts with a letter,
-        consists of 4 to 64 characters, and supports only letters, digits, hyphens (-) and underscores (_).
+        Specifies the parameter name. Static parameter needs to restart the instance to take effect.
         """
         return pulumi.get(self, "name")
 
@@ -501,13 +570,37 @@ class KafkaInstanceArgs:
         pulumi.set(self, "name", value)
 
     @property
+    @pulumi.getter(name="newTenantIps")
+    def new_tenant_ips(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]:
+        """
+        Specifies the IPv4 private IP addresses for the new brokers.
+        """
+        return pulumi.get(self, "new_tenant_ips")
+
+    @new_tenant_ips.setter
+    def new_tenant_ips(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]):
+        pulumi.set(self, "new_tenant_ips", value)
+
+    @property
+    @pulumi.getter
+    def parameters(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['KafkaInstanceParameterArgs']]]]:
+        """
+        Specifies the array of one or more parameters to be set to the Kafka instance after
+        launched. The parameters structure is documented below.
+        """
+        return pulumi.get(self, "parameters")
+
+    @parameters.setter
+    def parameters(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['KafkaInstanceParameterArgs']]]]):
+        pulumi.set(self, "parameters", value)
+
+    @property
     @pulumi.getter
     def password(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the password of SASL_SSL user. A password must meet the
-        following complexity requirements: Must be 8 to 32 characters long. Must contain at least 2 of the following character
-        types: lowercase letters, uppercase letters, digits, and special characters (`~!@#$%^&*()-_=+\\\\|[{}]:'",<.>/?).
-        Changing this creates a new instance resource.
+        Specifies the password of SASL_SSL user. A password must meet the following
+        complexity requirements: Must be 8 to 32 characters long. Must contain at least 2 of the following character types:
+        lowercase letters, uppercase letters, digits, and special characters (`~!@#$%^&*()-_=+\\\\|[{}]:'",<.>/?).
         """
         return pulumi.get(self, "password")
 
@@ -600,6 +693,34 @@ class KafkaInstanceArgs:
         pulumi.set(self, "retention_policy", value)
 
     @property
+    @pulumi.getter(name="securityProtocol")
+    def security_protocol(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the protocol to use after SASL is enabled. Value options:
+        + **SASL_SSL**: Data is encrypted with SSL certificates for high-security transmission.
+        + **SASL_PLAINTEXT**: Data is transmitted in plaintext with username and password authentication. This protocol only
+        uses the SCRAM-SHA-512 mechanism and delivers high performance.
+        """
+        return pulumi.get(self, "security_protocol")
+
+    @security_protocol.setter
+    def security_protocol(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "security_protocol", value)
+
+    @property
+    @pulumi.getter(name="sslEnable")
+    def ssl_enable(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies whether the Kafka SASL_SSL is enabled.
+        Changing this creates a new resource.
+        """
+        return pulumi.get(self, "ssl_enable")
+
+    @ssl_enable.setter
+    def ssl_enable(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "ssl_enable", value)
+
+    @property
     @pulumi.getter(name="storageSpace")
     def storage_space(self) -> Optional[pulumi.Input[int]]:
         """
@@ -629,86 +750,136 @@ class KafkaInstanceArgs:
     def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]):
         pulumi.set(self, "tags", value)
 
+    @property
+    @pulumi.getter(name="vpcClientPlain")
+    def vpc_client_plain(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies whether the intra-VPC plaintext access is enabled.
+        Defaults to **false**. Changing this creates a new resource.
+        """
+        return pulumi.get(self, "vpc_client_plain")
+
+    @vpc_client_plain.setter
+    def vpc_client_plain(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "vpc_client_plain", value)
+
 
 @pulumi.input_type
 class _KafkaInstanceState:
     def __init__(__self__, *,
                  access_user: Optional[pulumi.Input[str]] = None,
+                 arch_type: Optional[pulumi.Input[str]] = None,
                  auto_renew: Optional[pulumi.Input[str]] = None,
                  availability_zones: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  available_zones: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  bandwidth: Optional[pulumi.Input[str]] = None,
                  broker_num: Optional[pulumi.Input[int]] = None,
+                 cert_replaced: Optional[pulumi.Input[bool]] = None,
                  charging_mode: Optional[pulumi.Input[str]] = None,
                  connect_address: Optional[pulumi.Input[str]] = None,
+                 connector_id: Optional[pulumi.Input[str]] = None,
+                 connector_node_num: Optional[pulumi.Input[int]] = None,
+                 created_at: Optional[pulumi.Input[str]] = None,
                  cross_vpc_accesses: Optional[pulumi.Input[Sequence[pulumi.Input['KafkaInstanceCrossVpcAccessArgs']]]] = None,
                  description: Optional[pulumi.Input[str]] = None,
                  dumping: Optional[pulumi.Input[bool]] = None,
                  enable_auto_topic: Optional[pulumi.Input[bool]] = None,
                  enable_public_ip: Optional[pulumi.Input[bool]] = None,
+                 enabled_mechanisms: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  engine: Optional[pulumi.Input[str]] = None,
                  engine_version: Optional[pulumi.Input[str]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
+                 extend_times: Optional[pulumi.Input[int]] = None,
                  flavor_id: Optional[pulumi.Input[str]] = None,
+                 ipv6_connect_addresses: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
+                 ipv6_enable: Optional[pulumi.Input[bool]] = None,
+                 is_logical_volume: Optional[pulumi.Input[bool]] = None,
                  maintain_begin: Optional[pulumi.Input[str]] = None,
                  maintain_end: Optional[pulumi.Input[str]] = None,
                  management_connect_address: Optional[pulumi.Input[str]] = None,
                  manager_password: Optional[pulumi.Input[str]] = None,
                  manager_user: Optional[pulumi.Input[str]] = None,
                  manegement_connect_address: Optional[pulumi.Input[str]] = None,
+                 message_query_inst_enable: Optional[pulumi.Input[bool]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  network_id: Optional[pulumi.Input[str]] = None,
+                 new_tenant_ips: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
+                 node_num: Optional[pulumi.Input[int]] = None,
+                 parameters: Optional[pulumi.Input[Sequence[pulumi.Input['KafkaInstanceParameterArgs']]]] = None,
                  partition_num: Optional[pulumi.Input[int]] = None,
                  password: Optional[pulumi.Input[str]] = None,
                  period: Optional[pulumi.Input[int]] = None,
                  period_unit: Optional[pulumi.Input[str]] = None,
+                 pod_connect_address: Optional[pulumi.Input[str]] = None,
                  port: Optional[pulumi.Input[int]] = None,
+                 port_protocols: Optional[pulumi.Input[Sequence[pulumi.Input['KafkaInstancePortProtocolArgs']]]] = None,
                  product_id: Optional[pulumi.Input[str]] = None,
+                 public_bandwidth: Optional[pulumi.Input[int]] = None,
+                 public_ip_addresses: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  public_ip_ids: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  region: Optional[pulumi.Input[str]] = None,
                  resource_spec_code: Optional[pulumi.Input[str]] = None,
                  retention_policy: Optional[pulumi.Input[str]] = None,
                  security_group_id: Optional[pulumi.Input[str]] = None,
+                 security_protocol: Optional[pulumi.Input[str]] = None,
                  ssl_enable: Optional[pulumi.Input[bool]] = None,
+                 ssl_two_way_enable: Optional[pulumi.Input[bool]] = None,
                  status: Optional[pulumi.Input[str]] = None,
+                 storage_resource_id: Optional[pulumi.Input[str]] = None,
                  storage_space: Optional[pulumi.Input[int]] = None,
                  storage_spec_code: Optional[pulumi.Input[str]] = None,
+                 storage_type: Optional[pulumi.Input[str]] = None,
                  tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  type: Optional[pulumi.Input[str]] = None,
                  used_storage_space: Optional[pulumi.Input[int]] = None,
                  user_id: Optional[pulumi.Input[str]] = None,
                  user_name: Optional[pulumi.Input[str]] = None,
+                 vpc_client_plain: Optional[pulumi.Input[bool]] = None,
                  vpc_id: Optional[pulumi.Input[str]] = None):
         """
         Input properties used for looking up and filtering KafkaInstance resources.
         :param pulumi.Input[str] access_user: Specifies the username of SASL_SSL user. A username consists of 4
                to 64 characters and supports only letters, digits, and hyphens (-). Changing this creates a new instance resource.
+        :param pulumi.Input[str] arch_type: Specifies the CPU architecture. Valid value is **X86**.
+               Changing this creates a new instance resource.
         :param pulumi.Input[str] auto_renew: Specifies whether auto renew is enabled. Valid values are "true" and "false".
         :param pulumi.Input[Sequence[pulumi.Input[str]]] availability_zones: The names of the AZ where the Kafka instances reside.
                The parameter value can not be left blank or an empty array. Changing this creates a new instance resource.
         :param pulumi.Input[int] broker_num: Specifies the broker numbers.
                It is required when creating an instance with `flavor_id`.
+        :param pulumi.Input[bool] cert_replaced: Indicates whether the certificate can be replaced.
         :param pulumi.Input[str] charging_mode: Specifies the charging mode of the instance. Valid values are *prePaid*
                and *postPaid*, defaults to *postPaid*. Changing this creates a new resource.
         :param pulumi.Input[str] connect_address: Indicates the IP address of the DMS Kafka instance.
+        :param pulumi.Input[str] connector_id: Indicates the connector ID.
+        :param pulumi.Input[int] connector_node_num: Indicates the number of connector node.
+        :param pulumi.Input[str] created_at: Indicates the create time.
         :param pulumi.Input[Sequence[pulumi.Input['KafkaInstanceCrossVpcAccessArgs']]] cross_vpc_accesses: Specifies the cross-VPC access information.
                The object structure is documented below.
         :param pulumi.Input[str] description: Specifies the description of the DMS Kafka instance. It is a character string
                containing not more than 1,024 characters.
-        :param pulumi.Input[bool] dumping: Specifies whether to enable message dumping.
+        :param pulumi.Input[bool] dumping: Specifies whether to enable  message dumping(smart connect).
                Changing this creates a new instance resource.
         :param pulumi.Input[bool] enable_auto_topic: Specifies whether to enable automatic topic creation. If automatic
                topic creation is enabled, a topic will be automatically created with 3 partitions and 3 replicas when a message is
                produced to or consumed from a topic that does not exist.
                The default value is false.
-               Changing this creates a new instance resource.
         :param pulumi.Input[bool] enable_public_ip: Indicates whether public access to the DMS Kafka instance is enabled.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] enabled_mechanisms: Specifies the authentication mechanisms to use after SASL is
+               enabled. Value options:
+               + **PLAIN**: Simple username and password verification.
+               + **SCRAM-SHA-512**: User credential verification, which is more secure than **PLAIN**.
         :param pulumi.Input[str] engine: Indicates the message engine.
         :param pulumi.Input[str] engine_version: Specifies the version of the Kafka engine,
                such as 1.1.0, 2.3.0, 2.7 or other supported versions. Changing this creates a new instance resource.
         :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID of the Kafka instance.
+        :param pulumi.Input[int] extend_times: Indicates the extend times. If the value exceeds `20`, disk expansion is no longer allowed.
         :param pulumi.Input[str] flavor_id: Specifies the Kafka [flavor ID](https://support.huaweicloud.com/intl/en-us/productdesc-kafka/Kafka-specification.html),
                e.g. **c6.2u4g.cluster**. This parameter and `product_id` are alternative.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] ipv6_connect_addresses: Indicates the IPv6 connect addresses list.
+        :param pulumi.Input[bool] ipv6_enable: Specifies whether to enable IPv6. Defaults to **false**.
+               Changing this creates a new instance resource.
+        :param pulumi.Input[bool] is_logical_volume: Indicates whether the instance is a new instance.
         :param pulumi.Input[str] maintain_begin: Specifies the time at which a maintenance time window starts. Format: HH:mm. The
                start time and end time of a maintenance time window must indicate the time segment of a supported maintenance time
                window. The start time must be set to 22:00, 02:00, 06:00, 10:00, 14:00, or 18:00. Parameters `maintain_begin`
@@ -720,32 +891,32 @@ class _KafkaInstanceState:
                02:00. Parameters `maintain_begin`
                and `maintain_end` must be set in pairs. If parameter `maintain_end` is left blank, parameter
                `maintain_begin` is also blank. In this case, the system automatically allocates the default end time 06:00.
-        :param pulumi.Input[str] management_connect_address: Indicates the Kafka Manager connection address of a Kafka instance.
-        :param pulumi.Input[str] manager_password: Specifies the password for logging in to the Kafka Manager. The
-               password must meet the following complexity requirements: Must be 8 to 32 characters long. Must contain at least 2 of
-               the following character types: lowercase letters, uppercase letters, digits, and special characters (`~!@#$%^&*()-_
-               =+\\\\|[{}]:'",<.>/?). Changing this creates a new instance resource.
-        :param pulumi.Input[str] manager_user: Specifies the username for logging in to the Kafka Manager. The username
-               consists of 4 to 64 characters and can contain letters, digits, hyphens (-), and underscores (_). Changing this
-               creates a new instance resource.
-        :param pulumi.Input[str] name: Specifies the name of the DMS Kafka instance. An instance name starts with a letter,
-               consists of 4 to 64 characters, and supports only letters, digits, hyphens (-) and underscores (_).
+        :param pulumi.Input[bool] message_query_inst_enable: Indicates whether message query is enabled.
+        :param pulumi.Input[str] name: Specifies the parameter name. Static parameter needs to restart the instance to take effect.
         :param pulumi.Input[str] network_id: Specifies the ID of a subnet. Changing this creates a new instance
                resource.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] new_tenant_ips: Specifies the IPv4 private IP addresses for the new brokers.
+        :param pulumi.Input[int] node_num: Indicates the node quantity.
+        :param pulumi.Input[Sequence[pulumi.Input['KafkaInstanceParameterArgs']]] parameters: Specifies the array of one or more parameters to be set to the Kafka instance after
+               launched. The parameters structure is documented below.
         :param pulumi.Input[int] partition_num: Indicates the number of partitions in Kafka instance.
-        :param pulumi.Input[str] password: Specifies the password of SASL_SSL user. A password must meet the
-               following complexity requirements: Must be 8 to 32 characters long. Must contain at least 2 of the following character
-               types: lowercase letters, uppercase letters, digits, and special characters (`~!@#$%^&*()-_=+\\\\|[{}]:'",<.>/?).
-               Changing this creates a new instance resource.
+        :param pulumi.Input[str] password: Specifies the password of SASL_SSL user. A password must meet the following
+               complexity requirements: Must be 8 to 32 characters long. Must contain at least 2 of the following character types:
+               lowercase letters, uppercase letters, digits, and special characters (`~!@#$%^&*()-_=+\\\\|[{}]:'",<.>/?).
         :param pulumi.Input[int] period: Specifies the charging period of the instance. If `period_unit` is set to *month*
                , the value ranges from 1 to 9. If `period_unit` is set to *year*, the value ranges from 1 to 3. This parameter is
                mandatory if `charging_mode` is set to *prePaid*. Changing this creates a new resource.
         :param pulumi.Input[str] period_unit: Specifies the charging period unit of the instance.
                Valid values are *month* and *year*. This parameter is mandatory if `charging_mode` is set to *prePaid*.
                Changing this creates a new resource.
+        :param pulumi.Input[str] pod_connect_address: Indicates the connection address on the tenant side.
         :param pulumi.Input[int] port: The port number.
+        :param pulumi.Input[Sequence[pulumi.Input['KafkaInstancePortProtocolArgs']]] port_protocols: Indicates instance connection address. The structure is documented below.
+               The port_protocols structure is documented below.
         :param pulumi.Input[str] product_id: Specifies a product ID, which includes bandwidth, partition, broker and default
                storage capacity.
+        :param pulumi.Input[int] public_bandwidth: Indicates the public network access bandwidth.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] public_ip_addresses: Indicates the public IP addresses list of the instance.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] public_ip_ids: Specifies the IDs of the elastic IP address (EIP)
                bound to the DMS Kafka instance. Changing this creates a new instance resource.
                + If the instance is created with `flavor_id`, the total number of public IPs is equal to `broker_num`.
@@ -758,8 +929,15 @@ class _KafkaInstanceState:
                + **time_base**: Automatically delete the earliest messages.
                + **produce_reject**: Stop producing new messages.
         :param pulumi.Input[str] security_group_id: Specifies the ID of a security group.
-        :param pulumi.Input[bool] ssl_enable: Indicates whether the Kafka SASL_SSL is enabled.
+        :param pulumi.Input[str] security_protocol: Specifies the protocol to use after SASL is enabled. Value options:
+               + **SASL_SSL**: Data is encrypted with SSL certificates for high-security transmission.
+               + **SASL_PLAINTEXT**: Data is transmitted in plaintext with username and password authentication. This protocol only
+               uses the SCRAM-SHA-512 mechanism and delivers high performance.
+        :param pulumi.Input[bool] ssl_enable: Specifies whether the Kafka SASL_SSL is enabled.
+               Changing this creates a new resource.
+        :param pulumi.Input[bool] ssl_two_way_enable: Indicates whether to enable two-way authentication.
         :param pulumi.Input[str] status: Indicates the status of the DMS Kafka instance.
+        :param pulumi.Input[str] storage_resource_id: Indicates the storage resource ID.
         :param pulumi.Input[int] storage_space: Specifies the message storage capacity, the unit is GB.
                The storage spaces corresponding to the product IDs are as follows:
                + **c6.2u4g.cluster** (100MB bandwidth): `300` to `300,000` GB
@@ -771,15 +949,20 @@ class _KafkaInstanceState:
                If the instance is created with `flavor_id`, the valid values are as follows:
                + **dms.physical.storage.high.v2**: Type of the disk that uses high I/O.
                + **dms.physical.storage.ultra.v2**: Type of the disk that uses ultra-high I/O.
+        :param pulumi.Input[str] storage_type: Indicates the storage type.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: The key/value pairs to associate with the DMS Kafka instance.
         :param pulumi.Input[str] type: Indicates the DMS Kafka instance type.
         :param pulumi.Input[int] used_storage_space: Indicates the used message storage space. Unit: GB
         :param pulumi.Input[str] user_id: Indicates the ID of the user who created the DMS Kafka instance
         :param pulumi.Input[str] user_name: Indicates the name of the user who created the DMS Kafka instance
+        :param pulumi.Input[bool] vpc_client_plain: Specifies whether the intra-VPC plaintext access is enabled.
+               Defaults to **false**. Changing this creates a new resource.
         :param pulumi.Input[str] vpc_id: Specifies the ID of a VPC. Changing this creates a new instance resource.
         """
         if access_user is not None:
             pulumi.set(__self__, "access_user", access_user)
+        if arch_type is not None:
+            pulumi.set(__self__, "arch_type", arch_type)
         if auto_renew is not None:
             pulumi.set(__self__, "auto_renew", auto_renew)
         if availability_zones is not None:
@@ -796,10 +979,18 @@ class _KafkaInstanceState:
             pulumi.set(__self__, "bandwidth", bandwidth)
         if broker_num is not None:
             pulumi.set(__self__, "broker_num", broker_num)
+        if cert_replaced is not None:
+            pulumi.set(__self__, "cert_replaced", cert_replaced)
         if charging_mode is not None:
             pulumi.set(__self__, "charging_mode", charging_mode)
         if connect_address is not None:
             pulumi.set(__self__, "connect_address", connect_address)
+        if connector_id is not None:
+            pulumi.set(__self__, "connector_id", connector_id)
+        if connector_node_num is not None:
+            pulumi.set(__self__, "connector_node_num", connector_node_num)
+        if created_at is not None:
+            pulumi.set(__self__, "created_at", created_at)
         if cross_vpc_accesses is not None:
             pulumi.set(__self__, "cross_vpc_accesses", cross_vpc_accesses)
         if description is not None:
@@ -810,22 +1001,41 @@ class _KafkaInstanceState:
             pulumi.set(__self__, "enable_auto_topic", enable_auto_topic)
         if enable_public_ip is not None:
             pulumi.set(__self__, "enable_public_ip", enable_public_ip)
+        if enabled_mechanisms is not None:
+            pulumi.set(__self__, "enabled_mechanisms", enabled_mechanisms)
         if engine is not None:
             pulumi.set(__self__, "engine", engine)
         if engine_version is not None:
             pulumi.set(__self__, "engine_version", engine_version)
         if enterprise_project_id is not None:
             pulumi.set(__self__, "enterprise_project_id", enterprise_project_id)
+        if extend_times is not None:
+            pulumi.set(__self__, "extend_times", extend_times)
         if flavor_id is not None:
             pulumi.set(__self__, "flavor_id", flavor_id)
+        if ipv6_connect_addresses is not None:
+            pulumi.set(__self__, "ipv6_connect_addresses", ipv6_connect_addresses)
+        if ipv6_enable is not None:
+            pulumi.set(__self__, "ipv6_enable", ipv6_enable)
+        if is_logical_volume is not None:
+            pulumi.set(__self__, "is_logical_volume", is_logical_volume)
         if maintain_begin is not None:
             pulumi.set(__self__, "maintain_begin", maintain_begin)
         if maintain_end is not None:
             pulumi.set(__self__, "maintain_end", maintain_end)
         if management_connect_address is not None:
+            warnings.warn("""Deprecated""", DeprecationWarning)
+            pulumi.log.warn("""management_connect_address is deprecated: Deprecated""")
+        if management_connect_address is not None:
             pulumi.set(__self__, "management_connect_address", management_connect_address)
         if manager_password is not None:
+            warnings.warn("""Deprecated""", DeprecationWarning)
+            pulumi.log.warn("""manager_password is deprecated: Deprecated""")
+        if manager_password is not None:
             pulumi.set(__self__, "manager_password", manager_password)
+        if manager_user is not None:
+            warnings.warn("""Deprecated""", DeprecationWarning)
+            pulumi.log.warn("""manager_user is deprecated: Deprecated""")
         if manager_user is not None:
             pulumi.set(__self__, "manager_user", manager_user)
         if manegement_connect_address is not None:
@@ -833,10 +1043,18 @@ class _KafkaInstanceState:
             pulumi.log.warn("""manegement_connect_address is deprecated: typo in manegement_connect_address, please use \"management_connect_address\" instead.""")
         if manegement_connect_address is not None:
             pulumi.set(__self__, "manegement_connect_address", manegement_connect_address)
+        if message_query_inst_enable is not None:
+            pulumi.set(__self__, "message_query_inst_enable", message_query_inst_enable)
         if name is not None:
             pulumi.set(__self__, "name", name)
         if network_id is not None:
             pulumi.set(__self__, "network_id", network_id)
+        if new_tenant_ips is not None:
+            pulumi.set(__self__, "new_tenant_ips", new_tenant_ips)
+        if node_num is not None:
+            pulumi.set(__self__, "node_num", node_num)
+        if parameters is not None:
+            pulumi.set(__self__, "parameters", parameters)
         if partition_num is not None:
             pulumi.set(__self__, "partition_num", partition_num)
         if password is not None:
@@ -845,10 +1063,18 @@ class _KafkaInstanceState:
             pulumi.set(__self__, "period", period)
         if period_unit is not None:
             pulumi.set(__self__, "period_unit", period_unit)
+        if pod_connect_address is not None:
+            pulumi.set(__self__, "pod_connect_address", pod_connect_address)
         if port is not None:
             pulumi.set(__self__, "port", port)
+        if port_protocols is not None:
+            pulumi.set(__self__, "port_protocols", port_protocols)
         if product_id is not None:
             pulumi.set(__self__, "product_id", product_id)
+        if public_bandwidth is not None:
+            pulumi.set(__self__, "public_bandwidth", public_bandwidth)
+        if public_ip_addresses is not None:
+            pulumi.set(__self__, "public_ip_addresses", public_ip_addresses)
         if public_ip_ids is not None:
             pulumi.set(__self__, "public_ip_ids", public_ip_ids)
         if region is not None:
@@ -859,14 +1085,22 @@ class _KafkaInstanceState:
             pulumi.set(__self__, "retention_policy", retention_policy)
         if security_group_id is not None:
             pulumi.set(__self__, "security_group_id", security_group_id)
+        if security_protocol is not None:
+            pulumi.set(__self__, "security_protocol", security_protocol)
         if ssl_enable is not None:
             pulumi.set(__self__, "ssl_enable", ssl_enable)
+        if ssl_two_way_enable is not None:
+            pulumi.set(__self__, "ssl_two_way_enable", ssl_two_way_enable)
         if status is not None:
             pulumi.set(__self__, "status", status)
+        if storage_resource_id is not None:
+            pulumi.set(__self__, "storage_resource_id", storage_resource_id)
         if storage_space is not None:
             pulumi.set(__self__, "storage_space", storage_space)
         if storage_spec_code is not None:
             pulumi.set(__self__, "storage_spec_code", storage_spec_code)
+        if storage_type is not None:
+            pulumi.set(__self__, "storage_type", storage_type)
         if tags is not None:
             pulumi.set(__self__, "tags", tags)
         if type is not None:
@@ -877,6 +1111,8 @@ class _KafkaInstanceState:
             pulumi.set(__self__, "user_id", user_id)
         if user_name is not None:
             pulumi.set(__self__, "user_name", user_name)
+        if vpc_client_plain is not None:
+            pulumi.set(__self__, "vpc_client_plain", vpc_client_plain)
         if vpc_id is not None:
             pulumi.set(__self__, "vpc_id", vpc_id)
 
@@ -892,6 +1128,19 @@ class _KafkaInstanceState:
     @access_user.setter
     def access_user(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "access_user", value)
+
+    @property
+    @pulumi.getter(name="archType")
+    def arch_type(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the CPU architecture. Valid value is **X86**.
+        Changing this creates a new instance resource.
+        """
+        return pulumi.get(self, "arch_type")
+
+    @arch_type.setter
+    def arch_type(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "arch_type", value)
 
     @property
     @pulumi.getter(name="autoRenew")
@@ -950,6 +1199,18 @@ class _KafkaInstanceState:
         pulumi.set(self, "broker_num", value)
 
     @property
+    @pulumi.getter(name="certReplaced")
+    def cert_replaced(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Indicates whether the certificate can be replaced.
+        """
+        return pulumi.get(self, "cert_replaced")
+
+    @cert_replaced.setter
+    def cert_replaced(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "cert_replaced", value)
+
+    @property
     @pulumi.getter(name="chargingMode")
     def charging_mode(self) -> Optional[pulumi.Input[str]]:
         """
@@ -973,6 +1234,42 @@ class _KafkaInstanceState:
     @connect_address.setter
     def connect_address(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "connect_address", value)
+
+    @property
+    @pulumi.getter(name="connectorId")
+    def connector_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        Indicates the connector ID.
+        """
+        return pulumi.get(self, "connector_id")
+
+    @connector_id.setter
+    def connector_id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "connector_id", value)
+
+    @property
+    @pulumi.getter(name="connectorNodeNum")
+    def connector_node_num(self) -> Optional[pulumi.Input[int]]:
+        """
+        Indicates the number of connector node.
+        """
+        return pulumi.get(self, "connector_node_num")
+
+    @connector_node_num.setter
+    def connector_node_num(self, value: Optional[pulumi.Input[int]]):
+        pulumi.set(self, "connector_node_num", value)
+
+    @property
+    @pulumi.getter(name="createdAt")
+    def created_at(self) -> Optional[pulumi.Input[str]]:
+        """
+        Indicates the create time.
+        """
+        return pulumi.get(self, "created_at")
+
+    @created_at.setter
+    def created_at(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "created_at", value)
 
     @property
     @pulumi.getter(name="crossVpcAccesses")
@@ -1004,7 +1301,7 @@ class _KafkaInstanceState:
     @pulumi.getter
     def dumping(self) -> Optional[pulumi.Input[bool]]:
         """
-        Specifies whether to enable message dumping.
+        Specifies whether to enable  message dumping(smart connect).
         Changing this creates a new instance resource.
         """
         return pulumi.get(self, "dumping")
@@ -1021,7 +1318,6 @@ class _KafkaInstanceState:
         topic creation is enabled, a topic will be automatically created with 3 partitions and 3 replicas when a message is
         produced to or consumed from a topic that does not exist.
         The default value is false.
-        Changing this creates a new instance resource.
         """
         return pulumi.get(self, "enable_auto_topic")
 
@@ -1040,6 +1336,21 @@ class _KafkaInstanceState:
     @enable_public_ip.setter
     def enable_public_ip(self, value: Optional[pulumi.Input[bool]]):
         pulumi.set(self, "enable_public_ip", value)
+
+    @property
+    @pulumi.getter(name="enabledMechanisms")
+    def enabled_mechanisms(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]:
+        """
+        Specifies the authentication mechanisms to use after SASL is
+        enabled. Value options:
+        + **PLAIN**: Simple username and password verification.
+        + **SCRAM-SHA-512**: User credential verification, which is more secure than **PLAIN**.
+        """
+        return pulumi.get(self, "enabled_mechanisms")
+
+    @enabled_mechanisms.setter
+    def enabled_mechanisms(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]):
+        pulumi.set(self, "enabled_mechanisms", value)
 
     @property
     @pulumi.getter
@@ -1079,6 +1390,18 @@ class _KafkaInstanceState:
         pulumi.set(self, "enterprise_project_id", value)
 
     @property
+    @pulumi.getter(name="extendTimes")
+    def extend_times(self) -> Optional[pulumi.Input[int]]:
+        """
+        Indicates the extend times. If the value exceeds `20`, disk expansion is no longer allowed.
+        """
+        return pulumi.get(self, "extend_times")
+
+    @extend_times.setter
+    def extend_times(self, value: Optional[pulumi.Input[int]]):
+        pulumi.set(self, "extend_times", value)
+
+    @property
     @pulumi.getter(name="flavorId")
     def flavor_id(self) -> Optional[pulumi.Input[str]]:
         """
@@ -1090,6 +1413,43 @@ class _KafkaInstanceState:
     @flavor_id.setter
     def flavor_id(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "flavor_id", value)
+
+    @property
+    @pulumi.getter(name="ipv6ConnectAddresses")
+    def ipv6_connect_addresses(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]:
+        """
+        Indicates the IPv6 connect addresses list.
+        """
+        return pulumi.get(self, "ipv6_connect_addresses")
+
+    @ipv6_connect_addresses.setter
+    def ipv6_connect_addresses(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]):
+        pulumi.set(self, "ipv6_connect_addresses", value)
+
+    @property
+    @pulumi.getter(name="ipv6Enable")
+    def ipv6_enable(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies whether to enable IPv6. Defaults to **false**.
+        Changing this creates a new instance resource.
+        """
+        return pulumi.get(self, "ipv6_enable")
+
+    @ipv6_enable.setter
+    def ipv6_enable(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "ipv6_enable", value)
+
+    @property
+    @pulumi.getter(name="isLogicalVolume")
+    def is_logical_volume(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Indicates whether the instance is a new instance.
+        """
+        return pulumi.get(self, "is_logical_volume")
+
+    @is_logical_volume.setter
+    def is_logical_volume(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "is_logical_volume", value)
 
     @property
     @pulumi.getter(name="maintainBegin")
@@ -1127,9 +1487,6 @@ class _KafkaInstanceState:
     @property
     @pulumi.getter(name="managementConnectAddress")
     def management_connect_address(self) -> Optional[pulumi.Input[str]]:
-        """
-        Indicates the Kafka Manager connection address of a Kafka instance.
-        """
         return pulumi.get(self, "management_connect_address")
 
     @management_connect_address.setter
@@ -1139,12 +1496,6 @@ class _KafkaInstanceState:
     @property
     @pulumi.getter(name="managerPassword")
     def manager_password(self) -> Optional[pulumi.Input[str]]:
-        """
-        Specifies the password for logging in to the Kafka Manager. The
-        password must meet the following complexity requirements: Must be 8 to 32 characters long. Must contain at least 2 of
-        the following character types: lowercase letters, uppercase letters, digits, and special characters (`~!@#$%^&*()-_
-        =+\\\\|[{}]:'",<.>/?). Changing this creates a new instance resource.
-        """
         return pulumi.get(self, "manager_password")
 
     @manager_password.setter
@@ -1154,11 +1505,6 @@ class _KafkaInstanceState:
     @property
     @pulumi.getter(name="managerUser")
     def manager_user(self) -> Optional[pulumi.Input[str]]:
-        """
-        Specifies the username for logging in to the Kafka Manager. The username
-        consists of 4 to 64 characters and can contain letters, digits, hyphens (-), and underscores (_). Changing this
-        creates a new instance resource.
-        """
         return pulumi.get(self, "manager_user")
 
     @manager_user.setter
@@ -1175,11 +1521,22 @@ class _KafkaInstanceState:
         pulumi.set(self, "manegement_connect_address", value)
 
     @property
+    @pulumi.getter(name="messageQueryInstEnable")
+    def message_query_inst_enable(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Indicates whether message query is enabled.
+        """
+        return pulumi.get(self, "message_query_inst_enable")
+
+    @message_query_inst_enable.setter
+    def message_query_inst_enable(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "message_query_inst_enable", value)
+
+    @property
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the name of the DMS Kafka instance. An instance name starts with a letter,
-        consists of 4 to 64 characters, and supports only letters, digits, hyphens (-) and underscores (_).
+        Specifies the parameter name. Static parameter needs to restart the instance to take effect.
         """
         return pulumi.get(self, "name")
 
@@ -1201,6 +1558,43 @@ class _KafkaInstanceState:
         pulumi.set(self, "network_id", value)
 
     @property
+    @pulumi.getter(name="newTenantIps")
+    def new_tenant_ips(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]:
+        """
+        Specifies the IPv4 private IP addresses for the new brokers.
+        """
+        return pulumi.get(self, "new_tenant_ips")
+
+    @new_tenant_ips.setter
+    def new_tenant_ips(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]):
+        pulumi.set(self, "new_tenant_ips", value)
+
+    @property
+    @pulumi.getter(name="nodeNum")
+    def node_num(self) -> Optional[pulumi.Input[int]]:
+        """
+        Indicates the node quantity.
+        """
+        return pulumi.get(self, "node_num")
+
+    @node_num.setter
+    def node_num(self, value: Optional[pulumi.Input[int]]):
+        pulumi.set(self, "node_num", value)
+
+    @property
+    @pulumi.getter
+    def parameters(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['KafkaInstanceParameterArgs']]]]:
+        """
+        Specifies the array of one or more parameters to be set to the Kafka instance after
+        launched. The parameters structure is documented below.
+        """
+        return pulumi.get(self, "parameters")
+
+    @parameters.setter
+    def parameters(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['KafkaInstanceParameterArgs']]]]):
+        pulumi.set(self, "parameters", value)
+
+    @property
     @pulumi.getter(name="partitionNum")
     def partition_num(self) -> Optional[pulumi.Input[int]]:
         """
@@ -1216,10 +1610,9 @@ class _KafkaInstanceState:
     @pulumi.getter
     def password(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the password of SASL_SSL user. A password must meet the
-        following complexity requirements: Must be 8 to 32 characters long. Must contain at least 2 of the following character
-        types: lowercase letters, uppercase letters, digits, and special characters (`~!@#$%^&*()-_=+\\\\|[{}]:'",<.>/?).
-        Changing this creates a new instance resource.
+        Specifies the password of SASL_SSL user. A password must meet the following
+        complexity requirements: Must be 8 to 32 characters long. Must contain at least 2 of the following character types:
+        lowercase letters, uppercase letters, digits, and special characters (`~!@#$%^&*()-_=+\\\\|[{}]:'",<.>/?).
         """
         return pulumi.get(self, "password")
 
@@ -1256,6 +1649,18 @@ class _KafkaInstanceState:
         pulumi.set(self, "period_unit", value)
 
     @property
+    @pulumi.getter(name="podConnectAddress")
+    def pod_connect_address(self) -> Optional[pulumi.Input[str]]:
+        """
+        Indicates the connection address on the tenant side.
+        """
+        return pulumi.get(self, "pod_connect_address")
+
+    @pod_connect_address.setter
+    def pod_connect_address(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "pod_connect_address", value)
+
+    @property
     @pulumi.getter
     def port(self) -> Optional[pulumi.Input[int]]:
         """
@@ -1266,6 +1671,19 @@ class _KafkaInstanceState:
     @port.setter
     def port(self, value: Optional[pulumi.Input[int]]):
         pulumi.set(self, "port", value)
+
+    @property
+    @pulumi.getter(name="portProtocols")
+    def port_protocols(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['KafkaInstancePortProtocolArgs']]]]:
+        """
+        Indicates instance connection address. The structure is documented below.
+        The port_protocols structure is documented below.
+        """
+        return pulumi.get(self, "port_protocols")
+
+    @port_protocols.setter
+    def port_protocols(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['KafkaInstancePortProtocolArgs']]]]):
+        pulumi.set(self, "port_protocols", value)
 
     @property
     @pulumi.getter(name="productId")
@@ -1279,6 +1697,30 @@ class _KafkaInstanceState:
     @product_id.setter
     def product_id(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "product_id", value)
+
+    @property
+    @pulumi.getter(name="publicBandwidth")
+    def public_bandwidth(self) -> Optional[pulumi.Input[int]]:
+        """
+        Indicates the public network access bandwidth.
+        """
+        return pulumi.get(self, "public_bandwidth")
+
+    @public_bandwidth.setter
+    def public_bandwidth(self, value: Optional[pulumi.Input[int]]):
+        pulumi.set(self, "public_bandwidth", value)
+
+    @property
+    @pulumi.getter(name="publicIpAddresses")
+    def public_ip_addresses(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]:
+        """
+        Indicates the public IP addresses list of the instance.
+        """
+        return pulumi.get(self, "public_ip_addresses")
+
+    @public_ip_addresses.setter
+    def public_ip_addresses(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]):
+        pulumi.set(self, "public_ip_addresses", value)
 
     @property
     @pulumi.getter(name="publicIpIds")
@@ -1348,16 +1790,44 @@ class _KafkaInstanceState:
         pulumi.set(self, "security_group_id", value)
 
     @property
+    @pulumi.getter(name="securityProtocol")
+    def security_protocol(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the protocol to use after SASL is enabled. Value options:
+        + **SASL_SSL**: Data is encrypted with SSL certificates for high-security transmission.
+        + **SASL_PLAINTEXT**: Data is transmitted in plaintext with username and password authentication. This protocol only
+        uses the SCRAM-SHA-512 mechanism and delivers high performance.
+        """
+        return pulumi.get(self, "security_protocol")
+
+    @security_protocol.setter
+    def security_protocol(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "security_protocol", value)
+
+    @property
     @pulumi.getter(name="sslEnable")
     def ssl_enable(self) -> Optional[pulumi.Input[bool]]:
         """
-        Indicates whether the Kafka SASL_SSL is enabled.
+        Specifies whether the Kafka SASL_SSL is enabled.
+        Changing this creates a new resource.
         """
         return pulumi.get(self, "ssl_enable")
 
     @ssl_enable.setter
     def ssl_enable(self, value: Optional[pulumi.Input[bool]]):
         pulumi.set(self, "ssl_enable", value)
+
+    @property
+    @pulumi.getter(name="sslTwoWayEnable")
+    def ssl_two_way_enable(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Indicates whether to enable two-way authentication.
+        """
+        return pulumi.get(self, "ssl_two_way_enable")
+
+    @ssl_two_way_enable.setter
+    def ssl_two_way_enable(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "ssl_two_way_enable", value)
 
     @property
     @pulumi.getter
@@ -1370,6 +1840,18 @@ class _KafkaInstanceState:
     @status.setter
     def status(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "status", value)
+
+    @property
+    @pulumi.getter(name="storageResourceId")
+    def storage_resource_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        Indicates the storage resource ID.
+        """
+        return pulumi.get(self, "storage_resource_id")
+
+    @storage_resource_id.setter
+    def storage_resource_id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "storage_resource_id", value)
 
     @property
     @pulumi.getter(name="storageSpace")
@@ -1403,6 +1885,18 @@ class _KafkaInstanceState:
     @storage_spec_code.setter
     def storage_spec_code(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "storage_spec_code", value)
+
+    @property
+    @pulumi.getter(name="storageType")
+    def storage_type(self) -> Optional[pulumi.Input[str]]:
+        """
+        Indicates the storage type.
+        """
+        return pulumi.get(self, "storage_type")
+
+    @storage_type.setter
+    def storage_type(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "storage_type", value)
 
     @property
     @pulumi.getter
@@ -1465,6 +1959,19 @@ class _KafkaInstanceState:
         pulumi.set(self, "user_name", value)
 
     @property
+    @pulumi.getter(name="vpcClientPlain")
+    def vpc_client_plain(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies whether the intra-VPC plaintext access is enabled.
+        Defaults to **false**. Changing this creates a new resource.
+        """
+        return pulumi.get(self, "vpc_client_plain")
+
+    @vpc_client_plain.setter
+    def vpc_client_plain(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "vpc_client_plain", value)
+
+    @property
     @pulumi.getter(name="vpcId")
     def vpc_id(self) -> Optional[pulumi.Input[str]]:
         """
@@ -1483,6 +1990,7 @@ class KafkaInstance(pulumi.CustomResource):
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
                  access_user: Optional[pulumi.Input[str]] = None,
+                 arch_type: Optional[pulumi.Input[str]] = None,
                  auto_renew: Optional[pulumi.Input[str]] = None,
                  availability_zones: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  available_zones: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
@@ -1493,15 +2001,19 @@ class KafkaInstance(pulumi.CustomResource):
                  description: Optional[pulumi.Input[str]] = None,
                  dumping: Optional[pulumi.Input[bool]] = None,
                  enable_auto_topic: Optional[pulumi.Input[bool]] = None,
+                 enabled_mechanisms: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  engine_version: Optional[pulumi.Input[str]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  flavor_id: Optional[pulumi.Input[str]] = None,
+                 ipv6_enable: Optional[pulumi.Input[bool]] = None,
                  maintain_begin: Optional[pulumi.Input[str]] = None,
                  maintain_end: Optional[pulumi.Input[str]] = None,
                  manager_password: Optional[pulumi.Input[str]] = None,
                  manager_user: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  network_id: Optional[pulumi.Input[str]] = None,
+                 new_tenant_ips: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
+                 parameters: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['KafkaInstanceParameterArgs']]]]] = None,
                  password: Optional[pulumi.Input[str]] = None,
                  period: Optional[pulumi.Input[int]] = None,
                  period_unit: Optional[pulumi.Input[str]] = None,
@@ -1510,9 +2022,12 @@ class KafkaInstance(pulumi.CustomResource):
                  region: Optional[pulumi.Input[str]] = None,
                  retention_policy: Optional[pulumi.Input[str]] = None,
                  security_group_id: Optional[pulumi.Input[str]] = None,
+                 security_protocol: Optional[pulumi.Input[str]] = None,
+                 ssl_enable: Optional[pulumi.Input[bool]] = None,
                  storage_space: Optional[pulumi.Input[int]] = None,
                  storage_spec_code: Optional[pulumi.Input[str]] = None,
                  tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
+                 vpc_client_plain: Optional[pulumi.Input[bool]] = None,
                  vpc_id: Optional[pulumi.Input[str]] = None,
                  __props__=None):
         """
@@ -1529,6 +2044,7 @@ class KafkaInstance(pulumi.CustomResource):
         vpc_id = config.require_object("vpcId")
         subnet_id = config.require_object("subnetId")
         security_group_id = config.require_object("securityGroupId")
+        access_password = config.require_object("accessPassword")
         availability_zones = config.get_object("availabilityZones")
         if availability_zones is None:
             availability_zones = [
@@ -1556,10 +2072,13 @@ class KafkaInstance(pulumi.CustomResource):
             engine_version="2.7",
             storage_space=600,
             broker_num=3,
+            ssl_enable=True,
             access_user="user",
-            password="Kafka_%^&_Test",
-            manager_user="kafka_manager",
-            manager_password="Kafka_Test^&*(")
+            password=access_password,
+            parameters=[huaweicloud.dms.KafkaInstanceParameterArgs(
+                name="min.insync.replicas",
+                value="2",
+            )])
         ```
 
         ## Import
@@ -1570,7 +2089,7 @@ class KafkaInstance(pulumi.CustomResource):
          $ pulumi import huaweicloud:Dms/kafkaInstance:KafkaInstance huaweicloud_dms_kafka_instance.instance_1 8d3c7938-dc47-4937-a30f-c80de381c5e3
         ```
 
-         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`password`, `manager_password` and `public_ip_ids`. It is generally recommended running `terraform plan` after importing a DMS Kafka instance. You can then decide if changes should be applied to the instance, or the resource definition should be updated to align with the instance. Also you can ignore changes as below. resource "huaweicloud_dms_kafka_instance" "instance_1" {
+         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`password`, `public_ip_ids`, `security_protocol`, `enabled_mechanisms` and `arch_type`. It is generally recommended running `terraform plan` after importing a DMS Kafka instance. You can then decide if changes should be applied to the instance, or the resource definition should be updated to align with the instance. Also you can ignore changes as below. hcl resource "huaweicloud_dms_kafka_instance" "instance_1" {
 
          ...
 
@@ -1578,7 +2097,7 @@ class KafkaInstance(pulumi.CustomResource):
 
          ignore_changes = [
 
-         password, manager_password,
+         password,
 
          ]
 
@@ -1588,6 +2107,8 @@ class KafkaInstance(pulumi.CustomResource):
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[str] access_user: Specifies the username of SASL_SSL user. A username consists of 4
                to 64 characters and supports only letters, digits, and hyphens (-). Changing this creates a new instance resource.
+        :param pulumi.Input[str] arch_type: Specifies the CPU architecture. Valid value is **X86**.
+               Changing this creates a new instance resource.
         :param pulumi.Input[str] auto_renew: Specifies whether auto renew is enabled. Valid values are "true" and "false".
         :param pulumi.Input[Sequence[pulumi.Input[str]]] availability_zones: The names of the AZ where the Kafka instances reside.
                The parameter value can not be left blank or an empty array. Changing this creates a new instance resource.
@@ -1599,18 +2120,23 @@ class KafkaInstance(pulumi.CustomResource):
                The object structure is documented below.
         :param pulumi.Input[str] description: Specifies the description of the DMS Kafka instance. It is a character string
                containing not more than 1,024 characters.
-        :param pulumi.Input[bool] dumping: Specifies whether to enable message dumping.
+        :param pulumi.Input[bool] dumping: Specifies whether to enable  message dumping(smart connect).
                Changing this creates a new instance resource.
         :param pulumi.Input[bool] enable_auto_topic: Specifies whether to enable automatic topic creation. If automatic
                topic creation is enabled, a topic will be automatically created with 3 partitions and 3 replicas when a message is
                produced to or consumed from a topic that does not exist.
                The default value is false.
-               Changing this creates a new instance resource.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] enabled_mechanisms: Specifies the authentication mechanisms to use after SASL is
+               enabled. Value options:
+               + **PLAIN**: Simple username and password verification.
+               + **SCRAM-SHA-512**: User credential verification, which is more secure than **PLAIN**.
         :param pulumi.Input[str] engine_version: Specifies the version of the Kafka engine,
                such as 1.1.0, 2.3.0, 2.7 or other supported versions. Changing this creates a new instance resource.
         :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID of the Kafka instance.
         :param pulumi.Input[str] flavor_id: Specifies the Kafka [flavor ID](https://support.huaweicloud.com/intl/en-us/productdesc-kafka/Kafka-specification.html),
                e.g. **c6.2u4g.cluster**. This parameter and `product_id` are alternative.
+        :param pulumi.Input[bool] ipv6_enable: Specifies whether to enable IPv6. Defaults to **false**.
+               Changing this creates a new instance resource.
         :param pulumi.Input[str] maintain_begin: Specifies the time at which a maintenance time window starts. Format: HH:mm. The
                start time and end time of a maintenance time window must indicate the time segment of a supported maintenance time
                window. The start time must be set to 22:00, 02:00, 06:00, 10:00, 14:00, or 18:00. Parameters `maintain_begin`
@@ -1622,21 +2148,15 @@ class KafkaInstance(pulumi.CustomResource):
                02:00. Parameters `maintain_begin`
                and `maintain_end` must be set in pairs. If parameter `maintain_end` is left blank, parameter
                `maintain_begin` is also blank. In this case, the system automatically allocates the default end time 06:00.
-        :param pulumi.Input[str] manager_password: Specifies the password for logging in to the Kafka Manager. The
-               password must meet the following complexity requirements: Must be 8 to 32 characters long. Must contain at least 2 of
-               the following character types: lowercase letters, uppercase letters, digits, and special characters (`~!@#$%^&*()-_
-               =+\\\\|[{}]:'",<.>/?). Changing this creates a new instance resource.
-        :param pulumi.Input[str] manager_user: Specifies the username for logging in to the Kafka Manager. The username
-               consists of 4 to 64 characters and can contain letters, digits, hyphens (-), and underscores (_). Changing this
-               creates a new instance resource.
-        :param pulumi.Input[str] name: Specifies the name of the DMS Kafka instance. An instance name starts with a letter,
-               consists of 4 to 64 characters, and supports only letters, digits, hyphens (-) and underscores (_).
+        :param pulumi.Input[str] name: Specifies the parameter name. Static parameter needs to restart the instance to take effect.
         :param pulumi.Input[str] network_id: Specifies the ID of a subnet. Changing this creates a new instance
                resource.
-        :param pulumi.Input[str] password: Specifies the password of SASL_SSL user. A password must meet the
-               following complexity requirements: Must be 8 to 32 characters long. Must contain at least 2 of the following character
-               types: lowercase letters, uppercase letters, digits, and special characters (`~!@#$%^&*()-_=+\\\\|[{}]:'",<.>/?).
-               Changing this creates a new instance resource.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] new_tenant_ips: Specifies the IPv4 private IP addresses for the new brokers.
+        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['KafkaInstanceParameterArgs']]]] parameters: Specifies the array of one or more parameters to be set to the Kafka instance after
+               launched. The parameters structure is documented below.
+        :param pulumi.Input[str] password: Specifies the password of SASL_SSL user. A password must meet the following
+               complexity requirements: Must be 8 to 32 characters long. Must contain at least 2 of the following character types:
+               lowercase letters, uppercase letters, digits, and special characters (`~!@#$%^&*()-_=+\\\\|[{}]:'",<.>/?).
         :param pulumi.Input[int] period: Specifies the charging period of the instance. If `period_unit` is set to *month*
                , the value ranges from 1 to 9. If `period_unit` is set to *year*, the value ranges from 1 to 3. This parameter is
                mandatory if `charging_mode` is set to *prePaid*. Changing this creates a new resource.
@@ -1656,6 +2176,12 @@ class KafkaInstance(pulumi.CustomResource):
                + **time_base**: Automatically delete the earliest messages.
                + **produce_reject**: Stop producing new messages.
         :param pulumi.Input[str] security_group_id: Specifies the ID of a security group.
+        :param pulumi.Input[str] security_protocol: Specifies the protocol to use after SASL is enabled. Value options:
+               + **SASL_SSL**: Data is encrypted with SSL certificates for high-security transmission.
+               + **SASL_PLAINTEXT**: Data is transmitted in plaintext with username and password authentication. This protocol only
+               uses the SCRAM-SHA-512 mechanism and delivers high performance.
+        :param pulumi.Input[bool] ssl_enable: Specifies whether the Kafka SASL_SSL is enabled.
+               Changing this creates a new resource.
         :param pulumi.Input[int] storage_space: Specifies the message storage capacity, the unit is GB.
                The storage spaces corresponding to the product IDs are as follows:
                + **c6.2u4g.cluster** (100MB bandwidth): `300` to `300,000` GB
@@ -1668,6 +2194,8 @@ class KafkaInstance(pulumi.CustomResource):
                + **dms.physical.storage.high.v2**: Type of the disk that uses high I/O.
                + **dms.physical.storage.ultra.v2**: Type of the disk that uses ultra-high I/O.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: The key/value pairs to associate with the DMS Kafka instance.
+        :param pulumi.Input[bool] vpc_client_plain: Specifies whether the intra-VPC plaintext access is enabled.
+               Defaults to **false**. Changing this creates a new resource.
         :param pulumi.Input[str] vpc_id: Specifies the ID of a VPC. Changing this creates a new instance resource.
         """
         ...
@@ -1690,6 +2218,7 @@ class KafkaInstance(pulumi.CustomResource):
         vpc_id = config.require_object("vpcId")
         subnet_id = config.require_object("subnetId")
         security_group_id = config.require_object("securityGroupId")
+        access_password = config.require_object("accessPassword")
         availability_zones = config.get_object("availabilityZones")
         if availability_zones is None:
             availability_zones = [
@@ -1717,10 +2246,13 @@ class KafkaInstance(pulumi.CustomResource):
             engine_version="2.7",
             storage_space=600,
             broker_num=3,
+            ssl_enable=True,
             access_user="user",
-            password="Kafka_%^&_Test",
-            manager_user="kafka_manager",
-            manager_password="Kafka_Test^&*(")
+            password=access_password,
+            parameters=[huaweicloud.dms.KafkaInstanceParameterArgs(
+                name="min.insync.replicas",
+                value="2",
+            )])
         ```
 
         ## Import
@@ -1731,7 +2263,7 @@ class KafkaInstance(pulumi.CustomResource):
          $ pulumi import huaweicloud:Dms/kafkaInstance:KafkaInstance huaweicloud_dms_kafka_instance.instance_1 8d3c7938-dc47-4937-a30f-c80de381c5e3
         ```
 
-         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`password`, `manager_password` and `public_ip_ids`. It is generally recommended running `terraform plan` after importing a DMS Kafka instance. You can then decide if changes should be applied to the instance, or the resource definition should be updated to align with the instance. Also you can ignore changes as below. resource "huaweicloud_dms_kafka_instance" "instance_1" {
+         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`password`, `public_ip_ids`, `security_protocol`, `enabled_mechanisms` and `arch_type`. It is generally recommended running `terraform plan` after importing a DMS Kafka instance. You can then decide if changes should be applied to the instance, or the resource definition should be updated to align with the instance. Also you can ignore changes as below. hcl resource "huaweicloud_dms_kafka_instance" "instance_1" {
 
          ...
 
@@ -1739,7 +2271,7 @@ class KafkaInstance(pulumi.CustomResource):
 
          ignore_changes = [
 
-         password, manager_password,
+         password,
 
          ]
 
@@ -1761,6 +2293,7 @@ class KafkaInstance(pulumi.CustomResource):
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
                  access_user: Optional[pulumi.Input[str]] = None,
+                 arch_type: Optional[pulumi.Input[str]] = None,
                  auto_renew: Optional[pulumi.Input[str]] = None,
                  availability_zones: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  available_zones: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
@@ -1771,15 +2304,19 @@ class KafkaInstance(pulumi.CustomResource):
                  description: Optional[pulumi.Input[str]] = None,
                  dumping: Optional[pulumi.Input[bool]] = None,
                  enable_auto_topic: Optional[pulumi.Input[bool]] = None,
+                 enabled_mechanisms: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  engine_version: Optional[pulumi.Input[str]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  flavor_id: Optional[pulumi.Input[str]] = None,
+                 ipv6_enable: Optional[pulumi.Input[bool]] = None,
                  maintain_begin: Optional[pulumi.Input[str]] = None,
                  maintain_end: Optional[pulumi.Input[str]] = None,
                  manager_password: Optional[pulumi.Input[str]] = None,
                  manager_user: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  network_id: Optional[pulumi.Input[str]] = None,
+                 new_tenant_ips: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
+                 parameters: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['KafkaInstanceParameterArgs']]]]] = None,
                  password: Optional[pulumi.Input[str]] = None,
                  period: Optional[pulumi.Input[int]] = None,
                  period_unit: Optional[pulumi.Input[str]] = None,
@@ -1788,9 +2325,12 @@ class KafkaInstance(pulumi.CustomResource):
                  region: Optional[pulumi.Input[str]] = None,
                  retention_policy: Optional[pulumi.Input[str]] = None,
                  security_group_id: Optional[pulumi.Input[str]] = None,
+                 security_protocol: Optional[pulumi.Input[str]] = None,
+                 ssl_enable: Optional[pulumi.Input[bool]] = None,
                  storage_space: Optional[pulumi.Input[int]] = None,
                  storage_spec_code: Optional[pulumi.Input[str]] = None,
                  tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
+                 vpc_client_plain: Optional[pulumi.Input[bool]] = None,
                  vpc_id: Optional[pulumi.Input[str]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
@@ -1802,6 +2342,7 @@ class KafkaInstance(pulumi.CustomResource):
             __props__ = KafkaInstanceArgs.__new__(KafkaInstanceArgs)
 
             __props__.__dict__["access_user"] = access_user
+            __props__.__dict__["arch_type"] = arch_type
             __props__.__dict__["auto_renew"] = auto_renew
             __props__.__dict__["availability_zones"] = availability_zones
             if available_zones is not None and not opts.urn:
@@ -1818,23 +2359,29 @@ class KafkaInstance(pulumi.CustomResource):
             __props__.__dict__["description"] = description
             __props__.__dict__["dumping"] = dumping
             __props__.__dict__["enable_auto_topic"] = enable_auto_topic
+            __props__.__dict__["enabled_mechanisms"] = enabled_mechanisms
             if engine_version is None and not opts.urn:
                 raise TypeError("Missing required property 'engine_version'")
             __props__.__dict__["engine_version"] = engine_version
             __props__.__dict__["enterprise_project_id"] = enterprise_project_id
             __props__.__dict__["flavor_id"] = flavor_id
+            __props__.__dict__["ipv6_enable"] = ipv6_enable
             __props__.__dict__["maintain_begin"] = maintain_begin
             __props__.__dict__["maintain_end"] = maintain_end
-            if manager_password is None and not opts.urn:
-                raise TypeError("Missing required property 'manager_password'")
+            if manager_password is not None and not opts.urn:
+                warnings.warn("""Deprecated""", DeprecationWarning)
+                pulumi.log.warn("""manager_password is deprecated: Deprecated""")
             __props__.__dict__["manager_password"] = manager_password
-            if manager_user is None and not opts.urn:
-                raise TypeError("Missing required property 'manager_user'")
+            if manager_user is not None and not opts.urn:
+                warnings.warn("""Deprecated""", DeprecationWarning)
+                pulumi.log.warn("""manager_user is deprecated: Deprecated""")
             __props__.__dict__["manager_user"] = manager_user
             __props__.__dict__["name"] = name
             if network_id is None and not opts.urn:
                 raise TypeError("Missing required property 'network_id'")
             __props__.__dict__["network_id"] = network_id
+            __props__.__dict__["new_tenant_ips"] = new_tenant_ips
+            __props__.__dict__["parameters"] = parameters
             __props__.__dict__["password"] = password
             __props__.__dict__["period"] = period
             __props__.__dict__["period_unit"] = period_unit
@@ -1845,24 +2392,42 @@ class KafkaInstance(pulumi.CustomResource):
             if security_group_id is None and not opts.urn:
                 raise TypeError("Missing required property 'security_group_id'")
             __props__.__dict__["security_group_id"] = security_group_id
+            __props__.__dict__["security_protocol"] = security_protocol
+            __props__.__dict__["ssl_enable"] = ssl_enable
             __props__.__dict__["storage_space"] = storage_space
             if storage_spec_code is None and not opts.urn:
                 raise TypeError("Missing required property 'storage_spec_code'")
             __props__.__dict__["storage_spec_code"] = storage_spec_code
             __props__.__dict__["tags"] = tags
+            __props__.__dict__["vpc_client_plain"] = vpc_client_plain
             if vpc_id is None and not opts.urn:
                 raise TypeError("Missing required property 'vpc_id'")
             __props__.__dict__["vpc_id"] = vpc_id
+            __props__.__dict__["cert_replaced"] = None
             __props__.__dict__["connect_address"] = None
+            __props__.__dict__["connector_id"] = None
+            __props__.__dict__["connector_node_num"] = None
+            __props__.__dict__["created_at"] = None
             __props__.__dict__["enable_public_ip"] = None
             __props__.__dict__["engine"] = None
+            __props__.__dict__["extend_times"] = None
+            __props__.__dict__["ipv6_connect_addresses"] = None
+            __props__.__dict__["is_logical_volume"] = None
             __props__.__dict__["management_connect_address"] = None
             __props__.__dict__["manegement_connect_address"] = None
+            __props__.__dict__["message_query_inst_enable"] = None
+            __props__.__dict__["node_num"] = None
             __props__.__dict__["partition_num"] = None
+            __props__.__dict__["pod_connect_address"] = None
             __props__.__dict__["port"] = None
+            __props__.__dict__["port_protocols"] = None
+            __props__.__dict__["public_bandwidth"] = None
+            __props__.__dict__["public_ip_addresses"] = None
             __props__.__dict__["resource_spec_code"] = None
-            __props__.__dict__["ssl_enable"] = None
+            __props__.__dict__["ssl_two_way_enable"] = None
             __props__.__dict__["status"] = None
+            __props__.__dict__["storage_resource_id"] = None
+            __props__.__dict__["storage_type"] = None
             __props__.__dict__["type"] = None
             __props__.__dict__["used_storage_space"] = None
             __props__.__dict__["user_id"] = None
@@ -1878,50 +2443,73 @@ class KafkaInstance(pulumi.CustomResource):
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
             access_user: Optional[pulumi.Input[str]] = None,
+            arch_type: Optional[pulumi.Input[str]] = None,
             auto_renew: Optional[pulumi.Input[str]] = None,
             availability_zones: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
             available_zones: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
             bandwidth: Optional[pulumi.Input[str]] = None,
             broker_num: Optional[pulumi.Input[int]] = None,
+            cert_replaced: Optional[pulumi.Input[bool]] = None,
             charging_mode: Optional[pulumi.Input[str]] = None,
             connect_address: Optional[pulumi.Input[str]] = None,
+            connector_id: Optional[pulumi.Input[str]] = None,
+            connector_node_num: Optional[pulumi.Input[int]] = None,
+            created_at: Optional[pulumi.Input[str]] = None,
             cross_vpc_accesses: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['KafkaInstanceCrossVpcAccessArgs']]]]] = None,
             description: Optional[pulumi.Input[str]] = None,
             dumping: Optional[pulumi.Input[bool]] = None,
             enable_auto_topic: Optional[pulumi.Input[bool]] = None,
             enable_public_ip: Optional[pulumi.Input[bool]] = None,
+            enabled_mechanisms: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
             engine: Optional[pulumi.Input[str]] = None,
             engine_version: Optional[pulumi.Input[str]] = None,
             enterprise_project_id: Optional[pulumi.Input[str]] = None,
+            extend_times: Optional[pulumi.Input[int]] = None,
             flavor_id: Optional[pulumi.Input[str]] = None,
+            ipv6_connect_addresses: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
+            ipv6_enable: Optional[pulumi.Input[bool]] = None,
+            is_logical_volume: Optional[pulumi.Input[bool]] = None,
             maintain_begin: Optional[pulumi.Input[str]] = None,
             maintain_end: Optional[pulumi.Input[str]] = None,
             management_connect_address: Optional[pulumi.Input[str]] = None,
             manager_password: Optional[pulumi.Input[str]] = None,
             manager_user: Optional[pulumi.Input[str]] = None,
             manegement_connect_address: Optional[pulumi.Input[str]] = None,
+            message_query_inst_enable: Optional[pulumi.Input[bool]] = None,
             name: Optional[pulumi.Input[str]] = None,
             network_id: Optional[pulumi.Input[str]] = None,
+            new_tenant_ips: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
+            node_num: Optional[pulumi.Input[int]] = None,
+            parameters: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['KafkaInstanceParameterArgs']]]]] = None,
             partition_num: Optional[pulumi.Input[int]] = None,
             password: Optional[pulumi.Input[str]] = None,
             period: Optional[pulumi.Input[int]] = None,
             period_unit: Optional[pulumi.Input[str]] = None,
+            pod_connect_address: Optional[pulumi.Input[str]] = None,
             port: Optional[pulumi.Input[int]] = None,
+            port_protocols: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['KafkaInstancePortProtocolArgs']]]]] = None,
             product_id: Optional[pulumi.Input[str]] = None,
+            public_bandwidth: Optional[pulumi.Input[int]] = None,
+            public_ip_addresses: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
             public_ip_ids: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
             region: Optional[pulumi.Input[str]] = None,
             resource_spec_code: Optional[pulumi.Input[str]] = None,
             retention_policy: Optional[pulumi.Input[str]] = None,
             security_group_id: Optional[pulumi.Input[str]] = None,
+            security_protocol: Optional[pulumi.Input[str]] = None,
             ssl_enable: Optional[pulumi.Input[bool]] = None,
+            ssl_two_way_enable: Optional[pulumi.Input[bool]] = None,
             status: Optional[pulumi.Input[str]] = None,
+            storage_resource_id: Optional[pulumi.Input[str]] = None,
             storage_space: Optional[pulumi.Input[int]] = None,
             storage_spec_code: Optional[pulumi.Input[str]] = None,
+            storage_type: Optional[pulumi.Input[str]] = None,
             tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
             type: Optional[pulumi.Input[str]] = None,
             used_storage_space: Optional[pulumi.Input[int]] = None,
             user_id: Optional[pulumi.Input[str]] = None,
             user_name: Optional[pulumi.Input[str]] = None,
+            vpc_client_plain: Optional[pulumi.Input[bool]] = None,
             vpc_id: Optional[pulumi.Input[str]] = None) -> 'KafkaInstance':
         """
         Get an existing KafkaInstance resource's state with the given name, id, and optional extra
@@ -1932,32 +2520,46 @@ class KafkaInstance(pulumi.CustomResource):
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[str] access_user: Specifies the username of SASL_SSL user. A username consists of 4
                to 64 characters and supports only letters, digits, and hyphens (-). Changing this creates a new instance resource.
+        :param pulumi.Input[str] arch_type: Specifies the CPU architecture. Valid value is **X86**.
+               Changing this creates a new instance resource.
         :param pulumi.Input[str] auto_renew: Specifies whether auto renew is enabled. Valid values are "true" and "false".
         :param pulumi.Input[Sequence[pulumi.Input[str]]] availability_zones: The names of the AZ where the Kafka instances reside.
                The parameter value can not be left blank or an empty array. Changing this creates a new instance resource.
         :param pulumi.Input[int] broker_num: Specifies the broker numbers.
                It is required when creating an instance with `flavor_id`.
+        :param pulumi.Input[bool] cert_replaced: Indicates whether the certificate can be replaced.
         :param pulumi.Input[str] charging_mode: Specifies the charging mode of the instance. Valid values are *prePaid*
                and *postPaid*, defaults to *postPaid*. Changing this creates a new resource.
         :param pulumi.Input[str] connect_address: Indicates the IP address of the DMS Kafka instance.
+        :param pulumi.Input[str] connector_id: Indicates the connector ID.
+        :param pulumi.Input[int] connector_node_num: Indicates the number of connector node.
+        :param pulumi.Input[str] created_at: Indicates the create time.
         :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['KafkaInstanceCrossVpcAccessArgs']]]] cross_vpc_accesses: Specifies the cross-VPC access information.
                The object structure is documented below.
         :param pulumi.Input[str] description: Specifies the description of the DMS Kafka instance. It is a character string
                containing not more than 1,024 characters.
-        :param pulumi.Input[bool] dumping: Specifies whether to enable message dumping.
+        :param pulumi.Input[bool] dumping: Specifies whether to enable  message dumping(smart connect).
                Changing this creates a new instance resource.
         :param pulumi.Input[bool] enable_auto_topic: Specifies whether to enable automatic topic creation. If automatic
                topic creation is enabled, a topic will be automatically created with 3 partitions and 3 replicas when a message is
                produced to or consumed from a topic that does not exist.
                The default value is false.
-               Changing this creates a new instance resource.
         :param pulumi.Input[bool] enable_public_ip: Indicates whether public access to the DMS Kafka instance is enabled.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] enabled_mechanisms: Specifies the authentication mechanisms to use after SASL is
+               enabled. Value options:
+               + **PLAIN**: Simple username and password verification.
+               + **SCRAM-SHA-512**: User credential verification, which is more secure than **PLAIN**.
         :param pulumi.Input[str] engine: Indicates the message engine.
         :param pulumi.Input[str] engine_version: Specifies the version of the Kafka engine,
                such as 1.1.0, 2.3.0, 2.7 or other supported versions. Changing this creates a new instance resource.
         :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID of the Kafka instance.
+        :param pulumi.Input[int] extend_times: Indicates the extend times. If the value exceeds `20`, disk expansion is no longer allowed.
         :param pulumi.Input[str] flavor_id: Specifies the Kafka [flavor ID](https://support.huaweicloud.com/intl/en-us/productdesc-kafka/Kafka-specification.html),
                e.g. **c6.2u4g.cluster**. This parameter and `product_id` are alternative.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] ipv6_connect_addresses: Indicates the IPv6 connect addresses list.
+        :param pulumi.Input[bool] ipv6_enable: Specifies whether to enable IPv6. Defaults to **false**.
+               Changing this creates a new instance resource.
+        :param pulumi.Input[bool] is_logical_volume: Indicates whether the instance is a new instance.
         :param pulumi.Input[str] maintain_begin: Specifies the time at which a maintenance time window starts. Format: HH:mm. The
                start time and end time of a maintenance time window must indicate the time segment of a supported maintenance time
                window. The start time must be set to 22:00, 02:00, 06:00, 10:00, 14:00, or 18:00. Parameters `maintain_begin`
@@ -1969,32 +2571,32 @@ class KafkaInstance(pulumi.CustomResource):
                02:00. Parameters `maintain_begin`
                and `maintain_end` must be set in pairs. If parameter `maintain_end` is left blank, parameter
                `maintain_begin` is also blank. In this case, the system automatically allocates the default end time 06:00.
-        :param pulumi.Input[str] management_connect_address: Indicates the Kafka Manager connection address of a Kafka instance.
-        :param pulumi.Input[str] manager_password: Specifies the password for logging in to the Kafka Manager. The
-               password must meet the following complexity requirements: Must be 8 to 32 characters long. Must contain at least 2 of
-               the following character types: lowercase letters, uppercase letters, digits, and special characters (`~!@#$%^&*()-_
-               =+\\\\|[{}]:'",<.>/?). Changing this creates a new instance resource.
-        :param pulumi.Input[str] manager_user: Specifies the username for logging in to the Kafka Manager. The username
-               consists of 4 to 64 characters and can contain letters, digits, hyphens (-), and underscores (_). Changing this
-               creates a new instance resource.
-        :param pulumi.Input[str] name: Specifies the name of the DMS Kafka instance. An instance name starts with a letter,
-               consists of 4 to 64 characters, and supports only letters, digits, hyphens (-) and underscores (_).
+        :param pulumi.Input[bool] message_query_inst_enable: Indicates whether message query is enabled.
+        :param pulumi.Input[str] name: Specifies the parameter name. Static parameter needs to restart the instance to take effect.
         :param pulumi.Input[str] network_id: Specifies the ID of a subnet. Changing this creates a new instance
                resource.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] new_tenant_ips: Specifies the IPv4 private IP addresses for the new brokers.
+        :param pulumi.Input[int] node_num: Indicates the node quantity.
+        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['KafkaInstanceParameterArgs']]]] parameters: Specifies the array of one or more parameters to be set to the Kafka instance after
+               launched. The parameters structure is documented below.
         :param pulumi.Input[int] partition_num: Indicates the number of partitions in Kafka instance.
-        :param pulumi.Input[str] password: Specifies the password of SASL_SSL user. A password must meet the
-               following complexity requirements: Must be 8 to 32 characters long. Must contain at least 2 of the following character
-               types: lowercase letters, uppercase letters, digits, and special characters (`~!@#$%^&*()-_=+\\\\|[{}]:'",<.>/?).
-               Changing this creates a new instance resource.
+        :param pulumi.Input[str] password: Specifies the password of SASL_SSL user. A password must meet the following
+               complexity requirements: Must be 8 to 32 characters long. Must contain at least 2 of the following character types:
+               lowercase letters, uppercase letters, digits, and special characters (`~!@#$%^&*()-_=+\\\\|[{}]:'",<.>/?).
         :param pulumi.Input[int] period: Specifies the charging period of the instance. If `period_unit` is set to *month*
                , the value ranges from 1 to 9. If `period_unit` is set to *year*, the value ranges from 1 to 3. This parameter is
                mandatory if `charging_mode` is set to *prePaid*. Changing this creates a new resource.
         :param pulumi.Input[str] period_unit: Specifies the charging period unit of the instance.
                Valid values are *month* and *year*. This parameter is mandatory if `charging_mode` is set to *prePaid*.
                Changing this creates a new resource.
+        :param pulumi.Input[str] pod_connect_address: Indicates the connection address on the tenant side.
         :param pulumi.Input[int] port: The port number.
+        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['KafkaInstancePortProtocolArgs']]]] port_protocols: Indicates instance connection address. The structure is documented below.
+               The port_protocols structure is documented below.
         :param pulumi.Input[str] product_id: Specifies a product ID, which includes bandwidth, partition, broker and default
                storage capacity.
+        :param pulumi.Input[int] public_bandwidth: Indicates the public network access bandwidth.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] public_ip_addresses: Indicates the public IP addresses list of the instance.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] public_ip_ids: Specifies the IDs of the elastic IP address (EIP)
                bound to the DMS Kafka instance. Changing this creates a new instance resource.
                + If the instance is created with `flavor_id`, the total number of public IPs is equal to `broker_num`.
@@ -2007,8 +2609,15 @@ class KafkaInstance(pulumi.CustomResource):
                + **time_base**: Automatically delete the earliest messages.
                + **produce_reject**: Stop producing new messages.
         :param pulumi.Input[str] security_group_id: Specifies the ID of a security group.
-        :param pulumi.Input[bool] ssl_enable: Indicates whether the Kafka SASL_SSL is enabled.
+        :param pulumi.Input[str] security_protocol: Specifies the protocol to use after SASL is enabled. Value options:
+               + **SASL_SSL**: Data is encrypted with SSL certificates for high-security transmission.
+               + **SASL_PLAINTEXT**: Data is transmitted in plaintext with username and password authentication. This protocol only
+               uses the SCRAM-SHA-512 mechanism and delivers high performance.
+        :param pulumi.Input[bool] ssl_enable: Specifies whether the Kafka SASL_SSL is enabled.
+               Changing this creates a new resource.
+        :param pulumi.Input[bool] ssl_two_way_enable: Indicates whether to enable two-way authentication.
         :param pulumi.Input[str] status: Indicates the status of the DMS Kafka instance.
+        :param pulumi.Input[str] storage_resource_id: Indicates the storage resource ID.
         :param pulumi.Input[int] storage_space: Specifies the message storage capacity, the unit is GB.
                The storage spaces corresponding to the product IDs are as follows:
                + **c6.2u4g.cluster** (100MB bandwidth): `300` to `300,000` GB
@@ -2020,11 +2629,14 @@ class KafkaInstance(pulumi.CustomResource):
                If the instance is created with `flavor_id`, the valid values are as follows:
                + **dms.physical.storage.high.v2**: Type of the disk that uses high I/O.
                + **dms.physical.storage.ultra.v2**: Type of the disk that uses ultra-high I/O.
+        :param pulumi.Input[str] storage_type: Indicates the storage type.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: The key/value pairs to associate with the DMS Kafka instance.
         :param pulumi.Input[str] type: Indicates the DMS Kafka instance type.
         :param pulumi.Input[int] used_storage_space: Indicates the used message storage space. Unit: GB
         :param pulumi.Input[str] user_id: Indicates the ID of the user who created the DMS Kafka instance
         :param pulumi.Input[str] user_name: Indicates the name of the user who created the DMS Kafka instance
+        :param pulumi.Input[bool] vpc_client_plain: Specifies whether the intra-VPC plaintext access is enabled.
+               Defaults to **false**. Changing this creates a new resource.
         :param pulumi.Input[str] vpc_id: Specifies the ID of a VPC. Changing this creates a new instance resource.
         """
         opts = pulumi.ResourceOptions.merge(opts, pulumi.ResourceOptions(id=id))
@@ -2032,50 +2644,73 @@ class KafkaInstance(pulumi.CustomResource):
         __props__ = _KafkaInstanceState.__new__(_KafkaInstanceState)
 
         __props__.__dict__["access_user"] = access_user
+        __props__.__dict__["arch_type"] = arch_type
         __props__.__dict__["auto_renew"] = auto_renew
         __props__.__dict__["availability_zones"] = availability_zones
         __props__.__dict__["available_zones"] = available_zones
         __props__.__dict__["bandwidth"] = bandwidth
         __props__.__dict__["broker_num"] = broker_num
+        __props__.__dict__["cert_replaced"] = cert_replaced
         __props__.__dict__["charging_mode"] = charging_mode
         __props__.__dict__["connect_address"] = connect_address
+        __props__.__dict__["connector_id"] = connector_id
+        __props__.__dict__["connector_node_num"] = connector_node_num
+        __props__.__dict__["created_at"] = created_at
         __props__.__dict__["cross_vpc_accesses"] = cross_vpc_accesses
         __props__.__dict__["description"] = description
         __props__.__dict__["dumping"] = dumping
         __props__.__dict__["enable_auto_topic"] = enable_auto_topic
         __props__.__dict__["enable_public_ip"] = enable_public_ip
+        __props__.__dict__["enabled_mechanisms"] = enabled_mechanisms
         __props__.__dict__["engine"] = engine
         __props__.__dict__["engine_version"] = engine_version
         __props__.__dict__["enterprise_project_id"] = enterprise_project_id
+        __props__.__dict__["extend_times"] = extend_times
         __props__.__dict__["flavor_id"] = flavor_id
+        __props__.__dict__["ipv6_connect_addresses"] = ipv6_connect_addresses
+        __props__.__dict__["ipv6_enable"] = ipv6_enable
+        __props__.__dict__["is_logical_volume"] = is_logical_volume
         __props__.__dict__["maintain_begin"] = maintain_begin
         __props__.__dict__["maintain_end"] = maintain_end
         __props__.__dict__["management_connect_address"] = management_connect_address
         __props__.__dict__["manager_password"] = manager_password
         __props__.__dict__["manager_user"] = manager_user
         __props__.__dict__["manegement_connect_address"] = manegement_connect_address
+        __props__.__dict__["message_query_inst_enable"] = message_query_inst_enable
         __props__.__dict__["name"] = name
         __props__.__dict__["network_id"] = network_id
+        __props__.__dict__["new_tenant_ips"] = new_tenant_ips
+        __props__.__dict__["node_num"] = node_num
+        __props__.__dict__["parameters"] = parameters
         __props__.__dict__["partition_num"] = partition_num
         __props__.__dict__["password"] = password
         __props__.__dict__["period"] = period
         __props__.__dict__["period_unit"] = period_unit
+        __props__.__dict__["pod_connect_address"] = pod_connect_address
         __props__.__dict__["port"] = port
+        __props__.__dict__["port_protocols"] = port_protocols
         __props__.__dict__["product_id"] = product_id
+        __props__.__dict__["public_bandwidth"] = public_bandwidth
+        __props__.__dict__["public_ip_addresses"] = public_ip_addresses
         __props__.__dict__["public_ip_ids"] = public_ip_ids
         __props__.__dict__["region"] = region
         __props__.__dict__["resource_spec_code"] = resource_spec_code
         __props__.__dict__["retention_policy"] = retention_policy
         __props__.__dict__["security_group_id"] = security_group_id
+        __props__.__dict__["security_protocol"] = security_protocol
         __props__.__dict__["ssl_enable"] = ssl_enable
+        __props__.__dict__["ssl_two_way_enable"] = ssl_two_way_enable
         __props__.__dict__["status"] = status
+        __props__.__dict__["storage_resource_id"] = storage_resource_id
         __props__.__dict__["storage_space"] = storage_space
         __props__.__dict__["storage_spec_code"] = storage_spec_code
+        __props__.__dict__["storage_type"] = storage_type
         __props__.__dict__["tags"] = tags
         __props__.__dict__["type"] = type
         __props__.__dict__["used_storage_space"] = used_storage_space
         __props__.__dict__["user_id"] = user_id
         __props__.__dict__["user_name"] = user_name
+        __props__.__dict__["vpc_client_plain"] = vpc_client_plain
         __props__.__dict__["vpc_id"] = vpc_id
         return KafkaInstance(resource_name, opts=opts, __props__=__props__)
 
@@ -2087,6 +2722,15 @@ class KafkaInstance(pulumi.CustomResource):
         to 64 characters and supports only letters, digits, and hyphens (-). Changing this creates a new instance resource.
         """
         return pulumi.get(self, "access_user")
+
+    @property
+    @pulumi.getter(name="archType")
+    def arch_type(self) -> pulumi.Output[Optional[str]]:
+        """
+        Specifies the CPU architecture. Valid value is **X86**.
+        Changing this creates a new instance resource.
+        """
+        return pulumi.get(self, "arch_type")
 
     @property
     @pulumi.getter(name="autoRenew")
@@ -2125,6 +2769,14 @@ class KafkaInstance(pulumi.CustomResource):
         return pulumi.get(self, "broker_num")
 
     @property
+    @pulumi.getter(name="certReplaced")
+    def cert_replaced(self) -> pulumi.Output[bool]:
+        """
+        Indicates whether the certificate can be replaced.
+        """
+        return pulumi.get(self, "cert_replaced")
+
+    @property
     @pulumi.getter(name="chargingMode")
     def charging_mode(self) -> pulumi.Output[str]:
         """
@@ -2140,6 +2792,30 @@ class KafkaInstance(pulumi.CustomResource):
         Indicates the IP address of the DMS Kafka instance.
         """
         return pulumi.get(self, "connect_address")
+
+    @property
+    @pulumi.getter(name="connectorId")
+    def connector_id(self) -> pulumi.Output[str]:
+        """
+        Indicates the connector ID.
+        """
+        return pulumi.get(self, "connector_id")
+
+    @property
+    @pulumi.getter(name="connectorNodeNum")
+    def connector_node_num(self) -> pulumi.Output[int]:
+        """
+        Indicates the number of connector node.
+        """
+        return pulumi.get(self, "connector_node_num")
+
+    @property
+    @pulumi.getter(name="createdAt")
+    def created_at(self) -> pulumi.Output[str]:
+        """
+        Indicates the create time.
+        """
+        return pulumi.get(self, "created_at")
 
     @property
     @pulumi.getter(name="crossVpcAccesses")
@@ -2163,7 +2839,7 @@ class KafkaInstance(pulumi.CustomResource):
     @pulumi.getter
     def dumping(self) -> pulumi.Output[bool]:
         """
-        Specifies whether to enable message dumping.
+        Specifies whether to enable  message dumping(smart connect).
         Changing this creates a new instance resource.
         """
         return pulumi.get(self, "dumping")
@@ -2176,7 +2852,6 @@ class KafkaInstance(pulumi.CustomResource):
         topic creation is enabled, a topic will be automatically created with 3 partitions and 3 replicas when a message is
         produced to or consumed from a topic that does not exist.
         The default value is false.
-        Changing this creates a new instance resource.
         """
         return pulumi.get(self, "enable_auto_topic")
 
@@ -2187,6 +2862,17 @@ class KafkaInstance(pulumi.CustomResource):
         Indicates whether public access to the DMS Kafka instance is enabled.
         """
         return pulumi.get(self, "enable_public_ip")
+
+    @property
+    @pulumi.getter(name="enabledMechanisms")
+    def enabled_mechanisms(self) -> pulumi.Output[Optional[Sequence[str]]]:
+        """
+        Specifies the authentication mechanisms to use after SASL is
+        enabled. Value options:
+        + **PLAIN**: Simple username and password verification.
+        + **SCRAM-SHA-512**: User credential verification, which is more secure than **PLAIN**.
+        """
+        return pulumi.get(self, "enabled_mechanisms")
 
     @property
     @pulumi.getter
@@ -2214,6 +2900,14 @@ class KafkaInstance(pulumi.CustomResource):
         return pulumi.get(self, "enterprise_project_id")
 
     @property
+    @pulumi.getter(name="extendTimes")
+    def extend_times(self) -> pulumi.Output[int]:
+        """
+        Indicates the extend times. If the value exceeds `20`, disk expansion is no longer allowed.
+        """
+        return pulumi.get(self, "extend_times")
+
+    @property
     @pulumi.getter(name="flavorId")
     def flavor_id(self) -> pulumi.Output[Optional[str]]:
         """
@@ -2221,6 +2915,31 @@ class KafkaInstance(pulumi.CustomResource):
         e.g. **c6.2u4g.cluster**. This parameter and `product_id` are alternative.
         """
         return pulumi.get(self, "flavor_id")
+
+    @property
+    @pulumi.getter(name="ipv6ConnectAddresses")
+    def ipv6_connect_addresses(self) -> pulumi.Output[Sequence[str]]:
+        """
+        Indicates the IPv6 connect addresses list.
+        """
+        return pulumi.get(self, "ipv6_connect_addresses")
+
+    @property
+    @pulumi.getter(name="ipv6Enable")
+    def ipv6_enable(self) -> pulumi.Output[bool]:
+        """
+        Specifies whether to enable IPv6. Defaults to **false**.
+        Changing this creates a new instance resource.
+        """
+        return pulumi.get(self, "ipv6_enable")
+
+    @property
+    @pulumi.getter(name="isLogicalVolume")
+    def is_logical_volume(self) -> pulumi.Output[bool]:
+        """
+        Indicates whether the instance is a new instance.
+        """
+        return pulumi.get(self, "is_logical_volume")
 
     @property
     @pulumi.getter(name="maintainBegin")
@@ -2250,30 +2969,16 @@ class KafkaInstance(pulumi.CustomResource):
     @property
     @pulumi.getter(name="managementConnectAddress")
     def management_connect_address(self) -> pulumi.Output[str]:
-        """
-        Indicates the Kafka Manager connection address of a Kafka instance.
-        """
         return pulumi.get(self, "management_connect_address")
 
     @property
     @pulumi.getter(name="managerPassword")
-    def manager_password(self) -> pulumi.Output[str]:
-        """
-        Specifies the password for logging in to the Kafka Manager. The
-        password must meet the following complexity requirements: Must be 8 to 32 characters long. Must contain at least 2 of
-        the following character types: lowercase letters, uppercase letters, digits, and special characters (`~!@#$%^&*()-_
-        =+\\\\|[{}]:'",<.>/?). Changing this creates a new instance resource.
-        """
+    def manager_password(self) -> pulumi.Output[Optional[str]]:
         return pulumi.get(self, "manager_password")
 
     @property
     @pulumi.getter(name="managerUser")
-    def manager_user(self) -> pulumi.Output[str]:
-        """
-        Specifies the username for logging in to the Kafka Manager. The username
-        consists of 4 to 64 characters and can contain letters, digits, hyphens (-), and underscores (_). Changing this
-        creates a new instance resource.
-        """
+    def manager_user(self) -> pulumi.Output[Optional[str]]:
         return pulumi.get(self, "manager_user")
 
     @property
@@ -2282,11 +2987,18 @@ class KafkaInstance(pulumi.CustomResource):
         return pulumi.get(self, "manegement_connect_address")
 
     @property
+    @pulumi.getter(name="messageQueryInstEnable")
+    def message_query_inst_enable(self) -> pulumi.Output[bool]:
+        """
+        Indicates whether message query is enabled.
+        """
+        return pulumi.get(self, "message_query_inst_enable")
+
+    @property
     @pulumi.getter
     def name(self) -> pulumi.Output[str]:
         """
-        Specifies the name of the DMS Kafka instance. An instance name starts with a letter,
-        consists of 4 to 64 characters, and supports only letters, digits, hyphens (-) and underscores (_).
+        Specifies the parameter name. Static parameter needs to restart the instance to take effect.
         """
         return pulumi.get(self, "name")
 
@@ -2300,6 +3012,31 @@ class KafkaInstance(pulumi.CustomResource):
         return pulumi.get(self, "network_id")
 
     @property
+    @pulumi.getter(name="newTenantIps")
+    def new_tenant_ips(self) -> pulumi.Output[Optional[Sequence[str]]]:
+        """
+        Specifies the IPv4 private IP addresses for the new brokers.
+        """
+        return pulumi.get(self, "new_tenant_ips")
+
+    @property
+    @pulumi.getter(name="nodeNum")
+    def node_num(self) -> pulumi.Output[int]:
+        """
+        Indicates the node quantity.
+        """
+        return pulumi.get(self, "node_num")
+
+    @property
+    @pulumi.getter
+    def parameters(self) -> pulumi.Output[Sequence['outputs.KafkaInstanceParameter']]:
+        """
+        Specifies the array of one or more parameters to be set to the Kafka instance after
+        launched. The parameters structure is documented below.
+        """
+        return pulumi.get(self, "parameters")
+
+    @property
     @pulumi.getter(name="partitionNum")
     def partition_num(self) -> pulumi.Output[int]:
         """
@@ -2311,10 +3048,9 @@ class KafkaInstance(pulumi.CustomResource):
     @pulumi.getter
     def password(self) -> pulumi.Output[Optional[str]]:
         """
-        Specifies the password of SASL_SSL user. A password must meet the
-        following complexity requirements: Must be 8 to 32 characters long. Must contain at least 2 of the following character
-        types: lowercase letters, uppercase letters, digits, and special characters (`~!@#$%^&*()-_=+\\\\|[{}]:'",<.>/?).
-        Changing this creates a new instance resource.
+        Specifies the password of SASL_SSL user. A password must meet the following
+        complexity requirements: Must be 8 to 32 characters long. Must contain at least 2 of the following character types:
+        lowercase letters, uppercase letters, digits, and special characters (`~!@#$%^&*()-_=+\\\\|[{}]:'",<.>/?).
         """
         return pulumi.get(self, "password")
 
@@ -2339,12 +3075,29 @@ class KafkaInstance(pulumi.CustomResource):
         return pulumi.get(self, "period_unit")
 
     @property
+    @pulumi.getter(name="podConnectAddress")
+    def pod_connect_address(self) -> pulumi.Output[str]:
+        """
+        Indicates the connection address on the tenant side.
+        """
+        return pulumi.get(self, "pod_connect_address")
+
+    @property
     @pulumi.getter
     def port(self) -> pulumi.Output[int]:
         """
         The port number.
         """
         return pulumi.get(self, "port")
+
+    @property
+    @pulumi.getter(name="portProtocols")
+    def port_protocols(self) -> pulumi.Output[Sequence['outputs.KafkaInstancePortProtocol']]:
+        """
+        Indicates instance connection address. The structure is documented below.
+        The port_protocols structure is documented below.
+        """
+        return pulumi.get(self, "port_protocols")
 
     @property
     @pulumi.getter(name="productId")
@@ -2354,6 +3107,22 @@ class KafkaInstance(pulumi.CustomResource):
         storage capacity.
         """
         return pulumi.get(self, "product_id")
+
+    @property
+    @pulumi.getter(name="publicBandwidth")
+    def public_bandwidth(self) -> pulumi.Output[int]:
+        """
+        Indicates the public network access bandwidth.
+        """
+        return pulumi.get(self, "public_bandwidth")
+
+    @property
+    @pulumi.getter(name="publicIpAddresses")
+    def public_ip_addresses(self) -> pulumi.Output[Sequence[str]]:
+        """
+        Indicates the public IP addresses list of the instance.
+        """
+        return pulumi.get(self, "public_ip_addresses")
 
     @property
     @pulumi.getter(name="publicIpIds")
@@ -2403,12 +3172,32 @@ class KafkaInstance(pulumi.CustomResource):
         return pulumi.get(self, "security_group_id")
 
     @property
+    @pulumi.getter(name="securityProtocol")
+    def security_protocol(self) -> pulumi.Output[Optional[str]]:
+        """
+        Specifies the protocol to use after SASL is enabled. Value options:
+        + **SASL_SSL**: Data is encrypted with SSL certificates for high-security transmission.
+        + **SASL_PLAINTEXT**: Data is transmitted in plaintext with username and password authentication. This protocol only
+        uses the SCRAM-SHA-512 mechanism and delivers high performance.
+        """
+        return pulumi.get(self, "security_protocol")
+
+    @property
     @pulumi.getter(name="sslEnable")
     def ssl_enable(self) -> pulumi.Output[bool]:
         """
-        Indicates whether the Kafka SASL_SSL is enabled.
+        Specifies whether the Kafka SASL_SSL is enabled.
+        Changing this creates a new resource.
         """
         return pulumi.get(self, "ssl_enable")
+
+    @property
+    @pulumi.getter(name="sslTwoWayEnable")
+    def ssl_two_way_enable(self) -> pulumi.Output[bool]:
+        """
+        Indicates whether to enable two-way authentication.
+        """
+        return pulumi.get(self, "ssl_two_way_enable")
 
     @property
     @pulumi.getter
@@ -2417,6 +3206,14 @@ class KafkaInstance(pulumi.CustomResource):
         Indicates the status of the DMS Kafka instance.
         """
         return pulumi.get(self, "status")
+
+    @property
+    @pulumi.getter(name="storageResourceId")
+    def storage_resource_id(self) -> pulumi.Output[str]:
+        """
+        Indicates the storage resource ID.
+        """
+        return pulumi.get(self, "storage_resource_id")
 
     @property
     @pulumi.getter(name="storageSpace")
@@ -2442,6 +3239,14 @@ class KafkaInstance(pulumi.CustomResource):
         + **dms.physical.storage.ultra.v2**: Type of the disk that uses ultra-high I/O.
         """
         return pulumi.get(self, "storage_spec_code")
+
+    @property
+    @pulumi.getter(name="storageType")
+    def storage_type(self) -> pulumi.Output[str]:
+        """
+        Indicates the storage type.
+        """
+        return pulumi.get(self, "storage_type")
 
     @property
     @pulumi.getter
@@ -2482,6 +3287,15 @@ class KafkaInstance(pulumi.CustomResource):
         Indicates the name of the user who created the DMS Kafka instance
         """
         return pulumi.get(self, "user_name")
+
+    @property
+    @pulumi.getter(name="vpcClientPlain")
+    def vpc_client_plain(self) -> pulumi.Output[bool]:
+        """
+        Specifies whether the intra-VPC plaintext access is enabled.
+        Defaults to **false**. Changing this creates a new resource.
+        """
+        return pulumi.get(self, "vpc_client_plain")
 
     @property
     @pulumi.getter(name="vpcId")

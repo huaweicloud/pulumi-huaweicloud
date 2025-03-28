@@ -55,10 +55,11 @@ func GetReferenceTables(ctx *pulumi.Context, args *GetReferenceTablesArgs, opts 
 // A collection of arguments for invoking getReferenceTables.
 type GetReferenceTablesArgs struct {
 	// Specifies the enterprise project ID of WAF reference tables.
+	// For enterprise users, if omitted, default enterprise project will be used.
 	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
-	// The name of the reference table. The value is case sensitive and matches exactly.
+	// Specifies the name of the reference table. The value is case-sensitive and matches exactly.
 	Name *string `pulumi:"name"`
-	// The region in which to create the WAF reference table resource.
+	// Specifies the region in which to create the WAF reference table resource.
 	// If omitted, the provider-level region will be used.
 	Region *string `pulumi:"region"`
 }
@@ -68,7 +69,7 @@ type GetReferenceTablesResult struct {
 	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
 	// The provider-assigned unique ID for this managed resource.
 	Id string `pulumi:"id"`
-	// The name of the reference table. The maximum length is 64 characters.
+	// The name of the reference table. The maximum length is `64` characters.
 	Name   *string `pulumi:"name"`
 	Region string  `pulumi:"region"`
 	// A list of WAF reference tables.
@@ -91,10 +92,11 @@ func GetReferenceTablesOutput(ctx *pulumi.Context, args GetReferenceTablesOutput
 // A collection of arguments for invoking getReferenceTables.
 type GetReferenceTablesOutputArgs struct {
 	// Specifies the enterprise project ID of WAF reference tables.
+	// For enterprise users, if omitted, default enterprise project will be used.
 	EnterpriseProjectId pulumi.StringPtrInput `pulumi:"enterpriseProjectId"`
-	// The name of the reference table. The value is case sensitive and matches exactly.
+	// Specifies the name of the reference table. The value is case-sensitive and matches exactly.
 	Name pulumi.StringPtrInput `pulumi:"name"`
-	// The region in which to create the WAF reference table resource.
+	// Specifies the region in which to create the WAF reference table resource.
 	// If omitted, the provider-level region will be used.
 	Region pulumi.StringPtrInput `pulumi:"region"`
 }
@@ -127,7 +129,7 @@ func (o GetReferenceTablesResultOutput) Id() pulumi.StringOutput {
 	return o.ApplyT(func(v GetReferenceTablesResult) string { return v.Id }).(pulumi.StringOutput)
 }
 
-// The name of the reference table. The maximum length is 64 characters.
+// The name of the reference table. The maximum length is `64` characters.
 func (o GetReferenceTablesResultOutput) Name() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v GetReferenceTablesResult) *string { return v.Name }).(pulumi.StringPtrOutput)
 }

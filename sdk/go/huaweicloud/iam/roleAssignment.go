@@ -13,7 +13,9 @@ import (
 
 // Manages a Role assignment within group on HuaweiCloud IAM Service.
 //
-// Note: You *must* have admin privileges in your HuaweiCloud cloud to use this resource.
+// > **NOTE:** 1. You *must* have admin privileges to use this resource.
+//
+//	<br/>2. When the resource is created, the permissions will take effect after 15 to 30 minutes.
 //
 // ## Example Usage
 // ### Assign Role On Project Level

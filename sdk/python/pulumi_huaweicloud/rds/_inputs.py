@@ -10,17 +10,54 @@ from typing import Any, Mapping, Optional, Sequence, Union, overload
 from .. import _utilities
 
 __all__ = [
+    'BackupDatabaseArgs',
     'Database_privilegeUserArgs',
     'InstanceBackupStrategyArgs',
     'InstanceDbArgs',
+    'InstanceMsdtcHostArgs',
     'InstanceNodeArgs',
     'InstanceParameterArgs',
+    'InstanceRestoreArgs',
     'InstanceVolumeArgs',
+    'MysqlDatabasePrivilegeUserArgs',
+    'MysqlDatabaseTableRestoreDatabaseArgs',
+    'MysqlDatabaseTableRestoreRestoreTableArgs',
+    'MysqlDatabaseTableRestoreRestoreTableTableArgs',
+    'MysqlProxyMasterNodeWeightArgs',
+    'MysqlProxyNodeArgs',
+    'MysqlProxyReadonlyNodesWeightArgs',
     'ParametergroupConfigurationParameterArgs',
     'ParametergroupDatastoreArgs',
+    'PgAccountAttributeArgs',
+    'PgDatabasePrivilegeUserArgs',
+    'PgHbaHostBasedAuthenticationArgs',
     'ReadReplicaInstanceDbArgs',
+    'ReadReplicaInstanceParameterArgs',
     'ReadReplicaInstanceVolumeArgs',
+    'SqlserverDatabasePrivilegeUserArgs',
 ]
+
+@pulumi.input_type
+class BackupDatabaseArgs:
+    def __init__(__self__, *,
+                 name: pulumi.Input[str]):
+        """
+        :param pulumi.Input[str] name: Database to be backed up for Microsoft SQL Server.
+        """
+        pulumi.set(__self__, "name", name)
+
+    @property
+    @pulumi.getter
+    def name(self) -> pulumi.Input[str]:
+        """
+        Database to be backed up for Microsoft SQL Server.
+        """
+        return pulumi.get(self, "name")
+
+    @name.setter
+    def name(self, value: pulumi.Input[str]):
+        pulumi.set(self, "name", value)
+
 
 @pulumi.input_type
 class Database_privilegeUserArgs:
@@ -121,36 +158,38 @@ class InstanceBackupStrategyArgs:
 @pulumi.input_type
 class InstanceDbArgs:
     def __init__(__self__, *,
-                 password: pulumi.Input[str],
                  type: pulumi.Input[str],
                  version: pulumi.Input[str],
+                 password: Optional[pulumi.Input[str]] = None,
                  port: Optional[pulumi.Input[int]] = None,
                  user_name: Optional[pulumi.Input[str]] = None):
         """
-        :param pulumi.Input[str] password: Specifies the database password. The value cannot be empty and should
-               contain 8 to 32 characters, including uppercase and lowercase letters, digits, and the following special
-               characters: ~!@#%^*-_=+? You are advised to enter a strong password to improve security, preventing security risks
-               such as brute force cracking.
         :param pulumi.Input[str] type: Specifies the volume type. Its value can be any of the following and is
                case-sensitive:
-               + *ULTRAHIGH*: SSD storage.
-               + *LOCALSSD*: local SSD storage.
-               + *CLOUDSSD*: cloud SSD storage. This storage type is supported only with general-purpose and dedicated DB
+               + **ULTRAHIGH**: SSD storage.
+               + **LOCALSSD**: local SSD storage.
+               + **CLOUDSSD**: cloud SSD storage. This storage type is supported only with general-purpose and dedicated DB
                instances.
-               + *ESSD*: extreme SSD storage.
+               + **ESSD**: extreme SSD storage.
         :param pulumi.Input[str] version: Specifies the database version. Changing this parameter will create a new
                resource. Available values detailed in
                [DB Engines and Versions](https://support.huaweicloud.com/intl/en-us/productdesc-rds/en-us_topic_0043898356.html).
+        :param pulumi.Input[str] password: Specifies the database password. The value should contain 8 to 32 characters,
+               including uppercase and lowercase letters, digits, and the following special characters: ~!@#%^*-_=+? You are advised
+               to enter a strong password to improve security, preventing security risks such as brute force cracking.
         :param pulumi.Input[int] port: Specifies the database port.
                + The MySQL database port ranges from 1024 to 65535 (excluding 12017 and 33071, which are occupied by the RDS system
                and cannot be used). The default value is 3306.
                + The PostgreSQL database port ranges from 2100 to 9500. The default value is 5432.
                + The Microsoft SQL Server database port can be 1433 or ranges from 2100 to 9500, excluding 5355 and 5985. The
                default value is 1433.
+               + The MariaDB database port ranges from 1024 to 65535 (excluding 12017 and 33071, which are occupied by the RDS system
+               and cannot be used). The default value is 3306.
         """
-        pulumi.set(__self__, "password", password)
         pulumi.set(__self__, "type", type)
         pulumi.set(__self__, "version", version)
+        if password is not None:
+            pulumi.set(__self__, "password", password)
         if port is not None:
             pulumi.set(__self__, "port", port)
         if user_name is not None:
@@ -158,30 +197,15 @@ class InstanceDbArgs:
 
     @property
     @pulumi.getter
-    def password(self) -> pulumi.Input[str]:
-        """
-        Specifies the database password. The value cannot be empty and should
-        contain 8 to 32 characters, including uppercase and lowercase letters, digits, and the following special
-        characters: ~!@#%^*-_=+? You are advised to enter a strong password to improve security, preventing security risks
-        such as brute force cracking.
-        """
-        return pulumi.get(self, "password")
-
-    @password.setter
-    def password(self, value: pulumi.Input[str]):
-        pulumi.set(self, "password", value)
-
-    @property
-    @pulumi.getter
     def type(self) -> pulumi.Input[str]:
         """
         Specifies the volume type. Its value can be any of the following and is
         case-sensitive:
-        + *ULTRAHIGH*: SSD storage.
-        + *LOCALSSD*: local SSD storage.
-        + *CLOUDSSD*: cloud SSD storage. This storage type is supported only with general-purpose and dedicated DB
+        + **ULTRAHIGH**: SSD storage.
+        + **LOCALSSD**: local SSD storage.
+        + **CLOUDSSD**: cloud SSD storage. This storage type is supported only with general-purpose and dedicated DB
         instances.
-        + *ESSD*: extreme SSD storage.
+        + **ESSD**: extreme SSD storage.
         """
         return pulumi.get(self, "type")
 
@@ -205,6 +229,20 @@ class InstanceDbArgs:
 
     @property
     @pulumi.getter
+    def password(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the database password. The value should contain 8 to 32 characters,
+        including uppercase and lowercase letters, digits, and the following special characters: ~!@#%^*-_=+? You are advised
+        to enter a strong password to improve security, preventing security risks such as brute force cracking.
+        """
+        return pulumi.get(self, "password")
+
+    @password.setter
+    def password(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "password", value)
+
+    @property
+    @pulumi.getter
     def port(self) -> Optional[pulumi.Input[int]]:
         """
         Specifies the database port.
@@ -213,6 +251,8 @@ class InstanceDbArgs:
         + The PostgreSQL database port ranges from 2100 to 9500. The default value is 5432.
         + The Microsoft SQL Server database port can be 1433 or ranges from 2100 to 9500, excluding 5355 and 5985. The
         default value is 1433.
+        + The MariaDB database port ranges from 1024 to 65535 (excluding 12017 and 33071, which are occupied by the RDS system
+        and cannot be used). The default value is 3306.
         """
         return pulumi.get(self, "port")
 
@@ -231,6 +271,59 @@ class InstanceDbArgs:
 
 
 @pulumi.input_type
+class InstanceMsdtcHostArgs:
+    def __init__(__self__, *,
+                 host_name: pulumi.Input[str],
+                 ip: pulumi.Input[str],
+                 id: Optional[pulumi.Input[str]] = None):
+        """
+        :param pulumi.Input[str] host_name: Specifies the host name.
+        :param pulumi.Input[str] ip: Specifies the host IP address.
+        :param pulumi.Input[str] id: Indicates the host ID.
+        """
+        pulumi.set(__self__, "host_name", host_name)
+        pulumi.set(__self__, "ip", ip)
+        if id is not None:
+            pulumi.set(__self__, "id", id)
+
+    @property
+    @pulumi.getter(name="hostName")
+    def host_name(self) -> pulumi.Input[str]:
+        """
+        Specifies the host name.
+        """
+        return pulumi.get(self, "host_name")
+
+    @host_name.setter
+    def host_name(self, value: pulumi.Input[str]):
+        pulumi.set(self, "host_name", value)
+
+    @property
+    @pulumi.getter
+    def ip(self) -> pulumi.Input[str]:
+        """
+        Specifies the host IP address.
+        """
+        return pulumi.get(self, "ip")
+
+    @ip.setter
+    def ip(self, value: pulumi.Input[str]):
+        pulumi.set(self, "ip", value)
+
+    @property
+    @pulumi.getter
+    def id(self) -> Optional[pulumi.Input[str]]:
+        """
+        Indicates the host ID.
+        """
+        return pulumi.get(self, "id")
+
+    @id.setter
+    def id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "id", value)
+
+
+@pulumi.input_type
 class InstanceNodeArgs:
     def __init__(__self__, *,
                  availability_zone: Optional[pulumi.Input[str]] = None,
@@ -241,7 +334,7 @@ class InstanceNodeArgs:
         """
         :param pulumi.Input[str] availability_zone: Specifies the list of AZ name. Changing this parameter will create a
                new resource.
-        :param pulumi.Input[str] id: Indicates the node ID.
+        :param pulumi.Input[str] id: Indicates the host ID.
         :param pulumi.Input[str] name: Specifies the parameter name. Some of them needs the instance to be restarted
                to take effect.
         :param pulumi.Input[str] role: Indicates the node type. The value can be master or slave, indicating the primary node or standby node
@@ -276,7 +369,7 @@ class InstanceNodeArgs:
     @pulumi.getter
     def id(self) -> Optional[pulumi.Input[str]]:
         """
-        Indicates the node ID.
+        Indicates the host ID.
         """
         return pulumi.get(self, "id")
 
@@ -363,6 +456,65 @@ class InstanceParameterArgs:
 
 
 @pulumi.input_type
+class InstanceRestoreArgs:
+    def __init__(__self__, *,
+                 backup_id: pulumi.Input[str],
+                 instance_id: pulumi.Input[str],
+                 database_name: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None):
+        """
+        :param pulumi.Input[str] backup_id: Specifies the ID of the backup used to restore data. Changing this
+               parameter will create a new resource.
+        :param pulumi.Input[str] instance_id: Specifies the source DB instance ID. Changing this parameter will create
+               a new resource.
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] database_name: Specifies the database to be restored. This parameter applies only to
+               Microsoft SQL Server databases. Changing this parameter will create a new resource.
+        """
+        pulumi.set(__self__, "backup_id", backup_id)
+        pulumi.set(__self__, "instance_id", instance_id)
+        if database_name is not None:
+            pulumi.set(__self__, "database_name", database_name)
+
+    @property
+    @pulumi.getter(name="backupId")
+    def backup_id(self) -> pulumi.Input[str]:
+        """
+        Specifies the ID of the backup used to restore data. Changing this
+        parameter will create a new resource.
+        """
+        return pulumi.get(self, "backup_id")
+
+    @backup_id.setter
+    def backup_id(self, value: pulumi.Input[str]):
+        pulumi.set(self, "backup_id", value)
+
+    @property
+    @pulumi.getter(name="instanceId")
+    def instance_id(self) -> pulumi.Input[str]:
+        """
+        Specifies the source DB instance ID. Changing this parameter will create
+        a new resource.
+        """
+        return pulumi.get(self, "instance_id")
+
+    @instance_id.setter
+    def instance_id(self, value: pulumi.Input[str]):
+        pulumi.set(self, "instance_id", value)
+
+    @property
+    @pulumi.getter(name="databaseName")
+    def database_name(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]:
+        """
+        Specifies the database to be restored. This parameter applies only to
+        Microsoft SQL Server databases. Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "database_name")
+
+    @database_name.setter
+    def database_name(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]):
+        pulumi.set(self, "database_name", value)
+
+
+@pulumi.input_type
 class InstanceVolumeArgs:
     def __init__(__self__, *,
                  size: pulumi.Input[int],
@@ -375,11 +527,11 @@ class InstanceVolumeArgs:
                multiple of 10 and greater than the original size.
         :param pulumi.Input[str] type: Specifies the volume type. Its value can be any of the following and is
                case-sensitive:
-               + *ULTRAHIGH*: SSD storage.
-               + *LOCALSSD*: local SSD storage.
-               + *CLOUDSSD*: cloud SSD storage. This storage type is supported only with general-purpose and dedicated DB
+               + **ULTRAHIGH**: SSD storage.
+               + **LOCALSSD**: local SSD storage.
+               + **CLOUDSSD**: cloud SSD storage. This storage type is supported only with general-purpose and dedicated DB
                instances.
-               + *ESSD*: extreme SSD storage.
+               + **ESSD**: extreme SSD storage.
         :param pulumi.Input[str] disk_encryption_id: Specifies the key ID for disk encryption.
                Changing this parameter will create a new resource.
         :param pulumi.Input[int] limit_size: Specifies the upper limit of automatic expansion of storage, in GB.
@@ -418,11 +570,11 @@ class InstanceVolumeArgs:
         """
         Specifies the volume type. Its value can be any of the following and is
         case-sensitive:
-        + *ULTRAHIGH*: SSD storage.
-        + *LOCALSSD*: local SSD storage.
-        + *CLOUDSSD*: cloud SSD storage. This storage type is supported only with general-purpose and dedicated DB
+        + **ULTRAHIGH**: SSD storage.
+        + **LOCALSSD**: local SSD storage.
+        + **CLOUDSSD**: cloud SSD storage. This storage type is supported only with general-purpose and dedicated DB
         instances.
-        + *ESSD*: extreme SSD storage.
+        + **ESSD**: extreme SSD storage.
         """
         return pulumi.get(self, "type")
 
@@ -474,6 +626,350 @@ class InstanceVolumeArgs:
 
 
 @pulumi.input_type
+class MysqlDatabasePrivilegeUserArgs:
+    def __init__(__self__, *,
+                 name: pulumi.Input[str],
+                 readonly: Optional[pulumi.Input[bool]] = None):
+        """
+        :param pulumi.Input[str] name: Specifies the username of the database account.
+        :param pulumi.Input[bool] readonly: Specifies the read-only permission. The value can be:
+               + **true**: indicates the read-only permission.
+               + **false**: indicates the read and write permission.
+        """
+        pulumi.set(__self__, "name", name)
+        if readonly is not None:
+            pulumi.set(__self__, "readonly", readonly)
+
+    @property
+    @pulumi.getter
+    def name(self) -> pulumi.Input[str]:
+        """
+        Specifies the username of the database account.
+        """
+        return pulumi.get(self, "name")
+
+    @name.setter
+    def name(self, value: pulumi.Input[str]):
+        pulumi.set(self, "name", value)
+
+    @property
+    @pulumi.getter
+    def readonly(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies the read-only permission. The value can be:
+        + **true**: indicates the read-only permission.
+        + **false**: indicates the read and write permission.
+        """
+        return pulumi.get(self, "readonly")
+
+    @readonly.setter
+    def readonly(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "readonly", value)
+
+
+@pulumi.input_type
+class MysqlDatabaseTableRestoreDatabaseArgs:
+    def __init__(__self__, *,
+                 new_name: pulumi.Input[str],
+                 old_name: pulumi.Input[str]):
+        """
+        :param pulumi.Input[str] new_name: Specifies the name of the table after restoration.
+        :param pulumi.Input[str] old_name: Specifies the name of the table before restoration.
+        """
+        pulumi.set(__self__, "new_name", new_name)
+        pulumi.set(__self__, "old_name", old_name)
+
+    @property
+    @pulumi.getter(name="newName")
+    def new_name(self) -> pulumi.Input[str]:
+        """
+        Specifies the name of the table after restoration.
+        """
+        return pulumi.get(self, "new_name")
+
+    @new_name.setter
+    def new_name(self, value: pulumi.Input[str]):
+        pulumi.set(self, "new_name", value)
+
+    @property
+    @pulumi.getter(name="oldName")
+    def old_name(self) -> pulumi.Input[str]:
+        """
+        Specifies the name of the table before restoration.
+        """
+        return pulumi.get(self, "old_name")
+
+    @old_name.setter
+    def old_name(self, value: pulumi.Input[str]):
+        pulumi.set(self, "old_name", value)
+
+
+@pulumi.input_type
+class MysqlDatabaseTableRestoreRestoreTableArgs:
+    def __init__(__self__, *,
+                 database: pulumi.Input[str],
+                 tables: pulumi.Input[Sequence[pulumi.Input['MysqlDatabaseTableRestoreRestoreTableTableArgs']]]):
+        """
+        :param pulumi.Input[str] database: Specifies the database name.
+        :param pulumi.Input[Sequence[pulumi.Input['MysqlDatabaseTableRestoreRestoreTableTableArgs']]] tables: Specifies the tables.
+               The tables structure is documented below.
+        """
+        pulumi.set(__self__, "database", database)
+        pulumi.set(__self__, "tables", tables)
+
+    @property
+    @pulumi.getter
+    def database(self) -> pulumi.Input[str]:
+        """
+        Specifies the database name.
+        """
+        return pulumi.get(self, "database")
+
+    @database.setter
+    def database(self, value: pulumi.Input[str]):
+        pulumi.set(self, "database", value)
+
+    @property
+    @pulumi.getter
+    def tables(self) -> pulumi.Input[Sequence[pulumi.Input['MysqlDatabaseTableRestoreRestoreTableTableArgs']]]:
+        """
+        Specifies the tables.
+        The tables structure is documented below.
+        """
+        return pulumi.get(self, "tables")
+
+    @tables.setter
+    def tables(self, value: pulumi.Input[Sequence[pulumi.Input['MysqlDatabaseTableRestoreRestoreTableTableArgs']]]):
+        pulumi.set(self, "tables", value)
+
+
+@pulumi.input_type
+class MysqlDatabaseTableRestoreRestoreTableTableArgs:
+    def __init__(__self__, *,
+                 new_name: pulumi.Input[str],
+                 old_name: pulumi.Input[str]):
+        """
+        :param pulumi.Input[str] new_name: Specifies the name of the table after restoration.
+        :param pulumi.Input[str] old_name: Specifies the name of the table before restoration.
+        """
+        pulumi.set(__self__, "new_name", new_name)
+        pulumi.set(__self__, "old_name", old_name)
+
+    @property
+    @pulumi.getter(name="newName")
+    def new_name(self) -> pulumi.Input[str]:
+        """
+        Specifies the name of the table after restoration.
+        """
+        return pulumi.get(self, "new_name")
+
+    @new_name.setter
+    def new_name(self, value: pulumi.Input[str]):
+        pulumi.set(self, "new_name", value)
+
+    @property
+    @pulumi.getter(name="oldName")
+    def old_name(self) -> pulumi.Input[str]:
+        """
+        Specifies the name of the table before restoration.
+        """
+        return pulumi.get(self, "old_name")
+
+    @old_name.setter
+    def old_name(self, value: pulumi.Input[str]):
+        pulumi.set(self, "old_name", value)
+
+
+@pulumi.input_type
+class MysqlProxyMasterNodeWeightArgs:
+    def __init__(__self__, *,
+                 id: pulumi.Input[str],
+                 weight: pulumi.Input[int]):
+        """
+        :param pulumi.Input[str] id: Specifies the ID of the node.
+        :param pulumi.Input[int] weight: Specifies the weight assigned to the node.
+               + If `route_mode` is `0`, the value is `0` to `1,000`.
+               + If `route_mode` is `1`, the value for the primary node is `0` and the value for read replicas is `0` or `1`.
+               + If `route_mode` is `2`, the value for the primary node is `1` and the value for read replicas is `0` or `1`.
+        """
+        pulumi.set(__self__, "id", id)
+        pulumi.set(__self__, "weight", weight)
+
+    @property
+    @pulumi.getter
+    def id(self) -> pulumi.Input[str]:
+        """
+        Specifies the ID of the node.
+        """
+        return pulumi.get(self, "id")
+
+    @id.setter
+    def id(self, value: pulumi.Input[str]):
+        pulumi.set(self, "id", value)
+
+    @property
+    @pulumi.getter
+    def weight(self) -> pulumi.Input[int]:
+        """
+        Specifies the weight assigned to the node.
+        + If `route_mode` is `0`, the value is `0` to `1,000`.
+        + If `route_mode` is `1`, the value for the primary node is `0` and the value for read replicas is `0` or `1`.
+        + If `route_mode` is `2`, the value for the primary node is `1` and the value for read replicas is `0` or `1`.
+        """
+        return pulumi.get(self, "weight")
+
+    @weight.setter
+    def weight(self, value: pulumi.Input[int]):
+        pulumi.set(self, "weight", value)
+
+
+@pulumi.input_type
+class MysqlProxyNodeArgs:
+    def __init__(__self__, *,
+                 az_code: Optional[pulumi.Input[str]] = None,
+                 frozen_flag: Optional[pulumi.Input[int]] = None,
+                 id: Optional[pulumi.Input[str]] = None,
+                 role: Optional[pulumi.Input[str]] = None,
+                 status: Optional[pulumi.Input[str]] = None):
+        """
+        :param pulumi.Input[str] az_code: Indicates the AZ where the proxy node is located.
+        :param pulumi.Input[int] frozen_flag: Indicates whether the proxy node is frozen. The values can be:
+               + **0**: unfrozen.
+               + **1**: frozen.
+        :param pulumi.Input[str] id: Specifies the ID of the node.
+        :param pulumi.Input[str] role: Indicates the role of the proxy node. The values can be:
+               + **master**: primary node.
+               + **slave**: standby node.
+        :param pulumi.Input[str] status: Indicates the proxy node status. The values can be:
+               + **NORMAL**: The node is normal.
+               + **ABNORMAL**: The node is abnormal.
+               + **CREATING**: The node is being created.
+               + **CREATEFAIL**: The node failed to be created.
+        """
+        if az_code is not None:
+            pulumi.set(__self__, "az_code", az_code)
+        if frozen_flag is not None:
+            pulumi.set(__self__, "frozen_flag", frozen_flag)
+        if id is not None:
+            pulumi.set(__self__, "id", id)
+        if role is not None:
+            pulumi.set(__self__, "role", role)
+        if status is not None:
+            pulumi.set(__self__, "status", status)
+
+    @property
+    @pulumi.getter(name="azCode")
+    def az_code(self) -> Optional[pulumi.Input[str]]:
+        """
+        Indicates the AZ where the proxy node is located.
+        """
+        return pulumi.get(self, "az_code")
+
+    @az_code.setter
+    def az_code(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "az_code", value)
+
+    @property
+    @pulumi.getter(name="frozenFlag")
+    def frozen_flag(self) -> Optional[pulumi.Input[int]]:
+        """
+        Indicates whether the proxy node is frozen. The values can be:
+        + **0**: unfrozen.
+        + **1**: frozen.
+        """
+        return pulumi.get(self, "frozen_flag")
+
+    @frozen_flag.setter
+    def frozen_flag(self, value: Optional[pulumi.Input[int]]):
+        pulumi.set(self, "frozen_flag", value)
+
+    @property
+    @pulumi.getter
+    def id(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the ID of the node.
+        """
+        return pulumi.get(self, "id")
+
+    @id.setter
+    def id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "id", value)
+
+    @property
+    @pulumi.getter
+    def role(self) -> Optional[pulumi.Input[str]]:
+        """
+        Indicates the role of the proxy node. The values can be:
+        + **master**: primary node.
+        + **slave**: standby node.
+        """
+        return pulumi.get(self, "role")
+
+    @role.setter
+    def role(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "role", value)
+
+    @property
+    @pulumi.getter
+    def status(self) -> Optional[pulumi.Input[str]]:
+        """
+        Indicates the proxy node status. The values can be:
+        + **NORMAL**: The node is normal.
+        + **ABNORMAL**: The node is abnormal.
+        + **CREATING**: The node is being created.
+        + **CREATEFAIL**: The node failed to be created.
+        """
+        return pulumi.get(self, "status")
+
+    @status.setter
+    def status(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "status", value)
+
+
+@pulumi.input_type
+class MysqlProxyReadonlyNodesWeightArgs:
+    def __init__(__self__, *,
+                 id: pulumi.Input[str],
+                 weight: pulumi.Input[int]):
+        """
+        :param pulumi.Input[str] id: Specifies the ID of the node.
+        :param pulumi.Input[int] weight: Specifies the weight assigned to the node.
+               + If `route_mode` is `0`, the value is `0` to `1,000`.
+               + If `route_mode` is `1`, the value for the primary node is `0` and the value for read replicas is `0` or `1`.
+               + If `route_mode` is `2`, the value for the primary node is `1` and the value for read replicas is `0` or `1`.
+        """
+        pulumi.set(__self__, "id", id)
+        pulumi.set(__self__, "weight", weight)
+
+    @property
+    @pulumi.getter
+    def id(self) -> pulumi.Input[str]:
+        """
+        Specifies the ID of the node.
+        """
+        return pulumi.get(self, "id")
+
+    @id.setter
+    def id(self, value: pulumi.Input[str]):
+        pulumi.set(self, "id", value)
+
+    @property
+    @pulumi.getter
+    def weight(self) -> pulumi.Input[int]:
+        """
+        Specifies the weight assigned to the node.
+        + If `route_mode` is `0`, the value is `0` to `1,000`.
+        + If `route_mode` is `1`, the value for the primary node is `0` and the value for read replicas is `0` or `1`.
+        + If `route_mode` is `2`, the value for the primary node is `1` and the value for read replicas is `0` or `1`.
+        """
+        return pulumi.get(self, "weight")
+
+    @weight.setter
+    def weight(self, value: pulumi.Input[int]):
+        pulumi.set(self, "weight", value)
+
+
+@pulumi.input_type
 class ParametergroupConfigurationParameterArgs:
     def __init__(__self__, *,
                  description: Optional[pulumi.Input[str]] = None,
@@ -489,8 +985,8 @@ class ParametergroupConfigurationParameterArgs:
         :param pulumi.Input[str] name: The parameter group name. It contains a maximum of 64 characters.
         :param pulumi.Input[bool] readonly: Indicates whether the parameter is read-only.
         :param pulumi.Input[bool] restart_required: Indicates whether a restart is required.
-        :param pulumi.Input[str] type: The DB engine. Currently, MySQL, PostgreSQL, and Microsoft SQL Server are supported. The
-               value is case-insensitive and can be mysql, postgresql, or sqlserver.
+        :param pulumi.Input[str] type: The DB engine. Currently, MySQL, PostgreSQL, Microsoft SQL Server and MariaDB are supported.
+               The value is case-insensitive and can be **mysql**, **postgresql**, **sqlserver**, or **mariadb**.
         :param pulumi.Input[str] value: Indicates the parameter value.
         :param pulumi.Input[str] value_range: Indicates the parameter value range.
         """
@@ -562,8 +1058,8 @@ class ParametergroupConfigurationParameterArgs:
     @pulumi.getter
     def type(self) -> Optional[pulumi.Input[str]]:
         """
-        The DB engine. Currently, MySQL, PostgreSQL, and Microsoft SQL Server are supported. The
-        value is case-insensitive and can be mysql, postgresql, or sqlserver.
+        The DB engine. Currently, MySQL, PostgreSQL, Microsoft SQL Server and MariaDB are supported.
+        The value is case-insensitive and can be **mysql**, **postgresql**, **sqlserver**, or **mariadb**.
         """
         return pulumi.get(self, "type")
 
@@ -602,8 +1098,8 @@ class ParametergroupDatastoreArgs:
                  type: pulumi.Input[str],
                  version: pulumi.Input[str]):
         """
-        :param pulumi.Input[str] type: The DB engine. Currently, MySQL, PostgreSQL, and Microsoft SQL Server are supported. The
-               value is case-insensitive and can be mysql, postgresql, or sqlserver.
+        :param pulumi.Input[str] type: The DB engine. Currently, MySQL, PostgreSQL, Microsoft SQL Server and MariaDB are supported.
+               The value is case-insensitive and can be **mysql**, **postgresql**, **sqlserver**, or **mariadb**.
         :param pulumi.Input[str] version: Specifies the database version.
         """
         pulumi.set(__self__, "type", type)
@@ -613,8 +1109,8 @@ class ParametergroupDatastoreArgs:
     @pulumi.getter
     def type(self) -> pulumi.Input[str]:
         """
-        The DB engine. Currently, MySQL, PostgreSQL, and Microsoft SQL Server are supported. The
-        value is case-insensitive and can be mysql, postgresql, or sqlserver.
+        The DB engine. Currently, MySQL, PostgreSQL, Microsoft SQL Server and MariaDB are supported.
+        The value is case-insensitive and can be **mysql**, **postgresql**, **sqlserver**, or **mariadb**.
         """
         return pulumi.get(self, "type")
 
@@ -636,6 +1132,309 @@ class ParametergroupDatastoreArgs:
 
 
 @pulumi.input_type
+class PgAccountAttributeArgs:
+    def __init__(__self__, *,
+                 rol_bypass_rls: Optional[pulumi.Input[bool]] = None,
+                 rol_can_login: Optional[pulumi.Input[bool]] = None,
+                 rol_conn_limit: Optional[pulumi.Input[int]] = None,
+                 rol_create_db: Optional[pulumi.Input[bool]] = None,
+                 rol_create_role: Optional[pulumi.Input[bool]] = None,
+                 rol_inherit: Optional[pulumi.Input[bool]] = None,
+                 rol_replication: Optional[pulumi.Input[bool]] = None,
+                 rol_super: Optional[pulumi.Input[bool]] = None):
+        """
+        :param pulumi.Input[bool] rol_bypass_rls: Indicates whether a user bypasses each row-level security policy.
+        :param pulumi.Input[bool] rol_can_login: Indicates whether a user can log in to the database.
+        :param pulumi.Input[int] rol_conn_limit: Indicates the maximum number of concurrent connections to a DB instance.
+        :param pulumi.Input[bool] rol_create_db: Indicates whether a user can create a database.
+        :param pulumi.Input[bool] rol_create_role: Indicates whether a user can create other sub-users.
+        :param pulumi.Input[bool] rol_inherit: Indicates whether a user automatically inherits the permissions of the role to which the user belongs.
+        :param pulumi.Input[bool] rol_replication: Indicates whether the user is a replication role.
+        :param pulumi.Input[bool] rol_super: Indicates whether a user has the super-user permission.
+        """
+        if rol_bypass_rls is not None:
+            pulumi.set(__self__, "rol_bypass_rls", rol_bypass_rls)
+        if rol_can_login is not None:
+            pulumi.set(__self__, "rol_can_login", rol_can_login)
+        if rol_conn_limit is not None:
+            pulumi.set(__self__, "rol_conn_limit", rol_conn_limit)
+        if rol_create_db is not None:
+            pulumi.set(__self__, "rol_create_db", rol_create_db)
+        if rol_create_role is not None:
+            pulumi.set(__self__, "rol_create_role", rol_create_role)
+        if rol_inherit is not None:
+            pulumi.set(__self__, "rol_inherit", rol_inherit)
+        if rol_replication is not None:
+            pulumi.set(__self__, "rol_replication", rol_replication)
+        if rol_super is not None:
+            pulumi.set(__self__, "rol_super", rol_super)
+
+    @property
+    @pulumi.getter(name="rolBypassRls")
+    def rol_bypass_rls(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Indicates whether a user bypasses each row-level security policy.
+        """
+        return pulumi.get(self, "rol_bypass_rls")
+
+    @rol_bypass_rls.setter
+    def rol_bypass_rls(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "rol_bypass_rls", value)
+
+    @property
+    @pulumi.getter(name="rolCanLogin")
+    def rol_can_login(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Indicates whether a user can log in to the database.
+        """
+        return pulumi.get(self, "rol_can_login")
+
+    @rol_can_login.setter
+    def rol_can_login(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "rol_can_login", value)
+
+    @property
+    @pulumi.getter(name="rolConnLimit")
+    def rol_conn_limit(self) -> Optional[pulumi.Input[int]]:
+        """
+        Indicates the maximum number of concurrent connections to a DB instance.
+        """
+        return pulumi.get(self, "rol_conn_limit")
+
+    @rol_conn_limit.setter
+    def rol_conn_limit(self, value: Optional[pulumi.Input[int]]):
+        pulumi.set(self, "rol_conn_limit", value)
+
+    @property
+    @pulumi.getter(name="rolCreateDb")
+    def rol_create_db(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Indicates whether a user can create a database.
+        """
+        return pulumi.get(self, "rol_create_db")
+
+    @rol_create_db.setter
+    def rol_create_db(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "rol_create_db", value)
+
+    @property
+    @pulumi.getter(name="rolCreateRole")
+    def rol_create_role(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Indicates whether a user can create other sub-users.
+        """
+        return pulumi.get(self, "rol_create_role")
+
+    @rol_create_role.setter
+    def rol_create_role(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "rol_create_role", value)
+
+    @property
+    @pulumi.getter(name="rolInherit")
+    def rol_inherit(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Indicates whether a user automatically inherits the permissions of the role to which the user belongs.
+        """
+        return pulumi.get(self, "rol_inherit")
+
+    @rol_inherit.setter
+    def rol_inherit(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "rol_inherit", value)
+
+    @property
+    @pulumi.getter(name="rolReplication")
+    def rol_replication(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Indicates whether the user is a replication role.
+        """
+        return pulumi.get(self, "rol_replication")
+
+    @rol_replication.setter
+    def rol_replication(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "rol_replication", value)
+
+    @property
+    @pulumi.getter(name="rolSuper")
+    def rol_super(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Indicates whether a user has the super-user permission.
+        """
+        return pulumi.get(self, "rol_super")
+
+    @rol_super.setter
+    def rol_super(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "rol_super", value)
+
+
+@pulumi.input_type
+class PgDatabasePrivilegeUserArgs:
+    def __init__(__self__, *,
+                 name: pulumi.Input[str],
+                 readonly: pulumi.Input[bool],
+                 schema_name: pulumi.Input[str]):
+        """
+        :param pulumi.Input[str] name: Specifies the username of the database account.
+        :param pulumi.Input[bool] readonly: Specifies the read-only permission. The value can be:
+               + **true**: indicates the read-only permission.
+               + **false**: indicates the read and write permission.
+        :param pulumi.Input[str] schema_name: Specifies the name of the schema.
+        """
+        pulumi.set(__self__, "name", name)
+        pulumi.set(__self__, "readonly", readonly)
+        pulumi.set(__self__, "schema_name", schema_name)
+
+    @property
+    @pulumi.getter
+    def name(self) -> pulumi.Input[str]:
+        """
+        Specifies the username of the database account.
+        """
+        return pulumi.get(self, "name")
+
+    @name.setter
+    def name(self, value: pulumi.Input[str]):
+        pulumi.set(self, "name", value)
+
+    @property
+    @pulumi.getter
+    def readonly(self) -> pulumi.Input[bool]:
+        """
+        Specifies the read-only permission. The value can be:
+        + **true**: indicates the read-only permission.
+        + **false**: indicates the read and write permission.
+        """
+        return pulumi.get(self, "readonly")
+
+    @readonly.setter
+    def readonly(self, value: pulumi.Input[bool]):
+        pulumi.set(self, "readonly", value)
+
+    @property
+    @pulumi.getter(name="schemaName")
+    def schema_name(self) -> pulumi.Input[str]:
+        """
+        Specifies the name of the schema.
+        """
+        return pulumi.get(self, "schema_name")
+
+    @schema_name.setter
+    def schema_name(self, value: pulumi.Input[str]):
+        pulumi.set(self, "schema_name", value)
+
+
+@pulumi.input_type
+class PgHbaHostBasedAuthenticationArgs:
+    def __init__(__self__, *,
+                 address: pulumi.Input[str],
+                 database: pulumi.Input[str],
+                 method: pulumi.Input[str],
+                 type: pulumi.Input[str],
+                 user: pulumi.Input[str],
+                 mask: Optional[pulumi.Input[str]] = None):
+        """
+        :param pulumi.Input[str] address: Specifies the client IP address.
+               + **0.0.0.0/0** indicates that the user can access the database from any IP address.
+        :param pulumi.Input[str] database: Specifies the database name other than **template0** and **template1**.
+               + **all** indicates all databases of the DB instance.
+               + Use commas (,) to separate multiple databases.
+        :param pulumi.Input[str] method: Specifies the authentication mode. Value options: **reject**, **md5** and
+               **scram-sha-256**.
+        :param pulumi.Input[str] type: Specifies the connection type. Value options: **host**, **hostssl** and **hostnossl**.
+        :param pulumi.Input[str] user: Specifies the name of a user other than **rdsAdmin**, **rdsMetric**, **rdsBackup**,
+               **rdsRepl** and **rdsProxy**.
+               + **all** indicates all database users of the DB instance.
+               + Use commas (,) to separate multiple user names.
+        :param pulumi.Input[str] mask: Specifies the subnet mask. It is mandatory when `address` does not contain mask.
+        """
+        pulumi.set(__self__, "address", address)
+        pulumi.set(__self__, "database", database)
+        pulumi.set(__self__, "method", method)
+        pulumi.set(__self__, "type", type)
+        pulumi.set(__self__, "user", user)
+        if mask is not None:
+            pulumi.set(__self__, "mask", mask)
+
+    @property
+    @pulumi.getter
+    def address(self) -> pulumi.Input[str]:
+        """
+        Specifies the client IP address.
+        + **0.0.0.0/0** indicates that the user can access the database from any IP address.
+        """
+        return pulumi.get(self, "address")
+
+    @address.setter
+    def address(self, value: pulumi.Input[str]):
+        pulumi.set(self, "address", value)
+
+    @property
+    @pulumi.getter
+    def database(self) -> pulumi.Input[str]:
+        """
+        Specifies the database name other than **template0** and **template1**.
+        + **all** indicates all databases of the DB instance.
+        + Use commas (,) to separate multiple databases.
+        """
+        return pulumi.get(self, "database")
+
+    @database.setter
+    def database(self, value: pulumi.Input[str]):
+        pulumi.set(self, "database", value)
+
+    @property
+    @pulumi.getter
+    def method(self) -> pulumi.Input[str]:
+        """
+        Specifies the authentication mode. Value options: **reject**, **md5** and
+        **scram-sha-256**.
+        """
+        return pulumi.get(self, "method")
+
+    @method.setter
+    def method(self, value: pulumi.Input[str]):
+        pulumi.set(self, "method", value)
+
+    @property
+    @pulumi.getter
+    def type(self) -> pulumi.Input[str]:
+        """
+        Specifies the connection type. Value options: **host**, **hostssl** and **hostnossl**.
+        """
+        return pulumi.get(self, "type")
+
+    @type.setter
+    def type(self, value: pulumi.Input[str]):
+        pulumi.set(self, "type", value)
+
+    @property
+    @pulumi.getter
+    def user(self) -> pulumi.Input[str]:
+        """
+        Specifies the name of a user other than **rdsAdmin**, **rdsMetric**, **rdsBackup**,
+        **rdsRepl** and **rdsProxy**.
+        + **all** indicates all database users of the DB instance.
+        + Use commas (,) to separate multiple user names.
+        """
+        return pulumi.get(self, "user")
+
+    @user.setter
+    def user(self, value: pulumi.Input[str]):
+        pulumi.set(self, "user", value)
+
+    @property
+    @pulumi.getter
+    def mask(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the subnet mask. It is mandatory when `address` does not contain mask.
+        """
+        return pulumi.get(self, "mask")
+
+    @mask.setter
+    def mask(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "mask", value)
+
+
+@pulumi.input_type
 class ReadReplicaInstanceDbArgs:
     def __init__(__self__, *,
                  port: Optional[pulumi.Input[int]] = None,
@@ -643,16 +1442,19 @@ class ReadReplicaInstanceDbArgs:
                  user_name: Optional[pulumi.Input[str]] = None,
                  version: Optional[pulumi.Input[str]] = None):
         """
-        :param pulumi.Input[int] port: Indicates the database port information.
-        :param pulumi.Input[str] type: Specifies the volume type. Its value can be any of the following and is
-               case-sensitive:
-               + *ULTRAHIGH*: SSD storage.
-               + *LOCALSSD*: local SSD storage.
-               + *CLOUDSSD*: cloud SSD storage. This storage type is supported only with general-purpose and dedicated DB
+        :param pulumi.Input[int] port: Specifies the database port.
+               + The MySQL database port ranges from `1,024` to `65,535` (excluding `12,017` and `33,071`, which are occupied by
+               the RDS system and cannot be used). The default value is `3,306`.
+               + The PostgreSQL database port ranges from `2,100` to `9,500`. The default value is `5,432`.
+               + The Microsoft SQL Server database port can be `1,433` or ranges from `2,100` to `9,500`, excluding `5,355` and
+               `5,985`. The default value is `1,433`.
+        :param pulumi.Input[str] type: Specifies the volume type. It must same with the type of the primary instance.
+               Its value can be any of the following and is case-sensitive:
+               + **ULTRAHIGH**: SSD storage.
+               + **LOCALSSD**: local SSD storage.
+               + **CLOUDSSD**: cloud SSD storage. This storage type is supported only with general-purpose and dedicated DB
                instances.
-               + *ESSD*: extreme SSD storage.
-        :param pulumi.Input[str] user_name: Indicates the default user name of database.
-        :param pulumi.Input[str] version: Indicates the database version.
+               + **ESSD**: extreme SSD storage.
         """
         if port is not None:
             pulumi.set(__self__, "port", port)
@@ -667,7 +1469,12 @@ class ReadReplicaInstanceDbArgs:
     @pulumi.getter
     def port(self) -> Optional[pulumi.Input[int]]:
         """
-        Indicates the database port information.
+        Specifies the database port.
+        + The MySQL database port ranges from `1,024` to `65,535` (excluding `12,017` and `33,071`, which are occupied by
+        the RDS system and cannot be used). The default value is `3,306`.
+        + The PostgreSQL database port ranges from `2,100` to `9,500`. The default value is `5,432`.
+        + The Microsoft SQL Server database port can be `1,433` or ranges from `2,100` to `9,500`, excluding `5,355` and
+        `5,985`. The default value is `1,433`.
         """
         return pulumi.get(self, "port")
 
@@ -679,13 +1486,13 @@ class ReadReplicaInstanceDbArgs:
     @pulumi.getter
     def type(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the volume type. Its value can be any of the following and is
-        case-sensitive:
-        + *ULTRAHIGH*: SSD storage.
-        + *LOCALSSD*: local SSD storage.
-        + *CLOUDSSD*: cloud SSD storage. This storage type is supported only with general-purpose and dedicated DB
+        Specifies the volume type. It must same with the type of the primary instance.
+        Its value can be any of the following and is case-sensitive:
+        + **ULTRAHIGH**: SSD storage.
+        + **LOCALSSD**: local SSD storage.
+        + **CLOUDSSD**: cloud SSD storage. This storage type is supported only with general-purpose and dedicated DB
         instances.
-        + *ESSD*: extreme SSD storage.
+        + **ESSD**: extreme SSD storage.
         """
         return pulumi.get(self, "type")
 
@@ -696,9 +1503,6 @@ class ReadReplicaInstanceDbArgs:
     @property
     @pulumi.getter(name="userName")
     def user_name(self) -> Optional[pulumi.Input[str]]:
-        """
-        Indicates the default user name of database.
-        """
         return pulumi.get(self, "user_name")
 
     @user_name.setter
@@ -708,9 +1512,6 @@ class ReadReplicaInstanceDbArgs:
     @property
     @pulumi.getter
     def version(self) -> Optional[pulumi.Input[str]]:
-        """
-        Indicates the database version.
-        """
         return pulumi.get(self, "version")
 
     @version.setter
@@ -719,39 +1520,91 @@ class ReadReplicaInstanceDbArgs:
 
 
 @pulumi.input_type
+class ReadReplicaInstanceParameterArgs:
+    def __init__(__self__, *,
+                 name: pulumi.Input[str],
+                 value: pulumi.Input[str]):
+        """
+        :param pulumi.Input[str] name: Specifies the parameter name. Some of them needs the instance to be restarted
+               to take effect.
+        :param pulumi.Input[str] value: Specifies the parameter value.
+        """
+        pulumi.set(__self__, "name", name)
+        pulumi.set(__self__, "value", value)
+
+    @property
+    @pulumi.getter
+    def name(self) -> pulumi.Input[str]:
+        """
+        Specifies the parameter name. Some of them needs the instance to be restarted
+        to take effect.
+        """
+        return pulumi.get(self, "name")
+
+    @name.setter
+    def name(self, value: pulumi.Input[str]):
+        pulumi.set(self, "name", value)
+
+    @property
+    @pulumi.getter
+    def value(self) -> pulumi.Input[str]:
+        """
+        Specifies the parameter value.
+        """
+        return pulumi.get(self, "value")
+
+    @value.setter
+    def value(self, value: pulumi.Input[str]):
+        pulumi.set(self, "value", value)
+
+
+@pulumi.input_type
 class ReadReplicaInstanceVolumeArgs:
     def __init__(__self__, *,
                  type: pulumi.Input[str],
                  disk_encryption_id: Optional[pulumi.Input[str]] = None,
-                 size: Optional[pulumi.Input[int]] = None):
+                 limit_size: Optional[pulumi.Input[int]] = None,
+                 size: Optional[pulumi.Input[int]] = None,
+                 trigger_threshold: Optional[pulumi.Input[int]] = None):
         """
-        :param pulumi.Input[str] type: Specifies the volume type. Its value can be any of the following and is
-               case-sensitive:
-               + *ULTRAHIGH*: SSD storage.
-               + *LOCALSSD*: local SSD storage.
-               + *CLOUDSSD*: cloud SSD storage. This storage type is supported only with general-purpose and dedicated DB
+        :param pulumi.Input[str] type: Specifies the volume type. It must same with the type of the primary instance.
+               Its value can be any of the following and is case-sensitive:
+               + **ULTRAHIGH**: SSD storage.
+               + **LOCALSSD**: local SSD storage.
+               + **CLOUDSSD**: cloud SSD storage. This storage type is supported only with general-purpose and dedicated DB
                instances.
-               + *ESSD*: extreme SSD storage.
-        :param pulumi.Input[str] disk_encryption_id: Specifies the key ID for disk encryption. Changing this parameter
-               will create a new resource.
+               + **ESSD**: extreme SSD storage.
+        :param pulumi.Input[int] limit_size: Specifies the upper limit of automatic expansion of storage, in GB.
+        :param pulumi.Input[int] size: Specifies the volume size. Its value range is from `40` GB to `4,000` GB. The value must
+               be a multiple of 10 and greater than the original size.
+        :param pulumi.Input[int] trigger_threshold: Specifies the threshold to trigger automatic expansion.  
+               If the available storage drops to this threshold or `10` GB, the automatic expansion is triggered.
+               The valid values are as follows:
+               + **10**
+               + **15**
+               + **20**
         """
         pulumi.set(__self__, "type", type)
         if disk_encryption_id is not None:
             pulumi.set(__self__, "disk_encryption_id", disk_encryption_id)
+        if limit_size is not None:
+            pulumi.set(__self__, "limit_size", limit_size)
         if size is not None:
             pulumi.set(__self__, "size", size)
+        if trigger_threshold is not None:
+            pulumi.set(__self__, "trigger_threshold", trigger_threshold)
 
     @property
     @pulumi.getter
     def type(self) -> pulumi.Input[str]:
         """
-        Specifies the volume type. Its value can be any of the following and is
-        case-sensitive:
-        + *ULTRAHIGH*: SSD storage.
-        + *LOCALSSD*: local SSD storage.
-        + *CLOUDSSD*: cloud SSD storage. This storage type is supported only with general-purpose and dedicated DB
+        Specifies the volume type. It must same with the type of the primary instance.
+        Its value can be any of the following and is case-sensitive:
+        + **ULTRAHIGH**: SSD storage.
+        + **LOCALSSD**: local SSD storage.
+        + **CLOUDSSD**: cloud SSD storage. This storage type is supported only with general-purpose and dedicated DB
         instances.
-        + *ESSD*: extreme SSD storage.
+        + **ESSD**: extreme SSD storage.
         """
         return pulumi.get(self, "type")
 
@@ -762,10 +1615,6 @@ class ReadReplicaInstanceVolumeArgs:
     @property
     @pulumi.getter(name="diskEncryptionId")
     def disk_encryption_id(self) -> Optional[pulumi.Input[str]]:
-        """
-        Specifies the key ID for disk encryption. Changing this parameter
-        will create a new resource.
-        """
         return pulumi.get(self, "disk_encryption_id")
 
     @disk_encryption_id.setter
@@ -773,12 +1622,87 @@ class ReadReplicaInstanceVolumeArgs:
         pulumi.set(self, "disk_encryption_id", value)
 
     @property
+    @pulumi.getter(name="limitSize")
+    def limit_size(self) -> Optional[pulumi.Input[int]]:
+        """
+        Specifies the upper limit of automatic expansion of storage, in GB.
+        """
+        return pulumi.get(self, "limit_size")
+
+    @limit_size.setter
+    def limit_size(self, value: Optional[pulumi.Input[int]]):
+        pulumi.set(self, "limit_size", value)
+
+    @property
     @pulumi.getter
     def size(self) -> Optional[pulumi.Input[int]]:
+        """
+        Specifies the volume size. Its value range is from `40` GB to `4,000` GB. The value must
+        be a multiple of 10 and greater than the original size.
+        """
         return pulumi.get(self, "size")
 
     @size.setter
     def size(self, value: Optional[pulumi.Input[int]]):
         pulumi.set(self, "size", value)
+
+    @property
+    @pulumi.getter(name="triggerThreshold")
+    def trigger_threshold(self) -> Optional[pulumi.Input[int]]:
+        """
+        Specifies the threshold to trigger automatic expansion.  
+        If the available storage drops to this threshold or `10` GB, the automatic expansion is triggered.
+        The valid values are as follows:
+        + **10**
+        + **15**
+        + **20**
+        """
+        return pulumi.get(self, "trigger_threshold")
+
+    @trigger_threshold.setter
+    def trigger_threshold(self, value: Optional[pulumi.Input[int]]):
+        pulumi.set(self, "trigger_threshold", value)
+
+
+@pulumi.input_type
+class SqlserverDatabasePrivilegeUserArgs:
+    def __init__(__self__, *,
+                 name: pulumi.Input[str],
+                 readonly: Optional[pulumi.Input[bool]] = None):
+        """
+        :param pulumi.Input[str] name: Specifies the username of the database account.
+        :param pulumi.Input[bool] readonly: Specifies the read-only permission. Value options:
+               + **true**: indicates the read-only permission.
+               + **false**: indicates the read and write permission.
+        """
+        pulumi.set(__self__, "name", name)
+        if readonly is not None:
+            pulumi.set(__self__, "readonly", readonly)
+
+    @property
+    @pulumi.getter
+    def name(self) -> pulumi.Input[str]:
+        """
+        Specifies the username of the database account.
+        """
+        return pulumi.get(self, "name")
+
+    @name.setter
+    def name(self, value: pulumi.Input[str]):
+        pulumi.set(self, "name", value)
+
+    @property
+    @pulumi.getter
+    def readonly(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies the read-only permission. Value options:
+        + **true**: indicates the read-only permission.
+        + **false**: indicates the read and write permission.
+        """
+        return pulumi.get(self, "readonly")
+
+    @readonly.setter
+    def readonly(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "readonly", value)
 
 

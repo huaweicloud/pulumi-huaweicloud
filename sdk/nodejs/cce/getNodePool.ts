@@ -83,6 +83,10 @@ export interface GetNodePoolResult {
      */
     readonly dataVolumes: outputs.Cce.GetNodePoolDataVolume[];
     /**
+     * The enterprise project ID of the node pool.
+     */
+    readonly enterpriseProjectId: string;
+    /**
      * Extended parameter.
      */
     readonly extendParam: {[key: string]: string};
@@ -90,6 +94,11 @@ export interface GetNodePoolResult {
      * The flavor ID.
      */
     readonly flavorId: string;
+    /**
+     * The hostname config of the kubernetes node.
+     * The object structure is documented below.
+     */
+    readonly hostnameConfigs: outputs.Cce.GetNodePoolHostnameConfig[];
     /**
      * The provider-assigned unique ID for this managed resource.
      */
@@ -151,7 +160,7 @@ export interface GetNodePoolResult {
      */
     readonly tags: {[key: string]: string};
     /**
-     * Node Pool type.
+     * The hostname type of the kubernetes node.
      */
     readonly type: string;
 }

@@ -51,34 +51,37 @@ func GetFlavors(ctx *pulumi.Context, args *GetFlavorsArgs, opts ...pulumi.Invoke
 
 // A collection of arguments for invoking getFlavors.
 type GetFlavorsArgs struct {
-	// Specifies the engine name of the dds, "DDS-Community" and "DDS-Enhanced" are
-	// supported.
+	// Specifies the engine name. Value options: **DDS-Community** and **DDS-Enhanced**.
 	EngineName string `pulumi:"engineName"`
-	// Specifies the ram of the dds flavor in GB.
+	// Specifies the DB version number. Value options: **3.4**, **4.0**, **4.2** and **4.4**.
+	EngineVersion *string `pulumi:"engineVersion"`
+	// Specifies the memory size in GB.
 	Memory *string `pulumi:"memory"`
 	// Specifies the region in which to obtain the flavors. If omitted,
 	// the provider-level region will be used.
 	Region *string `pulumi:"region"`
-	// Specifies the type of the dds falvor. "mongos", "shard", "config", "replica" and "single"
-	// are supported.
+	// Specifies the type of the flavor. Value options: **mongos**, **shard**, **config**,
+	// **replica**, **single** and **readonly**.
 	Type *string `pulumi:"type"`
-	// Specifies the vcpus of the dds flavor.
+	// Specifies the number of vCPUs.
 	Vcpus *string `pulumi:"vcpus"`
 }
 
 // A collection of values returned by getFlavors.
 type GetFlavorsResult struct {
-	EngineName string `pulumi:"engineName"`
+	// Indicates the engine name.
+	EngineName    string  `pulumi:"engineName"`
+	EngineVersion *string `pulumi:"engineVersion"`
 	// Indicates the flavors information. Structure is documented below.
 	Flavors []GetFlavorsFlavor `pulumi:"flavors"`
 	// The provider-assigned unique ID for this managed resource.
 	Id string `pulumi:"id"`
-	// See `memory` above.
+	// Indicates the memory size in GB.
 	Memory *string `pulumi:"memory"`
 	Region string  `pulumi:"region"`
-	// See `type` above.
+	// Indicates the type of the flavor.
 	Type *string `pulumi:"type"`
-	// See `vcpus` above.
+	// Indicates the number of vCPUs.
 	Vcpus *string `pulumi:"vcpus"`
 }
 
@@ -97,18 +100,19 @@ func GetFlavorsOutput(ctx *pulumi.Context, args GetFlavorsOutputArgs, opts ...pu
 
 // A collection of arguments for invoking getFlavors.
 type GetFlavorsOutputArgs struct {
-	// Specifies the engine name of the dds, "DDS-Community" and "DDS-Enhanced" are
-	// supported.
+	// Specifies the engine name. Value options: **DDS-Community** and **DDS-Enhanced**.
 	EngineName pulumi.StringInput `pulumi:"engineName"`
-	// Specifies the ram of the dds flavor in GB.
+	// Specifies the DB version number. Value options: **3.4**, **4.0**, **4.2** and **4.4**.
+	EngineVersion pulumi.StringPtrInput `pulumi:"engineVersion"`
+	// Specifies the memory size in GB.
 	Memory pulumi.StringPtrInput `pulumi:"memory"`
 	// Specifies the region in which to obtain the flavors. If omitted,
 	// the provider-level region will be used.
 	Region pulumi.StringPtrInput `pulumi:"region"`
-	// Specifies the type of the dds falvor. "mongos", "shard", "config", "replica" and "single"
-	// are supported.
+	// Specifies the type of the flavor. Value options: **mongos**, **shard**, **config**,
+	// **replica**, **single** and **readonly**.
 	Type pulumi.StringPtrInput `pulumi:"type"`
-	// Specifies the vcpus of the dds flavor.
+	// Specifies the number of vCPUs.
 	Vcpus pulumi.StringPtrInput `pulumi:"vcpus"`
 }
 
@@ -131,8 +135,13 @@ func (o GetFlavorsResultOutput) ToGetFlavorsResultOutputWithContext(ctx context.
 	return o
 }
 
+// Indicates the engine name.
 func (o GetFlavorsResultOutput) EngineName() pulumi.StringOutput {
 	return o.ApplyT(func(v GetFlavorsResult) string { return v.EngineName }).(pulumi.StringOutput)
+}
+
+func (o GetFlavorsResultOutput) EngineVersion() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v GetFlavorsResult) *string { return v.EngineVersion }).(pulumi.StringPtrOutput)
 }
 
 // Indicates the flavors information. Structure is documented below.
@@ -145,7 +154,7 @@ func (o GetFlavorsResultOutput) Id() pulumi.StringOutput {
 	return o.ApplyT(func(v GetFlavorsResult) string { return v.Id }).(pulumi.StringOutput)
 }
 
-// See `memory` above.
+// Indicates the memory size in GB.
 func (o GetFlavorsResultOutput) Memory() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v GetFlavorsResult) *string { return v.Memory }).(pulumi.StringPtrOutput)
 }
@@ -154,12 +163,12 @@ func (o GetFlavorsResultOutput) Region() pulumi.StringOutput {
 	return o.ApplyT(func(v GetFlavorsResult) string { return v.Region }).(pulumi.StringOutput)
 }
 
-// See `type` above.
+// Indicates the type of the flavor.
 func (o GetFlavorsResultOutput) Type() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v GetFlavorsResult) *string { return v.Type }).(pulumi.StringPtrOutput)
 }
 
-// See `vcpus` above.
+// Indicates the number of vCPUs.
 func (o GetFlavorsResultOutput) Vcpus() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v GetFlavorsResult) *string { return v.Vcpus }).(pulumi.StringPtrOutput)
 }

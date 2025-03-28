@@ -269,8 +269,7 @@ func (o AddonValuesPtrOutput) FlavorJson() pulumi.StringPtrOutput {
 type ClusterCertificateCluster struct {
 	// The certificate data.
 	CertificateAuthorityData *string `pulumi:"certificateAuthorityData"`
-	// Specifies the cluster name.
-	// Changing this parameter will create a new cluster resource.
+	// Specifies the component name.
 	Name *string `pulumi:"name"`
 	// The server IP address.
 	Server *string `pulumi:"server"`
@@ -290,8 +289,7 @@ type ClusterCertificateClusterInput interface {
 type ClusterCertificateClusterArgs struct {
 	// The certificate data.
 	CertificateAuthorityData pulumi.StringPtrInput `pulumi:"certificateAuthorityData"`
-	// Specifies the cluster name.
-	// Changing this parameter will create a new cluster resource.
+	// Specifies the component name.
 	Name pulumi.StringPtrInput `pulumi:"name"`
 	// The server IP address.
 	Server pulumi.StringPtrInput `pulumi:"server"`
@@ -353,8 +351,7 @@ func (o ClusterCertificateClusterOutput) CertificateAuthorityData() pulumi.Strin
 	return o.ApplyT(func(v ClusterCertificateCluster) *string { return v.CertificateAuthorityData }).(pulumi.StringPtrOutput)
 }
 
-// Specifies the cluster name.
-// Changing this parameter will create a new cluster resource.
+// Specifies the component name.
 func (o ClusterCertificateClusterOutput) Name() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v ClusterCertificateCluster) *string { return v.Name }).(pulumi.StringPtrOutput)
 }
@@ -389,8 +386,7 @@ type ClusterCertificateUser struct {
 	ClientCertificateData *string `pulumi:"clientCertificateData"`
 	// The client key data.
 	ClientKeyData *string `pulumi:"clientKeyData"`
-	// Specifies the cluster name.
-	// Changing this parameter will create a new cluster resource.
+	// Specifies the component name.
 	Name *string `pulumi:"name"`
 }
 
@@ -410,8 +406,7 @@ type ClusterCertificateUserArgs struct {
 	ClientCertificateData pulumi.StringPtrInput `pulumi:"clientCertificateData"`
 	// The client key data.
 	ClientKeyData pulumi.StringPtrInput `pulumi:"clientKeyData"`
-	// Specifies the cluster name.
-	// Changing this parameter will create a new cluster resource.
+	// Specifies the component name.
 	Name pulumi.StringPtrInput `pulumi:"name"`
 }
 
@@ -476,8 +471,7 @@ func (o ClusterCertificateUserOutput) ClientKeyData() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v ClusterCertificateUser) *string { return v.ClientKeyData }).(pulumi.StringPtrOutput)
 }
 
-// Specifies the cluster name.
-// Changing this parameter will create a new cluster resource.
+// Specifies the component name.
 func (o ClusterCertificateUserOutput) Name() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v ClusterCertificateUser) *string { return v.Name }).(pulumi.StringPtrOutput)
 }
@@ -500,6 +494,414 @@ func (o ClusterCertificateUserArrayOutput) Index(i pulumi.IntInput) ClusterCerti
 	return pulumi.All(o, i).ApplyT(func(vs []interface{}) ClusterCertificateUser {
 		return vs[0].([]ClusterCertificateUser)[vs[1].(int)]
 	}).(ClusterCertificateUserOutput)
+}
+
+type ClusterComponentConfiguration struct {
+	// Specifies JSON string of the component configurations.
+	Configurations *string `pulumi:"configurations"`
+	// Specifies the component name.
+	Name string `pulumi:"name"`
+}
+
+// ClusterComponentConfigurationInput is an input type that accepts ClusterComponentConfigurationArgs and ClusterComponentConfigurationOutput values.
+// You can construct a concrete instance of `ClusterComponentConfigurationInput` via:
+//
+//	ClusterComponentConfigurationArgs{...}
+type ClusterComponentConfigurationInput interface {
+	pulumi.Input
+
+	ToClusterComponentConfigurationOutput() ClusterComponentConfigurationOutput
+	ToClusterComponentConfigurationOutputWithContext(context.Context) ClusterComponentConfigurationOutput
+}
+
+type ClusterComponentConfigurationArgs struct {
+	// Specifies JSON string of the component configurations.
+	Configurations pulumi.StringPtrInput `pulumi:"configurations"`
+	// Specifies the component name.
+	Name pulumi.StringInput `pulumi:"name"`
+}
+
+func (ClusterComponentConfigurationArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*ClusterComponentConfiguration)(nil)).Elem()
+}
+
+func (i ClusterComponentConfigurationArgs) ToClusterComponentConfigurationOutput() ClusterComponentConfigurationOutput {
+	return i.ToClusterComponentConfigurationOutputWithContext(context.Background())
+}
+
+func (i ClusterComponentConfigurationArgs) ToClusterComponentConfigurationOutputWithContext(ctx context.Context) ClusterComponentConfigurationOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(ClusterComponentConfigurationOutput)
+}
+
+// ClusterComponentConfigurationArrayInput is an input type that accepts ClusterComponentConfigurationArray and ClusterComponentConfigurationArrayOutput values.
+// You can construct a concrete instance of `ClusterComponentConfigurationArrayInput` via:
+//
+//	ClusterComponentConfigurationArray{ ClusterComponentConfigurationArgs{...} }
+type ClusterComponentConfigurationArrayInput interface {
+	pulumi.Input
+
+	ToClusterComponentConfigurationArrayOutput() ClusterComponentConfigurationArrayOutput
+	ToClusterComponentConfigurationArrayOutputWithContext(context.Context) ClusterComponentConfigurationArrayOutput
+}
+
+type ClusterComponentConfigurationArray []ClusterComponentConfigurationInput
+
+func (ClusterComponentConfigurationArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]ClusterComponentConfiguration)(nil)).Elem()
+}
+
+func (i ClusterComponentConfigurationArray) ToClusterComponentConfigurationArrayOutput() ClusterComponentConfigurationArrayOutput {
+	return i.ToClusterComponentConfigurationArrayOutputWithContext(context.Background())
+}
+
+func (i ClusterComponentConfigurationArray) ToClusterComponentConfigurationArrayOutputWithContext(ctx context.Context) ClusterComponentConfigurationArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(ClusterComponentConfigurationArrayOutput)
+}
+
+type ClusterComponentConfigurationOutput struct{ *pulumi.OutputState }
+
+func (ClusterComponentConfigurationOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*ClusterComponentConfiguration)(nil)).Elem()
+}
+
+func (o ClusterComponentConfigurationOutput) ToClusterComponentConfigurationOutput() ClusterComponentConfigurationOutput {
+	return o
+}
+
+func (o ClusterComponentConfigurationOutput) ToClusterComponentConfigurationOutputWithContext(ctx context.Context) ClusterComponentConfigurationOutput {
+	return o
+}
+
+// Specifies JSON string of the component configurations.
+func (o ClusterComponentConfigurationOutput) Configurations() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v ClusterComponentConfiguration) *string { return v.Configurations }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the component name.
+func (o ClusterComponentConfigurationOutput) Name() pulumi.StringOutput {
+	return o.ApplyT(func(v ClusterComponentConfiguration) string { return v.Name }).(pulumi.StringOutput)
+}
+
+type ClusterComponentConfigurationArrayOutput struct{ *pulumi.OutputState }
+
+func (ClusterComponentConfigurationArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]ClusterComponentConfiguration)(nil)).Elem()
+}
+
+func (o ClusterComponentConfigurationArrayOutput) ToClusterComponentConfigurationArrayOutput() ClusterComponentConfigurationArrayOutput {
+	return o
+}
+
+func (o ClusterComponentConfigurationArrayOutput) ToClusterComponentConfigurationArrayOutputWithContext(ctx context.Context) ClusterComponentConfigurationArrayOutput {
+	return o
+}
+
+func (o ClusterComponentConfigurationArrayOutput) Index(i pulumi.IntInput) ClusterComponentConfigurationOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) ClusterComponentConfiguration {
+		return vs[0].([]ClusterComponentConfiguration)[vs[1].(int)]
+	}).(ClusterComponentConfigurationOutput)
+}
+
+type ClusterExtendParam struct {
+	// Specifies the AZ of master nodes in the cluster. The value can be:
+	// + **multi_az**: The cluster will span across AZs. This field is configurable only for high-availability clusters.
+	// + **AZ of the dedicated cloud computing pool**: The cluster will be deployed in the AZ of Dedicated Cloud (DeC).
+	//   This parameter is mandatory for dedicated CCE clusters.
+	ClusterAz *string `pulumi:"clusterAz"`
+	// Specifies the cluster CPU management policy.
+	// The value can be:
+	// + **none**: CPU cores will not be exclusively allocated to workload pods.
+	//   Select this value if you want a large pool of shareable CPU cores.
+	// + **static**: CPU cores can be exclusively allocated to workload pods.
+	//   Select this value if your workload is sensitive to latency in CPU cache and scheduling.In a CCE Turbo cluster,
+	//   this setting is valid only for nodes where common containers, not Kata containers, run.
+	CpuManagerPolicy *string `pulumi:"cpuManagerPolicy"`
+	// Specifies the specifications of the master node
+	// in the dedicated hybrid cluster.
+	// Changing this parameter will create a new cluster resource.
+	DecMasterFlavor *string `pulumi:"decMasterFlavor"`
+	// Specifies the default UmaskMode configuration of Docker in a
+	// cluster. The value can be **secure** or **normal**, defaults to normal.
+	// Changing this parameter will create a new cluster resource.
+	DockerUmaskMode *string `pulumi:"dockerUmaskMode"`
+	// Specifies whether the system and data disks of a master node
+	// use dedicated distributed storage. If left unspecified, EVS disks are used by default.
+	// This parameter is mandatory for dedicated CCE clusters.
+	// It is in the following format:
+	DssMasterVolumes *string `pulumi:"dssMasterVolumes"`
+	// Specifies the number of mask bits of the fixed IP address pool
+	// of the container network model. This field can only be used when `containerNetworkType` is set to **vpc-router**.
+	// Changing this parameter will create a new cluster resource.
+	FixPoolMask *string `pulumi:"fixPoolMask"`
+}
+
+// ClusterExtendParamInput is an input type that accepts ClusterExtendParamArgs and ClusterExtendParamOutput values.
+// You can construct a concrete instance of `ClusterExtendParamInput` via:
+//
+//	ClusterExtendParamArgs{...}
+type ClusterExtendParamInput interface {
+	pulumi.Input
+
+	ToClusterExtendParamOutput() ClusterExtendParamOutput
+	ToClusterExtendParamOutputWithContext(context.Context) ClusterExtendParamOutput
+}
+
+type ClusterExtendParamArgs struct {
+	// Specifies the AZ of master nodes in the cluster. The value can be:
+	// + **multi_az**: The cluster will span across AZs. This field is configurable only for high-availability clusters.
+	// + **AZ of the dedicated cloud computing pool**: The cluster will be deployed in the AZ of Dedicated Cloud (DeC).
+	//   This parameter is mandatory for dedicated CCE clusters.
+	ClusterAz pulumi.StringPtrInput `pulumi:"clusterAz"`
+	// Specifies the cluster CPU management policy.
+	// The value can be:
+	// + **none**: CPU cores will not be exclusively allocated to workload pods.
+	//   Select this value if you want a large pool of shareable CPU cores.
+	// + **static**: CPU cores can be exclusively allocated to workload pods.
+	//   Select this value if your workload is sensitive to latency in CPU cache and scheduling.In a CCE Turbo cluster,
+	//   this setting is valid only for nodes where common containers, not Kata containers, run.
+	CpuManagerPolicy pulumi.StringPtrInput `pulumi:"cpuManagerPolicy"`
+	// Specifies the specifications of the master node
+	// in the dedicated hybrid cluster.
+	// Changing this parameter will create a new cluster resource.
+	DecMasterFlavor pulumi.StringPtrInput `pulumi:"decMasterFlavor"`
+	// Specifies the default UmaskMode configuration of Docker in a
+	// cluster. The value can be **secure** or **normal**, defaults to normal.
+	// Changing this parameter will create a new cluster resource.
+	DockerUmaskMode pulumi.StringPtrInput `pulumi:"dockerUmaskMode"`
+	// Specifies whether the system and data disks of a master node
+	// use dedicated distributed storage. If left unspecified, EVS disks are used by default.
+	// This parameter is mandatory for dedicated CCE clusters.
+	// It is in the following format:
+	DssMasterVolumes pulumi.StringPtrInput `pulumi:"dssMasterVolumes"`
+	// Specifies the number of mask bits of the fixed IP address pool
+	// of the container network model. This field can only be used when `containerNetworkType` is set to **vpc-router**.
+	// Changing this parameter will create a new cluster resource.
+	FixPoolMask pulumi.StringPtrInput `pulumi:"fixPoolMask"`
+}
+
+func (ClusterExtendParamArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*ClusterExtendParam)(nil)).Elem()
+}
+
+func (i ClusterExtendParamArgs) ToClusterExtendParamOutput() ClusterExtendParamOutput {
+	return i.ToClusterExtendParamOutputWithContext(context.Background())
+}
+
+func (i ClusterExtendParamArgs) ToClusterExtendParamOutputWithContext(ctx context.Context) ClusterExtendParamOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(ClusterExtendParamOutput)
+}
+
+// ClusterExtendParamArrayInput is an input type that accepts ClusterExtendParamArray and ClusterExtendParamArrayOutput values.
+// You can construct a concrete instance of `ClusterExtendParamArrayInput` via:
+//
+//	ClusterExtendParamArray{ ClusterExtendParamArgs{...} }
+type ClusterExtendParamArrayInput interface {
+	pulumi.Input
+
+	ToClusterExtendParamArrayOutput() ClusterExtendParamArrayOutput
+	ToClusterExtendParamArrayOutputWithContext(context.Context) ClusterExtendParamArrayOutput
+}
+
+type ClusterExtendParamArray []ClusterExtendParamInput
+
+func (ClusterExtendParamArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]ClusterExtendParam)(nil)).Elem()
+}
+
+func (i ClusterExtendParamArray) ToClusterExtendParamArrayOutput() ClusterExtendParamArrayOutput {
+	return i.ToClusterExtendParamArrayOutputWithContext(context.Background())
+}
+
+func (i ClusterExtendParamArray) ToClusterExtendParamArrayOutputWithContext(ctx context.Context) ClusterExtendParamArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(ClusterExtendParamArrayOutput)
+}
+
+type ClusterExtendParamOutput struct{ *pulumi.OutputState }
+
+func (ClusterExtendParamOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*ClusterExtendParam)(nil)).Elem()
+}
+
+func (o ClusterExtendParamOutput) ToClusterExtendParamOutput() ClusterExtendParamOutput {
+	return o
+}
+
+func (o ClusterExtendParamOutput) ToClusterExtendParamOutputWithContext(ctx context.Context) ClusterExtendParamOutput {
+	return o
+}
+
+// Specifies the AZ of master nodes in the cluster. The value can be:
+//   - **multi_az**: The cluster will span across AZs. This field is configurable only for high-availability clusters.
+//   - **AZ of the dedicated cloud computing pool**: The cluster will be deployed in the AZ of Dedicated Cloud (DeC).
+//     This parameter is mandatory for dedicated CCE clusters.
+func (o ClusterExtendParamOutput) ClusterAz() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v ClusterExtendParam) *string { return v.ClusterAz }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the cluster CPU management policy.
+// The value can be:
+//   - **none**: CPU cores will not be exclusively allocated to workload pods.
+//     Select this value if you want a large pool of shareable CPU cores.
+//   - **static**: CPU cores can be exclusively allocated to workload pods.
+//     Select this value if your workload is sensitive to latency in CPU cache and scheduling.In a CCE Turbo cluster,
+//     this setting is valid only for nodes where common containers, not Kata containers, run.
+func (o ClusterExtendParamOutput) CpuManagerPolicy() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v ClusterExtendParam) *string { return v.CpuManagerPolicy }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the specifications of the master node
+// in the dedicated hybrid cluster.
+// Changing this parameter will create a new cluster resource.
+func (o ClusterExtendParamOutput) DecMasterFlavor() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v ClusterExtendParam) *string { return v.DecMasterFlavor }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the default UmaskMode configuration of Docker in a
+// cluster. The value can be **secure** or **normal**, defaults to normal.
+// Changing this parameter will create a new cluster resource.
+func (o ClusterExtendParamOutput) DockerUmaskMode() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v ClusterExtendParam) *string { return v.DockerUmaskMode }).(pulumi.StringPtrOutput)
+}
+
+// Specifies whether the system and data disks of a master node
+// use dedicated distributed storage. If left unspecified, EVS disks are used by default.
+// This parameter is mandatory for dedicated CCE clusters.
+// It is in the following format:
+func (o ClusterExtendParamOutput) DssMasterVolumes() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v ClusterExtendParam) *string { return v.DssMasterVolumes }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the number of mask bits of the fixed IP address pool
+// of the container network model. This field can only be used when `containerNetworkType` is set to **vpc-router**.
+// Changing this parameter will create a new cluster resource.
+func (o ClusterExtendParamOutput) FixPoolMask() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v ClusterExtendParam) *string { return v.FixPoolMask }).(pulumi.StringPtrOutput)
+}
+
+type ClusterExtendParamArrayOutput struct{ *pulumi.OutputState }
+
+func (ClusterExtendParamArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]ClusterExtendParam)(nil)).Elem()
+}
+
+func (o ClusterExtendParamArrayOutput) ToClusterExtendParamArrayOutput() ClusterExtendParamArrayOutput {
+	return o
+}
+
+func (o ClusterExtendParamArrayOutput) ToClusterExtendParamArrayOutputWithContext(ctx context.Context) ClusterExtendParamArrayOutput {
+	return o
+}
+
+func (o ClusterExtendParamArrayOutput) Index(i pulumi.IntInput) ClusterExtendParamOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) ClusterExtendParam {
+		return vs[0].([]ClusterExtendParam)[vs[1].(int)]
+	}).(ClusterExtendParamOutput)
+}
+
+type ClusterLogConfigLogConfig struct {
+	// Specifies whether to collect the log.
+	Enable *bool `pulumi:"enable"`
+	// Specifies the log type.
+	Name *string `pulumi:"name"`
+}
+
+// ClusterLogConfigLogConfigInput is an input type that accepts ClusterLogConfigLogConfigArgs and ClusterLogConfigLogConfigOutput values.
+// You can construct a concrete instance of `ClusterLogConfigLogConfigInput` via:
+//
+//	ClusterLogConfigLogConfigArgs{...}
+type ClusterLogConfigLogConfigInput interface {
+	pulumi.Input
+
+	ToClusterLogConfigLogConfigOutput() ClusterLogConfigLogConfigOutput
+	ToClusterLogConfigLogConfigOutputWithContext(context.Context) ClusterLogConfigLogConfigOutput
+}
+
+type ClusterLogConfigLogConfigArgs struct {
+	// Specifies whether to collect the log.
+	Enable pulumi.BoolPtrInput `pulumi:"enable"`
+	// Specifies the log type.
+	Name pulumi.StringPtrInput `pulumi:"name"`
+}
+
+func (ClusterLogConfigLogConfigArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*ClusterLogConfigLogConfig)(nil)).Elem()
+}
+
+func (i ClusterLogConfigLogConfigArgs) ToClusterLogConfigLogConfigOutput() ClusterLogConfigLogConfigOutput {
+	return i.ToClusterLogConfigLogConfigOutputWithContext(context.Background())
+}
+
+func (i ClusterLogConfigLogConfigArgs) ToClusterLogConfigLogConfigOutputWithContext(ctx context.Context) ClusterLogConfigLogConfigOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(ClusterLogConfigLogConfigOutput)
+}
+
+// ClusterLogConfigLogConfigArrayInput is an input type that accepts ClusterLogConfigLogConfigArray and ClusterLogConfigLogConfigArrayOutput values.
+// You can construct a concrete instance of `ClusterLogConfigLogConfigArrayInput` via:
+//
+//	ClusterLogConfigLogConfigArray{ ClusterLogConfigLogConfigArgs{...} }
+type ClusterLogConfigLogConfigArrayInput interface {
+	pulumi.Input
+
+	ToClusterLogConfigLogConfigArrayOutput() ClusterLogConfigLogConfigArrayOutput
+	ToClusterLogConfigLogConfigArrayOutputWithContext(context.Context) ClusterLogConfigLogConfigArrayOutput
+}
+
+type ClusterLogConfigLogConfigArray []ClusterLogConfigLogConfigInput
+
+func (ClusterLogConfigLogConfigArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]ClusterLogConfigLogConfig)(nil)).Elem()
+}
+
+func (i ClusterLogConfigLogConfigArray) ToClusterLogConfigLogConfigArrayOutput() ClusterLogConfigLogConfigArrayOutput {
+	return i.ToClusterLogConfigLogConfigArrayOutputWithContext(context.Background())
+}
+
+func (i ClusterLogConfigLogConfigArray) ToClusterLogConfigLogConfigArrayOutputWithContext(ctx context.Context) ClusterLogConfigLogConfigArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(ClusterLogConfigLogConfigArrayOutput)
+}
+
+type ClusterLogConfigLogConfigOutput struct{ *pulumi.OutputState }
+
+func (ClusterLogConfigLogConfigOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*ClusterLogConfigLogConfig)(nil)).Elem()
+}
+
+func (o ClusterLogConfigLogConfigOutput) ToClusterLogConfigLogConfigOutput() ClusterLogConfigLogConfigOutput {
+	return o
+}
+
+func (o ClusterLogConfigLogConfigOutput) ToClusterLogConfigLogConfigOutputWithContext(ctx context.Context) ClusterLogConfigLogConfigOutput {
+	return o
+}
+
+// Specifies whether to collect the log.
+func (o ClusterLogConfigLogConfigOutput) Enable() pulumi.BoolPtrOutput {
+	return o.ApplyT(func(v ClusterLogConfigLogConfig) *bool { return v.Enable }).(pulumi.BoolPtrOutput)
+}
+
+// Specifies the log type.
+func (o ClusterLogConfigLogConfigOutput) Name() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v ClusterLogConfigLogConfig) *string { return v.Name }).(pulumi.StringPtrOutput)
+}
+
+type ClusterLogConfigLogConfigArrayOutput struct{ *pulumi.OutputState }
+
+func (ClusterLogConfigLogConfigArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]ClusterLogConfigLogConfig)(nil)).Elem()
+}
+
+func (o ClusterLogConfigLogConfigArrayOutput) ToClusterLogConfigLogConfigArrayOutput() ClusterLogConfigLogConfigArrayOutput {
+	return o
+}
+
+func (o ClusterLogConfigLogConfigArrayOutput) ToClusterLogConfigLogConfigArrayOutputWithContext(ctx context.Context) ClusterLogConfigLogConfigArrayOutput {
+	return o
+}
+
+func (o ClusterLogConfigLogConfigArrayOutput) Index(i pulumi.IntInput) ClusterLogConfigLogConfigOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) ClusterLogConfigLogConfig {
+		return vs[0].([]ClusterLogConfigLogConfig)[vs[1].(int)]
+	}).(ClusterLogConfigLogConfigOutput)
 }
 
 type ClusterMaster struct {
@@ -602,16 +1004,643 @@ func (o ClusterMasterArrayOutput) Index(i pulumi.IntInput) ClusterMasterOutput {
 	}).(ClusterMasterOutput)
 }
 
+type ClusterUpgradeAddon struct {
+	// Specifies the add-on name.
+	AddonTemplateName string `pulumi:"addonTemplateName"`
+	// Specifies the execution action.
+	// For current upgrades, the value can be **patch**.
+	Operation string `pulumi:"operation"`
+	// Specifies the add-on template installation parameters.
+	// These parameters vary depending on the add-on. The values is documented below.
+	Values *ClusterUpgradeAddonValues `pulumi:"values"`
+	// Specifies the target add-on version.
+	// The target add-on version must match the target cluster version.
+	Version string `pulumi:"version"`
+}
+
+// ClusterUpgradeAddonInput is an input type that accepts ClusterUpgradeAddonArgs and ClusterUpgradeAddonOutput values.
+// You can construct a concrete instance of `ClusterUpgradeAddonInput` via:
+//
+//	ClusterUpgradeAddonArgs{...}
+type ClusterUpgradeAddonInput interface {
+	pulumi.Input
+
+	ToClusterUpgradeAddonOutput() ClusterUpgradeAddonOutput
+	ToClusterUpgradeAddonOutputWithContext(context.Context) ClusterUpgradeAddonOutput
+}
+
+type ClusterUpgradeAddonArgs struct {
+	// Specifies the add-on name.
+	AddonTemplateName pulumi.StringInput `pulumi:"addonTemplateName"`
+	// Specifies the execution action.
+	// For current upgrades, the value can be **patch**.
+	Operation pulumi.StringInput `pulumi:"operation"`
+	// Specifies the add-on template installation parameters.
+	// These parameters vary depending on the add-on. The values is documented below.
+	Values ClusterUpgradeAddonValuesPtrInput `pulumi:"values"`
+	// Specifies the target add-on version.
+	// The target add-on version must match the target cluster version.
+	Version pulumi.StringInput `pulumi:"version"`
+}
+
+func (ClusterUpgradeAddonArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*ClusterUpgradeAddon)(nil)).Elem()
+}
+
+func (i ClusterUpgradeAddonArgs) ToClusterUpgradeAddonOutput() ClusterUpgradeAddonOutput {
+	return i.ToClusterUpgradeAddonOutputWithContext(context.Background())
+}
+
+func (i ClusterUpgradeAddonArgs) ToClusterUpgradeAddonOutputWithContext(ctx context.Context) ClusterUpgradeAddonOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(ClusterUpgradeAddonOutput)
+}
+
+// ClusterUpgradeAddonArrayInput is an input type that accepts ClusterUpgradeAddonArray and ClusterUpgradeAddonArrayOutput values.
+// You can construct a concrete instance of `ClusterUpgradeAddonArrayInput` via:
+//
+//	ClusterUpgradeAddonArray{ ClusterUpgradeAddonArgs{...} }
+type ClusterUpgradeAddonArrayInput interface {
+	pulumi.Input
+
+	ToClusterUpgradeAddonArrayOutput() ClusterUpgradeAddonArrayOutput
+	ToClusterUpgradeAddonArrayOutputWithContext(context.Context) ClusterUpgradeAddonArrayOutput
+}
+
+type ClusterUpgradeAddonArray []ClusterUpgradeAddonInput
+
+func (ClusterUpgradeAddonArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]ClusterUpgradeAddon)(nil)).Elem()
+}
+
+func (i ClusterUpgradeAddonArray) ToClusterUpgradeAddonArrayOutput() ClusterUpgradeAddonArrayOutput {
+	return i.ToClusterUpgradeAddonArrayOutputWithContext(context.Background())
+}
+
+func (i ClusterUpgradeAddonArray) ToClusterUpgradeAddonArrayOutputWithContext(ctx context.Context) ClusterUpgradeAddonArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(ClusterUpgradeAddonArrayOutput)
+}
+
+type ClusterUpgradeAddonOutput struct{ *pulumi.OutputState }
+
+func (ClusterUpgradeAddonOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*ClusterUpgradeAddon)(nil)).Elem()
+}
+
+func (o ClusterUpgradeAddonOutput) ToClusterUpgradeAddonOutput() ClusterUpgradeAddonOutput {
+	return o
+}
+
+func (o ClusterUpgradeAddonOutput) ToClusterUpgradeAddonOutputWithContext(ctx context.Context) ClusterUpgradeAddonOutput {
+	return o
+}
+
+// Specifies the add-on name.
+func (o ClusterUpgradeAddonOutput) AddonTemplateName() pulumi.StringOutput {
+	return o.ApplyT(func(v ClusterUpgradeAddon) string { return v.AddonTemplateName }).(pulumi.StringOutput)
+}
+
+// Specifies the execution action.
+// For current upgrades, the value can be **patch**.
+func (o ClusterUpgradeAddonOutput) Operation() pulumi.StringOutput {
+	return o.ApplyT(func(v ClusterUpgradeAddon) string { return v.Operation }).(pulumi.StringOutput)
+}
+
+// Specifies the add-on template installation parameters.
+// These parameters vary depending on the add-on. The values is documented below.
+func (o ClusterUpgradeAddonOutput) Values() ClusterUpgradeAddonValuesPtrOutput {
+	return o.ApplyT(func(v ClusterUpgradeAddon) *ClusterUpgradeAddonValues { return v.Values }).(ClusterUpgradeAddonValuesPtrOutput)
+}
+
+// Specifies the target add-on version.
+// The target add-on version must match the target cluster version.
+func (o ClusterUpgradeAddonOutput) Version() pulumi.StringOutput {
+	return o.ApplyT(func(v ClusterUpgradeAddon) string { return v.Version }).(pulumi.StringOutput)
+}
+
+type ClusterUpgradeAddonArrayOutput struct{ *pulumi.OutputState }
+
+func (ClusterUpgradeAddonArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]ClusterUpgradeAddon)(nil)).Elem()
+}
+
+func (o ClusterUpgradeAddonArrayOutput) ToClusterUpgradeAddonArrayOutput() ClusterUpgradeAddonArrayOutput {
+	return o
+}
+
+func (o ClusterUpgradeAddonArrayOutput) ToClusterUpgradeAddonArrayOutputWithContext(ctx context.Context) ClusterUpgradeAddonArrayOutput {
+	return o
+}
+
+func (o ClusterUpgradeAddonArrayOutput) Index(i pulumi.IntInput) ClusterUpgradeAddonOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) ClusterUpgradeAddon {
+		return vs[0].([]ClusterUpgradeAddon)[vs[1].(int)]
+	}).(ClusterUpgradeAddonOutput)
+}
+
+type ClusterUpgradeAddonValues struct {
+	// Specifies the json string vary depending on the add-on.
+	BasicJson *string `pulumi:"basicJson"`
+	// Specifies the json string vary depending on the add-on.
+	CustomJson *string `pulumi:"customJson"`
+	// Specifies the json string vary depending on the add-on.
+	FlavorJson *string `pulumi:"flavorJson"`
+}
+
+// ClusterUpgradeAddonValuesInput is an input type that accepts ClusterUpgradeAddonValuesArgs and ClusterUpgradeAddonValuesOutput values.
+// You can construct a concrete instance of `ClusterUpgradeAddonValuesInput` via:
+//
+//	ClusterUpgradeAddonValuesArgs{...}
+type ClusterUpgradeAddonValuesInput interface {
+	pulumi.Input
+
+	ToClusterUpgradeAddonValuesOutput() ClusterUpgradeAddonValuesOutput
+	ToClusterUpgradeAddonValuesOutputWithContext(context.Context) ClusterUpgradeAddonValuesOutput
+}
+
+type ClusterUpgradeAddonValuesArgs struct {
+	// Specifies the json string vary depending on the add-on.
+	BasicJson pulumi.StringPtrInput `pulumi:"basicJson"`
+	// Specifies the json string vary depending on the add-on.
+	CustomJson pulumi.StringPtrInput `pulumi:"customJson"`
+	// Specifies the json string vary depending on the add-on.
+	FlavorJson pulumi.StringPtrInput `pulumi:"flavorJson"`
+}
+
+func (ClusterUpgradeAddonValuesArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*ClusterUpgradeAddonValues)(nil)).Elem()
+}
+
+func (i ClusterUpgradeAddonValuesArgs) ToClusterUpgradeAddonValuesOutput() ClusterUpgradeAddonValuesOutput {
+	return i.ToClusterUpgradeAddonValuesOutputWithContext(context.Background())
+}
+
+func (i ClusterUpgradeAddonValuesArgs) ToClusterUpgradeAddonValuesOutputWithContext(ctx context.Context) ClusterUpgradeAddonValuesOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(ClusterUpgradeAddonValuesOutput)
+}
+
+func (i ClusterUpgradeAddonValuesArgs) ToClusterUpgradeAddonValuesPtrOutput() ClusterUpgradeAddonValuesPtrOutput {
+	return i.ToClusterUpgradeAddonValuesPtrOutputWithContext(context.Background())
+}
+
+func (i ClusterUpgradeAddonValuesArgs) ToClusterUpgradeAddonValuesPtrOutputWithContext(ctx context.Context) ClusterUpgradeAddonValuesPtrOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(ClusterUpgradeAddonValuesOutput).ToClusterUpgradeAddonValuesPtrOutputWithContext(ctx)
+}
+
+// ClusterUpgradeAddonValuesPtrInput is an input type that accepts ClusterUpgradeAddonValuesArgs, ClusterUpgradeAddonValuesPtr and ClusterUpgradeAddonValuesPtrOutput values.
+// You can construct a concrete instance of `ClusterUpgradeAddonValuesPtrInput` via:
+//
+//	        ClusterUpgradeAddonValuesArgs{...}
+//
+//	or:
+//
+//	        nil
+type ClusterUpgradeAddonValuesPtrInput interface {
+	pulumi.Input
+
+	ToClusterUpgradeAddonValuesPtrOutput() ClusterUpgradeAddonValuesPtrOutput
+	ToClusterUpgradeAddonValuesPtrOutputWithContext(context.Context) ClusterUpgradeAddonValuesPtrOutput
+}
+
+type clusterUpgradeAddonValuesPtrType ClusterUpgradeAddonValuesArgs
+
+func ClusterUpgradeAddonValuesPtr(v *ClusterUpgradeAddonValuesArgs) ClusterUpgradeAddonValuesPtrInput {
+	return (*clusterUpgradeAddonValuesPtrType)(v)
+}
+
+func (*clusterUpgradeAddonValuesPtrType) ElementType() reflect.Type {
+	return reflect.TypeOf((**ClusterUpgradeAddonValues)(nil)).Elem()
+}
+
+func (i *clusterUpgradeAddonValuesPtrType) ToClusterUpgradeAddonValuesPtrOutput() ClusterUpgradeAddonValuesPtrOutput {
+	return i.ToClusterUpgradeAddonValuesPtrOutputWithContext(context.Background())
+}
+
+func (i *clusterUpgradeAddonValuesPtrType) ToClusterUpgradeAddonValuesPtrOutputWithContext(ctx context.Context) ClusterUpgradeAddonValuesPtrOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(ClusterUpgradeAddonValuesPtrOutput)
+}
+
+type ClusterUpgradeAddonValuesOutput struct{ *pulumi.OutputState }
+
+func (ClusterUpgradeAddonValuesOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*ClusterUpgradeAddonValues)(nil)).Elem()
+}
+
+func (o ClusterUpgradeAddonValuesOutput) ToClusterUpgradeAddonValuesOutput() ClusterUpgradeAddonValuesOutput {
+	return o
+}
+
+func (o ClusterUpgradeAddonValuesOutput) ToClusterUpgradeAddonValuesOutputWithContext(ctx context.Context) ClusterUpgradeAddonValuesOutput {
+	return o
+}
+
+func (o ClusterUpgradeAddonValuesOutput) ToClusterUpgradeAddonValuesPtrOutput() ClusterUpgradeAddonValuesPtrOutput {
+	return o.ToClusterUpgradeAddonValuesPtrOutputWithContext(context.Background())
+}
+
+func (o ClusterUpgradeAddonValuesOutput) ToClusterUpgradeAddonValuesPtrOutputWithContext(ctx context.Context) ClusterUpgradeAddonValuesPtrOutput {
+	return o.ApplyTWithContext(ctx, func(_ context.Context, v ClusterUpgradeAddonValues) *ClusterUpgradeAddonValues {
+		return &v
+	}).(ClusterUpgradeAddonValuesPtrOutput)
+}
+
+// Specifies the json string vary depending on the add-on.
+func (o ClusterUpgradeAddonValuesOutput) BasicJson() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v ClusterUpgradeAddonValues) *string { return v.BasicJson }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the json string vary depending on the add-on.
+func (o ClusterUpgradeAddonValuesOutput) CustomJson() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v ClusterUpgradeAddonValues) *string { return v.CustomJson }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the json string vary depending on the add-on.
+func (o ClusterUpgradeAddonValuesOutput) FlavorJson() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v ClusterUpgradeAddonValues) *string { return v.FlavorJson }).(pulumi.StringPtrOutput)
+}
+
+type ClusterUpgradeAddonValuesPtrOutput struct{ *pulumi.OutputState }
+
+func (ClusterUpgradeAddonValuesPtrOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((**ClusterUpgradeAddonValues)(nil)).Elem()
+}
+
+func (o ClusterUpgradeAddonValuesPtrOutput) ToClusterUpgradeAddonValuesPtrOutput() ClusterUpgradeAddonValuesPtrOutput {
+	return o
+}
+
+func (o ClusterUpgradeAddonValuesPtrOutput) ToClusterUpgradeAddonValuesPtrOutputWithContext(ctx context.Context) ClusterUpgradeAddonValuesPtrOutput {
+	return o
+}
+
+func (o ClusterUpgradeAddonValuesPtrOutput) Elem() ClusterUpgradeAddonValuesOutput {
+	return o.ApplyT(func(v *ClusterUpgradeAddonValues) ClusterUpgradeAddonValues {
+		if v != nil {
+			return *v
+		}
+		var ret ClusterUpgradeAddonValues
+		return ret
+	}).(ClusterUpgradeAddonValuesOutput)
+}
+
+// Specifies the json string vary depending on the add-on.
+func (o ClusterUpgradeAddonValuesPtrOutput) BasicJson() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *ClusterUpgradeAddonValues) *string {
+		if v == nil {
+			return nil
+		}
+		return v.BasicJson
+	}).(pulumi.StringPtrOutput)
+}
+
+// Specifies the json string vary depending on the add-on.
+func (o ClusterUpgradeAddonValuesPtrOutput) CustomJson() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *ClusterUpgradeAddonValues) *string {
+		if v == nil {
+			return nil
+		}
+		return v.CustomJson
+	}).(pulumi.StringPtrOutput)
+}
+
+// Specifies the json string vary depending on the add-on.
+func (o ClusterUpgradeAddonValuesPtrOutput) FlavorJson() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *ClusterUpgradeAddonValues) *string {
+		if v == nil {
+			return nil
+		}
+		return v.FlavorJson
+	}).(pulumi.StringPtrOutput)
+}
+
+type ClusterUpgradeStrategy struct {
+	// Specifies the in-place upgrade settings.
+	// It's mandatory when the `type` is set to **inPlaceRollingUpdate**.
+	// The inPlaceRollingUpdate structure is documented below.
+	InPlaceRollingUpdate *ClusterUpgradeStrategyInPlaceRollingUpdate `pulumi:"inPlaceRollingUpdate"`
+	// Specifies the upgrade strategy type.
+	// The value can be **inPlaceRollingUpdate**.
+	Type string `pulumi:"type"`
+}
+
+// ClusterUpgradeStrategyInput is an input type that accepts ClusterUpgradeStrategyArgs and ClusterUpgradeStrategyOutput values.
+// You can construct a concrete instance of `ClusterUpgradeStrategyInput` via:
+//
+//	ClusterUpgradeStrategyArgs{...}
+type ClusterUpgradeStrategyInput interface {
+	pulumi.Input
+
+	ToClusterUpgradeStrategyOutput() ClusterUpgradeStrategyOutput
+	ToClusterUpgradeStrategyOutputWithContext(context.Context) ClusterUpgradeStrategyOutput
+}
+
+type ClusterUpgradeStrategyArgs struct {
+	// Specifies the in-place upgrade settings.
+	// It's mandatory when the `type` is set to **inPlaceRollingUpdate**.
+	// The inPlaceRollingUpdate structure is documented below.
+	InPlaceRollingUpdate ClusterUpgradeStrategyInPlaceRollingUpdatePtrInput `pulumi:"inPlaceRollingUpdate"`
+	// Specifies the upgrade strategy type.
+	// The value can be **inPlaceRollingUpdate**.
+	Type pulumi.StringInput `pulumi:"type"`
+}
+
+func (ClusterUpgradeStrategyArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*ClusterUpgradeStrategy)(nil)).Elem()
+}
+
+func (i ClusterUpgradeStrategyArgs) ToClusterUpgradeStrategyOutput() ClusterUpgradeStrategyOutput {
+	return i.ToClusterUpgradeStrategyOutputWithContext(context.Background())
+}
+
+func (i ClusterUpgradeStrategyArgs) ToClusterUpgradeStrategyOutputWithContext(ctx context.Context) ClusterUpgradeStrategyOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(ClusterUpgradeStrategyOutput)
+}
+
+func (i ClusterUpgradeStrategyArgs) ToClusterUpgradeStrategyPtrOutput() ClusterUpgradeStrategyPtrOutput {
+	return i.ToClusterUpgradeStrategyPtrOutputWithContext(context.Background())
+}
+
+func (i ClusterUpgradeStrategyArgs) ToClusterUpgradeStrategyPtrOutputWithContext(ctx context.Context) ClusterUpgradeStrategyPtrOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(ClusterUpgradeStrategyOutput).ToClusterUpgradeStrategyPtrOutputWithContext(ctx)
+}
+
+// ClusterUpgradeStrategyPtrInput is an input type that accepts ClusterUpgradeStrategyArgs, ClusterUpgradeStrategyPtr and ClusterUpgradeStrategyPtrOutput values.
+// You can construct a concrete instance of `ClusterUpgradeStrategyPtrInput` via:
+//
+//	        ClusterUpgradeStrategyArgs{...}
+//
+//	or:
+//
+//	        nil
+type ClusterUpgradeStrategyPtrInput interface {
+	pulumi.Input
+
+	ToClusterUpgradeStrategyPtrOutput() ClusterUpgradeStrategyPtrOutput
+	ToClusterUpgradeStrategyPtrOutputWithContext(context.Context) ClusterUpgradeStrategyPtrOutput
+}
+
+type clusterUpgradeStrategyPtrType ClusterUpgradeStrategyArgs
+
+func ClusterUpgradeStrategyPtr(v *ClusterUpgradeStrategyArgs) ClusterUpgradeStrategyPtrInput {
+	return (*clusterUpgradeStrategyPtrType)(v)
+}
+
+func (*clusterUpgradeStrategyPtrType) ElementType() reflect.Type {
+	return reflect.TypeOf((**ClusterUpgradeStrategy)(nil)).Elem()
+}
+
+func (i *clusterUpgradeStrategyPtrType) ToClusterUpgradeStrategyPtrOutput() ClusterUpgradeStrategyPtrOutput {
+	return i.ToClusterUpgradeStrategyPtrOutputWithContext(context.Background())
+}
+
+func (i *clusterUpgradeStrategyPtrType) ToClusterUpgradeStrategyPtrOutputWithContext(ctx context.Context) ClusterUpgradeStrategyPtrOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(ClusterUpgradeStrategyPtrOutput)
+}
+
+type ClusterUpgradeStrategyOutput struct{ *pulumi.OutputState }
+
+func (ClusterUpgradeStrategyOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*ClusterUpgradeStrategy)(nil)).Elem()
+}
+
+func (o ClusterUpgradeStrategyOutput) ToClusterUpgradeStrategyOutput() ClusterUpgradeStrategyOutput {
+	return o
+}
+
+func (o ClusterUpgradeStrategyOutput) ToClusterUpgradeStrategyOutputWithContext(ctx context.Context) ClusterUpgradeStrategyOutput {
+	return o
+}
+
+func (o ClusterUpgradeStrategyOutput) ToClusterUpgradeStrategyPtrOutput() ClusterUpgradeStrategyPtrOutput {
+	return o.ToClusterUpgradeStrategyPtrOutputWithContext(context.Background())
+}
+
+func (o ClusterUpgradeStrategyOutput) ToClusterUpgradeStrategyPtrOutputWithContext(ctx context.Context) ClusterUpgradeStrategyPtrOutput {
+	return o.ApplyTWithContext(ctx, func(_ context.Context, v ClusterUpgradeStrategy) *ClusterUpgradeStrategy {
+		return &v
+	}).(ClusterUpgradeStrategyPtrOutput)
+}
+
+// Specifies the in-place upgrade settings.
+// It's mandatory when the `type` is set to **inPlaceRollingUpdate**.
+// The inPlaceRollingUpdate structure is documented below.
+func (o ClusterUpgradeStrategyOutput) InPlaceRollingUpdate() ClusterUpgradeStrategyInPlaceRollingUpdatePtrOutput {
+	return o.ApplyT(func(v ClusterUpgradeStrategy) *ClusterUpgradeStrategyInPlaceRollingUpdate {
+		return v.InPlaceRollingUpdate
+	}).(ClusterUpgradeStrategyInPlaceRollingUpdatePtrOutput)
+}
+
+// Specifies the upgrade strategy type.
+// The value can be **inPlaceRollingUpdate**.
+func (o ClusterUpgradeStrategyOutput) Type() pulumi.StringOutput {
+	return o.ApplyT(func(v ClusterUpgradeStrategy) string { return v.Type }).(pulumi.StringOutput)
+}
+
+type ClusterUpgradeStrategyPtrOutput struct{ *pulumi.OutputState }
+
+func (ClusterUpgradeStrategyPtrOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((**ClusterUpgradeStrategy)(nil)).Elem()
+}
+
+func (o ClusterUpgradeStrategyPtrOutput) ToClusterUpgradeStrategyPtrOutput() ClusterUpgradeStrategyPtrOutput {
+	return o
+}
+
+func (o ClusterUpgradeStrategyPtrOutput) ToClusterUpgradeStrategyPtrOutputWithContext(ctx context.Context) ClusterUpgradeStrategyPtrOutput {
+	return o
+}
+
+func (o ClusterUpgradeStrategyPtrOutput) Elem() ClusterUpgradeStrategyOutput {
+	return o.ApplyT(func(v *ClusterUpgradeStrategy) ClusterUpgradeStrategy {
+		if v != nil {
+			return *v
+		}
+		var ret ClusterUpgradeStrategy
+		return ret
+	}).(ClusterUpgradeStrategyOutput)
+}
+
+// Specifies the in-place upgrade settings.
+// It's mandatory when the `type` is set to **inPlaceRollingUpdate**.
+// The inPlaceRollingUpdate structure is documented below.
+func (o ClusterUpgradeStrategyPtrOutput) InPlaceRollingUpdate() ClusterUpgradeStrategyInPlaceRollingUpdatePtrOutput {
+	return o.ApplyT(func(v *ClusterUpgradeStrategy) *ClusterUpgradeStrategyInPlaceRollingUpdate {
+		if v == nil {
+			return nil
+		}
+		return v.InPlaceRollingUpdate
+	}).(ClusterUpgradeStrategyInPlaceRollingUpdatePtrOutput)
+}
+
+// Specifies the upgrade strategy type.
+// The value can be **inPlaceRollingUpdate**.
+func (o ClusterUpgradeStrategyPtrOutput) Type() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *ClusterUpgradeStrategy) *string {
+		if v == nil {
+			return nil
+		}
+		return &v.Type
+	}).(pulumi.StringPtrOutput)
+}
+
+type ClusterUpgradeStrategyInPlaceRollingUpdate struct {
+	// Specifies the node upgrade step.
+	// The value ranges from **1** to **40**. The recommended value is **20**.
+	UserDefinedStep *int `pulumi:"userDefinedStep"`
+}
+
+// ClusterUpgradeStrategyInPlaceRollingUpdateInput is an input type that accepts ClusterUpgradeStrategyInPlaceRollingUpdateArgs and ClusterUpgradeStrategyInPlaceRollingUpdateOutput values.
+// You can construct a concrete instance of `ClusterUpgradeStrategyInPlaceRollingUpdateInput` via:
+//
+//	ClusterUpgradeStrategyInPlaceRollingUpdateArgs{...}
+type ClusterUpgradeStrategyInPlaceRollingUpdateInput interface {
+	pulumi.Input
+
+	ToClusterUpgradeStrategyInPlaceRollingUpdateOutput() ClusterUpgradeStrategyInPlaceRollingUpdateOutput
+	ToClusterUpgradeStrategyInPlaceRollingUpdateOutputWithContext(context.Context) ClusterUpgradeStrategyInPlaceRollingUpdateOutput
+}
+
+type ClusterUpgradeStrategyInPlaceRollingUpdateArgs struct {
+	// Specifies the node upgrade step.
+	// The value ranges from **1** to **40**. The recommended value is **20**.
+	UserDefinedStep pulumi.IntPtrInput `pulumi:"userDefinedStep"`
+}
+
+func (ClusterUpgradeStrategyInPlaceRollingUpdateArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*ClusterUpgradeStrategyInPlaceRollingUpdate)(nil)).Elem()
+}
+
+func (i ClusterUpgradeStrategyInPlaceRollingUpdateArgs) ToClusterUpgradeStrategyInPlaceRollingUpdateOutput() ClusterUpgradeStrategyInPlaceRollingUpdateOutput {
+	return i.ToClusterUpgradeStrategyInPlaceRollingUpdateOutputWithContext(context.Background())
+}
+
+func (i ClusterUpgradeStrategyInPlaceRollingUpdateArgs) ToClusterUpgradeStrategyInPlaceRollingUpdateOutputWithContext(ctx context.Context) ClusterUpgradeStrategyInPlaceRollingUpdateOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(ClusterUpgradeStrategyInPlaceRollingUpdateOutput)
+}
+
+func (i ClusterUpgradeStrategyInPlaceRollingUpdateArgs) ToClusterUpgradeStrategyInPlaceRollingUpdatePtrOutput() ClusterUpgradeStrategyInPlaceRollingUpdatePtrOutput {
+	return i.ToClusterUpgradeStrategyInPlaceRollingUpdatePtrOutputWithContext(context.Background())
+}
+
+func (i ClusterUpgradeStrategyInPlaceRollingUpdateArgs) ToClusterUpgradeStrategyInPlaceRollingUpdatePtrOutputWithContext(ctx context.Context) ClusterUpgradeStrategyInPlaceRollingUpdatePtrOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(ClusterUpgradeStrategyInPlaceRollingUpdateOutput).ToClusterUpgradeStrategyInPlaceRollingUpdatePtrOutputWithContext(ctx)
+}
+
+// ClusterUpgradeStrategyInPlaceRollingUpdatePtrInput is an input type that accepts ClusterUpgradeStrategyInPlaceRollingUpdateArgs, ClusterUpgradeStrategyInPlaceRollingUpdatePtr and ClusterUpgradeStrategyInPlaceRollingUpdatePtrOutput values.
+// You can construct a concrete instance of `ClusterUpgradeStrategyInPlaceRollingUpdatePtrInput` via:
+//
+//	        ClusterUpgradeStrategyInPlaceRollingUpdateArgs{...}
+//
+//	or:
+//
+//	        nil
+type ClusterUpgradeStrategyInPlaceRollingUpdatePtrInput interface {
+	pulumi.Input
+
+	ToClusterUpgradeStrategyInPlaceRollingUpdatePtrOutput() ClusterUpgradeStrategyInPlaceRollingUpdatePtrOutput
+	ToClusterUpgradeStrategyInPlaceRollingUpdatePtrOutputWithContext(context.Context) ClusterUpgradeStrategyInPlaceRollingUpdatePtrOutput
+}
+
+type clusterUpgradeStrategyInPlaceRollingUpdatePtrType ClusterUpgradeStrategyInPlaceRollingUpdateArgs
+
+func ClusterUpgradeStrategyInPlaceRollingUpdatePtr(v *ClusterUpgradeStrategyInPlaceRollingUpdateArgs) ClusterUpgradeStrategyInPlaceRollingUpdatePtrInput {
+	return (*clusterUpgradeStrategyInPlaceRollingUpdatePtrType)(v)
+}
+
+func (*clusterUpgradeStrategyInPlaceRollingUpdatePtrType) ElementType() reflect.Type {
+	return reflect.TypeOf((**ClusterUpgradeStrategyInPlaceRollingUpdate)(nil)).Elem()
+}
+
+func (i *clusterUpgradeStrategyInPlaceRollingUpdatePtrType) ToClusterUpgradeStrategyInPlaceRollingUpdatePtrOutput() ClusterUpgradeStrategyInPlaceRollingUpdatePtrOutput {
+	return i.ToClusterUpgradeStrategyInPlaceRollingUpdatePtrOutputWithContext(context.Background())
+}
+
+func (i *clusterUpgradeStrategyInPlaceRollingUpdatePtrType) ToClusterUpgradeStrategyInPlaceRollingUpdatePtrOutputWithContext(ctx context.Context) ClusterUpgradeStrategyInPlaceRollingUpdatePtrOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(ClusterUpgradeStrategyInPlaceRollingUpdatePtrOutput)
+}
+
+type ClusterUpgradeStrategyInPlaceRollingUpdateOutput struct{ *pulumi.OutputState }
+
+func (ClusterUpgradeStrategyInPlaceRollingUpdateOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*ClusterUpgradeStrategyInPlaceRollingUpdate)(nil)).Elem()
+}
+
+func (o ClusterUpgradeStrategyInPlaceRollingUpdateOutput) ToClusterUpgradeStrategyInPlaceRollingUpdateOutput() ClusterUpgradeStrategyInPlaceRollingUpdateOutput {
+	return o
+}
+
+func (o ClusterUpgradeStrategyInPlaceRollingUpdateOutput) ToClusterUpgradeStrategyInPlaceRollingUpdateOutputWithContext(ctx context.Context) ClusterUpgradeStrategyInPlaceRollingUpdateOutput {
+	return o
+}
+
+func (o ClusterUpgradeStrategyInPlaceRollingUpdateOutput) ToClusterUpgradeStrategyInPlaceRollingUpdatePtrOutput() ClusterUpgradeStrategyInPlaceRollingUpdatePtrOutput {
+	return o.ToClusterUpgradeStrategyInPlaceRollingUpdatePtrOutputWithContext(context.Background())
+}
+
+func (o ClusterUpgradeStrategyInPlaceRollingUpdateOutput) ToClusterUpgradeStrategyInPlaceRollingUpdatePtrOutputWithContext(ctx context.Context) ClusterUpgradeStrategyInPlaceRollingUpdatePtrOutput {
+	return o.ApplyTWithContext(ctx, func(_ context.Context, v ClusterUpgradeStrategyInPlaceRollingUpdate) *ClusterUpgradeStrategyInPlaceRollingUpdate {
+		return &v
+	}).(ClusterUpgradeStrategyInPlaceRollingUpdatePtrOutput)
+}
+
+// Specifies the node upgrade step.
+// The value ranges from **1** to **40**. The recommended value is **20**.
+func (o ClusterUpgradeStrategyInPlaceRollingUpdateOutput) UserDefinedStep() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v ClusterUpgradeStrategyInPlaceRollingUpdate) *int { return v.UserDefinedStep }).(pulumi.IntPtrOutput)
+}
+
+type ClusterUpgradeStrategyInPlaceRollingUpdatePtrOutput struct{ *pulumi.OutputState }
+
+func (ClusterUpgradeStrategyInPlaceRollingUpdatePtrOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((**ClusterUpgradeStrategyInPlaceRollingUpdate)(nil)).Elem()
+}
+
+func (o ClusterUpgradeStrategyInPlaceRollingUpdatePtrOutput) ToClusterUpgradeStrategyInPlaceRollingUpdatePtrOutput() ClusterUpgradeStrategyInPlaceRollingUpdatePtrOutput {
+	return o
+}
+
+func (o ClusterUpgradeStrategyInPlaceRollingUpdatePtrOutput) ToClusterUpgradeStrategyInPlaceRollingUpdatePtrOutputWithContext(ctx context.Context) ClusterUpgradeStrategyInPlaceRollingUpdatePtrOutput {
+	return o
+}
+
+func (o ClusterUpgradeStrategyInPlaceRollingUpdatePtrOutput) Elem() ClusterUpgradeStrategyInPlaceRollingUpdateOutput {
+	return o.ApplyT(func(v *ClusterUpgradeStrategyInPlaceRollingUpdate) ClusterUpgradeStrategyInPlaceRollingUpdate {
+		if v != nil {
+			return *v
+		}
+		var ret ClusterUpgradeStrategyInPlaceRollingUpdate
+		return ret
+	}).(ClusterUpgradeStrategyInPlaceRollingUpdateOutput)
+}
+
+// Specifies the node upgrade step.
+// The value ranges from **1** to **40**. The recommended value is **20**.
+func (o ClusterUpgradeStrategyInPlaceRollingUpdatePtrOutput) UserDefinedStep() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v *ClusterUpgradeStrategyInPlaceRollingUpdate) *int {
+		if v == nil {
+			return nil
+		}
+		return v.UserDefinedStep
+	}).(pulumi.IntPtrOutput)
+}
+
 type NodeAttachDataVolume struct {
+	// The DSS pool ID. This field is used only for dedicated storage.
+	DssPoolId *string `pulumi:"dssPoolId"`
 	// Deprecated: use extend_params instead
 	ExtendParam *string `pulumi:"extendParam"`
 	// The disk expansion parameters.
 	ExtendParams  map[string]string `pulumi:"extendParams"`
 	HwPassthrough *bool             `pulumi:"hwPassthrough"`
+	// The iops of the disk.
+	Iops *int `pulumi:"iops"`
 	// The ID of a KMS key. This is used to encrypt the volume.
 	KmsKeyId *string `pulumi:"kmsKeyId"`
-	// The disk size in GB.
+	// Specifies the size of a virtual space. Only an integer percentage is supported.
+	// Example: 90%. Note that the total percentage of all virtual spaces in a group cannot exceed 100%.
+	// Changing this parameter will reset the node.
 	Size *int `pulumi:"size"`
+	// The throughput of the disk.
+	Throughput *int `pulumi:"throughput"`
 	// The disk type.
 	Volumetype *string `pulumi:"volumetype"`
 }
@@ -628,15 +1657,23 @@ type NodeAttachDataVolumeInput interface {
 }
 
 type NodeAttachDataVolumeArgs struct {
+	// The DSS pool ID. This field is used only for dedicated storage.
+	DssPoolId pulumi.StringPtrInput `pulumi:"dssPoolId"`
 	// Deprecated: use extend_params instead
 	ExtendParam pulumi.StringPtrInput `pulumi:"extendParam"`
 	// The disk expansion parameters.
 	ExtendParams  pulumi.StringMapInput `pulumi:"extendParams"`
 	HwPassthrough pulumi.BoolPtrInput   `pulumi:"hwPassthrough"`
+	// The iops of the disk.
+	Iops pulumi.IntPtrInput `pulumi:"iops"`
 	// The ID of a KMS key. This is used to encrypt the volume.
 	KmsKeyId pulumi.StringPtrInput `pulumi:"kmsKeyId"`
-	// The disk size in GB.
+	// Specifies the size of a virtual space. Only an integer percentage is supported.
+	// Example: 90%. Note that the total percentage of all virtual spaces in a group cannot exceed 100%.
+	// Changing this parameter will reset the node.
 	Size pulumi.IntPtrInput `pulumi:"size"`
+	// The throughput of the disk.
+	Throughput pulumi.IntPtrInput `pulumi:"throughput"`
 	// The disk type.
 	Volumetype pulumi.StringPtrInput `pulumi:"volumetype"`
 }
@@ -692,6 +1729,11 @@ func (o NodeAttachDataVolumeOutput) ToNodeAttachDataVolumeOutputWithContext(ctx 
 	return o
 }
 
+// The DSS pool ID. This field is used only for dedicated storage.
+func (o NodeAttachDataVolumeOutput) DssPoolId() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v NodeAttachDataVolume) *string { return v.DssPoolId }).(pulumi.StringPtrOutput)
+}
+
 // Deprecated: use extend_params instead
 func (o NodeAttachDataVolumeOutput) ExtendParam() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v NodeAttachDataVolume) *string { return v.ExtendParam }).(pulumi.StringPtrOutput)
@@ -706,14 +1748,26 @@ func (o NodeAttachDataVolumeOutput) HwPassthrough() pulumi.BoolPtrOutput {
 	return o.ApplyT(func(v NodeAttachDataVolume) *bool { return v.HwPassthrough }).(pulumi.BoolPtrOutput)
 }
 
+// The iops of the disk.
+func (o NodeAttachDataVolumeOutput) Iops() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v NodeAttachDataVolume) *int { return v.Iops }).(pulumi.IntPtrOutput)
+}
+
 // The ID of a KMS key. This is used to encrypt the volume.
 func (o NodeAttachDataVolumeOutput) KmsKeyId() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v NodeAttachDataVolume) *string { return v.KmsKeyId }).(pulumi.StringPtrOutput)
 }
 
-// The disk size in GB.
+// Specifies the size of a virtual space. Only an integer percentage is supported.
+// Example: 90%. Note that the total percentage of all virtual spaces in a group cannot exceed 100%.
+// Changing this parameter will reset the node.
 func (o NodeAttachDataVolumeOutput) Size() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v NodeAttachDataVolume) *int { return v.Size }).(pulumi.IntPtrOutput)
+}
+
+// The throughput of the disk.
+func (o NodeAttachDataVolumeOutput) Throughput() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v NodeAttachDataVolume) *int { return v.Throughput }).(pulumi.IntPtrOutput)
 }
 
 // The disk type.
@@ -741,16 +1795,173 @@ func (o NodeAttachDataVolumeArrayOutput) Index(i pulumi.IntInput) NodeAttachData
 	}).(NodeAttachDataVolumeOutput)
 }
 
+type NodeAttachHostnameConfig struct {
+	// Specifies the hostname type of the kubernetes node.
+	// The value can be:
+	// + **privateIp**: The Kubernetes node is named after its IP address.
+	// + **cceNodeName**: The Kubernetes node is named after the CCE node.
+	Type string `pulumi:"type"`
+}
+
+// NodeAttachHostnameConfigInput is an input type that accepts NodeAttachHostnameConfigArgs and NodeAttachHostnameConfigOutput values.
+// You can construct a concrete instance of `NodeAttachHostnameConfigInput` via:
+//
+//	NodeAttachHostnameConfigArgs{...}
+type NodeAttachHostnameConfigInput interface {
+	pulumi.Input
+
+	ToNodeAttachHostnameConfigOutput() NodeAttachHostnameConfigOutput
+	ToNodeAttachHostnameConfigOutputWithContext(context.Context) NodeAttachHostnameConfigOutput
+}
+
+type NodeAttachHostnameConfigArgs struct {
+	// Specifies the hostname type of the kubernetes node.
+	// The value can be:
+	// + **privateIp**: The Kubernetes node is named after its IP address.
+	// + **cceNodeName**: The Kubernetes node is named after the CCE node.
+	Type pulumi.StringInput `pulumi:"type"`
+}
+
+func (NodeAttachHostnameConfigArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*NodeAttachHostnameConfig)(nil)).Elem()
+}
+
+func (i NodeAttachHostnameConfigArgs) ToNodeAttachHostnameConfigOutput() NodeAttachHostnameConfigOutput {
+	return i.ToNodeAttachHostnameConfigOutputWithContext(context.Background())
+}
+
+func (i NodeAttachHostnameConfigArgs) ToNodeAttachHostnameConfigOutputWithContext(ctx context.Context) NodeAttachHostnameConfigOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(NodeAttachHostnameConfigOutput)
+}
+
+func (i NodeAttachHostnameConfigArgs) ToNodeAttachHostnameConfigPtrOutput() NodeAttachHostnameConfigPtrOutput {
+	return i.ToNodeAttachHostnameConfigPtrOutputWithContext(context.Background())
+}
+
+func (i NodeAttachHostnameConfigArgs) ToNodeAttachHostnameConfigPtrOutputWithContext(ctx context.Context) NodeAttachHostnameConfigPtrOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(NodeAttachHostnameConfigOutput).ToNodeAttachHostnameConfigPtrOutputWithContext(ctx)
+}
+
+// NodeAttachHostnameConfigPtrInput is an input type that accepts NodeAttachHostnameConfigArgs, NodeAttachHostnameConfigPtr and NodeAttachHostnameConfigPtrOutput values.
+// You can construct a concrete instance of `NodeAttachHostnameConfigPtrInput` via:
+//
+//	        NodeAttachHostnameConfigArgs{...}
+//
+//	or:
+//
+//	        nil
+type NodeAttachHostnameConfigPtrInput interface {
+	pulumi.Input
+
+	ToNodeAttachHostnameConfigPtrOutput() NodeAttachHostnameConfigPtrOutput
+	ToNodeAttachHostnameConfigPtrOutputWithContext(context.Context) NodeAttachHostnameConfigPtrOutput
+}
+
+type nodeAttachHostnameConfigPtrType NodeAttachHostnameConfigArgs
+
+func NodeAttachHostnameConfigPtr(v *NodeAttachHostnameConfigArgs) NodeAttachHostnameConfigPtrInput {
+	return (*nodeAttachHostnameConfigPtrType)(v)
+}
+
+func (*nodeAttachHostnameConfigPtrType) ElementType() reflect.Type {
+	return reflect.TypeOf((**NodeAttachHostnameConfig)(nil)).Elem()
+}
+
+func (i *nodeAttachHostnameConfigPtrType) ToNodeAttachHostnameConfigPtrOutput() NodeAttachHostnameConfigPtrOutput {
+	return i.ToNodeAttachHostnameConfigPtrOutputWithContext(context.Background())
+}
+
+func (i *nodeAttachHostnameConfigPtrType) ToNodeAttachHostnameConfigPtrOutputWithContext(ctx context.Context) NodeAttachHostnameConfigPtrOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(NodeAttachHostnameConfigPtrOutput)
+}
+
+type NodeAttachHostnameConfigOutput struct{ *pulumi.OutputState }
+
+func (NodeAttachHostnameConfigOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*NodeAttachHostnameConfig)(nil)).Elem()
+}
+
+func (o NodeAttachHostnameConfigOutput) ToNodeAttachHostnameConfigOutput() NodeAttachHostnameConfigOutput {
+	return o
+}
+
+func (o NodeAttachHostnameConfigOutput) ToNodeAttachHostnameConfigOutputWithContext(ctx context.Context) NodeAttachHostnameConfigOutput {
+	return o
+}
+
+func (o NodeAttachHostnameConfigOutput) ToNodeAttachHostnameConfigPtrOutput() NodeAttachHostnameConfigPtrOutput {
+	return o.ToNodeAttachHostnameConfigPtrOutputWithContext(context.Background())
+}
+
+func (o NodeAttachHostnameConfigOutput) ToNodeAttachHostnameConfigPtrOutputWithContext(ctx context.Context) NodeAttachHostnameConfigPtrOutput {
+	return o.ApplyTWithContext(ctx, func(_ context.Context, v NodeAttachHostnameConfig) *NodeAttachHostnameConfig {
+		return &v
+	}).(NodeAttachHostnameConfigPtrOutput)
+}
+
+// Specifies the hostname type of the kubernetes node.
+// The value can be:
+// + **privateIp**: The Kubernetes node is named after its IP address.
+// + **cceNodeName**: The Kubernetes node is named after the CCE node.
+func (o NodeAttachHostnameConfigOutput) Type() pulumi.StringOutput {
+	return o.ApplyT(func(v NodeAttachHostnameConfig) string { return v.Type }).(pulumi.StringOutput)
+}
+
+type NodeAttachHostnameConfigPtrOutput struct{ *pulumi.OutputState }
+
+func (NodeAttachHostnameConfigPtrOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((**NodeAttachHostnameConfig)(nil)).Elem()
+}
+
+func (o NodeAttachHostnameConfigPtrOutput) ToNodeAttachHostnameConfigPtrOutput() NodeAttachHostnameConfigPtrOutput {
+	return o
+}
+
+func (o NodeAttachHostnameConfigPtrOutput) ToNodeAttachHostnameConfigPtrOutputWithContext(ctx context.Context) NodeAttachHostnameConfigPtrOutput {
+	return o
+}
+
+func (o NodeAttachHostnameConfigPtrOutput) Elem() NodeAttachHostnameConfigOutput {
+	return o.ApplyT(func(v *NodeAttachHostnameConfig) NodeAttachHostnameConfig {
+		if v != nil {
+			return *v
+		}
+		var ret NodeAttachHostnameConfig
+		return ret
+	}).(NodeAttachHostnameConfigOutput)
+}
+
+// Specifies the hostname type of the kubernetes node.
+// The value can be:
+// + **privateIp**: The Kubernetes node is named after its IP address.
+// + **cceNodeName**: The Kubernetes node is named after the CCE node.
+func (o NodeAttachHostnameConfigPtrOutput) Type() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *NodeAttachHostnameConfig) *string {
+		if v == nil {
+			return nil
+		}
+		return &v.Type
+	}).(pulumi.StringPtrOutput)
+}
+
 type NodeAttachRootVolume struct {
+	// The DSS pool ID. This field is used only for dedicated storage.
+	DssPoolId *string `pulumi:"dssPoolId"`
 	// Deprecated: use extend_params instead
 	ExtendParam *string `pulumi:"extendParam"`
 	// The disk expansion parameters.
 	ExtendParams  map[string]string `pulumi:"extendParams"`
 	HwPassthrough *bool             `pulumi:"hwPassthrough"`
+	// The iops of the disk.
+	Iops *int `pulumi:"iops"`
 	// The ID of a KMS key. This is used to encrypt the volume.
 	KmsKeyId *string `pulumi:"kmsKeyId"`
-	// The disk size in GB.
+	// Specifies the size of a virtual space. Only an integer percentage is supported.
+	// Example: 90%. Note that the total percentage of all virtual spaces in a group cannot exceed 100%.
+	// Changing this parameter will reset the node.
 	Size *int `pulumi:"size"`
+	// The throughput of the disk.
+	Throughput *int `pulumi:"throughput"`
 	// The disk type.
 	Volumetype *string `pulumi:"volumetype"`
 }
@@ -767,15 +1978,23 @@ type NodeAttachRootVolumeInput interface {
 }
 
 type NodeAttachRootVolumeArgs struct {
+	// The DSS pool ID. This field is used only for dedicated storage.
+	DssPoolId pulumi.StringPtrInput `pulumi:"dssPoolId"`
 	// Deprecated: use extend_params instead
 	ExtendParam pulumi.StringPtrInput `pulumi:"extendParam"`
 	// The disk expansion parameters.
 	ExtendParams  pulumi.StringMapInput `pulumi:"extendParams"`
 	HwPassthrough pulumi.BoolPtrInput   `pulumi:"hwPassthrough"`
+	// The iops of the disk.
+	Iops pulumi.IntPtrInput `pulumi:"iops"`
 	// The ID of a KMS key. This is used to encrypt the volume.
 	KmsKeyId pulumi.StringPtrInput `pulumi:"kmsKeyId"`
-	// The disk size in GB.
+	// Specifies the size of a virtual space. Only an integer percentage is supported.
+	// Example: 90%. Note that the total percentage of all virtual spaces in a group cannot exceed 100%.
+	// Changing this parameter will reset the node.
 	Size pulumi.IntPtrInput `pulumi:"size"`
+	// The throughput of the disk.
+	Throughput pulumi.IntPtrInput `pulumi:"throughput"`
 	// The disk type.
 	Volumetype pulumi.StringPtrInput `pulumi:"volumetype"`
 }
@@ -831,6 +2050,11 @@ func (o NodeAttachRootVolumeOutput) ToNodeAttachRootVolumeOutputWithContext(ctx 
 	return o
 }
 
+// The DSS pool ID. This field is used only for dedicated storage.
+func (o NodeAttachRootVolumeOutput) DssPoolId() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v NodeAttachRootVolume) *string { return v.DssPoolId }).(pulumi.StringPtrOutput)
+}
+
 // Deprecated: use extend_params instead
 func (o NodeAttachRootVolumeOutput) ExtendParam() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v NodeAttachRootVolume) *string { return v.ExtendParam }).(pulumi.StringPtrOutput)
@@ -845,14 +2069,26 @@ func (o NodeAttachRootVolumeOutput) HwPassthrough() pulumi.BoolPtrOutput {
 	return o.ApplyT(func(v NodeAttachRootVolume) *bool { return v.HwPassthrough }).(pulumi.BoolPtrOutput)
 }
 
+// The iops of the disk.
+func (o NodeAttachRootVolumeOutput) Iops() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v NodeAttachRootVolume) *int { return v.Iops }).(pulumi.IntPtrOutput)
+}
+
 // The ID of a KMS key. This is used to encrypt the volume.
 func (o NodeAttachRootVolumeOutput) KmsKeyId() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v NodeAttachRootVolume) *string { return v.KmsKeyId }).(pulumi.StringPtrOutput)
 }
 
-// The disk size in GB.
+// Specifies the size of a virtual space. Only an integer percentage is supported.
+// Example: 90%. Note that the total percentage of all virtual spaces in a group cannot exceed 100%.
+// Changing this parameter will reset the node.
 func (o NodeAttachRootVolumeOutput) Size() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v NodeAttachRootVolume) *int { return v.Size }).(pulumi.IntPtrOutput)
+}
+
+// The throughput of the disk.
+func (o NodeAttachRootVolumeOutput) Throughput() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v NodeAttachRootVolume) *int { return v.Throughput }).(pulumi.IntPtrOutput)
 }
 
 // The disk type.
@@ -880,17 +2116,669 @@ func (o NodeAttachRootVolumeArrayOutput) Index(i pulumi.IntInput) NodeAttachRoot
 	}).(NodeAttachRootVolumeOutput)
 }
 
+type NodeAttachStorage struct {
+	// Specifies the storage group consists of multiple storage devices.
+	// This is used to divide storage space. Structure is documented below.
+	// Changing this parameter will reset the node.
+	Groups []NodeAttachStorageGroup `pulumi:"groups"`
+	// Specifies the disk selection.
+	// Matched disks are managed according to match labels and storage type. Structure is documented below.
+	// Changing this parameter will reset the node.
+	Selectors []NodeAttachStorageSelector `pulumi:"selectors"`
+}
+
+// NodeAttachStorageInput is an input type that accepts NodeAttachStorageArgs and NodeAttachStorageOutput values.
+// You can construct a concrete instance of `NodeAttachStorageInput` via:
+//
+//	NodeAttachStorageArgs{...}
+type NodeAttachStorageInput interface {
+	pulumi.Input
+
+	ToNodeAttachStorageOutput() NodeAttachStorageOutput
+	ToNodeAttachStorageOutputWithContext(context.Context) NodeAttachStorageOutput
+}
+
+type NodeAttachStorageArgs struct {
+	// Specifies the storage group consists of multiple storage devices.
+	// This is used to divide storage space. Structure is documented below.
+	// Changing this parameter will reset the node.
+	Groups NodeAttachStorageGroupArrayInput `pulumi:"groups"`
+	// Specifies the disk selection.
+	// Matched disks are managed according to match labels and storage type. Structure is documented below.
+	// Changing this parameter will reset the node.
+	Selectors NodeAttachStorageSelectorArrayInput `pulumi:"selectors"`
+}
+
+func (NodeAttachStorageArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*NodeAttachStorage)(nil)).Elem()
+}
+
+func (i NodeAttachStorageArgs) ToNodeAttachStorageOutput() NodeAttachStorageOutput {
+	return i.ToNodeAttachStorageOutputWithContext(context.Background())
+}
+
+func (i NodeAttachStorageArgs) ToNodeAttachStorageOutputWithContext(ctx context.Context) NodeAttachStorageOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(NodeAttachStorageOutput)
+}
+
+func (i NodeAttachStorageArgs) ToNodeAttachStoragePtrOutput() NodeAttachStoragePtrOutput {
+	return i.ToNodeAttachStoragePtrOutputWithContext(context.Background())
+}
+
+func (i NodeAttachStorageArgs) ToNodeAttachStoragePtrOutputWithContext(ctx context.Context) NodeAttachStoragePtrOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(NodeAttachStorageOutput).ToNodeAttachStoragePtrOutputWithContext(ctx)
+}
+
+// NodeAttachStoragePtrInput is an input type that accepts NodeAttachStorageArgs, NodeAttachStoragePtr and NodeAttachStoragePtrOutput values.
+// You can construct a concrete instance of `NodeAttachStoragePtrInput` via:
+//
+//	        NodeAttachStorageArgs{...}
+//
+//	or:
+//
+//	        nil
+type NodeAttachStoragePtrInput interface {
+	pulumi.Input
+
+	ToNodeAttachStoragePtrOutput() NodeAttachStoragePtrOutput
+	ToNodeAttachStoragePtrOutputWithContext(context.Context) NodeAttachStoragePtrOutput
+}
+
+type nodeAttachStoragePtrType NodeAttachStorageArgs
+
+func NodeAttachStoragePtr(v *NodeAttachStorageArgs) NodeAttachStoragePtrInput {
+	return (*nodeAttachStoragePtrType)(v)
+}
+
+func (*nodeAttachStoragePtrType) ElementType() reflect.Type {
+	return reflect.TypeOf((**NodeAttachStorage)(nil)).Elem()
+}
+
+func (i *nodeAttachStoragePtrType) ToNodeAttachStoragePtrOutput() NodeAttachStoragePtrOutput {
+	return i.ToNodeAttachStoragePtrOutputWithContext(context.Background())
+}
+
+func (i *nodeAttachStoragePtrType) ToNodeAttachStoragePtrOutputWithContext(ctx context.Context) NodeAttachStoragePtrOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(NodeAttachStoragePtrOutput)
+}
+
+type NodeAttachStorageOutput struct{ *pulumi.OutputState }
+
+func (NodeAttachStorageOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*NodeAttachStorage)(nil)).Elem()
+}
+
+func (o NodeAttachStorageOutput) ToNodeAttachStorageOutput() NodeAttachStorageOutput {
+	return o
+}
+
+func (o NodeAttachStorageOutput) ToNodeAttachStorageOutputWithContext(ctx context.Context) NodeAttachStorageOutput {
+	return o
+}
+
+func (o NodeAttachStorageOutput) ToNodeAttachStoragePtrOutput() NodeAttachStoragePtrOutput {
+	return o.ToNodeAttachStoragePtrOutputWithContext(context.Background())
+}
+
+func (o NodeAttachStorageOutput) ToNodeAttachStoragePtrOutputWithContext(ctx context.Context) NodeAttachStoragePtrOutput {
+	return o.ApplyTWithContext(ctx, func(_ context.Context, v NodeAttachStorage) *NodeAttachStorage {
+		return &v
+	}).(NodeAttachStoragePtrOutput)
+}
+
+// Specifies the storage group consists of multiple storage devices.
+// This is used to divide storage space. Structure is documented below.
+// Changing this parameter will reset the node.
+func (o NodeAttachStorageOutput) Groups() NodeAttachStorageGroupArrayOutput {
+	return o.ApplyT(func(v NodeAttachStorage) []NodeAttachStorageGroup { return v.Groups }).(NodeAttachStorageGroupArrayOutput)
+}
+
+// Specifies the disk selection.
+// Matched disks are managed according to match labels and storage type. Structure is documented below.
+// Changing this parameter will reset the node.
+func (o NodeAttachStorageOutput) Selectors() NodeAttachStorageSelectorArrayOutput {
+	return o.ApplyT(func(v NodeAttachStorage) []NodeAttachStorageSelector { return v.Selectors }).(NodeAttachStorageSelectorArrayOutput)
+}
+
+type NodeAttachStoragePtrOutput struct{ *pulumi.OutputState }
+
+func (NodeAttachStoragePtrOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((**NodeAttachStorage)(nil)).Elem()
+}
+
+func (o NodeAttachStoragePtrOutput) ToNodeAttachStoragePtrOutput() NodeAttachStoragePtrOutput {
+	return o
+}
+
+func (o NodeAttachStoragePtrOutput) ToNodeAttachStoragePtrOutputWithContext(ctx context.Context) NodeAttachStoragePtrOutput {
+	return o
+}
+
+func (o NodeAttachStoragePtrOutput) Elem() NodeAttachStorageOutput {
+	return o.ApplyT(func(v *NodeAttachStorage) NodeAttachStorage {
+		if v != nil {
+			return *v
+		}
+		var ret NodeAttachStorage
+		return ret
+	}).(NodeAttachStorageOutput)
+}
+
+// Specifies the storage group consists of multiple storage devices.
+// This is used to divide storage space. Structure is documented below.
+// Changing this parameter will reset the node.
+func (o NodeAttachStoragePtrOutput) Groups() NodeAttachStorageGroupArrayOutput {
+	return o.ApplyT(func(v *NodeAttachStorage) []NodeAttachStorageGroup {
+		if v == nil {
+			return nil
+		}
+		return v.Groups
+	}).(NodeAttachStorageGroupArrayOutput)
+}
+
+// Specifies the disk selection.
+// Matched disks are managed according to match labels and storage type. Structure is documented below.
+// Changing this parameter will reset the node.
+func (o NodeAttachStoragePtrOutput) Selectors() NodeAttachStorageSelectorArrayOutput {
+	return o.ApplyT(func(v *NodeAttachStorage) []NodeAttachStorageSelector {
+		if v == nil {
+			return nil
+		}
+		return v.Selectors
+	}).(NodeAttachStorageSelectorArrayOutput)
+}
+
+type NodeAttachStorageGroup struct {
+	// Specifies the whether the storage space is for **kubernetes** and
+	// **runtime** components. Only one group can be set to true. The default value is **false**.
+	// Changing this parameter will reset the node.
+	CceManaged *bool `pulumi:"cceManaged"`
+	// Specifies the virtual space name. Currently, only **kubernetes**, **runtime**,
+	// and **user** are supported. Changing this parameter will reset the node.
+	Name string `pulumi:"name"`
+	// Specifies the list of names of selectors to match.
+	// This parameter corresponds to name in `selectors`. A group can match multiple selectors,
+	// but a selector can match only one group. Changing this parameter will reset the node.
+	SelectorNames []string `pulumi:"selectorNames"`
+	// Specifies the detailed management of space configuration in a group.
+	// Changing this parameter will reset the node.
+	VirtualSpaces []NodeAttachStorageGroupVirtualSpace `pulumi:"virtualSpaces"`
+}
+
+// NodeAttachStorageGroupInput is an input type that accepts NodeAttachStorageGroupArgs and NodeAttachStorageGroupOutput values.
+// You can construct a concrete instance of `NodeAttachStorageGroupInput` via:
+//
+//	NodeAttachStorageGroupArgs{...}
+type NodeAttachStorageGroupInput interface {
+	pulumi.Input
+
+	ToNodeAttachStorageGroupOutput() NodeAttachStorageGroupOutput
+	ToNodeAttachStorageGroupOutputWithContext(context.Context) NodeAttachStorageGroupOutput
+}
+
+type NodeAttachStorageGroupArgs struct {
+	// Specifies the whether the storage space is for **kubernetes** and
+	// **runtime** components. Only one group can be set to true. The default value is **false**.
+	// Changing this parameter will reset the node.
+	CceManaged pulumi.BoolPtrInput `pulumi:"cceManaged"`
+	// Specifies the virtual space name. Currently, only **kubernetes**, **runtime**,
+	// and **user** are supported. Changing this parameter will reset the node.
+	Name pulumi.StringInput `pulumi:"name"`
+	// Specifies the list of names of selectors to match.
+	// This parameter corresponds to name in `selectors`. A group can match multiple selectors,
+	// but a selector can match only one group. Changing this parameter will reset the node.
+	SelectorNames pulumi.StringArrayInput `pulumi:"selectorNames"`
+	// Specifies the detailed management of space configuration in a group.
+	// Changing this parameter will reset the node.
+	VirtualSpaces NodeAttachStorageGroupVirtualSpaceArrayInput `pulumi:"virtualSpaces"`
+}
+
+func (NodeAttachStorageGroupArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*NodeAttachStorageGroup)(nil)).Elem()
+}
+
+func (i NodeAttachStorageGroupArgs) ToNodeAttachStorageGroupOutput() NodeAttachStorageGroupOutput {
+	return i.ToNodeAttachStorageGroupOutputWithContext(context.Background())
+}
+
+func (i NodeAttachStorageGroupArgs) ToNodeAttachStorageGroupOutputWithContext(ctx context.Context) NodeAttachStorageGroupOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(NodeAttachStorageGroupOutput)
+}
+
+// NodeAttachStorageGroupArrayInput is an input type that accepts NodeAttachStorageGroupArray and NodeAttachStorageGroupArrayOutput values.
+// You can construct a concrete instance of `NodeAttachStorageGroupArrayInput` via:
+//
+//	NodeAttachStorageGroupArray{ NodeAttachStorageGroupArgs{...} }
+type NodeAttachStorageGroupArrayInput interface {
+	pulumi.Input
+
+	ToNodeAttachStorageGroupArrayOutput() NodeAttachStorageGroupArrayOutput
+	ToNodeAttachStorageGroupArrayOutputWithContext(context.Context) NodeAttachStorageGroupArrayOutput
+}
+
+type NodeAttachStorageGroupArray []NodeAttachStorageGroupInput
+
+func (NodeAttachStorageGroupArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]NodeAttachStorageGroup)(nil)).Elem()
+}
+
+func (i NodeAttachStorageGroupArray) ToNodeAttachStorageGroupArrayOutput() NodeAttachStorageGroupArrayOutput {
+	return i.ToNodeAttachStorageGroupArrayOutputWithContext(context.Background())
+}
+
+func (i NodeAttachStorageGroupArray) ToNodeAttachStorageGroupArrayOutputWithContext(ctx context.Context) NodeAttachStorageGroupArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(NodeAttachStorageGroupArrayOutput)
+}
+
+type NodeAttachStorageGroupOutput struct{ *pulumi.OutputState }
+
+func (NodeAttachStorageGroupOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*NodeAttachStorageGroup)(nil)).Elem()
+}
+
+func (o NodeAttachStorageGroupOutput) ToNodeAttachStorageGroupOutput() NodeAttachStorageGroupOutput {
+	return o
+}
+
+func (o NodeAttachStorageGroupOutput) ToNodeAttachStorageGroupOutputWithContext(ctx context.Context) NodeAttachStorageGroupOutput {
+	return o
+}
+
+// Specifies the whether the storage space is for **kubernetes** and
+// **runtime** components. Only one group can be set to true. The default value is **false**.
+// Changing this parameter will reset the node.
+func (o NodeAttachStorageGroupOutput) CceManaged() pulumi.BoolPtrOutput {
+	return o.ApplyT(func(v NodeAttachStorageGroup) *bool { return v.CceManaged }).(pulumi.BoolPtrOutput)
+}
+
+// Specifies the virtual space name. Currently, only **kubernetes**, **runtime**,
+// and **user** are supported. Changing this parameter will reset the node.
+func (o NodeAttachStorageGroupOutput) Name() pulumi.StringOutput {
+	return o.ApplyT(func(v NodeAttachStorageGroup) string { return v.Name }).(pulumi.StringOutput)
+}
+
+// Specifies the list of names of selectors to match.
+// This parameter corresponds to name in `selectors`. A group can match multiple selectors,
+// but a selector can match only one group. Changing this parameter will reset the node.
+func (o NodeAttachStorageGroupOutput) SelectorNames() pulumi.StringArrayOutput {
+	return o.ApplyT(func(v NodeAttachStorageGroup) []string { return v.SelectorNames }).(pulumi.StringArrayOutput)
+}
+
+// Specifies the detailed management of space configuration in a group.
+// Changing this parameter will reset the node.
+func (o NodeAttachStorageGroupOutput) VirtualSpaces() NodeAttachStorageGroupVirtualSpaceArrayOutput {
+	return o.ApplyT(func(v NodeAttachStorageGroup) []NodeAttachStorageGroupVirtualSpace { return v.VirtualSpaces }).(NodeAttachStorageGroupVirtualSpaceArrayOutput)
+}
+
+type NodeAttachStorageGroupArrayOutput struct{ *pulumi.OutputState }
+
+func (NodeAttachStorageGroupArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]NodeAttachStorageGroup)(nil)).Elem()
+}
+
+func (o NodeAttachStorageGroupArrayOutput) ToNodeAttachStorageGroupArrayOutput() NodeAttachStorageGroupArrayOutput {
+	return o
+}
+
+func (o NodeAttachStorageGroupArrayOutput) ToNodeAttachStorageGroupArrayOutputWithContext(ctx context.Context) NodeAttachStorageGroupArrayOutput {
+	return o
+}
+
+func (o NodeAttachStorageGroupArrayOutput) Index(i pulumi.IntInput) NodeAttachStorageGroupOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) NodeAttachStorageGroup {
+		return vs[0].([]NodeAttachStorageGroup)[vs[1].(int)]
+	}).(NodeAttachStorageGroupOutput)
+}
+
+type NodeAttachStorageGroupVirtualSpace struct {
+	// Specifies the LVM write mode, values can be **linear** and **striped**.
+	// This parameter takes effect only in **kubernetes** and **user** configuration. Changing this parameter will create
+	// a new resource.
+	LvmLvType *string `pulumi:"lvmLvType"`
+	// Specifies the absolute path to which the disk is attached.
+	// This parameter takes effect only in **user** configuration. Changing this parameter will reset the node.
+	LvmPath *string `pulumi:"lvmPath"`
+	// Specifies the virtual space name. Currently, only **kubernetes**, **runtime**,
+	// and **user** are supported. Changing this parameter will reset the node.
+	Name string `pulumi:"name"`
+	// Specifies the LVM write mode, values can be **linear** and **striped**.
+	// This parameter takes effect only in **runtime** configuration. Changing this parameter will reset the node.
+	RuntimeLvType *string `pulumi:"runtimeLvType"`
+	// Specifies the size of a virtual space. Only an integer percentage is supported.
+	// Example: 90%. Note that the total percentage of all virtual spaces in a group cannot exceed 100%.
+	// Changing this parameter will reset the node.
+	Size string `pulumi:"size"`
+}
+
+// NodeAttachStorageGroupVirtualSpaceInput is an input type that accepts NodeAttachStorageGroupVirtualSpaceArgs and NodeAttachStorageGroupVirtualSpaceOutput values.
+// You can construct a concrete instance of `NodeAttachStorageGroupVirtualSpaceInput` via:
+//
+//	NodeAttachStorageGroupVirtualSpaceArgs{...}
+type NodeAttachStorageGroupVirtualSpaceInput interface {
+	pulumi.Input
+
+	ToNodeAttachStorageGroupVirtualSpaceOutput() NodeAttachStorageGroupVirtualSpaceOutput
+	ToNodeAttachStorageGroupVirtualSpaceOutputWithContext(context.Context) NodeAttachStorageGroupVirtualSpaceOutput
+}
+
+type NodeAttachStorageGroupVirtualSpaceArgs struct {
+	// Specifies the LVM write mode, values can be **linear** and **striped**.
+	// This parameter takes effect only in **kubernetes** and **user** configuration. Changing this parameter will create
+	// a new resource.
+	LvmLvType pulumi.StringPtrInput `pulumi:"lvmLvType"`
+	// Specifies the absolute path to which the disk is attached.
+	// This parameter takes effect only in **user** configuration. Changing this parameter will reset the node.
+	LvmPath pulumi.StringPtrInput `pulumi:"lvmPath"`
+	// Specifies the virtual space name. Currently, only **kubernetes**, **runtime**,
+	// and **user** are supported. Changing this parameter will reset the node.
+	Name pulumi.StringInput `pulumi:"name"`
+	// Specifies the LVM write mode, values can be **linear** and **striped**.
+	// This parameter takes effect only in **runtime** configuration. Changing this parameter will reset the node.
+	RuntimeLvType pulumi.StringPtrInput `pulumi:"runtimeLvType"`
+	// Specifies the size of a virtual space. Only an integer percentage is supported.
+	// Example: 90%. Note that the total percentage of all virtual spaces in a group cannot exceed 100%.
+	// Changing this parameter will reset the node.
+	Size pulumi.StringInput `pulumi:"size"`
+}
+
+func (NodeAttachStorageGroupVirtualSpaceArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*NodeAttachStorageGroupVirtualSpace)(nil)).Elem()
+}
+
+func (i NodeAttachStorageGroupVirtualSpaceArgs) ToNodeAttachStorageGroupVirtualSpaceOutput() NodeAttachStorageGroupVirtualSpaceOutput {
+	return i.ToNodeAttachStorageGroupVirtualSpaceOutputWithContext(context.Background())
+}
+
+func (i NodeAttachStorageGroupVirtualSpaceArgs) ToNodeAttachStorageGroupVirtualSpaceOutputWithContext(ctx context.Context) NodeAttachStorageGroupVirtualSpaceOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(NodeAttachStorageGroupVirtualSpaceOutput)
+}
+
+// NodeAttachStorageGroupVirtualSpaceArrayInput is an input type that accepts NodeAttachStorageGroupVirtualSpaceArray and NodeAttachStorageGroupVirtualSpaceArrayOutput values.
+// You can construct a concrete instance of `NodeAttachStorageGroupVirtualSpaceArrayInput` via:
+//
+//	NodeAttachStorageGroupVirtualSpaceArray{ NodeAttachStorageGroupVirtualSpaceArgs{...} }
+type NodeAttachStorageGroupVirtualSpaceArrayInput interface {
+	pulumi.Input
+
+	ToNodeAttachStorageGroupVirtualSpaceArrayOutput() NodeAttachStorageGroupVirtualSpaceArrayOutput
+	ToNodeAttachStorageGroupVirtualSpaceArrayOutputWithContext(context.Context) NodeAttachStorageGroupVirtualSpaceArrayOutput
+}
+
+type NodeAttachStorageGroupVirtualSpaceArray []NodeAttachStorageGroupVirtualSpaceInput
+
+func (NodeAttachStorageGroupVirtualSpaceArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]NodeAttachStorageGroupVirtualSpace)(nil)).Elem()
+}
+
+func (i NodeAttachStorageGroupVirtualSpaceArray) ToNodeAttachStorageGroupVirtualSpaceArrayOutput() NodeAttachStorageGroupVirtualSpaceArrayOutput {
+	return i.ToNodeAttachStorageGroupVirtualSpaceArrayOutputWithContext(context.Background())
+}
+
+func (i NodeAttachStorageGroupVirtualSpaceArray) ToNodeAttachStorageGroupVirtualSpaceArrayOutputWithContext(ctx context.Context) NodeAttachStorageGroupVirtualSpaceArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(NodeAttachStorageGroupVirtualSpaceArrayOutput)
+}
+
+type NodeAttachStorageGroupVirtualSpaceOutput struct{ *pulumi.OutputState }
+
+func (NodeAttachStorageGroupVirtualSpaceOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*NodeAttachStorageGroupVirtualSpace)(nil)).Elem()
+}
+
+func (o NodeAttachStorageGroupVirtualSpaceOutput) ToNodeAttachStorageGroupVirtualSpaceOutput() NodeAttachStorageGroupVirtualSpaceOutput {
+	return o
+}
+
+func (o NodeAttachStorageGroupVirtualSpaceOutput) ToNodeAttachStorageGroupVirtualSpaceOutputWithContext(ctx context.Context) NodeAttachStorageGroupVirtualSpaceOutput {
+	return o
+}
+
+// Specifies the LVM write mode, values can be **linear** and **striped**.
+// This parameter takes effect only in **kubernetes** and **user** configuration. Changing this parameter will create
+// a new resource.
+func (o NodeAttachStorageGroupVirtualSpaceOutput) LvmLvType() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v NodeAttachStorageGroupVirtualSpace) *string { return v.LvmLvType }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the absolute path to which the disk is attached.
+// This parameter takes effect only in **user** configuration. Changing this parameter will reset the node.
+func (o NodeAttachStorageGroupVirtualSpaceOutput) LvmPath() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v NodeAttachStorageGroupVirtualSpace) *string { return v.LvmPath }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the virtual space name. Currently, only **kubernetes**, **runtime**,
+// and **user** are supported. Changing this parameter will reset the node.
+func (o NodeAttachStorageGroupVirtualSpaceOutput) Name() pulumi.StringOutput {
+	return o.ApplyT(func(v NodeAttachStorageGroupVirtualSpace) string { return v.Name }).(pulumi.StringOutput)
+}
+
+// Specifies the LVM write mode, values can be **linear** and **striped**.
+// This parameter takes effect only in **runtime** configuration. Changing this parameter will reset the node.
+func (o NodeAttachStorageGroupVirtualSpaceOutput) RuntimeLvType() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v NodeAttachStorageGroupVirtualSpace) *string { return v.RuntimeLvType }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the size of a virtual space. Only an integer percentage is supported.
+// Example: 90%. Note that the total percentage of all virtual spaces in a group cannot exceed 100%.
+// Changing this parameter will reset the node.
+func (o NodeAttachStorageGroupVirtualSpaceOutput) Size() pulumi.StringOutput {
+	return o.ApplyT(func(v NodeAttachStorageGroupVirtualSpace) string { return v.Size }).(pulumi.StringOutput)
+}
+
+type NodeAttachStorageGroupVirtualSpaceArrayOutput struct{ *pulumi.OutputState }
+
+func (NodeAttachStorageGroupVirtualSpaceArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]NodeAttachStorageGroupVirtualSpace)(nil)).Elem()
+}
+
+func (o NodeAttachStorageGroupVirtualSpaceArrayOutput) ToNodeAttachStorageGroupVirtualSpaceArrayOutput() NodeAttachStorageGroupVirtualSpaceArrayOutput {
+	return o
+}
+
+func (o NodeAttachStorageGroupVirtualSpaceArrayOutput) ToNodeAttachStorageGroupVirtualSpaceArrayOutputWithContext(ctx context.Context) NodeAttachStorageGroupVirtualSpaceArrayOutput {
+	return o
+}
+
+func (o NodeAttachStorageGroupVirtualSpaceArrayOutput) Index(i pulumi.IntInput) NodeAttachStorageGroupVirtualSpaceOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) NodeAttachStorageGroupVirtualSpace {
+		return vs[0].([]NodeAttachStorageGroupVirtualSpace)[vs[1].(int)]
+	}).(NodeAttachStorageGroupVirtualSpaceOutput)
+}
+
+type NodeAttachStorageSelector struct {
+	// Specifies the number of disks to be selected. If omitted,
+	// all disks of this type are selected. Changing this parameter will reset the node.
+	MatchLabelCount *string `pulumi:"matchLabelCount"`
+	// Specifies the customer master key ID of an encrypted
+	// disk. Changing this parameter will reset the node.
+	MatchLabelMetadataCmkid *string `pulumi:"matchLabelMetadataCmkid"`
+	// Specifies the disk encryption identifier.
+	// Values can be: **0** indicates that the disk is not encrypted and **1** indicates that the disk is encrypted.
+	// If omitted, whether the disk is encrypted is not limited. Changing this parameter will reset the node.
+	MatchLabelMetadataEncrypted *string `pulumi:"matchLabelMetadataEncrypted"`
+	// Specifies the matched disk size. If omitted,
+	// the disk size is not limited. Example: 100. Changing this parameter will reset the node.
+	MatchLabelSize *string `pulumi:"matchLabelSize"`
+	// Specifies the EVS disk type. Currently,
+	// **SSD**, **GPSSD**, and **SAS** are supported. If omitted, the disk type is not limited.
+	// Changing this parameter will reset the node.
+	MatchLabelVolumeType *string `pulumi:"matchLabelVolumeType"`
+	// Specifies the virtual space name. Currently, only **kubernetes**, **runtime**,
+	// and **user** are supported. Changing this parameter will reset the node.
+	Name string `pulumi:"name"`
+	// Specifies the hostname type of the kubernetes node.
+	// The value can be:
+	// + **privateIp**: The Kubernetes node is named after its IP address.
+	// + **cceNodeName**: The Kubernetes node is named after the CCE node.
+	Type *string `pulumi:"type"`
+}
+
+// NodeAttachStorageSelectorInput is an input type that accepts NodeAttachStorageSelectorArgs and NodeAttachStorageSelectorOutput values.
+// You can construct a concrete instance of `NodeAttachStorageSelectorInput` via:
+//
+//	NodeAttachStorageSelectorArgs{...}
+type NodeAttachStorageSelectorInput interface {
+	pulumi.Input
+
+	ToNodeAttachStorageSelectorOutput() NodeAttachStorageSelectorOutput
+	ToNodeAttachStorageSelectorOutputWithContext(context.Context) NodeAttachStorageSelectorOutput
+}
+
+type NodeAttachStorageSelectorArgs struct {
+	// Specifies the number of disks to be selected. If omitted,
+	// all disks of this type are selected. Changing this parameter will reset the node.
+	MatchLabelCount pulumi.StringPtrInput `pulumi:"matchLabelCount"`
+	// Specifies the customer master key ID of an encrypted
+	// disk. Changing this parameter will reset the node.
+	MatchLabelMetadataCmkid pulumi.StringPtrInput `pulumi:"matchLabelMetadataCmkid"`
+	// Specifies the disk encryption identifier.
+	// Values can be: **0** indicates that the disk is not encrypted and **1** indicates that the disk is encrypted.
+	// If omitted, whether the disk is encrypted is not limited. Changing this parameter will reset the node.
+	MatchLabelMetadataEncrypted pulumi.StringPtrInput `pulumi:"matchLabelMetadataEncrypted"`
+	// Specifies the matched disk size. If omitted,
+	// the disk size is not limited. Example: 100. Changing this parameter will reset the node.
+	MatchLabelSize pulumi.StringPtrInput `pulumi:"matchLabelSize"`
+	// Specifies the EVS disk type. Currently,
+	// **SSD**, **GPSSD**, and **SAS** are supported. If omitted, the disk type is not limited.
+	// Changing this parameter will reset the node.
+	MatchLabelVolumeType pulumi.StringPtrInput `pulumi:"matchLabelVolumeType"`
+	// Specifies the virtual space name. Currently, only **kubernetes**, **runtime**,
+	// and **user** are supported. Changing this parameter will reset the node.
+	Name pulumi.StringInput `pulumi:"name"`
+	// Specifies the hostname type of the kubernetes node.
+	// The value can be:
+	// + **privateIp**: The Kubernetes node is named after its IP address.
+	// + **cceNodeName**: The Kubernetes node is named after the CCE node.
+	Type pulumi.StringPtrInput `pulumi:"type"`
+}
+
+func (NodeAttachStorageSelectorArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*NodeAttachStorageSelector)(nil)).Elem()
+}
+
+func (i NodeAttachStorageSelectorArgs) ToNodeAttachStorageSelectorOutput() NodeAttachStorageSelectorOutput {
+	return i.ToNodeAttachStorageSelectorOutputWithContext(context.Background())
+}
+
+func (i NodeAttachStorageSelectorArgs) ToNodeAttachStorageSelectorOutputWithContext(ctx context.Context) NodeAttachStorageSelectorOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(NodeAttachStorageSelectorOutput)
+}
+
+// NodeAttachStorageSelectorArrayInput is an input type that accepts NodeAttachStorageSelectorArray and NodeAttachStorageSelectorArrayOutput values.
+// You can construct a concrete instance of `NodeAttachStorageSelectorArrayInput` via:
+//
+//	NodeAttachStorageSelectorArray{ NodeAttachStorageSelectorArgs{...} }
+type NodeAttachStorageSelectorArrayInput interface {
+	pulumi.Input
+
+	ToNodeAttachStorageSelectorArrayOutput() NodeAttachStorageSelectorArrayOutput
+	ToNodeAttachStorageSelectorArrayOutputWithContext(context.Context) NodeAttachStorageSelectorArrayOutput
+}
+
+type NodeAttachStorageSelectorArray []NodeAttachStorageSelectorInput
+
+func (NodeAttachStorageSelectorArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]NodeAttachStorageSelector)(nil)).Elem()
+}
+
+func (i NodeAttachStorageSelectorArray) ToNodeAttachStorageSelectorArrayOutput() NodeAttachStorageSelectorArrayOutput {
+	return i.ToNodeAttachStorageSelectorArrayOutputWithContext(context.Background())
+}
+
+func (i NodeAttachStorageSelectorArray) ToNodeAttachStorageSelectorArrayOutputWithContext(ctx context.Context) NodeAttachStorageSelectorArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(NodeAttachStorageSelectorArrayOutput)
+}
+
+type NodeAttachStorageSelectorOutput struct{ *pulumi.OutputState }
+
+func (NodeAttachStorageSelectorOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*NodeAttachStorageSelector)(nil)).Elem()
+}
+
+func (o NodeAttachStorageSelectorOutput) ToNodeAttachStorageSelectorOutput() NodeAttachStorageSelectorOutput {
+	return o
+}
+
+func (o NodeAttachStorageSelectorOutput) ToNodeAttachStorageSelectorOutputWithContext(ctx context.Context) NodeAttachStorageSelectorOutput {
+	return o
+}
+
+// Specifies the number of disks to be selected. If omitted,
+// all disks of this type are selected. Changing this parameter will reset the node.
+func (o NodeAttachStorageSelectorOutput) MatchLabelCount() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v NodeAttachStorageSelector) *string { return v.MatchLabelCount }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the customer master key ID of an encrypted
+// disk. Changing this parameter will reset the node.
+func (o NodeAttachStorageSelectorOutput) MatchLabelMetadataCmkid() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v NodeAttachStorageSelector) *string { return v.MatchLabelMetadataCmkid }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the disk encryption identifier.
+// Values can be: **0** indicates that the disk is not encrypted and **1** indicates that the disk is encrypted.
+// If omitted, whether the disk is encrypted is not limited. Changing this parameter will reset the node.
+func (o NodeAttachStorageSelectorOutput) MatchLabelMetadataEncrypted() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v NodeAttachStorageSelector) *string { return v.MatchLabelMetadataEncrypted }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the matched disk size. If omitted,
+// the disk size is not limited. Example: 100. Changing this parameter will reset the node.
+func (o NodeAttachStorageSelectorOutput) MatchLabelSize() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v NodeAttachStorageSelector) *string { return v.MatchLabelSize }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the EVS disk type. Currently,
+// **SSD**, **GPSSD**, and **SAS** are supported. If omitted, the disk type is not limited.
+// Changing this parameter will reset the node.
+func (o NodeAttachStorageSelectorOutput) MatchLabelVolumeType() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v NodeAttachStorageSelector) *string { return v.MatchLabelVolumeType }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the virtual space name. Currently, only **kubernetes**, **runtime**,
+// and **user** are supported. Changing this parameter will reset the node.
+func (o NodeAttachStorageSelectorOutput) Name() pulumi.StringOutput {
+	return o.ApplyT(func(v NodeAttachStorageSelector) string { return v.Name }).(pulumi.StringOutput)
+}
+
+// Specifies the hostname type of the kubernetes node.
+// The value can be:
+// + **privateIp**: The Kubernetes node is named after its IP address.
+// + **cceNodeName**: The Kubernetes node is named after the CCE node.
+func (o NodeAttachStorageSelectorOutput) Type() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v NodeAttachStorageSelector) *string { return v.Type }).(pulumi.StringPtrOutput)
+}
+
+type NodeAttachStorageSelectorArrayOutput struct{ *pulumi.OutputState }
+
+func (NodeAttachStorageSelectorArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]NodeAttachStorageSelector)(nil)).Elem()
+}
+
+func (o NodeAttachStorageSelectorArrayOutput) ToNodeAttachStorageSelectorArrayOutput() NodeAttachStorageSelectorArrayOutput {
+	return o
+}
+
+func (o NodeAttachStorageSelectorArrayOutput) ToNodeAttachStorageSelectorArrayOutputWithContext(ctx context.Context) NodeAttachStorageSelectorArrayOutput {
+	return o
+}
+
+func (o NodeAttachStorageSelectorArrayOutput) Index(i pulumi.IntInput) NodeAttachStorageSelectorOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) NodeAttachStorageSelector {
+		return vs[0].([]NodeAttachStorageSelector)[vs[1].(int)]
+	}).(NodeAttachStorageSelectorOutput)
+}
+
 type NodeAttachTaint struct {
 	// Available options are NoSchedule, PreferNoSchedule, and NoExecute.
-	// Changing this parameter will create a new resource.
+	// Changing this parameter will reset the node.
 	Effect string `pulumi:"effect"`
 	// A key must contain 1 to 63 characters starting with a letter or digit.
 	// Only letters, digits, hyphens (-), underscores (_), and periods (.) are allowed. A DNS subdomain name can be used
-	// as the prefix of a key. Changing this parameter will create a new resource.
+	// as the prefix of a key. Changing this parameter will reset the node.
 	Key string `pulumi:"key"`
 	// A value must start with a letter or digit and can contain a maximum of 63
 	// characters, including letters, digits, hyphens (-), underscores (_), and periods (.). Changing this parameter will
-	// create a new resource.
+	// reset the node.
 	Value string `pulumi:"value"`
 }
 
@@ -907,15 +2795,15 @@ type NodeAttachTaintInput interface {
 
 type NodeAttachTaintArgs struct {
 	// Available options are NoSchedule, PreferNoSchedule, and NoExecute.
-	// Changing this parameter will create a new resource.
+	// Changing this parameter will reset the node.
 	Effect pulumi.StringInput `pulumi:"effect"`
 	// A key must contain 1 to 63 characters starting with a letter or digit.
 	// Only letters, digits, hyphens (-), underscores (_), and periods (.) are allowed. A DNS subdomain name can be used
-	// as the prefix of a key. Changing this parameter will create a new resource.
+	// as the prefix of a key. Changing this parameter will reset the node.
 	Key pulumi.StringInput `pulumi:"key"`
 	// A value must start with a letter or digit and can contain a maximum of 63
 	// characters, including letters, digits, hyphens (-), underscores (_), and periods (.). Changing this parameter will
-	// create a new resource.
+	// reset the node.
 	Value pulumi.StringInput `pulumi:"value"`
 }
 
@@ -971,21 +2859,21 @@ func (o NodeAttachTaintOutput) ToNodeAttachTaintOutputWithContext(ctx context.Co
 }
 
 // Available options are NoSchedule, PreferNoSchedule, and NoExecute.
-// Changing this parameter will create a new resource.
+// Changing this parameter will reset the node.
 func (o NodeAttachTaintOutput) Effect() pulumi.StringOutput {
 	return o.ApplyT(func(v NodeAttachTaint) string { return v.Effect }).(pulumi.StringOutput)
 }
 
 // A key must contain 1 to 63 characters starting with a letter or digit.
 // Only letters, digits, hyphens (-), underscores (_), and periods (.) are allowed. A DNS subdomain name can be used
-// as the prefix of a key. Changing this parameter will create a new resource.
+// as the prefix of a key. Changing this parameter will reset the node.
 func (o NodeAttachTaintOutput) Key() pulumi.StringOutput {
 	return o.ApplyT(func(v NodeAttachTaint) string { return v.Key }).(pulumi.StringOutput)
 }
 
 // A value must start with a letter or digit and can contain a maximum of 63
 // characters, including letters, digits, hyphens (-), underscores (_), and periods (.). Changing this parameter will
-// create a new resource.
+// reset the node.
 func (o NodeAttachTaintOutput) Value() pulumi.StringOutput {
 	return o.ApplyT(func(v NodeAttachTaint) string { return v.Value }).(pulumi.StringOutput)
 }
@@ -1011,20 +2899,19 @@ func (o NodeAttachTaintArrayOutput) Index(i pulumi.IntInput) NodeAttachTaintOutp
 }
 
 type NodeDataVolume struct {
-	// Specifies the extended parameter.
-	// Changing this parameter will create a new resource.
-	// The available keys are as follows:
-	// + **agency_name**: The agency name to provide temporary credentials for CCE node to access other cloud services.
-	// + **alpha.cce/NodeImageID**: The custom image ID used to create the BMS nodes.
-	// + **dockerBaseSize**: The available disk space of a single docker container on the node in device mapper mode.
-	// + **DockerLVMConfigOverride**: Specifies the data disk configurations of Docker.
-	//
+	// Specifies the DSS pool ID. This field is used only for
+	// dedicated storage. Changing this parameter will create a new resource.
+	DssPoolId *string `pulumi:"dssPoolId"`
 	// Deprecated: use extend_params instead
 	ExtendParam *string `pulumi:"extendParam"`
-	// Specifies the disk expansion parameters.
+	// Specifies the extended parameters.
+	// The object structure is documented below.
 	// Changing this parameter will create a new resource.
 	ExtendParams  map[string]string `pulumi:"extendParams"`
 	HwPassthrough *bool             `pulumi:"hwPassthrough"`
+	// Specifies the iops of the disk,
+	// required when `volumetype` is **GPSSD2** or **ESSD2**.
+	Iops *int `pulumi:"iops"`
 	// Specifies the ID of a KMS key. This is used to encrypt the volume.
 	// Changing this parameter will create a new resource.
 	KmsKeyId *string `pulumi:"kmsKeyId"`
@@ -1032,6 +2919,9 @@ type NodeDataVolume struct {
 	// Example: 90%. Note that the total percentage of all virtual spaces in a group cannot exceed 100%.
 	// Changing this parameter will create a new resource.
 	Size int `pulumi:"size"`
+	// Specifies the throughput of the disk in MiB/s,
+	// required when `volumetype` is **GPSSD2**.
+	Throughput *int `pulumi:"throughput"`
 	// Specifies the disk type.
 	// Changing this parameter will create a new resource.
 	Volumetype string `pulumi:"volumetype"`
@@ -1049,20 +2939,19 @@ type NodeDataVolumeInput interface {
 }
 
 type NodeDataVolumeArgs struct {
-	// Specifies the extended parameter.
-	// Changing this parameter will create a new resource.
-	// The available keys are as follows:
-	// + **agency_name**: The agency name to provide temporary credentials for CCE node to access other cloud services.
-	// + **alpha.cce/NodeImageID**: The custom image ID used to create the BMS nodes.
-	// + **dockerBaseSize**: The available disk space of a single docker container on the node in device mapper mode.
-	// + **DockerLVMConfigOverride**: Specifies the data disk configurations of Docker.
-	//
+	// Specifies the DSS pool ID. This field is used only for
+	// dedicated storage. Changing this parameter will create a new resource.
+	DssPoolId pulumi.StringPtrInput `pulumi:"dssPoolId"`
 	// Deprecated: use extend_params instead
 	ExtendParam pulumi.StringPtrInput `pulumi:"extendParam"`
-	// Specifies the disk expansion parameters.
+	// Specifies the extended parameters.
+	// The object structure is documented below.
 	// Changing this parameter will create a new resource.
 	ExtendParams  pulumi.StringMapInput `pulumi:"extendParams"`
 	HwPassthrough pulumi.BoolPtrInput   `pulumi:"hwPassthrough"`
+	// Specifies the iops of the disk,
+	// required when `volumetype` is **GPSSD2** or **ESSD2**.
+	Iops pulumi.IntPtrInput `pulumi:"iops"`
 	// Specifies the ID of a KMS key. This is used to encrypt the volume.
 	// Changing this parameter will create a new resource.
 	KmsKeyId pulumi.StringPtrInput `pulumi:"kmsKeyId"`
@@ -1070,6 +2959,9 @@ type NodeDataVolumeArgs struct {
 	// Example: 90%. Note that the total percentage of all virtual spaces in a group cannot exceed 100%.
 	// Changing this parameter will create a new resource.
 	Size pulumi.IntInput `pulumi:"size"`
+	// Specifies the throughput of the disk in MiB/s,
+	// required when `volumetype` is **GPSSD2**.
+	Throughput pulumi.IntPtrInput `pulumi:"throughput"`
 	// Specifies the disk type.
 	// Changing this parameter will create a new resource.
 	Volumetype pulumi.StringInput `pulumi:"volumetype"`
@@ -1126,20 +3018,19 @@ func (o NodeDataVolumeOutput) ToNodeDataVolumeOutputWithContext(ctx context.Cont
 	return o
 }
 
-// Specifies the extended parameter.
-// Changing this parameter will create a new resource.
-// The available keys are as follows:
-// + **agency_name**: The agency name to provide temporary credentials for CCE node to access other cloud services.
-// + **alpha.cce/NodeImageID**: The custom image ID used to create the BMS nodes.
-// + **dockerBaseSize**: The available disk space of a single docker container on the node in device mapper mode.
-// + **DockerLVMConfigOverride**: Specifies the data disk configurations of Docker.
-//
+// Specifies the DSS pool ID. This field is used only for
+// dedicated storage. Changing this parameter will create a new resource.
+func (o NodeDataVolumeOutput) DssPoolId() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v NodeDataVolume) *string { return v.DssPoolId }).(pulumi.StringPtrOutput)
+}
+
 // Deprecated: use extend_params instead
 func (o NodeDataVolumeOutput) ExtendParam() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v NodeDataVolume) *string { return v.ExtendParam }).(pulumi.StringPtrOutput)
 }
 
-// Specifies the disk expansion parameters.
+// Specifies the extended parameters.
+// The object structure is documented below.
 // Changing this parameter will create a new resource.
 func (o NodeDataVolumeOutput) ExtendParams() pulumi.StringMapOutput {
 	return o.ApplyT(func(v NodeDataVolume) map[string]string { return v.ExtendParams }).(pulumi.StringMapOutput)
@@ -1147,6 +3038,12 @@ func (o NodeDataVolumeOutput) ExtendParams() pulumi.StringMapOutput {
 
 func (o NodeDataVolumeOutput) HwPassthrough() pulumi.BoolPtrOutput {
 	return o.ApplyT(func(v NodeDataVolume) *bool { return v.HwPassthrough }).(pulumi.BoolPtrOutput)
+}
+
+// Specifies the iops of the disk,
+// required when `volumetype` is **GPSSD2** or **ESSD2**.
+func (o NodeDataVolumeOutput) Iops() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v NodeDataVolume) *int { return v.Iops }).(pulumi.IntPtrOutput)
 }
 
 // Specifies the ID of a KMS key. This is used to encrypt the volume.
@@ -1160,6 +3057,12 @@ func (o NodeDataVolumeOutput) KmsKeyId() pulumi.StringPtrOutput {
 // Changing this parameter will create a new resource.
 func (o NodeDataVolumeOutput) Size() pulumi.IntOutput {
 	return o.ApplyT(func(v NodeDataVolume) int { return v.Size }).(pulumi.IntOutput)
+}
+
+// Specifies the throughput of the disk in MiB/s,
+// required when `volumetype` is **GPSSD2**.
+func (o NodeDataVolumeOutput) Throughput() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v NodeDataVolume) *int { return v.Throughput }).(pulumi.IntPtrOutput)
 }
 
 // Specifies the disk type.
@@ -1188,21 +3091,669 @@ func (o NodeDataVolumeArrayOutput) Index(i pulumi.IntInput) NodeDataVolumeOutput
 	}).(NodeDataVolumeOutput)
 }
 
-type NodePoolDataVolume struct {
-	// Specifies the extended parameter.
+type NodeExtendParams struct {
+	// Specifies the agency name.
 	// Changing this parameter will create a new resource.
-	// The available keys are as follows:
-	// + **agency_name**: The agency name to provide temporary credentials for CCE node to access other cloud services.
-	// + **alpha.cce/NodeImageID**: The custom image ID used to create the BMS nodes.
-	// + **dockerBaseSize**: The available disk space of a single docker container on the node in device mapper mode.
-	// + **DockerLVMConfigOverride**: Specifies the data disk configurations of Docker.
-	//
+	AgencyName *string `pulumi:"agencyName"`
+	// Specifies the available disk space of a single container on a node,
+	// in GB. Changing this parameter will create a new resource.
+	DockerBaseSize *int `pulumi:"dockerBaseSize"`
+	// Specifies the reserved node memory, which is reserved for
+	// Kubernetes-related components. Changing this parameter will create a new resource.
+	KubeReservedMem *int    `pulumi:"kubeReservedMem"`
+	MarketType      *string `pulumi:"marketType"`
+	// Specifies the maximum number of instances a node is allowed to create.
+	// Changing this parameter will create a new resource.
+	MaxPods *int `pulumi:"maxPods"`
+	// Specifies the ENI pre-binding thresholds.
+	// Example setting: **"0.3:0.6"**. Changing this parameter will create a new resource.
+	NicThreshold *string `pulumi:"nicThreshold"`
+	// Specifies the image ID to create the node.
+	// Changing this parameter will create a new resource.
+	NodeImageId *string `pulumi:"nodeImageId"`
+	// Specifies the number of ENI queues.
+	// Example setting: **"[{\"queue\":4}]"**. Changing this parameter will create a new resource.
+	NodeMultiQueue *string `pulumi:"nodeMultiQueue"`
+	// Specifies the script to be executed after installation.
+	// The input value can be a Base64 encoded string or not. Changing this parameter will create a new resource.
+	Postinstall *string `pulumi:"postinstall"`
+	// Specifies the script to be executed before installation.
+	// The input value can be a Base64 encoded string or not. Changing this parameter will create a new resource.
+	Preinstall *string `pulumi:"preinstall"`
+	// Specifies the security reinforcement type.
+	// The value can be: **null** or **cybersecurity**. Changing this parameter will create a new resource.
+	SecurityReinforcementType *string `pulumi:"securityReinforcementType"`
+	SpotPrice                 *string `pulumi:"spotPrice"`
+	// Specifies the reserved node memory, which is reserved
+	// value for system components. Changing this parameter will create a new resource.
+	SystemReservedMem *int `pulumi:"systemReservedMem"`
+}
+
+// NodeExtendParamsInput is an input type that accepts NodeExtendParamsArgs and NodeExtendParamsOutput values.
+// You can construct a concrete instance of `NodeExtendParamsInput` via:
+//
+//	NodeExtendParamsArgs{...}
+type NodeExtendParamsInput interface {
+	pulumi.Input
+
+	ToNodeExtendParamsOutput() NodeExtendParamsOutput
+	ToNodeExtendParamsOutputWithContext(context.Context) NodeExtendParamsOutput
+}
+
+type NodeExtendParamsArgs struct {
+	// Specifies the agency name.
+	// Changing this parameter will create a new resource.
+	AgencyName pulumi.StringPtrInput `pulumi:"agencyName"`
+	// Specifies the available disk space of a single container on a node,
+	// in GB. Changing this parameter will create a new resource.
+	DockerBaseSize pulumi.IntPtrInput `pulumi:"dockerBaseSize"`
+	// Specifies the reserved node memory, which is reserved for
+	// Kubernetes-related components. Changing this parameter will create a new resource.
+	KubeReservedMem pulumi.IntPtrInput    `pulumi:"kubeReservedMem"`
+	MarketType      pulumi.StringPtrInput `pulumi:"marketType"`
+	// Specifies the maximum number of instances a node is allowed to create.
+	// Changing this parameter will create a new resource.
+	MaxPods pulumi.IntPtrInput `pulumi:"maxPods"`
+	// Specifies the ENI pre-binding thresholds.
+	// Example setting: **"0.3:0.6"**. Changing this parameter will create a new resource.
+	NicThreshold pulumi.StringPtrInput `pulumi:"nicThreshold"`
+	// Specifies the image ID to create the node.
+	// Changing this parameter will create a new resource.
+	NodeImageId pulumi.StringPtrInput `pulumi:"nodeImageId"`
+	// Specifies the number of ENI queues.
+	// Example setting: **"[{\"queue\":4}]"**. Changing this parameter will create a new resource.
+	NodeMultiQueue pulumi.StringPtrInput `pulumi:"nodeMultiQueue"`
+	// Specifies the script to be executed after installation.
+	// The input value can be a Base64 encoded string or not. Changing this parameter will create a new resource.
+	Postinstall pulumi.StringPtrInput `pulumi:"postinstall"`
+	// Specifies the script to be executed before installation.
+	// The input value can be a Base64 encoded string or not. Changing this parameter will create a new resource.
+	Preinstall pulumi.StringPtrInput `pulumi:"preinstall"`
+	// Specifies the security reinforcement type.
+	// The value can be: **null** or **cybersecurity**. Changing this parameter will create a new resource.
+	SecurityReinforcementType pulumi.StringPtrInput `pulumi:"securityReinforcementType"`
+	SpotPrice                 pulumi.StringPtrInput `pulumi:"spotPrice"`
+	// Specifies the reserved node memory, which is reserved
+	// value for system components. Changing this parameter will create a new resource.
+	SystemReservedMem pulumi.IntPtrInput `pulumi:"systemReservedMem"`
+}
+
+func (NodeExtendParamsArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*NodeExtendParams)(nil)).Elem()
+}
+
+func (i NodeExtendParamsArgs) ToNodeExtendParamsOutput() NodeExtendParamsOutput {
+	return i.ToNodeExtendParamsOutputWithContext(context.Background())
+}
+
+func (i NodeExtendParamsArgs) ToNodeExtendParamsOutputWithContext(ctx context.Context) NodeExtendParamsOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(NodeExtendParamsOutput)
+}
+
+func (i NodeExtendParamsArgs) ToNodeExtendParamsPtrOutput() NodeExtendParamsPtrOutput {
+	return i.ToNodeExtendParamsPtrOutputWithContext(context.Background())
+}
+
+func (i NodeExtendParamsArgs) ToNodeExtendParamsPtrOutputWithContext(ctx context.Context) NodeExtendParamsPtrOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(NodeExtendParamsOutput).ToNodeExtendParamsPtrOutputWithContext(ctx)
+}
+
+// NodeExtendParamsPtrInput is an input type that accepts NodeExtendParamsArgs, NodeExtendParamsPtr and NodeExtendParamsPtrOutput values.
+// You can construct a concrete instance of `NodeExtendParamsPtrInput` via:
+//
+//	        NodeExtendParamsArgs{...}
+//
+//	or:
+//
+//	        nil
+type NodeExtendParamsPtrInput interface {
+	pulumi.Input
+
+	ToNodeExtendParamsPtrOutput() NodeExtendParamsPtrOutput
+	ToNodeExtendParamsPtrOutputWithContext(context.Context) NodeExtendParamsPtrOutput
+}
+
+type nodeExtendParamsPtrType NodeExtendParamsArgs
+
+func NodeExtendParamsPtr(v *NodeExtendParamsArgs) NodeExtendParamsPtrInput {
+	return (*nodeExtendParamsPtrType)(v)
+}
+
+func (*nodeExtendParamsPtrType) ElementType() reflect.Type {
+	return reflect.TypeOf((**NodeExtendParams)(nil)).Elem()
+}
+
+func (i *nodeExtendParamsPtrType) ToNodeExtendParamsPtrOutput() NodeExtendParamsPtrOutput {
+	return i.ToNodeExtendParamsPtrOutputWithContext(context.Background())
+}
+
+func (i *nodeExtendParamsPtrType) ToNodeExtendParamsPtrOutputWithContext(ctx context.Context) NodeExtendParamsPtrOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(NodeExtendParamsPtrOutput)
+}
+
+type NodeExtendParamsOutput struct{ *pulumi.OutputState }
+
+func (NodeExtendParamsOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*NodeExtendParams)(nil)).Elem()
+}
+
+func (o NodeExtendParamsOutput) ToNodeExtendParamsOutput() NodeExtendParamsOutput {
+	return o
+}
+
+func (o NodeExtendParamsOutput) ToNodeExtendParamsOutputWithContext(ctx context.Context) NodeExtendParamsOutput {
+	return o
+}
+
+func (o NodeExtendParamsOutput) ToNodeExtendParamsPtrOutput() NodeExtendParamsPtrOutput {
+	return o.ToNodeExtendParamsPtrOutputWithContext(context.Background())
+}
+
+func (o NodeExtendParamsOutput) ToNodeExtendParamsPtrOutputWithContext(ctx context.Context) NodeExtendParamsPtrOutput {
+	return o.ApplyTWithContext(ctx, func(_ context.Context, v NodeExtendParams) *NodeExtendParams {
+		return &v
+	}).(NodeExtendParamsPtrOutput)
+}
+
+// Specifies the agency name.
+// Changing this parameter will create a new resource.
+func (o NodeExtendParamsOutput) AgencyName() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v NodeExtendParams) *string { return v.AgencyName }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the available disk space of a single container on a node,
+// in GB. Changing this parameter will create a new resource.
+func (o NodeExtendParamsOutput) DockerBaseSize() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v NodeExtendParams) *int { return v.DockerBaseSize }).(pulumi.IntPtrOutput)
+}
+
+// Specifies the reserved node memory, which is reserved for
+// Kubernetes-related components. Changing this parameter will create a new resource.
+func (o NodeExtendParamsOutput) KubeReservedMem() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v NodeExtendParams) *int { return v.KubeReservedMem }).(pulumi.IntPtrOutput)
+}
+
+func (o NodeExtendParamsOutput) MarketType() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v NodeExtendParams) *string { return v.MarketType }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the maximum number of instances a node is allowed to create.
+// Changing this parameter will create a new resource.
+func (o NodeExtendParamsOutput) MaxPods() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v NodeExtendParams) *int { return v.MaxPods }).(pulumi.IntPtrOutput)
+}
+
+// Specifies the ENI pre-binding thresholds.
+// Example setting: **"0.3:0.6"**. Changing this parameter will create a new resource.
+func (o NodeExtendParamsOutput) NicThreshold() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v NodeExtendParams) *string { return v.NicThreshold }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the image ID to create the node.
+// Changing this parameter will create a new resource.
+func (o NodeExtendParamsOutput) NodeImageId() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v NodeExtendParams) *string { return v.NodeImageId }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the number of ENI queues.
+// Example setting: **"[{\"queue\":4}]"**. Changing this parameter will create a new resource.
+func (o NodeExtendParamsOutput) NodeMultiQueue() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v NodeExtendParams) *string { return v.NodeMultiQueue }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the script to be executed after installation.
+// The input value can be a Base64 encoded string or not. Changing this parameter will create a new resource.
+func (o NodeExtendParamsOutput) Postinstall() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v NodeExtendParams) *string { return v.Postinstall }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the script to be executed before installation.
+// The input value can be a Base64 encoded string or not. Changing this parameter will create a new resource.
+func (o NodeExtendParamsOutput) Preinstall() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v NodeExtendParams) *string { return v.Preinstall }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the security reinforcement type.
+// The value can be: **null** or **cybersecurity**. Changing this parameter will create a new resource.
+func (o NodeExtendParamsOutput) SecurityReinforcementType() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v NodeExtendParams) *string { return v.SecurityReinforcementType }).(pulumi.StringPtrOutput)
+}
+
+func (o NodeExtendParamsOutput) SpotPrice() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v NodeExtendParams) *string { return v.SpotPrice }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the reserved node memory, which is reserved
+// value for system components. Changing this parameter will create a new resource.
+func (o NodeExtendParamsOutput) SystemReservedMem() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v NodeExtendParams) *int { return v.SystemReservedMem }).(pulumi.IntPtrOutput)
+}
+
+type NodeExtendParamsPtrOutput struct{ *pulumi.OutputState }
+
+func (NodeExtendParamsPtrOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((**NodeExtendParams)(nil)).Elem()
+}
+
+func (o NodeExtendParamsPtrOutput) ToNodeExtendParamsPtrOutput() NodeExtendParamsPtrOutput {
+	return o
+}
+
+func (o NodeExtendParamsPtrOutput) ToNodeExtendParamsPtrOutputWithContext(ctx context.Context) NodeExtendParamsPtrOutput {
+	return o
+}
+
+func (o NodeExtendParamsPtrOutput) Elem() NodeExtendParamsOutput {
+	return o.ApplyT(func(v *NodeExtendParams) NodeExtendParams {
+		if v != nil {
+			return *v
+		}
+		var ret NodeExtendParams
+		return ret
+	}).(NodeExtendParamsOutput)
+}
+
+// Specifies the agency name.
+// Changing this parameter will create a new resource.
+func (o NodeExtendParamsPtrOutput) AgencyName() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *NodeExtendParams) *string {
+		if v == nil {
+			return nil
+		}
+		return v.AgencyName
+	}).(pulumi.StringPtrOutput)
+}
+
+// Specifies the available disk space of a single container on a node,
+// in GB. Changing this parameter will create a new resource.
+func (o NodeExtendParamsPtrOutput) DockerBaseSize() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v *NodeExtendParams) *int {
+		if v == nil {
+			return nil
+		}
+		return v.DockerBaseSize
+	}).(pulumi.IntPtrOutput)
+}
+
+// Specifies the reserved node memory, which is reserved for
+// Kubernetes-related components. Changing this parameter will create a new resource.
+func (o NodeExtendParamsPtrOutput) KubeReservedMem() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v *NodeExtendParams) *int {
+		if v == nil {
+			return nil
+		}
+		return v.KubeReservedMem
+	}).(pulumi.IntPtrOutput)
+}
+
+func (o NodeExtendParamsPtrOutput) MarketType() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *NodeExtendParams) *string {
+		if v == nil {
+			return nil
+		}
+		return v.MarketType
+	}).(pulumi.StringPtrOutput)
+}
+
+// Specifies the maximum number of instances a node is allowed to create.
+// Changing this parameter will create a new resource.
+func (o NodeExtendParamsPtrOutput) MaxPods() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v *NodeExtendParams) *int {
+		if v == nil {
+			return nil
+		}
+		return v.MaxPods
+	}).(pulumi.IntPtrOutput)
+}
+
+// Specifies the ENI pre-binding thresholds.
+// Example setting: **"0.3:0.6"**. Changing this parameter will create a new resource.
+func (o NodeExtendParamsPtrOutput) NicThreshold() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *NodeExtendParams) *string {
+		if v == nil {
+			return nil
+		}
+		return v.NicThreshold
+	}).(pulumi.StringPtrOutput)
+}
+
+// Specifies the image ID to create the node.
+// Changing this parameter will create a new resource.
+func (o NodeExtendParamsPtrOutput) NodeImageId() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *NodeExtendParams) *string {
+		if v == nil {
+			return nil
+		}
+		return v.NodeImageId
+	}).(pulumi.StringPtrOutput)
+}
+
+// Specifies the number of ENI queues.
+// Example setting: **"[{\"queue\":4}]"**. Changing this parameter will create a new resource.
+func (o NodeExtendParamsPtrOutput) NodeMultiQueue() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *NodeExtendParams) *string {
+		if v == nil {
+			return nil
+		}
+		return v.NodeMultiQueue
+	}).(pulumi.StringPtrOutput)
+}
+
+// Specifies the script to be executed after installation.
+// The input value can be a Base64 encoded string or not. Changing this parameter will create a new resource.
+func (o NodeExtendParamsPtrOutput) Postinstall() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *NodeExtendParams) *string {
+		if v == nil {
+			return nil
+		}
+		return v.Postinstall
+	}).(pulumi.StringPtrOutput)
+}
+
+// Specifies the script to be executed before installation.
+// The input value can be a Base64 encoded string or not. Changing this parameter will create a new resource.
+func (o NodeExtendParamsPtrOutput) Preinstall() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *NodeExtendParams) *string {
+		if v == nil {
+			return nil
+		}
+		return v.Preinstall
+	}).(pulumi.StringPtrOutput)
+}
+
+// Specifies the security reinforcement type.
+// The value can be: **null** or **cybersecurity**. Changing this parameter will create a new resource.
+func (o NodeExtendParamsPtrOutput) SecurityReinforcementType() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *NodeExtendParams) *string {
+		if v == nil {
+			return nil
+		}
+		return v.SecurityReinforcementType
+	}).(pulumi.StringPtrOutput)
+}
+
+func (o NodeExtendParamsPtrOutput) SpotPrice() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *NodeExtendParams) *string {
+		if v == nil {
+			return nil
+		}
+		return v.SpotPrice
+	}).(pulumi.StringPtrOutput)
+}
+
+// Specifies the reserved node memory, which is reserved
+// value for system components. Changing this parameter will create a new resource.
+func (o NodeExtendParamsPtrOutput) SystemReservedMem() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v *NodeExtendParams) *int {
+		if v == nil {
+			return nil
+		}
+		return v.SystemReservedMem
+	}).(pulumi.IntPtrOutput)
+}
+
+type NodeExtensionNic struct {
+	// Specifies the ID of the subnet to which the NIC belongs.
+	// Changing this parameter will create a new resource.
+	SubnetId string `pulumi:"subnetId"`
+}
+
+// NodeExtensionNicInput is an input type that accepts NodeExtensionNicArgs and NodeExtensionNicOutput values.
+// You can construct a concrete instance of `NodeExtensionNicInput` via:
+//
+//	NodeExtensionNicArgs{...}
+type NodeExtensionNicInput interface {
+	pulumi.Input
+
+	ToNodeExtensionNicOutput() NodeExtensionNicOutput
+	ToNodeExtensionNicOutputWithContext(context.Context) NodeExtensionNicOutput
+}
+
+type NodeExtensionNicArgs struct {
+	// Specifies the ID of the subnet to which the NIC belongs.
+	// Changing this parameter will create a new resource.
+	SubnetId pulumi.StringInput `pulumi:"subnetId"`
+}
+
+func (NodeExtensionNicArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*NodeExtensionNic)(nil)).Elem()
+}
+
+func (i NodeExtensionNicArgs) ToNodeExtensionNicOutput() NodeExtensionNicOutput {
+	return i.ToNodeExtensionNicOutputWithContext(context.Background())
+}
+
+func (i NodeExtensionNicArgs) ToNodeExtensionNicOutputWithContext(ctx context.Context) NodeExtensionNicOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(NodeExtensionNicOutput)
+}
+
+// NodeExtensionNicArrayInput is an input type that accepts NodeExtensionNicArray and NodeExtensionNicArrayOutput values.
+// You can construct a concrete instance of `NodeExtensionNicArrayInput` via:
+//
+//	NodeExtensionNicArray{ NodeExtensionNicArgs{...} }
+type NodeExtensionNicArrayInput interface {
+	pulumi.Input
+
+	ToNodeExtensionNicArrayOutput() NodeExtensionNicArrayOutput
+	ToNodeExtensionNicArrayOutputWithContext(context.Context) NodeExtensionNicArrayOutput
+}
+
+type NodeExtensionNicArray []NodeExtensionNicInput
+
+func (NodeExtensionNicArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]NodeExtensionNic)(nil)).Elem()
+}
+
+func (i NodeExtensionNicArray) ToNodeExtensionNicArrayOutput() NodeExtensionNicArrayOutput {
+	return i.ToNodeExtensionNicArrayOutputWithContext(context.Background())
+}
+
+func (i NodeExtensionNicArray) ToNodeExtensionNicArrayOutputWithContext(ctx context.Context) NodeExtensionNicArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(NodeExtensionNicArrayOutput)
+}
+
+type NodeExtensionNicOutput struct{ *pulumi.OutputState }
+
+func (NodeExtensionNicOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*NodeExtensionNic)(nil)).Elem()
+}
+
+func (o NodeExtensionNicOutput) ToNodeExtensionNicOutput() NodeExtensionNicOutput {
+	return o
+}
+
+func (o NodeExtensionNicOutput) ToNodeExtensionNicOutputWithContext(ctx context.Context) NodeExtensionNicOutput {
+	return o
+}
+
+// Specifies the ID of the subnet to which the NIC belongs.
+// Changing this parameter will create a new resource.
+func (o NodeExtensionNicOutput) SubnetId() pulumi.StringOutput {
+	return o.ApplyT(func(v NodeExtensionNic) string { return v.SubnetId }).(pulumi.StringOutput)
+}
+
+type NodeExtensionNicArrayOutput struct{ *pulumi.OutputState }
+
+func (NodeExtensionNicArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]NodeExtensionNic)(nil)).Elem()
+}
+
+func (o NodeExtensionNicArrayOutput) ToNodeExtensionNicArrayOutput() NodeExtensionNicArrayOutput {
+	return o
+}
+
+func (o NodeExtensionNicArrayOutput) ToNodeExtensionNicArrayOutputWithContext(ctx context.Context) NodeExtensionNicArrayOutput {
+	return o
+}
+
+func (o NodeExtensionNicArrayOutput) Index(i pulumi.IntInput) NodeExtensionNicOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) NodeExtensionNic {
+		return vs[0].([]NodeExtensionNic)[vs[1].(int)]
+	}).(NodeExtensionNicOutput)
+}
+
+type NodeHostnameConfig struct {
+	// Specifies the hostname type of the kubernetes node.
+	// The value can be:
+	// + **privateIp**: The Kubernetes node is named after its IP address.
+	// + **cceNodeName**: The Kubernetes node is named after the CCE node.
+	Type string `pulumi:"type"`
+}
+
+// NodeHostnameConfigInput is an input type that accepts NodeHostnameConfigArgs and NodeHostnameConfigOutput values.
+// You can construct a concrete instance of `NodeHostnameConfigInput` via:
+//
+//	NodeHostnameConfigArgs{...}
+type NodeHostnameConfigInput interface {
+	pulumi.Input
+
+	ToNodeHostnameConfigOutput() NodeHostnameConfigOutput
+	ToNodeHostnameConfigOutputWithContext(context.Context) NodeHostnameConfigOutput
+}
+
+type NodeHostnameConfigArgs struct {
+	// Specifies the hostname type of the kubernetes node.
+	// The value can be:
+	// + **privateIp**: The Kubernetes node is named after its IP address.
+	// + **cceNodeName**: The Kubernetes node is named after the CCE node.
+	Type pulumi.StringInput `pulumi:"type"`
+}
+
+func (NodeHostnameConfigArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*NodeHostnameConfig)(nil)).Elem()
+}
+
+func (i NodeHostnameConfigArgs) ToNodeHostnameConfigOutput() NodeHostnameConfigOutput {
+	return i.ToNodeHostnameConfigOutputWithContext(context.Background())
+}
+
+func (i NodeHostnameConfigArgs) ToNodeHostnameConfigOutputWithContext(ctx context.Context) NodeHostnameConfigOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(NodeHostnameConfigOutput)
+}
+
+func (i NodeHostnameConfigArgs) ToNodeHostnameConfigPtrOutput() NodeHostnameConfigPtrOutput {
+	return i.ToNodeHostnameConfigPtrOutputWithContext(context.Background())
+}
+
+func (i NodeHostnameConfigArgs) ToNodeHostnameConfigPtrOutputWithContext(ctx context.Context) NodeHostnameConfigPtrOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(NodeHostnameConfigOutput).ToNodeHostnameConfigPtrOutputWithContext(ctx)
+}
+
+// NodeHostnameConfigPtrInput is an input type that accepts NodeHostnameConfigArgs, NodeHostnameConfigPtr and NodeHostnameConfigPtrOutput values.
+// You can construct a concrete instance of `NodeHostnameConfigPtrInput` via:
+//
+//	        NodeHostnameConfigArgs{...}
+//
+//	or:
+//
+//	        nil
+type NodeHostnameConfigPtrInput interface {
+	pulumi.Input
+
+	ToNodeHostnameConfigPtrOutput() NodeHostnameConfigPtrOutput
+	ToNodeHostnameConfigPtrOutputWithContext(context.Context) NodeHostnameConfigPtrOutput
+}
+
+type nodeHostnameConfigPtrType NodeHostnameConfigArgs
+
+func NodeHostnameConfigPtr(v *NodeHostnameConfigArgs) NodeHostnameConfigPtrInput {
+	return (*nodeHostnameConfigPtrType)(v)
+}
+
+func (*nodeHostnameConfigPtrType) ElementType() reflect.Type {
+	return reflect.TypeOf((**NodeHostnameConfig)(nil)).Elem()
+}
+
+func (i *nodeHostnameConfigPtrType) ToNodeHostnameConfigPtrOutput() NodeHostnameConfigPtrOutput {
+	return i.ToNodeHostnameConfigPtrOutputWithContext(context.Background())
+}
+
+func (i *nodeHostnameConfigPtrType) ToNodeHostnameConfigPtrOutputWithContext(ctx context.Context) NodeHostnameConfigPtrOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(NodeHostnameConfigPtrOutput)
+}
+
+type NodeHostnameConfigOutput struct{ *pulumi.OutputState }
+
+func (NodeHostnameConfigOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*NodeHostnameConfig)(nil)).Elem()
+}
+
+func (o NodeHostnameConfigOutput) ToNodeHostnameConfigOutput() NodeHostnameConfigOutput {
+	return o
+}
+
+func (o NodeHostnameConfigOutput) ToNodeHostnameConfigOutputWithContext(ctx context.Context) NodeHostnameConfigOutput {
+	return o
+}
+
+func (o NodeHostnameConfigOutput) ToNodeHostnameConfigPtrOutput() NodeHostnameConfigPtrOutput {
+	return o.ToNodeHostnameConfigPtrOutputWithContext(context.Background())
+}
+
+func (o NodeHostnameConfigOutput) ToNodeHostnameConfigPtrOutputWithContext(ctx context.Context) NodeHostnameConfigPtrOutput {
+	return o.ApplyTWithContext(ctx, func(_ context.Context, v NodeHostnameConfig) *NodeHostnameConfig {
+		return &v
+	}).(NodeHostnameConfigPtrOutput)
+}
+
+// Specifies the hostname type of the kubernetes node.
+// The value can be:
+// + **privateIp**: The Kubernetes node is named after its IP address.
+// + **cceNodeName**: The Kubernetes node is named after the CCE node.
+func (o NodeHostnameConfigOutput) Type() pulumi.StringOutput {
+	return o.ApplyT(func(v NodeHostnameConfig) string { return v.Type }).(pulumi.StringOutput)
+}
+
+type NodeHostnameConfigPtrOutput struct{ *pulumi.OutputState }
+
+func (NodeHostnameConfigPtrOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((**NodeHostnameConfig)(nil)).Elem()
+}
+
+func (o NodeHostnameConfigPtrOutput) ToNodeHostnameConfigPtrOutput() NodeHostnameConfigPtrOutput {
+	return o
+}
+
+func (o NodeHostnameConfigPtrOutput) ToNodeHostnameConfigPtrOutputWithContext(ctx context.Context) NodeHostnameConfigPtrOutput {
+	return o
+}
+
+func (o NodeHostnameConfigPtrOutput) Elem() NodeHostnameConfigOutput {
+	return o.ApplyT(func(v *NodeHostnameConfig) NodeHostnameConfig {
+		if v != nil {
+			return *v
+		}
+		var ret NodeHostnameConfig
+		return ret
+	}).(NodeHostnameConfigOutput)
+}
+
+// Specifies the hostname type of the kubernetes node.
+// The value can be:
+// + **privateIp**: The Kubernetes node is named after its IP address.
+// + **cceNodeName**: The Kubernetes node is named after the CCE node.
+func (o NodeHostnameConfigPtrOutput) Type() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *NodeHostnameConfig) *string {
+		if v == nil {
+			return nil
+		}
+		return &v.Type
+	}).(pulumi.StringPtrOutput)
+}
+
+type NodePoolDataVolume struct {
+	// Specifies the DSS pool ID. This field is used only for dedicated storage.
+	// Changing this parameter will create a new resource.
+	DssPoolId *string `pulumi:"dssPoolId"`
 	// Deprecated: use extend_params instead
 	ExtendParam *string `pulumi:"extendParam"`
 	// Specifies the disk expansion parameters.
 	// Changing this parameter will create a new resource.
 	ExtendParams  map[string]string `pulumi:"extendParams"`
 	HwPassthrough *bool             `pulumi:"hwPassthrough"`
+	// Specifies the iops of the disk,
+	// required when `volumetype` is **GPSSD2** or **ESSD2**.
+	Iops *int `pulumi:"iops"`
 	// Specifies the KMS key ID. This is used to encrypt the volume.
 	// Changing this parameter will create a new resource.
 	KmsKeyId *string `pulumi:"kmsKeyId"`
@@ -1210,6 +3761,9 @@ type NodePoolDataVolume struct {
 	// Example: 90%. Note that the total percentage of all virtual spaces in a group cannot exceed 100%.
 	// Changing this parameter will create a new resource.
 	Size int `pulumi:"size"`
+	// Specifies the throughput of the disk in MiB/s,
+	// required when `volumetype` is **GPSSD2**.
+	Throughput *int `pulumi:"throughput"`
 	// Specifies the disk type. Changing this parameter will create a new resource.
 	Volumetype string `pulumi:"volumetype"`
 }
@@ -1226,20 +3780,18 @@ type NodePoolDataVolumeInput interface {
 }
 
 type NodePoolDataVolumeArgs struct {
-	// Specifies the extended parameter.
+	// Specifies the DSS pool ID. This field is used only for dedicated storage.
 	// Changing this parameter will create a new resource.
-	// The available keys are as follows:
-	// + **agency_name**: The agency name to provide temporary credentials for CCE node to access other cloud services.
-	// + **alpha.cce/NodeImageID**: The custom image ID used to create the BMS nodes.
-	// + **dockerBaseSize**: The available disk space of a single docker container on the node in device mapper mode.
-	// + **DockerLVMConfigOverride**: Specifies the data disk configurations of Docker.
-	//
+	DssPoolId pulumi.StringPtrInput `pulumi:"dssPoolId"`
 	// Deprecated: use extend_params instead
 	ExtendParam pulumi.StringPtrInput `pulumi:"extendParam"`
 	// Specifies the disk expansion parameters.
 	// Changing this parameter will create a new resource.
 	ExtendParams  pulumi.StringMapInput `pulumi:"extendParams"`
 	HwPassthrough pulumi.BoolPtrInput   `pulumi:"hwPassthrough"`
+	// Specifies the iops of the disk,
+	// required when `volumetype` is **GPSSD2** or **ESSD2**.
+	Iops pulumi.IntPtrInput `pulumi:"iops"`
 	// Specifies the KMS key ID. This is used to encrypt the volume.
 	// Changing this parameter will create a new resource.
 	KmsKeyId pulumi.StringPtrInput `pulumi:"kmsKeyId"`
@@ -1247,6 +3799,9 @@ type NodePoolDataVolumeArgs struct {
 	// Example: 90%. Note that the total percentage of all virtual spaces in a group cannot exceed 100%.
 	// Changing this parameter will create a new resource.
 	Size pulumi.IntInput `pulumi:"size"`
+	// Specifies the throughput of the disk in MiB/s,
+	// required when `volumetype` is **GPSSD2**.
+	Throughput pulumi.IntPtrInput `pulumi:"throughput"`
 	// Specifies the disk type. Changing this parameter will create a new resource.
 	Volumetype pulumi.StringInput `pulumi:"volumetype"`
 }
@@ -1302,14 +3857,12 @@ func (o NodePoolDataVolumeOutput) ToNodePoolDataVolumeOutputWithContext(ctx cont
 	return o
 }
 
-// Specifies the extended parameter.
+// Specifies the DSS pool ID. This field is used only for dedicated storage.
 // Changing this parameter will create a new resource.
-// The available keys are as follows:
-// + **agency_name**: The agency name to provide temporary credentials for CCE node to access other cloud services.
-// + **alpha.cce/NodeImageID**: The custom image ID used to create the BMS nodes.
-// + **dockerBaseSize**: The available disk space of a single docker container on the node in device mapper mode.
-// + **DockerLVMConfigOverride**: Specifies the data disk configurations of Docker.
-//
+func (o NodePoolDataVolumeOutput) DssPoolId() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v NodePoolDataVolume) *string { return v.DssPoolId }).(pulumi.StringPtrOutput)
+}
+
 // Deprecated: use extend_params instead
 func (o NodePoolDataVolumeOutput) ExtendParam() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v NodePoolDataVolume) *string { return v.ExtendParam }).(pulumi.StringPtrOutput)
@@ -1325,6 +3878,12 @@ func (o NodePoolDataVolumeOutput) HwPassthrough() pulumi.BoolPtrOutput {
 	return o.ApplyT(func(v NodePoolDataVolume) *bool { return v.HwPassthrough }).(pulumi.BoolPtrOutput)
 }
 
+// Specifies the iops of the disk,
+// required when `volumetype` is **GPSSD2** or **ESSD2**.
+func (o NodePoolDataVolumeOutput) Iops() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v NodePoolDataVolume) *int { return v.Iops }).(pulumi.IntPtrOutput)
+}
+
 // Specifies the KMS key ID. This is used to encrypt the volume.
 // Changing this parameter will create a new resource.
 func (o NodePoolDataVolumeOutput) KmsKeyId() pulumi.StringPtrOutput {
@@ -1336,6 +3895,12 @@ func (o NodePoolDataVolumeOutput) KmsKeyId() pulumi.StringPtrOutput {
 // Changing this parameter will create a new resource.
 func (o NodePoolDataVolumeOutput) Size() pulumi.IntOutput {
 	return o.ApplyT(func(v NodePoolDataVolume) int { return v.Size }).(pulumi.IntOutput)
+}
+
+// Specifies the throughput of the disk in MiB/s,
+// required when `volumetype` is **GPSSD2**.
+func (o NodePoolDataVolumeOutput) Throughput() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v NodePoolDataVolume) *int { return v.Throughput }).(pulumi.IntPtrOutput)
 }
 
 // Specifies the disk type. Changing this parameter will create a new resource.
@@ -1363,21 +3928,1518 @@ func (o NodePoolDataVolumeArrayOutput) Index(i pulumi.IntInput) NodePoolDataVolu
 	}).(NodePoolDataVolumeOutput)
 }
 
-type NodePoolRootVolume struct {
-	// Specifies the extended parameter.
+type NodePoolExtendParams struct {
+	// Specifies the agency name.
 	// Changing this parameter will create a new resource.
-	// The available keys are as follows:
-	// + **agency_name**: The agency name to provide temporary credentials for CCE node to access other cloud services.
-	// + **alpha.cce/NodeImageID**: The custom image ID used to create the BMS nodes.
-	// + **dockerBaseSize**: The available disk space of a single docker container on the node in device mapper mode.
-	// + **DockerLVMConfigOverride**: Specifies the data disk configurations of Docker.
-	//
+	AgencyName *string `pulumi:"agencyName"`
+	// Specifies the available disk space of a single container on a node,
+	// in GB. Changing this parameter will create a new resource.
+	DockerBaseSize *int `pulumi:"dockerBaseSize"`
+	// Specifies the reserved node memory, which is reserved for
+	// Kubernetes-related components. Changing this parameter will create a new resource.
+	KubeReservedMem *int    `pulumi:"kubeReservedMem"`
+	MarketType      *string `pulumi:"marketType"`
+	// Specifies the maximum number of instances a node is allowed to create.
+	// Changing this parameter will create a new resource.
+	MaxPods *int `pulumi:"maxPods"`
+	// Specifies the ENI pre-binding thresholds.
+	// Example setting: **"0.3:0.6"**. Changing this parameter will create a new resource.
+	NicThreshold *string `pulumi:"nicThreshold"`
+	// Specifies the image ID to create the node.
+	// Changing this parameter will create a new resource.
+	NodeImageId *string `pulumi:"nodeImageId"`
+	// Specifies the number of ENI queues.
+	// Example setting: **"[{\"queue\":4}]"**. Changing this parameter will create a new resource.
+	NodeMultiQueue *string `pulumi:"nodeMultiQueue"`
+	// Specifies the script to be executed after installation.
+	// The input value can be a Base64 encoded string or not. Changing this parameter will create a new resource.
+	Postinstall *string `pulumi:"postinstall"`
+	// Specifies the script to be executed before installation.
+	// The input value can be a Base64 encoded string or not. Changing this parameter will create a new resource.
+	Preinstall *string `pulumi:"preinstall"`
+	// Specifies the security reinforcement type.
+	// The value can be: **null** or **cybersecurity**. Changing this parameter will create a new resource.
+	SecurityReinforcementType *string `pulumi:"securityReinforcementType"`
+	SpotPrice                 *string `pulumi:"spotPrice"`
+	// Specifies the reserved node memory, which is reserved
+	// value for system components. Changing this parameter will create a new resource.
+	SystemReservedMem *int `pulumi:"systemReservedMem"`
+}
+
+// NodePoolExtendParamsInput is an input type that accepts NodePoolExtendParamsArgs and NodePoolExtendParamsOutput values.
+// You can construct a concrete instance of `NodePoolExtendParamsInput` via:
+//
+//	NodePoolExtendParamsArgs{...}
+type NodePoolExtendParamsInput interface {
+	pulumi.Input
+
+	ToNodePoolExtendParamsOutput() NodePoolExtendParamsOutput
+	ToNodePoolExtendParamsOutputWithContext(context.Context) NodePoolExtendParamsOutput
+}
+
+type NodePoolExtendParamsArgs struct {
+	// Specifies the agency name.
+	// Changing this parameter will create a new resource.
+	AgencyName pulumi.StringPtrInput `pulumi:"agencyName"`
+	// Specifies the available disk space of a single container on a node,
+	// in GB. Changing this parameter will create a new resource.
+	DockerBaseSize pulumi.IntPtrInput `pulumi:"dockerBaseSize"`
+	// Specifies the reserved node memory, which is reserved for
+	// Kubernetes-related components. Changing this parameter will create a new resource.
+	KubeReservedMem pulumi.IntPtrInput    `pulumi:"kubeReservedMem"`
+	MarketType      pulumi.StringPtrInput `pulumi:"marketType"`
+	// Specifies the maximum number of instances a node is allowed to create.
+	// Changing this parameter will create a new resource.
+	MaxPods pulumi.IntPtrInput `pulumi:"maxPods"`
+	// Specifies the ENI pre-binding thresholds.
+	// Example setting: **"0.3:0.6"**. Changing this parameter will create a new resource.
+	NicThreshold pulumi.StringPtrInput `pulumi:"nicThreshold"`
+	// Specifies the image ID to create the node.
+	// Changing this parameter will create a new resource.
+	NodeImageId pulumi.StringPtrInput `pulumi:"nodeImageId"`
+	// Specifies the number of ENI queues.
+	// Example setting: **"[{\"queue\":4}]"**. Changing this parameter will create a new resource.
+	NodeMultiQueue pulumi.StringPtrInput `pulumi:"nodeMultiQueue"`
+	// Specifies the script to be executed after installation.
+	// The input value can be a Base64 encoded string or not. Changing this parameter will create a new resource.
+	Postinstall pulumi.StringPtrInput `pulumi:"postinstall"`
+	// Specifies the script to be executed before installation.
+	// The input value can be a Base64 encoded string or not. Changing this parameter will create a new resource.
+	Preinstall pulumi.StringPtrInput `pulumi:"preinstall"`
+	// Specifies the security reinforcement type.
+	// The value can be: **null** or **cybersecurity**. Changing this parameter will create a new resource.
+	SecurityReinforcementType pulumi.StringPtrInput `pulumi:"securityReinforcementType"`
+	SpotPrice                 pulumi.StringPtrInput `pulumi:"spotPrice"`
+	// Specifies the reserved node memory, which is reserved
+	// value for system components. Changing this parameter will create a new resource.
+	SystemReservedMem pulumi.IntPtrInput `pulumi:"systemReservedMem"`
+}
+
+func (NodePoolExtendParamsArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*NodePoolExtendParams)(nil)).Elem()
+}
+
+func (i NodePoolExtendParamsArgs) ToNodePoolExtendParamsOutput() NodePoolExtendParamsOutput {
+	return i.ToNodePoolExtendParamsOutputWithContext(context.Background())
+}
+
+func (i NodePoolExtendParamsArgs) ToNodePoolExtendParamsOutputWithContext(ctx context.Context) NodePoolExtendParamsOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(NodePoolExtendParamsOutput)
+}
+
+func (i NodePoolExtendParamsArgs) ToNodePoolExtendParamsPtrOutput() NodePoolExtendParamsPtrOutput {
+	return i.ToNodePoolExtendParamsPtrOutputWithContext(context.Background())
+}
+
+func (i NodePoolExtendParamsArgs) ToNodePoolExtendParamsPtrOutputWithContext(ctx context.Context) NodePoolExtendParamsPtrOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(NodePoolExtendParamsOutput).ToNodePoolExtendParamsPtrOutputWithContext(ctx)
+}
+
+// NodePoolExtendParamsPtrInput is an input type that accepts NodePoolExtendParamsArgs, NodePoolExtendParamsPtr and NodePoolExtendParamsPtrOutput values.
+// You can construct a concrete instance of `NodePoolExtendParamsPtrInput` via:
+//
+//	        NodePoolExtendParamsArgs{...}
+//
+//	or:
+//
+//	        nil
+type NodePoolExtendParamsPtrInput interface {
+	pulumi.Input
+
+	ToNodePoolExtendParamsPtrOutput() NodePoolExtendParamsPtrOutput
+	ToNodePoolExtendParamsPtrOutputWithContext(context.Context) NodePoolExtendParamsPtrOutput
+}
+
+type nodePoolExtendParamsPtrType NodePoolExtendParamsArgs
+
+func NodePoolExtendParamsPtr(v *NodePoolExtendParamsArgs) NodePoolExtendParamsPtrInput {
+	return (*nodePoolExtendParamsPtrType)(v)
+}
+
+func (*nodePoolExtendParamsPtrType) ElementType() reflect.Type {
+	return reflect.TypeOf((**NodePoolExtendParams)(nil)).Elem()
+}
+
+func (i *nodePoolExtendParamsPtrType) ToNodePoolExtendParamsPtrOutput() NodePoolExtendParamsPtrOutput {
+	return i.ToNodePoolExtendParamsPtrOutputWithContext(context.Background())
+}
+
+func (i *nodePoolExtendParamsPtrType) ToNodePoolExtendParamsPtrOutputWithContext(ctx context.Context) NodePoolExtendParamsPtrOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(NodePoolExtendParamsPtrOutput)
+}
+
+type NodePoolExtendParamsOutput struct{ *pulumi.OutputState }
+
+func (NodePoolExtendParamsOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*NodePoolExtendParams)(nil)).Elem()
+}
+
+func (o NodePoolExtendParamsOutput) ToNodePoolExtendParamsOutput() NodePoolExtendParamsOutput {
+	return o
+}
+
+func (o NodePoolExtendParamsOutput) ToNodePoolExtendParamsOutputWithContext(ctx context.Context) NodePoolExtendParamsOutput {
+	return o
+}
+
+func (o NodePoolExtendParamsOutput) ToNodePoolExtendParamsPtrOutput() NodePoolExtendParamsPtrOutput {
+	return o.ToNodePoolExtendParamsPtrOutputWithContext(context.Background())
+}
+
+func (o NodePoolExtendParamsOutput) ToNodePoolExtendParamsPtrOutputWithContext(ctx context.Context) NodePoolExtendParamsPtrOutput {
+	return o.ApplyTWithContext(ctx, func(_ context.Context, v NodePoolExtendParams) *NodePoolExtendParams {
+		return &v
+	}).(NodePoolExtendParamsPtrOutput)
+}
+
+// Specifies the agency name.
+// Changing this parameter will create a new resource.
+func (o NodePoolExtendParamsOutput) AgencyName() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v NodePoolExtendParams) *string { return v.AgencyName }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the available disk space of a single container on a node,
+// in GB. Changing this parameter will create a new resource.
+func (o NodePoolExtendParamsOutput) DockerBaseSize() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v NodePoolExtendParams) *int { return v.DockerBaseSize }).(pulumi.IntPtrOutput)
+}
+
+// Specifies the reserved node memory, which is reserved for
+// Kubernetes-related components. Changing this parameter will create a new resource.
+func (o NodePoolExtendParamsOutput) KubeReservedMem() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v NodePoolExtendParams) *int { return v.KubeReservedMem }).(pulumi.IntPtrOutput)
+}
+
+func (o NodePoolExtendParamsOutput) MarketType() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v NodePoolExtendParams) *string { return v.MarketType }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the maximum number of instances a node is allowed to create.
+// Changing this parameter will create a new resource.
+func (o NodePoolExtendParamsOutput) MaxPods() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v NodePoolExtendParams) *int { return v.MaxPods }).(pulumi.IntPtrOutput)
+}
+
+// Specifies the ENI pre-binding thresholds.
+// Example setting: **"0.3:0.6"**. Changing this parameter will create a new resource.
+func (o NodePoolExtendParamsOutput) NicThreshold() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v NodePoolExtendParams) *string { return v.NicThreshold }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the image ID to create the node.
+// Changing this parameter will create a new resource.
+func (o NodePoolExtendParamsOutput) NodeImageId() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v NodePoolExtendParams) *string { return v.NodeImageId }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the number of ENI queues.
+// Example setting: **"[{\"queue\":4}]"**. Changing this parameter will create a new resource.
+func (o NodePoolExtendParamsOutput) NodeMultiQueue() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v NodePoolExtendParams) *string { return v.NodeMultiQueue }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the script to be executed after installation.
+// The input value can be a Base64 encoded string or not. Changing this parameter will create a new resource.
+func (o NodePoolExtendParamsOutput) Postinstall() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v NodePoolExtendParams) *string { return v.Postinstall }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the script to be executed before installation.
+// The input value can be a Base64 encoded string or not. Changing this parameter will create a new resource.
+func (o NodePoolExtendParamsOutput) Preinstall() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v NodePoolExtendParams) *string { return v.Preinstall }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the security reinforcement type.
+// The value can be: **null** or **cybersecurity**. Changing this parameter will create a new resource.
+func (o NodePoolExtendParamsOutput) SecurityReinforcementType() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v NodePoolExtendParams) *string { return v.SecurityReinforcementType }).(pulumi.StringPtrOutput)
+}
+
+func (o NodePoolExtendParamsOutput) SpotPrice() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v NodePoolExtendParams) *string { return v.SpotPrice }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the reserved node memory, which is reserved
+// value for system components. Changing this parameter will create a new resource.
+func (o NodePoolExtendParamsOutput) SystemReservedMem() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v NodePoolExtendParams) *int { return v.SystemReservedMem }).(pulumi.IntPtrOutput)
+}
+
+type NodePoolExtendParamsPtrOutput struct{ *pulumi.OutputState }
+
+func (NodePoolExtendParamsPtrOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((**NodePoolExtendParams)(nil)).Elem()
+}
+
+func (o NodePoolExtendParamsPtrOutput) ToNodePoolExtendParamsPtrOutput() NodePoolExtendParamsPtrOutput {
+	return o
+}
+
+func (o NodePoolExtendParamsPtrOutput) ToNodePoolExtendParamsPtrOutputWithContext(ctx context.Context) NodePoolExtendParamsPtrOutput {
+	return o
+}
+
+func (o NodePoolExtendParamsPtrOutput) Elem() NodePoolExtendParamsOutput {
+	return o.ApplyT(func(v *NodePoolExtendParams) NodePoolExtendParams {
+		if v != nil {
+			return *v
+		}
+		var ret NodePoolExtendParams
+		return ret
+	}).(NodePoolExtendParamsOutput)
+}
+
+// Specifies the agency name.
+// Changing this parameter will create a new resource.
+func (o NodePoolExtendParamsPtrOutput) AgencyName() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *NodePoolExtendParams) *string {
+		if v == nil {
+			return nil
+		}
+		return v.AgencyName
+	}).(pulumi.StringPtrOutput)
+}
+
+// Specifies the available disk space of a single container on a node,
+// in GB. Changing this parameter will create a new resource.
+func (o NodePoolExtendParamsPtrOutput) DockerBaseSize() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v *NodePoolExtendParams) *int {
+		if v == nil {
+			return nil
+		}
+		return v.DockerBaseSize
+	}).(pulumi.IntPtrOutput)
+}
+
+// Specifies the reserved node memory, which is reserved for
+// Kubernetes-related components. Changing this parameter will create a new resource.
+func (o NodePoolExtendParamsPtrOutput) KubeReservedMem() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v *NodePoolExtendParams) *int {
+		if v == nil {
+			return nil
+		}
+		return v.KubeReservedMem
+	}).(pulumi.IntPtrOutput)
+}
+
+func (o NodePoolExtendParamsPtrOutput) MarketType() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *NodePoolExtendParams) *string {
+		if v == nil {
+			return nil
+		}
+		return v.MarketType
+	}).(pulumi.StringPtrOutput)
+}
+
+// Specifies the maximum number of instances a node is allowed to create.
+// Changing this parameter will create a new resource.
+func (o NodePoolExtendParamsPtrOutput) MaxPods() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v *NodePoolExtendParams) *int {
+		if v == nil {
+			return nil
+		}
+		return v.MaxPods
+	}).(pulumi.IntPtrOutput)
+}
+
+// Specifies the ENI pre-binding thresholds.
+// Example setting: **"0.3:0.6"**. Changing this parameter will create a new resource.
+func (o NodePoolExtendParamsPtrOutput) NicThreshold() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *NodePoolExtendParams) *string {
+		if v == nil {
+			return nil
+		}
+		return v.NicThreshold
+	}).(pulumi.StringPtrOutput)
+}
+
+// Specifies the image ID to create the node.
+// Changing this parameter will create a new resource.
+func (o NodePoolExtendParamsPtrOutput) NodeImageId() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *NodePoolExtendParams) *string {
+		if v == nil {
+			return nil
+		}
+		return v.NodeImageId
+	}).(pulumi.StringPtrOutput)
+}
+
+// Specifies the number of ENI queues.
+// Example setting: **"[{\"queue\":4}]"**. Changing this parameter will create a new resource.
+func (o NodePoolExtendParamsPtrOutput) NodeMultiQueue() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *NodePoolExtendParams) *string {
+		if v == nil {
+			return nil
+		}
+		return v.NodeMultiQueue
+	}).(pulumi.StringPtrOutput)
+}
+
+// Specifies the script to be executed after installation.
+// The input value can be a Base64 encoded string or not. Changing this parameter will create a new resource.
+func (o NodePoolExtendParamsPtrOutput) Postinstall() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *NodePoolExtendParams) *string {
+		if v == nil {
+			return nil
+		}
+		return v.Postinstall
+	}).(pulumi.StringPtrOutput)
+}
+
+// Specifies the script to be executed before installation.
+// The input value can be a Base64 encoded string or not. Changing this parameter will create a new resource.
+func (o NodePoolExtendParamsPtrOutput) Preinstall() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *NodePoolExtendParams) *string {
+		if v == nil {
+			return nil
+		}
+		return v.Preinstall
+	}).(pulumi.StringPtrOutput)
+}
+
+// Specifies the security reinforcement type.
+// The value can be: **null** or **cybersecurity**. Changing this parameter will create a new resource.
+func (o NodePoolExtendParamsPtrOutput) SecurityReinforcementType() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *NodePoolExtendParams) *string {
+		if v == nil {
+			return nil
+		}
+		return v.SecurityReinforcementType
+	}).(pulumi.StringPtrOutput)
+}
+
+func (o NodePoolExtendParamsPtrOutput) SpotPrice() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *NodePoolExtendParams) *string {
+		if v == nil {
+			return nil
+		}
+		return v.SpotPrice
+	}).(pulumi.StringPtrOutput)
+}
+
+// Specifies the reserved node memory, which is reserved
+// value for system components. Changing this parameter will create a new resource.
+func (o NodePoolExtendParamsPtrOutput) SystemReservedMem() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v *NodePoolExtendParams) *int {
+		if v == nil {
+			return nil
+		}
+		return v.SystemReservedMem
+	}).(pulumi.IntPtrOutput)
+}
+
+type NodePoolExtensionScaleGroup struct {
+	// Specifies the basic information about the extended scaling group.
+	// The object structure is documented below.
+	Metadata *NodePoolExtensionScaleGroupMetadata `pulumi:"metadata"`
+	// Specifies the configurations of the extended scaling group,
+	// which carry different configurations from those of the default scaling group.
+	// The object structure is documented below.
+	Spec *NodePoolExtensionScaleGroupSpec `pulumi:"spec"`
+}
+
+// NodePoolExtensionScaleGroupInput is an input type that accepts NodePoolExtensionScaleGroupArgs and NodePoolExtensionScaleGroupOutput values.
+// You can construct a concrete instance of `NodePoolExtensionScaleGroupInput` via:
+//
+//	NodePoolExtensionScaleGroupArgs{...}
+type NodePoolExtensionScaleGroupInput interface {
+	pulumi.Input
+
+	ToNodePoolExtensionScaleGroupOutput() NodePoolExtensionScaleGroupOutput
+	ToNodePoolExtensionScaleGroupOutputWithContext(context.Context) NodePoolExtensionScaleGroupOutput
+}
+
+type NodePoolExtensionScaleGroupArgs struct {
+	// Specifies the basic information about the extended scaling group.
+	// The object structure is documented below.
+	Metadata NodePoolExtensionScaleGroupMetadataPtrInput `pulumi:"metadata"`
+	// Specifies the configurations of the extended scaling group,
+	// which carry different configurations from those of the default scaling group.
+	// The object structure is documented below.
+	Spec NodePoolExtensionScaleGroupSpecPtrInput `pulumi:"spec"`
+}
+
+func (NodePoolExtensionScaleGroupArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*NodePoolExtensionScaleGroup)(nil)).Elem()
+}
+
+func (i NodePoolExtensionScaleGroupArgs) ToNodePoolExtensionScaleGroupOutput() NodePoolExtensionScaleGroupOutput {
+	return i.ToNodePoolExtensionScaleGroupOutputWithContext(context.Background())
+}
+
+func (i NodePoolExtensionScaleGroupArgs) ToNodePoolExtensionScaleGroupOutputWithContext(ctx context.Context) NodePoolExtensionScaleGroupOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(NodePoolExtensionScaleGroupOutput)
+}
+
+// NodePoolExtensionScaleGroupArrayInput is an input type that accepts NodePoolExtensionScaleGroupArray and NodePoolExtensionScaleGroupArrayOutput values.
+// You can construct a concrete instance of `NodePoolExtensionScaleGroupArrayInput` via:
+//
+//	NodePoolExtensionScaleGroupArray{ NodePoolExtensionScaleGroupArgs{...} }
+type NodePoolExtensionScaleGroupArrayInput interface {
+	pulumi.Input
+
+	ToNodePoolExtensionScaleGroupArrayOutput() NodePoolExtensionScaleGroupArrayOutput
+	ToNodePoolExtensionScaleGroupArrayOutputWithContext(context.Context) NodePoolExtensionScaleGroupArrayOutput
+}
+
+type NodePoolExtensionScaleGroupArray []NodePoolExtensionScaleGroupInput
+
+func (NodePoolExtensionScaleGroupArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]NodePoolExtensionScaleGroup)(nil)).Elem()
+}
+
+func (i NodePoolExtensionScaleGroupArray) ToNodePoolExtensionScaleGroupArrayOutput() NodePoolExtensionScaleGroupArrayOutput {
+	return i.ToNodePoolExtensionScaleGroupArrayOutputWithContext(context.Background())
+}
+
+func (i NodePoolExtensionScaleGroupArray) ToNodePoolExtensionScaleGroupArrayOutputWithContext(ctx context.Context) NodePoolExtensionScaleGroupArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(NodePoolExtensionScaleGroupArrayOutput)
+}
+
+type NodePoolExtensionScaleGroupOutput struct{ *pulumi.OutputState }
+
+func (NodePoolExtensionScaleGroupOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*NodePoolExtensionScaleGroup)(nil)).Elem()
+}
+
+func (o NodePoolExtensionScaleGroupOutput) ToNodePoolExtensionScaleGroupOutput() NodePoolExtensionScaleGroupOutput {
+	return o
+}
+
+func (o NodePoolExtensionScaleGroupOutput) ToNodePoolExtensionScaleGroupOutputWithContext(ctx context.Context) NodePoolExtensionScaleGroupOutput {
+	return o
+}
+
+// Specifies the basic information about the extended scaling group.
+// The object structure is documented below.
+func (o NodePoolExtensionScaleGroupOutput) Metadata() NodePoolExtensionScaleGroupMetadataPtrOutput {
+	return o.ApplyT(func(v NodePoolExtensionScaleGroup) *NodePoolExtensionScaleGroupMetadata { return v.Metadata }).(NodePoolExtensionScaleGroupMetadataPtrOutput)
+}
+
+// Specifies the configurations of the extended scaling group,
+// which carry different configurations from those of the default scaling group.
+// The object structure is documented below.
+func (o NodePoolExtensionScaleGroupOutput) Spec() NodePoolExtensionScaleGroupSpecPtrOutput {
+	return o.ApplyT(func(v NodePoolExtensionScaleGroup) *NodePoolExtensionScaleGroupSpec { return v.Spec }).(NodePoolExtensionScaleGroupSpecPtrOutput)
+}
+
+type NodePoolExtensionScaleGroupArrayOutput struct{ *pulumi.OutputState }
+
+func (NodePoolExtensionScaleGroupArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]NodePoolExtensionScaleGroup)(nil)).Elem()
+}
+
+func (o NodePoolExtensionScaleGroupArrayOutput) ToNodePoolExtensionScaleGroupArrayOutput() NodePoolExtensionScaleGroupArrayOutput {
+	return o
+}
+
+func (o NodePoolExtensionScaleGroupArrayOutput) ToNodePoolExtensionScaleGroupArrayOutputWithContext(ctx context.Context) NodePoolExtensionScaleGroupArrayOutput {
+	return o
+}
+
+func (o NodePoolExtensionScaleGroupArrayOutput) Index(i pulumi.IntInput) NodePoolExtensionScaleGroupOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) NodePoolExtensionScaleGroup {
+		return vs[0].([]NodePoolExtensionScaleGroup)[vs[1].(int)]
+	}).(NodePoolExtensionScaleGroupOutput)
+}
+
+type NodePoolExtensionScaleGroupMetadata struct {
+	// Specifies the name of an extended scaling group.
+	// The value cannot be default and can contain a maximum of 55 characters.
+	// Only digits, lowercase letters, and hyphens (-) are allowed.
+	Name *string `pulumi:"name"`
+}
+
+// NodePoolExtensionScaleGroupMetadataInput is an input type that accepts NodePoolExtensionScaleGroupMetadataArgs and NodePoolExtensionScaleGroupMetadataOutput values.
+// You can construct a concrete instance of `NodePoolExtensionScaleGroupMetadataInput` via:
+//
+//	NodePoolExtensionScaleGroupMetadataArgs{...}
+type NodePoolExtensionScaleGroupMetadataInput interface {
+	pulumi.Input
+
+	ToNodePoolExtensionScaleGroupMetadataOutput() NodePoolExtensionScaleGroupMetadataOutput
+	ToNodePoolExtensionScaleGroupMetadataOutputWithContext(context.Context) NodePoolExtensionScaleGroupMetadataOutput
+}
+
+type NodePoolExtensionScaleGroupMetadataArgs struct {
+	// Specifies the name of an extended scaling group.
+	// The value cannot be default and can contain a maximum of 55 characters.
+	// Only digits, lowercase letters, and hyphens (-) are allowed.
+	Name pulumi.StringPtrInput `pulumi:"name"`
+}
+
+func (NodePoolExtensionScaleGroupMetadataArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*NodePoolExtensionScaleGroupMetadata)(nil)).Elem()
+}
+
+func (i NodePoolExtensionScaleGroupMetadataArgs) ToNodePoolExtensionScaleGroupMetadataOutput() NodePoolExtensionScaleGroupMetadataOutput {
+	return i.ToNodePoolExtensionScaleGroupMetadataOutputWithContext(context.Background())
+}
+
+func (i NodePoolExtensionScaleGroupMetadataArgs) ToNodePoolExtensionScaleGroupMetadataOutputWithContext(ctx context.Context) NodePoolExtensionScaleGroupMetadataOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(NodePoolExtensionScaleGroupMetadataOutput)
+}
+
+func (i NodePoolExtensionScaleGroupMetadataArgs) ToNodePoolExtensionScaleGroupMetadataPtrOutput() NodePoolExtensionScaleGroupMetadataPtrOutput {
+	return i.ToNodePoolExtensionScaleGroupMetadataPtrOutputWithContext(context.Background())
+}
+
+func (i NodePoolExtensionScaleGroupMetadataArgs) ToNodePoolExtensionScaleGroupMetadataPtrOutputWithContext(ctx context.Context) NodePoolExtensionScaleGroupMetadataPtrOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(NodePoolExtensionScaleGroupMetadataOutput).ToNodePoolExtensionScaleGroupMetadataPtrOutputWithContext(ctx)
+}
+
+// NodePoolExtensionScaleGroupMetadataPtrInput is an input type that accepts NodePoolExtensionScaleGroupMetadataArgs, NodePoolExtensionScaleGroupMetadataPtr and NodePoolExtensionScaleGroupMetadataPtrOutput values.
+// You can construct a concrete instance of `NodePoolExtensionScaleGroupMetadataPtrInput` via:
+//
+//	        NodePoolExtensionScaleGroupMetadataArgs{...}
+//
+//	or:
+//
+//	        nil
+type NodePoolExtensionScaleGroupMetadataPtrInput interface {
+	pulumi.Input
+
+	ToNodePoolExtensionScaleGroupMetadataPtrOutput() NodePoolExtensionScaleGroupMetadataPtrOutput
+	ToNodePoolExtensionScaleGroupMetadataPtrOutputWithContext(context.Context) NodePoolExtensionScaleGroupMetadataPtrOutput
+}
+
+type nodePoolExtensionScaleGroupMetadataPtrType NodePoolExtensionScaleGroupMetadataArgs
+
+func NodePoolExtensionScaleGroupMetadataPtr(v *NodePoolExtensionScaleGroupMetadataArgs) NodePoolExtensionScaleGroupMetadataPtrInput {
+	return (*nodePoolExtensionScaleGroupMetadataPtrType)(v)
+}
+
+func (*nodePoolExtensionScaleGroupMetadataPtrType) ElementType() reflect.Type {
+	return reflect.TypeOf((**NodePoolExtensionScaleGroupMetadata)(nil)).Elem()
+}
+
+func (i *nodePoolExtensionScaleGroupMetadataPtrType) ToNodePoolExtensionScaleGroupMetadataPtrOutput() NodePoolExtensionScaleGroupMetadataPtrOutput {
+	return i.ToNodePoolExtensionScaleGroupMetadataPtrOutputWithContext(context.Background())
+}
+
+func (i *nodePoolExtensionScaleGroupMetadataPtrType) ToNodePoolExtensionScaleGroupMetadataPtrOutputWithContext(ctx context.Context) NodePoolExtensionScaleGroupMetadataPtrOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(NodePoolExtensionScaleGroupMetadataPtrOutput)
+}
+
+type NodePoolExtensionScaleGroupMetadataOutput struct{ *pulumi.OutputState }
+
+func (NodePoolExtensionScaleGroupMetadataOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*NodePoolExtensionScaleGroupMetadata)(nil)).Elem()
+}
+
+func (o NodePoolExtensionScaleGroupMetadataOutput) ToNodePoolExtensionScaleGroupMetadataOutput() NodePoolExtensionScaleGroupMetadataOutput {
+	return o
+}
+
+func (o NodePoolExtensionScaleGroupMetadataOutput) ToNodePoolExtensionScaleGroupMetadataOutputWithContext(ctx context.Context) NodePoolExtensionScaleGroupMetadataOutput {
+	return o
+}
+
+func (o NodePoolExtensionScaleGroupMetadataOutput) ToNodePoolExtensionScaleGroupMetadataPtrOutput() NodePoolExtensionScaleGroupMetadataPtrOutput {
+	return o.ToNodePoolExtensionScaleGroupMetadataPtrOutputWithContext(context.Background())
+}
+
+func (o NodePoolExtensionScaleGroupMetadataOutput) ToNodePoolExtensionScaleGroupMetadataPtrOutputWithContext(ctx context.Context) NodePoolExtensionScaleGroupMetadataPtrOutput {
+	return o.ApplyTWithContext(ctx, func(_ context.Context, v NodePoolExtensionScaleGroupMetadata) *NodePoolExtensionScaleGroupMetadata {
+		return &v
+	}).(NodePoolExtensionScaleGroupMetadataPtrOutput)
+}
+
+// Specifies the name of an extended scaling group.
+// The value cannot be default and can contain a maximum of 55 characters.
+// Only digits, lowercase letters, and hyphens (-) are allowed.
+func (o NodePoolExtensionScaleGroupMetadataOutput) Name() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v NodePoolExtensionScaleGroupMetadata) *string { return v.Name }).(pulumi.StringPtrOutput)
+}
+
+type NodePoolExtensionScaleGroupMetadataPtrOutput struct{ *pulumi.OutputState }
+
+func (NodePoolExtensionScaleGroupMetadataPtrOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((**NodePoolExtensionScaleGroupMetadata)(nil)).Elem()
+}
+
+func (o NodePoolExtensionScaleGroupMetadataPtrOutput) ToNodePoolExtensionScaleGroupMetadataPtrOutput() NodePoolExtensionScaleGroupMetadataPtrOutput {
+	return o
+}
+
+func (o NodePoolExtensionScaleGroupMetadataPtrOutput) ToNodePoolExtensionScaleGroupMetadataPtrOutputWithContext(ctx context.Context) NodePoolExtensionScaleGroupMetadataPtrOutput {
+	return o
+}
+
+func (o NodePoolExtensionScaleGroupMetadataPtrOutput) Elem() NodePoolExtensionScaleGroupMetadataOutput {
+	return o.ApplyT(func(v *NodePoolExtensionScaleGroupMetadata) NodePoolExtensionScaleGroupMetadata {
+		if v != nil {
+			return *v
+		}
+		var ret NodePoolExtensionScaleGroupMetadata
+		return ret
+	}).(NodePoolExtensionScaleGroupMetadataOutput)
+}
+
+// Specifies the name of an extended scaling group.
+// The value cannot be default and can contain a maximum of 55 characters.
+// Only digits, lowercase letters, and hyphens (-) are allowed.
+func (o NodePoolExtensionScaleGroupMetadataPtrOutput) Name() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *NodePoolExtensionScaleGroupMetadata) *string {
+		if v == nil {
+			return nil
+		}
+		return v.Name
+	}).(pulumi.StringPtrOutput)
+}
+
+type NodePoolExtensionScaleGroupSpec struct {
+	// Specifies the auto scaling configurations of the extended scaling group.
+	// The object structure is documented below.
+	Autoscaling *NodePoolExtensionScaleGroupSpecAutoscaling `pulumi:"autoscaling"`
+	// Specifies the availability zone of a node.
+	// If this parameter is not specified or left blank, the default scaling group configurations take effect.
+	Az *string `pulumi:"az"`
+	// Specifies the capacity reservation
+	// configurations of the extended scaling group.
+	// The object structure is documented below.
+	CapacityReservationSpecification *NodePoolExtensionScaleGroupSpecCapacityReservationSpecification `pulumi:"capacityReservationSpecification"`
+	// Specifies the node flavor.
+	Flavor *string `pulumi:"flavor"`
+}
+
+// NodePoolExtensionScaleGroupSpecInput is an input type that accepts NodePoolExtensionScaleGroupSpecArgs and NodePoolExtensionScaleGroupSpecOutput values.
+// You can construct a concrete instance of `NodePoolExtensionScaleGroupSpecInput` via:
+//
+//	NodePoolExtensionScaleGroupSpecArgs{...}
+type NodePoolExtensionScaleGroupSpecInput interface {
+	pulumi.Input
+
+	ToNodePoolExtensionScaleGroupSpecOutput() NodePoolExtensionScaleGroupSpecOutput
+	ToNodePoolExtensionScaleGroupSpecOutputWithContext(context.Context) NodePoolExtensionScaleGroupSpecOutput
+}
+
+type NodePoolExtensionScaleGroupSpecArgs struct {
+	// Specifies the auto scaling configurations of the extended scaling group.
+	// The object structure is documented below.
+	Autoscaling NodePoolExtensionScaleGroupSpecAutoscalingPtrInput `pulumi:"autoscaling"`
+	// Specifies the availability zone of a node.
+	// If this parameter is not specified or left blank, the default scaling group configurations take effect.
+	Az pulumi.StringPtrInput `pulumi:"az"`
+	// Specifies the capacity reservation
+	// configurations of the extended scaling group.
+	// The object structure is documented below.
+	CapacityReservationSpecification NodePoolExtensionScaleGroupSpecCapacityReservationSpecificationPtrInput `pulumi:"capacityReservationSpecification"`
+	// Specifies the node flavor.
+	Flavor pulumi.StringPtrInput `pulumi:"flavor"`
+}
+
+func (NodePoolExtensionScaleGroupSpecArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*NodePoolExtensionScaleGroupSpec)(nil)).Elem()
+}
+
+func (i NodePoolExtensionScaleGroupSpecArgs) ToNodePoolExtensionScaleGroupSpecOutput() NodePoolExtensionScaleGroupSpecOutput {
+	return i.ToNodePoolExtensionScaleGroupSpecOutputWithContext(context.Background())
+}
+
+func (i NodePoolExtensionScaleGroupSpecArgs) ToNodePoolExtensionScaleGroupSpecOutputWithContext(ctx context.Context) NodePoolExtensionScaleGroupSpecOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(NodePoolExtensionScaleGroupSpecOutput)
+}
+
+func (i NodePoolExtensionScaleGroupSpecArgs) ToNodePoolExtensionScaleGroupSpecPtrOutput() NodePoolExtensionScaleGroupSpecPtrOutput {
+	return i.ToNodePoolExtensionScaleGroupSpecPtrOutputWithContext(context.Background())
+}
+
+func (i NodePoolExtensionScaleGroupSpecArgs) ToNodePoolExtensionScaleGroupSpecPtrOutputWithContext(ctx context.Context) NodePoolExtensionScaleGroupSpecPtrOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(NodePoolExtensionScaleGroupSpecOutput).ToNodePoolExtensionScaleGroupSpecPtrOutputWithContext(ctx)
+}
+
+// NodePoolExtensionScaleGroupSpecPtrInput is an input type that accepts NodePoolExtensionScaleGroupSpecArgs, NodePoolExtensionScaleGroupSpecPtr and NodePoolExtensionScaleGroupSpecPtrOutput values.
+// You can construct a concrete instance of `NodePoolExtensionScaleGroupSpecPtrInput` via:
+//
+//	        NodePoolExtensionScaleGroupSpecArgs{...}
+//
+//	or:
+//
+//	        nil
+type NodePoolExtensionScaleGroupSpecPtrInput interface {
+	pulumi.Input
+
+	ToNodePoolExtensionScaleGroupSpecPtrOutput() NodePoolExtensionScaleGroupSpecPtrOutput
+	ToNodePoolExtensionScaleGroupSpecPtrOutputWithContext(context.Context) NodePoolExtensionScaleGroupSpecPtrOutput
+}
+
+type nodePoolExtensionScaleGroupSpecPtrType NodePoolExtensionScaleGroupSpecArgs
+
+func NodePoolExtensionScaleGroupSpecPtr(v *NodePoolExtensionScaleGroupSpecArgs) NodePoolExtensionScaleGroupSpecPtrInput {
+	return (*nodePoolExtensionScaleGroupSpecPtrType)(v)
+}
+
+func (*nodePoolExtensionScaleGroupSpecPtrType) ElementType() reflect.Type {
+	return reflect.TypeOf((**NodePoolExtensionScaleGroupSpec)(nil)).Elem()
+}
+
+func (i *nodePoolExtensionScaleGroupSpecPtrType) ToNodePoolExtensionScaleGroupSpecPtrOutput() NodePoolExtensionScaleGroupSpecPtrOutput {
+	return i.ToNodePoolExtensionScaleGroupSpecPtrOutputWithContext(context.Background())
+}
+
+func (i *nodePoolExtensionScaleGroupSpecPtrType) ToNodePoolExtensionScaleGroupSpecPtrOutputWithContext(ctx context.Context) NodePoolExtensionScaleGroupSpecPtrOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(NodePoolExtensionScaleGroupSpecPtrOutput)
+}
+
+type NodePoolExtensionScaleGroupSpecOutput struct{ *pulumi.OutputState }
+
+func (NodePoolExtensionScaleGroupSpecOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*NodePoolExtensionScaleGroupSpec)(nil)).Elem()
+}
+
+func (o NodePoolExtensionScaleGroupSpecOutput) ToNodePoolExtensionScaleGroupSpecOutput() NodePoolExtensionScaleGroupSpecOutput {
+	return o
+}
+
+func (o NodePoolExtensionScaleGroupSpecOutput) ToNodePoolExtensionScaleGroupSpecOutputWithContext(ctx context.Context) NodePoolExtensionScaleGroupSpecOutput {
+	return o
+}
+
+func (o NodePoolExtensionScaleGroupSpecOutput) ToNodePoolExtensionScaleGroupSpecPtrOutput() NodePoolExtensionScaleGroupSpecPtrOutput {
+	return o.ToNodePoolExtensionScaleGroupSpecPtrOutputWithContext(context.Background())
+}
+
+func (o NodePoolExtensionScaleGroupSpecOutput) ToNodePoolExtensionScaleGroupSpecPtrOutputWithContext(ctx context.Context) NodePoolExtensionScaleGroupSpecPtrOutput {
+	return o.ApplyTWithContext(ctx, func(_ context.Context, v NodePoolExtensionScaleGroupSpec) *NodePoolExtensionScaleGroupSpec {
+		return &v
+	}).(NodePoolExtensionScaleGroupSpecPtrOutput)
+}
+
+// Specifies the auto scaling configurations of the extended scaling group.
+// The object structure is documented below.
+func (o NodePoolExtensionScaleGroupSpecOutput) Autoscaling() NodePoolExtensionScaleGroupSpecAutoscalingPtrOutput {
+	return o.ApplyT(func(v NodePoolExtensionScaleGroupSpec) *NodePoolExtensionScaleGroupSpecAutoscaling {
+		return v.Autoscaling
+	}).(NodePoolExtensionScaleGroupSpecAutoscalingPtrOutput)
+}
+
+// Specifies the availability zone of a node.
+// If this parameter is not specified or left blank, the default scaling group configurations take effect.
+func (o NodePoolExtensionScaleGroupSpecOutput) Az() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v NodePoolExtensionScaleGroupSpec) *string { return v.Az }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the capacity reservation
+// configurations of the extended scaling group.
+// The object structure is documented below.
+func (o NodePoolExtensionScaleGroupSpecOutput) CapacityReservationSpecification() NodePoolExtensionScaleGroupSpecCapacityReservationSpecificationPtrOutput {
+	return o.ApplyT(func(v NodePoolExtensionScaleGroupSpec) *NodePoolExtensionScaleGroupSpecCapacityReservationSpecification {
+		return v.CapacityReservationSpecification
+	}).(NodePoolExtensionScaleGroupSpecCapacityReservationSpecificationPtrOutput)
+}
+
+// Specifies the node flavor.
+func (o NodePoolExtensionScaleGroupSpecOutput) Flavor() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v NodePoolExtensionScaleGroupSpec) *string { return v.Flavor }).(pulumi.StringPtrOutput)
+}
+
+type NodePoolExtensionScaleGroupSpecPtrOutput struct{ *pulumi.OutputState }
+
+func (NodePoolExtensionScaleGroupSpecPtrOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((**NodePoolExtensionScaleGroupSpec)(nil)).Elem()
+}
+
+func (o NodePoolExtensionScaleGroupSpecPtrOutput) ToNodePoolExtensionScaleGroupSpecPtrOutput() NodePoolExtensionScaleGroupSpecPtrOutput {
+	return o
+}
+
+func (o NodePoolExtensionScaleGroupSpecPtrOutput) ToNodePoolExtensionScaleGroupSpecPtrOutputWithContext(ctx context.Context) NodePoolExtensionScaleGroupSpecPtrOutput {
+	return o
+}
+
+func (o NodePoolExtensionScaleGroupSpecPtrOutput) Elem() NodePoolExtensionScaleGroupSpecOutput {
+	return o.ApplyT(func(v *NodePoolExtensionScaleGroupSpec) NodePoolExtensionScaleGroupSpec {
+		if v != nil {
+			return *v
+		}
+		var ret NodePoolExtensionScaleGroupSpec
+		return ret
+	}).(NodePoolExtensionScaleGroupSpecOutput)
+}
+
+// Specifies the auto scaling configurations of the extended scaling group.
+// The object structure is documented below.
+func (o NodePoolExtensionScaleGroupSpecPtrOutput) Autoscaling() NodePoolExtensionScaleGroupSpecAutoscalingPtrOutput {
+	return o.ApplyT(func(v *NodePoolExtensionScaleGroupSpec) *NodePoolExtensionScaleGroupSpecAutoscaling {
+		if v == nil {
+			return nil
+		}
+		return v.Autoscaling
+	}).(NodePoolExtensionScaleGroupSpecAutoscalingPtrOutput)
+}
+
+// Specifies the availability zone of a node.
+// If this parameter is not specified or left blank, the default scaling group configurations take effect.
+func (o NodePoolExtensionScaleGroupSpecPtrOutput) Az() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *NodePoolExtensionScaleGroupSpec) *string {
+		if v == nil {
+			return nil
+		}
+		return v.Az
+	}).(pulumi.StringPtrOutput)
+}
+
+// Specifies the capacity reservation
+// configurations of the extended scaling group.
+// The object structure is documented below.
+func (o NodePoolExtensionScaleGroupSpecPtrOutput) CapacityReservationSpecification() NodePoolExtensionScaleGroupSpecCapacityReservationSpecificationPtrOutput {
+	return o.ApplyT(func(v *NodePoolExtensionScaleGroupSpec) *NodePoolExtensionScaleGroupSpecCapacityReservationSpecification {
+		if v == nil {
+			return nil
+		}
+		return v.CapacityReservationSpecification
+	}).(NodePoolExtensionScaleGroupSpecCapacityReservationSpecificationPtrOutput)
+}
+
+// Specifies the node flavor.
+func (o NodePoolExtensionScaleGroupSpecPtrOutput) Flavor() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *NodePoolExtensionScaleGroupSpec) *string {
+		if v == nil {
+			return nil
+		}
+		return v.Flavor
+	}).(pulumi.StringPtrOutput)
+}
+
+type NodePoolExtensionScaleGroupSpecAutoscaling struct {
+	// Specifies whether to enable auto scaling for the scaling group, defaults to **false**.
+	Enable *bool `pulumi:"enable"`
+	// Specifies the priority of the scaling group, defaults to **0**.
+	// A higher value indicates a greater priority.
+	ExtensionPriority *int `pulumi:"extensionPriority"`
+	// Specifies the maximum number of nodes that can be retained in the scaling group
+	// during auto scaling. The value must be greater than or equal to that of `minNodeCount`, and can neither be greater
+	// than the maximum number of nodes allowed by the cluster nor the maximum number of nodes in the node pool.
+	MaxNodeCount *int `pulumi:"maxNodeCount"`
+	// Specifies the minimum number of nodes in the scaling group during auto scaling.
+	// The value must be greater than **0**.
+	MinNodeCount *int `pulumi:"minNodeCount"`
+}
+
+// NodePoolExtensionScaleGroupSpecAutoscalingInput is an input type that accepts NodePoolExtensionScaleGroupSpecAutoscalingArgs and NodePoolExtensionScaleGroupSpecAutoscalingOutput values.
+// You can construct a concrete instance of `NodePoolExtensionScaleGroupSpecAutoscalingInput` via:
+//
+//	NodePoolExtensionScaleGroupSpecAutoscalingArgs{...}
+type NodePoolExtensionScaleGroupSpecAutoscalingInput interface {
+	pulumi.Input
+
+	ToNodePoolExtensionScaleGroupSpecAutoscalingOutput() NodePoolExtensionScaleGroupSpecAutoscalingOutput
+	ToNodePoolExtensionScaleGroupSpecAutoscalingOutputWithContext(context.Context) NodePoolExtensionScaleGroupSpecAutoscalingOutput
+}
+
+type NodePoolExtensionScaleGroupSpecAutoscalingArgs struct {
+	// Specifies whether to enable auto scaling for the scaling group, defaults to **false**.
+	Enable pulumi.BoolPtrInput `pulumi:"enable"`
+	// Specifies the priority of the scaling group, defaults to **0**.
+	// A higher value indicates a greater priority.
+	ExtensionPriority pulumi.IntPtrInput `pulumi:"extensionPriority"`
+	// Specifies the maximum number of nodes that can be retained in the scaling group
+	// during auto scaling. The value must be greater than or equal to that of `minNodeCount`, and can neither be greater
+	// than the maximum number of nodes allowed by the cluster nor the maximum number of nodes in the node pool.
+	MaxNodeCount pulumi.IntPtrInput `pulumi:"maxNodeCount"`
+	// Specifies the minimum number of nodes in the scaling group during auto scaling.
+	// The value must be greater than **0**.
+	MinNodeCount pulumi.IntPtrInput `pulumi:"minNodeCount"`
+}
+
+func (NodePoolExtensionScaleGroupSpecAutoscalingArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*NodePoolExtensionScaleGroupSpecAutoscaling)(nil)).Elem()
+}
+
+func (i NodePoolExtensionScaleGroupSpecAutoscalingArgs) ToNodePoolExtensionScaleGroupSpecAutoscalingOutput() NodePoolExtensionScaleGroupSpecAutoscalingOutput {
+	return i.ToNodePoolExtensionScaleGroupSpecAutoscalingOutputWithContext(context.Background())
+}
+
+func (i NodePoolExtensionScaleGroupSpecAutoscalingArgs) ToNodePoolExtensionScaleGroupSpecAutoscalingOutputWithContext(ctx context.Context) NodePoolExtensionScaleGroupSpecAutoscalingOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(NodePoolExtensionScaleGroupSpecAutoscalingOutput)
+}
+
+func (i NodePoolExtensionScaleGroupSpecAutoscalingArgs) ToNodePoolExtensionScaleGroupSpecAutoscalingPtrOutput() NodePoolExtensionScaleGroupSpecAutoscalingPtrOutput {
+	return i.ToNodePoolExtensionScaleGroupSpecAutoscalingPtrOutputWithContext(context.Background())
+}
+
+func (i NodePoolExtensionScaleGroupSpecAutoscalingArgs) ToNodePoolExtensionScaleGroupSpecAutoscalingPtrOutputWithContext(ctx context.Context) NodePoolExtensionScaleGroupSpecAutoscalingPtrOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(NodePoolExtensionScaleGroupSpecAutoscalingOutput).ToNodePoolExtensionScaleGroupSpecAutoscalingPtrOutputWithContext(ctx)
+}
+
+// NodePoolExtensionScaleGroupSpecAutoscalingPtrInput is an input type that accepts NodePoolExtensionScaleGroupSpecAutoscalingArgs, NodePoolExtensionScaleGroupSpecAutoscalingPtr and NodePoolExtensionScaleGroupSpecAutoscalingPtrOutput values.
+// You can construct a concrete instance of `NodePoolExtensionScaleGroupSpecAutoscalingPtrInput` via:
+//
+//	        NodePoolExtensionScaleGroupSpecAutoscalingArgs{...}
+//
+//	or:
+//
+//	        nil
+type NodePoolExtensionScaleGroupSpecAutoscalingPtrInput interface {
+	pulumi.Input
+
+	ToNodePoolExtensionScaleGroupSpecAutoscalingPtrOutput() NodePoolExtensionScaleGroupSpecAutoscalingPtrOutput
+	ToNodePoolExtensionScaleGroupSpecAutoscalingPtrOutputWithContext(context.Context) NodePoolExtensionScaleGroupSpecAutoscalingPtrOutput
+}
+
+type nodePoolExtensionScaleGroupSpecAutoscalingPtrType NodePoolExtensionScaleGroupSpecAutoscalingArgs
+
+func NodePoolExtensionScaleGroupSpecAutoscalingPtr(v *NodePoolExtensionScaleGroupSpecAutoscalingArgs) NodePoolExtensionScaleGroupSpecAutoscalingPtrInput {
+	return (*nodePoolExtensionScaleGroupSpecAutoscalingPtrType)(v)
+}
+
+func (*nodePoolExtensionScaleGroupSpecAutoscalingPtrType) ElementType() reflect.Type {
+	return reflect.TypeOf((**NodePoolExtensionScaleGroupSpecAutoscaling)(nil)).Elem()
+}
+
+func (i *nodePoolExtensionScaleGroupSpecAutoscalingPtrType) ToNodePoolExtensionScaleGroupSpecAutoscalingPtrOutput() NodePoolExtensionScaleGroupSpecAutoscalingPtrOutput {
+	return i.ToNodePoolExtensionScaleGroupSpecAutoscalingPtrOutputWithContext(context.Background())
+}
+
+func (i *nodePoolExtensionScaleGroupSpecAutoscalingPtrType) ToNodePoolExtensionScaleGroupSpecAutoscalingPtrOutputWithContext(ctx context.Context) NodePoolExtensionScaleGroupSpecAutoscalingPtrOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(NodePoolExtensionScaleGroupSpecAutoscalingPtrOutput)
+}
+
+type NodePoolExtensionScaleGroupSpecAutoscalingOutput struct{ *pulumi.OutputState }
+
+func (NodePoolExtensionScaleGroupSpecAutoscalingOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*NodePoolExtensionScaleGroupSpecAutoscaling)(nil)).Elem()
+}
+
+func (o NodePoolExtensionScaleGroupSpecAutoscalingOutput) ToNodePoolExtensionScaleGroupSpecAutoscalingOutput() NodePoolExtensionScaleGroupSpecAutoscalingOutput {
+	return o
+}
+
+func (o NodePoolExtensionScaleGroupSpecAutoscalingOutput) ToNodePoolExtensionScaleGroupSpecAutoscalingOutputWithContext(ctx context.Context) NodePoolExtensionScaleGroupSpecAutoscalingOutput {
+	return o
+}
+
+func (o NodePoolExtensionScaleGroupSpecAutoscalingOutput) ToNodePoolExtensionScaleGroupSpecAutoscalingPtrOutput() NodePoolExtensionScaleGroupSpecAutoscalingPtrOutput {
+	return o.ToNodePoolExtensionScaleGroupSpecAutoscalingPtrOutputWithContext(context.Background())
+}
+
+func (o NodePoolExtensionScaleGroupSpecAutoscalingOutput) ToNodePoolExtensionScaleGroupSpecAutoscalingPtrOutputWithContext(ctx context.Context) NodePoolExtensionScaleGroupSpecAutoscalingPtrOutput {
+	return o.ApplyTWithContext(ctx, func(_ context.Context, v NodePoolExtensionScaleGroupSpecAutoscaling) *NodePoolExtensionScaleGroupSpecAutoscaling {
+		return &v
+	}).(NodePoolExtensionScaleGroupSpecAutoscalingPtrOutput)
+}
+
+// Specifies whether to enable auto scaling for the scaling group, defaults to **false**.
+func (o NodePoolExtensionScaleGroupSpecAutoscalingOutput) Enable() pulumi.BoolPtrOutput {
+	return o.ApplyT(func(v NodePoolExtensionScaleGroupSpecAutoscaling) *bool { return v.Enable }).(pulumi.BoolPtrOutput)
+}
+
+// Specifies the priority of the scaling group, defaults to **0**.
+// A higher value indicates a greater priority.
+func (o NodePoolExtensionScaleGroupSpecAutoscalingOutput) ExtensionPriority() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v NodePoolExtensionScaleGroupSpecAutoscaling) *int { return v.ExtensionPriority }).(pulumi.IntPtrOutput)
+}
+
+// Specifies the maximum number of nodes that can be retained in the scaling group
+// during auto scaling. The value must be greater than or equal to that of `minNodeCount`, and can neither be greater
+// than the maximum number of nodes allowed by the cluster nor the maximum number of nodes in the node pool.
+func (o NodePoolExtensionScaleGroupSpecAutoscalingOutput) MaxNodeCount() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v NodePoolExtensionScaleGroupSpecAutoscaling) *int { return v.MaxNodeCount }).(pulumi.IntPtrOutput)
+}
+
+// Specifies the minimum number of nodes in the scaling group during auto scaling.
+// The value must be greater than **0**.
+func (o NodePoolExtensionScaleGroupSpecAutoscalingOutput) MinNodeCount() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v NodePoolExtensionScaleGroupSpecAutoscaling) *int { return v.MinNodeCount }).(pulumi.IntPtrOutput)
+}
+
+type NodePoolExtensionScaleGroupSpecAutoscalingPtrOutput struct{ *pulumi.OutputState }
+
+func (NodePoolExtensionScaleGroupSpecAutoscalingPtrOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((**NodePoolExtensionScaleGroupSpecAutoscaling)(nil)).Elem()
+}
+
+func (o NodePoolExtensionScaleGroupSpecAutoscalingPtrOutput) ToNodePoolExtensionScaleGroupSpecAutoscalingPtrOutput() NodePoolExtensionScaleGroupSpecAutoscalingPtrOutput {
+	return o
+}
+
+func (o NodePoolExtensionScaleGroupSpecAutoscalingPtrOutput) ToNodePoolExtensionScaleGroupSpecAutoscalingPtrOutputWithContext(ctx context.Context) NodePoolExtensionScaleGroupSpecAutoscalingPtrOutput {
+	return o
+}
+
+func (o NodePoolExtensionScaleGroupSpecAutoscalingPtrOutput) Elem() NodePoolExtensionScaleGroupSpecAutoscalingOutput {
+	return o.ApplyT(func(v *NodePoolExtensionScaleGroupSpecAutoscaling) NodePoolExtensionScaleGroupSpecAutoscaling {
+		if v != nil {
+			return *v
+		}
+		var ret NodePoolExtensionScaleGroupSpecAutoscaling
+		return ret
+	}).(NodePoolExtensionScaleGroupSpecAutoscalingOutput)
+}
+
+// Specifies whether to enable auto scaling for the scaling group, defaults to **false**.
+func (o NodePoolExtensionScaleGroupSpecAutoscalingPtrOutput) Enable() pulumi.BoolPtrOutput {
+	return o.ApplyT(func(v *NodePoolExtensionScaleGroupSpecAutoscaling) *bool {
+		if v == nil {
+			return nil
+		}
+		return v.Enable
+	}).(pulumi.BoolPtrOutput)
+}
+
+// Specifies the priority of the scaling group, defaults to **0**.
+// A higher value indicates a greater priority.
+func (o NodePoolExtensionScaleGroupSpecAutoscalingPtrOutput) ExtensionPriority() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v *NodePoolExtensionScaleGroupSpecAutoscaling) *int {
+		if v == nil {
+			return nil
+		}
+		return v.ExtensionPriority
+	}).(pulumi.IntPtrOutput)
+}
+
+// Specifies the maximum number of nodes that can be retained in the scaling group
+// during auto scaling. The value must be greater than or equal to that of `minNodeCount`, and can neither be greater
+// than the maximum number of nodes allowed by the cluster nor the maximum number of nodes in the node pool.
+func (o NodePoolExtensionScaleGroupSpecAutoscalingPtrOutput) MaxNodeCount() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v *NodePoolExtensionScaleGroupSpecAutoscaling) *int {
+		if v == nil {
+			return nil
+		}
+		return v.MaxNodeCount
+	}).(pulumi.IntPtrOutput)
+}
+
+// Specifies the minimum number of nodes in the scaling group during auto scaling.
+// The value must be greater than **0**.
+func (o NodePoolExtensionScaleGroupSpecAutoscalingPtrOutput) MinNodeCount() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v *NodePoolExtensionScaleGroupSpecAutoscaling) *int {
+		if v == nil {
+			return nil
+		}
+		return v.MinNodeCount
+	}).(pulumi.IntPtrOutput)
+}
+
+type NodePoolExtensionScaleGroupSpecCapacityReservationSpecification struct {
+	// Specifies the private pool ID.
+	// The parameter value can be ignored when preference is set to none.
+	Id *string `pulumi:"id"`
+	// Specifies the capacity of a private storage pool. If the value is none,
+	// the capacity reservation is not specified. If the value is targeted, the capacity reservation is specified.
+	// In this case, the `id` cannot be left blank.
+	Preference *string `pulumi:"preference"`
+}
+
+// NodePoolExtensionScaleGroupSpecCapacityReservationSpecificationInput is an input type that accepts NodePoolExtensionScaleGroupSpecCapacityReservationSpecificationArgs and NodePoolExtensionScaleGroupSpecCapacityReservationSpecificationOutput values.
+// You can construct a concrete instance of `NodePoolExtensionScaleGroupSpecCapacityReservationSpecificationInput` via:
+//
+//	NodePoolExtensionScaleGroupSpecCapacityReservationSpecificationArgs{...}
+type NodePoolExtensionScaleGroupSpecCapacityReservationSpecificationInput interface {
+	pulumi.Input
+
+	ToNodePoolExtensionScaleGroupSpecCapacityReservationSpecificationOutput() NodePoolExtensionScaleGroupSpecCapacityReservationSpecificationOutput
+	ToNodePoolExtensionScaleGroupSpecCapacityReservationSpecificationOutputWithContext(context.Context) NodePoolExtensionScaleGroupSpecCapacityReservationSpecificationOutput
+}
+
+type NodePoolExtensionScaleGroupSpecCapacityReservationSpecificationArgs struct {
+	// Specifies the private pool ID.
+	// The parameter value can be ignored when preference is set to none.
+	Id pulumi.StringPtrInput `pulumi:"id"`
+	// Specifies the capacity of a private storage pool. If the value is none,
+	// the capacity reservation is not specified. If the value is targeted, the capacity reservation is specified.
+	// In this case, the `id` cannot be left blank.
+	Preference pulumi.StringPtrInput `pulumi:"preference"`
+}
+
+func (NodePoolExtensionScaleGroupSpecCapacityReservationSpecificationArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*NodePoolExtensionScaleGroupSpecCapacityReservationSpecification)(nil)).Elem()
+}
+
+func (i NodePoolExtensionScaleGroupSpecCapacityReservationSpecificationArgs) ToNodePoolExtensionScaleGroupSpecCapacityReservationSpecificationOutput() NodePoolExtensionScaleGroupSpecCapacityReservationSpecificationOutput {
+	return i.ToNodePoolExtensionScaleGroupSpecCapacityReservationSpecificationOutputWithContext(context.Background())
+}
+
+func (i NodePoolExtensionScaleGroupSpecCapacityReservationSpecificationArgs) ToNodePoolExtensionScaleGroupSpecCapacityReservationSpecificationOutputWithContext(ctx context.Context) NodePoolExtensionScaleGroupSpecCapacityReservationSpecificationOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(NodePoolExtensionScaleGroupSpecCapacityReservationSpecificationOutput)
+}
+
+func (i NodePoolExtensionScaleGroupSpecCapacityReservationSpecificationArgs) ToNodePoolExtensionScaleGroupSpecCapacityReservationSpecificationPtrOutput() NodePoolExtensionScaleGroupSpecCapacityReservationSpecificationPtrOutput {
+	return i.ToNodePoolExtensionScaleGroupSpecCapacityReservationSpecificationPtrOutputWithContext(context.Background())
+}
+
+func (i NodePoolExtensionScaleGroupSpecCapacityReservationSpecificationArgs) ToNodePoolExtensionScaleGroupSpecCapacityReservationSpecificationPtrOutputWithContext(ctx context.Context) NodePoolExtensionScaleGroupSpecCapacityReservationSpecificationPtrOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(NodePoolExtensionScaleGroupSpecCapacityReservationSpecificationOutput).ToNodePoolExtensionScaleGroupSpecCapacityReservationSpecificationPtrOutputWithContext(ctx)
+}
+
+// NodePoolExtensionScaleGroupSpecCapacityReservationSpecificationPtrInput is an input type that accepts NodePoolExtensionScaleGroupSpecCapacityReservationSpecificationArgs, NodePoolExtensionScaleGroupSpecCapacityReservationSpecificationPtr and NodePoolExtensionScaleGroupSpecCapacityReservationSpecificationPtrOutput values.
+// You can construct a concrete instance of `NodePoolExtensionScaleGroupSpecCapacityReservationSpecificationPtrInput` via:
+//
+//	        NodePoolExtensionScaleGroupSpecCapacityReservationSpecificationArgs{...}
+//
+//	or:
+//
+//	        nil
+type NodePoolExtensionScaleGroupSpecCapacityReservationSpecificationPtrInput interface {
+	pulumi.Input
+
+	ToNodePoolExtensionScaleGroupSpecCapacityReservationSpecificationPtrOutput() NodePoolExtensionScaleGroupSpecCapacityReservationSpecificationPtrOutput
+	ToNodePoolExtensionScaleGroupSpecCapacityReservationSpecificationPtrOutputWithContext(context.Context) NodePoolExtensionScaleGroupSpecCapacityReservationSpecificationPtrOutput
+}
+
+type nodePoolExtensionScaleGroupSpecCapacityReservationSpecificationPtrType NodePoolExtensionScaleGroupSpecCapacityReservationSpecificationArgs
+
+func NodePoolExtensionScaleGroupSpecCapacityReservationSpecificationPtr(v *NodePoolExtensionScaleGroupSpecCapacityReservationSpecificationArgs) NodePoolExtensionScaleGroupSpecCapacityReservationSpecificationPtrInput {
+	return (*nodePoolExtensionScaleGroupSpecCapacityReservationSpecificationPtrType)(v)
+}
+
+func (*nodePoolExtensionScaleGroupSpecCapacityReservationSpecificationPtrType) ElementType() reflect.Type {
+	return reflect.TypeOf((**NodePoolExtensionScaleGroupSpecCapacityReservationSpecification)(nil)).Elem()
+}
+
+func (i *nodePoolExtensionScaleGroupSpecCapacityReservationSpecificationPtrType) ToNodePoolExtensionScaleGroupSpecCapacityReservationSpecificationPtrOutput() NodePoolExtensionScaleGroupSpecCapacityReservationSpecificationPtrOutput {
+	return i.ToNodePoolExtensionScaleGroupSpecCapacityReservationSpecificationPtrOutputWithContext(context.Background())
+}
+
+func (i *nodePoolExtensionScaleGroupSpecCapacityReservationSpecificationPtrType) ToNodePoolExtensionScaleGroupSpecCapacityReservationSpecificationPtrOutputWithContext(ctx context.Context) NodePoolExtensionScaleGroupSpecCapacityReservationSpecificationPtrOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(NodePoolExtensionScaleGroupSpecCapacityReservationSpecificationPtrOutput)
+}
+
+type NodePoolExtensionScaleGroupSpecCapacityReservationSpecificationOutput struct{ *pulumi.OutputState }
+
+func (NodePoolExtensionScaleGroupSpecCapacityReservationSpecificationOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*NodePoolExtensionScaleGroupSpecCapacityReservationSpecification)(nil)).Elem()
+}
+
+func (o NodePoolExtensionScaleGroupSpecCapacityReservationSpecificationOutput) ToNodePoolExtensionScaleGroupSpecCapacityReservationSpecificationOutput() NodePoolExtensionScaleGroupSpecCapacityReservationSpecificationOutput {
+	return o
+}
+
+func (o NodePoolExtensionScaleGroupSpecCapacityReservationSpecificationOutput) ToNodePoolExtensionScaleGroupSpecCapacityReservationSpecificationOutputWithContext(ctx context.Context) NodePoolExtensionScaleGroupSpecCapacityReservationSpecificationOutput {
+	return o
+}
+
+func (o NodePoolExtensionScaleGroupSpecCapacityReservationSpecificationOutput) ToNodePoolExtensionScaleGroupSpecCapacityReservationSpecificationPtrOutput() NodePoolExtensionScaleGroupSpecCapacityReservationSpecificationPtrOutput {
+	return o.ToNodePoolExtensionScaleGroupSpecCapacityReservationSpecificationPtrOutputWithContext(context.Background())
+}
+
+func (o NodePoolExtensionScaleGroupSpecCapacityReservationSpecificationOutput) ToNodePoolExtensionScaleGroupSpecCapacityReservationSpecificationPtrOutputWithContext(ctx context.Context) NodePoolExtensionScaleGroupSpecCapacityReservationSpecificationPtrOutput {
+	return o.ApplyTWithContext(ctx, func(_ context.Context, v NodePoolExtensionScaleGroupSpecCapacityReservationSpecification) *NodePoolExtensionScaleGroupSpecCapacityReservationSpecification {
+		return &v
+	}).(NodePoolExtensionScaleGroupSpecCapacityReservationSpecificationPtrOutput)
+}
+
+// Specifies the private pool ID.
+// The parameter value can be ignored when preference is set to none.
+func (o NodePoolExtensionScaleGroupSpecCapacityReservationSpecificationOutput) Id() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v NodePoolExtensionScaleGroupSpecCapacityReservationSpecification) *string { return v.Id }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the capacity of a private storage pool. If the value is none,
+// the capacity reservation is not specified. If the value is targeted, the capacity reservation is specified.
+// In this case, the `id` cannot be left blank.
+func (o NodePoolExtensionScaleGroupSpecCapacityReservationSpecificationOutput) Preference() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v NodePoolExtensionScaleGroupSpecCapacityReservationSpecification) *string { return v.Preference }).(pulumi.StringPtrOutput)
+}
+
+type NodePoolExtensionScaleGroupSpecCapacityReservationSpecificationPtrOutput struct{ *pulumi.OutputState }
+
+func (NodePoolExtensionScaleGroupSpecCapacityReservationSpecificationPtrOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((**NodePoolExtensionScaleGroupSpecCapacityReservationSpecification)(nil)).Elem()
+}
+
+func (o NodePoolExtensionScaleGroupSpecCapacityReservationSpecificationPtrOutput) ToNodePoolExtensionScaleGroupSpecCapacityReservationSpecificationPtrOutput() NodePoolExtensionScaleGroupSpecCapacityReservationSpecificationPtrOutput {
+	return o
+}
+
+func (o NodePoolExtensionScaleGroupSpecCapacityReservationSpecificationPtrOutput) ToNodePoolExtensionScaleGroupSpecCapacityReservationSpecificationPtrOutputWithContext(ctx context.Context) NodePoolExtensionScaleGroupSpecCapacityReservationSpecificationPtrOutput {
+	return o
+}
+
+func (o NodePoolExtensionScaleGroupSpecCapacityReservationSpecificationPtrOutput) Elem() NodePoolExtensionScaleGroupSpecCapacityReservationSpecificationOutput {
+	return o.ApplyT(func(v *NodePoolExtensionScaleGroupSpecCapacityReservationSpecification) NodePoolExtensionScaleGroupSpecCapacityReservationSpecification {
+		if v != nil {
+			return *v
+		}
+		var ret NodePoolExtensionScaleGroupSpecCapacityReservationSpecification
+		return ret
+	}).(NodePoolExtensionScaleGroupSpecCapacityReservationSpecificationOutput)
+}
+
+// Specifies the private pool ID.
+// The parameter value can be ignored when preference is set to none.
+func (o NodePoolExtensionScaleGroupSpecCapacityReservationSpecificationPtrOutput) Id() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *NodePoolExtensionScaleGroupSpecCapacityReservationSpecification) *string {
+		if v == nil {
+			return nil
+		}
+		return v.Id
+	}).(pulumi.StringPtrOutput)
+}
+
+// Specifies the capacity of a private storage pool. If the value is none,
+// the capacity reservation is not specified. If the value is targeted, the capacity reservation is specified.
+// In this case, the `id` cannot be left blank.
+func (o NodePoolExtensionScaleGroupSpecCapacityReservationSpecificationPtrOutput) Preference() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *NodePoolExtensionScaleGroupSpecCapacityReservationSpecification) *string {
+		if v == nil {
+			return nil
+		}
+		return v.Preference
+	}).(pulumi.StringPtrOutput)
+}
+
+type NodePoolHostnameConfig struct {
+	// Specifies the hostname type of the kubernetes node.
+	// The value can be:
+	// + **privateIp**: The Kubernetes node is named after its IP address.
+	// + **cceNodeName**: The Kubernetes node is named after the CCE node.
+	Type string `pulumi:"type"`
+}
+
+// NodePoolHostnameConfigInput is an input type that accepts NodePoolHostnameConfigArgs and NodePoolHostnameConfigOutput values.
+// You can construct a concrete instance of `NodePoolHostnameConfigInput` via:
+//
+//	NodePoolHostnameConfigArgs{...}
+type NodePoolHostnameConfigInput interface {
+	pulumi.Input
+
+	ToNodePoolHostnameConfigOutput() NodePoolHostnameConfigOutput
+	ToNodePoolHostnameConfigOutputWithContext(context.Context) NodePoolHostnameConfigOutput
+}
+
+type NodePoolHostnameConfigArgs struct {
+	// Specifies the hostname type of the kubernetes node.
+	// The value can be:
+	// + **privateIp**: The Kubernetes node is named after its IP address.
+	// + **cceNodeName**: The Kubernetes node is named after the CCE node.
+	Type pulumi.StringInput `pulumi:"type"`
+}
+
+func (NodePoolHostnameConfigArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*NodePoolHostnameConfig)(nil)).Elem()
+}
+
+func (i NodePoolHostnameConfigArgs) ToNodePoolHostnameConfigOutput() NodePoolHostnameConfigOutput {
+	return i.ToNodePoolHostnameConfigOutputWithContext(context.Background())
+}
+
+func (i NodePoolHostnameConfigArgs) ToNodePoolHostnameConfigOutputWithContext(ctx context.Context) NodePoolHostnameConfigOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(NodePoolHostnameConfigOutput)
+}
+
+func (i NodePoolHostnameConfigArgs) ToNodePoolHostnameConfigPtrOutput() NodePoolHostnameConfigPtrOutput {
+	return i.ToNodePoolHostnameConfigPtrOutputWithContext(context.Background())
+}
+
+func (i NodePoolHostnameConfigArgs) ToNodePoolHostnameConfigPtrOutputWithContext(ctx context.Context) NodePoolHostnameConfigPtrOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(NodePoolHostnameConfigOutput).ToNodePoolHostnameConfigPtrOutputWithContext(ctx)
+}
+
+// NodePoolHostnameConfigPtrInput is an input type that accepts NodePoolHostnameConfigArgs, NodePoolHostnameConfigPtr and NodePoolHostnameConfigPtrOutput values.
+// You can construct a concrete instance of `NodePoolHostnameConfigPtrInput` via:
+//
+//	        NodePoolHostnameConfigArgs{...}
+//
+//	or:
+//
+//	        nil
+type NodePoolHostnameConfigPtrInput interface {
+	pulumi.Input
+
+	ToNodePoolHostnameConfigPtrOutput() NodePoolHostnameConfigPtrOutput
+	ToNodePoolHostnameConfigPtrOutputWithContext(context.Context) NodePoolHostnameConfigPtrOutput
+}
+
+type nodePoolHostnameConfigPtrType NodePoolHostnameConfigArgs
+
+func NodePoolHostnameConfigPtr(v *NodePoolHostnameConfigArgs) NodePoolHostnameConfigPtrInput {
+	return (*nodePoolHostnameConfigPtrType)(v)
+}
+
+func (*nodePoolHostnameConfigPtrType) ElementType() reflect.Type {
+	return reflect.TypeOf((**NodePoolHostnameConfig)(nil)).Elem()
+}
+
+func (i *nodePoolHostnameConfigPtrType) ToNodePoolHostnameConfigPtrOutput() NodePoolHostnameConfigPtrOutput {
+	return i.ToNodePoolHostnameConfigPtrOutputWithContext(context.Background())
+}
+
+func (i *nodePoolHostnameConfigPtrType) ToNodePoolHostnameConfigPtrOutputWithContext(ctx context.Context) NodePoolHostnameConfigPtrOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(NodePoolHostnameConfigPtrOutput)
+}
+
+type NodePoolHostnameConfigOutput struct{ *pulumi.OutputState }
+
+func (NodePoolHostnameConfigOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*NodePoolHostnameConfig)(nil)).Elem()
+}
+
+func (o NodePoolHostnameConfigOutput) ToNodePoolHostnameConfigOutput() NodePoolHostnameConfigOutput {
+	return o
+}
+
+func (o NodePoolHostnameConfigOutput) ToNodePoolHostnameConfigOutputWithContext(ctx context.Context) NodePoolHostnameConfigOutput {
+	return o
+}
+
+func (o NodePoolHostnameConfigOutput) ToNodePoolHostnameConfigPtrOutput() NodePoolHostnameConfigPtrOutput {
+	return o.ToNodePoolHostnameConfigPtrOutputWithContext(context.Background())
+}
+
+func (o NodePoolHostnameConfigOutput) ToNodePoolHostnameConfigPtrOutputWithContext(ctx context.Context) NodePoolHostnameConfigPtrOutput {
+	return o.ApplyTWithContext(ctx, func(_ context.Context, v NodePoolHostnameConfig) *NodePoolHostnameConfig {
+		return &v
+	}).(NodePoolHostnameConfigPtrOutput)
+}
+
+// Specifies the hostname type of the kubernetes node.
+// The value can be:
+// + **privateIp**: The Kubernetes node is named after its IP address.
+// + **cceNodeName**: The Kubernetes node is named after the CCE node.
+func (o NodePoolHostnameConfigOutput) Type() pulumi.StringOutput {
+	return o.ApplyT(func(v NodePoolHostnameConfig) string { return v.Type }).(pulumi.StringOutput)
+}
+
+type NodePoolHostnameConfigPtrOutput struct{ *pulumi.OutputState }
+
+func (NodePoolHostnameConfigPtrOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((**NodePoolHostnameConfig)(nil)).Elem()
+}
+
+func (o NodePoolHostnameConfigPtrOutput) ToNodePoolHostnameConfigPtrOutput() NodePoolHostnameConfigPtrOutput {
+	return o
+}
+
+func (o NodePoolHostnameConfigPtrOutput) ToNodePoolHostnameConfigPtrOutputWithContext(ctx context.Context) NodePoolHostnameConfigPtrOutput {
+	return o
+}
+
+func (o NodePoolHostnameConfigPtrOutput) Elem() NodePoolHostnameConfigOutput {
+	return o.ApplyT(func(v *NodePoolHostnameConfig) NodePoolHostnameConfig {
+		if v != nil {
+			return *v
+		}
+		var ret NodePoolHostnameConfig
+		return ret
+	}).(NodePoolHostnameConfigOutput)
+}
+
+// Specifies the hostname type of the kubernetes node.
+// The value can be:
+// + **privateIp**: The Kubernetes node is named after its IP address.
+// + **cceNodeName**: The Kubernetes node is named after the CCE node.
+func (o NodePoolHostnameConfigPtrOutput) Type() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *NodePoolHostnameConfig) *string {
+		if v == nil {
+			return nil
+		}
+		return &v.Type
+	}).(pulumi.StringPtrOutput)
+}
+
+type NodePoolNodesAddNodeList struct {
+	// Specifies server ID.
+	ServerId string `pulumi:"serverId"`
+}
+
+// NodePoolNodesAddNodeListInput is an input type that accepts NodePoolNodesAddNodeListArgs and NodePoolNodesAddNodeListOutput values.
+// You can construct a concrete instance of `NodePoolNodesAddNodeListInput` via:
+//
+//	NodePoolNodesAddNodeListArgs{...}
+type NodePoolNodesAddNodeListInput interface {
+	pulumi.Input
+
+	ToNodePoolNodesAddNodeListOutput() NodePoolNodesAddNodeListOutput
+	ToNodePoolNodesAddNodeListOutputWithContext(context.Context) NodePoolNodesAddNodeListOutput
+}
+
+type NodePoolNodesAddNodeListArgs struct {
+	// Specifies server ID.
+	ServerId pulumi.StringInput `pulumi:"serverId"`
+}
+
+func (NodePoolNodesAddNodeListArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*NodePoolNodesAddNodeList)(nil)).Elem()
+}
+
+func (i NodePoolNodesAddNodeListArgs) ToNodePoolNodesAddNodeListOutput() NodePoolNodesAddNodeListOutput {
+	return i.ToNodePoolNodesAddNodeListOutputWithContext(context.Background())
+}
+
+func (i NodePoolNodesAddNodeListArgs) ToNodePoolNodesAddNodeListOutputWithContext(ctx context.Context) NodePoolNodesAddNodeListOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(NodePoolNodesAddNodeListOutput)
+}
+
+// NodePoolNodesAddNodeListArrayInput is an input type that accepts NodePoolNodesAddNodeListArray and NodePoolNodesAddNodeListArrayOutput values.
+// You can construct a concrete instance of `NodePoolNodesAddNodeListArrayInput` via:
+//
+//	NodePoolNodesAddNodeListArray{ NodePoolNodesAddNodeListArgs{...} }
+type NodePoolNodesAddNodeListArrayInput interface {
+	pulumi.Input
+
+	ToNodePoolNodesAddNodeListArrayOutput() NodePoolNodesAddNodeListArrayOutput
+	ToNodePoolNodesAddNodeListArrayOutputWithContext(context.Context) NodePoolNodesAddNodeListArrayOutput
+}
+
+type NodePoolNodesAddNodeListArray []NodePoolNodesAddNodeListInput
+
+func (NodePoolNodesAddNodeListArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]NodePoolNodesAddNodeList)(nil)).Elem()
+}
+
+func (i NodePoolNodesAddNodeListArray) ToNodePoolNodesAddNodeListArrayOutput() NodePoolNodesAddNodeListArrayOutput {
+	return i.ToNodePoolNodesAddNodeListArrayOutputWithContext(context.Background())
+}
+
+func (i NodePoolNodesAddNodeListArray) ToNodePoolNodesAddNodeListArrayOutputWithContext(ctx context.Context) NodePoolNodesAddNodeListArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(NodePoolNodesAddNodeListArrayOutput)
+}
+
+type NodePoolNodesAddNodeListOutput struct{ *pulumi.OutputState }
+
+func (NodePoolNodesAddNodeListOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*NodePoolNodesAddNodeList)(nil)).Elem()
+}
+
+func (o NodePoolNodesAddNodeListOutput) ToNodePoolNodesAddNodeListOutput() NodePoolNodesAddNodeListOutput {
+	return o
+}
+
+func (o NodePoolNodesAddNodeListOutput) ToNodePoolNodesAddNodeListOutputWithContext(ctx context.Context) NodePoolNodesAddNodeListOutput {
+	return o
+}
+
+// Specifies server ID.
+func (o NodePoolNodesAddNodeListOutput) ServerId() pulumi.StringOutput {
+	return o.ApplyT(func(v NodePoolNodesAddNodeList) string { return v.ServerId }).(pulumi.StringOutput)
+}
+
+type NodePoolNodesAddNodeListArrayOutput struct{ *pulumi.OutputState }
+
+func (NodePoolNodesAddNodeListArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]NodePoolNodesAddNodeList)(nil)).Elem()
+}
+
+func (o NodePoolNodesAddNodeListArrayOutput) ToNodePoolNodesAddNodeListArrayOutput() NodePoolNodesAddNodeListArrayOutput {
+	return o
+}
+
+func (o NodePoolNodesAddNodeListArrayOutput) ToNodePoolNodesAddNodeListArrayOutputWithContext(ctx context.Context) NodePoolNodesAddNodeListArrayOutput {
+	return o
+}
+
+func (o NodePoolNodesAddNodeListArrayOutput) Index(i pulumi.IntInput) NodePoolNodesAddNodeListOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) NodePoolNodesAddNodeList {
+		return vs[0].([]NodePoolNodesAddNodeList)[vs[1].(int)]
+	}).(NodePoolNodesAddNodeListOutput)
+}
+
+type NodePoolRootVolume struct {
+	// Specifies the DSS pool ID. This field is used only for dedicated storage.
+	// Changing this parameter will create a new resource.
+	DssPoolId *string `pulumi:"dssPoolId"`
 	// Deprecated: use extend_params instead
 	ExtendParam *string `pulumi:"extendParam"`
 	// Specifies the disk expansion parameters.
 	// Changing this parameter will create a new resource.
 	ExtendParams  map[string]string `pulumi:"extendParams"`
 	HwPassthrough *bool             `pulumi:"hwPassthrough"`
+	// Specifies the iops of the disk,
+	// required when `volumetype` is **GPSSD2** or **ESSD2**.
+	Iops *int `pulumi:"iops"`
 	// Specifies the KMS key ID. This is used to encrypt the volume.
 	// Changing this parameter will create a new resource.
 	KmsKeyId *string `pulumi:"kmsKeyId"`
@@ -1385,6 +5447,9 @@ type NodePoolRootVolume struct {
 	// Example: 90%. Note that the total percentage of all virtual spaces in a group cannot exceed 100%.
 	// Changing this parameter will create a new resource.
 	Size int `pulumi:"size"`
+	// Specifies the throughput of the disk in MiB/s,
+	// required when `volumetype` is **GPSSD2**.
+	Throughput *int `pulumi:"throughput"`
 	// Specifies the disk type. Changing this parameter will create a new resource.
 	Volumetype string `pulumi:"volumetype"`
 }
@@ -1401,20 +5466,18 @@ type NodePoolRootVolumeInput interface {
 }
 
 type NodePoolRootVolumeArgs struct {
-	// Specifies the extended parameter.
+	// Specifies the DSS pool ID. This field is used only for dedicated storage.
 	// Changing this parameter will create a new resource.
-	// The available keys are as follows:
-	// + **agency_name**: The agency name to provide temporary credentials for CCE node to access other cloud services.
-	// + **alpha.cce/NodeImageID**: The custom image ID used to create the BMS nodes.
-	// + **dockerBaseSize**: The available disk space of a single docker container on the node in device mapper mode.
-	// + **DockerLVMConfigOverride**: Specifies the data disk configurations of Docker.
-	//
+	DssPoolId pulumi.StringPtrInput `pulumi:"dssPoolId"`
 	// Deprecated: use extend_params instead
 	ExtendParam pulumi.StringPtrInput `pulumi:"extendParam"`
 	// Specifies the disk expansion parameters.
 	// Changing this parameter will create a new resource.
 	ExtendParams  pulumi.StringMapInput `pulumi:"extendParams"`
 	HwPassthrough pulumi.BoolPtrInput   `pulumi:"hwPassthrough"`
+	// Specifies the iops of the disk,
+	// required when `volumetype` is **GPSSD2** or **ESSD2**.
+	Iops pulumi.IntPtrInput `pulumi:"iops"`
 	// Specifies the KMS key ID. This is used to encrypt the volume.
 	// Changing this parameter will create a new resource.
 	KmsKeyId pulumi.StringPtrInput `pulumi:"kmsKeyId"`
@@ -1422,6 +5485,9 @@ type NodePoolRootVolumeArgs struct {
 	// Example: 90%. Note that the total percentage of all virtual spaces in a group cannot exceed 100%.
 	// Changing this parameter will create a new resource.
 	Size pulumi.IntInput `pulumi:"size"`
+	// Specifies the throughput of the disk in MiB/s,
+	// required when `volumetype` is **GPSSD2**.
+	Throughput pulumi.IntPtrInput `pulumi:"throughput"`
 	// Specifies the disk type. Changing this parameter will create a new resource.
 	Volumetype pulumi.StringInput `pulumi:"volumetype"`
 }
@@ -1503,14 +5569,12 @@ func (o NodePoolRootVolumeOutput) ToNodePoolRootVolumePtrOutputWithContext(ctx c
 	}).(NodePoolRootVolumePtrOutput)
 }
 
-// Specifies the extended parameter.
+// Specifies the DSS pool ID. This field is used only for dedicated storage.
 // Changing this parameter will create a new resource.
-// The available keys are as follows:
-// + **agency_name**: The agency name to provide temporary credentials for CCE node to access other cloud services.
-// + **alpha.cce/NodeImageID**: The custom image ID used to create the BMS nodes.
-// + **dockerBaseSize**: The available disk space of a single docker container on the node in device mapper mode.
-// + **DockerLVMConfigOverride**: Specifies the data disk configurations of Docker.
-//
+func (o NodePoolRootVolumeOutput) DssPoolId() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v NodePoolRootVolume) *string { return v.DssPoolId }).(pulumi.StringPtrOutput)
+}
+
 // Deprecated: use extend_params instead
 func (o NodePoolRootVolumeOutput) ExtendParam() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v NodePoolRootVolume) *string { return v.ExtendParam }).(pulumi.StringPtrOutput)
@@ -1526,6 +5590,12 @@ func (o NodePoolRootVolumeOutput) HwPassthrough() pulumi.BoolPtrOutput {
 	return o.ApplyT(func(v NodePoolRootVolume) *bool { return v.HwPassthrough }).(pulumi.BoolPtrOutput)
 }
 
+// Specifies the iops of the disk,
+// required when `volumetype` is **GPSSD2** or **ESSD2**.
+func (o NodePoolRootVolumeOutput) Iops() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v NodePoolRootVolume) *int { return v.Iops }).(pulumi.IntPtrOutput)
+}
+
 // Specifies the KMS key ID. This is used to encrypt the volume.
 // Changing this parameter will create a new resource.
 func (o NodePoolRootVolumeOutput) KmsKeyId() pulumi.StringPtrOutput {
@@ -1537,6 +5607,12 @@ func (o NodePoolRootVolumeOutput) KmsKeyId() pulumi.StringPtrOutput {
 // Changing this parameter will create a new resource.
 func (o NodePoolRootVolumeOutput) Size() pulumi.IntOutput {
 	return o.ApplyT(func(v NodePoolRootVolume) int { return v.Size }).(pulumi.IntOutput)
+}
+
+// Specifies the throughput of the disk in MiB/s,
+// required when `volumetype` is **GPSSD2**.
+func (o NodePoolRootVolumeOutput) Throughput() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v NodePoolRootVolume) *int { return v.Throughput }).(pulumi.IntPtrOutput)
 }
 
 // Specifies the disk type. Changing this parameter will create a new resource.
@@ -1568,14 +5644,17 @@ func (o NodePoolRootVolumePtrOutput) Elem() NodePoolRootVolumeOutput {
 	}).(NodePoolRootVolumeOutput)
 }
 
-// Specifies the extended parameter.
+// Specifies the DSS pool ID. This field is used only for dedicated storage.
 // Changing this parameter will create a new resource.
-// The available keys are as follows:
-// + **agency_name**: The agency name to provide temporary credentials for CCE node to access other cloud services.
-// + **alpha.cce/NodeImageID**: The custom image ID used to create the BMS nodes.
-// + **dockerBaseSize**: The available disk space of a single docker container on the node in device mapper mode.
-// + **DockerLVMConfigOverride**: Specifies the data disk configurations of Docker.
-//
+func (o NodePoolRootVolumePtrOutput) DssPoolId() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *NodePoolRootVolume) *string {
+		if v == nil {
+			return nil
+		}
+		return v.DssPoolId
+	}).(pulumi.StringPtrOutput)
+}
+
 // Deprecated: use extend_params instead
 func (o NodePoolRootVolumePtrOutput) ExtendParam() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *NodePoolRootVolume) *string {
@@ -1606,6 +5685,17 @@ func (o NodePoolRootVolumePtrOutput) HwPassthrough() pulumi.BoolPtrOutput {
 	}).(pulumi.BoolPtrOutput)
 }
 
+// Specifies the iops of the disk,
+// required when `volumetype` is **GPSSD2** or **ESSD2**.
+func (o NodePoolRootVolumePtrOutput) Iops() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v *NodePoolRootVolume) *int {
+		if v == nil {
+			return nil
+		}
+		return v.Iops
+	}).(pulumi.IntPtrOutput)
+}
+
 // Specifies the KMS key ID. This is used to encrypt the volume.
 // Changing this parameter will create a new resource.
 func (o NodePoolRootVolumePtrOutput) KmsKeyId() pulumi.StringPtrOutput {
@@ -1626,6 +5716,17 @@ func (o NodePoolRootVolumePtrOutput) Size() pulumi.IntPtrOutput {
 			return nil
 		}
 		return &v.Size
+	}).(pulumi.IntPtrOutput)
+}
+
+// Specifies the throughput of the disk in MiB/s,
+// required when `volumetype` is **GPSSD2**.
+func (o NodePoolRootVolumePtrOutput) Throughput() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v *NodePoolRootVolume) *int {
+		if v == nil {
+			return nil
+		}
+		return v.Throughput
 	}).(pulumi.IntPtrOutput)
 }
 
@@ -1816,10 +5917,11 @@ type NodePoolStorageGroup struct {
 	// **runtime** components. Only one group can be set to true. The default value is **false**.
 	// Changing this parameter will create a new resource.
 	CceManaged *bool `pulumi:"cceManaged"`
-	// Specifies the virtual space name. Currently, only **kubernetes**, **runtime**,
-	// and **user** are supported. Changing this parameter will create a new resource.
+	// Specifies the name of an extended scaling group.
+	// The value cannot be default and can contain a maximum of 55 characters.
+	// Only digits, lowercase letters, and hyphens (-) are allowed.
 	Name string `pulumi:"name"`
-	// Specifies the list of names of seletors to match.
+	// Specifies the list of names of selectors to match.
 	// This parameter corresponds to name in `selectors`. A group can match multiple selectors,
 	// but a selector can match only one group. Changing this parameter will create a new resource.
 	SelectorNames []string `pulumi:"selectorNames"`
@@ -1844,10 +5946,11 @@ type NodePoolStorageGroupArgs struct {
 	// **runtime** components. Only one group can be set to true. The default value is **false**.
 	// Changing this parameter will create a new resource.
 	CceManaged pulumi.BoolPtrInput `pulumi:"cceManaged"`
-	// Specifies the virtual space name. Currently, only **kubernetes**, **runtime**,
-	// and **user** are supported. Changing this parameter will create a new resource.
+	// Specifies the name of an extended scaling group.
+	// The value cannot be default and can contain a maximum of 55 characters.
+	// Only digits, lowercase letters, and hyphens (-) are allowed.
 	Name pulumi.StringInput `pulumi:"name"`
-	// Specifies the list of names of seletors to match.
+	// Specifies the list of names of selectors to match.
 	// This parameter corresponds to name in `selectors`. A group can match multiple selectors,
 	// but a selector can match only one group. Changing this parameter will create a new resource.
 	SelectorNames pulumi.StringArrayInput `pulumi:"selectorNames"`
@@ -1914,13 +6017,14 @@ func (o NodePoolStorageGroupOutput) CceManaged() pulumi.BoolPtrOutput {
 	return o.ApplyT(func(v NodePoolStorageGroup) *bool { return v.CceManaged }).(pulumi.BoolPtrOutput)
 }
 
-// Specifies the virtual space name. Currently, only **kubernetes**, **runtime**,
-// and **user** are supported. Changing this parameter will create a new resource.
+// Specifies the name of an extended scaling group.
+// The value cannot be default and can contain a maximum of 55 characters.
+// Only digits, lowercase letters, and hyphens (-) are allowed.
 func (o NodePoolStorageGroupOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v NodePoolStorageGroup) string { return v.Name }).(pulumi.StringOutput)
 }
 
-// Specifies the list of names of seletors to match.
+// Specifies the list of names of selectors to match.
 // This parameter corresponds to name in `selectors`. A group can match multiple selectors,
 // but a selector can match only one group. Changing this parameter will create a new resource.
 func (o NodePoolStorageGroupOutput) SelectorNames() pulumi.StringArrayOutput {
@@ -1961,8 +6065,9 @@ type NodePoolStorageGroupVirtualSpace struct {
 	// Specifies the absolute path to which the disk is attached.
 	// This parameter takes effect only in **user** configuration. Changing this parameter will create a new resource.
 	LvmPath *string `pulumi:"lvmPath"`
-	// Specifies the virtual space name. Currently, only **kubernetes**, **runtime**,
-	// and **user** are supported. Changing this parameter will create a new resource.
+	// Specifies the name of an extended scaling group.
+	// The value cannot be default and can contain a maximum of 55 characters.
+	// Only digits, lowercase letters, and hyphens (-) are allowed.
 	Name string `pulumi:"name"`
 	// Specifies the LVM write mode, values can be **linear** and **striped**.
 	// This parameter takes effect only in **runtime** configuration. Changing this parameter will create a new resource.
@@ -1992,8 +6097,9 @@ type NodePoolStorageGroupVirtualSpaceArgs struct {
 	// Specifies the absolute path to which the disk is attached.
 	// This parameter takes effect only in **user** configuration. Changing this parameter will create a new resource.
 	LvmPath pulumi.StringPtrInput `pulumi:"lvmPath"`
-	// Specifies the virtual space name. Currently, only **kubernetes**, **runtime**,
-	// and **user** are supported. Changing this parameter will create a new resource.
+	// Specifies the name of an extended scaling group.
+	// The value cannot be default and can contain a maximum of 55 characters.
+	// Only digits, lowercase letters, and hyphens (-) are allowed.
 	Name pulumi.StringInput `pulumi:"name"`
 	// Specifies the LVM write mode, values can be **linear** and **striped**.
 	// This parameter takes effect only in **runtime** configuration. Changing this parameter will create a new resource.
@@ -2068,8 +6174,9 @@ func (o NodePoolStorageGroupVirtualSpaceOutput) LvmPath() pulumi.StringPtrOutput
 	return o.ApplyT(func(v NodePoolStorageGroupVirtualSpace) *string { return v.LvmPath }).(pulumi.StringPtrOutput)
 }
 
-// Specifies the virtual space name. Currently, only **kubernetes**, **runtime**,
-// and **user** are supported. Changing this parameter will create a new resource.
+// Specifies the name of an extended scaling group.
+// The value cannot be default and can contain a maximum of 55 characters.
+// Only digits, lowercase letters, and hyphens (-) are allowed.
 func (o NodePoolStorageGroupVirtualSpaceOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v NodePoolStorageGroupVirtualSpace) string { return v.Name }).(pulumi.StringOutput)
 }
@@ -2111,7 +6218,7 @@ type NodePoolStorageSelector struct {
 	// Specifies the number of disks to be selected. If omitted,
 	// all disks of this type are selected. Changing this parameter will create a new resource.
 	MatchLabelCount *string `pulumi:"matchLabelCount"`
-	// Specifies the cstomer master key ID of an encrypted
+	// Specifies the customer master key ID of an encrypted
 	// disk. Changing this parameter will create a new resource.
 	MatchLabelMetadataCmkid *string `pulumi:"matchLabelMetadataCmkid"`
 	// Specifies the disk encryption identifier.
@@ -2125,11 +6232,14 @@ type NodePoolStorageSelector struct {
 	// **SSD**, **GPSSD**, and **SAS** are supported. If omitted, the disk type is not limited.
 	// Changing this parameter will create a new resource.
 	MatchLabelVolumeType *string `pulumi:"matchLabelVolumeType"`
-	// Specifies the virtual space name. Currently, only **kubernetes**, **runtime**,
-	// and **user** are supported. Changing this parameter will create a new resource.
+	// Specifies the name of an extended scaling group.
+	// The value cannot be default and can contain a maximum of 55 characters.
+	// Only digits, lowercase letters, and hyphens (-) are allowed.
 	Name string `pulumi:"name"`
-	// Specifies the storage type. Currently, only **evs (EVS volumes)** is supported.
-	// The default value is **evs**. Changing this parameter will create a new resource.
+	// Specifies the hostname type of the kubernetes node.
+	// The value can be:
+	// + **privateIp**: The Kubernetes node is named after its IP address.
+	// + **cceNodeName**: The Kubernetes node is named after the CCE node.
 	Type *string `pulumi:"type"`
 }
 
@@ -2148,7 +6258,7 @@ type NodePoolStorageSelectorArgs struct {
 	// Specifies the number of disks to be selected. If omitted,
 	// all disks of this type are selected. Changing this parameter will create a new resource.
 	MatchLabelCount pulumi.StringPtrInput `pulumi:"matchLabelCount"`
-	// Specifies the cstomer master key ID of an encrypted
+	// Specifies the customer master key ID of an encrypted
 	// disk. Changing this parameter will create a new resource.
 	MatchLabelMetadataCmkid pulumi.StringPtrInput `pulumi:"matchLabelMetadataCmkid"`
 	// Specifies the disk encryption identifier.
@@ -2162,11 +6272,14 @@ type NodePoolStorageSelectorArgs struct {
 	// **SSD**, **GPSSD**, and **SAS** are supported. If omitted, the disk type is not limited.
 	// Changing this parameter will create a new resource.
 	MatchLabelVolumeType pulumi.StringPtrInput `pulumi:"matchLabelVolumeType"`
-	// Specifies the virtual space name. Currently, only **kubernetes**, **runtime**,
-	// and **user** are supported. Changing this parameter will create a new resource.
+	// Specifies the name of an extended scaling group.
+	// The value cannot be default and can contain a maximum of 55 characters.
+	// Only digits, lowercase letters, and hyphens (-) are allowed.
 	Name pulumi.StringInput `pulumi:"name"`
-	// Specifies the storage type. Currently, only **evs (EVS volumes)** is supported.
-	// The default value is **evs**. Changing this parameter will create a new resource.
+	// Specifies the hostname type of the kubernetes node.
+	// The value can be:
+	// + **privateIp**: The Kubernetes node is named after its IP address.
+	// + **cceNodeName**: The Kubernetes node is named after the CCE node.
 	Type pulumi.StringPtrInput `pulumi:"type"`
 }
 
@@ -2227,7 +6340,7 @@ func (o NodePoolStorageSelectorOutput) MatchLabelCount() pulumi.StringPtrOutput 
 	return o.ApplyT(func(v NodePoolStorageSelector) *string { return v.MatchLabelCount }).(pulumi.StringPtrOutput)
 }
 
-// Specifies the cstomer master key ID of an encrypted
+// Specifies the customer master key ID of an encrypted
 // disk. Changing this parameter will create a new resource.
 func (o NodePoolStorageSelectorOutput) MatchLabelMetadataCmkid() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v NodePoolStorageSelector) *string { return v.MatchLabelMetadataCmkid }).(pulumi.StringPtrOutput)
@@ -2253,14 +6366,17 @@ func (o NodePoolStorageSelectorOutput) MatchLabelVolumeType() pulumi.StringPtrOu
 	return o.ApplyT(func(v NodePoolStorageSelector) *string { return v.MatchLabelVolumeType }).(pulumi.StringPtrOutput)
 }
 
-// Specifies the virtual space name. Currently, only **kubernetes**, **runtime**,
-// and **user** are supported. Changing this parameter will create a new resource.
+// Specifies the name of an extended scaling group.
+// The value cannot be default and can contain a maximum of 55 characters.
+// Only digits, lowercase letters, and hyphens (-) are allowed.
 func (o NodePoolStorageSelectorOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v NodePoolStorageSelector) string { return v.Name }).(pulumi.StringOutput)
 }
 
-// Specifies the storage type. Currently, only **evs (EVS volumes)** is supported.
-// The default value is **evs**. Changing this parameter will create a new resource.
+// Specifies the hostname type of the kubernetes node.
+// The value can be:
+// + **privateIp**: The Kubernetes node is named after its IP address.
+// + **cceNodeName**: The Kubernetes node is named after the CCE node.
 func (o NodePoolStorageSelectorOutput) Type() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v NodePoolStorageSelector) *string { return v.Type }).(pulumi.StringPtrOutput)
 }
@@ -2410,20 +6526,19 @@ func (o NodePoolTaintArrayOutput) Index(i pulumi.IntInput) NodePoolTaintOutput {
 }
 
 type NodeRootVolume struct {
-	// Specifies the extended parameter.
-	// Changing this parameter will create a new resource.
-	// The available keys are as follows:
-	// + **agency_name**: The agency name to provide temporary credentials for CCE node to access other cloud services.
-	// + **alpha.cce/NodeImageID**: The custom image ID used to create the BMS nodes.
-	// + **dockerBaseSize**: The available disk space of a single docker container on the node in device mapper mode.
-	// + **DockerLVMConfigOverride**: Specifies the data disk configurations of Docker.
-	//
+	// Specifies the DSS pool ID. This field is used only for
+	// dedicated storage. Changing this parameter will create a new resource.
+	DssPoolId *string `pulumi:"dssPoolId"`
 	// Deprecated: use extend_params instead
 	ExtendParam *string `pulumi:"extendParam"`
-	// Specifies the disk expansion parameters.
+	// Specifies the extended parameters.
+	// The object structure is documented below.
 	// Changing this parameter will create a new resource.
 	ExtendParams  map[string]string `pulumi:"extendParams"`
 	HwPassthrough *bool             `pulumi:"hwPassthrough"`
+	// Specifies the iops of the disk,
+	// required when `volumetype` is **GPSSD2** or **ESSD2**.
+	Iops *int `pulumi:"iops"`
 	// Specifies the ID of a KMS key. This is used to encrypt the volume.
 	// Changing this parameter will create a new resource.
 	KmsKeyId *string `pulumi:"kmsKeyId"`
@@ -2431,6 +6546,9 @@ type NodeRootVolume struct {
 	// Example: 90%. Note that the total percentage of all virtual spaces in a group cannot exceed 100%.
 	// Changing this parameter will create a new resource.
 	Size int `pulumi:"size"`
+	// Specifies the throughput of the disk in MiB/s,
+	// required when `volumetype` is **GPSSD2**.
+	Throughput *int `pulumi:"throughput"`
 	// Specifies the disk type.
 	// Changing this parameter will create a new resource.
 	Volumetype string `pulumi:"volumetype"`
@@ -2448,20 +6566,19 @@ type NodeRootVolumeInput interface {
 }
 
 type NodeRootVolumeArgs struct {
-	// Specifies the extended parameter.
-	// Changing this parameter will create a new resource.
-	// The available keys are as follows:
-	// + **agency_name**: The agency name to provide temporary credentials for CCE node to access other cloud services.
-	// + **alpha.cce/NodeImageID**: The custom image ID used to create the BMS nodes.
-	// + **dockerBaseSize**: The available disk space of a single docker container on the node in device mapper mode.
-	// + **DockerLVMConfigOverride**: Specifies the data disk configurations of Docker.
-	//
+	// Specifies the DSS pool ID. This field is used only for
+	// dedicated storage. Changing this parameter will create a new resource.
+	DssPoolId pulumi.StringPtrInput `pulumi:"dssPoolId"`
 	// Deprecated: use extend_params instead
 	ExtendParam pulumi.StringPtrInput `pulumi:"extendParam"`
-	// Specifies the disk expansion parameters.
+	// Specifies the extended parameters.
+	// The object structure is documented below.
 	// Changing this parameter will create a new resource.
 	ExtendParams  pulumi.StringMapInput `pulumi:"extendParams"`
 	HwPassthrough pulumi.BoolPtrInput   `pulumi:"hwPassthrough"`
+	// Specifies the iops of the disk,
+	// required when `volumetype` is **GPSSD2** or **ESSD2**.
+	Iops pulumi.IntPtrInput `pulumi:"iops"`
 	// Specifies the ID of a KMS key. This is used to encrypt the volume.
 	// Changing this parameter will create a new resource.
 	KmsKeyId pulumi.StringPtrInput `pulumi:"kmsKeyId"`
@@ -2469,6 +6586,9 @@ type NodeRootVolumeArgs struct {
 	// Example: 90%. Note that the total percentage of all virtual spaces in a group cannot exceed 100%.
 	// Changing this parameter will create a new resource.
 	Size pulumi.IntInput `pulumi:"size"`
+	// Specifies the throughput of the disk in MiB/s,
+	// required when `volumetype` is **GPSSD2**.
+	Throughput pulumi.IntPtrInput `pulumi:"throughput"`
 	// Specifies the disk type.
 	// Changing this parameter will create a new resource.
 	Volumetype pulumi.StringInput `pulumi:"volumetype"`
@@ -2551,20 +6671,19 @@ func (o NodeRootVolumeOutput) ToNodeRootVolumePtrOutputWithContext(ctx context.C
 	}).(NodeRootVolumePtrOutput)
 }
 
-// Specifies the extended parameter.
-// Changing this parameter will create a new resource.
-// The available keys are as follows:
-// + **agency_name**: The agency name to provide temporary credentials for CCE node to access other cloud services.
-// + **alpha.cce/NodeImageID**: The custom image ID used to create the BMS nodes.
-// + **dockerBaseSize**: The available disk space of a single docker container on the node in device mapper mode.
-// + **DockerLVMConfigOverride**: Specifies the data disk configurations of Docker.
-//
+// Specifies the DSS pool ID. This field is used only for
+// dedicated storage. Changing this parameter will create a new resource.
+func (o NodeRootVolumeOutput) DssPoolId() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v NodeRootVolume) *string { return v.DssPoolId }).(pulumi.StringPtrOutput)
+}
+
 // Deprecated: use extend_params instead
 func (o NodeRootVolumeOutput) ExtendParam() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v NodeRootVolume) *string { return v.ExtendParam }).(pulumi.StringPtrOutput)
 }
 
-// Specifies the disk expansion parameters.
+// Specifies the extended parameters.
+// The object structure is documented below.
 // Changing this parameter will create a new resource.
 func (o NodeRootVolumeOutput) ExtendParams() pulumi.StringMapOutput {
 	return o.ApplyT(func(v NodeRootVolume) map[string]string { return v.ExtendParams }).(pulumi.StringMapOutput)
@@ -2572,6 +6691,12 @@ func (o NodeRootVolumeOutput) ExtendParams() pulumi.StringMapOutput {
 
 func (o NodeRootVolumeOutput) HwPassthrough() pulumi.BoolPtrOutput {
 	return o.ApplyT(func(v NodeRootVolume) *bool { return v.HwPassthrough }).(pulumi.BoolPtrOutput)
+}
+
+// Specifies the iops of the disk,
+// required when `volumetype` is **GPSSD2** or **ESSD2**.
+func (o NodeRootVolumeOutput) Iops() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v NodeRootVolume) *int { return v.Iops }).(pulumi.IntPtrOutput)
 }
 
 // Specifies the ID of a KMS key. This is used to encrypt the volume.
@@ -2585,6 +6710,12 @@ func (o NodeRootVolumeOutput) KmsKeyId() pulumi.StringPtrOutput {
 // Changing this parameter will create a new resource.
 func (o NodeRootVolumeOutput) Size() pulumi.IntOutput {
 	return o.ApplyT(func(v NodeRootVolume) int { return v.Size }).(pulumi.IntOutput)
+}
+
+// Specifies the throughput of the disk in MiB/s,
+// required when `volumetype` is **GPSSD2**.
+func (o NodeRootVolumeOutput) Throughput() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v NodeRootVolume) *int { return v.Throughput }).(pulumi.IntPtrOutput)
 }
 
 // Specifies the disk type.
@@ -2617,14 +6748,17 @@ func (o NodeRootVolumePtrOutput) Elem() NodeRootVolumeOutput {
 	}).(NodeRootVolumeOutput)
 }
 
-// Specifies the extended parameter.
-// Changing this parameter will create a new resource.
-// The available keys are as follows:
-// + **agency_name**: The agency name to provide temporary credentials for CCE node to access other cloud services.
-// + **alpha.cce/NodeImageID**: The custom image ID used to create the BMS nodes.
-// + **dockerBaseSize**: The available disk space of a single docker container on the node in device mapper mode.
-// + **DockerLVMConfigOverride**: Specifies the data disk configurations of Docker.
-//
+// Specifies the DSS pool ID. This field is used only for
+// dedicated storage. Changing this parameter will create a new resource.
+func (o NodeRootVolumePtrOutput) DssPoolId() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *NodeRootVolume) *string {
+		if v == nil {
+			return nil
+		}
+		return v.DssPoolId
+	}).(pulumi.StringPtrOutput)
+}
+
 // Deprecated: use extend_params instead
 func (o NodeRootVolumePtrOutput) ExtendParam() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *NodeRootVolume) *string {
@@ -2635,7 +6769,8 @@ func (o NodeRootVolumePtrOutput) ExtendParam() pulumi.StringPtrOutput {
 	}).(pulumi.StringPtrOutput)
 }
 
-// Specifies the disk expansion parameters.
+// Specifies the extended parameters.
+// The object structure is documented below.
 // Changing this parameter will create a new resource.
 func (o NodeRootVolumePtrOutput) ExtendParams() pulumi.StringMapOutput {
 	return o.ApplyT(func(v *NodeRootVolume) map[string]string {
@@ -2653,6 +6788,17 @@ func (o NodeRootVolumePtrOutput) HwPassthrough() pulumi.BoolPtrOutput {
 		}
 		return v.HwPassthrough
 	}).(pulumi.BoolPtrOutput)
+}
+
+// Specifies the iops of the disk,
+// required when `volumetype` is **GPSSD2** or **ESSD2**.
+func (o NodeRootVolumePtrOutput) Iops() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v *NodeRootVolume) *int {
+		if v == nil {
+			return nil
+		}
+		return v.Iops
+	}).(pulumi.IntPtrOutput)
 }
 
 // Specifies the ID of a KMS key. This is used to encrypt the volume.
@@ -2675,6 +6821,17 @@ func (o NodeRootVolumePtrOutput) Size() pulumi.IntPtrOutput {
 			return nil
 		}
 		return &v.Size
+	}).(pulumi.IntPtrOutput)
+}
+
+// Specifies the throughput of the disk in MiB/s,
+// required when `volumetype` is **GPSSD2**.
+func (o NodeRootVolumePtrOutput) Throughput() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v *NodeRootVolume) *int {
+		if v == nil {
+			return nil
+		}
+		return v.Throughput
 	}).(pulumi.IntPtrOutput)
 }
 
@@ -2869,7 +7026,7 @@ type NodeStorageGroup struct {
 	// Specifies the virtual space name. Currently, only **kubernetes**, **runtime**,
 	// and **user** are supported. Changing this parameter will create a new resource.
 	Name string `pulumi:"name"`
-	// Specifies the list of names of seletors to match.
+	// Specifies the list of names of selectors to match.
 	// This parameter corresponds to name in `selectors`. A group can match multiple selectors,
 	// but a selector can match only one group. Changing this parameter will create a new resource.
 	SelectorNames []string `pulumi:"selectorNames"`
@@ -2897,7 +7054,7 @@ type NodeStorageGroupArgs struct {
 	// Specifies the virtual space name. Currently, only **kubernetes**, **runtime**,
 	// and **user** are supported. Changing this parameter will create a new resource.
 	Name pulumi.StringInput `pulumi:"name"`
-	// Specifies the list of names of seletors to match.
+	// Specifies the list of names of selectors to match.
 	// This parameter corresponds to name in `selectors`. A group can match multiple selectors,
 	// but a selector can match only one group. Changing this parameter will create a new resource.
 	SelectorNames pulumi.StringArrayInput `pulumi:"selectorNames"`
@@ -2970,7 +7127,7 @@ func (o NodeStorageGroupOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v NodeStorageGroup) string { return v.Name }).(pulumi.StringOutput)
 }
 
-// Specifies the list of names of seletors to match.
+// Specifies the list of names of selectors to match.
 // This parameter corresponds to name in `selectors`. A group can match multiple selectors,
 // but a selector can match only one group. Changing this parameter will create a new resource.
 func (o NodeStorageGroupOutput) SelectorNames() pulumi.StringArrayOutput {
@@ -3178,8 +7335,10 @@ type NodeStorageSelector struct {
 	// Specifies the virtual space name. Currently, only **kubernetes**, **runtime**,
 	// and **user** are supported. Changing this parameter will create a new resource.
 	Name string `pulumi:"name"`
-	// Specifies the storage type. Currently, only **evs (EVS volumes)** is supported.
-	// The default value is **evs**. Changing this parameter will create a new resource.
+	// Specifies the hostname type of the kubernetes node.
+	// The value can be:
+	// + **privateIp**: The Kubernetes node is named after its IP address.
+	// + **cceNodeName**: The Kubernetes node is named after the CCE node.
 	Type *string `pulumi:"type"`
 }
 
@@ -3215,8 +7374,10 @@ type NodeStorageSelectorArgs struct {
 	// Specifies the virtual space name. Currently, only **kubernetes**, **runtime**,
 	// and **user** are supported. Changing this parameter will create a new resource.
 	Name pulumi.StringInput `pulumi:"name"`
-	// Specifies the storage type. Currently, only **evs (EVS volumes)** is supported.
-	// The default value is **evs**. Changing this parameter will create a new resource.
+	// Specifies the hostname type of the kubernetes node.
+	// The value can be:
+	// + **privateIp**: The Kubernetes node is named after its IP address.
+	// + **cceNodeName**: The Kubernetes node is named after the CCE node.
 	Type pulumi.StringPtrInput `pulumi:"type"`
 }
 
@@ -3309,8 +7470,10 @@ func (o NodeStorageSelectorOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v NodeStorageSelector) string { return v.Name }).(pulumi.StringOutput)
 }
 
-// Specifies the storage type. Currently, only **evs (EVS volumes)** is supported.
-// The default value is **evs**. Changing this parameter will create a new resource.
+// Specifies the hostname type of the kubernetes node.
+// The value can be:
+// + **privateIp**: The Kubernetes node is named after its IP address.
+// + **cceNodeName**: The Kubernetes node is named after the CCE node.
 func (o NodeStorageSelectorOutput) Type() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v NodeStorageSelector) *string { return v.Type }).(pulumi.StringPtrOutput)
 }
@@ -3346,7 +7509,7 @@ type NodeTaint struct {
 	// A value must start with a letter or digit and can contain a maximum of 63
 	// characters, including letters, digits, hyphens (-), underscores (_), and periods (.). Changing this parameter will
 	// create a new resource.
-	Value string `pulumi:"value"`
+	Value *string `pulumi:"value"`
 }
 
 // NodeTaintInput is an input type that accepts NodeTaintArgs and NodeTaintOutput values.
@@ -3371,7 +7534,7 @@ type NodeTaintArgs struct {
 	// A value must start with a letter or digit and can contain a maximum of 63
 	// characters, including letters, digits, hyphens (-), underscores (_), and periods (.). Changing this parameter will
 	// create a new resource.
-	Value pulumi.StringInput `pulumi:"value"`
+	Value pulumi.StringPtrInput `pulumi:"value"`
 }
 
 func (NodeTaintArgs) ElementType() reflect.Type {
@@ -3441,8 +7604,8 @@ func (o NodeTaintOutput) Key() pulumi.StringOutput {
 // A value must start with a letter or digit and can contain a maximum of 63
 // characters, including letters, digits, hyphens (-), underscores (_), and periods (.). Changing this parameter will
 // create a new resource.
-func (o NodeTaintOutput) Value() pulumi.StringOutput {
-	return o.ApplyT(func(v NodeTaint) string { return v.Value }).(pulumi.StringOutput)
+func (o NodeTaintOutput) Value() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v NodeTaint) *string { return v.Value }).(pulumi.StringPtrOutput)
 }
 
 type NodeTaintArrayOutput struct{ *pulumi.OutputState }
@@ -3569,6 +7732,1056 @@ func (o GetAddonTemplateSupportVersionArrayOutput) Index(i pulumi.IntInput) GetA
 	return pulumi.All(o, i).ApplyT(func(vs []interface{}) GetAddonTemplateSupportVersion {
 		return vs[0].([]GetAddonTemplateSupportVersion)[vs[1].(int)]
 	}).(GetAddonTemplateSupportVersionOutput)
+}
+
+type GetAddonsItem struct {
+	// The metadata of the add-on instance.
+	Metadatas []GetAddonsItemMetadata `pulumi:"metadatas"`
+	// The detailed description of the add-on instance.
+	Specs []GetAddonsItemSpec `pulumi:"specs"`
+	// The statuses of add-on instances.
+	Statuses []GetAddonsItemStatus `pulumi:"statuses"`
+}
+
+// GetAddonsItemInput is an input type that accepts GetAddonsItemArgs and GetAddonsItemOutput values.
+// You can construct a concrete instance of `GetAddonsItemInput` via:
+//
+//	GetAddonsItemArgs{...}
+type GetAddonsItemInput interface {
+	pulumi.Input
+
+	ToGetAddonsItemOutput() GetAddonsItemOutput
+	ToGetAddonsItemOutputWithContext(context.Context) GetAddonsItemOutput
+}
+
+type GetAddonsItemArgs struct {
+	// The metadata of the add-on instance.
+	Metadatas GetAddonsItemMetadataArrayInput `pulumi:"metadatas"`
+	// The detailed description of the add-on instance.
+	Specs GetAddonsItemSpecArrayInput `pulumi:"specs"`
+	// The statuses of add-on instances.
+	Statuses GetAddonsItemStatusArrayInput `pulumi:"statuses"`
+}
+
+func (GetAddonsItemArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetAddonsItem)(nil)).Elem()
+}
+
+func (i GetAddonsItemArgs) ToGetAddonsItemOutput() GetAddonsItemOutput {
+	return i.ToGetAddonsItemOutputWithContext(context.Background())
+}
+
+func (i GetAddonsItemArgs) ToGetAddonsItemOutputWithContext(ctx context.Context) GetAddonsItemOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetAddonsItemOutput)
+}
+
+// GetAddonsItemArrayInput is an input type that accepts GetAddonsItemArray and GetAddonsItemArrayOutput values.
+// You can construct a concrete instance of `GetAddonsItemArrayInput` via:
+//
+//	GetAddonsItemArray{ GetAddonsItemArgs{...} }
+type GetAddonsItemArrayInput interface {
+	pulumi.Input
+
+	ToGetAddonsItemArrayOutput() GetAddonsItemArrayOutput
+	ToGetAddonsItemArrayOutputWithContext(context.Context) GetAddonsItemArrayOutput
+}
+
+type GetAddonsItemArray []GetAddonsItemInput
+
+func (GetAddonsItemArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetAddonsItem)(nil)).Elem()
+}
+
+func (i GetAddonsItemArray) ToGetAddonsItemArrayOutput() GetAddonsItemArrayOutput {
+	return i.ToGetAddonsItemArrayOutputWithContext(context.Background())
+}
+
+func (i GetAddonsItemArray) ToGetAddonsItemArrayOutputWithContext(ctx context.Context) GetAddonsItemArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetAddonsItemArrayOutput)
+}
+
+type GetAddonsItemOutput struct{ *pulumi.OutputState }
+
+func (GetAddonsItemOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetAddonsItem)(nil)).Elem()
+}
+
+func (o GetAddonsItemOutput) ToGetAddonsItemOutput() GetAddonsItemOutput {
+	return o
+}
+
+func (o GetAddonsItemOutput) ToGetAddonsItemOutputWithContext(ctx context.Context) GetAddonsItemOutput {
+	return o
+}
+
+// The metadata of the add-on instance.
+func (o GetAddonsItemOutput) Metadatas() GetAddonsItemMetadataArrayOutput {
+	return o.ApplyT(func(v GetAddonsItem) []GetAddonsItemMetadata { return v.Metadatas }).(GetAddonsItemMetadataArrayOutput)
+}
+
+// The detailed description of the add-on instance.
+func (o GetAddonsItemOutput) Specs() GetAddonsItemSpecArrayOutput {
+	return o.ApplyT(func(v GetAddonsItem) []GetAddonsItemSpec { return v.Specs }).(GetAddonsItemSpecArrayOutput)
+}
+
+// The statuses of add-on instances.
+func (o GetAddonsItemOutput) Statuses() GetAddonsItemStatusArrayOutput {
+	return o.ApplyT(func(v GetAddonsItem) []GetAddonsItemStatus { return v.Statuses }).(GetAddonsItemStatusArrayOutput)
+}
+
+type GetAddonsItemArrayOutput struct{ *pulumi.OutputState }
+
+func (GetAddonsItemArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetAddonsItem)(nil)).Elem()
+}
+
+func (o GetAddonsItemArrayOutput) ToGetAddonsItemArrayOutput() GetAddonsItemArrayOutput {
+	return o
+}
+
+func (o GetAddonsItemArrayOutput) ToGetAddonsItemArrayOutputWithContext(ctx context.Context) GetAddonsItemArrayOutput {
+	return o
+}
+
+func (o GetAddonsItemArrayOutput) Index(i pulumi.IntInput) GetAddonsItemOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) GetAddonsItem {
+		return vs[0].([]GetAddonsItem)[vs[1].(int)]
+	}).(GetAddonsItemOutput)
+}
+
+type GetAddonsItemMetadata struct {
+	// The add-on instance alias.
+	Alias string `pulumi:"alias"`
+	// The add-on annotations in the format of key/value pairs.
+	Annotations map[string]string `pulumi:"annotations"`
+	// The creation time.
+	CreationTimestamp string `pulumi:"creationTimestamp"`
+	// The add-on labels in key/value pairs.
+	Labels map[string]string `pulumi:"labels"`
+	// The add-on instance name.
+	Name string `pulumi:"name"`
+	// The add-on instance ID.
+	Uid string `pulumi:"uid"`
+	// The update time.
+	UpdateTimestamp string `pulumi:"updateTimestamp"`
+}
+
+// GetAddonsItemMetadataInput is an input type that accepts GetAddonsItemMetadataArgs and GetAddonsItemMetadataOutput values.
+// You can construct a concrete instance of `GetAddonsItemMetadataInput` via:
+//
+//	GetAddonsItemMetadataArgs{...}
+type GetAddonsItemMetadataInput interface {
+	pulumi.Input
+
+	ToGetAddonsItemMetadataOutput() GetAddonsItemMetadataOutput
+	ToGetAddonsItemMetadataOutputWithContext(context.Context) GetAddonsItemMetadataOutput
+}
+
+type GetAddonsItemMetadataArgs struct {
+	// The add-on instance alias.
+	Alias pulumi.StringInput `pulumi:"alias"`
+	// The add-on annotations in the format of key/value pairs.
+	Annotations pulumi.StringMapInput `pulumi:"annotations"`
+	// The creation time.
+	CreationTimestamp pulumi.StringInput `pulumi:"creationTimestamp"`
+	// The add-on labels in key/value pairs.
+	Labels pulumi.StringMapInput `pulumi:"labels"`
+	// The add-on instance name.
+	Name pulumi.StringInput `pulumi:"name"`
+	// The add-on instance ID.
+	Uid pulumi.StringInput `pulumi:"uid"`
+	// The update time.
+	UpdateTimestamp pulumi.StringInput `pulumi:"updateTimestamp"`
+}
+
+func (GetAddonsItemMetadataArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetAddonsItemMetadata)(nil)).Elem()
+}
+
+func (i GetAddonsItemMetadataArgs) ToGetAddonsItemMetadataOutput() GetAddonsItemMetadataOutput {
+	return i.ToGetAddonsItemMetadataOutputWithContext(context.Background())
+}
+
+func (i GetAddonsItemMetadataArgs) ToGetAddonsItemMetadataOutputWithContext(ctx context.Context) GetAddonsItemMetadataOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetAddonsItemMetadataOutput)
+}
+
+// GetAddonsItemMetadataArrayInput is an input type that accepts GetAddonsItemMetadataArray and GetAddonsItemMetadataArrayOutput values.
+// You can construct a concrete instance of `GetAddonsItemMetadataArrayInput` via:
+//
+//	GetAddonsItemMetadataArray{ GetAddonsItemMetadataArgs{...} }
+type GetAddonsItemMetadataArrayInput interface {
+	pulumi.Input
+
+	ToGetAddonsItemMetadataArrayOutput() GetAddonsItemMetadataArrayOutput
+	ToGetAddonsItemMetadataArrayOutputWithContext(context.Context) GetAddonsItemMetadataArrayOutput
+}
+
+type GetAddonsItemMetadataArray []GetAddonsItemMetadataInput
+
+func (GetAddonsItemMetadataArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetAddonsItemMetadata)(nil)).Elem()
+}
+
+func (i GetAddonsItemMetadataArray) ToGetAddonsItemMetadataArrayOutput() GetAddonsItemMetadataArrayOutput {
+	return i.ToGetAddonsItemMetadataArrayOutputWithContext(context.Background())
+}
+
+func (i GetAddonsItemMetadataArray) ToGetAddonsItemMetadataArrayOutputWithContext(ctx context.Context) GetAddonsItemMetadataArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetAddonsItemMetadataArrayOutput)
+}
+
+type GetAddonsItemMetadataOutput struct{ *pulumi.OutputState }
+
+func (GetAddonsItemMetadataOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetAddonsItemMetadata)(nil)).Elem()
+}
+
+func (o GetAddonsItemMetadataOutput) ToGetAddonsItemMetadataOutput() GetAddonsItemMetadataOutput {
+	return o
+}
+
+func (o GetAddonsItemMetadataOutput) ToGetAddonsItemMetadataOutputWithContext(ctx context.Context) GetAddonsItemMetadataOutput {
+	return o
+}
+
+// The add-on instance alias.
+func (o GetAddonsItemMetadataOutput) Alias() pulumi.StringOutput {
+	return o.ApplyT(func(v GetAddonsItemMetadata) string { return v.Alias }).(pulumi.StringOutput)
+}
+
+// The add-on annotations in the format of key/value pairs.
+func (o GetAddonsItemMetadataOutput) Annotations() pulumi.StringMapOutput {
+	return o.ApplyT(func(v GetAddonsItemMetadata) map[string]string { return v.Annotations }).(pulumi.StringMapOutput)
+}
+
+// The creation time.
+func (o GetAddonsItemMetadataOutput) CreationTimestamp() pulumi.StringOutput {
+	return o.ApplyT(func(v GetAddonsItemMetadata) string { return v.CreationTimestamp }).(pulumi.StringOutput)
+}
+
+// The add-on labels in key/value pairs.
+func (o GetAddonsItemMetadataOutput) Labels() pulumi.StringMapOutput {
+	return o.ApplyT(func(v GetAddonsItemMetadata) map[string]string { return v.Labels }).(pulumi.StringMapOutput)
+}
+
+// The add-on instance name.
+func (o GetAddonsItemMetadataOutput) Name() pulumi.StringOutput {
+	return o.ApplyT(func(v GetAddonsItemMetadata) string { return v.Name }).(pulumi.StringOutput)
+}
+
+// The add-on instance ID.
+func (o GetAddonsItemMetadataOutput) Uid() pulumi.StringOutput {
+	return o.ApplyT(func(v GetAddonsItemMetadata) string { return v.Uid }).(pulumi.StringOutput)
+}
+
+// The update time.
+func (o GetAddonsItemMetadataOutput) UpdateTimestamp() pulumi.StringOutput {
+	return o.ApplyT(func(v GetAddonsItemMetadata) string { return v.UpdateTimestamp }).(pulumi.StringOutput)
+}
+
+type GetAddonsItemMetadataArrayOutput struct{ *pulumi.OutputState }
+
+func (GetAddonsItemMetadataArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetAddonsItemMetadata)(nil)).Elem()
+}
+
+func (o GetAddonsItemMetadataArrayOutput) ToGetAddonsItemMetadataArrayOutput() GetAddonsItemMetadataArrayOutput {
+	return o
+}
+
+func (o GetAddonsItemMetadataArrayOutput) ToGetAddonsItemMetadataArrayOutputWithContext(ctx context.Context) GetAddonsItemMetadataArrayOutput {
+	return o
+}
+
+func (o GetAddonsItemMetadataArrayOutput) Index(i pulumi.IntInput) GetAddonsItemMetadataOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) GetAddonsItemMetadata {
+		return vs[0].([]GetAddonsItemMetadata)[vs[1].(int)]
+	}).(GetAddonsItemMetadataOutput)
+}
+
+type GetAddonsItemSpec struct {
+	// The labels of the add-on template.
+	AddonTemplateLabels []string `pulumi:"addonTemplateLabels"`
+	// The URL for obtaining the add-on template logo.
+	AddonTemplateLogo string `pulumi:"addonTemplateLogo"`
+	// The add-on name.
+	AddonTemplateName string `pulumi:"addonTemplateName"`
+	// The add-on type.
+	AddonTemplateType string `pulumi:"addonTemplateType"`
+	// Specifies the ID of the cluster to which the add-on instance belongs.
+	ClusterId string `pulumi:"clusterId"`
+	// The add-on description.
+	Description string `pulumi:"description"`
+	// The add-on installation parameters.
+	Values []string `pulumi:"values"`
+	// The add-on version.
+	Version string `pulumi:"version"`
+}
+
+// GetAddonsItemSpecInput is an input type that accepts GetAddonsItemSpecArgs and GetAddonsItemSpecOutput values.
+// You can construct a concrete instance of `GetAddonsItemSpecInput` via:
+//
+//	GetAddonsItemSpecArgs{...}
+type GetAddonsItemSpecInput interface {
+	pulumi.Input
+
+	ToGetAddonsItemSpecOutput() GetAddonsItemSpecOutput
+	ToGetAddonsItemSpecOutputWithContext(context.Context) GetAddonsItemSpecOutput
+}
+
+type GetAddonsItemSpecArgs struct {
+	// The labels of the add-on template.
+	AddonTemplateLabels pulumi.StringArrayInput `pulumi:"addonTemplateLabels"`
+	// The URL for obtaining the add-on template logo.
+	AddonTemplateLogo pulumi.StringInput `pulumi:"addonTemplateLogo"`
+	// The add-on name.
+	AddonTemplateName pulumi.StringInput `pulumi:"addonTemplateName"`
+	// The add-on type.
+	AddonTemplateType pulumi.StringInput `pulumi:"addonTemplateType"`
+	// Specifies the ID of the cluster to which the add-on instance belongs.
+	ClusterId pulumi.StringInput `pulumi:"clusterId"`
+	// The add-on description.
+	Description pulumi.StringInput `pulumi:"description"`
+	// The add-on installation parameters.
+	Values pulumi.StringArrayInput `pulumi:"values"`
+	// The add-on version.
+	Version pulumi.StringInput `pulumi:"version"`
+}
+
+func (GetAddonsItemSpecArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetAddonsItemSpec)(nil)).Elem()
+}
+
+func (i GetAddonsItemSpecArgs) ToGetAddonsItemSpecOutput() GetAddonsItemSpecOutput {
+	return i.ToGetAddonsItemSpecOutputWithContext(context.Background())
+}
+
+func (i GetAddonsItemSpecArgs) ToGetAddonsItemSpecOutputWithContext(ctx context.Context) GetAddonsItemSpecOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetAddonsItemSpecOutput)
+}
+
+// GetAddonsItemSpecArrayInput is an input type that accepts GetAddonsItemSpecArray and GetAddonsItemSpecArrayOutput values.
+// You can construct a concrete instance of `GetAddonsItemSpecArrayInput` via:
+//
+//	GetAddonsItemSpecArray{ GetAddonsItemSpecArgs{...} }
+type GetAddonsItemSpecArrayInput interface {
+	pulumi.Input
+
+	ToGetAddonsItemSpecArrayOutput() GetAddonsItemSpecArrayOutput
+	ToGetAddonsItemSpecArrayOutputWithContext(context.Context) GetAddonsItemSpecArrayOutput
+}
+
+type GetAddonsItemSpecArray []GetAddonsItemSpecInput
+
+func (GetAddonsItemSpecArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetAddonsItemSpec)(nil)).Elem()
+}
+
+func (i GetAddonsItemSpecArray) ToGetAddonsItemSpecArrayOutput() GetAddonsItemSpecArrayOutput {
+	return i.ToGetAddonsItemSpecArrayOutputWithContext(context.Background())
+}
+
+func (i GetAddonsItemSpecArray) ToGetAddonsItemSpecArrayOutputWithContext(ctx context.Context) GetAddonsItemSpecArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetAddonsItemSpecArrayOutput)
+}
+
+type GetAddonsItemSpecOutput struct{ *pulumi.OutputState }
+
+func (GetAddonsItemSpecOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetAddonsItemSpec)(nil)).Elem()
+}
+
+func (o GetAddonsItemSpecOutput) ToGetAddonsItemSpecOutput() GetAddonsItemSpecOutput {
+	return o
+}
+
+func (o GetAddonsItemSpecOutput) ToGetAddonsItemSpecOutputWithContext(ctx context.Context) GetAddonsItemSpecOutput {
+	return o
+}
+
+// The labels of the add-on template.
+func (o GetAddonsItemSpecOutput) AddonTemplateLabels() pulumi.StringArrayOutput {
+	return o.ApplyT(func(v GetAddonsItemSpec) []string { return v.AddonTemplateLabels }).(pulumi.StringArrayOutput)
+}
+
+// The URL for obtaining the add-on template logo.
+func (o GetAddonsItemSpecOutput) AddonTemplateLogo() pulumi.StringOutput {
+	return o.ApplyT(func(v GetAddonsItemSpec) string { return v.AddonTemplateLogo }).(pulumi.StringOutput)
+}
+
+// The add-on name.
+func (o GetAddonsItemSpecOutput) AddonTemplateName() pulumi.StringOutput {
+	return o.ApplyT(func(v GetAddonsItemSpec) string { return v.AddonTemplateName }).(pulumi.StringOutput)
+}
+
+// The add-on type.
+func (o GetAddonsItemSpecOutput) AddonTemplateType() pulumi.StringOutput {
+	return o.ApplyT(func(v GetAddonsItemSpec) string { return v.AddonTemplateType }).(pulumi.StringOutput)
+}
+
+// Specifies the ID of the cluster to which the add-on instance belongs.
+func (o GetAddonsItemSpecOutput) ClusterId() pulumi.StringOutput {
+	return o.ApplyT(func(v GetAddonsItemSpec) string { return v.ClusterId }).(pulumi.StringOutput)
+}
+
+// The add-on description.
+func (o GetAddonsItemSpecOutput) Description() pulumi.StringOutput {
+	return o.ApplyT(func(v GetAddonsItemSpec) string { return v.Description }).(pulumi.StringOutput)
+}
+
+// The add-on installation parameters.
+func (o GetAddonsItemSpecOutput) Values() pulumi.StringArrayOutput {
+	return o.ApplyT(func(v GetAddonsItemSpec) []string { return v.Values }).(pulumi.StringArrayOutput)
+}
+
+// The add-on version.
+func (o GetAddonsItemSpecOutput) Version() pulumi.StringOutput {
+	return o.ApplyT(func(v GetAddonsItemSpec) string { return v.Version }).(pulumi.StringOutput)
+}
+
+type GetAddonsItemSpecArrayOutput struct{ *pulumi.OutputState }
+
+func (GetAddonsItemSpecArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetAddonsItemSpec)(nil)).Elem()
+}
+
+func (o GetAddonsItemSpecArrayOutput) ToGetAddonsItemSpecArrayOutput() GetAddonsItemSpecArrayOutput {
+	return o
+}
+
+func (o GetAddonsItemSpecArrayOutput) ToGetAddonsItemSpecArrayOutputWithContext(ctx context.Context) GetAddonsItemSpecArrayOutput {
+	return o
+}
+
+func (o GetAddonsItemSpecArrayOutput) Index(i pulumi.IntInput) GetAddonsItemSpecOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) GetAddonsItemSpec {
+		return vs[0].([]GetAddonsItemSpec)[vs[1].(int)]
+	}).(GetAddonsItemSpecOutput)
+}
+
+type GetAddonsItemStatus struct {
+	// The cause of the add-on installation failure.
+	_reason string `pulumi:"_reason"`
+	// The information about the current add-on version.
+	CurrentVersions []GetAddonsItemStatusCurrentVersion `pulumi:"currentVersions"`
+	// Whether the add-on version can be rolled back to the source version.
+	IsRollbackable bool `pulumi:"isRollbackable"`
+	// The installation error details.
+	Message string `pulumi:"message"`
+	// The add-on version before upgrade or rollback
+	PreviousVersion string `pulumi:"previousVersion"`
+	// The statuses of add-on instances.
+	Status string `pulumi:"status"`
+	// The versions to which the current add-on version can be upgraded.
+	TargetVersions []string `pulumi:"targetVersions"`
+}
+
+// GetAddonsItemStatusInput is an input type that accepts GetAddonsItemStatusArgs and GetAddonsItemStatusOutput values.
+// You can construct a concrete instance of `GetAddonsItemStatusInput` via:
+//
+//	GetAddonsItemStatusArgs{...}
+type GetAddonsItemStatusInput interface {
+	pulumi.Input
+
+	ToGetAddonsItemStatusOutput() GetAddonsItemStatusOutput
+	ToGetAddonsItemStatusOutputWithContext(context.Context) GetAddonsItemStatusOutput
+}
+
+type GetAddonsItemStatusArgs struct {
+	// The cause of the add-on installation failure.
+	_reason pulumi.StringInput `pulumi:"_reason"`
+	// The information about the current add-on version.
+	CurrentVersions GetAddonsItemStatusCurrentVersionArrayInput `pulumi:"currentVersions"`
+	// Whether the add-on version can be rolled back to the source version.
+	IsRollbackable pulumi.BoolInput `pulumi:"isRollbackable"`
+	// The installation error details.
+	Message pulumi.StringInput `pulumi:"message"`
+	// The add-on version before upgrade or rollback
+	PreviousVersion pulumi.StringInput `pulumi:"previousVersion"`
+	// The statuses of add-on instances.
+	Status pulumi.StringInput `pulumi:"status"`
+	// The versions to which the current add-on version can be upgraded.
+	TargetVersions pulumi.StringArrayInput `pulumi:"targetVersions"`
+}
+
+func (GetAddonsItemStatusArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetAddonsItemStatus)(nil)).Elem()
+}
+
+func (i GetAddonsItemStatusArgs) ToGetAddonsItemStatusOutput() GetAddonsItemStatusOutput {
+	return i.ToGetAddonsItemStatusOutputWithContext(context.Background())
+}
+
+func (i GetAddonsItemStatusArgs) ToGetAddonsItemStatusOutputWithContext(ctx context.Context) GetAddonsItemStatusOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetAddonsItemStatusOutput)
+}
+
+// GetAddonsItemStatusArrayInput is an input type that accepts GetAddonsItemStatusArray and GetAddonsItemStatusArrayOutput values.
+// You can construct a concrete instance of `GetAddonsItemStatusArrayInput` via:
+//
+//	GetAddonsItemStatusArray{ GetAddonsItemStatusArgs{...} }
+type GetAddonsItemStatusArrayInput interface {
+	pulumi.Input
+
+	ToGetAddonsItemStatusArrayOutput() GetAddonsItemStatusArrayOutput
+	ToGetAddonsItemStatusArrayOutputWithContext(context.Context) GetAddonsItemStatusArrayOutput
+}
+
+type GetAddonsItemStatusArray []GetAddonsItemStatusInput
+
+func (GetAddonsItemStatusArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetAddonsItemStatus)(nil)).Elem()
+}
+
+func (i GetAddonsItemStatusArray) ToGetAddonsItemStatusArrayOutput() GetAddonsItemStatusArrayOutput {
+	return i.ToGetAddonsItemStatusArrayOutputWithContext(context.Background())
+}
+
+func (i GetAddonsItemStatusArray) ToGetAddonsItemStatusArrayOutputWithContext(ctx context.Context) GetAddonsItemStatusArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetAddonsItemStatusArrayOutput)
+}
+
+type GetAddonsItemStatusOutput struct{ *pulumi.OutputState }
+
+func (GetAddonsItemStatusOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetAddonsItemStatus)(nil)).Elem()
+}
+
+func (o GetAddonsItemStatusOutput) ToGetAddonsItemStatusOutput() GetAddonsItemStatusOutput {
+	return o
+}
+
+func (o GetAddonsItemStatusOutput) ToGetAddonsItemStatusOutputWithContext(ctx context.Context) GetAddonsItemStatusOutput {
+	return o
+}
+
+// The cause of the add-on installation failure.
+func (o GetAddonsItemStatusOutput) _reason() pulumi.StringOutput {
+	return o.ApplyT(func(v GetAddonsItemStatus) string { return v._reason }).(pulumi.StringOutput)
+}
+
+// The information about the current add-on version.
+func (o GetAddonsItemStatusOutput) CurrentVersions() GetAddonsItemStatusCurrentVersionArrayOutput {
+	return o.ApplyT(func(v GetAddonsItemStatus) []GetAddonsItemStatusCurrentVersion { return v.CurrentVersions }).(GetAddonsItemStatusCurrentVersionArrayOutput)
+}
+
+// Whether the add-on version can be rolled back to the source version.
+func (o GetAddonsItemStatusOutput) IsRollbackable() pulumi.BoolOutput {
+	return o.ApplyT(func(v GetAddonsItemStatus) bool { return v.IsRollbackable }).(pulumi.BoolOutput)
+}
+
+// The installation error details.
+func (o GetAddonsItemStatusOutput) Message() pulumi.StringOutput {
+	return o.ApplyT(func(v GetAddonsItemStatus) string { return v.Message }).(pulumi.StringOutput)
+}
+
+// The add-on version before upgrade or rollback
+func (o GetAddonsItemStatusOutput) PreviousVersion() pulumi.StringOutput {
+	return o.ApplyT(func(v GetAddonsItemStatus) string { return v.PreviousVersion }).(pulumi.StringOutput)
+}
+
+// The statuses of add-on instances.
+func (o GetAddonsItemStatusOutput) Status() pulumi.StringOutput {
+	return o.ApplyT(func(v GetAddonsItemStatus) string { return v.Status }).(pulumi.StringOutput)
+}
+
+// The versions to which the current add-on version can be upgraded.
+func (o GetAddonsItemStatusOutput) TargetVersions() pulumi.StringArrayOutput {
+	return o.ApplyT(func(v GetAddonsItemStatus) []string { return v.TargetVersions }).(pulumi.StringArrayOutput)
+}
+
+type GetAddonsItemStatusArrayOutput struct{ *pulumi.OutputState }
+
+func (GetAddonsItemStatusArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetAddonsItemStatus)(nil)).Elem()
+}
+
+func (o GetAddonsItemStatusArrayOutput) ToGetAddonsItemStatusArrayOutput() GetAddonsItemStatusArrayOutput {
+	return o
+}
+
+func (o GetAddonsItemStatusArrayOutput) ToGetAddonsItemStatusArrayOutputWithContext(ctx context.Context) GetAddonsItemStatusArrayOutput {
+	return o
+}
+
+func (o GetAddonsItemStatusArrayOutput) Index(i pulumi.IntInput) GetAddonsItemStatusOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) GetAddonsItemStatus {
+		return vs[0].([]GetAddonsItemStatus)[vs[1].(int)]
+	}).(GetAddonsItemStatusOutput)
+}
+
+type GetAddonsItemStatusCurrentVersion struct {
+	// The creation time.
+	CreationTimestamp string `pulumi:"creationTimestamp"`
+	// The add-on installation parameters.
+	Inputs []string `pulumi:"inputs"`
+	// Whether the add-on version is a stable release.
+	Stable bool `pulumi:"stable"`
+	// The cluster versions that support the add-on.
+	SupportVersions []GetAddonsItemStatusCurrentVersionSupportVersion `pulumi:"supportVersions"`
+	// The translation information used by the GUI.
+	Translates []string `pulumi:"translates"`
+	// The update time.
+	UpdateTimestamp string `pulumi:"updateTimestamp"`
+	// The add-on version.
+	Version string `pulumi:"version"`
+}
+
+// GetAddonsItemStatusCurrentVersionInput is an input type that accepts GetAddonsItemStatusCurrentVersionArgs and GetAddonsItemStatusCurrentVersionOutput values.
+// You can construct a concrete instance of `GetAddonsItemStatusCurrentVersionInput` via:
+//
+//	GetAddonsItemStatusCurrentVersionArgs{...}
+type GetAddonsItemStatusCurrentVersionInput interface {
+	pulumi.Input
+
+	ToGetAddonsItemStatusCurrentVersionOutput() GetAddonsItemStatusCurrentVersionOutput
+	ToGetAddonsItemStatusCurrentVersionOutputWithContext(context.Context) GetAddonsItemStatusCurrentVersionOutput
+}
+
+type GetAddonsItemStatusCurrentVersionArgs struct {
+	// The creation time.
+	CreationTimestamp pulumi.StringInput `pulumi:"creationTimestamp"`
+	// The add-on installation parameters.
+	Inputs pulumi.StringArrayInput `pulumi:"inputs"`
+	// Whether the add-on version is a stable release.
+	Stable pulumi.BoolInput `pulumi:"stable"`
+	// The cluster versions that support the add-on.
+	SupportVersions GetAddonsItemStatusCurrentVersionSupportVersionArrayInput `pulumi:"supportVersions"`
+	// The translation information used by the GUI.
+	Translates pulumi.StringArrayInput `pulumi:"translates"`
+	// The update time.
+	UpdateTimestamp pulumi.StringInput `pulumi:"updateTimestamp"`
+	// The add-on version.
+	Version pulumi.StringInput `pulumi:"version"`
+}
+
+func (GetAddonsItemStatusCurrentVersionArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetAddonsItemStatusCurrentVersion)(nil)).Elem()
+}
+
+func (i GetAddonsItemStatusCurrentVersionArgs) ToGetAddonsItemStatusCurrentVersionOutput() GetAddonsItemStatusCurrentVersionOutput {
+	return i.ToGetAddonsItemStatusCurrentVersionOutputWithContext(context.Background())
+}
+
+func (i GetAddonsItemStatusCurrentVersionArgs) ToGetAddonsItemStatusCurrentVersionOutputWithContext(ctx context.Context) GetAddonsItemStatusCurrentVersionOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetAddonsItemStatusCurrentVersionOutput)
+}
+
+// GetAddonsItemStatusCurrentVersionArrayInput is an input type that accepts GetAddonsItemStatusCurrentVersionArray and GetAddonsItemStatusCurrentVersionArrayOutput values.
+// You can construct a concrete instance of `GetAddonsItemStatusCurrentVersionArrayInput` via:
+//
+//	GetAddonsItemStatusCurrentVersionArray{ GetAddonsItemStatusCurrentVersionArgs{...} }
+type GetAddonsItemStatusCurrentVersionArrayInput interface {
+	pulumi.Input
+
+	ToGetAddonsItemStatusCurrentVersionArrayOutput() GetAddonsItemStatusCurrentVersionArrayOutput
+	ToGetAddonsItemStatusCurrentVersionArrayOutputWithContext(context.Context) GetAddonsItemStatusCurrentVersionArrayOutput
+}
+
+type GetAddonsItemStatusCurrentVersionArray []GetAddonsItemStatusCurrentVersionInput
+
+func (GetAddonsItemStatusCurrentVersionArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetAddonsItemStatusCurrentVersion)(nil)).Elem()
+}
+
+func (i GetAddonsItemStatusCurrentVersionArray) ToGetAddonsItemStatusCurrentVersionArrayOutput() GetAddonsItemStatusCurrentVersionArrayOutput {
+	return i.ToGetAddonsItemStatusCurrentVersionArrayOutputWithContext(context.Background())
+}
+
+func (i GetAddonsItemStatusCurrentVersionArray) ToGetAddonsItemStatusCurrentVersionArrayOutputWithContext(ctx context.Context) GetAddonsItemStatusCurrentVersionArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetAddonsItemStatusCurrentVersionArrayOutput)
+}
+
+type GetAddonsItemStatusCurrentVersionOutput struct{ *pulumi.OutputState }
+
+func (GetAddonsItemStatusCurrentVersionOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetAddonsItemStatusCurrentVersion)(nil)).Elem()
+}
+
+func (o GetAddonsItemStatusCurrentVersionOutput) ToGetAddonsItemStatusCurrentVersionOutput() GetAddonsItemStatusCurrentVersionOutput {
+	return o
+}
+
+func (o GetAddonsItemStatusCurrentVersionOutput) ToGetAddonsItemStatusCurrentVersionOutputWithContext(ctx context.Context) GetAddonsItemStatusCurrentVersionOutput {
+	return o
+}
+
+// The creation time.
+func (o GetAddonsItemStatusCurrentVersionOutput) CreationTimestamp() pulumi.StringOutput {
+	return o.ApplyT(func(v GetAddonsItemStatusCurrentVersion) string { return v.CreationTimestamp }).(pulumi.StringOutput)
+}
+
+// The add-on installation parameters.
+func (o GetAddonsItemStatusCurrentVersionOutput) Inputs() pulumi.StringArrayOutput {
+	return o.ApplyT(func(v GetAddonsItemStatusCurrentVersion) []string { return v.Inputs }).(pulumi.StringArrayOutput)
+}
+
+// Whether the add-on version is a stable release.
+func (o GetAddonsItemStatusCurrentVersionOutput) Stable() pulumi.BoolOutput {
+	return o.ApplyT(func(v GetAddonsItemStatusCurrentVersion) bool { return v.Stable }).(pulumi.BoolOutput)
+}
+
+// The cluster versions that support the add-on.
+func (o GetAddonsItemStatusCurrentVersionOutput) SupportVersions() GetAddonsItemStatusCurrentVersionSupportVersionArrayOutput {
+	return o.ApplyT(func(v GetAddonsItemStatusCurrentVersion) []GetAddonsItemStatusCurrentVersionSupportVersion {
+		return v.SupportVersions
+	}).(GetAddonsItemStatusCurrentVersionSupportVersionArrayOutput)
+}
+
+// The translation information used by the GUI.
+func (o GetAddonsItemStatusCurrentVersionOutput) Translates() pulumi.StringArrayOutput {
+	return o.ApplyT(func(v GetAddonsItemStatusCurrentVersion) []string { return v.Translates }).(pulumi.StringArrayOutput)
+}
+
+// The update time.
+func (o GetAddonsItemStatusCurrentVersionOutput) UpdateTimestamp() pulumi.StringOutput {
+	return o.ApplyT(func(v GetAddonsItemStatusCurrentVersion) string { return v.UpdateTimestamp }).(pulumi.StringOutput)
+}
+
+// The add-on version.
+func (o GetAddonsItemStatusCurrentVersionOutput) Version() pulumi.StringOutput {
+	return o.ApplyT(func(v GetAddonsItemStatusCurrentVersion) string { return v.Version }).(pulumi.StringOutput)
+}
+
+type GetAddonsItemStatusCurrentVersionArrayOutput struct{ *pulumi.OutputState }
+
+func (GetAddonsItemStatusCurrentVersionArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetAddonsItemStatusCurrentVersion)(nil)).Elem()
+}
+
+func (o GetAddonsItemStatusCurrentVersionArrayOutput) ToGetAddonsItemStatusCurrentVersionArrayOutput() GetAddonsItemStatusCurrentVersionArrayOutput {
+	return o
+}
+
+func (o GetAddonsItemStatusCurrentVersionArrayOutput) ToGetAddonsItemStatusCurrentVersionArrayOutputWithContext(ctx context.Context) GetAddonsItemStatusCurrentVersionArrayOutput {
+	return o
+}
+
+func (o GetAddonsItemStatusCurrentVersionArrayOutput) Index(i pulumi.IntInput) GetAddonsItemStatusCurrentVersionOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) GetAddonsItemStatusCurrentVersion {
+		return vs[0].([]GetAddonsItemStatusCurrentVersion)[vs[1].(int)]
+	}).(GetAddonsItemStatusCurrentVersionOutput)
+}
+
+type GetAddonsItemStatusCurrentVersionSupportVersion struct {
+	// The current support version category.
+	Categories []string `pulumi:"categories"`
+	// The cluster type that supports the add-on.
+	ClusterType string `pulumi:"clusterType"`
+	// The cluster versions that support the add-on. The value is a regular expression.
+	ClusterVersions []string `pulumi:"clusterVersions"`
+}
+
+// GetAddonsItemStatusCurrentVersionSupportVersionInput is an input type that accepts GetAddonsItemStatusCurrentVersionSupportVersionArgs and GetAddonsItemStatusCurrentVersionSupportVersionOutput values.
+// You can construct a concrete instance of `GetAddonsItemStatusCurrentVersionSupportVersionInput` via:
+//
+//	GetAddonsItemStatusCurrentVersionSupportVersionArgs{...}
+type GetAddonsItemStatusCurrentVersionSupportVersionInput interface {
+	pulumi.Input
+
+	ToGetAddonsItemStatusCurrentVersionSupportVersionOutput() GetAddonsItemStatusCurrentVersionSupportVersionOutput
+	ToGetAddonsItemStatusCurrentVersionSupportVersionOutputWithContext(context.Context) GetAddonsItemStatusCurrentVersionSupportVersionOutput
+}
+
+type GetAddonsItemStatusCurrentVersionSupportVersionArgs struct {
+	// The current support version category.
+	Categories pulumi.StringArrayInput `pulumi:"categories"`
+	// The cluster type that supports the add-on.
+	ClusterType pulumi.StringInput `pulumi:"clusterType"`
+	// The cluster versions that support the add-on. The value is a regular expression.
+	ClusterVersions pulumi.StringArrayInput `pulumi:"clusterVersions"`
+}
+
+func (GetAddonsItemStatusCurrentVersionSupportVersionArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetAddonsItemStatusCurrentVersionSupportVersion)(nil)).Elem()
+}
+
+func (i GetAddonsItemStatusCurrentVersionSupportVersionArgs) ToGetAddonsItemStatusCurrentVersionSupportVersionOutput() GetAddonsItemStatusCurrentVersionSupportVersionOutput {
+	return i.ToGetAddonsItemStatusCurrentVersionSupportVersionOutputWithContext(context.Background())
+}
+
+func (i GetAddonsItemStatusCurrentVersionSupportVersionArgs) ToGetAddonsItemStatusCurrentVersionSupportVersionOutputWithContext(ctx context.Context) GetAddonsItemStatusCurrentVersionSupportVersionOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetAddonsItemStatusCurrentVersionSupportVersionOutput)
+}
+
+// GetAddonsItemStatusCurrentVersionSupportVersionArrayInput is an input type that accepts GetAddonsItemStatusCurrentVersionSupportVersionArray and GetAddonsItemStatusCurrentVersionSupportVersionArrayOutput values.
+// You can construct a concrete instance of `GetAddonsItemStatusCurrentVersionSupportVersionArrayInput` via:
+//
+//	GetAddonsItemStatusCurrentVersionSupportVersionArray{ GetAddonsItemStatusCurrentVersionSupportVersionArgs{...} }
+type GetAddonsItemStatusCurrentVersionSupportVersionArrayInput interface {
+	pulumi.Input
+
+	ToGetAddonsItemStatusCurrentVersionSupportVersionArrayOutput() GetAddonsItemStatusCurrentVersionSupportVersionArrayOutput
+	ToGetAddonsItemStatusCurrentVersionSupportVersionArrayOutputWithContext(context.Context) GetAddonsItemStatusCurrentVersionSupportVersionArrayOutput
+}
+
+type GetAddonsItemStatusCurrentVersionSupportVersionArray []GetAddonsItemStatusCurrentVersionSupportVersionInput
+
+func (GetAddonsItemStatusCurrentVersionSupportVersionArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetAddonsItemStatusCurrentVersionSupportVersion)(nil)).Elem()
+}
+
+func (i GetAddonsItemStatusCurrentVersionSupportVersionArray) ToGetAddonsItemStatusCurrentVersionSupportVersionArrayOutput() GetAddonsItemStatusCurrentVersionSupportVersionArrayOutput {
+	return i.ToGetAddonsItemStatusCurrentVersionSupportVersionArrayOutputWithContext(context.Background())
+}
+
+func (i GetAddonsItemStatusCurrentVersionSupportVersionArray) ToGetAddonsItemStatusCurrentVersionSupportVersionArrayOutputWithContext(ctx context.Context) GetAddonsItemStatusCurrentVersionSupportVersionArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetAddonsItemStatusCurrentVersionSupportVersionArrayOutput)
+}
+
+type GetAddonsItemStatusCurrentVersionSupportVersionOutput struct{ *pulumi.OutputState }
+
+func (GetAddonsItemStatusCurrentVersionSupportVersionOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetAddonsItemStatusCurrentVersionSupportVersion)(nil)).Elem()
+}
+
+func (o GetAddonsItemStatusCurrentVersionSupportVersionOutput) ToGetAddonsItemStatusCurrentVersionSupportVersionOutput() GetAddonsItemStatusCurrentVersionSupportVersionOutput {
+	return o
+}
+
+func (o GetAddonsItemStatusCurrentVersionSupportVersionOutput) ToGetAddonsItemStatusCurrentVersionSupportVersionOutputWithContext(ctx context.Context) GetAddonsItemStatusCurrentVersionSupportVersionOutput {
+	return o
+}
+
+// The current support version category.
+func (o GetAddonsItemStatusCurrentVersionSupportVersionOutput) Categories() pulumi.StringArrayOutput {
+	return o.ApplyT(func(v GetAddonsItemStatusCurrentVersionSupportVersion) []string { return v.Categories }).(pulumi.StringArrayOutput)
+}
+
+// The cluster type that supports the add-on.
+func (o GetAddonsItemStatusCurrentVersionSupportVersionOutput) ClusterType() pulumi.StringOutput {
+	return o.ApplyT(func(v GetAddonsItemStatusCurrentVersionSupportVersion) string { return v.ClusterType }).(pulumi.StringOutput)
+}
+
+// The cluster versions that support the add-on. The value is a regular expression.
+func (o GetAddonsItemStatusCurrentVersionSupportVersionOutput) ClusterVersions() pulumi.StringArrayOutput {
+	return o.ApplyT(func(v GetAddonsItemStatusCurrentVersionSupportVersion) []string { return v.ClusterVersions }).(pulumi.StringArrayOutput)
+}
+
+type GetAddonsItemStatusCurrentVersionSupportVersionArrayOutput struct{ *pulumi.OutputState }
+
+func (GetAddonsItemStatusCurrentVersionSupportVersionArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetAddonsItemStatusCurrentVersionSupportVersion)(nil)).Elem()
+}
+
+func (o GetAddonsItemStatusCurrentVersionSupportVersionArrayOutput) ToGetAddonsItemStatusCurrentVersionSupportVersionArrayOutput() GetAddonsItemStatusCurrentVersionSupportVersionArrayOutput {
+	return o
+}
+
+func (o GetAddonsItemStatusCurrentVersionSupportVersionArrayOutput) ToGetAddonsItemStatusCurrentVersionSupportVersionArrayOutputWithContext(ctx context.Context) GetAddonsItemStatusCurrentVersionSupportVersionArrayOutput {
+	return o
+}
+
+func (o GetAddonsItemStatusCurrentVersionSupportVersionArrayOutput) Index(i pulumi.IntInput) GetAddonsItemStatusCurrentVersionSupportVersionOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) GetAddonsItemStatusCurrentVersionSupportVersion {
+		return vs[0].([]GetAddonsItemStatusCurrentVersionSupportVersion)[vs[1].(int)]
+	}).(GetAddonsItemStatusCurrentVersionSupportVersionOutput)
+}
+
+type GetChartsChart struct {
+	// The chart URL.
+	ChartUrl string `pulumi:"chartUrl"`
+	// The create time.
+	CreatedAt string `pulumi:"createdAt"`
+	// The description of the chart.
+	Description string `pulumi:"description"`
+	// The icon URL.
+	IconUrl string `pulumi:"iconUrl"`
+	// The chart ID.
+	Id string `pulumi:"id"`
+	// The instruction of the chart.
+	Instruction string `pulumi:"instruction"`
+	// The chart name.
+	Name string `pulumi:"name"`
+	// Whether the chart is public.
+	Public bool `pulumi:"public"`
+	// The source of the chart.
+	Source string `pulumi:"source"`
+	// The traslate source of the chart.
+	Translate string `pulumi:"translate"`
+	// The update time.
+	UpdatedAt string `pulumi:"updatedAt"`
+	// The values of the chart.
+	Values string `pulumi:"values"`
+	// The chart version.
+	Version string `pulumi:"version"`
+}
+
+// GetChartsChartInput is an input type that accepts GetChartsChartArgs and GetChartsChartOutput values.
+// You can construct a concrete instance of `GetChartsChartInput` via:
+//
+//	GetChartsChartArgs{...}
+type GetChartsChartInput interface {
+	pulumi.Input
+
+	ToGetChartsChartOutput() GetChartsChartOutput
+	ToGetChartsChartOutputWithContext(context.Context) GetChartsChartOutput
+}
+
+type GetChartsChartArgs struct {
+	// The chart URL.
+	ChartUrl pulumi.StringInput `pulumi:"chartUrl"`
+	// The create time.
+	CreatedAt pulumi.StringInput `pulumi:"createdAt"`
+	// The description of the chart.
+	Description pulumi.StringInput `pulumi:"description"`
+	// The icon URL.
+	IconUrl pulumi.StringInput `pulumi:"iconUrl"`
+	// The chart ID.
+	Id pulumi.StringInput `pulumi:"id"`
+	// The instruction of the chart.
+	Instruction pulumi.StringInput `pulumi:"instruction"`
+	// The chart name.
+	Name pulumi.StringInput `pulumi:"name"`
+	// Whether the chart is public.
+	Public pulumi.BoolInput `pulumi:"public"`
+	// The source of the chart.
+	Source pulumi.StringInput `pulumi:"source"`
+	// The traslate source of the chart.
+	Translate pulumi.StringInput `pulumi:"translate"`
+	// The update time.
+	UpdatedAt pulumi.StringInput `pulumi:"updatedAt"`
+	// The values of the chart.
+	Values pulumi.StringInput `pulumi:"values"`
+	// The chart version.
+	Version pulumi.StringInput `pulumi:"version"`
+}
+
+func (GetChartsChartArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetChartsChart)(nil)).Elem()
+}
+
+func (i GetChartsChartArgs) ToGetChartsChartOutput() GetChartsChartOutput {
+	return i.ToGetChartsChartOutputWithContext(context.Background())
+}
+
+func (i GetChartsChartArgs) ToGetChartsChartOutputWithContext(ctx context.Context) GetChartsChartOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetChartsChartOutput)
+}
+
+// GetChartsChartArrayInput is an input type that accepts GetChartsChartArray and GetChartsChartArrayOutput values.
+// You can construct a concrete instance of `GetChartsChartArrayInput` via:
+//
+//	GetChartsChartArray{ GetChartsChartArgs{...} }
+type GetChartsChartArrayInput interface {
+	pulumi.Input
+
+	ToGetChartsChartArrayOutput() GetChartsChartArrayOutput
+	ToGetChartsChartArrayOutputWithContext(context.Context) GetChartsChartArrayOutput
+}
+
+type GetChartsChartArray []GetChartsChartInput
+
+func (GetChartsChartArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetChartsChart)(nil)).Elem()
+}
+
+func (i GetChartsChartArray) ToGetChartsChartArrayOutput() GetChartsChartArrayOutput {
+	return i.ToGetChartsChartArrayOutputWithContext(context.Background())
+}
+
+func (i GetChartsChartArray) ToGetChartsChartArrayOutputWithContext(ctx context.Context) GetChartsChartArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetChartsChartArrayOutput)
+}
+
+type GetChartsChartOutput struct{ *pulumi.OutputState }
+
+func (GetChartsChartOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetChartsChart)(nil)).Elem()
+}
+
+func (o GetChartsChartOutput) ToGetChartsChartOutput() GetChartsChartOutput {
+	return o
+}
+
+func (o GetChartsChartOutput) ToGetChartsChartOutputWithContext(ctx context.Context) GetChartsChartOutput {
+	return o
+}
+
+// The chart URL.
+func (o GetChartsChartOutput) ChartUrl() pulumi.StringOutput {
+	return o.ApplyT(func(v GetChartsChart) string { return v.ChartUrl }).(pulumi.StringOutput)
+}
+
+// The create time.
+func (o GetChartsChartOutput) CreatedAt() pulumi.StringOutput {
+	return o.ApplyT(func(v GetChartsChart) string { return v.CreatedAt }).(pulumi.StringOutput)
+}
+
+// The description of the chart.
+func (o GetChartsChartOutput) Description() pulumi.StringOutput {
+	return o.ApplyT(func(v GetChartsChart) string { return v.Description }).(pulumi.StringOutput)
+}
+
+// The icon URL.
+func (o GetChartsChartOutput) IconUrl() pulumi.StringOutput {
+	return o.ApplyT(func(v GetChartsChart) string { return v.IconUrl }).(pulumi.StringOutput)
+}
+
+// The chart ID.
+func (o GetChartsChartOutput) Id() pulumi.StringOutput {
+	return o.ApplyT(func(v GetChartsChart) string { return v.Id }).(pulumi.StringOutput)
+}
+
+// The instruction of the chart.
+func (o GetChartsChartOutput) Instruction() pulumi.StringOutput {
+	return o.ApplyT(func(v GetChartsChart) string { return v.Instruction }).(pulumi.StringOutput)
+}
+
+// The chart name.
+func (o GetChartsChartOutput) Name() pulumi.StringOutput {
+	return o.ApplyT(func(v GetChartsChart) string { return v.Name }).(pulumi.StringOutput)
+}
+
+// Whether the chart is public.
+func (o GetChartsChartOutput) Public() pulumi.BoolOutput {
+	return o.ApplyT(func(v GetChartsChart) bool { return v.Public }).(pulumi.BoolOutput)
+}
+
+// The source of the chart.
+func (o GetChartsChartOutput) Source() pulumi.StringOutput {
+	return o.ApplyT(func(v GetChartsChart) string { return v.Source }).(pulumi.StringOutput)
+}
+
+// The traslate source of the chart.
+func (o GetChartsChartOutput) Translate() pulumi.StringOutput {
+	return o.ApplyT(func(v GetChartsChart) string { return v.Translate }).(pulumi.StringOutput)
+}
+
+// The update time.
+func (o GetChartsChartOutput) UpdatedAt() pulumi.StringOutput {
+	return o.ApplyT(func(v GetChartsChart) string { return v.UpdatedAt }).(pulumi.StringOutput)
+}
+
+// The values of the chart.
+func (o GetChartsChartOutput) Values() pulumi.StringOutput {
+	return o.ApplyT(func(v GetChartsChart) string { return v.Values }).(pulumi.StringOutput)
+}
+
+// The chart version.
+func (o GetChartsChartOutput) Version() pulumi.StringOutput {
+	return o.ApplyT(func(v GetChartsChart) string { return v.Version }).(pulumi.StringOutput)
+}
+
+type GetChartsChartArrayOutput struct{ *pulumi.OutputState }
+
+func (GetChartsChartArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetChartsChart)(nil)).Elem()
+}
+
+func (o GetChartsChartArrayOutput) ToGetChartsChartArrayOutput() GetChartsChartArrayOutput {
+	return o
+}
+
+func (o GetChartsChartArrayOutput) ToGetChartsChartArrayOutputWithContext(ctx context.Context) GetChartsChartArrayOutput {
+	return o
+}
+
+func (o GetChartsChartArrayOutput) Index(i pulumi.IntInput) GetChartsChartOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) GetChartsChart {
+		return vs[0].([]GetChartsChart)[vs[1].(int)]
+	}).(GetChartsChartOutput)
 }
 
 type GetClusterCertificateCluster struct {
@@ -3799,6 +9012,360 @@ func (o GetClusterCertificateUserArrayOutput) Index(i pulumi.IntInput) GetCluste
 	return pulumi.All(o, i).ApplyT(func(vs []interface{}) GetClusterCertificateUser {
 		return vs[0].([]GetClusterCertificateUser)[vs[1].(int)]
 	}).(GetClusterCertificateUserOutput)
+}
+
+type GetClusterCertificatesCluster struct {
+	// The certificate authority data of the cluster certificate.
+	CertificateAuthorityData string `pulumi:"certificateAuthorityData"`
+	// Whether insecure skip tls verify of the cluster certificate.
+	InsecureSkipTlsVerify bool `pulumi:"insecureSkipTlsVerify"`
+	// The context name of the cluster certificate.
+	Name string `pulumi:"name"`
+	// The server address of the cluster certificate.
+	Server string `pulumi:"server"`
+}
+
+// GetClusterCertificatesClusterInput is an input type that accepts GetClusterCertificatesClusterArgs and GetClusterCertificatesClusterOutput values.
+// You can construct a concrete instance of `GetClusterCertificatesClusterInput` via:
+//
+//	GetClusterCertificatesClusterArgs{...}
+type GetClusterCertificatesClusterInput interface {
+	pulumi.Input
+
+	ToGetClusterCertificatesClusterOutput() GetClusterCertificatesClusterOutput
+	ToGetClusterCertificatesClusterOutputWithContext(context.Context) GetClusterCertificatesClusterOutput
+}
+
+type GetClusterCertificatesClusterArgs struct {
+	// The certificate authority data of the cluster certificate.
+	CertificateAuthorityData pulumi.StringInput `pulumi:"certificateAuthorityData"`
+	// Whether insecure skip tls verify of the cluster certificate.
+	InsecureSkipTlsVerify pulumi.BoolInput `pulumi:"insecureSkipTlsVerify"`
+	// The context name of the cluster certificate.
+	Name pulumi.StringInput `pulumi:"name"`
+	// The server address of the cluster certificate.
+	Server pulumi.StringInput `pulumi:"server"`
+}
+
+func (GetClusterCertificatesClusterArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetClusterCertificatesCluster)(nil)).Elem()
+}
+
+func (i GetClusterCertificatesClusterArgs) ToGetClusterCertificatesClusterOutput() GetClusterCertificatesClusterOutput {
+	return i.ToGetClusterCertificatesClusterOutputWithContext(context.Background())
+}
+
+func (i GetClusterCertificatesClusterArgs) ToGetClusterCertificatesClusterOutputWithContext(ctx context.Context) GetClusterCertificatesClusterOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetClusterCertificatesClusterOutput)
+}
+
+// GetClusterCertificatesClusterArrayInput is an input type that accepts GetClusterCertificatesClusterArray and GetClusterCertificatesClusterArrayOutput values.
+// You can construct a concrete instance of `GetClusterCertificatesClusterArrayInput` via:
+//
+//	GetClusterCertificatesClusterArray{ GetClusterCertificatesClusterArgs{...} }
+type GetClusterCertificatesClusterArrayInput interface {
+	pulumi.Input
+
+	ToGetClusterCertificatesClusterArrayOutput() GetClusterCertificatesClusterArrayOutput
+	ToGetClusterCertificatesClusterArrayOutputWithContext(context.Context) GetClusterCertificatesClusterArrayOutput
+}
+
+type GetClusterCertificatesClusterArray []GetClusterCertificatesClusterInput
+
+func (GetClusterCertificatesClusterArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetClusterCertificatesCluster)(nil)).Elem()
+}
+
+func (i GetClusterCertificatesClusterArray) ToGetClusterCertificatesClusterArrayOutput() GetClusterCertificatesClusterArrayOutput {
+	return i.ToGetClusterCertificatesClusterArrayOutputWithContext(context.Background())
+}
+
+func (i GetClusterCertificatesClusterArray) ToGetClusterCertificatesClusterArrayOutputWithContext(ctx context.Context) GetClusterCertificatesClusterArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetClusterCertificatesClusterArrayOutput)
+}
+
+type GetClusterCertificatesClusterOutput struct{ *pulumi.OutputState }
+
+func (GetClusterCertificatesClusterOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetClusterCertificatesCluster)(nil)).Elem()
+}
+
+func (o GetClusterCertificatesClusterOutput) ToGetClusterCertificatesClusterOutput() GetClusterCertificatesClusterOutput {
+	return o
+}
+
+func (o GetClusterCertificatesClusterOutput) ToGetClusterCertificatesClusterOutputWithContext(ctx context.Context) GetClusterCertificatesClusterOutput {
+	return o
+}
+
+// The certificate authority data of the cluster certificate.
+func (o GetClusterCertificatesClusterOutput) CertificateAuthorityData() pulumi.StringOutput {
+	return o.ApplyT(func(v GetClusterCertificatesCluster) string { return v.CertificateAuthorityData }).(pulumi.StringOutput)
+}
+
+// Whether insecure skip tls verify of the cluster certificate.
+func (o GetClusterCertificatesClusterOutput) InsecureSkipTlsVerify() pulumi.BoolOutput {
+	return o.ApplyT(func(v GetClusterCertificatesCluster) bool { return v.InsecureSkipTlsVerify }).(pulumi.BoolOutput)
+}
+
+// The context name of the cluster certificate.
+func (o GetClusterCertificatesClusterOutput) Name() pulumi.StringOutput {
+	return o.ApplyT(func(v GetClusterCertificatesCluster) string { return v.Name }).(pulumi.StringOutput)
+}
+
+// The server address of the cluster certificate.
+func (o GetClusterCertificatesClusterOutput) Server() pulumi.StringOutput {
+	return o.ApplyT(func(v GetClusterCertificatesCluster) string { return v.Server }).(pulumi.StringOutput)
+}
+
+type GetClusterCertificatesClusterArrayOutput struct{ *pulumi.OutputState }
+
+func (GetClusterCertificatesClusterArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetClusterCertificatesCluster)(nil)).Elem()
+}
+
+func (o GetClusterCertificatesClusterArrayOutput) ToGetClusterCertificatesClusterArrayOutput() GetClusterCertificatesClusterArrayOutput {
+	return o
+}
+
+func (o GetClusterCertificatesClusterArrayOutput) ToGetClusterCertificatesClusterArrayOutputWithContext(ctx context.Context) GetClusterCertificatesClusterArrayOutput {
+	return o
+}
+
+func (o GetClusterCertificatesClusterArrayOutput) Index(i pulumi.IntInput) GetClusterCertificatesClusterOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) GetClusterCertificatesCluster {
+		return vs[0].([]GetClusterCertificatesCluster)[vs[1].(int)]
+	}).(GetClusterCertificatesClusterOutput)
+}
+
+type GetClusterCertificatesContext struct {
+	// The context cluster of the cluster certificate.
+	Cluster string `pulumi:"cluster"`
+	// The context name of the cluster certificate.
+	Name string `pulumi:"name"`
+	// The context user of the cluster certificate.
+	User string `pulumi:"user"`
+}
+
+// GetClusterCertificatesContextInput is an input type that accepts GetClusterCertificatesContextArgs and GetClusterCertificatesContextOutput values.
+// You can construct a concrete instance of `GetClusterCertificatesContextInput` via:
+//
+//	GetClusterCertificatesContextArgs{...}
+type GetClusterCertificatesContextInput interface {
+	pulumi.Input
+
+	ToGetClusterCertificatesContextOutput() GetClusterCertificatesContextOutput
+	ToGetClusterCertificatesContextOutputWithContext(context.Context) GetClusterCertificatesContextOutput
+}
+
+type GetClusterCertificatesContextArgs struct {
+	// The context cluster of the cluster certificate.
+	Cluster pulumi.StringInput `pulumi:"cluster"`
+	// The context name of the cluster certificate.
+	Name pulumi.StringInput `pulumi:"name"`
+	// The context user of the cluster certificate.
+	User pulumi.StringInput `pulumi:"user"`
+}
+
+func (GetClusterCertificatesContextArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetClusterCertificatesContext)(nil)).Elem()
+}
+
+func (i GetClusterCertificatesContextArgs) ToGetClusterCertificatesContextOutput() GetClusterCertificatesContextOutput {
+	return i.ToGetClusterCertificatesContextOutputWithContext(context.Background())
+}
+
+func (i GetClusterCertificatesContextArgs) ToGetClusterCertificatesContextOutputWithContext(ctx context.Context) GetClusterCertificatesContextOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetClusterCertificatesContextOutput)
+}
+
+// GetClusterCertificatesContextArrayInput is an input type that accepts GetClusterCertificatesContextArray and GetClusterCertificatesContextArrayOutput values.
+// You can construct a concrete instance of `GetClusterCertificatesContextArrayInput` via:
+//
+//	GetClusterCertificatesContextArray{ GetClusterCertificatesContextArgs{...} }
+type GetClusterCertificatesContextArrayInput interface {
+	pulumi.Input
+
+	ToGetClusterCertificatesContextArrayOutput() GetClusterCertificatesContextArrayOutput
+	ToGetClusterCertificatesContextArrayOutputWithContext(context.Context) GetClusterCertificatesContextArrayOutput
+}
+
+type GetClusterCertificatesContextArray []GetClusterCertificatesContextInput
+
+func (GetClusterCertificatesContextArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetClusterCertificatesContext)(nil)).Elem()
+}
+
+func (i GetClusterCertificatesContextArray) ToGetClusterCertificatesContextArrayOutput() GetClusterCertificatesContextArrayOutput {
+	return i.ToGetClusterCertificatesContextArrayOutputWithContext(context.Background())
+}
+
+func (i GetClusterCertificatesContextArray) ToGetClusterCertificatesContextArrayOutputWithContext(ctx context.Context) GetClusterCertificatesContextArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetClusterCertificatesContextArrayOutput)
+}
+
+type GetClusterCertificatesContextOutput struct{ *pulumi.OutputState }
+
+func (GetClusterCertificatesContextOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetClusterCertificatesContext)(nil)).Elem()
+}
+
+func (o GetClusterCertificatesContextOutput) ToGetClusterCertificatesContextOutput() GetClusterCertificatesContextOutput {
+	return o
+}
+
+func (o GetClusterCertificatesContextOutput) ToGetClusterCertificatesContextOutputWithContext(ctx context.Context) GetClusterCertificatesContextOutput {
+	return o
+}
+
+// The context cluster of the cluster certificate.
+func (o GetClusterCertificatesContextOutput) Cluster() pulumi.StringOutput {
+	return o.ApplyT(func(v GetClusterCertificatesContext) string { return v.Cluster }).(pulumi.StringOutput)
+}
+
+// The context name of the cluster certificate.
+func (o GetClusterCertificatesContextOutput) Name() pulumi.StringOutput {
+	return o.ApplyT(func(v GetClusterCertificatesContext) string { return v.Name }).(pulumi.StringOutput)
+}
+
+// The context user of the cluster certificate.
+func (o GetClusterCertificatesContextOutput) User() pulumi.StringOutput {
+	return o.ApplyT(func(v GetClusterCertificatesContext) string { return v.User }).(pulumi.StringOutput)
+}
+
+type GetClusterCertificatesContextArrayOutput struct{ *pulumi.OutputState }
+
+func (GetClusterCertificatesContextArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetClusterCertificatesContext)(nil)).Elem()
+}
+
+func (o GetClusterCertificatesContextArrayOutput) ToGetClusterCertificatesContextArrayOutput() GetClusterCertificatesContextArrayOutput {
+	return o
+}
+
+func (o GetClusterCertificatesContextArrayOutput) ToGetClusterCertificatesContextArrayOutputWithContext(ctx context.Context) GetClusterCertificatesContextArrayOutput {
+	return o
+}
+
+func (o GetClusterCertificatesContextArrayOutput) Index(i pulumi.IntInput) GetClusterCertificatesContextOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) GetClusterCertificatesContext {
+		return vs[0].([]GetClusterCertificatesContext)[vs[1].(int)]
+	}).(GetClusterCertificatesContextOutput)
+}
+
+type GetClusterCertificatesUser struct {
+	// The client certificate data of the cluster certificate.
+	ClientCertificateData string `pulumi:"clientCertificateData"`
+	// The client key data of the cluster certificate.
+	ClientKeyData string `pulumi:"clientKeyData"`
+	// The context name of the cluster certificate.
+	Name string `pulumi:"name"`
+}
+
+// GetClusterCertificatesUserInput is an input type that accepts GetClusterCertificatesUserArgs and GetClusterCertificatesUserOutput values.
+// You can construct a concrete instance of `GetClusterCertificatesUserInput` via:
+//
+//	GetClusterCertificatesUserArgs{...}
+type GetClusterCertificatesUserInput interface {
+	pulumi.Input
+
+	ToGetClusterCertificatesUserOutput() GetClusterCertificatesUserOutput
+	ToGetClusterCertificatesUserOutputWithContext(context.Context) GetClusterCertificatesUserOutput
+}
+
+type GetClusterCertificatesUserArgs struct {
+	// The client certificate data of the cluster certificate.
+	ClientCertificateData pulumi.StringInput `pulumi:"clientCertificateData"`
+	// The client key data of the cluster certificate.
+	ClientKeyData pulumi.StringInput `pulumi:"clientKeyData"`
+	// The context name of the cluster certificate.
+	Name pulumi.StringInput `pulumi:"name"`
+}
+
+func (GetClusterCertificatesUserArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetClusterCertificatesUser)(nil)).Elem()
+}
+
+func (i GetClusterCertificatesUserArgs) ToGetClusterCertificatesUserOutput() GetClusterCertificatesUserOutput {
+	return i.ToGetClusterCertificatesUserOutputWithContext(context.Background())
+}
+
+func (i GetClusterCertificatesUserArgs) ToGetClusterCertificatesUserOutputWithContext(ctx context.Context) GetClusterCertificatesUserOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetClusterCertificatesUserOutput)
+}
+
+// GetClusterCertificatesUserArrayInput is an input type that accepts GetClusterCertificatesUserArray and GetClusterCertificatesUserArrayOutput values.
+// You can construct a concrete instance of `GetClusterCertificatesUserArrayInput` via:
+//
+//	GetClusterCertificatesUserArray{ GetClusterCertificatesUserArgs{...} }
+type GetClusterCertificatesUserArrayInput interface {
+	pulumi.Input
+
+	ToGetClusterCertificatesUserArrayOutput() GetClusterCertificatesUserArrayOutput
+	ToGetClusterCertificatesUserArrayOutputWithContext(context.Context) GetClusterCertificatesUserArrayOutput
+}
+
+type GetClusterCertificatesUserArray []GetClusterCertificatesUserInput
+
+func (GetClusterCertificatesUserArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetClusterCertificatesUser)(nil)).Elem()
+}
+
+func (i GetClusterCertificatesUserArray) ToGetClusterCertificatesUserArrayOutput() GetClusterCertificatesUserArrayOutput {
+	return i.ToGetClusterCertificatesUserArrayOutputWithContext(context.Background())
+}
+
+func (i GetClusterCertificatesUserArray) ToGetClusterCertificatesUserArrayOutputWithContext(ctx context.Context) GetClusterCertificatesUserArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetClusterCertificatesUserArrayOutput)
+}
+
+type GetClusterCertificatesUserOutput struct{ *pulumi.OutputState }
+
+func (GetClusterCertificatesUserOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetClusterCertificatesUser)(nil)).Elem()
+}
+
+func (o GetClusterCertificatesUserOutput) ToGetClusterCertificatesUserOutput() GetClusterCertificatesUserOutput {
+	return o
+}
+
+func (o GetClusterCertificatesUserOutput) ToGetClusterCertificatesUserOutputWithContext(ctx context.Context) GetClusterCertificatesUserOutput {
+	return o
+}
+
+// The client certificate data of the cluster certificate.
+func (o GetClusterCertificatesUserOutput) ClientCertificateData() pulumi.StringOutput {
+	return o.ApplyT(func(v GetClusterCertificatesUser) string { return v.ClientCertificateData }).(pulumi.StringOutput)
+}
+
+// The client key data of the cluster certificate.
+func (o GetClusterCertificatesUserOutput) ClientKeyData() pulumi.StringOutput {
+	return o.ApplyT(func(v GetClusterCertificatesUser) string { return v.ClientKeyData }).(pulumi.StringOutput)
+}
+
+// The context name of the cluster certificate.
+func (o GetClusterCertificatesUserOutput) Name() pulumi.StringOutput {
+	return o.ApplyT(func(v GetClusterCertificatesUser) string { return v.Name }).(pulumi.StringOutput)
+}
+
+type GetClusterCertificatesUserArrayOutput struct{ *pulumi.OutputState }
+
+func (GetClusterCertificatesUserArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetClusterCertificatesUser)(nil)).Elem()
+}
+
+func (o GetClusterCertificatesUserArrayOutput) ToGetClusterCertificatesUserArrayOutput() GetClusterCertificatesUserArrayOutput {
+	return o
+}
+
+func (o GetClusterCertificatesUserArrayOutput) ToGetClusterCertificatesUserArrayOutputWithContext(ctx context.Context) GetClusterCertificatesUserArrayOutput {
+	return o
+}
+
+func (o GetClusterCertificatesUserArrayOutput) Index(i pulumi.IntInput) GetClusterCertificatesUserOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) GetClusterCertificatesUser {
+		return vs[0].([]GetClusterCertificatesUser)[vs[1].(int)]
+	}).(GetClusterCertificatesUserOutput)
 }
 
 type GetClusterEndpoint struct {
@@ -4859,6 +10426,103 @@ func (o GetNodeDataVolumeArrayOutput) Index(i pulumi.IntInput) GetNodeDataVolume
 	}).(GetNodeDataVolumeOutput)
 }
 
+type GetNodeHostnameConfig struct {
+	// The hostname type of the kubernetes node.
+	Type string `pulumi:"type"`
+}
+
+// GetNodeHostnameConfigInput is an input type that accepts GetNodeHostnameConfigArgs and GetNodeHostnameConfigOutput values.
+// You can construct a concrete instance of `GetNodeHostnameConfigInput` via:
+//
+//	GetNodeHostnameConfigArgs{...}
+type GetNodeHostnameConfigInput interface {
+	pulumi.Input
+
+	ToGetNodeHostnameConfigOutput() GetNodeHostnameConfigOutput
+	ToGetNodeHostnameConfigOutputWithContext(context.Context) GetNodeHostnameConfigOutput
+}
+
+type GetNodeHostnameConfigArgs struct {
+	// The hostname type of the kubernetes node.
+	Type pulumi.StringInput `pulumi:"type"`
+}
+
+func (GetNodeHostnameConfigArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetNodeHostnameConfig)(nil)).Elem()
+}
+
+func (i GetNodeHostnameConfigArgs) ToGetNodeHostnameConfigOutput() GetNodeHostnameConfigOutput {
+	return i.ToGetNodeHostnameConfigOutputWithContext(context.Background())
+}
+
+func (i GetNodeHostnameConfigArgs) ToGetNodeHostnameConfigOutputWithContext(ctx context.Context) GetNodeHostnameConfigOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetNodeHostnameConfigOutput)
+}
+
+// GetNodeHostnameConfigArrayInput is an input type that accepts GetNodeHostnameConfigArray and GetNodeHostnameConfigArrayOutput values.
+// You can construct a concrete instance of `GetNodeHostnameConfigArrayInput` via:
+//
+//	GetNodeHostnameConfigArray{ GetNodeHostnameConfigArgs{...} }
+type GetNodeHostnameConfigArrayInput interface {
+	pulumi.Input
+
+	ToGetNodeHostnameConfigArrayOutput() GetNodeHostnameConfigArrayOutput
+	ToGetNodeHostnameConfigArrayOutputWithContext(context.Context) GetNodeHostnameConfigArrayOutput
+}
+
+type GetNodeHostnameConfigArray []GetNodeHostnameConfigInput
+
+func (GetNodeHostnameConfigArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetNodeHostnameConfig)(nil)).Elem()
+}
+
+func (i GetNodeHostnameConfigArray) ToGetNodeHostnameConfigArrayOutput() GetNodeHostnameConfigArrayOutput {
+	return i.ToGetNodeHostnameConfigArrayOutputWithContext(context.Background())
+}
+
+func (i GetNodeHostnameConfigArray) ToGetNodeHostnameConfigArrayOutputWithContext(ctx context.Context) GetNodeHostnameConfigArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetNodeHostnameConfigArrayOutput)
+}
+
+type GetNodeHostnameConfigOutput struct{ *pulumi.OutputState }
+
+func (GetNodeHostnameConfigOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetNodeHostnameConfig)(nil)).Elem()
+}
+
+func (o GetNodeHostnameConfigOutput) ToGetNodeHostnameConfigOutput() GetNodeHostnameConfigOutput {
+	return o
+}
+
+func (o GetNodeHostnameConfigOutput) ToGetNodeHostnameConfigOutputWithContext(ctx context.Context) GetNodeHostnameConfigOutput {
+	return o
+}
+
+// The hostname type of the kubernetes node.
+func (o GetNodeHostnameConfigOutput) Type() pulumi.StringOutput {
+	return o.ApplyT(func(v GetNodeHostnameConfig) string { return v.Type }).(pulumi.StringOutput)
+}
+
+type GetNodeHostnameConfigArrayOutput struct{ *pulumi.OutputState }
+
+func (GetNodeHostnameConfigArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetNodeHostnameConfig)(nil)).Elem()
+}
+
+func (o GetNodeHostnameConfigArrayOutput) ToGetNodeHostnameConfigArrayOutput() GetNodeHostnameConfigArrayOutput {
+	return o
+}
+
+func (o GetNodeHostnameConfigArrayOutput) ToGetNodeHostnameConfigArrayOutputWithContext(ctx context.Context) GetNodeHostnameConfigArrayOutput {
+	return o
+}
+
+func (o GetNodeHostnameConfigArrayOutput) Index(i pulumi.IntInput) GetNodeHostnameConfigOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) GetNodeHostnameConfig {
+		return vs[0].([]GetNodeHostnameConfig)[vs[1].(int)]
+	}).(GetNodeHostnameConfigOutput)
+}
+
 type GetNodePoolDataVolume struct {
 	// Disk expansion parameters.
 	ExtendParams map[string]string `pulumi:"extendParams"`
@@ -4972,6 +10636,103 @@ func (o GetNodePoolDataVolumeArrayOutput) Index(i pulumi.IntInput) GetNodePoolDa
 	return pulumi.All(o, i).ApplyT(func(vs []interface{}) GetNodePoolDataVolume {
 		return vs[0].([]GetNodePoolDataVolume)[vs[1].(int)]
 	}).(GetNodePoolDataVolumeOutput)
+}
+
+type GetNodePoolHostnameConfig struct {
+	// The hostname type of the kubernetes node.
+	Type string `pulumi:"type"`
+}
+
+// GetNodePoolHostnameConfigInput is an input type that accepts GetNodePoolHostnameConfigArgs and GetNodePoolHostnameConfigOutput values.
+// You can construct a concrete instance of `GetNodePoolHostnameConfigInput` via:
+//
+//	GetNodePoolHostnameConfigArgs{...}
+type GetNodePoolHostnameConfigInput interface {
+	pulumi.Input
+
+	ToGetNodePoolHostnameConfigOutput() GetNodePoolHostnameConfigOutput
+	ToGetNodePoolHostnameConfigOutputWithContext(context.Context) GetNodePoolHostnameConfigOutput
+}
+
+type GetNodePoolHostnameConfigArgs struct {
+	// The hostname type of the kubernetes node.
+	Type pulumi.StringInput `pulumi:"type"`
+}
+
+func (GetNodePoolHostnameConfigArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetNodePoolHostnameConfig)(nil)).Elem()
+}
+
+func (i GetNodePoolHostnameConfigArgs) ToGetNodePoolHostnameConfigOutput() GetNodePoolHostnameConfigOutput {
+	return i.ToGetNodePoolHostnameConfigOutputWithContext(context.Background())
+}
+
+func (i GetNodePoolHostnameConfigArgs) ToGetNodePoolHostnameConfigOutputWithContext(ctx context.Context) GetNodePoolHostnameConfigOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetNodePoolHostnameConfigOutput)
+}
+
+// GetNodePoolHostnameConfigArrayInput is an input type that accepts GetNodePoolHostnameConfigArray and GetNodePoolHostnameConfigArrayOutput values.
+// You can construct a concrete instance of `GetNodePoolHostnameConfigArrayInput` via:
+//
+//	GetNodePoolHostnameConfigArray{ GetNodePoolHostnameConfigArgs{...} }
+type GetNodePoolHostnameConfigArrayInput interface {
+	pulumi.Input
+
+	ToGetNodePoolHostnameConfigArrayOutput() GetNodePoolHostnameConfigArrayOutput
+	ToGetNodePoolHostnameConfigArrayOutputWithContext(context.Context) GetNodePoolHostnameConfigArrayOutput
+}
+
+type GetNodePoolHostnameConfigArray []GetNodePoolHostnameConfigInput
+
+func (GetNodePoolHostnameConfigArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetNodePoolHostnameConfig)(nil)).Elem()
+}
+
+func (i GetNodePoolHostnameConfigArray) ToGetNodePoolHostnameConfigArrayOutput() GetNodePoolHostnameConfigArrayOutput {
+	return i.ToGetNodePoolHostnameConfigArrayOutputWithContext(context.Background())
+}
+
+func (i GetNodePoolHostnameConfigArray) ToGetNodePoolHostnameConfigArrayOutputWithContext(ctx context.Context) GetNodePoolHostnameConfigArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetNodePoolHostnameConfigArrayOutput)
+}
+
+type GetNodePoolHostnameConfigOutput struct{ *pulumi.OutputState }
+
+func (GetNodePoolHostnameConfigOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetNodePoolHostnameConfig)(nil)).Elem()
+}
+
+func (o GetNodePoolHostnameConfigOutput) ToGetNodePoolHostnameConfigOutput() GetNodePoolHostnameConfigOutput {
+	return o
+}
+
+func (o GetNodePoolHostnameConfigOutput) ToGetNodePoolHostnameConfigOutputWithContext(ctx context.Context) GetNodePoolHostnameConfigOutput {
+	return o
+}
+
+// The hostname type of the kubernetes node.
+func (o GetNodePoolHostnameConfigOutput) Type() pulumi.StringOutput {
+	return o.ApplyT(func(v GetNodePoolHostnameConfig) string { return v.Type }).(pulumi.StringOutput)
+}
+
+type GetNodePoolHostnameConfigArrayOutput struct{ *pulumi.OutputState }
+
+func (GetNodePoolHostnameConfigArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetNodePoolHostnameConfig)(nil)).Elem()
+}
+
+func (o GetNodePoolHostnameConfigArrayOutput) ToGetNodePoolHostnameConfigArrayOutput() GetNodePoolHostnameConfigArrayOutput {
+	return o
+}
+
+func (o GetNodePoolHostnameConfigArrayOutput) ToGetNodePoolHostnameConfigArrayOutputWithContext(ctx context.Context) GetNodePoolHostnameConfigArrayOutput {
+	return o
+}
+
+func (o GetNodePoolHostnameConfigArrayOutput) Index(i pulumi.IntInput) GetNodePoolHostnameConfigOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) GetNodePoolHostnameConfig {
+		return vs[0].([]GetNodePoolHostnameConfig)[vs[1].(int)]
+	}).(GetNodePoolHostnameConfigOutput)
 }
 
 type GetNodePoolRootVolume struct {
@@ -5213,8 +10974,13 @@ type GetNodesNode struct {
 	DataVolumes []GetNodesNodeDataVolume `pulumi:"dataVolumes"`
 	// The ID of ECS group to which the node belongs.
 	EcsGroupId string `pulumi:"ecsGroupId"`
+	// The enterprise project ID of the node.
+	EnterpriseProjectId string `pulumi:"enterpriseProjectId"`
 	// The flavor ID to be used.
 	FlavorId string `pulumi:"flavorId"`
+	// The hostname config of the kubernetes node.
+	// The object structure is documented below.
+	HostnameConfigs []GetNodesNodeHostnameConfig `pulumi:"hostnameConfigs"`
 	// The ID of the node.
 	Id string `pulumi:"id"`
 	// The key pair name when logging in to select the key pair mode.
@@ -5259,8 +11025,13 @@ type GetNodesNodeArgs struct {
 	DataVolumes GetNodesNodeDataVolumeArrayInput `pulumi:"dataVolumes"`
 	// The ID of ECS group to which the node belongs.
 	EcsGroupId pulumi.StringInput `pulumi:"ecsGroupId"`
+	// The enterprise project ID of the node.
+	EnterpriseProjectId pulumi.StringInput `pulumi:"enterpriseProjectId"`
 	// The flavor ID to be used.
 	FlavorId pulumi.StringInput `pulumi:"flavorId"`
+	// The hostname config of the kubernetes node.
+	// The object structure is documented below.
+	HostnameConfigs GetNodesNodeHostnameConfigArrayInput `pulumi:"hostnameConfigs"`
 	// The ID of the node.
 	Id pulumi.StringInput `pulumi:"id"`
 	// The key pair name when logging in to select the key pair mode.
@@ -5356,9 +11127,20 @@ func (o GetNodesNodeOutput) EcsGroupId() pulumi.StringOutput {
 	return o.ApplyT(func(v GetNodesNode) string { return v.EcsGroupId }).(pulumi.StringOutput)
 }
 
+// The enterprise project ID of the node.
+func (o GetNodesNodeOutput) EnterpriseProjectId() pulumi.StringOutput {
+	return o.ApplyT(func(v GetNodesNode) string { return v.EnterpriseProjectId }).(pulumi.StringOutput)
+}
+
 // The flavor ID to be used.
 func (o GetNodesNodeOutput) FlavorId() pulumi.StringOutput {
 	return o.ApplyT(func(v GetNodesNode) string { return v.FlavorId }).(pulumi.StringOutput)
+}
+
+// The hostname config of the kubernetes node.
+// The object structure is documented below.
+func (o GetNodesNodeOutput) HostnameConfigs() GetNodesNodeHostnameConfigArrayOutput {
+	return o.ApplyT(func(v GetNodesNode) []GetNodesNodeHostnameConfig { return v.HostnameConfigs }).(GetNodesNodeHostnameConfigArrayOutput)
 }
 
 // The ID of the node.
@@ -5551,6 +11333,103 @@ func (o GetNodesNodeDataVolumeArrayOutput) Index(i pulumi.IntInput) GetNodesNode
 	}).(GetNodesNodeDataVolumeOutput)
 }
 
+type GetNodesNodeHostnameConfig struct {
+	// The hostname type of the kubernetes node.
+	Type string `pulumi:"type"`
+}
+
+// GetNodesNodeHostnameConfigInput is an input type that accepts GetNodesNodeHostnameConfigArgs and GetNodesNodeHostnameConfigOutput values.
+// You can construct a concrete instance of `GetNodesNodeHostnameConfigInput` via:
+//
+//	GetNodesNodeHostnameConfigArgs{...}
+type GetNodesNodeHostnameConfigInput interface {
+	pulumi.Input
+
+	ToGetNodesNodeHostnameConfigOutput() GetNodesNodeHostnameConfigOutput
+	ToGetNodesNodeHostnameConfigOutputWithContext(context.Context) GetNodesNodeHostnameConfigOutput
+}
+
+type GetNodesNodeHostnameConfigArgs struct {
+	// The hostname type of the kubernetes node.
+	Type pulumi.StringInput `pulumi:"type"`
+}
+
+func (GetNodesNodeHostnameConfigArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetNodesNodeHostnameConfig)(nil)).Elem()
+}
+
+func (i GetNodesNodeHostnameConfigArgs) ToGetNodesNodeHostnameConfigOutput() GetNodesNodeHostnameConfigOutput {
+	return i.ToGetNodesNodeHostnameConfigOutputWithContext(context.Background())
+}
+
+func (i GetNodesNodeHostnameConfigArgs) ToGetNodesNodeHostnameConfigOutputWithContext(ctx context.Context) GetNodesNodeHostnameConfigOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetNodesNodeHostnameConfigOutput)
+}
+
+// GetNodesNodeHostnameConfigArrayInput is an input type that accepts GetNodesNodeHostnameConfigArray and GetNodesNodeHostnameConfigArrayOutput values.
+// You can construct a concrete instance of `GetNodesNodeHostnameConfigArrayInput` via:
+//
+//	GetNodesNodeHostnameConfigArray{ GetNodesNodeHostnameConfigArgs{...} }
+type GetNodesNodeHostnameConfigArrayInput interface {
+	pulumi.Input
+
+	ToGetNodesNodeHostnameConfigArrayOutput() GetNodesNodeHostnameConfigArrayOutput
+	ToGetNodesNodeHostnameConfigArrayOutputWithContext(context.Context) GetNodesNodeHostnameConfigArrayOutput
+}
+
+type GetNodesNodeHostnameConfigArray []GetNodesNodeHostnameConfigInput
+
+func (GetNodesNodeHostnameConfigArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetNodesNodeHostnameConfig)(nil)).Elem()
+}
+
+func (i GetNodesNodeHostnameConfigArray) ToGetNodesNodeHostnameConfigArrayOutput() GetNodesNodeHostnameConfigArrayOutput {
+	return i.ToGetNodesNodeHostnameConfigArrayOutputWithContext(context.Background())
+}
+
+func (i GetNodesNodeHostnameConfigArray) ToGetNodesNodeHostnameConfigArrayOutputWithContext(ctx context.Context) GetNodesNodeHostnameConfigArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetNodesNodeHostnameConfigArrayOutput)
+}
+
+type GetNodesNodeHostnameConfigOutput struct{ *pulumi.OutputState }
+
+func (GetNodesNodeHostnameConfigOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetNodesNodeHostnameConfig)(nil)).Elem()
+}
+
+func (o GetNodesNodeHostnameConfigOutput) ToGetNodesNodeHostnameConfigOutput() GetNodesNodeHostnameConfigOutput {
+	return o
+}
+
+func (o GetNodesNodeHostnameConfigOutput) ToGetNodesNodeHostnameConfigOutputWithContext(ctx context.Context) GetNodesNodeHostnameConfigOutput {
+	return o
+}
+
+// The hostname type of the kubernetes node.
+func (o GetNodesNodeHostnameConfigOutput) Type() pulumi.StringOutput {
+	return o.ApplyT(func(v GetNodesNodeHostnameConfig) string { return v.Type }).(pulumi.StringOutput)
+}
+
+type GetNodesNodeHostnameConfigArrayOutput struct{ *pulumi.OutputState }
+
+func (GetNodesNodeHostnameConfigArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetNodesNodeHostnameConfig)(nil)).Elem()
+}
+
+func (o GetNodesNodeHostnameConfigArrayOutput) ToGetNodesNodeHostnameConfigArrayOutput() GetNodesNodeHostnameConfigArrayOutput {
+	return o
+}
+
+func (o GetNodesNodeHostnameConfigArrayOutput) ToGetNodesNodeHostnameConfigArrayOutputWithContext(ctx context.Context) GetNodesNodeHostnameConfigArrayOutput {
+	return o
+}
+
+func (o GetNodesNodeHostnameConfigArrayOutput) Index(i pulumi.IntInput) GetNodesNodeHostnameConfigOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) GetNodesNodeHostnameConfig {
+		return vs[0].([]GetNodesNodeHostnameConfig)[vs[1].(int)]
+	}).(GetNodesNodeHostnameConfigOutput)
+}
+
 type GetNodesNodeRootVolume struct {
 	// Disk expansion parameters.
 	ExtendParams map[string]string `pulumi:"extendParams"`
@@ -5673,18 +11552,64 @@ func init() {
 	pulumi.RegisterInputType(reflect.TypeOf((*ClusterCertificateClusterArrayInput)(nil)).Elem(), ClusterCertificateClusterArray{})
 	pulumi.RegisterInputType(reflect.TypeOf((*ClusterCertificateUserInput)(nil)).Elem(), ClusterCertificateUserArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*ClusterCertificateUserArrayInput)(nil)).Elem(), ClusterCertificateUserArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*ClusterComponentConfigurationInput)(nil)).Elem(), ClusterComponentConfigurationArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*ClusterComponentConfigurationArrayInput)(nil)).Elem(), ClusterComponentConfigurationArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*ClusterExtendParamInput)(nil)).Elem(), ClusterExtendParamArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*ClusterExtendParamArrayInput)(nil)).Elem(), ClusterExtendParamArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*ClusterLogConfigLogConfigInput)(nil)).Elem(), ClusterLogConfigLogConfigArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*ClusterLogConfigLogConfigArrayInput)(nil)).Elem(), ClusterLogConfigLogConfigArray{})
 	pulumi.RegisterInputType(reflect.TypeOf((*ClusterMasterInput)(nil)).Elem(), ClusterMasterArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*ClusterMasterArrayInput)(nil)).Elem(), ClusterMasterArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*ClusterUpgradeAddonInput)(nil)).Elem(), ClusterUpgradeAddonArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*ClusterUpgradeAddonArrayInput)(nil)).Elem(), ClusterUpgradeAddonArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*ClusterUpgradeAddonValuesInput)(nil)).Elem(), ClusterUpgradeAddonValuesArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*ClusterUpgradeAddonValuesPtrInput)(nil)).Elem(), ClusterUpgradeAddonValuesArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*ClusterUpgradeStrategyInput)(nil)).Elem(), ClusterUpgradeStrategyArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*ClusterUpgradeStrategyPtrInput)(nil)).Elem(), ClusterUpgradeStrategyArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*ClusterUpgradeStrategyInPlaceRollingUpdateInput)(nil)).Elem(), ClusterUpgradeStrategyInPlaceRollingUpdateArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*ClusterUpgradeStrategyInPlaceRollingUpdatePtrInput)(nil)).Elem(), ClusterUpgradeStrategyInPlaceRollingUpdateArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*NodeAttachDataVolumeInput)(nil)).Elem(), NodeAttachDataVolumeArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*NodeAttachDataVolumeArrayInput)(nil)).Elem(), NodeAttachDataVolumeArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*NodeAttachHostnameConfigInput)(nil)).Elem(), NodeAttachHostnameConfigArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*NodeAttachHostnameConfigPtrInput)(nil)).Elem(), NodeAttachHostnameConfigArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*NodeAttachRootVolumeInput)(nil)).Elem(), NodeAttachRootVolumeArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*NodeAttachRootVolumeArrayInput)(nil)).Elem(), NodeAttachRootVolumeArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*NodeAttachStorageInput)(nil)).Elem(), NodeAttachStorageArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*NodeAttachStoragePtrInput)(nil)).Elem(), NodeAttachStorageArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*NodeAttachStorageGroupInput)(nil)).Elem(), NodeAttachStorageGroupArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*NodeAttachStorageGroupArrayInput)(nil)).Elem(), NodeAttachStorageGroupArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*NodeAttachStorageGroupVirtualSpaceInput)(nil)).Elem(), NodeAttachStorageGroupVirtualSpaceArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*NodeAttachStorageGroupVirtualSpaceArrayInput)(nil)).Elem(), NodeAttachStorageGroupVirtualSpaceArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*NodeAttachStorageSelectorInput)(nil)).Elem(), NodeAttachStorageSelectorArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*NodeAttachStorageSelectorArrayInput)(nil)).Elem(), NodeAttachStorageSelectorArray{})
 	pulumi.RegisterInputType(reflect.TypeOf((*NodeAttachTaintInput)(nil)).Elem(), NodeAttachTaintArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*NodeAttachTaintArrayInput)(nil)).Elem(), NodeAttachTaintArray{})
 	pulumi.RegisterInputType(reflect.TypeOf((*NodeDataVolumeInput)(nil)).Elem(), NodeDataVolumeArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*NodeDataVolumeArrayInput)(nil)).Elem(), NodeDataVolumeArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*NodeExtendParamsInput)(nil)).Elem(), NodeExtendParamsArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*NodeExtendParamsPtrInput)(nil)).Elem(), NodeExtendParamsArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*NodeExtensionNicInput)(nil)).Elem(), NodeExtensionNicArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*NodeExtensionNicArrayInput)(nil)).Elem(), NodeExtensionNicArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*NodeHostnameConfigInput)(nil)).Elem(), NodeHostnameConfigArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*NodeHostnameConfigPtrInput)(nil)).Elem(), NodeHostnameConfigArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*NodePoolDataVolumeInput)(nil)).Elem(), NodePoolDataVolumeArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*NodePoolDataVolumeArrayInput)(nil)).Elem(), NodePoolDataVolumeArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*NodePoolExtendParamsInput)(nil)).Elem(), NodePoolExtendParamsArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*NodePoolExtendParamsPtrInput)(nil)).Elem(), NodePoolExtendParamsArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*NodePoolExtensionScaleGroupInput)(nil)).Elem(), NodePoolExtensionScaleGroupArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*NodePoolExtensionScaleGroupArrayInput)(nil)).Elem(), NodePoolExtensionScaleGroupArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*NodePoolExtensionScaleGroupMetadataInput)(nil)).Elem(), NodePoolExtensionScaleGroupMetadataArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*NodePoolExtensionScaleGroupMetadataPtrInput)(nil)).Elem(), NodePoolExtensionScaleGroupMetadataArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*NodePoolExtensionScaleGroupSpecInput)(nil)).Elem(), NodePoolExtensionScaleGroupSpecArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*NodePoolExtensionScaleGroupSpecPtrInput)(nil)).Elem(), NodePoolExtensionScaleGroupSpecArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*NodePoolExtensionScaleGroupSpecAutoscalingInput)(nil)).Elem(), NodePoolExtensionScaleGroupSpecAutoscalingArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*NodePoolExtensionScaleGroupSpecAutoscalingPtrInput)(nil)).Elem(), NodePoolExtensionScaleGroupSpecAutoscalingArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*NodePoolExtensionScaleGroupSpecCapacityReservationSpecificationInput)(nil)).Elem(), NodePoolExtensionScaleGroupSpecCapacityReservationSpecificationArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*NodePoolExtensionScaleGroupSpecCapacityReservationSpecificationPtrInput)(nil)).Elem(), NodePoolExtensionScaleGroupSpecCapacityReservationSpecificationArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*NodePoolHostnameConfigInput)(nil)).Elem(), NodePoolHostnameConfigArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*NodePoolHostnameConfigPtrInput)(nil)).Elem(), NodePoolHostnameConfigArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*NodePoolNodesAddNodeListInput)(nil)).Elem(), NodePoolNodesAddNodeListArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*NodePoolNodesAddNodeListArrayInput)(nil)).Elem(), NodePoolNodesAddNodeListArray{})
 	pulumi.RegisterInputType(reflect.TypeOf((*NodePoolRootVolumeInput)(nil)).Elem(), NodePoolRootVolumeArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*NodePoolRootVolumePtrInput)(nil)).Elem(), NodePoolRootVolumeArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*NodePoolStorageInput)(nil)).Elem(), NodePoolStorageArgs{})
@@ -5711,10 +11636,30 @@ func init() {
 	pulumi.RegisterInputType(reflect.TypeOf((*NodeTaintArrayInput)(nil)).Elem(), NodeTaintArray{})
 	pulumi.RegisterInputType(reflect.TypeOf((*GetAddonTemplateSupportVersionInput)(nil)).Elem(), GetAddonTemplateSupportVersionArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*GetAddonTemplateSupportVersionArrayInput)(nil)).Elem(), GetAddonTemplateSupportVersionArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetAddonsItemInput)(nil)).Elem(), GetAddonsItemArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetAddonsItemArrayInput)(nil)).Elem(), GetAddonsItemArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetAddonsItemMetadataInput)(nil)).Elem(), GetAddonsItemMetadataArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetAddonsItemMetadataArrayInput)(nil)).Elem(), GetAddonsItemMetadataArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetAddonsItemSpecInput)(nil)).Elem(), GetAddonsItemSpecArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetAddonsItemSpecArrayInput)(nil)).Elem(), GetAddonsItemSpecArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetAddonsItemStatusInput)(nil)).Elem(), GetAddonsItemStatusArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetAddonsItemStatusArrayInput)(nil)).Elem(), GetAddonsItemStatusArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetAddonsItemStatusCurrentVersionInput)(nil)).Elem(), GetAddonsItemStatusCurrentVersionArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetAddonsItemStatusCurrentVersionArrayInput)(nil)).Elem(), GetAddonsItemStatusCurrentVersionArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetAddonsItemStatusCurrentVersionSupportVersionInput)(nil)).Elem(), GetAddonsItemStatusCurrentVersionSupportVersionArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetAddonsItemStatusCurrentVersionSupportVersionArrayInput)(nil)).Elem(), GetAddonsItemStatusCurrentVersionSupportVersionArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetChartsChartInput)(nil)).Elem(), GetChartsChartArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetChartsChartArrayInput)(nil)).Elem(), GetChartsChartArray{})
 	pulumi.RegisterInputType(reflect.TypeOf((*GetClusterCertificateClusterInput)(nil)).Elem(), GetClusterCertificateClusterArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*GetClusterCertificateClusterArrayInput)(nil)).Elem(), GetClusterCertificateClusterArray{})
 	pulumi.RegisterInputType(reflect.TypeOf((*GetClusterCertificateUserInput)(nil)).Elem(), GetClusterCertificateUserArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*GetClusterCertificateUserArrayInput)(nil)).Elem(), GetClusterCertificateUserArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetClusterCertificatesClusterInput)(nil)).Elem(), GetClusterCertificatesClusterArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetClusterCertificatesClusterArrayInput)(nil)).Elem(), GetClusterCertificatesClusterArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetClusterCertificatesContextInput)(nil)).Elem(), GetClusterCertificatesContextArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetClusterCertificatesContextArrayInput)(nil)).Elem(), GetClusterCertificatesContextArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetClusterCertificatesUserInput)(nil)).Elem(), GetClusterCertificatesUserArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetClusterCertificatesUserArrayInput)(nil)).Elem(), GetClusterCertificatesUserArray{})
 	pulumi.RegisterInputType(reflect.TypeOf((*GetClusterEndpointInput)(nil)).Elem(), GetClusterEndpointArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*GetClusterEndpointArrayInput)(nil)).Elem(), GetClusterEndpointArray{})
 	pulumi.RegisterInputType(reflect.TypeOf((*GetClusterMasterInput)(nil)).Elem(), GetClusterMasterArgs{})
@@ -5731,8 +11676,12 @@ func init() {
 	pulumi.RegisterInputType(reflect.TypeOf((*GetClustersClusterMasterArrayInput)(nil)).Elem(), GetClustersClusterMasterArray{})
 	pulumi.RegisterInputType(reflect.TypeOf((*GetNodeDataVolumeInput)(nil)).Elem(), GetNodeDataVolumeArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*GetNodeDataVolumeArrayInput)(nil)).Elem(), GetNodeDataVolumeArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetNodeHostnameConfigInput)(nil)).Elem(), GetNodeHostnameConfigArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetNodeHostnameConfigArrayInput)(nil)).Elem(), GetNodeHostnameConfigArray{})
 	pulumi.RegisterInputType(reflect.TypeOf((*GetNodePoolDataVolumeInput)(nil)).Elem(), GetNodePoolDataVolumeArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*GetNodePoolDataVolumeArrayInput)(nil)).Elem(), GetNodePoolDataVolumeArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetNodePoolHostnameConfigInput)(nil)).Elem(), GetNodePoolHostnameConfigArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetNodePoolHostnameConfigArrayInput)(nil)).Elem(), GetNodePoolHostnameConfigArray{})
 	pulumi.RegisterInputType(reflect.TypeOf((*GetNodePoolRootVolumeInput)(nil)).Elem(), GetNodePoolRootVolumeArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*GetNodePoolRootVolumeArrayInput)(nil)).Elem(), GetNodePoolRootVolumeArray{})
 	pulumi.RegisterInputType(reflect.TypeOf((*GetNodeRootVolumeInput)(nil)).Elem(), GetNodeRootVolumeArgs{})
@@ -5741,6 +11690,8 @@ func init() {
 	pulumi.RegisterInputType(reflect.TypeOf((*GetNodesNodeArrayInput)(nil)).Elem(), GetNodesNodeArray{})
 	pulumi.RegisterInputType(reflect.TypeOf((*GetNodesNodeDataVolumeInput)(nil)).Elem(), GetNodesNodeDataVolumeArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*GetNodesNodeDataVolumeArrayInput)(nil)).Elem(), GetNodesNodeDataVolumeArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetNodesNodeHostnameConfigInput)(nil)).Elem(), GetNodesNodeHostnameConfigArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetNodesNodeHostnameConfigArrayInput)(nil)).Elem(), GetNodesNodeHostnameConfigArray{})
 	pulumi.RegisterInputType(reflect.TypeOf((*GetNodesNodeRootVolumeInput)(nil)).Elem(), GetNodesNodeRootVolumeArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*GetNodesNodeRootVolumeArrayInput)(nil)).Elem(), GetNodesNodeRootVolumeArray{})
 	pulumi.RegisterOutputType(AddonValuesOutput{})
@@ -5749,18 +11700,64 @@ func init() {
 	pulumi.RegisterOutputType(ClusterCertificateClusterArrayOutput{})
 	pulumi.RegisterOutputType(ClusterCertificateUserOutput{})
 	pulumi.RegisterOutputType(ClusterCertificateUserArrayOutput{})
+	pulumi.RegisterOutputType(ClusterComponentConfigurationOutput{})
+	pulumi.RegisterOutputType(ClusterComponentConfigurationArrayOutput{})
+	pulumi.RegisterOutputType(ClusterExtendParamOutput{})
+	pulumi.RegisterOutputType(ClusterExtendParamArrayOutput{})
+	pulumi.RegisterOutputType(ClusterLogConfigLogConfigOutput{})
+	pulumi.RegisterOutputType(ClusterLogConfigLogConfigArrayOutput{})
 	pulumi.RegisterOutputType(ClusterMasterOutput{})
 	pulumi.RegisterOutputType(ClusterMasterArrayOutput{})
+	pulumi.RegisterOutputType(ClusterUpgradeAddonOutput{})
+	pulumi.RegisterOutputType(ClusterUpgradeAddonArrayOutput{})
+	pulumi.RegisterOutputType(ClusterUpgradeAddonValuesOutput{})
+	pulumi.RegisterOutputType(ClusterUpgradeAddonValuesPtrOutput{})
+	pulumi.RegisterOutputType(ClusterUpgradeStrategyOutput{})
+	pulumi.RegisterOutputType(ClusterUpgradeStrategyPtrOutput{})
+	pulumi.RegisterOutputType(ClusterUpgradeStrategyInPlaceRollingUpdateOutput{})
+	pulumi.RegisterOutputType(ClusterUpgradeStrategyInPlaceRollingUpdatePtrOutput{})
 	pulumi.RegisterOutputType(NodeAttachDataVolumeOutput{})
 	pulumi.RegisterOutputType(NodeAttachDataVolumeArrayOutput{})
+	pulumi.RegisterOutputType(NodeAttachHostnameConfigOutput{})
+	pulumi.RegisterOutputType(NodeAttachHostnameConfigPtrOutput{})
 	pulumi.RegisterOutputType(NodeAttachRootVolumeOutput{})
 	pulumi.RegisterOutputType(NodeAttachRootVolumeArrayOutput{})
+	pulumi.RegisterOutputType(NodeAttachStorageOutput{})
+	pulumi.RegisterOutputType(NodeAttachStoragePtrOutput{})
+	pulumi.RegisterOutputType(NodeAttachStorageGroupOutput{})
+	pulumi.RegisterOutputType(NodeAttachStorageGroupArrayOutput{})
+	pulumi.RegisterOutputType(NodeAttachStorageGroupVirtualSpaceOutput{})
+	pulumi.RegisterOutputType(NodeAttachStorageGroupVirtualSpaceArrayOutput{})
+	pulumi.RegisterOutputType(NodeAttachStorageSelectorOutput{})
+	pulumi.RegisterOutputType(NodeAttachStorageSelectorArrayOutput{})
 	pulumi.RegisterOutputType(NodeAttachTaintOutput{})
 	pulumi.RegisterOutputType(NodeAttachTaintArrayOutput{})
 	pulumi.RegisterOutputType(NodeDataVolumeOutput{})
 	pulumi.RegisterOutputType(NodeDataVolumeArrayOutput{})
+	pulumi.RegisterOutputType(NodeExtendParamsOutput{})
+	pulumi.RegisterOutputType(NodeExtendParamsPtrOutput{})
+	pulumi.RegisterOutputType(NodeExtensionNicOutput{})
+	pulumi.RegisterOutputType(NodeExtensionNicArrayOutput{})
+	pulumi.RegisterOutputType(NodeHostnameConfigOutput{})
+	pulumi.RegisterOutputType(NodeHostnameConfigPtrOutput{})
 	pulumi.RegisterOutputType(NodePoolDataVolumeOutput{})
 	pulumi.RegisterOutputType(NodePoolDataVolumeArrayOutput{})
+	pulumi.RegisterOutputType(NodePoolExtendParamsOutput{})
+	pulumi.RegisterOutputType(NodePoolExtendParamsPtrOutput{})
+	pulumi.RegisterOutputType(NodePoolExtensionScaleGroupOutput{})
+	pulumi.RegisterOutputType(NodePoolExtensionScaleGroupArrayOutput{})
+	pulumi.RegisterOutputType(NodePoolExtensionScaleGroupMetadataOutput{})
+	pulumi.RegisterOutputType(NodePoolExtensionScaleGroupMetadataPtrOutput{})
+	pulumi.RegisterOutputType(NodePoolExtensionScaleGroupSpecOutput{})
+	pulumi.RegisterOutputType(NodePoolExtensionScaleGroupSpecPtrOutput{})
+	pulumi.RegisterOutputType(NodePoolExtensionScaleGroupSpecAutoscalingOutput{})
+	pulumi.RegisterOutputType(NodePoolExtensionScaleGroupSpecAutoscalingPtrOutput{})
+	pulumi.RegisterOutputType(NodePoolExtensionScaleGroupSpecCapacityReservationSpecificationOutput{})
+	pulumi.RegisterOutputType(NodePoolExtensionScaleGroupSpecCapacityReservationSpecificationPtrOutput{})
+	pulumi.RegisterOutputType(NodePoolHostnameConfigOutput{})
+	pulumi.RegisterOutputType(NodePoolHostnameConfigPtrOutput{})
+	pulumi.RegisterOutputType(NodePoolNodesAddNodeListOutput{})
+	pulumi.RegisterOutputType(NodePoolNodesAddNodeListArrayOutput{})
 	pulumi.RegisterOutputType(NodePoolRootVolumeOutput{})
 	pulumi.RegisterOutputType(NodePoolRootVolumePtrOutput{})
 	pulumi.RegisterOutputType(NodePoolStorageOutput{})
@@ -5787,10 +11784,30 @@ func init() {
 	pulumi.RegisterOutputType(NodeTaintArrayOutput{})
 	pulumi.RegisterOutputType(GetAddonTemplateSupportVersionOutput{})
 	pulumi.RegisterOutputType(GetAddonTemplateSupportVersionArrayOutput{})
+	pulumi.RegisterOutputType(GetAddonsItemOutput{})
+	pulumi.RegisterOutputType(GetAddonsItemArrayOutput{})
+	pulumi.RegisterOutputType(GetAddonsItemMetadataOutput{})
+	pulumi.RegisterOutputType(GetAddonsItemMetadataArrayOutput{})
+	pulumi.RegisterOutputType(GetAddonsItemSpecOutput{})
+	pulumi.RegisterOutputType(GetAddonsItemSpecArrayOutput{})
+	pulumi.RegisterOutputType(GetAddonsItemStatusOutput{})
+	pulumi.RegisterOutputType(GetAddonsItemStatusArrayOutput{})
+	pulumi.RegisterOutputType(GetAddonsItemStatusCurrentVersionOutput{})
+	pulumi.RegisterOutputType(GetAddonsItemStatusCurrentVersionArrayOutput{})
+	pulumi.RegisterOutputType(GetAddonsItemStatusCurrentVersionSupportVersionOutput{})
+	pulumi.RegisterOutputType(GetAddonsItemStatusCurrentVersionSupportVersionArrayOutput{})
+	pulumi.RegisterOutputType(GetChartsChartOutput{})
+	pulumi.RegisterOutputType(GetChartsChartArrayOutput{})
 	pulumi.RegisterOutputType(GetClusterCertificateClusterOutput{})
 	pulumi.RegisterOutputType(GetClusterCertificateClusterArrayOutput{})
 	pulumi.RegisterOutputType(GetClusterCertificateUserOutput{})
 	pulumi.RegisterOutputType(GetClusterCertificateUserArrayOutput{})
+	pulumi.RegisterOutputType(GetClusterCertificatesClusterOutput{})
+	pulumi.RegisterOutputType(GetClusterCertificatesClusterArrayOutput{})
+	pulumi.RegisterOutputType(GetClusterCertificatesContextOutput{})
+	pulumi.RegisterOutputType(GetClusterCertificatesContextArrayOutput{})
+	pulumi.RegisterOutputType(GetClusterCertificatesUserOutput{})
+	pulumi.RegisterOutputType(GetClusterCertificatesUserArrayOutput{})
 	pulumi.RegisterOutputType(GetClusterEndpointOutput{})
 	pulumi.RegisterOutputType(GetClusterEndpointArrayOutput{})
 	pulumi.RegisterOutputType(GetClusterMasterOutput{})
@@ -5807,8 +11824,12 @@ func init() {
 	pulumi.RegisterOutputType(GetClustersClusterMasterArrayOutput{})
 	pulumi.RegisterOutputType(GetNodeDataVolumeOutput{})
 	pulumi.RegisterOutputType(GetNodeDataVolumeArrayOutput{})
+	pulumi.RegisterOutputType(GetNodeHostnameConfigOutput{})
+	pulumi.RegisterOutputType(GetNodeHostnameConfigArrayOutput{})
 	pulumi.RegisterOutputType(GetNodePoolDataVolumeOutput{})
 	pulumi.RegisterOutputType(GetNodePoolDataVolumeArrayOutput{})
+	pulumi.RegisterOutputType(GetNodePoolHostnameConfigOutput{})
+	pulumi.RegisterOutputType(GetNodePoolHostnameConfigArrayOutput{})
 	pulumi.RegisterOutputType(GetNodePoolRootVolumeOutput{})
 	pulumi.RegisterOutputType(GetNodePoolRootVolumeArrayOutput{})
 	pulumi.RegisterOutputType(GetNodeRootVolumeOutput{})
@@ -5817,6 +11838,8 @@ func init() {
 	pulumi.RegisterOutputType(GetNodesNodeArrayOutput{})
 	pulumi.RegisterOutputType(GetNodesNodeDataVolumeOutput{})
 	pulumi.RegisterOutputType(GetNodesNodeDataVolumeArrayOutput{})
+	pulumi.RegisterOutputType(GetNodesNodeHostnameConfigOutput{})
+	pulumi.RegisterOutputType(GetNodesNodeHostnameConfigArrayOutput{})
 	pulumi.RegisterOutputType(GetNodesNodeRootVolumeOutput{})
 	pulumi.RegisterOutputType(GetNodesNodeRootVolumeArrayOutput{})
 }

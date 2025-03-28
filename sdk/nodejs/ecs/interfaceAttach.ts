@@ -22,6 +22,22 @@ import * as utilities from "../utilities";
  *     networkId: networkId,
  * });
  * ```
+ * ### Attach a port (under the specified network) to the ECS instance and use the custom security groups
+ *
+ * ```typescript
+ * import * as pulumi from "@pulumi/pulumi";
+ * import * as pulumi from "@huaweicloudos/pulumi";
+ *
+ * const config = new pulumi.Config();
+ * const instanceId = config.requireObject("instanceId");
+ * const networkId = config.requireObject("networkId");
+ * const securityGroupIds = config.requireObject("securityGroupIds");
+ * const test = new huaweicloud.ecs.InterfaceAttach("test", {
+ *     instanceId: instanceId,
+ *     networkId: networkId,
+ *     securityGroupIds: securityGroupIds,
+ * });
+ * ```
  * ### Attach a custom port to the ECS instance
  *
  * ```typescript
@@ -91,13 +107,25 @@ export class InterfaceAttach extends pulumi.CustomResource {
     }
 
     /**
-     * An IP address to assosciate with the port.
+     * An IP address to associate with the port.
      */
     public readonly fixedIp!: pulumi.Output<string>;
+    /**
+     * The IPv6 address.
+     */
+    public /*out*/ readonly fixedIpv6!: pulumi.Output<string>;
     /**
      * The ID of the Instance to attach the Port or Network to.
      */
     public readonly instanceId!: pulumi.Output<string>;
+    /**
+     * Specifies the shared bandwidth ID to which the IPv6 NIC attaches.
+     */
+    public readonly ipv6BandwidthId!: pulumi.Output<string | undefined>;
+    /**
+     * Specifies if the NIC supporting IPv6 or not.
+     */
+    public readonly ipv6Enable!: pulumi.Output<boolean>;
     /**
      * The MAC address of the NIC.
      */
@@ -144,7 +172,10 @@ export class InterfaceAttach extends pulumi.CustomResource {
         if (opts.id) {
             const state = argsOrState as InterfaceAttachState | undefined;
             resourceInputs["fixedIp"] = state ? state.fixedIp : undefined;
+            resourceInputs["fixedIpv6"] = state ? state.fixedIpv6 : undefined;
             resourceInputs["instanceId"] = state ? state.instanceId : undefined;
+            resourceInputs["ipv6BandwidthId"] = state ? state.ipv6BandwidthId : undefined;
+            resourceInputs["ipv6Enable"] = state ? state.ipv6Enable : undefined;
             resourceInputs["mac"] = state ? state.mac : undefined;
             resourceInputs["networkId"] = state ? state.networkId : undefined;
             resourceInputs["portId"] = state ? state.portId : undefined;
@@ -158,11 +189,14 @@ export class InterfaceAttach extends pulumi.CustomResource {
             }
             resourceInputs["fixedIp"] = args ? args.fixedIp : undefined;
             resourceInputs["instanceId"] = args ? args.instanceId : undefined;
+            resourceInputs["ipv6BandwidthId"] = args ? args.ipv6BandwidthId : undefined;
+            resourceInputs["ipv6Enable"] = args ? args.ipv6Enable : undefined;
             resourceInputs["networkId"] = args ? args.networkId : undefined;
             resourceInputs["portId"] = args ? args.portId : undefined;
             resourceInputs["region"] = args ? args.region : undefined;
             resourceInputs["securityGroupIds"] = args ? args.securityGroupIds : undefined;
             resourceInputs["sourceDestCheck"] = args ? args.sourceDestCheck : undefined;
+            resourceInputs["fixedIpv6"] = undefined /*out*/;
             resourceInputs["mac"] = undefined /*out*/;
         }
         opts = pulumi.mergeOptions(utilities.resourceOptsDefaults(), opts);
@@ -175,13 +209,25 @@ export class InterfaceAttach extends pulumi.CustomResource {
  */
 export interface InterfaceAttachState {
     /**
-     * An IP address to assosciate with the port.
+     * An IP address to associate with the port.
      */
     fixedIp?: pulumi.Input<string>;
+    /**
+     * The IPv6 address.
+     */
+    fixedIpv6?: pulumi.Input<string>;
     /**
      * The ID of the Instance to attach the Port or Network to.
      */
     instanceId?: pulumi.Input<string>;
+    /**
+     * Specifies the shared bandwidth ID to which the IPv6 NIC attaches.
+     */
+    ipv6BandwidthId?: pulumi.Input<string>;
+    /**
+     * Specifies if the NIC supporting IPv6 or not.
+     */
+    ipv6Enable?: pulumi.Input<boolean>;
     /**
      * The MAC address of the NIC.
      */
@@ -220,13 +266,21 @@ export interface InterfaceAttachState {
  */
 export interface InterfaceAttachArgs {
     /**
-     * An IP address to assosciate with the port.
+     * An IP address to associate with the port.
      */
     fixedIp?: pulumi.Input<string>;
     /**
      * The ID of the Instance to attach the Port or Network to.
      */
     instanceId: pulumi.Input<string>;
+    /**
+     * Specifies the shared bandwidth ID to which the IPv6 NIC attaches.
+     */
+    ipv6BandwidthId?: pulumi.Input<string>;
+    /**
+     * Specifies if the NIC supporting IPv6 or not.
+     */
+    ipv6Enable?: pulumi.Input<boolean>;
     /**
      * The ID of the Network to attach to an Instance. A port will be created
      * automatically.

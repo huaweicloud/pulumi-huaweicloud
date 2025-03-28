@@ -22,6 +22,7 @@ class InstanceBandwidthArgs:
     def __init__(__self__, *,
                  share_type: pulumi.Input[str],
                  charge_mode: Optional[pulumi.Input[str]] = None,
+                 extend_param: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  id: Optional[pulumi.Input[str]] = None,
                  size: Optional[pulumi.Input[int]] = None):
         """
@@ -31,6 +32,8 @@ class InstanceBandwidthArgs:
                + **WHOLE**: Shared bandwidth
         :param pulumi.Input[str] charge_mode: Specifies the bandwidth billing mode. The value can be *traffic* or *bandwidth*.
                Changing this creates a new instance.
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] extend_param: Specifies the additional EIP information.
+               Changing this creates a new instance.
         :param pulumi.Input[str] id: Specifies the **shared** bandwidth id. This parameter is mandatory when
                `share_type` is set to **WHOLE**. Changing this creates a new instance.
         :param pulumi.Input[int] size: Specifies the bandwidth size. The value ranges from 1 to 300 Mbit/s.
@@ -39,6 +42,8 @@ class InstanceBandwidthArgs:
         pulumi.set(__self__, "share_type", share_type)
         if charge_mode is not None:
             pulumi.set(__self__, "charge_mode", charge_mode)
+        if extend_param is not None:
+            pulumi.set(__self__, "extend_param", extend_param)
         if id is not None:
             pulumi.set(__self__, "id", id)
         if size is not None:
@@ -73,6 +78,19 @@ class InstanceBandwidthArgs:
         pulumi.set(self, "charge_mode", value)
 
     @property
+    @pulumi.getter(name="extendParam")
+    def extend_param(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]:
+        """
+        Specifies the additional EIP information.
+        Changing this creates a new instance.
+        """
+        return pulumi.get(self, "extend_param")
+
+    @extend_param.setter
+    def extend_param(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]):
+        pulumi.set(self, "extend_param", value)
+
+    @property
     @pulumi.getter
     def id(self) -> Optional[pulumi.Input[str]]:
         """
@@ -104,24 +122,38 @@ class InstanceDataDiskArgs:
     def __init__(__self__, *,
                  size: pulumi.Input[int],
                  type: pulumi.Input[str],
+                 dss_pool_id: Optional[pulumi.Input[str]] = None,
+                 iops: Optional[pulumi.Input[int]] = None,
                  kms_key_id: Optional[pulumi.Input[str]] = None,
-                 snapshot_id: Optional[pulumi.Input[str]] = None):
+                 snapshot_id: Optional[pulumi.Input[str]] = None,
+                 throughput: Optional[pulumi.Input[int]] = None):
         """
         :param pulumi.Input[int] size: Specifies the bandwidth size. The value ranges from 1 to 300 Mbit/s.
                This parameter is mandatory when `share_type` is set to **PER**. Changing this creates a new instance.
-        :param pulumi.Input[str] type: Specifies the ECS data disk type, which must be one of available disk types,
-               contains of *SSD*, *GPSSD* and *SAS*. Changing this creates a new instance.
+        :param pulumi.Input[str] type: Specifies the ECS data disk type. Changing this creates a new instance.
+        :param pulumi.Input[str] dss_pool_id: Specifies the data disk DSS pool ID. This field is used
+               only for dedicated storage. Changing this parameter will create a new resource.
+        :param pulumi.Input[int] iops: Specifies the IOPS(Input/Output Operations Per Second) for the disk.
+               The field is valid and required when `type` is set to **GPSSD2** or **ESSD2**.
         :param pulumi.Input[str] kms_key_id: Specifies the ID of a KMS key. This is used to encrypt the disk.
                Changing this creates a new instance.
         :param pulumi.Input[str] snapshot_id: Specifies the EVS snapshot ID or ID of the original data disk contained in
                the full-ECS image. Changing this creates a new instance.
+        :param pulumi.Input[int] throughput: Specifies the throughput for the disk. The Unit is MiB/s.
+               The field is valid and required when `type` is set to **GPSSD2**.
         """
         pulumi.set(__self__, "size", size)
         pulumi.set(__self__, "type", type)
+        if dss_pool_id is not None:
+            pulumi.set(__self__, "dss_pool_id", dss_pool_id)
+        if iops is not None:
+            pulumi.set(__self__, "iops", iops)
         if kms_key_id is not None:
             pulumi.set(__self__, "kms_key_id", kms_key_id)
         if snapshot_id is not None:
             pulumi.set(__self__, "snapshot_id", snapshot_id)
+        if throughput is not None:
+            pulumi.set(__self__, "throughput", throughput)
 
     @property
     @pulumi.getter
@@ -140,14 +172,39 @@ class InstanceDataDiskArgs:
     @pulumi.getter
     def type(self) -> pulumi.Input[str]:
         """
-        Specifies the ECS data disk type, which must be one of available disk types,
-        contains of *SSD*, *GPSSD* and *SAS*. Changing this creates a new instance.
+        Specifies the ECS data disk type. Changing this creates a new instance.
         """
         return pulumi.get(self, "type")
 
     @type.setter
     def type(self, value: pulumi.Input[str]):
         pulumi.set(self, "type", value)
+
+    @property
+    @pulumi.getter(name="dssPoolId")
+    def dss_pool_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the data disk DSS pool ID. This field is used
+        only for dedicated storage. Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "dss_pool_id")
+
+    @dss_pool_id.setter
+    def dss_pool_id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "dss_pool_id", value)
+
+    @property
+    @pulumi.getter
+    def iops(self) -> Optional[pulumi.Input[int]]:
+        """
+        Specifies the IOPS(Input/Output Operations Per Second) for the disk.
+        The field is valid and required when `type` is set to **GPSSD2** or **ESSD2**.
+        """
+        return pulumi.get(self, "iops")
+
+    @iops.setter
+    def iops(self, value: Optional[pulumi.Input[int]]):
+        pulumi.set(self, "iops", value)
 
     @property
     @pulumi.getter(name="kmsKeyId")
@@ -175,6 +232,19 @@ class InstanceDataDiskArgs:
     def snapshot_id(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "snapshot_id", value)
 
+    @property
+    @pulumi.getter
+    def throughput(self) -> Optional[pulumi.Input[int]]:
+        """
+        Specifies the throughput for the disk. The Unit is MiB/s.
+        The field is valid and required when `type` is set to **GPSSD2**.
+        """
+        return pulumi.get(self, "throughput")
+
+    @throughput.setter
+    def throughput(self, value: Optional[pulumi.Input[int]]):
+        pulumi.set(self, "throughput", value)
+
 
 @pulumi.input_type
 class InstanceNetworkArgs:
@@ -191,7 +261,6 @@ class InstanceNetworkArgs:
         :param pulumi.Input[bool] access_network: Specifies if this network should be used for provisioning access.
                Accepts true or false. Defaults to false.
         :param pulumi.Input[str] fixed_ip_v4: Specifies a fixed IPv4 address to be used on this network.
-               Changing this creates a new instance.
         :param pulumi.Input[str] fixed_ip_v6: The Fixed IPv6 address of the instance on that network.
         :param pulumi.Input[bool] ipv6_enable: Specifies whether the IPv6 function is enabled for the nic.
                Defaults to false. Changing this creates a new instance.
@@ -201,7 +270,6 @@ class InstanceNetworkArgs:
                for it. This function is enabled by default but should be disabled if the ECS functions as a SNAT server or has a
                virtual IP address bound to it.
         :param pulumi.Input[str] uuid: Specifies the network UUID to attach to the instance.
-               Changing this creates a new instance.
         """
         if access_network is not None:
             pulumi.set(__self__, "access_network", access_network)
@@ -238,7 +306,6 @@ class InstanceNetworkArgs:
     def fixed_ip_v4(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies a fixed IPv4 address to be used on this network.
-        Changing this creates a new instance.
         """
         return pulumi.get(self, "fixed_ip_v4")
 
@@ -314,7 +381,6 @@ class InstanceNetworkArgs:
     def uuid(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the network UUID to attach to the instance.
-        Changing this creates a new instance.
         """
         return pulumi.get(self, "uuid")
 
@@ -414,8 +480,7 @@ class InstanceVolumeAttachedArgs:
         :param pulumi.Input[str] pci_address: The volume pci address on that attachment.
         :param pulumi.Input[int] size: Specifies the bandwidth size. The value ranges from 1 to 300 Mbit/s.
                This parameter is mandatory when `share_type` is set to **PER**. Changing this creates a new instance.
-        :param pulumi.Input[str] type: Specifies the ECS data disk type, which must be one of available disk types,
-               contains of *SSD*, *GPSSD* and *SAS*. Changing this creates a new instance.
+        :param pulumi.Input[str] type: Specifies the ECS data disk type. Changing this creates a new instance.
         :param pulumi.Input[str] volume_id: The volume ID on that attachment.
         """
         if boot_index is not None:
@@ -485,8 +550,7 @@ class InstanceVolumeAttachedArgs:
     @pulumi.getter
     def type(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the ECS data disk type, which must be one of available disk types,
-        contains of *SSD*, *GPSSD* and *SAS*. Changing this creates a new instance.
+        Specifies the ECS data disk type. Changing this creates a new instance.
         """
         return pulumi.get(self, "type")
 

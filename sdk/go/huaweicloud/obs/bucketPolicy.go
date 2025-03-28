@@ -13,6 +13,8 @@ import (
 
 // Attaches a policy to an OBS bucket resource.
 //
+// > **NOTE:** When creating or updating the OBS bucket policy, the original policy will be overwritten.
+//
 // ## Example Usage
 // ### Policy with OBS format
 //
@@ -117,7 +119,7 @@ import (
 //
 // ## Import
 //
-// OBS format bucket policy can be imported using the `<bucket>`, e.g.
+// OBS format bucket policy can be imported using the `<bucket>`, e.g. bash
 //
 // ```sh
 //
@@ -125,7 +127,7 @@ import (
 //
 // ```
 //
-//	S3 foramt bucket policy can be imported using the `<bucket>` and "s3" by a slash, e.g.
+//	S3 format bucket policy can be imported using the `<bucket>` and "s3" by a slash, e.g. bash
 //
 // ```sh
 //

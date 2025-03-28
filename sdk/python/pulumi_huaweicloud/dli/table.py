@@ -606,7 +606,7 @@ class Table(pulumi.CustomResource):
 
         DLI table can be imported by `id`. It is composed of the name of database which table belongs and the name of table,
 
-        separated by a slash. For example,
+        separated by a slash. For example, bash
 
         ```sh
          $ pulumi import huaweicloud:Dli/table:Table example <database_name>/<table_name>
@@ -689,7 +689,7 @@ class Table(pulumi.CustomResource):
 
         DLI table can be imported by `id`. It is composed of the name of database which table belongs and the name of table,
 
-        separated by a slash. For example,
+        separated by a slash. For example, bash
 
         ```sh
          $ pulumi import huaweicloud:Dli/table:Table example <database_name>/<table_name>

@@ -14,11 +14,15 @@ import (
 type Database struct {
 	pulumi.CustomResourceState
 
-	CharacterSet pulumi.StringOutput    `pulumi:"characterSet"`
-	Description  pulumi.StringPtrOutput `pulumi:"description"`
-	InstanceId   pulumi.StringOutput    `pulumi:"instanceId"`
-	Name         pulumi.StringOutput    `pulumi:"name"`
-	Region       pulumi.StringOutput    `pulumi:"region"`
+	// Specifies the character set used by the database.
+	CharacterSet pulumi.StringOutput `pulumi:"characterSet"`
+	// Specifies the database description.
+	Description pulumi.StringPtrOutput `pulumi:"description"`
+	// Specifies the ID of the RDS Mysql instance.
+	InstanceId pulumi.StringOutput `pulumi:"instanceId"`
+	// Specifies the database name.
+	Name   pulumi.StringOutput `pulumi:"name"`
+	Region pulumi.StringOutput `pulumi:"region"`
 }
 
 // NewDatabase registers a new resource with the given unique name, arguments, and options.
@@ -57,19 +61,27 @@ func GetDatabase(ctx *pulumi.Context,
 
 // Input properties used for looking up and filtering Database resources.
 type databaseState struct {
+	// Specifies the character set used by the database.
 	CharacterSet *string `pulumi:"characterSet"`
-	Description  *string `pulumi:"description"`
-	InstanceId   *string `pulumi:"instanceId"`
-	Name         *string `pulumi:"name"`
-	Region       *string `pulumi:"region"`
+	// Specifies the database description.
+	Description *string `pulumi:"description"`
+	// Specifies the ID of the RDS Mysql instance.
+	InstanceId *string `pulumi:"instanceId"`
+	// Specifies the database name.
+	Name   *string `pulumi:"name"`
+	Region *string `pulumi:"region"`
 }
 
 type DatabaseState struct {
+	// Specifies the character set used by the database.
 	CharacterSet pulumi.StringPtrInput
-	Description  pulumi.StringPtrInput
-	InstanceId   pulumi.StringPtrInput
-	Name         pulumi.StringPtrInput
-	Region       pulumi.StringPtrInput
+	// Specifies the database description.
+	Description pulumi.StringPtrInput
+	// Specifies the ID of the RDS Mysql instance.
+	InstanceId pulumi.StringPtrInput
+	// Specifies the database name.
+	Name   pulumi.StringPtrInput
+	Region pulumi.StringPtrInput
 }
 
 func (DatabaseState) ElementType() reflect.Type {
@@ -77,20 +89,28 @@ func (DatabaseState) ElementType() reflect.Type {
 }
 
 type databaseArgs struct {
-	CharacterSet string  `pulumi:"characterSet"`
-	Description  *string `pulumi:"description"`
-	InstanceId   string  `pulumi:"instanceId"`
-	Name         *string `pulumi:"name"`
-	Region       *string `pulumi:"region"`
+	// Specifies the character set used by the database.
+	CharacterSet string `pulumi:"characterSet"`
+	// Specifies the database description.
+	Description *string `pulumi:"description"`
+	// Specifies the ID of the RDS Mysql instance.
+	InstanceId string `pulumi:"instanceId"`
+	// Specifies the database name.
+	Name   *string `pulumi:"name"`
+	Region *string `pulumi:"region"`
 }
 
 // The set of arguments for constructing a Database resource.
 type DatabaseArgs struct {
+	// Specifies the character set used by the database.
 	CharacterSet pulumi.StringInput
-	Description  pulumi.StringPtrInput
-	InstanceId   pulumi.StringInput
-	Name         pulumi.StringPtrInput
-	Region       pulumi.StringPtrInput
+	// Specifies the database description.
+	Description pulumi.StringPtrInput
+	// Specifies the ID of the RDS Mysql instance.
+	InstanceId pulumi.StringInput
+	// Specifies the database name.
+	Name   pulumi.StringPtrInput
+	Region pulumi.StringPtrInput
 }
 
 func (DatabaseArgs) ElementType() reflect.Type {
@@ -180,18 +200,22 @@ func (o DatabaseOutput) ToDatabaseOutputWithContext(ctx context.Context) Databas
 	return o
 }
 
+// Specifies the character set used by the database.
 func (o DatabaseOutput) CharacterSet() pulumi.StringOutput {
 	return o.ApplyT(func(v *Database) pulumi.StringOutput { return v.CharacterSet }).(pulumi.StringOutput)
 }
 
+// Specifies the database description.
 func (o DatabaseOutput) Description() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Database) pulumi.StringPtrOutput { return v.Description }).(pulumi.StringPtrOutput)
 }
 
+// Specifies the ID of the RDS Mysql instance.
 func (o DatabaseOutput) InstanceId() pulumi.StringOutput {
 	return o.ApplyT(func(v *Database) pulumi.StringOutput { return v.InstanceId }).(pulumi.StringOutput)
 }
 
+// Specifies the database name.
 func (o DatabaseOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v *Database) pulumi.StringOutput { return v.Name }).(pulumi.StringOutput)
 }

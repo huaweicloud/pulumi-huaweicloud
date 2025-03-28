@@ -13,6 +13,13 @@ import (
 
 // Manages an IoTDA data forwarding rule within HuaweiCloud.
 //
+// > When accessing an IoTDA **standard** or **enterprise** edition instance, you need to specify the IoTDA service
+// endpoint in `provider` block.
+// You can login to the IoTDA console, choose the instance **Overview** and click **Access Details**
+// to view the HTTPS application access address. An example of the access address might be
+// **9bc34xxxxx.st1.iotda-app.ap-southeast-1.myhuaweicloud.com**, then you need to configure the
+// `provider` block as follows:
+//
 // ## Example Usage
 //
 // ```go
@@ -71,7 +78,7 @@ import (
 //
 // ## Import
 //
-// Data forwarding rules can be imported using the `id`, e.g.
+// Data forwarding rules can be imported using the `id`, e.g. bash
 //
 // ```sh
 //
@@ -79,7 +86,7 @@ import (
 //
 // ```
 //
-//	Note that the imported state may not be identical to your resource definition, due to some attrubutes missing from the API response, security or some other reason. The missing attributes include`password` of `kafka_forwarding`. It is generally recommended running `terraform plan` after importing the resource. You can then decide if changes should be applied to the resource, or the resource definition should be updated to align with the group. Also you can ignore changes as below. resource "huaweicloud_iotda_device_group" "test" {
+//	Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`password` of `kafka_forwarding`. It is generally recommended running `terraform plan` after importing the resource. You can then decide if changes should be applied to the resource, or the resource definition should be updated to align with the group. Also you can ignore changes as below. hcl resource "huaweicloud_iotda_device_group" "test" {
 //
 //	...
 //
@@ -96,18 +103,18 @@ type DataforwardingRule struct {
 	pulumi.CustomResourceState
 
 	// Specifies the description of data forwarding rule. The description contains
-	// a maximum of 256 characters.
+	// a maximum of `256` characters.
 	Description pulumi.StringPtrOutput `pulumi:"description"`
-	// Specifies whether to enable the data forwarding rule. Defaults to `false`.
+	// Specifies whether to enable the data forwarding rule. Defaults to **false**.
 	// Can not enable without `targets`.
 	Enabled pulumi.BoolPtrOutput `pulumi:"enabled"`
-	// Specifies the name of data forwarding rule. The name contains a maximum of 256 characters.
+	// Specifies the name of data forwarding rule. The name contains a maximum of `256` characters.
 	// Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special characters are
 	// allowed: `?'#().,&%@!`.
 	Name pulumi.StringOutput `pulumi:"name"`
 	// Specifies the region to which the KAFKA belongs.
 	Region pulumi.StringOutput `pulumi:"region"`
-	// Specifies the SQL SELECT statement which contains a maximum of 500 characters.
+	// Specifies the SQL SELECT statement which contains a maximum of `500` characters.
 	Select pulumi.StringPtrOutput `pulumi:"select"`
 	// Specifies the resource space ID which uses the data forwarding rule.
 	// If omitted, all resource space will use the data forwarding rule. Changing this parameter will create a new resource.
@@ -129,7 +136,7 @@ type DataforwardingRule struct {
 	// + **product:update**: Product updated.
 	// + **device.command.status:update**: Update of the device asynchronous command status.
 	Trigger pulumi.StringOutput `pulumi:"trigger"`
-	// Specifies the SQL WHERE statement which contains a maximum of 500 characters.
+	// Specifies the SQL WHERE statement which contains a maximum of `500` characters.
 	Where pulumi.StringPtrOutput `pulumi:"where"`
 }
 
@@ -167,18 +174,18 @@ func GetDataforwardingRule(ctx *pulumi.Context,
 // Input properties used for looking up and filtering DataforwardingRule resources.
 type dataforwardingRuleState struct {
 	// Specifies the description of data forwarding rule. The description contains
-	// a maximum of 256 characters.
+	// a maximum of `256` characters.
 	Description *string `pulumi:"description"`
-	// Specifies whether to enable the data forwarding rule. Defaults to `false`.
+	// Specifies whether to enable the data forwarding rule. Defaults to **false**.
 	// Can not enable without `targets`.
 	Enabled *bool `pulumi:"enabled"`
-	// Specifies the name of data forwarding rule. The name contains a maximum of 256 characters.
+	// Specifies the name of data forwarding rule. The name contains a maximum of `256` characters.
 	// Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special characters are
 	// allowed: `?'#().,&%@!`.
 	Name *string `pulumi:"name"`
 	// Specifies the region to which the KAFKA belongs.
 	Region *string `pulumi:"region"`
-	// Specifies the SQL SELECT statement which contains a maximum of 500 characters.
+	// Specifies the SQL SELECT statement which contains a maximum of `500` characters.
 	Select *string `pulumi:"select"`
 	// Specifies the resource space ID which uses the data forwarding rule.
 	// If omitted, all resource space will use the data forwarding rule. Changing this parameter will create a new resource.
@@ -200,24 +207,24 @@ type dataforwardingRuleState struct {
 	// + **product:update**: Product updated.
 	// + **device.command.status:update**: Update of the device asynchronous command status.
 	Trigger *string `pulumi:"trigger"`
-	// Specifies the SQL WHERE statement which contains a maximum of 500 characters.
+	// Specifies the SQL WHERE statement which contains a maximum of `500` characters.
 	Where *string `pulumi:"where"`
 }
 
 type DataforwardingRuleState struct {
 	// Specifies the description of data forwarding rule. The description contains
-	// a maximum of 256 characters.
+	// a maximum of `256` characters.
 	Description pulumi.StringPtrInput
-	// Specifies whether to enable the data forwarding rule. Defaults to `false`.
+	// Specifies whether to enable the data forwarding rule. Defaults to **false**.
 	// Can not enable without `targets`.
 	Enabled pulumi.BoolPtrInput
-	// Specifies the name of data forwarding rule. The name contains a maximum of 256 characters.
+	// Specifies the name of data forwarding rule. The name contains a maximum of `256` characters.
 	// Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special characters are
 	// allowed: `?'#().,&%@!`.
 	Name pulumi.StringPtrInput
 	// Specifies the region to which the KAFKA belongs.
 	Region pulumi.StringPtrInput
-	// Specifies the SQL SELECT statement which contains a maximum of 500 characters.
+	// Specifies the SQL SELECT statement which contains a maximum of `500` characters.
 	Select pulumi.StringPtrInput
 	// Specifies the resource space ID which uses the data forwarding rule.
 	// If omitted, all resource space will use the data forwarding rule. Changing this parameter will create a new resource.
@@ -239,7 +246,7 @@ type DataforwardingRuleState struct {
 	// + **product:update**: Product updated.
 	// + **device.command.status:update**: Update of the device asynchronous command status.
 	Trigger pulumi.StringPtrInput
-	// Specifies the SQL WHERE statement which contains a maximum of 500 characters.
+	// Specifies the SQL WHERE statement which contains a maximum of `500` characters.
 	Where pulumi.StringPtrInput
 }
 
@@ -249,18 +256,18 @@ func (DataforwardingRuleState) ElementType() reflect.Type {
 
 type dataforwardingRuleArgs struct {
 	// Specifies the description of data forwarding rule. The description contains
-	// a maximum of 256 characters.
+	// a maximum of `256` characters.
 	Description *string `pulumi:"description"`
-	// Specifies whether to enable the data forwarding rule. Defaults to `false`.
+	// Specifies whether to enable the data forwarding rule. Defaults to **false**.
 	// Can not enable without `targets`.
 	Enabled *bool `pulumi:"enabled"`
-	// Specifies the name of data forwarding rule. The name contains a maximum of 256 characters.
+	// Specifies the name of data forwarding rule. The name contains a maximum of `256` characters.
 	// Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special characters are
 	// allowed: `?'#().,&%@!`.
 	Name *string `pulumi:"name"`
 	// Specifies the region to which the KAFKA belongs.
 	Region *string `pulumi:"region"`
-	// Specifies the SQL SELECT statement which contains a maximum of 500 characters.
+	// Specifies the SQL SELECT statement which contains a maximum of `500` characters.
 	Select *string `pulumi:"select"`
 	// Specifies the resource space ID which uses the data forwarding rule.
 	// If omitted, all resource space will use the data forwarding rule. Changing this parameter will create a new resource.
@@ -282,25 +289,25 @@ type dataforwardingRuleArgs struct {
 	// + **product:update**: Product updated.
 	// + **device.command.status:update**: Update of the device asynchronous command status.
 	Trigger string `pulumi:"trigger"`
-	// Specifies the SQL WHERE statement which contains a maximum of 500 characters.
+	// Specifies the SQL WHERE statement which contains a maximum of `500` characters.
 	Where *string `pulumi:"where"`
 }
 
 // The set of arguments for constructing a DataforwardingRule resource.
 type DataforwardingRuleArgs struct {
 	// Specifies the description of data forwarding rule. The description contains
-	// a maximum of 256 characters.
+	// a maximum of `256` characters.
 	Description pulumi.StringPtrInput
-	// Specifies whether to enable the data forwarding rule. Defaults to `false`.
+	// Specifies whether to enable the data forwarding rule. Defaults to **false**.
 	// Can not enable without `targets`.
 	Enabled pulumi.BoolPtrInput
-	// Specifies the name of data forwarding rule. The name contains a maximum of 256 characters.
+	// Specifies the name of data forwarding rule. The name contains a maximum of `256` characters.
 	// Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special characters are
 	// allowed: `?'#().,&%@!`.
 	Name pulumi.StringPtrInput
 	// Specifies the region to which the KAFKA belongs.
 	Region pulumi.StringPtrInput
-	// Specifies the SQL SELECT statement which contains a maximum of 500 characters.
+	// Specifies the SQL SELECT statement which contains a maximum of `500` characters.
 	Select pulumi.StringPtrInput
 	// Specifies the resource space ID which uses the data forwarding rule.
 	// If omitted, all resource space will use the data forwarding rule. Changing this parameter will create a new resource.
@@ -322,7 +329,7 @@ type DataforwardingRuleArgs struct {
 	// + **product:update**: Product updated.
 	// + **device.command.status:update**: Update of the device asynchronous command status.
 	Trigger pulumi.StringInput
-	// Specifies the SQL WHERE statement which contains a maximum of 500 characters.
+	// Specifies the SQL WHERE statement which contains a maximum of `500` characters.
 	Where pulumi.StringPtrInput
 }
 
@@ -414,18 +421,18 @@ func (o DataforwardingRuleOutput) ToDataforwardingRuleOutputWithContext(ctx cont
 }
 
 // Specifies the description of data forwarding rule. The description contains
-// a maximum of 256 characters.
+// a maximum of `256` characters.
 func (o DataforwardingRuleOutput) Description() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *DataforwardingRule) pulumi.StringPtrOutput { return v.Description }).(pulumi.StringPtrOutput)
 }
 
-// Specifies whether to enable the data forwarding rule. Defaults to `false`.
+// Specifies whether to enable the data forwarding rule. Defaults to **false**.
 // Can not enable without `targets`.
 func (o DataforwardingRuleOutput) Enabled() pulumi.BoolPtrOutput {
 	return o.ApplyT(func(v *DataforwardingRule) pulumi.BoolPtrOutput { return v.Enabled }).(pulumi.BoolPtrOutput)
 }
 
-// Specifies the name of data forwarding rule. The name contains a maximum of 256 characters.
+// Specifies the name of data forwarding rule. The name contains a maximum of `256` characters.
 // Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special characters are
 // allowed: `?'#().,&%@!`.
 func (o DataforwardingRuleOutput) Name() pulumi.StringOutput {
@@ -437,7 +444,7 @@ func (o DataforwardingRuleOutput) Region() pulumi.StringOutput {
 	return o.ApplyT(func(v *DataforwardingRule) pulumi.StringOutput { return v.Region }).(pulumi.StringOutput)
 }
 
-// Specifies the SQL SELECT statement which contains a maximum of 500 characters.
+// Specifies the SQL SELECT statement which contains a maximum of `500` characters.
 func (o DataforwardingRuleOutput) Select() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *DataforwardingRule) pulumi.StringPtrOutput { return v.Select }).(pulumi.StringPtrOutput)
 }
@@ -471,7 +478,7 @@ func (o DataforwardingRuleOutput) Trigger() pulumi.StringOutput {
 	return o.ApplyT(func(v *DataforwardingRule) pulumi.StringOutput { return v.Trigger }).(pulumi.StringOutput)
 }
 
-// Specifies the SQL WHERE statement which contains a maximum of 500 characters.
+// Specifies the SQL WHERE statement which contains a maximum of `500` characters.
 func (o DataforwardingRuleOutput) Where() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *DataforwardingRule) pulumi.StringPtrOutput { return v.Where }).(pulumi.StringPtrOutput)
 }

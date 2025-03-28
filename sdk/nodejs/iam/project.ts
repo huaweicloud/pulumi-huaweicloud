@@ -5,9 +5,9 @@ import * as pulumi from "@pulumi/pulumi";
 import * as utilities from "../utilities";
 
 /**
- * Manages a Project resource within HuaweiCloud Identity And Access Management service.
+ * Manages an IAM project resource within HuaweiCloud.
  *
- * > You *must* have security admin privileges in your HuaweiCloud cloud to use this resource.
+ * > **NOTE:** You *must* have admin privileges to use this resource.
  *
  * !>  Deleting projects is not supported. The project is only removed from the state, but it remains in the cloud.
  *
@@ -24,7 +24,7 @@ import * as utilities from "../utilities";
  *
  * ## Import
  *
- * Projects can be imported using the `id`, e.g.
+ * IAM projects can be imported using the `id`, e.g. bash
  *
  * ```sh
  *  $ pulumi import huaweicloud:Iam/project:Project project_1 89c60255-9bd6-460c-822a-e2b959ede9d2
@@ -63,7 +63,7 @@ export class Project extends pulumi.CustomResource {
      */
     public readonly description!: pulumi.Output<string | undefined>;
     /**
-     * Enabling status of this project.
+     * Whether the IAM project is enabled.
      */
     public /*out*/ readonly enabled!: pulumi.Output<boolean>;
     /**
@@ -72,9 +72,14 @@ export class Project extends pulumi.CustomResource {
      */
     public readonly name!: pulumi.Output<string>;
     /**
-     * The parent of this project.
+     * The parent of the IAM project.
      */
     public /*out*/ readonly parentId!: pulumi.Output<string>;
+    /**
+     * Specifies the status of the project.
+     * Valid values are **normal** and **suspended**, default is **normal**.
+     */
+    public readonly status!: pulumi.Output<string>;
 
     /**
      * Create a Project resource with the given unique name, arguments, and options.
@@ -93,10 +98,12 @@ export class Project extends pulumi.CustomResource {
             resourceInputs["enabled"] = state ? state.enabled : undefined;
             resourceInputs["name"] = state ? state.name : undefined;
             resourceInputs["parentId"] = state ? state.parentId : undefined;
+            resourceInputs["status"] = state ? state.status : undefined;
         } else {
             const args = argsOrState as ProjectArgs | undefined;
             resourceInputs["description"] = args ? args.description : undefined;
             resourceInputs["name"] = args ? args.name : undefined;
+            resourceInputs["status"] = args ? args.status : undefined;
             resourceInputs["enabled"] = undefined /*out*/;
             resourceInputs["parentId"] = undefined /*out*/;
         }
@@ -114,7 +121,7 @@ export interface ProjectState {
      */
     description?: pulumi.Input<string>;
     /**
-     * Enabling status of this project.
+     * Whether the IAM project is enabled.
      */
     enabled?: pulumi.Input<boolean>;
     /**
@@ -123,9 +130,14 @@ export interface ProjectState {
      */
     name?: pulumi.Input<string>;
     /**
-     * The parent of this project.
+     * The parent of the IAM project.
      */
     parentId?: pulumi.Input<string>;
+    /**
+     * Specifies the status of the project.
+     * Valid values are **normal** and **suspended**, default is **normal**.
+     */
+    status?: pulumi.Input<string>;
 }
 
 /**
@@ -141,4 +153,9 @@ export interface ProjectArgs {
      * than or equal to 64 characters. Example: cn-north-1_project1.
      */
     name?: pulumi.Input<string>;
+    /**
+     * Specifies the status of the project.
+     * Valid values are **normal** and **suspended**, default is **normal**.
+     */
+    status?: pulumi.Input<string>;
 }

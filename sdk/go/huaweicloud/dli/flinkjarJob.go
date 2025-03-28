@@ -67,7 +67,7 @@ import (
 //
 // ## Import
 //
-// The job can be imported by `id`. For example,
+// The job can be imported by `id`. For example, bash
 //
 // ```sh
 //
@@ -88,7 +88,7 @@ type FlinkjarJob struct {
 	// Specifies other dependency jars. It is the name of the package that
 	// has been uploaded to the DLI.
 	DependencyJars pulumi.StringArrayOutput `pulumi:"dependencyJars"`
-	// Specifies job description. Length range: 1 to 512 characters.
+	// Specifies job description. Length range: `1` to `512` characters.
 	Description pulumi.StringPtrOutput `pulumi:"description"`
 	// Specifies the JAR file where the job main class is located. It is the name of the
 	// package that has been uploaded to the DLI.
@@ -118,7 +118,7 @@ type FlinkjarJob struct {
 	// Specifies number of CUs in the JobManager selected for a job.
 	// The default value is `1`.
 	ManagerCuNum pulumi.IntPtrOutput `pulumi:"managerCuNum"`
-	// Specifies the name of the job. Length range: 1 to 57 characters.
+	// Specifies the name of the job. Length range: `1` to `57` characters.
 	// Which may consist of letters, digits, underscores (_) and hyphens (-).
 	Name pulumi.StringOutput `pulumi:"name"`
 	// Specifies OBS path. OBS path where users are authorized to save the log.
@@ -149,7 +149,6 @@ type FlinkjarJob struct {
 	// The Job status.
 	Status pulumi.StringOutput `pulumi:"status"`
 	// Specifies the key/value pairs to associate with the resource.
-	// Changing this parameter will create a new resource.
 	Tags pulumi.StringMapOutput `pulumi:"tags"`
 	// Specifies number of CUs for each TaskManager. The default value is `1`.
 	TmCuNum pulumi.IntPtrOutput `pulumi:"tmCuNum"`
@@ -199,7 +198,7 @@ type flinkjarJobState struct {
 	// Specifies other dependency jars. It is the name of the package that
 	// has been uploaded to the DLI.
 	DependencyJars []string `pulumi:"dependencyJars"`
-	// Specifies job description. Length range: 1 to 512 characters.
+	// Specifies job description. Length range: `1` to `512` characters.
 	Description *string `pulumi:"description"`
 	// Specifies the JAR file where the job main class is located. It is the name of the
 	// package that has been uploaded to the DLI.
@@ -229,7 +228,7 @@ type flinkjarJobState struct {
 	// Specifies number of CUs in the JobManager selected for a job.
 	// The default value is `1`.
 	ManagerCuNum *int `pulumi:"managerCuNum"`
-	// Specifies the name of the job. Length range: 1 to 57 characters.
+	// Specifies the name of the job. Length range: `1` to `57` characters.
 	// Which may consist of letters, digits, underscores (_) and hyphens (-).
 	Name *string `pulumi:"name"`
 	// Specifies OBS path. OBS path where users are authorized to save the log.
@@ -260,7 +259,6 @@ type flinkjarJobState struct {
 	// The Job status.
 	Status *string `pulumi:"status"`
 	// Specifies the key/value pairs to associate with the resource.
-	// Changing this parameter will create a new resource.
 	Tags map[string]string `pulumi:"tags"`
 	// Specifies number of CUs for each TaskManager. The default value is `1`.
 	TmCuNum *int `pulumi:"tmCuNum"`
@@ -281,7 +279,7 @@ type FlinkjarJobState struct {
 	// Specifies other dependency jars. It is the name of the package that
 	// has been uploaded to the DLI.
 	DependencyJars pulumi.StringArrayInput
-	// Specifies job description. Length range: 1 to 512 characters.
+	// Specifies job description. Length range: `1` to `512` characters.
 	Description pulumi.StringPtrInput
 	// Specifies the JAR file where the job main class is located. It is the name of the
 	// package that has been uploaded to the DLI.
@@ -311,7 +309,7 @@ type FlinkjarJobState struct {
 	// Specifies number of CUs in the JobManager selected for a job.
 	// The default value is `1`.
 	ManagerCuNum pulumi.IntPtrInput
-	// Specifies the name of the job. Length range: 1 to 57 characters.
+	// Specifies the name of the job. Length range: `1` to `57` characters.
 	// Which may consist of letters, digits, underscores (_) and hyphens (-).
 	Name pulumi.StringPtrInput
 	// Specifies OBS path. OBS path where users are authorized to save the log.
@@ -342,7 +340,6 @@ type FlinkjarJobState struct {
 	// The Job status.
 	Status pulumi.StringPtrInput
 	// Specifies the key/value pairs to associate with the resource.
-	// Changing this parameter will create a new resource.
 	Tags pulumi.StringMapInput
 	// Specifies number of CUs for each TaskManager. The default value is `1`.
 	TmCuNum pulumi.IntPtrInput
@@ -367,7 +364,7 @@ type flinkjarJobArgs struct {
 	// Specifies other dependency jars. It is the name of the package that
 	// has been uploaded to the DLI.
 	DependencyJars []string `pulumi:"dependencyJars"`
-	// Specifies job description. Length range: 1 to 512 characters.
+	// Specifies job description. Length range: `1` to `512` characters.
 	Description *string `pulumi:"description"`
 	// Specifies the JAR file where the job main class is located. It is the name of the
 	// package that has been uploaded to the DLI.
@@ -397,7 +394,7 @@ type flinkjarJobArgs struct {
 	// Specifies number of CUs in the JobManager selected for a job.
 	// The default value is `1`.
 	ManagerCuNum *int `pulumi:"managerCuNum"`
-	// Specifies the name of the job. Length range: 1 to 57 characters.
+	// Specifies the name of the job. Length range: `1` to `57` characters.
 	// Which may consist of letters, digits, underscores (_) and hyphens (-).
 	Name *string `pulumi:"name"`
 	// Specifies OBS path. OBS path where users are authorized to save the log.
@@ -426,7 +423,6 @@ type flinkjarJobArgs struct {
 	// subscribed to the SMN topic.
 	SmnTopic *string `pulumi:"smnTopic"`
 	// Specifies the key/value pairs to associate with the resource.
-	// Changing this parameter will create a new resource.
 	Tags map[string]string `pulumi:"tags"`
 	// Specifies number of CUs for each TaskManager. The default value is `1`.
 	TmCuNum *int `pulumi:"tmCuNum"`
@@ -448,7 +444,7 @@ type FlinkjarJobArgs struct {
 	// Specifies other dependency jars. It is the name of the package that
 	// has been uploaded to the DLI.
 	DependencyJars pulumi.StringArrayInput
-	// Specifies job description. Length range: 1 to 512 characters.
+	// Specifies job description. Length range: `1` to `512` characters.
 	Description pulumi.StringPtrInput
 	// Specifies the JAR file where the job main class is located. It is the name of the
 	// package that has been uploaded to the DLI.
@@ -478,7 +474,7 @@ type FlinkjarJobArgs struct {
 	// Specifies number of CUs in the JobManager selected for a job.
 	// The default value is `1`.
 	ManagerCuNum pulumi.IntPtrInput
-	// Specifies the name of the job. Length range: 1 to 57 characters.
+	// Specifies the name of the job. Length range: `1` to `57` characters.
 	// Which may consist of letters, digits, underscores (_) and hyphens (-).
 	Name pulumi.StringPtrInput
 	// Specifies OBS path. OBS path where users are authorized to save the log.
@@ -507,7 +503,6 @@ type FlinkjarJobArgs struct {
 	// subscribed to the SMN topic.
 	SmnTopic pulumi.StringPtrInput
 	// Specifies the key/value pairs to associate with the resource.
-	// Changing this parameter will create a new resource.
 	Tags pulumi.StringMapInput
 	// Specifies number of CUs for each TaskManager. The default value is `1`.
 	TmCuNum pulumi.IntPtrInput
@@ -626,7 +621,7 @@ func (o FlinkjarJobOutput) DependencyJars() pulumi.StringArrayOutput {
 	return o.ApplyT(func(v *FlinkjarJob) pulumi.StringArrayOutput { return v.DependencyJars }).(pulumi.StringArrayOutput)
 }
 
-// Specifies job description. Length range: 1 to 512 characters.
+// Specifies job description. Length range: `1` to `512` characters.
 func (o FlinkjarJobOutput) Description() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *FlinkjarJob) pulumi.StringPtrOutput { return v.Description }).(pulumi.StringPtrOutput)
 }
@@ -683,7 +678,7 @@ func (o FlinkjarJobOutput) ManagerCuNum() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v *FlinkjarJob) pulumi.IntPtrOutput { return v.ManagerCuNum }).(pulumi.IntPtrOutput)
 }
 
-// Specifies the name of the job. Length range: 1 to 57 characters.
+// Specifies the name of the job. Length range: `1` to `57` characters.
 // Which may consist of letters, digits, underscores (_) and hyphens (-).
 func (o FlinkjarJobOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v *FlinkjarJob) pulumi.StringOutput { return v.Name }).(pulumi.StringOutput)
@@ -747,7 +742,6 @@ func (o FlinkjarJobOutput) Status() pulumi.StringOutput {
 }
 
 // Specifies the key/value pairs to associate with the resource.
-// Changing this parameter will create a new resource.
 func (o FlinkjarJobOutput) Tags() pulumi.StringMapOutput {
 	return o.ApplyT(func(v *FlinkjarJob) pulumi.StringMapOutput { return v.Tags }).(pulumi.StringMapOutput)
 }

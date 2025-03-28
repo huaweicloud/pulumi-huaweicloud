@@ -101,6 +101,32 @@ import * as utilities from "../utilities";
  *     },
  * });
  * ```
+ * ### AS Configuration uses password authentication for Windows ECS
+ *
+ * ```typescript
+ * import * as pulumi from "@pulumi/pulumi";
+ * import * as pulumi from "@huaweicloudos/pulumi";
+ *
+ * const config = new pulumi.Config();
+ * const flavorId = config.requireObject("flavorId");
+ * const windowsImageId = config.requireObject("windowsImageId");
+ * const securityGroupId = config.requireObject("securityGroupId");
+ * const adminPass = config.requireObject("adminPass");
+ * const myAsConfig = new huaweicloud.as.Configuration("myAsConfig", {
+ *     scalingConfigurationName: "my_as_config",
+ *     instanceConfig: {
+ *         flavor: flavorId,
+ *         image: windowsImageId,
+ *         securityGroupIds: [securityGroupId],
+ *         adminPass: adminPass,
+ *         disks: [{
+ *             size: 40,
+ *             volumeType: "SSD",
+ *             diskType: "SYS",
+ *         }],
+ *     },
+ * });
+ * ```
  * ### AS Configuration uses the existing instance specifications as the template
  *
  * ```typescript
@@ -123,19 +149,19 @@ import * as utilities from "../utilities";
  *
  * ## Import
  *
- * AS configurations can be imported by their `id`, e.g.
+ * AS configurations can be imported by their `id`, e.g. bash
  *
  * ```sh
  *  $ pulumi import huaweicloud:As/configuration:Configuration test 18518c8a-9d15-416b-8add-2ee874751d18
  * ```
  *
- *  Note that the imported state may not be identical to your resource definition, due to `instance_config.0.instance_id` is missing from the API response. You can ignore changes after importing an AS configuration as below. resource "huaweicloud_as_configuration" "test" {
+ *  Note that the imported state may not be identical to your resource definition, due to `instance_config.0.instance_id`, `instance_config.0.admin_pass`, and `instance_config.0.metadata` are missing from the API response. You can ignore changes after importing an AS configuration as below. hcl resource "huaweicloud_as_configuration" "test" {
  *
  *  ...
  *
  *  lifecycle {
  *
- *  ignore_changes = [ instance_config.0.instance_id ]
+ *  ignore_changes = [ instance_config.0.instance_id, instance_config.0.admin_pass, instance_config.0.metadata ]
  *
  *  } }
  */
@@ -169,7 +195,8 @@ export class Configuration extends pulumi.CustomResource {
 
     /**
      * Specifies the information about instance configuration.
-     * The object structure is documented below. Changing this will create a new resource.
+     * The instanceConfig structure is documented below.
+     * Changing this will create a new resource.
      */
     public readonly instanceConfig!: pulumi.Output<outputs.As.ConfigurationInstanceConfig>;
     /**
@@ -179,7 +206,7 @@ export class Configuration extends pulumi.CustomResource {
     public readonly region!: pulumi.Output<string>;
     /**
      * Specifies the AS configuration name.
-     * The name contains only letters, digits, underscores (_), and hyphens (-), and cannot exceed 64 characters.
+     * The name contains only letters, digits, underscores (_), and hyphens (-), and cannot exceed `64` characters.
      * Changing this will create a new resource.
      */
     public readonly scalingConfigurationName!: pulumi.Output<string>;
@@ -229,7 +256,8 @@ export class Configuration extends pulumi.CustomResource {
 export interface ConfigurationState {
     /**
      * Specifies the information about instance configuration.
-     * The object structure is documented below. Changing this will create a new resource.
+     * The instanceConfig structure is documented below.
+     * Changing this will create a new resource.
      */
     instanceConfig?: pulumi.Input<inputs.As.ConfigurationInstanceConfig>;
     /**
@@ -239,7 +267,7 @@ export interface ConfigurationState {
     region?: pulumi.Input<string>;
     /**
      * Specifies the AS configuration name.
-     * The name contains only letters, digits, underscores (_), and hyphens (-), and cannot exceed 64 characters.
+     * The name contains only letters, digits, underscores (_), and hyphens (-), and cannot exceed `64` characters.
      * Changing this will create a new resource.
      */
     scalingConfigurationName?: pulumi.Input<string>;
@@ -255,7 +283,8 @@ export interface ConfigurationState {
 export interface ConfigurationArgs {
     /**
      * Specifies the information about instance configuration.
-     * The object structure is documented below. Changing this will create a new resource.
+     * The instanceConfig structure is documented below.
+     * Changing this will create a new resource.
      */
     instanceConfig: pulumi.Input<inputs.As.ConfigurationInstanceConfig>;
     /**
@@ -265,7 +294,7 @@ export interface ConfigurationArgs {
     region?: pulumi.Input<string>;
     /**
      * Specifies the AS configuration name.
-     * The name contains only letters, digits, underscores (_), and hyphens (-), and cannot exceed 64 characters.
+     * The name contains only letters, digits, underscores (_), and hyphens (-), and cannot exceed `64` characters.
      * Changing this will create a new resource.
      */
     scalingConfigurationName: pulumi.Input<string>;

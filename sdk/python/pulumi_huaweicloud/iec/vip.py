@@ -191,7 +191,7 @@ class Vip(pulumi.CustomResource):
 
         ## Import
 
-        IEC VIP can be imported using the `id`, e.g.
+        IEC VIP can be imported using the `id`, e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:Iec/vip:Vip vip_test 61fd8d31-8f92-4526-a5f5-07ec303e69e7
@@ -228,7 +228,7 @@ class Vip(pulumi.CustomResource):
 
         ## Import
 
-        IEC VIP can be imported using the `id`, e.g.
+        IEC VIP can be imported using the `id`, e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:Iec/vip:Vip vip_test 61fd8d31-8f92-4526-a5f5-07ec303e69e7

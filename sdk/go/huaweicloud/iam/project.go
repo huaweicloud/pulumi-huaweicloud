@@ -10,9 +10,9 @@ import (
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
-// Manages a Project resource within HuaweiCloud Identity And Access Management service.
+// Manages an IAM project resource within HuaweiCloud.
 //
-// > You *must* have security admin privileges in your HuaweiCloud cloud to use this resource.
+// > **NOTE:** You *must* have admin privileges to use this resource.
 //
 // !>  Deleting projects is not supported. The project is only removed from the state, but it remains in the cloud.
 //
@@ -44,7 +44,7 @@ import (
 //
 // ## Import
 //
-// Projects can be imported using the `id`, e.g.
+// IAM projects can be imported using the `id`, e.g. bash
 //
 // ```sh
 //
@@ -56,13 +56,16 @@ type Project struct {
 
 	// Specifies the description of the project.
 	Description pulumi.StringPtrOutput `pulumi:"description"`
-	// Enabling status of this project.
+	// Whether the IAM project is enabled.
 	Enabled pulumi.BoolOutput `pulumi:"enabled"`
 	// Specifies the name of the project. it must start with an existing *region* and be less
 	// than or equal to 64 characters. Example: cn-north-1_project1.
 	Name pulumi.StringOutput `pulumi:"name"`
-	// The parent of this project.
+	// The parent of the IAM project.
 	ParentId pulumi.StringOutput `pulumi:"parentId"`
+	// Specifies the status of the project.
+	// Valid values are **normal** and **suspended**, default is **normal**.
+	Status pulumi.StringOutput `pulumi:"status"`
 }
 
 // NewProject registers a new resource with the given unique name, arguments, and options.
@@ -97,25 +100,31 @@ func GetProject(ctx *pulumi.Context,
 type projectState struct {
 	// Specifies the description of the project.
 	Description *string `pulumi:"description"`
-	// Enabling status of this project.
+	// Whether the IAM project is enabled.
 	Enabled *bool `pulumi:"enabled"`
 	// Specifies the name of the project. it must start with an existing *region* and be less
 	// than or equal to 64 characters. Example: cn-north-1_project1.
 	Name *string `pulumi:"name"`
-	// The parent of this project.
+	// The parent of the IAM project.
 	ParentId *string `pulumi:"parentId"`
+	// Specifies the status of the project.
+	// Valid values are **normal** and **suspended**, default is **normal**.
+	Status *string `pulumi:"status"`
 }
 
 type ProjectState struct {
 	// Specifies the description of the project.
 	Description pulumi.StringPtrInput
-	// Enabling status of this project.
+	// Whether the IAM project is enabled.
 	Enabled pulumi.BoolPtrInput
 	// Specifies the name of the project. it must start with an existing *region* and be less
 	// than or equal to 64 characters. Example: cn-north-1_project1.
 	Name pulumi.StringPtrInput
-	// The parent of this project.
+	// The parent of the IAM project.
 	ParentId pulumi.StringPtrInput
+	// Specifies the status of the project.
+	// Valid values are **normal** and **suspended**, default is **normal**.
+	Status pulumi.StringPtrInput
 }
 
 func (ProjectState) ElementType() reflect.Type {
@@ -128,6 +137,9 @@ type projectArgs struct {
 	// Specifies the name of the project. it must start with an existing *region* and be less
 	// than or equal to 64 characters. Example: cn-north-1_project1.
 	Name *string `pulumi:"name"`
+	// Specifies the status of the project.
+	// Valid values are **normal** and **suspended**, default is **normal**.
+	Status *string `pulumi:"status"`
 }
 
 // The set of arguments for constructing a Project resource.
@@ -137,6 +149,9 @@ type ProjectArgs struct {
 	// Specifies the name of the project. it must start with an existing *region* and be less
 	// than or equal to 64 characters. Example: cn-north-1_project1.
 	Name pulumi.StringPtrInput
+	// Specifies the status of the project.
+	// Valid values are **normal** and **suspended**, default is **normal**.
+	Status pulumi.StringPtrInput
 }
 
 func (ProjectArgs) ElementType() reflect.Type {
@@ -231,7 +246,7 @@ func (o ProjectOutput) Description() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Project) pulumi.StringPtrOutput { return v.Description }).(pulumi.StringPtrOutput)
 }
 
-// Enabling status of this project.
+// Whether the IAM project is enabled.
 func (o ProjectOutput) Enabled() pulumi.BoolOutput {
 	return o.ApplyT(func(v *Project) pulumi.BoolOutput { return v.Enabled }).(pulumi.BoolOutput)
 }
@@ -242,9 +257,15 @@ func (o ProjectOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v *Project) pulumi.StringOutput { return v.Name }).(pulumi.StringOutput)
 }
 
-// The parent of this project.
+// The parent of the IAM project.
 func (o ProjectOutput) ParentId() pulumi.StringOutput {
 	return o.ApplyT(func(v *Project) pulumi.StringOutput { return v.ParentId }).(pulumi.StringOutput)
+}
+
+// Specifies the status of the project.
+// Valid values are **normal** and **suspended**, default is **normal**.
+func (o ProjectOutput) Status() pulumi.StringOutput {
+	return o.ApplyT(func(v *Project) pulumi.StringOutput { return v.Status }).(pulumi.StringOutput)
 }
 
 type ProjectArrayOutput struct{ *pulumi.OutputState }

@@ -14,10 +14,13 @@ import (
 type Database_privilege struct {
 	pulumi.CustomResourceState
 
-	DbName     pulumi.StringOutput               `pulumi:"dbName"`
-	InstanceId pulumi.StringOutput               `pulumi:"instanceId"`
-	Region     pulumi.StringOutput               `pulumi:"region"`
-	Users      Database_privilegeUserArrayOutput `pulumi:"users"`
+	// Specifies the database name.
+	DbName pulumi.StringOutput `pulumi:"dbName"`
+	// Specifies the ID of the RDS Mysql instance.
+	InstanceId pulumi.StringOutput `pulumi:"instanceId"`
+	Region     pulumi.StringOutput `pulumi:"region"`
+	// Specifies the account that associated with the database.
+	Users Database_privilegeUserArrayOutput `pulumi:"users"`
 }
 
 // NewDatabase_privilege registers a new resource with the given unique name, arguments, and options.
@@ -59,17 +62,23 @@ func GetDatabase_privilege(ctx *pulumi.Context,
 
 // Input properties used for looking up and filtering Database_privilege resources.
 type database_privilegeState struct {
-	DbName     *string                  `pulumi:"dbName"`
-	InstanceId *string                  `pulumi:"instanceId"`
-	Region     *string                  `pulumi:"region"`
-	Users      []Database_privilegeUser `pulumi:"users"`
+	// Specifies the database name.
+	DbName *string `pulumi:"dbName"`
+	// Specifies the ID of the RDS Mysql instance.
+	InstanceId *string `pulumi:"instanceId"`
+	Region     *string `pulumi:"region"`
+	// Specifies the account that associated with the database.
+	Users []Database_privilegeUser `pulumi:"users"`
 }
 
 type Database_privilegeState struct {
-	DbName     pulumi.StringPtrInput
+	// Specifies the database name.
+	DbName pulumi.StringPtrInput
+	// Specifies the ID of the RDS Mysql instance.
 	InstanceId pulumi.StringPtrInput
 	Region     pulumi.StringPtrInput
-	Users      Database_privilegeUserArrayInput
+	// Specifies the account that associated with the database.
+	Users Database_privilegeUserArrayInput
 }
 
 func (Database_privilegeState) ElementType() reflect.Type {
@@ -77,18 +86,24 @@ func (Database_privilegeState) ElementType() reflect.Type {
 }
 
 type database_privilegeArgs struct {
-	DbName     string                   `pulumi:"dbName"`
-	InstanceId string                   `pulumi:"instanceId"`
-	Region     *string                  `pulumi:"region"`
-	Users      []Database_privilegeUser `pulumi:"users"`
+	// Specifies the database name.
+	DbName string `pulumi:"dbName"`
+	// Specifies the ID of the RDS Mysql instance.
+	InstanceId string  `pulumi:"instanceId"`
+	Region     *string `pulumi:"region"`
+	// Specifies the account that associated with the database.
+	Users []Database_privilegeUser `pulumi:"users"`
 }
 
 // The set of arguments for constructing a Database_privilege resource.
 type Database_privilegeArgs struct {
-	DbName     pulumi.StringInput
+	// Specifies the database name.
+	DbName pulumi.StringInput
+	// Specifies the ID of the RDS Mysql instance.
 	InstanceId pulumi.StringInput
 	Region     pulumi.StringPtrInput
-	Users      Database_privilegeUserArrayInput
+	// Specifies the account that associated with the database.
+	Users Database_privilegeUserArrayInput
 }
 
 func (Database_privilegeArgs) ElementType() reflect.Type {
@@ -178,10 +193,12 @@ func (o Database_privilegeOutput) ToDatabase_privilegeOutputWithContext(ctx cont
 	return o
 }
 
+// Specifies the database name.
 func (o Database_privilegeOutput) DbName() pulumi.StringOutput {
 	return o.ApplyT(func(v *Database_privilege) pulumi.StringOutput { return v.DbName }).(pulumi.StringOutput)
 }
 
+// Specifies the ID of the RDS Mysql instance.
 func (o Database_privilegeOutput) InstanceId() pulumi.StringOutput {
 	return o.ApplyT(func(v *Database_privilege) pulumi.StringOutput { return v.InstanceId }).(pulumi.StringOutput)
 }
@@ -190,6 +207,7 @@ func (o Database_privilegeOutput) Region() pulumi.StringOutput {
 	return o.ApplyT(func(v *Database_privilege) pulumi.StringOutput { return v.Region }).(pulumi.StringOutput)
 }
 
+// Specifies the account that associated with the database.
 func (o Database_privilegeOutput) Users() Database_privilegeUserArrayOutput {
 	return o.ApplyT(func(v *Database_privilege) Database_privilegeUserArrayOutput { return v.Users }).(Database_privilegeUserArrayOutput)
 }

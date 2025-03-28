@@ -54,7 +54,7 @@ type GetEngineVersionsArgs struct {
 	// If omitted, the provider-level region will be used.
 	Region *string `pulumi:"region"`
 	// Specifies the RDS engine type.
-	// The valid values are **MySQL**, **PostgreSQL** and **SQLServer**, default to **MySQL**.
+	// The valid values are **MySQL**, **PostgreSQL**, **SQLServer** and **MariaDB**, default to **MySQL**.
 	Type *string `pulumi:"type"`
 }
 
@@ -87,7 +87,7 @@ type GetEngineVersionsOutputArgs struct {
 	// If omitted, the provider-level region will be used.
 	Region pulumi.StringPtrInput `pulumi:"region"`
 	// Specifies the RDS engine type.
-	// The valid values are **MySQL**, **PostgreSQL** and **SQLServer**, default to **MySQL**.
+	// The valid values are **MySQL**, **PostgreSQL**, **SQLServer** and **MariaDB**, default to **MySQL**.
 	Type pulumi.StringPtrInput `pulumi:"type"`
 }
 

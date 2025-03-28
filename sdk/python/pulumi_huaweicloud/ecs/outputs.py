@@ -16,6 +16,7 @@ __all__ = [
     'InstanceNetwork',
     'InstanceSchedulerHint',
     'InstanceVolumeAttached',
+    'GetFlavorsFlavorResult',
     'GetInstanceNetworkResult',
     'GetInstanceSchedulerHintResult',
     'GetInstanceVolumeAttachedResult',
@@ -23,6 +24,7 @@ __all__ = [
     'GetInstancesInstanceNetworkResult',
     'GetInstancesInstanceSchedulerHintResult',
     'GetInstancesInstanceVolumeAttachedResult',
+    'GetServergroupsServergroupResult',
 ]
 
 @pulumi.output_type
@@ -34,6 +36,8 @@ class InstanceBandwidth(dict):
             suggest = "share_type"
         elif key == "chargeMode":
             suggest = "charge_mode"
+        elif key == "extendParam":
+            suggest = "extend_param"
 
         if suggest:
             pulumi.log.warn(f"Key '{key}' not found in InstanceBandwidth. Access the value via the '{suggest}' property getter instead.")
@@ -49,6 +53,7 @@ class InstanceBandwidth(dict):
     def __init__(__self__, *,
                  share_type: str,
                  charge_mode: Optional[str] = None,
+                 extend_param: Optional[Mapping[str, str]] = None,
                  id: Optional[str] = None,
                  size: Optional[int] = None):
         """
@@ -58,6 +63,8 @@ class InstanceBandwidth(dict):
                + **WHOLE**: Shared bandwidth
         :param str charge_mode: Specifies the bandwidth billing mode. The value can be *traffic* or *bandwidth*.
                Changing this creates a new instance.
+        :param Mapping[str, str] extend_param: Specifies the additional EIP information.
+               Changing this creates a new instance.
         :param str id: Specifies the **shared** bandwidth id. This parameter is mandatory when
                `share_type` is set to **WHOLE**. Changing this creates a new instance.
         :param int size: Specifies the bandwidth size. The value ranges from 1 to 300 Mbit/s.
@@ -66,6 +73,8 @@ class InstanceBandwidth(dict):
         pulumi.set(__self__, "share_type", share_type)
         if charge_mode is not None:
             pulumi.set(__self__, "charge_mode", charge_mode)
+        if extend_param is not None:
+            pulumi.set(__self__, "extend_param", extend_param)
         if id is not None:
             pulumi.set(__self__, "id", id)
         if size is not None:
@@ -92,6 +101,15 @@ class InstanceBandwidth(dict):
         return pulumi.get(self, "charge_mode")
 
     @property
+    @pulumi.getter(name="extendParam")
+    def extend_param(self) -> Optional[Mapping[str, str]]:
+        """
+        Specifies the additional EIP information.
+        Changing this creates a new instance.
+        """
+        return pulumi.get(self, "extend_param")
+
+    @property
     @pulumi.getter
     def id(self) -> Optional[str]:
         """
@@ -115,7 +133,9 @@ class InstanceDataDisk(dict):
     @staticmethod
     def __key_warning(key: str):
         suggest = None
-        if key == "kmsKeyId":
+        if key == "dssPoolId":
+            suggest = "dss_pool_id"
+        elif key == "kmsKeyId":
             suggest = "kms_key_id"
         elif key == "snapshotId":
             suggest = "snapshot_id"
@@ -134,24 +154,38 @@ class InstanceDataDisk(dict):
     def __init__(__self__, *,
                  size: int,
                  type: str,
+                 dss_pool_id: Optional[str] = None,
+                 iops: Optional[int] = None,
                  kms_key_id: Optional[str] = None,
-                 snapshot_id: Optional[str] = None):
+                 snapshot_id: Optional[str] = None,
+                 throughput: Optional[int] = None):
         """
         :param int size: Specifies the bandwidth size. The value ranges from 1 to 300 Mbit/s.
                This parameter is mandatory when `share_type` is set to **PER**. Changing this creates a new instance.
-        :param str type: Specifies the ECS data disk type, which must be one of available disk types,
-               contains of *SSD*, *GPSSD* and *SAS*. Changing this creates a new instance.
+        :param str type: Specifies the ECS data disk type. Changing this creates a new instance.
+        :param str dss_pool_id: Specifies the data disk DSS pool ID. This field is used
+               only for dedicated storage. Changing this parameter will create a new resource.
+        :param int iops: Specifies the IOPS(Input/Output Operations Per Second) for the disk.
+               The field is valid and required when `type` is set to **GPSSD2** or **ESSD2**.
         :param str kms_key_id: Specifies the ID of a KMS key. This is used to encrypt the disk.
                Changing this creates a new instance.
         :param str snapshot_id: Specifies the EVS snapshot ID or ID of the original data disk contained in
                the full-ECS image. Changing this creates a new instance.
+        :param int throughput: Specifies the throughput for the disk. The Unit is MiB/s.
+               The field is valid and required when `type` is set to **GPSSD2**.
         """
         pulumi.set(__self__, "size", size)
         pulumi.set(__self__, "type", type)
+        if dss_pool_id is not None:
+            pulumi.set(__self__, "dss_pool_id", dss_pool_id)
+        if iops is not None:
+            pulumi.set(__self__, "iops", iops)
         if kms_key_id is not None:
             pulumi.set(__self__, "kms_key_id", kms_key_id)
         if snapshot_id is not None:
             pulumi.set(__self__, "snapshot_id", snapshot_id)
+        if throughput is not None:
+            pulumi.set(__self__, "throughput", throughput)
 
     @property
     @pulumi.getter
@@ -166,10 +200,27 @@ class InstanceDataDisk(dict):
     @pulumi.getter
     def type(self) -> str:
         """
-        Specifies the ECS data disk type, which must be one of available disk types,
-        contains of *SSD*, *GPSSD* and *SAS*. Changing this creates a new instance.
+        Specifies the ECS data disk type. Changing this creates a new instance.
         """
         return pulumi.get(self, "type")
+
+    @property
+    @pulumi.getter(name="dssPoolId")
+    def dss_pool_id(self) -> Optional[str]:
+        """
+        Specifies the data disk DSS pool ID. This field is used
+        only for dedicated storage. Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "dss_pool_id")
+
+    @property
+    @pulumi.getter
+    def iops(self) -> Optional[int]:
+        """
+        Specifies the IOPS(Input/Output Operations Per Second) for the disk.
+        The field is valid and required when `type` is set to **GPSSD2** or **ESSD2**.
+        """
+        return pulumi.get(self, "iops")
 
     @property
     @pulumi.getter(name="kmsKeyId")
@@ -188,6 +239,15 @@ class InstanceDataDisk(dict):
         the full-ECS image. Changing this creates a new instance.
         """
         return pulumi.get(self, "snapshot_id")
+
+    @property
+    @pulumi.getter
+    def throughput(self) -> Optional[int]:
+        """
+        Specifies the throughput for the disk. The Unit is MiB/s.
+        The field is valid and required when `type` is set to **GPSSD2**.
+        """
+        return pulumi.get(self, "throughput")
 
 
 @pulumi.output_type
@@ -230,7 +290,6 @@ class InstanceNetwork(dict):
         :param bool access_network: Specifies if this network should be used for provisioning access.
                Accepts true or false. Defaults to false.
         :param str fixed_ip_v4: Specifies a fixed IPv4 address to be used on this network.
-               Changing this creates a new instance.
         :param str fixed_ip_v6: The Fixed IPv6 address of the instance on that network.
         :param bool ipv6_enable: Specifies whether the IPv6 function is enabled for the nic.
                Defaults to false. Changing this creates a new instance.
@@ -240,7 +299,6 @@ class InstanceNetwork(dict):
                for it. This function is enabled by default but should be disabled if the ECS functions as a SNAT server or has a
                virtual IP address bound to it.
         :param str uuid: Specifies the network UUID to attach to the instance.
-               Changing this creates a new instance.
         """
         if access_network is not None:
             pulumi.set(__self__, "access_network", access_network)
@@ -273,7 +331,6 @@ class InstanceNetwork(dict):
     def fixed_ip_v4(self) -> Optional[str]:
         """
         Specifies a fixed IPv4 address to be used on this network.
-        Changing this creates a new instance.
         """
         return pulumi.get(self, "fixed_ip_v4")
 
@@ -325,7 +382,6 @@ class InstanceNetwork(dict):
     def uuid(self) -> Optional[str]:
         """
         Specifies the network UUID to attach to the instance.
-        Changing this creates a new instance.
         """
         return pulumi.get(self, "uuid")
 
@@ -447,8 +503,7 @@ class InstanceVolumeAttached(dict):
         :param str pci_address: The volume pci address on that attachment.
         :param int size: Specifies the bandwidth size. The value ranges from 1 to 300 Mbit/s.
                This parameter is mandatory when `share_type` is set to **PER**. Changing this creates a new instance.
-        :param str type: Specifies the ECS data disk type, which must be one of available disk types,
-               contains of *SSD*, *GPSSD* and *SAS*. Changing this creates a new instance.
+        :param str type: Specifies the ECS data disk type. Changing this creates a new instance.
         :param str volume_id: The volume ID on that attachment.
         """
         if boot_index is not None:
@@ -502,8 +557,7 @@ class InstanceVolumeAttached(dict):
     @pulumi.getter
     def type(self) -> Optional[str]:
         """
-        Specifies the ECS data disk type, which must be one of available disk types,
-        contains of *SSD*, *GPSSD* and *SAS*. Changing this creates a new instance.
+        Specifies the ECS data disk type. Changing this creates a new instance.
         """
         return pulumi.get(self, "type")
 
@@ -514,6 +568,93 @@ class InstanceVolumeAttached(dict):
         The volume ID on that attachment.
         """
         return pulumi.get(self, "volume_id")
+
+
+@pulumi.output_type
+class GetFlavorsFlavorResult(dict):
+    def __init__(__self__, *,
+                 cpu_core_count: int,
+                 generation: str,
+                 id: str,
+                 memory_size: int,
+                 performance_type: str,
+                 storage_type: str):
+        """
+        :param int cpu_core_count: Specifies the number of vCPUs in the ECS flavor.
+        :param str generation: Specifies the generation of an ECS type. For example, **s3** indicates
+               the general-purpose third-generation ECSs. For details, see
+               [ECS Specifications](https://support.huaweicloud.com/intl/en-us/productdesc-ecs/ecs_01_0014.html).
+        :param str id: The ID of the flavor.
+        :param int memory_size: Specifies the memory size(GB) in the ECS flavor.
+        :param str performance_type: Specifies the ECS flavor type. Possible values are as follows:
+               + **normal**: General computing
+               + **computingv3**: General computing-plus
+               + **highmem**: Memory-optimized
+               + **saphana**: Large-memory HANA ECS
+               + **diskintensive**: Disk-intensive
+        :param str storage_type: Specifies the storage type.
+        """
+        pulumi.set(__self__, "cpu_core_count", cpu_core_count)
+        pulumi.set(__self__, "generation", generation)
+        pulumi.set(__self__, "id", id)
+        pulumi.set(__self__, "memory_size", memory_size)
+        pulumi.set(__self__, "performance_type", performance_type)
+        pulumi.set(__self__, "storage_type", storage_type)
+
+    @property
+    @pulumi.getter(name="cpuCoreCount")
+    def cpu_core_count(self) -> int:
+        """
+        Specifies the number of vCPUs in the ECS flavor.
+        """
+        return pulumi.get(self, "cpu_core_count")
+
+    @property
+    @pulumi.getter
+    def generation(self) -> str:
+        """
+        Specifies the generation of an ECS type. For example, **s3** indicates
+        the general-purpose third-generation ECSs. For details, see
+        [ECS Specifications](https://support.huaweicloud.com/intl/en-us/productdesc-ecs/ecs_01_0014.html).
+        """
+        return pulumi.get(self, "generation")
+
+    @property
+    @pulumi.getter
+    def id(self) -> str:
+        """
+        The ID of the flavor.
+        """
+        return pulumi.get(self, "id")
+
+    @property
+    @pulumi.getter(name="memorySize")
+    def memory_size(self) -> int:
+        """
+        Specifies the memory size(GB) in the ECS flavor.
+        """
+        return pulumi.get(self, "memory_size")
+
+    @property
+    @pulumi.getter(name="performanceType")
+    def performance_type(self) -> str:
+        """
+        Specifies the ECS flavor type. Possible values are as follows:
+        + **normal**: General computing
+        + **computingv3**: General computing-plus
+        + **highmem**: Memory-optimized
+        + **saphana**: Large-memory HANA ECS
+        + **diskintensive**: Disk-intensive
+        """
+        return pulumi.get(self, "performance_type")
+
+    @property
+    @pulumi.getter(name="storageType")
+    def storage_type(self) -> str:
+        """
+        Specifies the storage type.
+        """
+        return pulumi.get(self, "storage_type")
 
 
 @pulumi.output_type
@@ -673,7 +814,9 @@ class GetInstanceVolumeAttachedResult(dict):
 class GetInstancesInstanceResult(dict):
     def __init__(__self__, *,
                  availability_zone: str,
+                 charging_mode: str,
                  enterprise_project_id: str,
+                 expired_time: str,
                  flavor_id: str,
                  flavor_name: str,
                  id: str,
@@ -693,7 +836,9 @@ class GetInstancesInstanceResult(dict):
         """
         :param str availability_zone: Specifies the availability zone where the instance is located.
                Please following [reference](https://developer.huaweicloud.com/intl/en-us/endpoint?ECS) for this argument.
+        :param str charging_mode: The charging mode of the instance. Valid values are **prePaid**, **postPaid** and **spot**.
         :param str enterprise_project_id: Specifies the enterprise project ID.
+        :param str expired_time: The expired time of prePaid instance, in UTC format.
         :param str flavor_id: Specifies the flavor ID.
         :param str flavor_name: Specifies the flavor name of the instance.
         :param str id: The instance ID in UUID format.
@@ -704,7 +849,7 @@ class GetInstancesInstanceResult(dict):
                The instance name supports fuzzy matching query too.
         :param Sequence['GetInstancesInstanceNetworkArgs'] networks: An array of one or more networks to attach to the instance.
                The network object structure is documented below.
-        :param str public_ip: The EIP address that is associted to the instance.
+        :param str public_ip: The EIP address that is associated to the instance.
         :param Sequence['GetInstancesInstanceSchedulerHintArgs'] scheduler_hints: The scheduler with hints on how the instance should be launched.
                The scheduler hints structure is documented below.
         :param Sequence[str] security_group_ids: An array of one or more security group IDs to associate with the instance.
@@ -712,14 +857,16 @@ class GetInstancesInstanceResult(dict):
                + **ACTIVE**: The instance is running properly.
                + **SHUTOFF**: The instance has been properly stopped.
                + **ERROR**: An error has occurred on the instance.
-        :param str system_disk_id: The system disk voume ID.
-        :param Mapping[str, str] tags: The key/value pairs to associate with the instance.
+        :param str system_disk_id: The system disk volume ID.
+        :param Mapping[str, str] tags: Specifies the tags to qurey the instances.
         :param str user_data: The user data (information after encoding) configured during instance creation.
         :param Sequence['GetInstancesInstanceVolumeAttachedArgs'] volume_attacheds: An array of one or more disks to attach to the instance.
                The volume attached object structure is documented below.
         """
         pulumi.set(__self__, "availability_zone", availability_zone)
+        pulumi.set(__self__, "charging_mode", charging_mode)
         pulumi.set(__self__, "enterprise_project_id", enterprise_project_id)
+        pulumi.set(__self__, "expired_time", expired_time)
         pulumi.set(__self__, "flavor_id", flavor_id)
         pulumi.set(__self__, "flavor_name", flavor_name)
         pulumi.set(__self__, "id", id)
@@ -747,12 +894,28 @@ class GetInstancesInstanceResult(dict):
         return pulumi.get(self, "availability_zone")
 
     @property
+    @pulumi.getter(name="chargingMode")
+    def charging_mode(self) -> str:
+        """
+        The charging mode of the instance. Valid values are **prePaid**, **postPaid** and **spot**.
+        """
+        return pulumi.get(self, "charging_mode")
+
+    @property
     @pulumi.getter(name="enterpriseProjectId")
     def enterprise_project_id(self) -> str:
         """
         Specifies the enterprise project ID.
         """
         return pulumi.get(self, "enterprise_project_id")
+
+    @property
+    @pulumi.getter(name="expiredTime")
+    def expired_time(self) -> str:
+        """
+        The expired time of prePaid instance, in UTC format.
+        """
+        return pulumi.get(self, "expired_time")
 
     @property
     @pulumi.getter(name="flavorId")
@@ -824,7 +987,7 @@ class GetInstancesInstanceResult(dict):
     @pulumi.getter(name="publicIp")
     def public_ip(self) -> str:
         """
-        The EIP address that is associted to the instance.
+        The EIP address that is associated to the instance.
         """
         return pulumi.get(self, "public_ip")
 
@@ -860,7 +1023,7 @@ class GetInstancesInstanceResult(dict):
     @pulumi.getter(name="systemDiskId")
     def system_disk_id(self) -> str:
         """
-        The system disk voume ID.
+        The system disk volume ID.
         """
         return pulumi.get(self, "system_disk_id")
 
@@ -868,7 +1031,7 @@ class GetInstancesInstanceResult(dict):
     @pulumi.getter
     def tags(self) -> Mapping[str, str]:
         """
-        The key/value pairs to associate with the instance.
+        Specifies the tags to qurey the instances.
         """
         return pulumi.get(self, "tags")
 
@@ -899,7 +1062,7 @@ class GetInstancesInstanceNetworkResult(dict):
                  port: str,
                  uuid: str):
         """
-        :param str fixed_ip_v4: The fixed IPv4 address of the instance on this network.
+        :param str fixed_ip_v4: Specifies the IPv4 addresses of the ECS.
         :param str fixed_ip_v6: The Fixed IPv6 address of the instance on that network.
         :param str mac: The MAC address of the NIC on that network.
         :param str port: The port ID corresponding to the IP address on that network.
@@ -915,7 +1078,7 @@ class GetInstancesInstanceNetworkResult(dict):
     @pulumi.getter(name="fixedIpV4")
     def fixed_ip_v4(self) -> str:
         """
-        The fixed IPv4 address of the instance on this network.
+        Specifies the IPv4 addresses of the ECS.
         """
         return pulumi.get(self, "fixed_ip_v4")
 
@@ -1041,5 +1204,56 @@ class GetInstancesInstanceVolumeAttachedResult(dict):
         The volume ID on that attachment.
         """
         return pulumi.get(self, "volume_id")
+
+
+@pulumi.output_type
+class GetServergroupsServergroupResult(dict):
+    def __init__(__self__, *,
+                 id: str,
+                 members: Sequence[str],
+                 name: str,
+                 policies: Sequence[str]):
+        """
+        :param str id: The server group ID in UUID format.
+        :param Sequence[str] members: An array of one or more instance ID attached to the server group.
+        :param str name: Specifies the server group name.
+        :param Sequence[str] policies: The set of policies for the server group.
+        """
+        pulumi.set(__self__, "id", id)
+        pulumi.set(__self__, "members", members)
+        pulumi.set(__self__, "name", name)
+        pulumi.set(__self__, "policies", policies)
+
+    @property
+    @pulumi.getter
+    def id(self) -> str:
+        """
+        The server group ID in UUID format.
+        """
+        return pulumi.get(self, "id")
+
+    @property
+    @pulumi.getter
+    def members(self) -> Sequence[str]:
+        """
+        An array of one or more instance ID attached to the server group.
+        """
+        return pulumi.get(self, "members")
+
+    @property
+    @pulumi.getter
+    def name(self) -> str:
+        """
+        Specifies the server group name.
+        """
+        return pulumi.get(self, "name")
+
+    @property
+    @pulumi.getter
+    def policies(self) -> Sequence[str]:
+        """
+        The set of policies for the server group.
+        """
+        return pulumi.get(self, "policies")
 
 

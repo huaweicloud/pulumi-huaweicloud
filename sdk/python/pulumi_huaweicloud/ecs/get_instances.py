@@ -22,13 +22,16 @@ class GetInstancesResult:
     """
     A collection of values returned by getInstances.
     """
-    def __init__(__self__, availability_zone=None, enterprise_project_id=None, flavor_id=None, flavor_name=None, id=None, image_id=None, instance_id=None, instances=None, key_pair=None, name=None, region=None, status=None):
+    def __init__(__self__, availability_zone=None, enterprise_project_id=None, fixed_ip_v4=None, flavor_id=None, flavor_name=None, id=None, image_id=None, instance_id=None, instances=None, key_pair=None, name=None, region=None, status=None, tags=None):
         if availability_zone and not isinstance(availability_zone, str):
             raise TypeError("Expected argument 'availability_zone' to be a str")
         pulumi.set(__self__, "availability_zone", availability_zone)
         if enterprise_project_id and not isinstance(enterprise_project_id, str):
             raise TypeError("Expected argument 'enterprise_project_id' to be a str")
         pulumi.set(__self__, "enterprise_project_id", enterprise_project_id)
+        if fixed_ip_v4 and not isinstance(fixed_ip_v4, str):
+            raise TypeError("Expected argument 'fixed_ip_v4' to be a str")
+        pulumi.set(__self__, "fixed_ip_v4", fixed_ip_v4)
         if flavor_id and not isinstance(flavor_id, str):
             raise TypeError("Expected argument 'flavor_id' to be a str")
         pulumi.set(__self__, "flavor_id", flavor_id)
@@ -59,6 +62,9 @@ class GetInstancesResult:
         if status and not isinstance(status, str):
             raise TypeError("Expected argument 'status' to be a str")
         pulumi.set(__self__, "status", status)
+        if tags and not isinstance(tags, dict):
+            raise TypeError("Expected argument 'tags' to be a dict")
+        pulumi.set(__self__, "tags", tags)
 
     @property
     @pulumi.getter(name="availabilityZone")
@@ -75,6 +81,14 @@ class GetInstancesResult:
         The enterprise project ID.
         """
         return pulumi.get(self, "enterprise_project_id")
+
+    @property
+    @pulumi.getter(name="fixedIpV4")
+    def fixed_ip_v4(self) -> Optional[str]:
+        """
+        The fixed IPv4 address of the instance on this network.
+        """
+        return pulumi.get(self, "fixed_ip_v4")
 
     @property
     @pulumi.getter(name="flavorId")
@@ -150,6 +164,14 @@ class GetInstancesResult:
         """
         return pulumi.get(self, "status")
 
+    @property
+    @pulumi.getter
+    def tags(self) -> Optional[Mapping[str, str]]:
+        """
+        The key/value pairs to associate with the instance.
+        """
+        return pulumi.get(self, "tags")
+
 
 class AwaitableGetInstancesResult(GetInstancesResult):
     # pylint: disable=using-constant-test
@@ -159,6 +181,7 @@ class AwaitableGetInstancesResult(GetInstancesResult):
         return GetInstancesResult(
             availability_zone=self.availability_zone,
             enterprise_project_id=self.enterprise_project_id,
+            fixed_ip_v4=self.fixed_ip_v4,
             flavor_id=self.flavor_id,
             flavor_name=self.flavor_name,
             id=self.id,
@@ -168,11 +191,13 @@ class AwaitableGetInstancesResult(GetInstancesResult):
             key_pair=self.key_pair,
             name=self.name,
             region=self.region,
-            status=self.status)
+            status=self.status,
+            tags=self.tags)
 
 
 def get_instances(availability_zone: Optional[str] = None,
                   enterprise_project_id: Optional[str] = None,
+                  fixed_ip_v4: Optional[str] = None,
                   flavor_id: Optional[str] = None,
                   flavor_name: Optional[str] = None,
                   image_id: Optional[str] = None,
@@ -181,6 +206,7 @@ def get_instances(availability_zone: Optional[str] = None,
                   name: Optional[str] = None,
                   region: Optional[str] = None,
                   status: Optional[str] = None,
+                  tags: Optional[Mapping[str, str]] = None,
                   opts: Optional[pulumi.InvokeOptions] = None) -> AwaitableGetInstancesResult:
     """
     Use this data source to get the list of the compute instances.
@@ -200,6 +226,7 @@ def get_instances(availability_zone: Optional[str] = None,
     :param str availability_zone: Specifies the availability zone where the instance is located.
            Please following [reference](https://developer.huaweicloud.com/intl/en-us/endpoint?ECS) for this argument.
     :param str enterprise_project_id: Specifies the enterprise project ID.
+    :param str fixed_ip_v4: Specifies the IPv4 addresses of the ECS.
     :param str flavor_id: Specifies the flavor ID.
     :param str flavor_name: Specifies the flavor name of the instance.
     :param str image_id: Specifies the image ID of the instance.
@@ -213,10 +240,12 @@ def get_instances(availability_zone: Optional[str] = None,
            + **ACTIVE**: The instance is running properly.
            + **SHUTOFF**: The instance has been properly stopped.
            + **ERROR**: An error has occurred on the instance.
+    :param Mapping[str, str] tags: Specifies the tags to qurey the instances.
     """
     __args__ = dict()
     __args__['availabilityZone'] = availability_zone
     __args__['enterpriseProjectId'] = enterprise_project_id
+    __args__['fixedIpV4'] = fixed_ip_v4
     __args__['flavorId'] = flavor_id
     __args__['flavorName'] = flavor_name
     __args__['imageId'] = image_id
@@ -225,12 +254,14 @@ def get_instances(availability_zone: Optional[str] = None,
     __args__['name'] = name
     __args__['region'] = region
     __args__['status'] = status
+    __args__['tags'] = tags
     opts = pulumi.InvokeOptions.merge(_utilities.get_invoke_opts_defaults(), opts)
     __ret__ = pulumi.runtime.invoke('huaweicloud:Ecs/getInstances:getInstances', __args__, opts=opts, typ=GetInstancesResult).value
 
     return AwaitableGetInstancesResult(
         availability_zone=__ret__.availability_zone,
         enterprise_project_id=__ret__.enterprise_project_id,
+        fixed_ip_v4=__ret__.fixed_ip_v4,
         flavor_id=__ret__.flavor_id,
         flavor_name=__ret__.flavor_name,
         id=__ret__.id,
@@ -240,12 +271,14 @@ def get_instances(availability_zone: Optional[str] = None,
         key_pair=__ret__.key_pair,
         name=__ret__.name,
         region=__ret__.region,
-        status=__ret__.status)
+        status=__ret__.status,
+        tags=__ret__.tags)
 
 
 @_utilities.lift_output_func(get_instances)
 def get_instances_output(availability_zone: Optional[pulumi.Input[Optional[str]]] = None,
                          enterprise_project_id: Optional[pulumi.Input[Optional[str]]] = None,
+                         fixed_ip_v4: Optional[pulumi.Input[Optional[str]]] = None,
                          flavor_id: Optional[pulumi.Input[Optional[str]]] = None,
                          flavor_name: Optional[pulumi.Input[Optional[str]]] = None,
                          image_id: Optional[pulumi.Input[Optional[str]]] = None,
@@ -254,6 +287,7 @@ def get_instances_output(availability_zone: Optional[pulumi.Input[Optional[str]]
                          name: Optional[pulumi.Input[Optional[str]]] = None,
                          region: Optional[pulumi.Input[Optional[str]]] = None,
                          status: Optional[pulumi.Input[Optional[str]]] = None,
+                         tags: Optional[pulumi.Input[Optional[Mapping[str, str]]]] = None,
                          opts: Optional[pulumi.InvokeOptions] = None) -> pulumi.Output[GetInstancesResult]:
     """
     Use this data source to get the list of the compute instances.
@@ -273,6 +307,7 @@ def get_instances_output(availability_zone: Optional[pulumi.Input[Optional[str]]
     :param str availability_zone: Specifies the availability zone where the instance is located.
            Please following [reference](https://developer.huaweicloud.com/intl/en-us/endpoint?ECS) for this argument.
     :param str enterprise_project_id: Specifies the enterprise project ID.
+    :param str fixed_ip_v4: Specifies the IPv4 addresses of the ECS.
     :param str flavor_id: Specifies the flavor ID.
     :param str flavor_name: Specifies the flavor name of the instance.
     :param str image_id: Specifies the image ID of the instance.
@@ -286,5 +321,6 @@ def get_instances_output(availability_zone: Optional[pulumi.Input[Optional[str]]
            + **ACTIVE**: The instance is running properly.
            + **SHUTOFF**: The instance has been properly stopped.
            + **ERROR**: An error has occurred on the instance.
+    :param Mapping[str, str] tags: Specifies the tags to qurey the instances.
     """
     ...

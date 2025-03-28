@@ -15,9 +15,11 @@ import * as utilities from "../utilities";
  * import * as pulumi from "@pulumi/pulumi";
  * import * as pulumi from "@huaweicloudos/pulumi";
  *
+ * const config = new pulumi.Config();
+ * const user1Password = config.requireObject("user1Password");
  * const user1 = new huaweicloud.iam.User("user1", {
  *     description: "A user",
- *     password: "password123!",
+ *     password: user1Password,
  * });
  * const key1 = new huaweicloud.iam.AccessKey("key1", {userId: user1.id});
  * ```
