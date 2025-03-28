@@ -23,9 +23,12 @@ builds:
       - -X github.com/huaweicloud/pulumi-huaweicloud/provider/pkg/version.Version={{.Tag }}
     main: ./cmd/pulumi-resource-huaweicloud/
 changelog:
-  skip: true
+  filters:
+    exclude:
+      - '^docs:'
+      - '^chore:'
 release:
   # Visit your project's GitHub Releases page to publish this release.
   draft: true
 snapshot:
-  name_template: '{{ .Tag }}-SNAPSHOT'
+  version_template: '{{ .Tag }}-SNAPSHOT'
