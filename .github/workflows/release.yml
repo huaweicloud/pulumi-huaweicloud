@@ -37,7 +37,7 @@ jobs:
       with:
         go-version: ${{matrix.goversion}}
     - name: Install pulumictl
-      uses: jaxxstorm/action-install-gh-release@v1.5.0
+      uses: jaxxstorm/action-install-gh-release@v2.0.0
       with:
         repo: pulumi/pulumictl
     - name: Set PreRelease Version
@@ -51,7 +51,7 @@ jobs:
       fail-fast: true
       matrix:
         goversion:
-        - 1.19.x
+        - 1.22.x
   publish_sdk:
     name: Publish SDKs
     if: ${{ github.repository == 'huaweicloud/pulumi-huaweicloud'}}
@@ -109,7 +109,7 @@ jobs:
       fail-fast: false
       matrix:
         goversion:
-          - 1.19.x
+          - 1.22.x
         language:
           - nodejs
           - python
