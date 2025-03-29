@@ -14,13 +14,13 @@ This package is available for several languages/platforms:
 To use from JavaScript or TypeScript in Node.js, install using either `npm`:
 
 ```bash
-npm install @huaweicloudos/huaweicloud
+npm install @huaweicloudos/pulumi
 ```
 
 or `yarn`:
 
 ```bash
-yarn add @huaweicloudos/huaweicloud
+yarn add @huaweicloudos/pulumi
 ```
 
 ### Python
